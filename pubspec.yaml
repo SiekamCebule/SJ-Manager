@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+    
   osje_sim:
     git:
       url: git@github.com:SiekamCebule/osje-sim.git
