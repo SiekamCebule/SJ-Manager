@@ -1,3 +1,4 @@
 {
-    "helloWorld": "Hello world"
+    "@@locale": "en",
+    "helloWorld": "Hello worldd"
 }

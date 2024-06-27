@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.5.0-272.0.dev <4.0.0'
+  sdk: ^3.4.0
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,10 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    
+
   osje_sim:
     git:
-      url: git@github.com:SiekamCebule/osje-sim.git
+      url: https://github.com/SiekamCebule/osje-sim.git
       ref: main
 
 
