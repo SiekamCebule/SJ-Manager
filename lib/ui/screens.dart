@@ -1,0 +1,4 @@
+enum AppScreens {
+  mainScreen,
+  settingsScreen,
+}

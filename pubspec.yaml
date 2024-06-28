@@ -43,6 +43,13 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any
+  package_info_plus: ^8.0.0
+  gap: ^3.0.1
+  material_symbols_icons: ^4.2762.0
+  flutter_bloc: ^8.1.6
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.10+1
+  fluro: ^2.0.5
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +74,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   generate: true
+  assets:
+    - assets/img/bg/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
