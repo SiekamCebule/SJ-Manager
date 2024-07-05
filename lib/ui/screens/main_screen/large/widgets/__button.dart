@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
+part of '../../main_screen.dart';
 
-class MainMenuButton extends StatelessWidget {
-  const MainMenuButton({
-    super.key,
+class _Button extends StatelessWidget {
+  const _Button({
     this.onTap,
     required this.child,
   });

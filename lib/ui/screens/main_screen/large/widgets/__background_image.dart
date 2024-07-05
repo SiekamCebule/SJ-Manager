@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+part of '../../main_screen.dart';
 
-class MainMenuBackgroundImage extends StatelessWidget {
-  const MainMenuBackgroundImage({super.key});
+class _BackgroundImage extends StatelessWidget {
+  const _BackgroundImage();
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +9,7 @@ class MainMenuBackgroundImage extends StatelessWidget {
       child: Image.asset(
         'assets/img/bg/main_menu.jpeg',
         fit: BoxFit.fill,
-        color: Colors.black.withOpacity(0.1),
+        color: Colors.black.withOpacity(UiConstants.backgroundImageTransparency),
         colorBlendMode: BlendMode.dstATop,
       ),
     );

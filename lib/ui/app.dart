@@ -2,6 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:sj_manager/repositories/database_items/predefined_types.dart';
 import 'package:sj_manager/ui/navigation/routes.dart';
 import 'package:sj_manager/ui/screens/main_screen/main_screen.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
@@ -18,6 +19,11 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   _AppState() {
     configureRoutes(router);
+    WidgetsBinding.instance.addPostFrameCallback((d) async {
+      await RepositoryProvider.of<MaleJumpersDatabaseRepo>(context).loadFromSource();
+      if (!mounted) return;
+      await RepositoryProvider.of<FemaleJumpersDatabaseRepo>(context).loadFromSource();
+    });
   }
 
   @override

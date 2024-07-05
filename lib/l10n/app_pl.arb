@@ -5,5 +5,13 @@
     "loadSimulation": "Wczytaj symulację",
     "continueConfirm": "Kontynuuj",
     "settings": "Ustawienia",
-    "newSimulationButtonContent": "Zasiądź za sterami swojej ulubionej reprezentacji, męskiej lub żeńskiej. Decyduj o najważniejszych sprawach związanych z drużyną, dbaj o rozwój zawodników i obserwuj skokowe wydarzenia w samym sercu akcji!"
+    "newSimulationButtonContent": "Zasiądź za sterami swojej ulubionej reprezentacji, męskiej lub żeńskiej. Decyduj o najważniejszych sprawach związanych z drużyną, dbaj o rozwój zawodników i obserwuj skokowe wydarzenia w samym sercu akcji!",
+    "language": "Język",
+    "polish": "Polski",
+    "english": "Angielski",
+    "german": "Niemiecki",
+    "french": "Francuski",
+    "colorScheme": "Schemat kolorów",
+    "databaseEditor": "Edytor bazy danych",
+    "acknowledgements": "Podziękowania"
 }

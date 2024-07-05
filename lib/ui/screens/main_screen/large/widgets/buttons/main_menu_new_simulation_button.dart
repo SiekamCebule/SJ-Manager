@@ -1,17 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/ui/screens/main_screen/main_menu_button.dart';
+part of '../../../main_screen.dart';
 
 class MainMenuNewSimulationButton extends StatelessWidget {
   const MainMenuNewSimulationButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MainMenuButton(
+    return _Button(
       child: Padding(
-        padding: const EdgeInsets.only(left: 20, top: 10),
+        padding: const EdgeInsets.only(
+          left: UiConstants.horizontalSpaceBetweenMainMenuButtonItems,
+          top: UiConstants.verticalSpaceBetweenMainMenuButtonItems,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -22,10 +21,10 @@ class MainMenuNewSimulationButton extends StatelessWidget {
                 textStyle: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
-            const Gap(10),
+            const Gap(UiConstants.verticalSpaceBetweenMainMenuButtonItems),
             Row(
               children: [
-                const Gap(20),
+                const Gap(UiConstants.horizontalSpaceBetweenMainMenuButtonItems),
                 Flexible(
                   child: Text(
                     translate(context).newSimulationButtonContent,
@@ -35,7 +34,7 @@ class MainMenuNewSimulationButton extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Gap(20),
+                const Gap(UiConstants.horizontalSpaceBetweenMainMenuButtonItems),
               ],
             ),
           ],

@@ -1,19 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/ui/screens/main_screen/main_menu_button.dart';
+part of '../../../main_screen.dart';
 
 class MainMenuContinueButton extends StatelessWidget {
   const MainMenuContinueButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MainMenuButton(
+    return _Button(
       child: Padding(
-        padding: const EdgeInsets.only(left: 20, top: 10),
+        padding: const EdgeInsets.only(
+            left: UiConstants.horizontalSpaceBetweenMainMenuButtonItems,
+            top: UiConstants.verticalSpaceBetweenMainMenuButtonItems),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -34,7 +30,7 @@ class MainMenuContinueButton extends StatelessWidget {
                     textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
-                const Gap(20),
+                const Gap(UiConstants.horizontalSpaceBetweenMainMenuButtonItems),
               ],
             ),
             const Spacer(),
@@ -45,10 +41,12 @@ class MainMenuContinueButton extends StatelessWidget {
                   children: [
                     SvgPicture.network(
                       'https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Bulgaria.svg',
-                      height: 45,
+                      height: UiConstants.mainMenuContinueButtonSimulationInfoIconSize,
                       fit: BoxFit.fitHeight,
                     ),
-                    const Gap(15),
+                    const Gap(
+                      UiConstants.mainMenuContinueButtonSimulationInfoVerticalGap,
+                    ),
                     Text(
                       'Bułgaria',
                       style: GoogleFonts.dosis(
@@ -64,10 +62,12 @@ class MainMenuContinueButton extends StatelessWidget {
                   children: [
                     Icon(
                       Symbols.calendar_month,
-                      size: 45,
+                      size: UiConstants.mainMenuContinueButtonSimulationInfoIconSize,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
-                    const Gap(15),
+                    const Gap(
+                      UiConstants.mainMenuContinueButtonSimulationInfoVerticalGap,
+                    ),
                     Text(
                       'Kwiecień \'26',
                       style: GoogleFonts.dosis(
@@ -83,10 +83,12 @@ class MainMenuContinueButton extends StatelessWidget {
                   children: [
                     Icon(
                       Symbols.person,
-                      size: 45,
+                      size: UiConstants.mainMenuContinueButtonSimulationInfoIconSize,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
-                    const Gap(15),
+                    const Gap(
+                      UiConstants.mainMenuContinueButtonSimulationInfoVerticalGap,
+                    ),
                     Text(
                       '5',
                       style: GoogleFonts.dosis(
