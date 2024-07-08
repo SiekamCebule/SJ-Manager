@@ -8,7 +8,7 @@ class _AppropiateItemEditor extends StatefulWidget {
   });
 
   final DatabaseItemType itemType;
-  final Function(dynamic) onChange;
+  final Function(Object?) onChange;
 
   @override
   State<_AppropiateItemEditor> createState() => _AppropiateItemEditorState();

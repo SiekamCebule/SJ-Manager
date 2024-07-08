@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/models/country.dart';
+import 'package:sj_manager/repositories/country_flags.dart/country_flags_api.dart';
 
 class CountryFlag extends StatelessWidget {
   const CountryFlag({
@@ -13,8 +15,9 @@ class CountryFlag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      'assets/country_flags/${country.code}.png',
+    final flagsRepo = context.watch<CountryFlagsApi>();
+    return Image(
+      image: flagsRepo.imageData(country),
       width: height,
       fit: BoxFit.fitHeight,
     );

@@ -1,17 +1,23 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:sj_manager/json/json_types.dart';
 
-@JsonSerializable(constructor: 'Country')
+part 'country.g.dart';
+
+@JsonSerializable()
 class Country {
   const Country({
     required this.code,
-    this.name,
+    required this.name,
   });
   final String code;
+  final String name;
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  final String? name;
+  static Country fromJson(Json json) => _$CountryFromJson(json);
 
-  factory Country.fromJson(String code) => Country(code: code);
+  Json toJson() => _$CountryToJson(this);
 
-  String toJson() => code;
+  @override
+  String toString() {
+    return '$name ($code)';
+  }
 }

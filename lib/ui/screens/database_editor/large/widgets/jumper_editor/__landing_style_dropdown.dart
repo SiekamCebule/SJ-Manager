@@ -5,22 +5,25 @@ class _LandingStyleDropdown extends StatelessWidget {
     required this.controller,
     required this.onChange,
     this.initial,
+    this.width,
   });
 
   final TextEditingController controller;
   final LandingStyle? initial;
   final Function(LandingStyle? selected) onChange;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     return DropdownMenu<LandingStyle>(
+      width: width,
       controller: controller,
       enableSearch: false,
       requestFocusOnTap: false,
       dropdownMenuEntries: LandingStyle.values.map((style) {
         return DropdownMenuEntry(
           value: style,
-          label: style.name,
+          label: translatedLandingStyleDescription(context, style),
         );
       }).toList(),
       label: const Text('Styl lądowania'),

@@ -5,15 +5,18 @@ class _JumpsConsistencyDropdown extends StatelessWidget {
     required this.controller,
     required this.onChange,
     this.initial,
+    this.width,
   });
 
   final TextEditingController controller;
   final JumpsConsistency? initial;
   final Function(JumpsConsistency? selected) onChange;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     return DropdownMenu<JumpsConsistency>(
+      width: width,
       controller: controller,
       initialSelection: initial,
       enableSearch: false,
@@ -21,7 +24,7 @@ class _JumpsConsistencyDropdown extends StatelessWidget {
       dropdownMenuEntries: JumpsConsistency.values.map((consistency) {
         return DropdownMenuEntry(
           value: consistency,
-          label: consistency.name,
+          label: translatedJumpsConsistencyDescription(context, consistency),
         );
       }).toList(),
       label: const Text('Równość skoków'),

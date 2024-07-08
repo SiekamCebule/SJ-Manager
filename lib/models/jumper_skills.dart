@@ -14,6 +14,13 @@ class JumperSkills with EquatableMixin {
     required this.jumpsConsistency,
   });
 
+  static const empty = JumperSkills(
+    qualityOnSmallerHills: 0,
+    qualityOnLargerHills: 0,
+    landingStyle: LandingStyle.average,
+    jumpsConsistency: JumpsConsistency.average,
+  );
+
   final double qualityOnSmallerHills;
   final double qualityOnLargerHills;
   final LandingStyle landingStyle;

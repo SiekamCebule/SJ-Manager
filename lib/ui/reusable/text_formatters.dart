@@ -64,3 +64,26 @@ class CommaToPeriodEnforcer extends TextInputFormatter {
     return newValue.copyWith(text: newValue.text.replaceAll(RegExp(r','), '.'));
   }
 }
+
+class NumberInRangeEnforcer extends TextInputFormatter {
+  const NumberInRangeEnforcer({
+    this.min,
+    this.max,
+  });
+
+  final num? min;
+  final num? max;
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final number = num.parse(newValue.text);
+    if (min != null && number < min!) {
+      return newValue.copyWith(text: min.toString());
+    } else if (max != null && number > max!) {
+      return newValue.copyWith(text: max.toString());
+    } else {
+      return newValue;
+    }
+  }
+}

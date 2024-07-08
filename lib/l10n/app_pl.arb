@@ -13,5 +13,16 @@
     "french": "Francuski",
     "colorScheme": "Schemat kolorów",
     "databaseEditor": "Edytor bazy danych",
-    "acknowledgements": "Podziękowania"
+    "acknowledgements": "Podziękowania",
+    "terrible": "Tragiczne",
+    "veryUgly": "Bardzo brzydkie",
+    "ugly": "Brzydkie",
+    "average": "Przeciętne",
+    "graceful": "Ładne",
+    "veryGraceful": "Bardzo ładne",
+    "perfect": "Perfekcyjne",
+    "veryInconsistent": "Bardzo nierówne",
+    "inconsistent": "Nierówne",
+    "consistent": "Równe",
+    "veryConsistent": "Bardzo równe"
 }

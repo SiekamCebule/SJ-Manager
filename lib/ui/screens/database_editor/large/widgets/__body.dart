@@ -15,13 +15,17 @@ class _BodyState extends State<_Body> {
   @override
   void initState() {
     scheduleMicrotask(() async {
-      final bloc = context.read<DatabaseEditingCubit>();
-      _selectionChangesSubscription = bloc.stream.distinct((prev, curr) {
-        return prev.selectedIndexes == curr.selectedIndexes;
+      final selectedIndexesRepo = context.read<SelectedIndexesRepository>();
+      _selectionChangesSubscription =
+          selectedIndexesRepo.selectedIndexes.distinct((prev, curr) {
+        return prev == curr;
       }).listen((state) {
-        if (bloc.state.selectedIndexes.length == 1) {
-          final index = bloc.state.selectedIndexes.single;
-          final singleSelectedItem = bloc.state.itemsForEditing.elementAt(index);
+        if (selectedIndexesRepo.state.length == 1) {
+          final index = selectedIndexesRepo.state.single;
+          final itemsType = context.read<DatabaseItemsTypeCubit>().state;
+          final filteredByType =
+              context.read<LocalDbFilteredItemsCubit>().state.byType(itemsType);
+          final singleSelectedItem = filteredByType.elementAt(index);
           _fillEditorBySingleSelected(singleSelectedItem);
         }
       });
@@ -37,8 +41,12 @@ class _BodyState extends State<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final dbEditingCubit = context.watch<DatabaseEditingCubit>();
-    DatabaseEditingState dbEditingState() => dbEditingCubit.state;
+    final itemsType = context.watch<DatabaseItemsTypeCubit>().state;
+    final editableItemsRepoByType =
+        context.watch<LocalDbReposRepository>().byType(itemsType);
+    final filteredItemsByType =
+        context.watch<LocalDbFilteredItemsCubit>().state.byType(itemsType);
+    final selectedIndexesRepo = context.watch<SelectedIndexesRepository>();
 
     return Row(
       children: [
@@ -55,23 +63,23 @@ class _BodyState extends State<_Body> {
                 if (newIndex > oldIndex) {
                   newIndex -= 1;
                 }
-                await dbEditingCubit.move(from: oldIndex, to: newIndex);
+                await editableItemsRepoByType.move(from: oldIndex, to: newIndex);
               },
-              length: dbEditingState().itemsForEditing.length,
+              length: filteredItemsByType.length,
               itemBuilder: (context, index) {
                 return AppropiateDbItemListTile(
                   key: ValueKey(index),
-                  itemType: dbEditingState().itemsType,
-                  item: dbEditingState().itemsForEditing.elementAt(index),
+                  itemType: itemsType,
+                  item: filteredItemsByType.elementAt(index),
                   indexInList: index,
                   onItemTap: () async {
                     if (_ctrlIsPressed) {
-                      dbEditingCubit.toggleSelection(index);
+                      selectedIndexesRepo.toggleSelection(index);
                     } else {
-                      dbEditingCubit.toggleOnly(index);
+                      selectedIndexesRepo.toggleSelectionAtOnly(index);
                     }
                   },
-                  selected: dbEditingState().selectedIndexes.contains(index),
+                  selected: selectedIndexesRepo.state.contains(index),
                 );
               },
             ),
@@ -83,14 +91,15 @@ class _BodyState extends State<_Body> {
           child: AnimatedOpacity(
             duration: Durations.short3,
             curve: Curves.easeIn,
-            opacity: dbEditingState().selectedIndexes.length == 1 ? 1 : 0,
+            opacity: selectedIndexesRepo.state.length == 1 ? 1 : 0,
             child: _AppropiateItemEditor(
               key: _editorKey,
-              itemType: dbEditingState().itemsType,
+              itemType: itemsType,
               onChange: (changedItem) async {
-                if (dbEditingState().selectedIndexes.length == 1) {
-                  final index = dbEditingState().selectedIndexes.single;
-                  await dbEditingCubit.update(index, changedItem);
+                if (selectedIndexesRepo.state.length == 1 && changedItem != null) {
+                  final index = selectedIndexesRepo.state.single;
+                  await editableItemsRepoByType.replace(
+                      oldIndex: index, newItem: changedItem);
                 }
               },
             ),

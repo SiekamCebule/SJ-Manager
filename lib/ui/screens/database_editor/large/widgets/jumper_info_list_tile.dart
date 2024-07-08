@@ -23,15 +23,10 @@ class JumperInfoListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tile = ListTile(
-      leading: jumper.country != null
-          ? CountryFlag(
-              country: jumper.country!,
-              height: 30,
-            )
-          : const SizedBox(
-              height: 30,
-              width: 40,
-            ),
+      leading: CountryFlag(
+        country: jumper.country,
+        height: 30,
+      ),
       title: Text('${jumper.name} ${jumper.surname}'),
       onTap: onTap,
       selected: selected,

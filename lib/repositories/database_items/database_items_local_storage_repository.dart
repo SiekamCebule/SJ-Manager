@@ -1,66 +1,78 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:sj_manager/json/convertable_to_json.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/repositories/database_items/database_items_api.dart';
+import 'package:sj_manager/repositories/database_items/database_items_repository.dart';
 
-class DatabaseItemsLocalStorageRepository<T extends ConvertableToJson<T>>
-    implements DatabaseItemsApi<T> {
+class DatabaseItemsLocalStorageRepository<T> implements DatabaseItemsRepository<T> {
   DatabaseItemsLocalStorageRepository({
     required this.storageFile,
     required this.fromJson,
+    required this.toJson,
   });
 
   T Function(Json json) fromJson;
+  Json Function(T object) toJson;
   final File storageFile;
+
   var _cachedItems = <T>[];
+  final _subject = BehaviorSubject<Iterable<T>>();
 
   @override
-  Future<DatabaseItemsApi<T>> clone() async {
+  Future<DatabaseItemsRepository<T>> clone() async {
     final repo = DatabaseItemsLocalStorageRepository(
       storageFile: storageFile,
       fromJson: fromJson,
+      toJson: toJson,
     );
-    await repo.loadRaw(List.of(items));
+    await repo.loadRaw(List.of(_cachedItems));
     return repo;
   }
 
   @override
-  Future<void> save(T item, [int? index]) async {
+  Future<void> add(T item, [int? index]) async {
     _cachedItems.insert(index ?? _cachedItems.length, item);
+    _notify();
   }
 
   @override
   Future<void> remove(T item) async {
     _cachedItems.remove(item);
+    _notify();
   }
 
   @override
   Future<T> removeAt(int index) async {
     final removed = _cachedItems.removeAt(index);
+    _notify();
     return removed;
   }
 
   @override
   Future<void> clear() async {
     _cachedItems.clear();
+    _notify();
   }
 
   @override
   Future<void> loadRaw(Iterable<T> items) async {
     _cachedItems = items.toList();
+    _notify();
   }
 
   @override
   Future<void> move({required int from, required int to}) async {
     final removed = _cachedItems.removeAt(from);
     _cachedItems.insert(to, removed);
+    _notify();
   }
 
   @override
   Future<void> replace({required int oldIndex, required T newItem}) async {
     _cachedItems[oldIndex] = newItem;
+    _notify();
   }
 
   @override
@@ -72,14 +84,19 @@ class DatabaseItemsLocalStorageRepository<T extends ConvertableToJson<T>>
           (itemInJson) => fromJson(itemInJson),
         )
         .toList();
+    _notify();
   }
 
   @override
   Future<void> saveToSource() async {
-    final itemsInJson = _cachedItems.map((item) => item.toJson()).toList();
+    final itemsInJson = _cachedItems.map((item) => toJson(item)).toList();
     await storageFile.writeAsString(jsonEncode(itemsInJson));
   }
 
+  void _notify() {
+    _subject.add(_cachedItems);
+  }
+
   @override
-  Iterable<T> get items => _cachedItems;
+  ValueStream<Iterable<T>> get items => _subject.stream;
 }

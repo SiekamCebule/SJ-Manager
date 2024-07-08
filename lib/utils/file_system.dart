@@ -13,9 +13,9 @@ class PlarformSpecificPathsCache {
   Directory get applicationDocumentsDirectory => _documents;
 }
 
-File databaseFile(PlarformSpecificPathsCache pathsCache, String fileName) {
+File userDataFile(PlarformSpecificPathsCache pathsCache, String fileName) {
   final documentsDir = pathsCache.applicationDocumentsDirectory;
-  final databaseDir = Directory('${documentsDir.path}/sj_manager/database');
+  final databaseDir = Directory('${documentsDir.path}/sj_manager/user_data');
   if (!databaseDir.existsSync()) {
     databaseDir.createSync(recursive: true);
   }
@@ -25,4 +25,18 @@ File databaseFile(PlarformSpecificPathsCache pathsCache, String fileName) {
     file.create(recursive: true);
   }
   return file;
+}
+
+Directory userDataDirectory(PlarformSpecificPathsCache pathsCache, String directoryName) {
+  final documentsDir = pathsCache.applicationDocumentsDirectory;
+  final databaseDir = Directory('${documentsDir.path}/sj_manager/user_data');
+  if (!databaseDir.existsSync()) {
+    databaseDir.createSync(recursive: true);
+  }
+  final dir = Directory('${databaseDir.path}/$directoryName');
+
+  if (!dir.existsSync()) {
+    dir.create(recursive: true);
+  }
+  return dir;
 }

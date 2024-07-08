@@ -10,10 +10,12 @@ JumperSkills _$JumperSkillsFromJson(Map<String, dynamic> json) => JumperSkills(
       qualityOnSmallerHills: (json['qualityOnSmallerHills'] as num).toDouble(),
       qualityOnLargerHills: (json['qualityOnLargerHills'] as num).toDouble(),
       landingStyle: $enumDecode(_$LandingStyleEnumMap, json['landingStyle']),
-      jumpsConsistency: $enumDecode(_$JumpsConsistencyEnumMap, json['jumpsConsistency']),
+      jumpsConsistency:
+          $enumDecode(_$JumpsConsistencyEnumMap, json['jumpsConsistency']),
     );
 
-Map<String, dynamic> _$JumperSkillsToJson(JumperSkills instance) => <String, dynamic>{
+Map<String, dynamic> _$JumperSkillsToJson(JumperSkills instance) =>
+    <String, dynamic>{
       'qualityOnSmallerHills': instance.qualityOnSmallerHills,
       'qualityOnLargerHills': instance.qualityOnLargerHills,
       'landingStyle': _$LandingStyleEnumMap[instance.landingStyle]!,

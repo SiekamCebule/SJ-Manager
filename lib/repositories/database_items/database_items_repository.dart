@@ -1,9 +1,11 @@
-abstract interface class DatabaseItemsApi<T> {
-  const DatabaseItemsApi();
+import 'package:rxdart/rxdart.dart';
 
-  Future<DatabaseItemsApi<T>> clone();
+abstract interface class DatabaseItemsRepository<T> {
+  const DatabaseItemsRepository();
 
-  Future<void> save(T item, [int? index]);
+  Future<DatabaseItemsRepository<T>> clone();
+
+  Future<void> add(T item, [int? index]);
 
   Future<void> remove(T item);
 
@@ -21,5 +23,5 @@ abstract interface class DatabaseItemsApi<T> {
 
   Future<void> saveToSource();
 
-  Iterable<T> get items;
+  ValueStream<Iterable<T>> get items;
 }

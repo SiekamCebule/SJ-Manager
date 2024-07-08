@@ -7,7 +7,32 @@ import 'package:sj_manager/ui/screens/settings/settings_screen.dart';
 void configureRoutes(FluroRouter router) {
   void define(String routePath,
       Widget? Function(BuildContext?, Map<String, List<String>>) handlerFunc) {
-    router.define(routePath, handler: Handler(handlerFunc: handlerFunc));
+    router.define(
+      routePath,
+      handler: Handler(handlerFunc: handlerFunc),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        final slideIn = CurvedAnimation(parent: animation, curve: Curves.easeIn).drive(
+          Tween<Offset>(
+            begin: const Offset(0, 1),
+            end: Offset.zero,
+          ),
+        );
+        final slideOut =
+            CurvedAnimation(parent: secondaryAnimation, curve: Curves.easeOut).drive(
+          Tween<Offset>(
+            begin: Offset.zero,
+            end: const Offset(0, 1),
+          ),
+        );
+        return SlideTransition(
+          position: slideOut,
+          child: SlideTransition(
+            position: slideIn,
+            child: child,
+          ),
+        );
+      },
+    );
   }
 
   define('/', (context, params) => const MainScreen());
