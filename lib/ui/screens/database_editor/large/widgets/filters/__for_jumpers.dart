@@ -12,7 +12,7 @@ class _ForJumpersState extends State<_ForJumpers> {
 
   @override
   Widget build(BuildContext context) {
-    final localDbFiltersCubit = context.read<FiltersRepository>();
+    final localDbFiltersCubit = context.read<DbFiltersRepository>();
     final CountriesApi countries = context.read();
     final noneCountry = countries.none;
 

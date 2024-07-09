@@ -8,13 +8,13 @@ class MainMenuDatabaseEditorButton extends StatelessWidget {
     return _Button(
       child: Row(
         children: [
-          const Gap(UiConstants.horizontalSpaceBetweenMainMenuButtonItems),
+          const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
           Icon(
             Symbols.database,
-            size: UiConstants.mainMenuSmallerButtonIconSize,
+            size: UiMainMenuConstants.smallerButtonIconSize,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
-          const Gap(UiConstants.horizontalSpaceBetweenMainMenuButtonItems),
+          const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
           Text(
             translate(context).databaseEditor,
             style: GoogleFonts.dosis(

@@ -8,13 +8,13 @@ class MainMenuSettingsButton extends StatelessWidget {
     return _Button(
       child: Row(
         children: [
-          const Gap(UiConstants.horizontalSpaceBetweenMainMenuButtonItems),
+          const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
           Icon(
             Symbols.settings,
-            size: UiConstants.mainMenuSmallerButtonIconSize,
+            size: UiMainMenuConstants.smallerButtonIconSize,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
-          const Gap(UiConstants.horizontalSpaceBetweenMainMenuButtonItems),
+          const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
           Text(
             translate(context).settings,
             style: GoogleFonts.dosis(

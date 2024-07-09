@@ -1,4 +1,4 @@
-part of 'local_db_repos_cubit.dart';
+part of 'copied_local_db_cubit.dart';
 
 class LocalDbReposState extends Equatable {
   const LocalDbReposState({

@@ -34,45 +34,45 @@ class DatabaseItemsLocalStorageRepository<T> implements DatabaseItemsRepository<
   @override
   Future<void> add(T item, [int? index]) async {
     _cachedItems.insert(index ?? _cachedItems.length, item);
-    _notify();
+    _addToStream();
   }
 
   @override
   Future<void> remove(T item) async {
     _cachedItems.remove(item);
-    _notify();
+    _addToStream();
   }
 
   @override
   Future<T> removeAt(int index) async {
     final removed = _cachedItems.removeAt(index);
-    _notify();
+    _addToStream();
     return removed;
   }
 
   @override
   Future<void> clear() async {
     _cachedItems.clear();
-    _notify();
+    _addToStream();
   }
 
   @override
   Future<void> loadRaw(Iterable<T> items) async {
     _cachedItems = items.toList();
-    _notify();
+    _addToStream();
   }
 
   @override
   Future<void> move({required int from, required int to}) async {
     final removed = _cachedItems.removeAt(from);
     _cachedItems.insert(to, removed);
-    _notify();
+    _addToStream();
   }
 
   @override
   Future<void> replace({required int oldIndex, required T newItem}) async {
     _cachedItems[oldIndex] = newItem;
-    _notify();
+    _addToStream();
   }
 
   @override
@@ -84,7 +84,7 @@ class DatabaseItemsLocalStorageRepository<T> implements DatabaseItemsRepository<
           (itemInJson) => fromJson(itemInJson),
         )
         .toList();
-    _notify();
+    _addToStream();
   }
 
   @override
@@ -93,7 +93,7 @@ class DatabaseItemsLocalStorageRepository<T> implements DatabaseItemsRepository<
     await storageFile.writeAsString(jsonEncode(itemsInJson));
   }
 
-  void _notify() {
+  void _addToStream() {
     _subject.add(_cachedItems);
   }
 

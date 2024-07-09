@@ -4,15 +4,10 @@ import 'package:sj_manager/bloc/database_editing/repos/local_db_repos_repository
 
 part 'local_db_repos_state.dart';
 
-class LocalDbReposCubit extends Cubit<LocalDbReposState> {
-  LocalDbReposCubit({
+class CopiedLocalDbCubit extends Cubit<LocalDbReposRepository?> {
+  CopiedLocalDbCubit({
     required this.originalRepositories,
-  }) : super(
-          const LocalDbReposState(
-            prepared: false,
-            editableRepositories: null,
-          ),
-        );
+  }) : super(null);
 
   LocalDbReposRepository originalRepositories;
 
@@ -22,27 +17,20 @@ class LocalDbReposCubit extends Cubit<LocalDbReposState> {
         await originalRepositories.femaleJumpersRepo.clone();
 
     emit(
-      state.copyWith(
-        prepared: true,
-        editableRepositories: LocalDbReposRepository(
-          maleJumpersRepo: editableMaleJumpersRepo,
-          femaleJumpersRepo: editableFemaleJumpersRepo,
-        ),
+      LocalDbReposRepository(
+        maleJumpersRepo: editableMaleJumpersRepo,
+        femaleJumpersRepo: editableFemaleJumpersRepo,
       ),
     );
   }
 
-  Future<void> endEditing() async {
-    if (!state.prepared) {
-      throw StateError(
-          'Cannot end editing the local db, because the db have not been set up');
-    }
+  Future<void> saveChangesToOriginalRepos() async {
     await originalRepositories.maleJumpersRepo
-        .loadRaw(state.editableRepositories!.maleJumpersRepo.items.value);
+        .loadRaw(state!.maleJumpersRepo.items.value);
     await originalRepositories.maleJumpersRepo.saveToSource();
 
     await originalRepositories.femaleJumpersRepo
-        .loadRaw(state.editableRepositories!.femaleJumpersRepo.items.value);
+        .loadRaw(state!.femaleJumpersRepo.items.value);
     await originalRepositories.femaleJumpersRepo.saveToSource();
   }
 }

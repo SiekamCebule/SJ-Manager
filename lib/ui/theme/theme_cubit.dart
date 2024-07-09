@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
+import 'package:sj_manager/ui/responsiveness/ui_main_menu_constants.dart';
 import 'package:sj_manager/ui/theme/app_schemes.dart';
 
 class ThemeCubit extends Cubit<ThemeData> {
@@ -25,13 +25,13 @@ class ThemeCubit extends Cubit<ThemeData> {
   final StreamSubscription<AppColorScheme> appSchemeSubscription;
   final StreamSubscription<Brightness> appThemeBrightnessSubscription;
 
-  AppColorScheme _lastScheme = UiConstants.defaultAppColorScheme;
-  Brightness _lastBrightness = UiConstants.defaultAppThemeBrightness;
+  AppColorScheme _lastScheme = UiGlobalConstants.defaultAppColorScheme;
+  Brightness _lastBrightness = UiGlobalConstants.defaultAppThemeBrightness;
 
   static ThemeData get _defaultTheme {
     return _constructTheme(
-      UiConstants.defaultAppColorScheme,
-      UiConstants.defaultAppThemeBrightness,
+      UiGlobalConstants.defaultAppColorScheme,
+      UiGlobalConstants.defaultAppThemeBrightness,
     );
   }
 

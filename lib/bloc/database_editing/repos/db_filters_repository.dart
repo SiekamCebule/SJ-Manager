@@ -3,8 +3,8 @@ import 'package:sj_manager/enums/database_item_type.dart';
 import 'package:sj_manager/filters/filter.dart';
 import 'package:sj_manager/models/jumper.dart';
 
-class FiltersRepository {
-  FiltersRepository();
+class DbFiltersRepository {
+  DbFiltersRepository();
 
   final _maleJumpersSubject = BehaviorSubject<Set<Filter<Jumper>>>.seeded({});
   final _femaleJumpersSubject = BehaviorSubject<Set<Filter<Jumper>>>.seeded({});

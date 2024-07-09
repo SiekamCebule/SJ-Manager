@@ -8,8 +8,8 @@ class MainMenuNewSimulationButton extends StatelessWidget {
     return _Button(
       child: Padding(
         padding: const EdgeInsets.only(
-          left: UiConstants.horizontalSpaceBetweenMainMenuButtonItems,
-          top: UiConstants.verticalSpaceBetweenMainMenuButtonItems,
+          left: UiMainMenuConstants.horizontalSpaceBetweenButtonItems,
+          top: UiMainMenuConstants.verticalSpaceBetweenButtonItems,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,10 +21,10 @@ class MainMenuNewSimulationButton extends StatelessWidget {
                 textStyle: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
-            const Gap(UiConstants.verticalSpaceBetweenMainMenuButtonItems),
+            const Gap(UiMainMenuConstants.verticalSpaceBetweenButtonItems),
             Row(
               children: [
-                const Gap(UiConstants.horizontalSpaceBetweenMainMenuButtonItems),
+                const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
                 Flexible(
                   child: Text(
                     translate(context).newSimulationButtonContent,
@@ -34,7 +34,7 @@ class MainMenuNewSimulationButton extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Gap(UiConstants.horizontalSpaceBetweenMainMenuButtonItems),
+                const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
               ],
             ),
           ],

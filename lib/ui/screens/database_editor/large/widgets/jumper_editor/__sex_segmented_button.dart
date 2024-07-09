@@ -23,14 +23,14 @@ class _SexSegmentedButtonState extends State<_SexSegmentedButton> {
           value: Sex.male,
           icon: Icon(
             Symbols.male,
-            size: 40,
+            size: UiItemEditorsConstants.sexIconSizeInJumperEditor,
           ),
         ),
         ButtonSegment(
           value: Sex.female,
           icon: Icon(
             Symbols.female,
-            size: 40,
+            size: UiItemEditorsConstants.sexIconSizeInJumperEditor,
           ),
         ),
       ],

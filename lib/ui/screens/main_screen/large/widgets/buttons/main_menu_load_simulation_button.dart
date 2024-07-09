@@ -9,13 +9,13 @@ class MainMenuLoadSimulationButton extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Gap(UiConstants.horizontalSpaceBetweenMainMenuButtonItems),
+          const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
           Icon(
             Symbols.open_in_new,
-            size: UiConstants.mainMenuSmallerButtonIconSize,
+            size: UiMainMenuConstants.smallerButtonIconSize,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
-          const Gap(UiConstants.horizontalSpaceBetweenMainMenuButtonItems),
+          const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
           Text(
             translate(context).loadSimulation,
             style: GoogleFonts.dosis(

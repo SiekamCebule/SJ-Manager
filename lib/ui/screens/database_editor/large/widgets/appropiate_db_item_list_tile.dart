@@ -10,6 +10,7 @@ class AppropiateDbItemListTile extends StatelessWidget {
     required this.indexInList,
     required this.onItemTap,
     required this.selected,
+    required this.reorderable,
   });
 
   final DatabaseItemType itemType;
@@ -17,12 +18,13 @@ class AppropiateDbItemListTile extends StatelessWidget {
   final dynamic item;
   final Function() onItemTap;
   final bool selected;
+  final bool reorderable;
 
   @override
   Widget build(BuildContext context) {
     return switch (itemType) {
       DatabaseItemType.maleJumper || DatabaseItemType.femaleJumper => JumperInfoListTile(
-          reorderable: true,
+          reorderable: reorderable,
           indexInList: indexInList,
           jumper: item,
           onTap: onItemTap,

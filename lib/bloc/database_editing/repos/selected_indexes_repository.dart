@@ -6,16 +6,6 @@ class SelectedIndexesRepository {
 
   final _subject = BehaviorSubject<Set<int>>.seeded({});
 
-  void toggleSelectionAtOnly(int index) {
-    var newSelectedIndexes = <int>{};
-    if (state.contains(index)) {
-      newSelectedIndexes = {};
-    } else {
-      newSelectedIndexes = {index};
-    }
-    _subject.add(newSelectedIndexes);
-  }
-
   void setSelection(int index, bool selection) {
     final newSelectedIndexes = Set.of(state);
     if (selection == true) {
@@ -26,9 +16,23 @@ class SelectedIndexesRepository {
     _subject.add(newSelectedIndexes);
   }
 
+  void selectOnlyAt(int index) {
+    _subject.add({index});
+  }
+
   void toggleSelection(int index) {
     final newSelectedIndexes = Set.of(state);
     newSelectedIndexes.toggle(index);
+    _subject.add(newSelectedIndexes);
+  }
+
+  void toggleSelectionAtOnly(int index) {
+    var newSelectedIndexes = <int>{};
+    if (state.contains(index)) {
+      newSelectedIndexes = {};
+    } else {
+      newSelectedIndexes = {index};
+    }
     _subject.add(newSelectedIndexes);
   }
 

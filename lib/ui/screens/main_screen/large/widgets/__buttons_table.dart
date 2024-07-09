@@ -18,14 +18,14 @@ class _ButtonsTable extends StatelessWidget {
                 Expanded(
                   child: MainMenuContinueButton(),
                 ),
-                Gap(UiConstants.spaceBetweenButtonsInMainMenu),
+                Gap(UiMainMenuConstants.spaceBetweenButtons),
                 Expanded(
                   child: MainMenuNewSimulationButton(),
                 ),
               ],
             ),
           ),
-          Gap(UiConstants.spaceBetweenButtonsInMainMenu),
+          Gap(UiMainMenuConstants.spaceBetweenButtons),
           Expanded(
             flex: 3,
             child: Row(
@@ -34,14 +34,14 @@ class _ButtonsTable extends StatelessWidget {
                 Expanded(
                   child: MainMenuLoadSimulationButton(),
                 ),
-                Gap(UiConstants.spaceBetweenButtonsInMainMenu),
+                Gap(UiMainMenuConstants.spaceBetweenButtons),
                 Expanded(
                   child: MainMenuSettingsButton(),
                 ),
               ],
             ),
           ),
-          Gap(UiConstants.spaceBetweenButtonsInMainMenu),
+          Gap(UiMainMenuConstants.spaceBetweenButtons),
           Expanded(
             flex: 3,
             child: Row(
@@ -50,7 +50,7 @@ class _ButtonsTable extends StatelessWidget {
                 Expanded(
                   child: MainMenuDatabaseEditorButton(),
                 ),
-                Gap(UiConstants.spaceBetweenButtonsInMainMenu),
+                Gap(UiMainMenuConstants.spaceBetweenButtons),
                 Expanded(
                   child: MainMenuAcknowledgementsButton(),
                 ),

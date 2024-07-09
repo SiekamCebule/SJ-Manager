@@ -8,8 +8,8 @@ class MainMenuContinueButton extends StatelessWidget {
     return _Button(
       child: Padding(
         padding: const EdgeInsets.only(
-            left: UiConstants.horizontalSpaceBetweenMainMenuButtonItems,
-            top: UiConstants.verticalSpaceBetweenMainMenuButtonItems),
+            left: UiMainMenuConstants.horizontalSpaceBetweenButtonItems,
+            top: UiMainMenuConstants.verticalSpaceBetweenButtonItems),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -30,7 +30,7 @@ class MainMenuContinueButton extends StatelessWidget {
                     textStyle: Theme.of(context).textTheme.bodyMedium,
                   ),
                 ),
-                const Gap(UiConstants.horizontalSpaceBetweenMainMenuButtonItems),
+                const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
               ],
             ),
             const Spacer(),
@@ -41,11 +41,11 @@ class MainMenuContinueButton extends StatelessWidget {
                   children: [
                     SvgPicture.network(
                       'https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Bulgaria.svg',
-                      height: UiConstants.mainMenuContinueButtonSimulationInfoIconSize,
+                      height: UiMainMenuConstants.continueButtonSimulationInfoIconSize,
                       fit: BoxFit.fitHeight,
                     ),
                     const Gap(
-                      UiConstants.mainMenuContinueButtonSimulationInfoVerticalGap,
+                      UiMainMenuConstants.continueButtonSimulationInfoVerticalGap,
                     ),
                     Text(
                       'Bułgaria',
@@ -62,11 +62,11 @@ class MainMenuContinueButton extends StatelessWidget {
                   children: [
                     Icon(
                       Symbols.calendar_month,
-                      size: UiConstants.mainMenuContinueButtonSimulationInfoIconSize,
+                      size: UiMainMenuConstants.continueButtonSimulationInfoIconSize,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     const Gap(
-                      UiConstants.mainMenuContinueButtonSimulationInfoVerticalGap,
+                      UiMainMenuConstants.continueButtonSimulationInfoVerticalGap,
                     ),
                     Text(
                       'Kwiecień \'26',
@@ -83,11 +83,11 @@ class MainMenuContinueButton extends StatelessWidget {
                   children: [
                     Icon(
                       Symbols.person,
-                      size: UiConstants.mainMenuContinueButtonSimulationInfoIconSize,
+                      size: UiMainMenuConstants.continueButtonSimulationInfoIconSize,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     const Gap(
-                      UiConstants.mainMenuContinueButtonSimulationInfoVerticalGap,
+                      UiMainMenuConstants.continueButtonSimulationInfoVerticalGap,
                     ),
                     Text(
                       '5',

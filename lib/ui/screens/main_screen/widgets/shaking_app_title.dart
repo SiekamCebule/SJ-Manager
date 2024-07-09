@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
+import 'package:sj_manager/ui/responsiveness/ui_main_menu_constants.dart';
 import 'package:sj_manager/ui/reusable/shaking_widget.dart';
 import 'package:sj_manager/ui/screens/main_screen/widgets/app_title.dart';
 
@@ -18,7 +18,7 @@ class _ShakingAppTitleState extends State<ShakingAppTitle> {
 
   @override
   void initState() {
-    final shakeTicks = Stream<void>.periodic(UiConstants.appTitleShakeInterval);
+    final shakeTicks = Stream<void>.periodic(UiMainMenuConstants.appTitleShakeInterval);
     _shakeTicksSubscription = shakeTicks.listen((_) {
       _shakingWidgetKey.currentState?.shake();
     });
@@ -35,7 +35,7 @@ class _ShakingAppTitleState extends State<ShakingAppTitle> {
   Widget build(BuildContext context) {
     return ShakingWidget(
       key: _shakingWidgetKey,
-      shakeDuration: UiConstants.appTitleShakeDuration,
+      shakeDuration: UiMainMenuConstants.appTitleShakeDuration,
       curve: Curves.linear,
       child: const AppTitle(),
     );

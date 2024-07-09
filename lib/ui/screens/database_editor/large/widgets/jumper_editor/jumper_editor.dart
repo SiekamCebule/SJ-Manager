@@ -10,7 +10,7 @@ import 'package:sj_manager/models/jumper.dart';
 import 'package:sj_manager/models/jumper_skills.dart';
 import 'package:sj_manager/models/sex.dart';
 import 'package:sj_manager/repositories/countries/countries_api.dart';
-import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
+import 'package:sj_manager/ui/responsiveness/ui_main_menu_constants.dart';
 import 'package:sj_manager/ui/reusable/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
 
@@ -81,7 +81,7 @@ class JumperEditorState extends State<JumperEditor> {
 
   @override
   Widget build(BuildContext context) {
-    const gap = Gap(UiConstants.verticalSpaceBetweenDatabaseItemEditorFields);
+    const gap = Gap(UiItemEditorsConstants.verticalSpaceBetweenFields);
     return Form(
       child: LayoutBuilder(
         builder: (context, constraints) {
