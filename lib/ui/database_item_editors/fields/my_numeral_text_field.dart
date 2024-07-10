@@ -14,6 +14,7 @@ class MyNumeralTextField extends StatelessWidget {
     required this.step,
     this.min,
     this.max,
+    this.focusNode,
   });
 
   final VoidCallback onChange;
@@ -24,6 +25,7 @@ class MyNumeralTextField extends StatelessWidget {
   final num step;
   final num? min;
   final num? max;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,7 @@ class MyNumeralTextField extends StatelessWidget {
               ],
               onSubmitted: (value) => onChange(),
               onTapOutside: (event) => onChange(),
+              focusNode: focusNode,
             ),
           ),
           IconButton(

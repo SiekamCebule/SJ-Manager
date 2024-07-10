@@ -9,6 +9,7 @@ class MyDropdownField<T> extends StatelessWidget {
     this.width,
     required this.entries,
     this.label,
+    this.focusNode,
   });
 
   final TextEditingController? controller;
@@ -17,6 +18,7 @@ class MyDropdownField<T> extends StatelessWidget {
   final double? width;
   final List<DropdownMenuEntry<T>> entries;
   final Widget? label;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class MyDropdownField<T> extends StatelessWidget {
       dropdownMenuEntries: entries,
       label: label,
       onSelected: onChange,
+      focusNode: focusNode,
     );
   }
 }

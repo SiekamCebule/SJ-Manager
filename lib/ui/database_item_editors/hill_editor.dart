@@ -52,6 +52,8 @@ class HillEditorState extends State<HillEditor> {
   TypicalWindDirection? _typicalWindDirection;
   Country? _country;
 
+  final _firstFocusNode = FocusNode();
+
   @override
   void initState() {
     _localityController = TextEditingController();
@@ -83,6 +85,7 @@ class HillEditorState extends State<HillEditor> {
     _profileController.dispose();
     _jumpsVariabilityController.dispose();
     _typicalWindDirectionController.dispose();
+    _firstFocusNode.dispose();
     super.dispose();
   }
 
@@ -96,6 +99,7 @@ class HillEditorState extends State<HillEditor> {
         children: [
           gap,
           MyTextField(
+            focusNode: _firstFocusNode,
             controller: _nameController,
             onChange: () {
               widget.onChange(_constructHill());
@@ -285,7 +289,13 @@ class HillEditorState extends State<HillEditor> {
     );
   }
 
-  void fillFields(Hill hill) {
+  void setUp(Hill hill) {
+    _fillFields(hill);
+    FocusScope.of(context).unfocus();
+    FocusScope.of(context).requestFocus(_firstFocusNode);
+  }
+
+  void _fillFields(Hill hill) {
     _nameController.text = hill.name;
     _localityController.text = hill.locality;
     _kController.text = hill.k.toString();

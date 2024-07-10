@@ -36,9 +36,9 @@ class _AppropiateItemEditorState extends State<_AppropiateItemEditor> {
     switch (widget.itemType) {
       case DatabaseItemType.maleJumper:
       case DatabaseItemType.femaleJumper:
-        _jumperEditorKey.currentState?.fillFields(item);
+        _jumperEditorKey.currentState?.setUp(item);
       case DatabaseItemType.hill:
-        _hillEditorKey.currentState?.fillFields(item);
+        _hillEditorKey.currentState?.setUp(item);
     }
   }
 }

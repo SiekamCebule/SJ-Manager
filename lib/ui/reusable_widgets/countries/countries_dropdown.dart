@@ -10,12 +10,14 @@ class CountriesDropdown extends StatefulWidget {
     required this.onSelected,
     this.firstAsInitial = false,
     this.label,
+    this.focusNode,
   });
 
   final CountriesApi countriesApi;
   final Function(Country?) onSelected;
   final bool firstAsInitial;
   final Widget? label;
+  final FocusNode? focusNode;
 
   @override
   State<CountriesDropdown> createState() => CountriesDropdownState();
@@ -44,6 +46,7 @@ class CountriesDropdownState extends State<CountriesDropdown> {
       enableSearch: false,
       requestFocusOnTap: false,
       label: widget.label,
+      focusNode: widget.focusNode,
       controller: controller,
       initialSelection: widget.firstAsInitial ? countries.first : null,
       onSelected: (selected) {

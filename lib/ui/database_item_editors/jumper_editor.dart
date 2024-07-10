@@ -52,6 +52,8 @@ class JumperEditorState extends State<JumperEditor> {
   var _landingStyle = LandingStyle.average;
   Country? _country;
 
+  final _firstFocusNode = FocusNode();
+
   @override
   void initState() {
     _nameController = TextEditingController();
@@ -73,6 +75,7 @@ class JumperEditorState extends State<JumperEditor> {
     _qualityOnLargerHillsController.dispose();
     _jumpsConsistencyController.dispose();
     _landingStyleController.dispose();
+    _firstFocusNode.dispose();
     super.dispose();
   }
 
@@ -87,6 +90,7 @@ class JumperEditorState extends State<JumperEditor> {
           children: [
             gap,
             MyTextField(
+              focusNode: _firstFocusNode,
               controller: _nameController,
               onChange: () {
                 widget.onChange(_constructJumper());
@@ -212,7 +216,12 @@ class JumperEditorState extends State<JumperEditor> {
     );
   }
 
-  void fillFields(Jumper jumper) {
+  void setUp(Jumper jumper) {
+    _fillFields(jumper);
+    FocusScope.of(context).requestFocus(_firstFocusNode);
+  }
+
+  void _fillFields(Jumper jumper) {
     _nameController.text = jumper.name;
     _surnameController.text = jumper.surname;
     _ageController.text = jumper.age.toString();

@@ -104,8 +104,8 @@ void main() async {
           RepositoryProvider(create: (context) {
             final noneCountry = context.read<CountriesApi>().none;
             return DefaultItemsRepository(
-              defaultFemaleJumper: FemaleJumper.empty(noneCountry),
-              defaultMaleJumper: MaleJumper.empty(noneCountry),
+              defaultFemaleJumper: FemaleJumper.empty(country: noneCountry),
+              defaultMaleJumper: MaleJumper.empty(country: noneCountry),
               defaultHill: Hill.empty(defaultCountry: noneCountry),
             );
           }),

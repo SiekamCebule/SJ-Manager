@@ -34,5 +34,8 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepository?> {
     await originalRepositories.femaleJumpersRepo
         .loadRaw(state!.femaleJumpersRepo.items.value);
     await originalRepositories.femaleJumpersRepo.saveToSource();
+
+    await originalRepositories.hillsRepo.loadRaw(state!.hillsRepo.items.value);
+    await originalRepositories.hillsRepo.saveToSource();
   }
 }

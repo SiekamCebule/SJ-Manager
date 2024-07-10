@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:sj_manager/enums/database_item_type.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
 import 'package:sj_manager/repositories/database_editing/database_items_repository.dart';
 
-class LocalDbReposRepository {
-  LocalDbReposRepository({
+class LocalDbReposRepository with EquatableMixin {
+  const LocalDbReposRepository({
     required this.maleJumpersRepo,
     required this.femaleJumpersRepo,
     required this.hillsRepo,
@@ -33,4 +34,11 @@ class LocalDbReposRepository {
       hillsRepo: hillsRepo ?? this.hillsRepo,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        maleJumpersRepo,
+        femaleJumpersRepo,
+        hillsRepo,
+      ];
 }

@@ -31,7 +31,6 @@ class _ItemsListState extends State<_ItemsList> {
         ]),
         builder: (context, snapshot) {
           final listShouldBeReorderable = !filtersRepo.hasValidFilter;
-          print('filtered items by type: $filteredItemsByType');
           return Focus(
             autofocus: true,
             onKeyEvent: (node, event) {

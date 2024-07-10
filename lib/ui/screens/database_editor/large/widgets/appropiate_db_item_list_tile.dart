@@ -23,7 +23,6 @@ class AppropiateDbItemListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('tole');
     return switch (itemType) {
       DatabaseItemType.maleJumper || DatabaseItemType.femaleJumper => JumperInfoListTile(
           reorderable: reorderable,

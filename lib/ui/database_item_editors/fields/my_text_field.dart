@@ -8,12 +8,14 @@ class MyTextField extends StatelessWidget {
     required this.onChange,
     this.formatters,
     required this.labelText,
+    this.focusNode,
   });
 
   final VoidCallback onChange;
   final TextEditingController controller;
   final List<TextInputFormatter>? formatters;
   final String labelText;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class MyTextField extends StatelessWidget {
       inputFormatters: formatters,
       onSubmitted: (value) => onChange(),
       onTapOutside: (event) => onChange(),
+      focusNode: focusNode,
     );
   }
 }

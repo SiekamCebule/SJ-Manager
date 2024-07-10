@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/country.dart';
@@ -19,11 +20,11 @@ class Jumper with EquatableMixin {
     required this.skills,
   });
 
-  factory Jumper.empty({required Country defaultCountry}) {
+  factory Jumper.empty({required Country country}) {
     return Jumper(
       name: '',
       surname: '',
-      country: defaultCountry,
+      country: country,
       sex: Sex.male,
       age: 0,
       skills: JumperSkills.empty,
@@ -68,6 +69,24 @@ class Jumper with EquatableMixin {
         sex,
         skills,
       ];
+
+  Jumper copyWith({
+    int? age,
+    String? name,
+    String? surname,
+    Country? country,
+    Sex? sex,
+    JumperSkills? skills,
+  }) {
+    return Jumper(
+      age: age ?? this.age,
+      name: name ?? this.name,
+      surname: surname ?? this.surname,
+      country: country ?? this.country,
+      sex: sex ?? this.sex,
+      skills: skills ?? this.skills,
+    );
+  }
 }
 
 class MaleJumper extends Jumper {
@@ -90,13 +109,31 @@ class MaleJumper extends Jumper {
     );
   }
 
-  static MaleJumper empty(Country country) {
+  static MaleJumper empty({required Country country}) {
     return MaleJumper(
       name: '',
       surname: '',
       country: country,
       age: 0,
       skills: JumperSkills.empty,
+    );
+  }
+
+  @override
+  MaleJumper copyWith({
+    int? age,
+    String? name,
+    String? surname,
+    Country? country,
+    Sex? sex,
+    JumperSkills? skills,
+  }) {
+    return MaleJumper(
+      age: age ?? this.age,
+      name: name ?? this.name,
+      surname: surname ?? this.surname,
+      country: country ?? this.country,
+      skills: skills ?? this.skills,
     );
   }
 }
@@ -121,13 +158,31 @@ class FemaleJumper extends Jumper {
     );
   }
 
-  static FemaleJumper empty(Country country) {
+  static FemaleJumper empty({required Country country}) {
     return FemaleJumper(
       name: '',
       surname: '',
       country: country,
       age: 0,
       skills: JumperSkills.empty,
+    );
+  }
+
+  @override
+  FemaleJumper copyWith({
+    int? age,
+    String? name,
+    String? surname,
+    Country? country,
+    Sex? sex,
+    JumperSkills? skills,
+  }) {
+    return FemaleJumper(
+      age: age ?? this.age,
+      name: name ?? this.name,
+      surname: surname ?? this.surname,
+      country: country ?? this.country,
+      skills: skills ?? this.skills,
     );
   }
 }

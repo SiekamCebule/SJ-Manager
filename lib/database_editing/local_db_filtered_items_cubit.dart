@@ -39,7 +39,6 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
       emit(state.copyWith(femaleJumpers: Filter.filterAll(jumpers, filters)));
     });
 
-    print('hills repo: ${itemsRepo.hillsRepo.items.value}');
     final hillsStream = Rx.combineLatest2(itemsRepo.hillsRepo.items,
         filtersRepo.hillsFilters, (items, filters) => (items, filters));
     _hillChangesSubscription = hillsStream.listen((event) {

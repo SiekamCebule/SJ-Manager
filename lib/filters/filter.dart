@@ -11,7 +11,6 @@ abstract class Filter<T> extends Equatable {
     var filtered = List.of(source);
     for (var filter in filters) {
       filtered = filter(filtered);
-      print('filtered: $filtered');
     }
     return filtered;
   }
