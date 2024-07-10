@@ -17,7 +17,7 @@ class _ItemsListState extends State<_ItemsList> {
     final copiedLocalDbRepos = copiedLocalDbCubit.state!;
 
     final editableItemsRepoByType = copiedLocalDbRepos.byType(itemsType);
-    final filtersRepoByType = context.watch<DbFiltersRepository>().byType(itemsType);
+    final filtersRepo = context.watch<DbFiltersRepository>();
     final selectedIndexesRepo = context.watch<SelectedIndexesRepository>();
 
     final filteredItemsByType =
@@ -30,7 +30,8 @@ class _ItemsListState extends State<_ItemsList> {
           editableItemsRepoByType.items,
         ]),
         builder: (context, snapshot) {
-          final listShouldBeReorderable = filtersRepoByType.isEmpty;
+          final listShouldBeReorderable = !filtersRepo.hasValidFilter;
+          print('filtered items by type: $filteredItemsByType');
           return Focus(
             autofocus: true,
             onKeyEvent: (node, event) {

@@ -59,6 +59,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     _originalDb = LocalDbReposRepository(
       maleJumpersRepo: context.read<DatabaseItemsRepository<MaleJumper>>(),
       femaleJumpersRepo: context.read<DatabaseItemsRepository<FemaleJumper>>(),
+      hillsRepo: context.read<DatabaseItemsRepository<Hill>>(),
     );
     _filtersRepo = DbFiltersRepository();
     _selectedIndexesRepo = SelectedIndexesRepository();
@@ -158,11 +159,8 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                             _selectedIndexesRepo.selectedIndexes,
                           ]),
                           builder: (context, snapshot) {
-                            final itemsType = _itemsTypeCubit.state;
                             final selectedIndexes = _selectedIndexesRepo.state;
-
-                            final shouldShowFabs = _filtersRepo.byType(itemsType).isEmpty;
-
+                            final shouldShowFabs = !_filtersRepo.hasValidFilter;
                             const fabsGap =
                                 Gap(UiDatabaseEditorConstants.verticalSpaceBetweenFabs);
 

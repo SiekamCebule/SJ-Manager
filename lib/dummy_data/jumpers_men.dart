@@ -1,7 +1,8 @@
-import 'package:osje_sim/osje_sim.dart';
 import 'package:sj_manager/models/country.dart';
-import 'package:sj_manager/models/jumper.dart';
-import 'package:sj_manager/models/jumper_skills.dart';
+import 'package:sj_manager/models/jumper/jumper.dart';
+import 'package:sj_manager/models/jumper/jumper_skills.dart';
+import 'package:sj_manager/models/jumper/jumps_consistency.dart';
+import 'package:sj_manager/models/jumper/landing_style.dart';
 import 'package:sj_manager/models/sex.dart';
 
 const jumpersMale = [

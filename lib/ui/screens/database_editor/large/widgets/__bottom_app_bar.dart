@@ -12,6 +12,7 @@ class _BottomAppBar extends StatelessWidget {
           return switch (itemsType) {
             DatabaseItemType.maleJumper => const _ForJumpers(),
             DatabaseItemType.femaleJumper => const _ForJumpers(),
+            DatabaseItemType.hill => const _ForHills(),
           };
         },
       ),

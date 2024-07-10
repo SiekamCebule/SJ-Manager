@@ -87,3 +87,11 @@ class NumberInRangeEnforcer extends TextInputFormatter {
     }
   }
 }
+
+List<TextInputFormatter> get doubleTextInputFormatters {
+  return [
+    FilteringTextInputFormatter.allow(RegExp(r'[\d\.,]')),
+    const CommaToPeriodEnforcer(),
+    const SinglePeriodEnforcer(),
+  ];
+}

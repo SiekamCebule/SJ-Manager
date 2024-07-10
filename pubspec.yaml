@@ -34,7 +34,7 @@ dependencies:
   osje_sim:
     git:
       url: https://github.com/SiekamCebule/osje-sim.git
-      ref: main
+      ref: dev
 
 
   # The following adds the Cupertino Icons font to your application.

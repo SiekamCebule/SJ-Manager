@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/bloc/database_editing/repos/default_items_repository.dart';
-import 'package:sj_manager/bloc/my_bloc_observer.dart';
+import 'package:sj_manager/models/hill/hill.dart';
+import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/jumper.dart';
+import 'package:sj_manager/models/jumper/jumper.dart';
 import 'package:sj_manager/repositories/countries/countries_api.dart';
 import 'package:sj_manager/repositories/countries/local_storage_multilingual_countries_repository.dart';
 import 'package:sj_manager/repositories/country_flags.dart/country_flags_api.dart';
 import 'package:sj_manager/repositories/country_flags.dart/local_storage_country_flags_repository.dart';
-import 'package:sj_manager/repositories/database_items/database_items_repository.dart';
-import 'package:sj_manager/repositories/database_items/database_items_local_storage_repository.dart';
+import 'package:sj_manager/repositories/database_editing/database_items_repository.dart';
+import 'package:sj_manager/repositories/database_editing/database_items_local_storage_repository.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/providers/locale_provider.dart';
 import 'package:sj_manager/ui/theme/app_theme_brightness_cubit.dart';
@@ -23,33 +23,24 @@ void main() async {
   final pathsCache = PlarformSpecificPathsCache();
   await pathsCache.setup();
 
-  Bloc.observer = MyBlocObserver();
-
   MaleJumper maleJumperFromJson(Json json, BuildContext context) {
     return MaleJumper.fromJson(
       json,
-      JsonCountryLoaderByCode(
-        repo: RepositoryProvider.of<CountriesApi>(
-          context,
-        ),
-      ),
+      countryLoader: JsonCountryLoaderByCode(repo: context.read()),
     );
   }
 
   FemaleJumper femaleJumperFromJson(Json json, BuildContext context) {
     return FemaleJumper.fromJson(
       json,
-      JsonCountryLoaderByCode(
-        repo: RepositoryProvider.of<CountriesApi>(
-          context,
-        ),
-      ),
+      countryLoader: JsonCountryLoaderByCode(repo: context.read()),
     );
   }
 
-  Json jumperToJson(Jumper jumper, BuildContext context) {
-    return jumper.toJson(
-      const JsonCountryCodeSaver(),
+  Hill hillFromJson(Json json, BuildContext context) {
+    return Hill.fromJson(
+      json,
+      countryLoader: JsonCountryLoaderByCode(repo: context.read()),
     );
   }
 
@@ -84,7 +75,9 @@ void main() async {
               return DatabaseItemsLocalStorageRepository<MaleJumper>(
                 storageFile: storageFile,
                 fromJson: (json) => maleJumperFromJson(json, context),
-                toJson: (jumper) => jumperToJson(jumper, context),
+                toJson: (jumper) => jumper.toJson(
+                  countrySaver: const JsonCountryCodeSaver(),
+                ),
               );
             },
           ),
@@ -95,15 +88,25 @@ void main() async {
               return DatabaseItemsLocalStorageRepository<FemaleJumper>(
                 storageFile: storageFile,
                 fromJson: (json) => femaleJumperFromJson(json, context),
-                toJson: (jumper) => jumperToJson(jumper, context),
+                toJson: (jumper) =>
+                    jumper.toJson(countrySaver: const JsonCountryCodeSaver()),
               );
             },
           ),
+          RepositoryProvider<DatabaseItemsRepository<Hill>>(create: (context) {
+            final storageFile = userDataFile(pathsCache, 'database/hills.json');
+            return DatabaseItemsLocalStorageRepository(
+              storageFile: storageFile,
+              fromJson: (json) => hillFromJson(json, context),
+              toJson: (hill) => hill.toJson(countrySaver: const JsonCountryCodeSaver()),
+            );
+          }),
           RepositoryProvider(create: (context) {
             final noneCountry = context.read<CountriesApi>().none;
             return DefaultItemsRepository(
               defaultFemaleJumper: FemaleJumper.empty(noneCountry),
               defaultMaleJumper: MaleJumper.empty(noneCountry),
+              defaultHill: Hill.empty(defaultCountry: noneCountry),
             );
           }),
         ],

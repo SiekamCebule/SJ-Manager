@@ -16,6 +16,7 @@ class _AppropiateItemEditor extends StatefulWidget {
 
 class _AppropiateItemEditorState extends State<_AppropiateItemEditor> {
   final _jumperEditorKey = GlobalKey<JumperEditorState>();
+  final _hillEditorKey = GlobalKey<HillEditorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +24,21 @@ class _AppropiateItemEditorState extends State<_AppropiateItemEditor> {
       DatabaseItemType.maleJumper || DatabaseItemType.femaleJumper => JumperEditor(
           key: _jumperEditorKey,
           onChange: widget.onChange,
-        )
+        ),
+      DatabaseItemType.hill => HillEditor(
+          key: _hillEditorKey,
+          onChange: widget.onChange,
+        ),
     };
   }
 
   void fill(dynamic item) {
-    _jumperEditorKey.currentState?.fillFields(item);
+    switch (widget.itemType) {
+      case DatabaseItemType.maleJumper:
+      case DatabaseItemType.femaleJumper:
+        _jumperEditorKey.currentState?.fillFields(item);
+      case DatabaseItemType.hill:
+        _hillEditorKey.currentState?.fillFields(item);
+    }
   }
 }

@@ -2,9 +2,10 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:sj_manager/models/jumper.dart';
+import 'package:sj_manager/models/hill/hill.dart';
+import 'package:sj_manager/models/jumper/jumper.dart';
 import 'package:sj_manager/repositories/countries/countries_api.dart';
-import 'package:sj_manager/repositories/database_items/database_items_repository.dart';
+import 'package:sj_manager/repositories/database_editing/database_items_repository.dart';
 import 'package:sj_manager/ui/navigation/routes.dart';
 import 'package:sj_manager/ui/screens/main_screen/main_screen.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
@@ -28,6 +29,9 @@ class _AppState extends State<App> {
           .loadFromSource();
       if (!mounted) return;
       await RepositoryProvider.of<DatabaseItemsRepository<FemaleJumper>>(context)
+          .loadFromSource();
+      if (!mounted) return;
+      await RepositoryProvider.of<DatabaseItemsRepository<Hill>>(context)
           .loadFromSource();
     });
   }

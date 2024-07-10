@@ -1,15 +1,16 @@
 part of '../../../database_editor_screen.dart';
 
-class _ForJumpers extends StatefulWidget {
-  const _ForJumpers();
+class _ForHills extends StatefulWidget {
+  const _ForHills();
 
   @override
-  State<_ForJumpers> createState() => _ForJumpersState();
+  State<_ForHills> createState() => _ForHillsState();
 }
 
-class _ForJumpersState extends State<_ForJumpers> {
-  var _byCountry = const JumpersFilterByCountry(countries: {});
-  var _bySearchText = const JumpersFilterBySearch(searchText: '');
+class _ForHillsState extends State<_ForHills> {
+  var _byCountry = const HillsFilterByCountry(countries: {});
+  var _byTypeBySize = const HillsFilterByTypeBySie(type: null);
+  var _bySearchText = const HillsFilterBySearch(searchText: '');
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +21,30 @@ class _ForJumpersState extends State<_ForJumpers> {
           width: 400,
           child: SearchTextField(
             onChanged: (changed) {
-              _bySearchText = JumpersFilterBySearch(searchText: changed);
+              _bySearchText = HillsFilterBySearch(searchText: changed);
               _setFilters();
               _clearSelection();
             },
           ),
         ),
         const Spacer(),
+        MyDropdownField(
+          onChange: (selected) {
+            _byTypeBySize = HillsFilterByTypeBySie(type: selected);
+            _setFilters();
+            _clearSelection();
+          },
+          entries: [
+            DropdownMenuEntry(value: null, label: translate(context).none),
+            ...HillTypeBySize.values.map((type) {
+              return DropdownMenuEntry(
+                value: type,
+                label: translatedHillTypeBySizeBriefDescription(context, type),
+              );
+            })
+          ],
+        ),
+        const Gap(30),
         CountriesDropdown(
           label: const Text('Filtruj wg kraju'),
           countriesApi: context.read(),
@@ -37,7 +55,7 @@ class _ForJumpersState extends State<_ForJumpers> {
               countries = {selected!};
             }
             _byCountry =
-                JumpersFilterByCountry(countries: countries, noneCountry: noneCountry);
+                HillsFilterByCountry(countries: countries, noneCountry: noneCountry);
             _setFilters();
             _clearSelection();
           },
@@ -50,8 +68,9 @@ class _ForJumpersState extends State<_ForJumpers> {
   Country get noneCountry => countries.none;
 
   void _setFilters() {
-    context.read<DbFiltersRepository>().setJumpersFilters({
+    context.read<DbFiltersRepository>().setHillsFilters({
       _byCountry,
+      _byTypeBySize,
       _bySearchText,
     });
   }
