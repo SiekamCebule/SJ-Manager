@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/models/hill/hill.dart';
+import 'package:sj_manager/repositories/database_editing/db_items_local_storage_repository.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
@@ -10,8 +11,7 @@ import 'package:sj_manager/repositories/countries/countries_api.dart';
 import 'package:sj_manager/repositories/countries/local_storage_multilingual_countries_repository.dart';
 import 'package:sj_manager/repositories/country_flags.dart/country_flags_api.dart';
 import 'package:sj_manager/repositories/country_flags.dart/local_storage_country_flags_repository.dart';
-import 'package:sj_manager/repositories/database_editing/database_items_repository.dart';
-import 'package:sj_manager/repositories/database_editing/database_items_local_storage_repository.dart';
+import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/providers/locale_provider.dart';
 import 'package:sj_manager/ui/theme/app_theme_brightness_cubit.dart';
@@ -69,10 +69,10 @@ void main() async {
               );
             },
           ),
-          RepositoryProvider<DatabaseItemsRepository<MaleJumper>>(
+          RepositoryProvider<DbItemsRepository<MaleJumper>>(
             create: (context) {
               final storageFile = userDataFile(pathsCache, 'database/jumpers_male.json');
-              return DatabaseItemsLocalStorageRepository<MaleJumper>(
+              return DbItemsLocalStorageRepository<MaleJumper>(
                 storageFile: storageFile,
                 fromJson: (json) => maleJumperFromJson(json, context),
                 toJson: (jumper) => jumper.toJson(
@@ -81,11 +81,11 @@ void main() async {
               );
             },
           ),
-          RepositoryProvider<DatabaseItemsRepository<FemaleJumper>>(
+          RepositoryProvider<DbItemsRepository<FemaleJumper>>(
             create: (context) {
               final storageFile =
                   userDataFile(pathsCache, 'database/jumpers_female.json');
-              return DatabaseItemsLocalStorageRepository<FemaleJumper>(
+              return DbItemsLocalStorageRepository<FemaleJumper>(
                 storageFile: storageFile,
                 fromJson: (json) => femaleJumperFromJson(json, context),
                 toJson: (jumper) =>
@@ -93,9 +93,9 @@ void main() async {
               );
             },
           ),
-          RepositoryProvider<DatabaseItemsRepository<Hill>>(create: (context) {
+          RepositoryProvider<DbItemsRepository<Hill>>(create: (context) {
             final storageFile = userDataFile(pathsCache, 'database/hills.json');
-            return DatabaseItemsLocalStorageRepository(
+            return DbItemsLocalStorageRepository(
               storageFile: storageFile,
               fromJson: (json) => hillFromJson(json, context),
               toJson: (hill) => hill.toJson(countrySaver: const JsonCountryCodeSaver()),
@@ -106,7 +106,7 @@ void main() async {
             return DefaultItemsRepository(
               defaultFemaleJumper: FemaleJumper.empty(country: noneCountry),
               defaultMaleJumper: MaleJumper.empty(country: noneCountry),
-              defaultHill: Hill.empty(defaultCountry: noneCountry),
+              defaultHill: Hill.empty(country: noneCountry),
             );
           }),
         ],

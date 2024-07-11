@@ -1,8 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:sj_manager/repositories/database_editing/local_db_repos_repository.dart';
-
-part 'local_db_repos_state.dart';
 
 class CopiedLocalDbCubit extends Cubit<LocalDbReposRepository?> {
   CopiedLocalDbCubit({

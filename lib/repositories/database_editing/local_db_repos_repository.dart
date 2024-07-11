@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:sj_manager/enums/database_item_type.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
-import 'package:sj_manager/repositories/database_editing/database_items_repository.dart';
+import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 
 class LocalDbReposRepository with EquatableMixin {
   const LocalDbReposRepository({
@@ -11,11 +11,11 @@ class LocalDbReposRepository with EquatableMixin {
     required this.hillsRepo,
   });
 
-  final DatabaseItemsRepository<Jumper> maleJumpersRepo;
-  final DatabaseItemsRepository<Jumper> femaleJumpersRepo;
-  final DatabaseItemsRepository<Hill> hillsRepo;
+  final DbItemsRepository<Jumper> maleJumpersRepo;
+  final DbItemsRepository<Jumper> femaleJumpersRepo;
+  final DbItemsRepository<Hill> hillsRepo;
 
-  DatabaseItemsRepository<dynamic> byType(DatabaseItemType type) {
+  DbItemsRepository<dynamic> byType(DatabaseItemType type) {
     return switch (type) {
       DatabaseItemType.maleJumper => maleJumpersRepo,
       DatabaseItemType.femaleJumper => femaleJumpersRepo,
@@ -24,9 +24,9 @@ class LocalDbReposRepository with EquatableMixin {
   }
 
   LocalDbReposRepository copyWith(
-    DatabaseItemsRepository<Jumper>? maleJumpersRepo,
-    DatabaseItemsRepository<Jumper>? femaleJumpersRepo,
-    DatabaseItemsRepository<Hill>? hillsRepo,
+    DbItemsRepository<Jumper>? maleJumpersRepo,
+    DbItemsRepository<Jumper>? femaleJumpersRepo,
+    DbItemsRepository<Hill>? hillsRepo,
   ) {
     return LocalDbReposRepository(
       maleJumpersRepo: maleJumpersRepo ?? this.maleJumpersRepo,

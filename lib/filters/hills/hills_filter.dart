@@ -1,4 +1,5 @@
-import 'package:sj_manager/enums/hill_type_by_size.dart';
+import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
+import 'package:sj_manager/models/hill/hill_type_by_size.dart';
 import 'package:sj_manager/filters/filter.dart';
 import 'package:sj_manager/models/country.dart';
 import 'package:sj_manager/models/hill/hill.dart';
@@ -36,13 +37,13 @@ final class HillsFilterByCountry extends HillsFilter {
 
 final class HillsFilterBySearch extends HillsFilter {
   const HillsFilterBySearch({
-    required this.searchText,
+    required this.searchAlgorithm,
   });
 
-  final String searchText;
+  final DbItemMatchingByTextAlgorithm<Hill> searchAlgorithm;
 
   @override
-  bool get isValid => searchText.isNotEmpty;
+  bool get isValid => searchAlgorithm.text.isNotEmpty;
 
   @override
   List<Hill> call(List<Hill> source) {
@@ -51,15 +52,11 @@ final class HillsFilterBySearch extends HillsFilter {
   }
 
   bool _shouldPass(Hill hill) {
-    final letters = hill.name.toLowerCase().split('');
-    final toContain = searchText.toLowerCase().split('');
-    return toContain.every((letterToContain) {
-      return letters.contains(letterToContain);
-    });
+    return searchAlgorithm.matches(hill);
   }
 
   @override
-  List<Object?> get props => [searchText];
+  List<Object?> get props => [searchAlgorithm];
 }
 
 final class HillsFilterByTypeBySie extends HillsFilter {

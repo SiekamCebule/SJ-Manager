@@ -7,7 +7,7 @@ abstract class Filter<T> extends Equatable {
 
   bool get isValid;
 
-  static List<T> filterAll<T>(List<T> source, Set<Filter<T>> filters) {
+  static List<T> filterAll<T>(List<T> source, List<Filter<T>> filters) {
     var filtered = List.of(source);
     for (var filter in filters) {
       filtered = filter(filtered);

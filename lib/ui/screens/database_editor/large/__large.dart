@@ -57,9 +57,9 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
 
   void _initializeRepos() {
     _originalDb = LocalDbReposRepository(
-      maleJumpersRepo: context.read<DatabaseItemsRepository<MaleJumper>>(),
-      femaleJumpersRepo: context.read<DatabaseItemsRepository<FemaleJumper>>(),
-      hillsRepo: context.read<DatabaseItemsRepository<Hill>>(),
+      maleJumpersRepo: context.read<DbItemsRepository<MaleJumper>>(),
+      femaleJumpersRepo: context.read<DbItemsRepository<FemaleJumper>>(),
+      hillsRepo: context.read<DbItemsRepository<Hill>>(),
     );
     _filtersRepo = DbFiltersRepository();
     _selectedIndexesRepo = SelectedIndexesRepository();
@@ -82,6 +82,8 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     _copiedDbCubit.close();
     _dbChangeStatusCubit.close();
     _itemsTypeCubit.close();
+    _selectedIndexesRepo.close();
+    _filtersRepo.close();
     FlutterWindowClose.setWindowShouldCloseHandler(null);
     super.dispose();
   }

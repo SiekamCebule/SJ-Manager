@@ -1,9 +1,9 @@
 import 'package:rxdart/rxdart.dart';
 
-abstract interface class DatabaseItemsRepository<T> {
-  const DatabaseItemsRepository();
+abstract interface class DbItemsRepository<T> {
+  const DbItemsRepository();
 
-  Future<DatabaseItemsRepository<T>> clone();
+  Future<DbItemsRepository<T>> clone();
 
   Future<void> add(T item, [int? index]);
 

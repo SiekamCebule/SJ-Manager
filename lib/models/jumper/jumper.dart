@@ -9,7 +9,6 @@ import 'package:sj_manager/models/sex.dart';
 
 part '../../json/manual_json/jumper_json.dart';
 
-@JsonSerializable()
 class Jumper with EquatableMixin {
   const Jumper({
     required this.name,

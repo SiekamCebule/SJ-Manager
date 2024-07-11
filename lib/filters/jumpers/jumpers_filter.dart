@@ -1,4 +1,5 @@
 import 'package:sj_manager/filters/filter.dart';
+import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
 import 'package:sj_manager/models/country.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
 
@@ -35,13 +36,13 @@ final class JumpersFilterByCountry extends JumpersFilter {
 
 final class JumpersFilterBySearch extends JumpersFilter {
   const JumpersFilterBySearch({
-    required this.searchText,
+    required this.searchAlgorithm,
   });
 
-  final String searchText;
+  final DbItemMatchingByTextAlgorithm<Jumper> searchAlgorithm;
 
   @override
-  bool get isValid => searchText.isNotEmpty;
+  bool get isValid => searchAlgorithm.text.isNotEmpty;
 
   @override
   List<Jumper> call(List<Jumper> source) {
@@ -50,13 +51,9 @@ final class JumpersFilterBySearch extends JumpersFilter {
   }
 
   bool _shouldPass(Jumper jumper) {
-    final letters = jumper.nameAndSurname().toLowerCase().split('');
-    final toContain = searchText.toLowerCase().split('');
-    return toContain.every((letterToContain) {
-      return letters.contains(letterToContain);
-    });
+    return searchAlgorithm.matches(jumper);
   }
 
   @override
-  List<Object?> get props => [searchText];
+  List<Object?> get props => [searchAlgorithm];
 }

@@ -10,7 +10,8 @@ class _ForHills extends StatefulWidget {
 class _ForHillsState extends State<_ForHills> {
   var _byCountry = const HillsFilterByCountry(countries: {});
   var _byTypeBySize = const HillsFilterByTypeBySie(type: null);
-  var _bySearchText = const HillsFilterBySearch(searchText: '');
+  var _bySearchText = const HillsFilterBySearch(
+      searchAlgorithm: DefaultHillMatchingByTextAlgorithm(text: ''));
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,8 @@ class _ForHillsState extends State<_ForHills> {
           width: 400,
           child: SearchTextField(
             onChanged: (changed) {
-              _bySearchText = HillsFilterBySearch(searchText: changed);
+              _bySearchText = HillsFilterBySearch(
+                  searchAlgorithm: DefaultHillMatchingByTextAlgorithm(text: changed));
               _setFilters();
               _clearSelection();
             },
@@ -68,11 +70,11 @@ class _ForHillsState extends State<_ForHills> {
   Country get noneCountry => countries.none;
 
   void _setFilters() {
-    context.read<DbFiltersRepository>().setHillsFilters({
+    context.read<DbFiltersRepository>().setHillsFilters([
       _byCountry,
       _byTypeBySize,
       _bySearchText,
-    });
+    ]);
   }
 
   void _clearSelection() {

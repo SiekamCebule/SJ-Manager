@@ -4,10 +4,10 @@ import 'dart:io';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/repositories/database_editing/database_items_repository.dart';
+import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 
-class DatabaseItemsLocalStorageRepository<T> implements DatabaseItemsRepository<T> {
-  DatabaseItemsLocalStorageRepository({
+class DbItemsLocalStorageRepository<T> implements DbItemsRepository<T> {
+  DbItemsLocalStorageRepository({
     required this.storageFile,
     required this.fromJson,
     required this.toJson,
@@ -21,8 +21,8 @@ class DatabaseItemsLocalStorageRepository<T> implements DatabaseItemsRepository<
   final _subject = BehaviorSubject<Iterable<T>>();
 
   @override
-  Future<DatabaseItemsRepository<T>> clone() async {
-    final repo = DatabaseItemsLocalStorageRepository(
+  Future<DbItemsRepository<T>> clone() async {
+    final repo = DbItemsLocalStorageRepository(
       storageFile: storageFile,
       fromJson: fromJson,
       toJson: toJson,

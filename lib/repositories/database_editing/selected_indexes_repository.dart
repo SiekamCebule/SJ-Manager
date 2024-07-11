@@ -39,7 +39,9 @@ class SelectedIndexesRepository {
   void moveSelection({required int from, required int to}) {
     final newSelectedIndexes = Set.of(state);
     if (newSelectedIndexes.contains(from)) {
-      newSelectedIndexes.remove(from);
+      if (!newSelectedIndexes.contains(to)) {
+        newSelectedIndexes.remove(from);
+      }
       newSelectedIndexes.add(to);
     }
     _subject.add(newSelectedIndexes);
@@ -47,6 +49,10 @@ class SelectedIndexesRepository {
 
   void clearSelection() {
     _subject.add({});
+  }
+
+  void close() {
+    _subject.close();
   }
 
   Set<int> get state => _subject.stream.value;

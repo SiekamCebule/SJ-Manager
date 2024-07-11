@@ -9,7 +9,8 @@ class _ForJumpers extends StatefulWidget {
 
 class _ForJumpersState extends State<_ForJumpers> {
   var _byCountry = const JumpersFilterByCountry(countries: {});
-  var _bySearchText = const JumpersFilterBySearch(searchText: '');
+  var _bySearchText = const JumpersFilterBySearch(
+      searchAlgorithm: DefaultJumperMatchingByTextAlgorithm(text: ''));
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,8 @@ class _ForJumpersState extends State<_ForJumpers> {
           width: 400,
           child: SearchTextField(
             onChanged: (changed) {
-              _bySearchText = JumpersFilterBySearch(searchText: changed);
+              _bySearchText = JumpersFilterBySearch(
+                  searchAlgorithm: DefaultJumperMatchingByTextAlgorithm(text: changed));
               _setFilters();
               _clearSelection();
             },
@@ -50,10 +52,10 @@ class _ForJumpersState extends State<_ForJumpers> {
   Country get noneCountry => countries.none;
 
   void _setFilters() {
-    context.read<DbFiltersRepository>().setJumpersFilters({
+    context.read<DbFiltersRepository>().setMaleAndFemaleJumpersFilters([
       _byCountry,
       _bySearchText,
-    });
+    ]);
   }
 
   void _clearSelection() {
