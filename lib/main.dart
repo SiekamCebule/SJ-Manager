@@ -14,6 +14,7 @@ import 'package:sj_manager/repositories/country_flags.dart/local_storage_country
 import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/providers/locale_provider.dart';
+import 'package:sj_manager/ui/reusable_widgets/jumper_image/jumper_image_generating_setup.dart';
 import 'package:sj_manager/ui/theme/app_theme_brightness_cubit.dart';
 import 'package:sj_manager/ui/theme/color_scheme_cubit.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
@@ -47,87 +48,103 @@ void main() async {
   runApp(
     ChangeNotifierProvider(
       create: (context) => LocaleProvider(),
-      child: MultiRepositoryProvider(
+      child: MultiProvider(
         providers: [
-          RepositoryProvider<CountriesApi>(
-            create: (context) {
-              final storageFile = userDataFile(pathsCache, 'countries/countries.json');
-              final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
-              return LocalStorageMultilingualCountriesRepository(
-                storageFile: storageFile,
-                languageCode: localeProvider.locale?.languageCode ?? 'pl',
-              );
-            },
-          ),
-          RepositoryProvider<CountryFlagsApi>(
-            create: (context) {
-              final storageDirectory =
-                  userDataDirectory(pathsCache, 'countries/country_flags');
-              return LocalStorageCountryFlagsRepository(
-                imagesDirectory: storageDirectory,
-                imagesExtension: 'png',
-              );
-            },
-          ),
-          RepositoryProvider<DbItemsRepository<MaleJumper>>(
-            create: (context) {
-              final storageFile = userDataFile(pathsCache, 'database/jumpers_male.json');
-              return DbItemsLocalStorageRepository<MaleJumper>(
-                storageFile: storageFile,
-                fromJson: (json) => maleJumperFromJson(json, context),
-                toJson: (jumper) => jumper.toJson(
-                  countrySaver: const JsonCountryCodeSaver(),
-                ),
-              );
-            },
-          ),
-          RepositoryProvider<DbItemsRepository<FemaleJumper>>(
-            create: (context) {
-              final storageFile =
-                  userDataFile(pathsCache, 'database/jumpers_female.json');
-              return DbItemsLocalStorageRepository<FemaleJumper>(
-                storageFile: storageFile,
-                fromJson: (json) => femaleJumperFromJson(json, context),
-                toJson: (jumper) =>
-                    jumper.toJson(countrySaver: const JsonCountryCodeSaver()),
-              );
-            },
-          ),
-          RepositoryProvider<DbItemsRepository<Hill>>(create: (context) {
-            final storageFile = userDataFile(pathsCache, 'database/hills.json');
-            return DbItemsLocalStorageRepository(
-              storageFile: storageFile,
-              fromJson: (json) => hillFromJson(json, context),
-              toJson: (hill) => hill.toJson(countrySaver: const JsonCountryCodeSaver()),
-            );
-          }),
-          RepositoryProvider(create: (context) {
-            final noneCountry = context.read<CountriesApi>().none;
-            return DefaultItemsRepository(
-              defaultFemaleJumper: FemaleJumper.empty(country: noneCountry),
-              defaultMaleJumper: MaleJumper.empty(country: noneCountry),
-              defaultHill: Hill.empty(country: noneCountry),
-            );
+          Provider(create: (context) {
+            return JumperImageGeneratingSetup(
+                imagesDirectory: userDataDirectory(pathsCache, 'database/jumper_images'),
+                toFileName: (jumper) {
+                  return '${jumper.country.code.toLowerCase()}_${jumper.name.toLowerCase()}_${jumper.surname.toLowerCase()}';
+                },
+                extension: 'png');
           }),
         ],
-        child: MultiBlocProvider(
+        child: MultiRepositoryProvider(
           providers: [
-            BlocProvider(
-              create: (context) => AppThemeBrightnessCubit(),
+            RepositoryProvider<CountriesApi>(
+              create: (context) {
+                final storageFile = userDataFile(pathsCache, 'countries/countries.json');
+                final localeProvider =
+                    Provider.of<LocaleProvider>(context, listen: false);
+                return LocalStorageMultilingualCountriesRepository(
+                  storageFile: storageFile,
+                  languageCode: localeProvider.locale?.languageCode ?? 'pl',
+                );
+              },
             ),
-            BlocProvider(
-              create: (context) => AppColorSchemeCubit(),
+            RepositoryProvider<CountryFlagsApi>(
+              create: (context) {
+                final storageDirectory =
+                    userDataDirectory(pathsCache, 'countries/country_flags');
+                return LocalStorageCountryFlagsRepository(
+                  imagesDirectory: storageDirectory,
+                  imagesExtension: 'png',
+                );
+              },
             ),
-            BlocProvider(create: (context) {
-              return ThemeCubit(
-                appSchemeSubscription:
-                    BlocProvider.of<AppColorSchemeCubit>(context).stream.listen(null),
-                appThemeBrightnessSubscription:
-                    BlocProvider.of<AppThemeBrightnessCubit>(context).stream.listen(null),
+            RepositoryProvider<DbItemsRepository<MaleJumper>>(
+              create: (context) {
+                final storageFile =
+                    userDataFile(pathsCache, 'database/jumpers_male.json');
+                return DbItemsLocalStorageRepository<MaleJumper>(
+                  storageFile: storageFile,
+                  fromJson: (json) => maleJumperFromJson(json, context),
+                  toJson: (jumper) => jumper.toJson(
+                    countrySaver: const JsonCountryCodeSaver(),
+                  ),
+                );
+              },
+            ),
+            RepositoryProvider<DbItemsRepository<FemaleJumper>>(
+              create: (context) {
+                final storageFile =
+                    userDataFile(pathsCache, 'database/jumpers_female.json');
+                return DbItemsLocalStorageRepository<FemaleJumper>(
+                  storageFile: storageFile,
+                  fromJson: (json) => femaleJumperFromJson(json, context),
+                  toJson: (jumper) =>
+                      jumper.toJson(countrySaver: const JsonCountryCodeSaver()),
+                );
+              },
+            ),
+            RepositoryProvider<DbItemsRepository<Hill>>(create: (context) {
+              final storageFile = userDataFile(pathsCache, 'database/hills.json');
+              return DbItemsLocalStorageRepository(
+                storageFile: storageFile,
+                fromJson: (json) => hillFromJson(json, context),
+                toJson: (hill) => hill.toJson(countrySaver: const JsonCountryCodeSaver()),
+              );
+            }),
+            RepositoryProvider(create: (context) {
+              final noneCountry = context.read<CountriesApi>().none;
+              return DefaultItemsRepository(
+                defaultFemaleJumper: FemaleJumper.empty(country: noneCountry),
+                defaultMaleJumper: MaleJumper.empty(country: noneCountry),
+                defaultHill: Hill.empty(country: noneCountry),
               );
             }),
           ],
-          child: const App(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => AppThemeBrightnessCubit(),
+              ),
+              BlocProvider(
+                create: (context) => AppColorSchemeCubit(),
+              ),
+              BlocProvider(create: (context) {
+                return ThemeCubit(
+                  appSchemeSubscription:
+                      BlocProvider.of<AppColorSchemeCubit>(context).stream.listen(null),
+                  appThemeBrightnessSubscription:
+                      BlocProvider.of<AppThemeBrightnessCubit>(context)
+                          .stream
+                          .listen(null),
+                );
+              }),
+            ],
+            child: const App(),
+          ),
         ),
       ),
     ),

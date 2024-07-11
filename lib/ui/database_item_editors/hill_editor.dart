@@ -16,6 +16,7 @@ import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/responsiveness/ui_main_menu_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
+import 'package:sj_manager/utils/platform.dart';
 
 class HillEditor extends StatefulWidget {
   const HillEditor({
@@ -53,6 +54,7 @@ class HillEditorState extends State<HillEditor> {
   Country? _country;
 
   final _firstFocusNode = FocusNode();
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
@@ -68,6 +70,7 @@ class HillEditorState extends State<HillEditor> {
     _profileController = TextEditingController();
     _jumpsVariabilityController = TextEditingController();
     _typicalWindDirectionController = TextEditingController();
+    _scrollController = ScrollController();
     super.initState();
   }
 
@@ -86,6 +89,7 @@ class HillEditorState extends State<HillEditor> {
     _jumpsVariabilityController.dispose();
     _typicalWindDirectionController.dispose();
     _firstFocusNode.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -93,180 +97,189 @@ class HillEditorState extends State<HillEditor> {
   Widget build(BuildContext context) {
     const gap = Gap(UiItemEditorsConstants.verticalSpaceBetweenFields);
     return LayoutBuilder(builder: (context, constraints) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          gap,
-          MyTextField(
-            focusNode: _firstFocusNode,
-            controller: _nameController,
-            onChange: () {
-              widget.onChange(_constructHill());
-            },
-            labelText: 'Nazwa',
-          ),
-          gap,
-          MyTextField(
-            controller: _localityController,
-            onChange: () {
-              widget.onChange(_constructHill());
-            },
-            formatters: const [
-              UpperCaseTextFormatter(),
+      return Scrollbar(
+        thumbVisibility: platformIsDesktop,
+        controller: _scrollController,
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              gap,
+              MyTextField(
+                focusNode: _firstFocusNode,
+                controller: _nameController,
+                onChange: () {
+                  widget.onChange(_constructHill());
+                },
+                labelText: 'Nazwa',
+              ),
+              gap,
+              MyTextField(
+                controller: _localityController,
+                onChange: () {
+                  widget.onChange(_constructHill());
+                },
+                formatters: const [
+                  UpperCaseTextFormatter(),
+                ],
+                labelText: 'Lokalizacja',
+              ),
+              gap,
+              CountriesDropdown(
+                key: _countriesDropdownKey,
+                countriesApi: RepositoryProvider.of<CountriesApi>(context),
+                onSelected: (maybeCountry) {
+                  _country = maybeCountry;
+                  widget.onChange(_constructHill());
+                },
+              ),
+              gap,
+              MyNumeralTextField(
+                controller: _kController,
+                onChange: () {
+                  widget.onChange(_constructHill());
+                },
+                formatters: doubleTextInputFormatters,
+                labelText: 'Punkt K',
+                step: 1.0,
+                min: 0.0,
+                max: 10000,
+              ),
+              gap,
+              MyNumeralTextField(
+                controller: _hsController,
+                onChange: () {
+                  widget.onChange(_constructHill());
+                },
+                formatters: doubleTextInputFormatters,
+                labelText: 'Punkt HS',
+                step: 1.0,
+                min: 0.0,
+                max: 10000,
+              ),
+              gap,
+              MyDropdownField(
+                controller: _landingEaseController,
+                onChange: (selected) {
+                  _landingEase = selected!;
+                  widget.onChange(_constructHill());
+                },
+                entries: LandingEase.values.map((ease) {
+                  return DropdownMenuEntry(
+                      value: ease,
+                      label: translatedLandingEaseDescription(context, ease));
+                }).toList(),
+                width: constraints.maxWidth,
+                initial: _landingEase,
+                label: const Text('Lądowanie'),
+              ),
+              gap,
+              MyDropdownField(
+                controller: _profileController,
+                onChange: (selected) {
+                  _profile = selected!;
+                  widget.onChange(_constructHill());
+                },
+                entries: HillProfileType.values.map((type) {
+                  return DropdownMenuEntry(
+                      value: type,
+                      label: translatedHillProfileDescription(context, type));
+                }).toList(),
+                width: constraints.maxWidth,
+                initial: _profile,
+                label: const Text('Profil'),
+              ),
+              gap,
+              MyDropdownField(
+                controller: _jumpsVariabilityController,
+                onChange: (selected) {
+                  _jumpsVariability = selected!;
+                  widget.onChange(_constructHill());
+                },
+                entries: JumpsVariability.values.map((variability) {
+                  return DropdownMenuEntry(
+                      value: variability,
+                      label: translatedJumpsVariabilityDescription(context, variability));
+                }).toList(),
+                width: constraints.maxWidth,
+                initial: _jumpsVariability,
+                label: const Text('Skoki zawodników'),
+              ),
+              gap,
+              MyDropdownField(
+                controller: _typicalWindDirectionController,
+                onChange: (selected) {
+                  _typicalWindDirection = selected;
+                  widget.onChange(_constructHill());
+                },
+                entries: TypicalWindDirection.values.map((direction) {
+                  return DropdownMenuEntry(
+                      value: direction,
+                      label: translatedTypicalWindDirectionBriefDescription(
+                          context, direction));
+                }).toList(),
+                width: constraints.maxWidth,
+                initial: _typicalWindDirection,
+                label: const Text('Typowy kierunek wiatru'),
+              ),
+              gap,
+              MyNumeralTextField(
+                controller: _typicalWindStrengthController,
+                onChange: () {
+                  widget.onChange(_constructHill());
+                },
+                formatters: doubleTextInputFormatters,
+                labelText: 'Typowa siła wiatru',
+                suffixText: 'm/s',
+                step: 0.5,
+                min: 0.0,
+                max: 50,
+              ),
+              gap,
+              MyNumeralTextField(
+                controller: _pointsForGateController,
+                onChange: () {
+                  widget.onChange(_constructHill());
+                },
+                formatters: doubleTextInputFormatters,
+                labelText: 'Punkty za belkę',
+                suffixText: 'pkt.',
+                step: 1.0,
+                min: 0.0,
+                max: 1000,
+              ),
+              gap,
+              MyNumeralTextField(
+                controller: _pointsForHeadwindController,
+                onChange: () {
+                  widget.onChange(_constructHill());
+                },
+                formatters: doubleTextInputFormatters,
+                labelText: 'Punkty za wiatr przedni',
+                suffixText: 'pkt.',
+                step: 1.0,
+                min: 0.0,
+                max: 1000,
+              ),
+              gap,
+              MyNumeralTextField(
+                controller: _pointsForTailwindController,
+                onChange: () {
+                  widget.onChange(_constructHill());
+                },
+                formatters: doubleTextInputFormatters,
+                labelText: 'Punkty za wiatr tylny',
+                suffixText: 'pkt',
+                step: 1.0,
+                min: 0.0,
+                max: 1000,
+              ),
+              gap,
             ],
-            labelText: 'Lokalizacja',
           ),
-          gap,
-          CountriesDropdown(
-            key: _countriesDropdownKey,
-            countriesApi: RepositoryProvider.of<CountriesApi>(context),
-            onSelected: (maybeCountry) {
-              _country = maybeCountry;
-              widget.onChange(_constructHill());
-            },
-          ),
-          gap,
-          MyNumeralTextField(
-            controller: _kController,
-            onChange: () {
-              widget.onChange(_constructHill());
-            },
-            formatters: doubleTextInputFormatters,
-            labelText: 'Punkt K',
-            step: 1.0,
-            min: 0.0,
-            max: 10000,
-          ),
-          gap,
-          MyNumeralTextField(
-            controller: _hsController,
-            onChange: () {
-              widget.onChange(_constructHill());
-            },
-            formatters: doubleTextInputFormatters,
-            labelText: 'Punkt HS',
-            step: 1.0,
-            min: 0.0,
-            max: 10000,
-          ),
-          gap,
-          MyDropdownField(
-            controller: _landingEaseController,
-            onChange: (selected) {
-              _landingEase = selected!;
-              widget.onChange(_constructHill());
-            },
-            entries: LandingEase.values.map((ease) {
-              return DropdownMenuEntry(
-                  value: ease, label: translatedLandingEaseDescription(context, ease));
-            }).toList(),
-            width: constraints.maxWidth,
-            initial: _landingEase,
-            label: const Text('Lądowanie'),
-          ),
-          gap,
-          MyDropdownField(
-            controller: _profileController,
-            onChange: (selected) {
-              _profile = selected!;
-              widget.onChange(_constructHill());
-            },
-            entries: HillProfileType.values.map((type) {
-              return DropdownMenuEntry(
-                  value: type, label: translatedHillProfileDescription(context, type));
-            }).toList(),
-            width: constraints.maxWidth,
-            initial: _profile,
-            label: const Text('Profil'),
-          ),
-          gap,
-          MyDropdownField(
-            controller: _jumpsVariabilityController,
-            onChange: (selected) {
-              _jumpsVariability = selected!;
-              widget.onChange(_constructHill());
-            },
-            entries: JumpsVariability.values.map((variability) {
-              return DropdownMenuEntry(
-                  value: variability,
-                  label: translatedJumpsVariabilityDescription(context, variability));
-            }).toList(),
-            width: constraints.maxWidth,
-            initial: _jumpsVariability,
-            label: const Text('Skoki zawodników'),
-          ),
-          gap,
-          MyDropdownField(
-            controller: _typicalWindDirectionController,
-            onChange: (selected) {
-              _typicalWindDirection = selected;
-              widget.onChange(_constructHill());
-            },
-            entries: TypicalWindDirection.values.map((direction) {
-              return DropdownMenuEntry(
-                  value: direction,
-                  label:
-                      translatedTypicalWindDirectionBriefDescription(context, direction));
-            }).toList(),
-            width: constraints.maxWidth,
-            initial: _typicalWindDirection,
-            label: const Text('Typowy kierunek wiatru'),
-          ),
-          gap,
-          MyNumeralTextField(
-            controller: _typicalWindStrengthController,
-            onChange: () {
-              widget.onChange(_constructHill());
-            },
-            formatters: doubleTextInputFormatters,
-            labelText: 'Typowa siła wiatru',
-            suffixText: 'm/s',
-            step: 0.5,
-            min: 0.0,
-            max: 50,
-          ),
-          gap,
-          MyNumeralTextField(
-            controller: _pointsForGateController,
-            onChange: () {
-              widget.onChange(_constructHill());
-            },
-            formatters: doubleTextInputFormatters,
-            labelText: 'Punkty za belkę',
-            suffixText: 'pkt.',
-            step: 1.0,
-            min: 0.0,
-            max: 1000,
-          ),
-          gap,
-          MyNumeralTextField(
-            controller: _pointsForHeadwindController,
-            onChange: () {
-              widget.onChange(_constructHill());
-            },
-            formatters: doubleTextInputFormatters,
-            labelText: 'Punkty za wiatr przedni',
-            suffixText: 'pkt.',
-            step: 1.0,
-            min: 0.0,
-            max: 1000,
-          ),
-          gap,
-          MyNumeralTextField(
-            controller: _pointsForTailwindController,
-            onChange: () {
-              widget.onChange(_constructHill());
-            },
-            formatters: doubleTextInputFormatters,
-            labelText: 'Punkty za wiatr tylny',
-            suffixText: 'pkt',
-            step: 1.0,
-            min: 0.0,
-            max: 1000,
-          ),
-          gap,
-        ],
+        ),
       );
     });
   }

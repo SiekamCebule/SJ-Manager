@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +18,9 @@ import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/responsiveness/ui_main_menu_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
+import 'package:sj_manager/ui/reusable_widgets/jumper_image/item_image_not_found_placeholder.dart';
+import 'package:sj_manager/ui/reusable_widgets/jumper_image/jumper_image.dart';
+import 'package:sj_manager/utils/platform.dart';
 
 class JumperEditor extends StatefulWidget {
   const JumperEditor({
@@ -52,7 +57,10 @@ class JumperEditorState extends State<JumperEditor> {
   var _landingStyle = LandingStyle.average;
   Country? _country;
 
+  Jumper? _cachedJumper;
+
   final _firstFocusNode = FocusNode();
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
@@ -63,6 +71,7 @@ class JumperEditorState extends State<JumperEditor> {
     _qualityOnLargerHillsController = TextEditingController();
     _jumpsConsistencyController = TextEditingController();
     _landingStyleController = TextEditingController();
+    _scrollController = ScrollController();
     super.initState();
   }
 
@@ -76,6 +85,7 @@ class JumperEditorState extends State<JumperEditor> {
     _jumpsConsistencyController.dispose();
     _landingStyleController.dispose();
     _firstFocusNode.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -84,139 +94,184 @@ class JumperEditorState extends State<JumperEditor> {
     const gap = Gap(UiItemEditorsConstants.verticalSpaceBetweenFields);
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            gap,
-            MyTextField(
-              focusNode: _firstFocusNode,
-              controller: _nameController,
-              onChange: () {
-                widget.onChange(_constructJumper());
-              },
-              formatters: const [
-                CapitalizeTextFormatter(),
+        return Scrollbar(
+          thumbVisibility: platformIsDesktop,
+          controller: _scrollController,
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                gap,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          MyTextField(
+                            focusNode: _firstFocusNode,
+                            controller: _nameController,
+                            onChange: () {
+                              widget.onChange(_constructAndCacheJumper());
+                            },
+                            formatters: const [
+                              CapitalizeTextFormatter(),
+                            ],
+                            labelText: 'Imię',
+                          ),
+                          gap,
+                          MyTextField(
+                            controller: _surnameController,
+                            onChange: () {
+                              widget.onChange(_constructAndCacheJumper());
+                            },
+                            formatters: [
+                              if (widget.forceUpperCaseOnSurname)
+                                const UpperCaseTextFormatter(),
+                            ],
+                            labelText: 'Nazwisko',
+                          ),
+                          gap,
+                          CountriesDropdown(
+                            key: _countriesDropdownKey,
+                            countriesApi: RepositoryProvider.of<CountriesApi>(context),
+                            onSelected: (maybeCountry) {
+                              _country = maybeCountry;
+                              widget.onChange(_constructAndCacheJumper());
+                            },
+                          ),
+                          gap,
+                        ],
+                      ),
+                    ),
+                    const Gap(25),
+                    if (_cachedJumper != null)
+                      Expanded(
+                        flex: 1,
+                        child: JumperImage(
+                          jumper: _cachedJumper!,
+                          setup: context.read(),
+                          height: 170,
+                          fit: BoxFit.fitHeight,
+                          errorBuilder: (_, __, ___) =>
+                              const ItemImageNotFoundPlaceholder(
+                            width: 80,
+                            height: 150,
+                          ),
+                        ),
+                      ),
+                    if (_cachedJumper != null) const Gap(25),
+                  ],
+                ),
+                MyNumeralTextField(
+                  controller: _ageController,
+                  onChange: () {
+                    widget.onChange(_constructAndCacheJumper());
+                  },
+                  formatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  labelText: 'Wiek',
+                  step: 1,
+                  min: 0,
+                  max: 99,
+                ),
+                gap,
+                const Divider(),
+                gap,
+                MyDropdownField(
+                  controller: _jumpsConsistencyController,
+                  onChange: (selected) {
+                    _jumpsConsistency = selected!;
+                    widget.onChange(_constructAndCacheJumper());
+                  },
+                  entries: JumpsConsistency.values.map((consistency) {
+                    return DropdownMenuEntry(
+                        value: consistency,
+                        label:
+                            translatedJumpsConsistencyDescription(context, consistency));
+                  }).toList(),
+                  width: constraints.maxWidth,
+                  initial: JumpsConsistency.average,
+                  label: const Text('Skoki'),
+                ),
+                gap,
+                MyDropdownField(
+                  controller: _landingStyleController,
+                  onChange: (selected) {
+                    _landingStyle = selected!;
+                    widget.onChange(_constructAndCacheJumper());
+                  },
+                  entries: LandingStyle.values.map((style) {
+                    return DropdownMenuEntry(
+                        value: style,
+                        label: translatedLandingStyleDescription(context, style));
+                  }).toList(),
+                  width: constraints.maxWidth,
+                  initial: LandingStyle.average,
+                  label: const Text('Lądowanie'),
+                ),
+                gap,
+                MyNumeralTextField(
+                  controller: _qualityOnSmallerHillsController,
+                  onChange: () {
+                    widget.onChange(_constructAndCacheJumper());
+                  },
+                  formatters: doubleTextInputFormatters,
+                  labelText: 'Na mniejszych skoczniach',
+                  step: 1.0,
+                  min: 0.0,
+                  max: 100.0,
+                ),
+                gap,
+                MyNumeralTextField(
+                  controller: _qualityOnLargerHillsController,
+                  onChange: () {
+                    widget.onChange(_constructAndCacheJumper());
+                  },
+                  formatters: doubleTextInputFormatters,
+                  labelText: 'Na większych skoczniach',
+                  step: 1.0,
+                  // TODO: Set it from the outside
+                  min: 0.0,
+                  max: 100.0,
+                ),
+                gap,
               ],
-              labelText: 'Imię',
             ),
-            gap,
-            MyTextField(
-              controller: _surnameController,
-              onChange: () {
-                widget.onChange(_constructJumper());
-              },
-              formatters: [
-                if (widget.forceUpperCaseOnSurname) const UpperCaseTextFormatter(),
-              ],
-              labelText: 'Nazwisko',
-            ),
-            gap,
-            CountriesDropdown(
-              key: _countriesDropdownKey,
-              countriesApi: RepositoryProvider.of<CountriesApi>(context),
-              onSelected: (maybeCountry) {
-                _country = maybeCountry;
-                widget.onChange(_constructJumper());
-              },
-            ),
-            gap,
-            MyNumeralTextField(
-              controller: _ageController,
-              onChange: () {
-                widget.onChange(_constructJumper());
-              },
-              formatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
-              labelText: 'Wiek',
-              step: 1,
-              min: 0,
-              max: 99,
-            ),
-            gap,
-            const Divider(),
-            gap,
-            MyDropdownField(
-              controller: _jumpsConsistencyController,
-              onChange: (selected) {
-                _jumpsConsistency = selected!;
-                widget.onChange(_constructJumper());
-              },
-              entries: JumpsConsistency.values.map((consistency) {
-                return DropdownMenuEntry(
-                    value: consistency,
-                    label: translatedJumpsConsistencyDescription(context, consistency));
-              }).toList(),
-              width: constraints.maxWidth,
-              initial: JumpsConsistency.average,
-              label: const Text('Skoki'),
-            ),
-            gap,
-            MyDropdownField(
-              controller: _landingStyleController,
-              onChange: (selected) {
-                _landingStyle = selected!;
-                widget.onChange(_constructJumper());
-              },
-              entries: LandingStyle.values.map((style) {
-                return DropdownMenuEntry(
-                    value: style,
-                    label: translatedLandingStyleDescription(context, style));
-              }).toList(),
-              width: constraints.maxWidth,
-              initial: LandingStyle.average,
-              label: const Text('Lądowanie'),
-            ),
-            gap,
-            MyNumeralTextField(
-              controller: _qualityOnSmallerHillsController,
-              onChange: () {
-                widget.onChange(_constructJumper());
-              },
-              formatters: doubleTextInputFormatters,
-              labelText: 'Na mniejszych skoczniach',
-              step: 1.0,
-              min: 0.0,
-              max: 100.0,
-            ),
-            gap,
-            MyNumeralTextField(
-              controller: _qualityOnLargerHillsController,
-              onChange: () {
-                widget.onChange(_constructJumper());
-              },
-              formatters: doubleTextInputFormatters,
-              labelText: 'Na większych skoczniach',
-              step: 1.0,
-              // TODO: Set it from the outside
-              min: 0.0,
-              max: 100.0,
-            ),
-            gap,
-          ],
+          ),
         );
       },
     );
   }
 
-  Jumper? _constructJumper() {
-    return Jumper(
-      name: _nameController.text,
-      surname: _surnameController.text,
-      country: _country!,
-      sex: _sex,
-      age: int.parse(_ageController.text),
-      skills: JumperSkills(
-        qualityOnSmallerHills: double.parse(_qualityOnSmallerHillsController.text),
-        qualityOnLargerHills: double.parse(_qualityOnLargerHillsController.text),
-        landingStyle: _landingStyle,
-        jumpsConsistency: _jumpsConsistency,
-      ),
+  Jumper? _constructAndCacheJumper() {
+    final name = _nameController.text;
+    final surname = _surnameController.text;
+    final country = _country!;
+    final age = int.parse(_ageController.text);
+    final skills = JumperSkills(
+      qualityOnSmallerHills: double.parse(_qualityOnSmallerHillsController.text),
+      qualityOnLargerHills: double.parse(_qualityOnLargerHillsController.text),
+      landingStyle: _landingStyle,
+      jumpsConsistency: _jumpsConsistency,
     );
+    final jumper = _sex == Sex.male
+        ? MaleJumper(
+            name: name, surname: surname, country: country, age: age, skills: skills)
+        : FemaleJumper(
+            name: name, surname: surname, country: country, age: age, skills: skills);
+    _cachedJumper = jumper;
+    return jumper;
   }
 
   void setUp(Jumper jumper) {
+    setState(() {
+      _cachedJumper = jumper;
+    });
     _fillFields(jumper);
     FocusScope.of(context).requestFocus(_firstFocusNode);
   }
