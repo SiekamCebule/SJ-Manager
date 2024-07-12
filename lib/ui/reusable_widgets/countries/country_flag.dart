@@ -7,11 +7,11 @@ class CountryFlag extends StatelessWidget {
   const CountryFlag({
     super.key,
     required this.country,
-    required this.height,
+    required this.width,
   });
 
   final Country country;
-  final double height;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +20,13 @@ class CountryFlag extends StatelessWidget {
     return countryFlagsRepoExists
         ? Image(
             image: flagsRepo.imageData(country),
-            height: height,
-            fit: BoxFit.fitHeight,
+            width: width,
+            fit: BoxFit.fitWidth,
           )
         : AspectRatio(
             aspectRatio: 4 / 3,
             child: SizedBox(
-              height: height,
+              width: width,
               child: Placeholder(
                 color: Theme.of(context).colorScheme.onTertiary,
               ),

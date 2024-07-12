@@ -21,7 +21,8 @@ class _AddFab extends StatelessWidget {
         ]),
         builder: (context, snapshot) {
           return FloatingActionButton(
-            heroTag: 'FABadd',
+            key: const ValueKey('addFab'),
+            heroTag: 'addFab',
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             onPressed: () async {
               bool selectedExists = selectedIndexesRepo.state.length == 1;

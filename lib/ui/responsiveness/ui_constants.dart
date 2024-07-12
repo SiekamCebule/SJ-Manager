@@ -6,6 +6,8 @@ abstract class UiGlobalConstants {
   static const defaultAppThemeBrightness = Brightness.dark;
 
   static const double backgroundImageTransparency = 0.1;
+
+  static const double smallCountryFlagWidth = 30;
 }
 
 abstract class UiMainMenuConstants {

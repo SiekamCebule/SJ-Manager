@@ -16,7 +16,8 @@ class _RemoveFab extends StatelessWidget {
         stream: MergeStream([selectedIndexesRepo.selectedIndexes]),
         builder: (context, snapshot) {
           return FloatingActionButton(
-            heroTag: 'FABremove',
+            key: const ValueKey('removeFab'),
+            heroTag: 'removeFab',
             backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
             onPressed: () async {
               var subtraction = 0;

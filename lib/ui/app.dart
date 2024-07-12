@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -15,7 +17,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   _AppState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    scheduleMicrotask(() async {
       await context.read<AppConfigurator>().setUp(context);
     });
   }

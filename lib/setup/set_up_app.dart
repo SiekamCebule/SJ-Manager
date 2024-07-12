@@ -1,7 +1,7 @@
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
+import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/country.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
@@ -12,12 +12,10 @@ import 'package:sj_manager/ui/navigation/routes.dart';
 
 class AppConfigurator {
   AppConfigurator({
-    required this.router,
     required this.shouldSetUpRouting,
     required this.shouldLoadDatabase,
   });
 
-  final FluroRouter router;
   final bool shouldSetUpRouting;
   final bool shouldLoadDatabase;
 
@@ -34,7 +32,10 @@ class AppConfigurator {
   }
 
   void setUpRouting() {
-    configureRoutes(router);
+    if (routerIsInitialized) {
+      configureRoutes(router);
+      routerIsInitialized = true;
+    }
   }
 
   Future<void> loadDatabase() async {

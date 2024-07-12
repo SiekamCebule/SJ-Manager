@@ -1,6 +1,9 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:sj_manager/database_editing/database_items_type_cubit.dart';
+import 'package:sj_manager/enums/database_item_type.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/country.dart';
 import 'package:sj_manager/models/hill/hill.dart';
@@ -14,16 +17,23 @@ import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
+import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/setup/set_up_app.dart';
 import 'package:sj_manager/ui/app.dart';
+import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
+import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
 import 'package:sj_manager/ui/providers/locale_provider.dart';
 import 'package:sj_manager/ui/screens/database_editor/database_editor_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropiate_db_item_list_tile.dart';
+import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
 import 'package:sj_manager/ui/theme/app_theme_brightness_cubit.dart';
 import 'package:sj_manager/ui/theme/color_scheme_cubit.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
 
 void main() {
+  const MethodChannel flutterWindowCloseChannel = MethodChannel('flutter_window_close');
+
   const slovenia = Country(code: 'si', name: 'Slovenia');
   const switzerland = Country(code: 'ch', name: 'Switzerland');
   const germany = Country(code: 'de', name: 'Germany');
@@ -58,6 +68,7 @@ void main() {
     FemaleJumper.empty(country: germany).copyWith(name: 'Angelica'),
     FemaleJumper.empty(country: germany).copyWith(name: 'Jasmina'),
     FemaleJumper.empty(country: switzerland).copyWith(name: 'Lisa'),
+    FemaleJumper.empty(country: slovenia).copyWith(name: 'Nika'),
   ];
   const hills = [
     Hill(
@@ -89,8 +100,8 @@ void main() {
       pointsForTailwind: 16.2,
     ),
     Hill(
-      name: 'Schattenbergschanze',
-      locality: 'Oberstdorf',
+      name: 'Kanzlersgrund',
+      locality: 'Oberhof',
       country: germany,
       k: 120,
       hs: 140,
@@ -104,76 +115,180 @@ void main() {
   ];
 
   group(DatabaseEditorScreen, () {
-    testWidgets('test', (tester) async {
-      await tester.pumpWidget(
-        ChangeNotifierProvider(
-          create: (context) => LocaleProvider(
-            initial: const Locale('en'),
-          ),
-          child: MultiRepositoryProvider(
+    late Widget appWidget;
+
+    setUpAll(() {
+      appWidget = ChangeNotifierProvider(
+        create: (context) => LocaleProvider(
+          initial: const Locale('en'),
+        ),
+        child: MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider<CountriesRepo>(
+              create: (context) => CountriesRepo(initial: countries),
+            ),
+            RepositoryProvider(
+              create: (context) => DbItemsRepo<MaleJumper>(initial: maleJumpers),
+            ),
+            RepositoryProvider(
+              create: (context) => DbItemsRepo<FemaleJumper>(initial: femaleJumpers),
+            ),
+            RepositoryProvider(
+              create: (context) => DbItemsRepo<Hill>(initial: hills),
+            ),
+            RepositoryProvider(create: (context) {
+              final noneCountry = context.read<CountriesRepo>().none;
+              return DefaultItemsRepo(
+                defaultFemaleJumper: FemaleJumper.empty(country: noneCountry),
+                defaultMaleJumper: MaleJumper.empty(country: noneCountry),
+                defaultHill: Hill.empty(country: noneCountry),
+              );
+            }),
+            RepositoryProvider(create: (context) {
+              return DbEditingDefaultsRepo.appDefault();
+            }),
+          ],
+          child: MultiProvider(
             providers: [
-              RepositoryProvider<CountriesRepo>(
-                create: (context) => CountriesRepo(initial: countries),
-              ),
-              RepositoryProvider(
-                create: (context) => DbItemsRepo<MaleJumper>(initial: maleJumpers),
-              ),
-              RepositoryProvider(
-                create: (context) => DbItemsRepo<FemaleJumper>(initial: femaleJumpers),
-              ),
-              RepositoryProvider(
-                create: (context) => DbItemsRepo<Hill>(initial: hills),
-              ),
-              RepositoryProvider(create: (context) {
-                final noneCountry = context.read<CountriesRepo>().none;
-                return DefaultItemsRepo(
-                  defaultFemaleJumper: FemaleJumper.empty(country: noneCountry),
-                  defaultMaleJumper: MaleJumper.empty(country: noneCountry),
-                  defaultHill: Hill.empty(country: noneCountry),
-                );
-              }),
-              RepositoryProvider(create: (context) {
-                return DbEditingDefaultsRepo.appDefault();
-              }),
-            ],
-            child: MultiProvider(
-              providers: [
-                Provider(
-                  create: (context) => AppConfigurator(
-                    router: router,
-                    shouldSetUpRouting: true,
-                    shouldLoadDatabase: false,
-                  ),
+              Provider(
+                create: (context) => AppConfigurator(
+                  shouldSetUpRouting: true,
+                  shouldLoadDatabase: false,
                 ),
-              ],
-              child: MultiBlocProvider(
-                providers: [
-                  BlocProvider(create: (context) => AppThemeBrightnessCubit()),
-                  BlocProvider(
-                    create: (context) => AppColorSchemeCubit(),
-                  ),
-                  BlocProvider(create: (context) {
-                    return ThemeCubit(
-                      appSchemeSubscription: BlocProvider.of<AppColorSchemeCubit>(context)
-                          .stream
-                          .listen(null),
-                      appThemeBrightnessSubscription:
-                          BlocProvider.of<AppThemeBrightnessCubit>(context)
-                              .stream
-                              .listen(null),
-                    );
-                  }),
-                ],
-                child: const App(home: DatabaseEditorScreen()),
               ),
+            ],
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) => AppThemeBrightnessCubit()),
+                BlocProvider(
+                  create: (context) => AppColorSchemeCubit(),
+                ),
+                BlocProvider(create: (context) {
+                  return ThemeCubit(
+                    appSchemeSubscription:
+                        BlocProvider.of<AppColorSchemeCubit>(context).stream.listen(null),
+                    appThemeBrightnessSubscription:
+                        BlocProvider.of<AppThemeBrightnessCubit>(context)
+                            .stream
+                            .listen(null),
+                  );
+                }),
+              ],
+              child: const App(home: DatabaseEditorScreen()),
             ),
           ),
         ),
       );
+    });
+
+    testWidgets('Appropiate displaying', (tester) async {
+      await tester.pumpWidget(appWidget);
       await tester.pumpAndSettle();
 
-      final fab = find.byType(FloatingActionButton);
-      expect(fab, findsNWidgets(2));
+      final context = tester.element(find.byType(DatabaseItemsList)) as BuildContext;
+
+      final itemsTypeCubit = context.read<DatabaseItemsTypeCubit>();
+      final itemsList = find.byType(DatabaseItemsList);
+      expect(itemsTypeCubit.state, DatabaseItemType.maleJumper);
+      expect(tester.widget<DatabaseItemsList>(itemsList).length, maleJumpers.length);
+      expect(find.byType(FloatingActionButton), findsNWidgets(2));
+
+      final tabBar = find.byType(TabBar);
+      final femaleJumpersTab = tester.widget<TabBar>(tabBar).tabs[1];
+      await tester.tap(find.byWidget(femaleJumpersTab));
+      await tester.pumpAndSettle();
+      expect(itemsTypeCubit.state, DatabaseItemType.femaleJumper);
+      expect(tester.widget<DatabaseItemsList>(itemsList).length, femaleJumpers.length);
+
+      final secondTile = find.descendant(
+          of: find.byType(DatabaseItemsList), matching: find.byKey(const ValueKey(1)));
+      expect(tester.widget<AppropiateDbItemListTile>(secondTile).selected, false);
+      await tester.tap(secondTile);
+      await tester.pumpAndSettle();
+      expect(tester.widget<AppropiateDbItemListTile>(secondTile).selected, true);
+    });
+
+    testWidgets('Editing hills and changing between them', (tester) async {
+      tester.binding.defaultBinaryMessenger
+          .setMockMethodCallHandler(flutterWindowCloseChannel, (call) async {
+        if (call.method == 'init') {
+          return 'mocked response';
+        }
+        throw MissingPluginException();
+      });
+      tester.view.devicePixelRatio = 1.0;
+      tester.view.physicalSize = const Size(1200, 1000);
+      WidgetsFlutterBinding.ensureInitialized();
+      await tester.pumpWidget(appWidget);
+      await tester.pumpAndSettle();
+
+      final context = tester.element(find.byType(DatabaseItemsList)) as BuildContext;
+      final itemsTypeCubit = context.read<DatabaseItemsTypeCubit>();
+      final itemsList = find.byType(DatabaseItemsList);
+      final tabBar = find.byType(TabBar);
+      final addFab = find.byKey(const Key('addFab'));
+      final removeFab = find.byKey(const Key('removeFab'));
+
+      Future<void> selectTab(DatabaseItemType itemsType) async {
+        final tab = tester.widget<TabBar>(tabBar).tabs[itemsType.index];
+        await tester.tap(find.byWidget(tab));
+        await tester.pumpAndSettle();
+      }
+
+      Future<void> tapItem(int index) async {
+        final itemTile = find.descendant(
+            of: find.byType(DatabaseItemsList), matching: find.byKey(ValueKey(index)));
+        await tester.tap(itemTile);
+        await tester.pumpAndSettle();
+      }
+
+      Future<void> tap(Finder finder) async {
+        await tester.tap(finder);
+        await tester.pumpAndSettle();
+      }
+
+      expect(itemsTypeCubit.state, DatabaseItemType.maleJumper);
+      await selectTab(DatabaseItemType.hill);
+      expect(itemsTypeCubit.state, DatabaseItemType.hill);
+      expect(tester.widget<DatabaseItemsList>(itemsList).length, hills.length);
+      await tapItem(1);
+      await tap(addFab); // index: 2
+      await tap(addFab); // index: 3
+      expect(tester.widget<DatabaseItemsList>(itemsList).length, hills.length + 2);
+      await tester.enterText(
+          find.byKey(const Key('locality')), 'Zakopane'); // We're editing index 3
+      await tester.enterText(find.byKey(const Key('name')), 'Wielka Krokiew');
+      await tester.enterText(find.byKey(const Key('hs')), '140');
+      await tester.pumpAndSettle();
+      await tapItem(2);
+      await tester.enterText(
+          find.byKey(const Key('locality')), 'Sapporo'); // We're editing index 2
+      await tester.enterText(find.byKey(const Key('name')), 'Ōkurayama');
+      await tester.enterText(find.byKey(const Key('k')), '123');
+      await tester.enterText(find.byKey(const Key('hs')), '137');
+      await tester.pumpAndSettle();
+      await tapItem(2); // Hide HillEditor
+      await tester.pumpAndSettle();
+
+      final hillEditor = find.byType(HillEditor);
+      final hillEditorVisibility =
+          find.ancestor(of: hillEditor, matching: find.byType(Visibility));
+      expect(tester.widget<Visibility>(hillEditorVisibility).visible, false);
+
+      await tapItem(2);
+      await tap(removeFab); //
+      await tapItem(3); // 4, if 2 hadn't been removed
+      await tap(removeFab);
+      await tapItem(1); // Schattenbergschanze
+      expect(find.byType(HillEditor), findsOneWidget);
+      expect(tester.widget<MyTextField>(find.byKey(const Key('name'))).controller.text,
+          'Schattenbergschanze');
+      final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
+      expect(selectedIndexesRepo.state.single, 1);
+      await tapItem(2);
+      expect(
+          tester.widget<MyTextField>(find.byKey(const Key('locality'))).controller.text,
+          'Zakopane');
     });
   });
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/models/country.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
+import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 
 class CountriesDropdown extends StatefulWidget {
@@ -58,7 +59,7 @@ class CountriesDropdownState extends State<CountriesDropdown> {
       trailingIcon: _selected != null
           ? CountryFlag(
               country: _selected!,
-              height: 20,
+              width: UiGlobalConstants.smallCountryFlagWidth,
             )
           : null,
       dropdownMenuEntries: [
@@ -68,7 +69,7 @@ class CountriesDropdownState extends State<CountriesDropdown> {
             label: country.name,
             trailingIcon: CountryFlag(
               country: country,
-              height: 20,
+              width: UiGlobalConstants.smallCountryFlagWidth,
             ),
           );
         }),

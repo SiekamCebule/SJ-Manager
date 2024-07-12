@@ -125,6 +125,7 @@ class HillEditorState extends State<HillEditor> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         MyTextField(
+                          key: const Key('name'),
                           focusNode: _firstFocusNode,
                           controller: _nameController,
                           onChange: () {
@@ -134,6 +135,7 @@ class HillEditorState extends State<HillEditor> {
                         ),
                         gap,
                         MyTextField(
+                          key: const Key('locality'),
                           controller: _localityController,
                           onChange: () {
                             widget.onChange(_constructAndCacheHill());
@@ -161,6 +163,7 @@ class HillEditorState extends State<HillEditor> {
                     Flexible(
                       flex: 4,
                       child: HillImage(
+                        key: const Key('image'),
                         hill: _cachedHill!,
                         setup: context.read(),
                         height: UiItemEditorsConstants.hillImageHeight,
@@ -176,6 +179,7 @@ class HillEditorState extends State<HillEditor> {
                 ],
               ),
               MyNumeralTextField(
+                key: const Key('k'),
                 controller: _kController,
                 onChange: () {
                   widget.onChange(_constructAndCacheHill());
@@ -188,6 +192,7 @@ class HillEditorState extends State<HillEditor> {
               ),
               gap,
               MyNumeralTextField(
+                key: const Key('hs'),
                 controller: _hsController,
                 onChange: () {
                   widget.onChange(_constructAndCacheHill());
@@ -200,6 +205,7 @@ class HillEditorState extends State<HillEditor> {
               ),
               gap,
               MyDropdownField(
+                key: const Key('landing'),
                 controller: _landingEaseController,
                 onChange: (selected) {
                   _landingEase = selected!;
@@ -216,6 +222,7 @@ class HillEditorState extends State<HillEditor> {
               ),
               gap,
               MyDropdownField(
+                key: const Key('profile'),
                 controller: _profileController,
                 onChange: (selected) {
                   _profile = selected!;
@@ -232,6 +239,7 @@ class HillEditorState extends State<HillEditor> {
               ),
               gap,
               MyDropdownField(
+                key: const Key('variability'),
                 controller: _jumpsVariabilityController,
                 onChange: (selected) {
                   _jumpsVariability = selected!;
@@ -248,6 +256,7 @@ class HillEditorState extends State<HillEditor> {
               ),
               gap,
               MyDropdownField(
+                key: const Key('typicalDirection'),
                 controller: _typicalWindDirectionController,
                 onChange: (selected) {
                   _typicalWindDirection = selected;
@@ -265,6 +274,7 @@ class HillEditorState extends State<HillEditor> {
               ),
               gap,
               MyNumeralTextField(
+                key: const Key('typicalStrength'),
                 controller: _typicalWindStrengthController,
                 onChange: () {
                   widget.onChange(_constructAndCacheHill());
@@ -279,6 +289,7 @@ class HillEditorState extends State<HillEditor> {
               ),
               gap,
               MyNumeralTextField(
+                key: const Key('pointsForGate'),
                 controller: _pointsForGateController,
                 onChange: () {
                   widget.onChange(_constructAndCacheHill());
@@ -293,6 +304,7 @@ class HillEditorState extends State<HillEditor> {
               ),
               gap,
               MyNumeralTextField(
+                key: const Key('pointsForHeadwind'),
                 controller: _pointsForHeadwindController,
                 onChange: () {
                   widget.onChange(_constructAndCacheHill());
@@ -310,6 +322,7 @@ class HillEditorState extends State<HillEditor> {
                 children: [
                   Expanded(
                     child: MyNumeralTextField(
+                      key: const Key('pointsForTailwind'),
                       controller: _pointsForTailwindController,
                       onChange: () {
                         widget.onChange(_constructAndCacheHill());

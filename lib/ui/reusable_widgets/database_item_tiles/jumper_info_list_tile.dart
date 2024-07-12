@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
+import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 
 class JumperInfoListTile extends StatelessWidget {
@@ -25,7 +26,7 @@ class JumperInfoListTile extends StatelessWidget {
     final tile = ListTile(
       leading: CountryFlag(
         country: jumper.country,
-        height: 30,
+        width: UiGlobalConstants.smallCountryFlagWidth,
       ),
       title: Text('${jumper.name} ${jumper.surname}'),
       onTap: onTap,

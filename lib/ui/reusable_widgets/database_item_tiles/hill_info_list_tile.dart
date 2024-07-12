@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/models/hill/hill.dart';
+import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/utils/doubles.dart';
 
@@ -26,7 +27,7 @@ class HillInfoListTile extends StatelessWidget {
     final tile = ListTile(
       leading: CountryFlag(
         country: hill.country,
-        height: 30,
+        width: UiGlobalConstants.smallCountryFlagWidth,
       ),
       title: Text('${hill.locality} HS${minimizeDecimalPlaces(hill.hs)}'),
       onTap: onTap,

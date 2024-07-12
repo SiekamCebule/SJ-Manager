@@ -26,6 +26,7 @@ import 'package:sj_manager/ui/theme/theme_cubit.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
 final router = FluroRouter();
+bool routerIsInitialized = false;
 
 void main() async {
   final pathsCache = PlarformSpecificPathsCache();
@@ -149,7 +150,6 @@ void main() async {
             }),
             Provider(
               create: (context) => AppConfigurator(
-                router: router,
                 shouldSetUpRouting: true,
                 shouldLoadDatabase: true,
               ),
