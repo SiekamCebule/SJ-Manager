@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,14 +10,15 @@ import 'package:sj_manager/models/jumper/jumps_consistency.dart';
 import 'package:sj_manager/models/jumper/landing_style.dart';
 import 'package:sj_manager/models/sex.dart';
 import 'package:sj_manager/repositories/countries/countries_api.dart';
+import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
-import 'package:sj_manager/ui/responsiveness/ui_main_menu_constants.dart';
+import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
-import 'package:sj_manager/ui/reusable_widgets/jumper_image/item_image_not_found_placeholder.dart';
-import 'package:sj_manager/ui/reusable_widgets/jumper_image/jumper_image.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/jumper_image/jumper_image.dart';
 import 'package:sj_manager/utils/platform.dart';
 
 class JumperEditor extends StatefulWidget {
@@ -107,7 +106,7 @@ class JumperEditorState extends State<JumperEditor> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      flex: 3,
+                      flex: 12,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -147,23 +146,24 @@ class JumperEditorState extends State<JumperEditor> {
                         ],
                       ),
                     ),
-                    const Gap(25),
+                    const Gap(UiItemEditorsConstants.itemImageHorizontalMargin),
                     if (_cachedJumper != null)
                       Expanded(
-                        flex: 1,
+                        flex: 4,
                         child: JumperImage(
                           jumper: _cachedJumper!,
                           setup: context.read(),
-                          height: 170,
+                          height: UiItemEditorsConstants.jumperImageHeight,
                           fit: BoxFit.fitHeight,
                           errorBuilder: (_, __, ___) =>
                               const ItemImageNotFoundPlaceholder(
-                            width: 80,
-                            height: 150,
+                            width: UiItemEditorsConstants.jumperImagePlaceholderWidth,
+                            height: UiItemEditorsConstants.jumperImageHeight,
                           ),
                         ),
                       ),
-                    if (_cachedJumper != null) const Gap(25),
+                    if (_cachedJumper != null)
+                      const Gap(UiItemEditorsConstants.itemImageHorizontalMargin),
                   ],
                 ),
                 MyNumeralTextField(
@@ -177,7 +177,7 @@ class JumperEditorState extends State<JumperEditor> {
                   labelText: 'Wiek',
                   step: 1,
                   min: 0,
-                  max: 99,
+                  max: context.read<DbEditingDefaultsRepo>().maxJumperAge,
                 ),
                 gap,
                 const Divider(),
@@ -224,7 +224,8 @@ class JumperEditorState extends State<JumperEditor> {
                   labelText: 'Na mniejszych skoczniach',
                   step: 1.0,
                   min: 0.0,
-                  max: 100.0,
+                  max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
+                  maxDecimalPlaces: 2,
                 ),
                 gap,
                 MyNumeralTextField(
@@ -235,9 +236,9 @@ class JumperEditorState extends State<JumperEditor> {
                   formatters: doubleTextInputFormatters,
                   labelText: 'Na większych skoczniach',
                   step: 1.0,
-                  // TODO: Set it from the outside
                   min: 0.0,
-                  max: 100.0,
+                  max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
+                  maxDecimalPlaces: 2,
                 ),
                 gap,
               ],
@@ -249,6 +250,7 @@ class JumperEditorState extends State<JumperEditor> {
   }
 
   Jumper? _constructAndCacheJumper() {
+    print('construct and CACHE');
     final name = _nameController.text;
     final surname = _surnameController.text;
     final country = _country!;
@@ -269,14 +271,17 @@ class JumperEditorState extends State<JumperEditor> {
   }
 
   void setUp(Jumper jumper) {
+    print('set up');
     setState(() {
       _cachedJumper = jumper;
     });
     _fillFields(jumper);
+    FocusScope.of(context).unfocus();
     FocusScope.of(context).requestFocus(_firstFocusNode);
   }
 
   void _fillFields(Jumper jumper) {
+    print('fill');
     _nameController.text = jumper.name;
     _surnameController.text = jumper.surname;
     _ageController.text = jumper.age.toString();

@@ -1,4 +1,8 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sj_manager/json/db_items_json.dart';
+import 'package:sj_manager/models/jumper/jumper.dart';
+import 'package:sj_manager/repositories/database_editing/db_io_parameters_repo.dart';
 import 'package:sj_manager/repositories/database_editing/local_db_repos_repository.dart';
 
 class CopiedLocalDbCubit extends Cubit<LocalDbReposRepository?> {
@@ -9,10 +13,9 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepository?> {
   LocalDbReposRepository originalRepositories;
 
   Future<void> setUp() async {
-    final editableMaleJumpersRepo = await originalRepositories.maleJumpersRepo.clone();
-    final editableFemaleJumpersRepo =
-        await originalRepositories.femaleJumpersRepo.clone();
-    final editableHillsRepo = await originalRepositories.hillsRepo.clone();
+    final editableMaleJumpersRepo = originalRepositories.maleJumpersRepo.clone();
+    final editableFemaleJumpersRepo = originalRepositories.femaleJumpersRepo.clone();
+    final editableHillsRepo = originalRepositories.hillsRepo.clone();
 
     emit(
       LocalDbReposRepository(
@@ -23,16 +26,21 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepository?> {
     );
   }
 
-  Future<void> saveChangesToOriginalRepos() async {
-    await originalRepositories.maleJumpersRepo
-        .loadRaw(state!.maleJumpersRepo.items.value);
-    await originalRepositories.maleJumpersRepo.saveToSource();
+  Future<void> saveChangesToOriginalRepos(BuildContext context) async {
+    await _saveChangesByType<MaleJumper>(context);
+    if (!context.mounted) return;
+    await _saveChangesByType<MaleJumper>(context);
+    if (!context.mounted) return;
+    await _saveChangesByType<MaleJumper>(context);
+  }
 
-    await originalRepositories.femaleJumpersRepo
-        .loadRaw(state!.femaleJumpersRepo.items.value);
-    await originalRepositories.femaleJumpersRepo.saveToSource();
-
-    await originalRepositories.hillsRepo.loadRaw(state!.hillsRepo.items.value);
-    await originalRepositories.hillsRepo.saveToSource();
+  Future<void> _saveChangesByType<T>(BuildContext context) async {
+    final parameters = context.read<DbIoParametersRepo<T>>();
+    originalRepositories.byGenericType<T>().setItems(state!.byGenericType<T>().lastItems);
+    await saveItemsListToJsonFile(
+      file: parameters.storageFile,
+      items: originalRepositories.byGenericType<T>().lastItems,
+      toJson: parameters.toJson,
+    );
   }
 }

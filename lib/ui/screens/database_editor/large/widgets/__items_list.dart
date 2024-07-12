@@ -27,10 +27,16 @@ class _ItemsListState extends State<_ItemsList> {
     return StreamBuilder(
         stream: StreamGroup.merge([
           selectedIndexesRepo.selectedIndexes,
-          editableItemsRepoByType.items,
+          copiedLocalDbRepos.femaleJumpersRepo.items,
+          copiedLocalDbRepos.maleJumpersRepo.items,
+          copiedLocalDbRepos.hillsRepo.items,
         ]),
         builder: (context, snapshot) {
           final listShouldBeReorderable = !filtersRepo.hasValidFilter;
+          print('indexes length: ${selectedIndexesRepo.state.length}');
+          print('reorderable: $listShouldBeReorderable');
+          print('filtered; $filteredItemsByType');
+          print('length: ${filteredItemsByType.length}');
           return Focus(
             autofocus: true,
             onKeyEvent: (node, event) {
@@ -43,11 +49,12 @@ class _ItemsListState extends State<_ItemsList> {
                 if (newIndex > oldIndex) {
                   newIndex -= 1;
                 }
-                await editableItemsRepoByType.move(from: oldIndex, to: newIndex);
+                editableItemsRepoByType.move(from: oldIndex, to: newIndex);
                 dbIsChangedCubit.markAsChanged();
               },
               length: filteredItemsByType.length,
               itemBuilder: (context, index) {
+                print('LIST TILE');
                 return AppropiateDbItemListTile(
                   key: ValueKey(index),
                   reorderable: listShouldBeReorderable,

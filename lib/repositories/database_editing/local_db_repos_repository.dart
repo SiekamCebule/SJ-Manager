@@ -15,12 +15,19 @@ class LocalDbReposRepository with EquatableMixin {
   final DbItemsRepository<Jumper> femaleJumpersRepo;
   final DbItemsRepository<Hill> hillsRepo;
 
-  DbItemsRepository<dynamic> byType(DatabaseItemType type) {
+  DbItemsRepository<dynamic> byType<T>(DatabaseItemType type) {
     return switch (type) {
       DatabaseItemType.maleJumper => maleJumpersRepo,
       DatabaseItemType.femaleJumper => femaleJumpersRepo,
       DatabaseItemType.hill => hillsRepo,
     };
+  }
+
+  DbItemsRepository<T> byGenericType<T>() {
+    if (T is MaleJumper) return maleJumpersRepo as DbItemsRepository<T>;
+    if (T is FemaleJumper) return maleJumpersRepo as DbItemsRepository<T>;
+    if (T is Hill) return maleJumpersRepo as DbItemsRepository<T>;
+    throw ArgumentError('Invalid type');
   }
 
   LocalDbReposRepository copyWith(

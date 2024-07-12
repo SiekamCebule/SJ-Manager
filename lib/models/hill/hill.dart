@@ -55,7 +55,6 @@ class Hill with EquatableMixin {
   final HillProfileType profileType;
   final JumpsVariability jumpsVariability;
 
-  //@JsonKey(fromJson: Degrees.fromJson, toJson: Degrees.staticToJson)
   final TypicalWindDirection? typicalWindDirection;
   final double? typicalWindStrength;
 

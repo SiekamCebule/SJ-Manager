@@ -26,12 +26,9 @@ class MyDropdownField<T> extends StatelessWidget {
       width: width,
       controller: controller,
       initialSelection: initial,
-      enableSearch: false,
-      requestFocusOnTap: false,
       dropdownMenuEntries: entries,
       label: label,
       onSelected: onChange,
-      focusNode: focusNode,
     );
   }
 }

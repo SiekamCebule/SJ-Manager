@@ -42,7 +42,8 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
         String? action = await _showSaveChangesDialog();
         final shouldClose = await _shouldCloseAfterDialog(action);
         if (action == 'yes') {
-          await _copiedDbCubit.saveChangesToOriginalRepos();
+          if (!mounted) return true;
+          await _copiedDbCubit.saveChangesToOriginalRepos(context);
         }
         if (!_closed && shouldClose) {
           _closed = shouldClose;
@@ -146,7 +147,8 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                         String? action = await _showSaveChangesDialog();
                         bool shouldClose = await _shouldCloseAfterDialog(action);
                         if (action == 'yes') {
-                          await _copiedDbCubit.saveChangesToOriginalRepos();
+                          if (!context.mounted) return;
+                          await _copiedDbCubit.saveChangesToOriginalRepos(context);
                         }
                         if (shouldClose) {
                           _closed = true;

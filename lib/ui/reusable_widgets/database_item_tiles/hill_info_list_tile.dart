@@ -28,7 +28,7 @@ class HillInfoListTile extends StatelessWidget {
         country: hill.country,
         height: 30,
       ),
-      title: Text('${hill.name} HS${minimizeDecimalPlaces(hill.hs)}'),
+      title: Text('${hill.locality} HS${minimizeDecimalPlaces(hill.hs)}'),
       onTap: onTap,
       selected: selected,
       selectedTileColor: Theme.of(context).colorScheme.surfaceContainer,

@@ -1,27 +1,60 @@
 import 'package:rxdart/rxdart.dart';
 
-abstract interface class DbItemsRepository<T> {
-  const DbItemsRepository();
+class DbItemsRepository<T> {
+  DbItemsRepository({
+    List<T>? initialItems,
+  }) : _items = initialItems ?? [] {
+    _subject.add(_items);
+  }
 
-  Future<DbItemsRepository<T>> clone();
+  List<T> _items;
+  final _subject = BehaviorSubject<List<T>>();
 
-  Future<void> add(T item, [int? index]);
+  DbItemsRepository<T> clone() {
+    return DbItemsRepository(initialItems: List.of(_items));
+  }
 
-  Future<void> remove(T item);
+  void add(T item, [int? index]) {
+    _items.insert(index ?? _items.length, item);
+    _addToStream();
+  }
 
-  Future<T> removeAt(int index);
+  void remove(T item) {
+    _items.remove(item);
+    _addToStream();
+  }
 
-  Future<void> clear();
+  T removeAt(int index) {
+    final removed = _items.removeAt(index);
+    _addToStream();
+    return removed;
+  }
 
-  Future<void> loadRaw(Iterable<T> items);
+  void clear() {
+    _items.clear();
+    _addToStream();
+  }
 
-  Future<void> move({required int from, required int to});
+  void setItems(Iterable<T> items) {
+    _items = items.toList();
+    _addToStream();
+  }
 
-  Future<void> replace({required int oldIndex, required T newItem});
+  void move({required int from, required int to}) {
+    final removed = _items.removeAt(from);
+    _items.insert(to, removed);
+    _addToStream();
+  }
 
-  Future<void> loadFromSource();
+  void replace({required int oldIndex, required T newItem}) {
+    _items[oldIndex] = newItem;
+    _addToStream();
+  }
 
-  Future<void> saveToSource();
+  void _addToStream() {
+    _subject.add(_items);
+  }
 
-  ValueStream<Iterable<T>> get items;
+  List<T> get lastItems => items.value;
+  ValueStream<List<T>> get items => _subject.stream;
 }

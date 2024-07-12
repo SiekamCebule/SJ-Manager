@@ -34,7 +34,7 @@ import 'package:sj_manager/ui/assets/icons.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
 import 'package:sj_manager/ui/responsiveness/responsive_builder.dart';
-import 'package:sj_manager/ui/responsiveness/ui_main_menu_constants.dart';
+import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable_widgets/filtering/search_text_field.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/database_editor_unsaved_changes_dialog.dart';

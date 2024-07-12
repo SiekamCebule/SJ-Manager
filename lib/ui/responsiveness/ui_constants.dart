@@ -28,6 +28,12 @@ abstract class UiDatabaseEditorConstants {
 
 abstract class UiItemEditorsConstants {
   static const double verticalSpaceBetweenFields = 15;
-
+  static const double itemImageHorizontalMargin = 25;
   static const double sexIconSizeInJumperEditor = 40;
+
+  static const double jumperImageHeight = 170;
+  static const double jumperImagePlaceholderWidth = 90;
+
+  static const double hillImageHeight = 175;
+  static const double hillImagePlaceholderWidth = 175;
 }

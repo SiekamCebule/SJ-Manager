@@ -10,12 +10,15 @@ import 'package:sj_manager/models/hill/hill_profile_type.dart';
 import 'package:sj_manager/models/hill/jumps_variability.dart';
 import 'package:sj_manager/models/hill/landing_ease.dart';
 import 'package:sj_manager/repositories/countries/countries_api.dart';
+import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
-import 'package:sj_manager/ui/responsiveness/ui_main_menu_constants.dart';
+import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/hill_image.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
 import 'package:sj_manager/utils/platform.dart';
 
 class HillEditor extends StatefulWidget {
@@ -52,6 +55,8 @@ class HillEditorState extends State<HillEditor> {
   var _jumpsVariability = JumpsVariability.average;
   TypicalWindDirection? _typicalWindDirection;
   Country? _country;
+
+  Hill? _cachedHill;
 
   final _firstFocusNode = FocusNode();
   late final ScrollController _scrollController;
@@ -107,64 +112,94 @@ class HillEditorState extends State<HillEditor> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               gap,
-              MyTextField(
-                focusNode: _firstFocusNode,
-                controller: _nameController,
-                onChange: () {
-                  widget.onChange(_constructHill());
-                },
-                labelText: 'Nazwa',
-              ),
-              gap,
-              MyTextField(
-                controller: _localityController,
-                onChange: () {
-                  widget.onChange(_constructHill());
-                },
-                formatters: const [
-                  UpperCaseTextFormatter(),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        MyTextField(
+                          focusNode: _firstFocusNode,
+                          controller: _nameController,
+                          onChange: () {
+                            widget.onChange(_constructAndCacheHill());
+                          },
+                          labelText: 'Nazwa',
+                        ),
+                        gap,
+                        MyTextField(
+                          controller: _localityController,
+                          onChange: () {
+                            widget.onChange(_constructAndCacheHill());
+                          },
+                          formatters: const [
+                            UpperCaseTextFormatter(),
+                          ],
+                          labelText: 'Lokalizacja',
+                        ),
+                        gap,
+                        CountriesDropdown(
+                          key: _countriesDropdownKey,
+                          countriesApi: RepositoryProvider.of<CountriesApi>(context),
+                          onSelected: (maybeCountry) {
+                            _country = maybeCountry;
+                            widget.onChange(_constructAndCacheHill());
+                          },
+                        ),
+                        gap,
+                      ],
+                    ),
+                  ),
+                  const Gap(UiItemEditorsConstants.itemImageHorizontalMargin),
+                  if (_cachedHill != null)
+                    Flexible(
+                      flex: 4,
+                      child: HillImage(
+                        hill: _cachedHill!,
+                        setup: context.read(),
+                        height: UiItemEditorsConstants.hillImageHeight,
+                        fit: BoxFit.fill,
+                        errorBuilder: (_, __, ___) => const ItemImageNotFoundPlaceholder(
+                          width: UiItemEditorsConstants.hillImagePlaceholderWidth,
+                          height: UiItemEditorsConstants.hillImageHeight,
+                        ),
+                      ),
+                    ),
+                  if (_cachedHill != null)
+                    const Gap(UiItemEditorsConstants.itemImageHorizontalMargin),
                 ],
-                labelText: 'Lokalizacja',
               ),
-              gap,
-              CountriesDropdown(
-                key: _countriesDropdownKey,
-                countriesApi: RepositoryProvider.of<CountriesApi>(context),
-                onSelected: (maybeCountry) {
-                  _country = maybeCountry;
-                  widget.onChange(_constructHill());
-                },
-              ),
-              gap,
               MyNumeralTextField(
                 controller: _kController,
                 onChange: () {
-                  widget.onChange(_constructHill());
+                  widget.onChange(_constructAndCacheHill());
                 },
                 formatters: doubleTextInputFormatters,
                 labelText: 'Punkt K',
                 step: 1.0,
                 min: 0.0,
-                max: 10000,
+                max: context.read<DbEditingDefaultsRepo>().maxKAndHs,
               ),
               gap,
               MyNumeralTextField(
                 controller: _hsController,
                 onChange: () {
-                  widget.onChange(_constructHill());
+                  widget.onChange(_constructAndCacheHill());
                 },
                 formatters: doubleTextInputFormatters,
                 labelText: 'Punkt HS',
                 step: 1.0,
                 min: 0.0,
-                max: 10000,
+                max: context.read<DbEditingDefaultsRepo>().maxKAndHs,
               ),
               gap,
               MyDropdownField(
                 controller: _landingEaseController,
                 onChange: (selected) {
                   _landingEase = selected!;
-                  widget.onChange(_constructHill());
+                  widget.onChange(_constructAndCacheHill());
                 },
                 entries: LandingEase.values.map((ease) {
                   return DropdownMenuEntry(
@@ -180,7 +215,7 @@ class HillEditorState extends State<HillEditor> {
                 controller: _profileController,
                 onChange: (selected) {
                   _profile = selected!;
-                  widget.onChange(_constructHill());
+                  widget.onChange(_constructAndCacheHill());
                 },
                 entries: HillProfileType.values.map((type) {
                   return DropdownMenuEntry(
@@ -196,7 +231,7 @@ class HillEditorState extends State<HillEditor> {
                 controller: _jumpsVariabilityController,
                 onChange: (selected) {
                   _jumpsVariability = selected!;
-                  widget.onChange(_constructHill());
+                  widget.onChange(_constructAndCacheHill());
                 },
                 entries: JumpsVariability.values.map((variability) {
                   return DropdownMenuEntry(
@@ -212,7 +247,7 @@ class HillEditorState extends State<HillEditor> {
                 controller: _typicalWindDirectionController,
                 onChange: (selected) {
                   _typicalWindDirection = selected;
-                  widget.onChange(_constructHill());
+                  widget.onChange(_constructAndCacheHill());
                 },
                 entries: TypicalWindDirection.values.map((direction) {
                   return DropdownMenuEntry(
@@ -228,53 +263,80 @@ class HillEditorState extends State<HillEditor> {
               MyNumeralTextField(
                 controller: _typicalWindStrengthController,
                 onChange: () {
-                  widget.onChange(_constructHill());
+                  widget.onChange(_constructAndCacheHill());
                 },
                 formatters: doubleTextInputFormatters,
                 labelText: 'Typowa siła wiatru',
                 suffixText: 'm/s',
                 step: 0.5,
                 min: 0.0,
-                max: 50,
+                max: context.read<DbEditingDefaultsRepo>().maxHillTypicalWindStrength,
+                maxDecimalPlaces: 2,
               ),
               gap,
               MyNumeralTextField(
                 controller: _pointsForGateController,
                 onChange: () {
-                  widget.onChange(_constructHill());
+                  widget.onChange(_constructAndCacheHill());
                 },
                 formatters: doubleTextInputFormatters,
                 labelText: 'Punkty za belkę',
                 suffixText: 'pkt.',
                 step: 1.0,
                 min: 0.0,
-                max: 1000,
+                max: context.read<DbEditingDefaultsRepo>().maxHillPoints,
+                maxDecimalPlaces: 2,
               ),
               gap,
               MyNumeralTextField(
                 controller: _pointsForHeadwindController,
                 onChange: () {
-                  widget.onChange(_constructHill());
+                  widget.onChange(_constructAndCacheHill());
                 },
                 formatters: doubleTextInputFormatters,
                 labelText: 'Punkty za wiatr przedni',
                 suffixText: 'pkt.',
                 step: 1.0,
                 min: 0.0,
-                max: 1000,
+                max: context.read<DbEditingDefaultsRepo>().maxHillPoints,
+                maxDecimalPlaces: 2,
               ),
               gap,
-              MyNumeralTextField(
-                controller: _pointsForTailwindController,
-                onChange: () {
-                  widget.onChange(_constructHill());
-                },
-                formatters: doubleTextInputFormatters,
-                labelText: 'Punkty za wiatr tylny',
-                suffixText: 'pkt',
-                step: 1.0,
-                min: 0.0,
-                max: 1000,
+              Row(
+                children: [
+                  Expanded(
+                    child: MyNumeralTextField(
+                      controller: _pointsForTailwindController,
+                      onChange: () {
+                        widget.onChange(_constructAndCacheHill());
+                      },
+                      buttons: [
+                        TextButton(
+                          onPressed: () {
+                            if (_cachedHill != null) {
+                              final double autoTailwind = _cachedHill!.pointsForHeadwind *
+                                  context
+                                      .read<DbEditingDefaultsRepo>()
+                                      .autoPointsForTailwindMultiplier;
+                              _pointsForTailwindController.text = autoTailwind.toString();
+
+                              widget.onChange(
+                                  _cachedHill!.copyWith(pointsForTailwind: autoTailwind));
+                            }
+                          },
+                          child: const Text('Automatycznie'),
+                        ),
+                      ],
+                      formatters: doubleTextInputFormatters,
+                      labelText: 'Punkty za wiatr tylny',
+                      suffixText: 'pkt',
+                      step: 1.0,
+                      min: 0.0,
+                      max: context.read<DbEditingDefaultsRepo>().maxHillPoints,
+                      maxDecimalPlaces: 2,
+                    ),
+                  ),
+                ],
               ),
               gap,
             ],
@@ -284,8 +346,8 @@ class HillEditorState extends State<HillEditor> {
     });
   }
 
-  Hill _constructHill() {
-    return Hill(
+  Hill _constructAndCacheHill() {
+    final hill = Hill(
       name: _nameController.text,
       locality: _localityController.text,
       country: _country!,
@@ -300,9 +362,14 @@ class HillEditorState extends State<HillEditor> {
       typicalWindStrength: double.tryParse(_typicalWindStrengthController.text),
       typicalWindDirection: _typicalWindDirection,
     );
+    _cachedHill = hill;
+    return hill;
   }
 
   void setUp(Hill hill) {
+    setState(() {
+      _cachedHill = hill;
+    });
     _fillFields(hill);
     FocusScope.of(context).unfocus();
     FocusScope.of(context).requestFocus(_firstFocusNode);

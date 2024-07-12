@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
+import 'package:sj_manager/utils/doubles.dart';
+import 'package:sj_manager/utils/math.dart';
 
 class MyNumeralTextField extends StatelessWidget {
   const MyNumeralTextField({
     super.key,
     required this.controller,
+    this.buttons,
     required this.onChange,
     required this.formatters,
     required this.labelText,
@@ -15,17 +18,20 @@ class MyNumeralTextField extends StatelessWidget {
     this.min,
     this.max,
     this.focusNode,
+    this.maxDecimalPlaces,
   });
 
   final VoidCallback onChange;
   final TextEditingController controller;
   final List<TextInputFormatter> formatters;
+  final List<Widget>? buttons;
   final String labelText;
   final String? suffixText;
   final num step;
   final num? min;
   final num? max;
   final FocusNode? focusNode;
+  final int? maxDecimalPlaces;
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +49,21 @@ class MyNumeralTextField extends StatelessWidget {
               inputFormatters: [
                 ...formatters,
                 _numberInRangeEnforcer,
+                if (maxDecimalPlaces != null)
+                  NDecimalPlacesEnforcer(decimalPlaces: maxDecimalPlaces!)
               ],
               onSubmitted: (value) => onChange(),
               onTapOutside: (event) => onChange(),
               focusNode: focusNode,
             ),
           ),
+          ...buttons ?? [],
           IconButton(
             onPressed: () {
-              final decremented = _numberFromController - step;
+              var decremented = _numberFromController - step;
+              if (maxDecimalPlaces != null) {
+                decremented = preparedNumber(decremented.toDouble());
+              }
               controller.text = _numberInRangeEnforcer
                   .formatEditUpdate(controller.value,
                       controller.value.copyWith(text: decremented.toString()))
@@ -64,7 +76,10 @@ class MyNumeralTextField extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              final incremented = _numberFromController + step;
+              var incremented = _numberFromController + step;
+              if (maxDecimalPlaces != null) {
+                incremented = preparedNumber(incremented.toDouble());
+              }
               controller.text = _numberInRangeEnforcer
                   .formatEditUpdate(controller.value,
                       controller.value.copyWith(text: incremented.toString()))
@@ -76,6 +91,11 @@ class MyNumeralTextField extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  double preparedNumber(double number) {
+    return double.parse(
+        minimizeDecimalPlaces(roundToNDecimalPlaces(number, maxDecimalPlaces!)));
   }
 
   NumberInRangeEnforcer get _numberInRangeEnforcer {

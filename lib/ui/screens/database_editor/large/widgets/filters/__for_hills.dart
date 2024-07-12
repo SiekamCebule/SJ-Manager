@@ -21,20 +21,22 @@ class _ForHillsState extends State<_ForHills> {
         SizedBox(
           width: 400,
           child: SearchTextField(
-            onChanged: (changed) {
+            onChanged: (changed) async {
+              _clearSelection();
+              await Future.delayed(Duration.zero);
               _bySearchText = HillsFilterBySearch(
                   searchAlgorithm: DefaultHillMatchingByTextAlgorithm(text: changed));
               _setFilters();
-              _clearSelection();
             },
           ),
         ),
         const Spacer(),
         MyDropdownField(
-          onChange: (selected) {
+          onChange: (selected) async {
+            _clearSelection();
+            await Future.delayed(Duration.zero);
             _byTypeBySize = HillsFilterByTypeBySie(type: selected);
             _setFilters();
-            _clearSelection();
           },
           entries: [
             DropdownMenuEntry(value: null, label: translate(context).none),
@@ -51,7 +53,9 @@ class _ForHillsState extends State<_ForHills> {
           label: const Text('Filtruj wg kraju'),
           countriesApi: context.read(),
           firstAsInitial: true,
-          onSelected: (selected) {
+          onSelected: (selected) async {
+            _clearSelection();
+            await Future.delayed(Duration.zero);
             var countries = <Country>{};
             if (selected != noneCountry || selected != null) {
               countries = {selected!};
@@ -59,7 +63,6 @@ class _ForHillsState extends State<_ForHills> {
             _byCountry =
                 HillsFilterByCountry(countries: countries, noneCountry: noneCountry);
             _setFilters();
-            _clearSelection();
           },
         ),
       ],

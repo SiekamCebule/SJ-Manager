@@ -20,11 +20,12 @@ class _ForJumpersState extends State<_ForJumpers> {
         SizedBox(
           width: 400,
           child: SearchTextField(
-            onChanged: (changed) {
+            onChanged: (changed) async {
+              _clearSelection();
+              await Future.delayed(Duration.zero);
               _bySearchText = JumpersFilterBySearch(
                   searchAlgorithm: DefaultJumperMatchingByTextAlgorithm(text: changed));
               _setFilters();
-              _clearSelection();
             },
           ),
         ),
@@ -33,7 +34,9 @@ class _ForJumpersState extends State<_ForJumpers> {
           label: const Text('Filtruj wg kraju'),
           countriesApi: context.read(),
           firstAsInitial: true,
-          onSelected: (selected) {
+          onSelected: (selected) async {
+            _clearSelection();
+            await Future.delayed(Duration.zero);
             var countries = <Country>{};
             if (selected != noneCountry || selected != null) {
               countries = {selected!};
@@ -41,7 +44,6 @@ class _ForJumpersState extends State<_ForJumpers> {
             _byCountry =
                 JumpersFilterByCountry(countries: countries, noneCountry: noneCountry);
             _setFilters();
-            _clearSelection();
           },
         ),
       ],

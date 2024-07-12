@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/ui/responsiveness/ui_main_menu_constants.dart';
+import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/theme/app_schemes.dart';
 
 class ThemeCubit extends Cubit<ThemeData> {

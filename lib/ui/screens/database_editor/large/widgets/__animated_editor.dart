@@ -40,7 +40,7 @@ class _AnimatedEditor extends StatelessWidget {
                 onChange: (changedItem) async {
                   if (selectedIndexesRepo.state.length == 1 && changedItem != null) {
                     final index = selectedIndexesRepo.state.single;
-                    await editableItemsRepoByType.replace(
+                    editableItemsRepoByType.replace(
                         oldIndex: index, newItem: changedItem);
                     dbIsChangedCubit.markAsChanged();
                   }

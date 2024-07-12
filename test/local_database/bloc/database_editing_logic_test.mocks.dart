@@ -3,14 +3,9 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
-import 'dart:io' as _i5;
-
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i6;
+import 'package:mockito/src/dummies.dart' as _i4;
 import 'package:rxdart/rxdart.dart' as _i2;
-import 'package:sj_manager/repositories/database_editing/db_items_local_storage_repository.dart'
-    as _i7;
 import 'package:sj_manager/repositories/database_editing/db_items_repository.dart'
     as _i3;
 
@@ -49,26 +44,6 @@ class _FakeDbItemsRepository_1<T1> extends _i1.SmartFake
         );
 }
 
-class _FakeFuture_2<T1> extends _i1.SmartFake implements _i4.Future<T1> {
-  _FakeFuture_2(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeFile_3 extends _i1.SmartFake implements _i5.File {
-  _FakeFile_3(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
 /// A class which mocks [DbItemsRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -79,242 +54,41 @@ class MockDbItemsRepository<T> extends _i1.Mock
   }
 
   @override
-  _i2.ValueStream<Iterable<T>> get items => (super.noSuchMethod(
+  List<T> get lastItems => (super.noSuchMethod(
+        Invocation.getter(#lastItems),
+        returnValue: <T>[],
+      ) as List<T>);
+
+  @override
+  _i2.ValueStream<List<T>> get items => (super.noSuchMethod(
         Invocation.getter(#items),
-        returnValue: _FakeValueStream_0<Iterable<T>>(
+        returnValue: _FakeValueStream_0<List<T>>(
           this,
           Invocation.getter(#items),
         ),
-      ) as _i2.ValueStream<Iterable<T>>);
+      ) as _i2.ValueStream<List<T>>);
 
   @override
-  _i4.Future<_i3.DbItemsRepository<T>> clone() => (super.noSuchMethod(
+  _i3.DbItemsRepository<T> clone() => (super.noSuchMethod(
         Invocation.method(
           #clone,
           [],
         ),
-        returnValue: _i4.Future<_i3.DbItemsRepository<T>>.value(
-            _FakeDbItemsRepository_1<T>(
+        returnValue: _FakeDbItemsRepository_1<T>(
           this,
           Invocation.method(
             #clone,
             [],
           ),
-        )),
-      ) as _i4.Future<_i3.DbItemsRepository<T>>);
+        ),
+      ) as _i3.DbItemsRepository<T>);
 
   @override
-  _i4.Future<void> add(
+  void add(
     T? item, [
     int? index,
   ]) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #add,
-          [
-            item,
-            index,
-          ],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> remove(T? item) => (super.noSuchMethod(
-        Invocation.method(
-          #remove,
-          [item],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<T> removeAt(int? index) => (super.noSuchMethod(
-        Invocation.method(
-          #removeAt,
-          [index],
-        ),
-        returnValue: _i6.ifNotNull(
-              _i6.dummyValueOrNull<T>(
-                this,
-                Invocation.method(
-                  #removeAt,
-                  [index],
-                ),
-              ),
-              (T v) => _i4.Future<T>.value(v),
-            ) ??
-            _FakeFuture_2<T>(
-              this,
-              Invocation.method(
-                #removeAt,
-                [index],
-              ),
-            ),
-      ) as _i4.Future<T>);
-
-  @override
-  _i4.Future<void> clear() => (super.noSuchMethod(
-        Invocation.method(
-          #clear,
-          [],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> loadRaw(Iterable<T>? items) => (super.noSuchMethod(
-        Invocation.method(
-          #loadRaw,
-          [items],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> move({
-    required int? from,
-    required int? to,
-  }) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #move,
-          [],
-          {
-            #from: from,
-            #to: to,
-          },
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> replace({
-    required int? oldIndex,
-    required T? newItem,
-  }) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #replace,
-          [],
-          {
-            #oldIndex: oldIndex,
-            #newItem: newItem,
-          },
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> loadFromSource() => (super.noSuchMethod(
-        Invocation.method(
-          #loadFromSource,
-          [],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> saveToSource() => (super.noSuchMethod(
-        Invocation.method(
-          #saveToSource,
-          [],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-}
-
-/// A class which mocks [DbItemsLocalStorageRepository].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockDbItemsLocalStorageRepository<T> extends _i1.Mock
-    implements _i7.DbItemsLocalStorageRepository<T> {
-  MockDbItemsLocalStorageRepository() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  T Function(Map<String, dynamic>) get fromJson => (super.noSuchMethod(
-        Invocation.getter(#fromJson),
-        returnValue: (Map<String, dynamic> json) => _i6.dummyValue<T>(
-          this,
-          Invocation.getter(#fromJson),
-        ),
-      ) as T Function(Map<String, dynamic>));
-
-  @override
-  set fromJson(T Function(Map<String, dynamic>)? _fromJson) =>
       super.noSuchMethod(
-        Invocation.setter(
-          #fromJson,
-          _fromJson,
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  Map<String, dynamic> Function(T) get toJson => (super.noSuchMethod(
-        Invocation.getter(#toJson),
-        returnValue: (T object) => <String, dynamic>{},
-      ) as Map<String, dynamic> Function(T));
-
-  @override
-  set toJson(Map<String, dynamic> Function(T)? _toJson) => super.noSuchMethod(
-        Invocation.setter(
-          #toJson,
-          _toJson,
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  _i5.File get storageFile => (super.noSuchMethod(
-        Invocation.getter(#storageFile),
-        returnValue: _FakeFile_3(
-          this,
-          Invocation.getter(#storageFile),
-        ),
-      ) as _i5.File);
-
-  @override
-  _i2.ValueStream<Iterable<T>> get items => (super.noSuchMethod(
-        Invocation.getter(#items),
-        returnValue: _FakeValueStream_0<Iterable<T>>(
-          this,
-          Invocation.getter(#items),
-        ),
-      ) as _i2.ValueStream<Iterable<T>>);
-
-  @override
-  _i4.Future<_i3.DbItemsRepository<T>> clone() => (super.noSuchMethod(
-        Invocation.method(
-          #clone,
-          [],
-        ),
-        returnValue: _i4.Future<_i3.DbItemsRepository<T>>.value(
-            _FakeDbItemsRepository_1<T>(
-          this,
-          Invocation.method(
-            #clone,
-            [],
-          ),
-        )),
-      ) as _i4.Future<_i3.DbItemsRepository<T>>);
-
-  @override
-  _i4.Future<void> add(
-    T? item, [
-    int? index,
-  ]) =>
-      (super.noSuchMethod(
         Invocation.method(
           #add,
           [
@@ -322,71 +96,57 @@ class MockDbItemsLocalStorageRepository<T> extends _i1.Mock
             index,
           ],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValueForMissingStub: null,
+      );
 
   @override
-  _i4.Future<void> remove(T? item) => (super.noSuchMethod(
+  void remove(T? item) => super.noSuchMethod(
         Invocation.method(
           #remove,
           [item],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValueForMissingStub: null,
+      );
 
   @override
-  _i4.Future<T> removeAt(int? index) => (super.noSuchMethod(
+  T removeAt(int? index) => (super.noSuchMethod(
         Invocation.method(
           #removeAt,
           [index],
         ),
-        returnValue: _i6.ifNotNull(
-              _i6.dummyValueOrNull<T>(
-                this,
-                Invocation.method(
-                  #removeAt,
-                  [index],
-                ),
-              ),
-              (T v) => _i4.Future<T>.value(v),
-            ) ??
-            _FakeFuture_2<T>(
-              this,
-              Invocation.method(
-                #removeAt,
-                [index],
-              ),
-            ),
-      ) as _i4.Future<T>);
+        returnValue: _i4.dummyValue<T>(
+          this,
+          Invocation.method(
+            #removeAt,
+            [index],
+          ),
+        ),
+      ) as T);
 
   @override
-  _i4.Future<void> clear() => (super.noSuchMethod(
+  void clear() => super.noSuchMethod(
         Invocation.method(
           #clear,
           [],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValueForMissingStub: null,
+      );
 
   @override
-  _i4.Future<void> loadRaw(Iterable<T>? items) => (super.noSuchMethod(
+  void setItems(Iterable<T>? items) => super.noSuchMethod(
         Invocation.method(
-          #loadRaw,
+          #setItems,
           [items],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValueForMissingStub: null,
+      );
 
   @override
-  _i4.Future<void> move({
+  void move({
     required int? from,
     required int? to,
   }) =>
-      (super.noSuchMethod(
+      super.noSuchMethod(
         Invocation.method(
           #move,
           [],
@@ -395,16 +155,15 @@ class MockDbItemsLocalStorageRepository<T> extends _i1.Mock
             #to: to,
           },
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValueForMissingStub: null,
+      );
 
   @override
-  _i4.Future<void> replace({
+  void replace({
     required int? oldIndex,
     required T? newItem,
   }) =>
-      (super.noSuchMethod(
+      super.noSuchMethod(
         Invocation.method(
           #replace,
           [],
@@ -413,27 +172,6 @@ class MockDbItemsLocalStorageRepository<T> extends _i1.Mock
             #newItem: newItem,
           },
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> loadFromSource() => (super.noSuchMethod(
-        Invocation.method(
-          #loadFromSource,
-          [],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
-
-  @override
-  _i4.Future<void> saveToSource() => (super.noSuchMethod(
-        Invocation.method(
-          #saveToSource,
-          [],
-        ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValueForMissingStub: null,
+      );
 }

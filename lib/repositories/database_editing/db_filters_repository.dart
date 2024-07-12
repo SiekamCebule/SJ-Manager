@@ -44,7 +44,8 @@ class DbFiltersRepository {
         _maleJumpersFilters.value.where((filter) => filter.isValid).isNotEmpty;
     final onFemaleJumpers =
         _femaleJumpersFilters.value.where((filter) => filter.isValid).isNotEmpty;
-    return onMaleJumpers || onFemaleJumpers;
+    final onHills = _hillsFilters.value.where((filter) => filter.isValid).isNotEmpty;
+    return onMaleJumpers || onFemaleJumpers || onHills;
   }
 
   List<Filter<dynamic>> filtersByType(DatabaseItemType type) {

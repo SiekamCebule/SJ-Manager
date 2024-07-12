@@ -40,3 +40,15 @@ Directory userDataDirectory(PlarformSpecificPathsCache pathsCache, String direct
   }
   return dir;
 }
+
+File fileByNameWithoutExtension(Directory directory, String name) {
+  final files = directory.listSync();
+  for (var file in files) {
+    if (file is File &&
+        file.path.contains(RegExp(r'/' + RegExp.escape(name) + r'\.\w+$'))) {
+      return file;
+    }
+  }
+  // Handle case when no file is found
+  throw FileSystemException('No file found with the base name $name');
+}

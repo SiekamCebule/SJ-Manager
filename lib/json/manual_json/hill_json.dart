@@ -24,7 +24,7 @@ Map<String, dynamic> _hillToJson(Hill instance,
     <String, dynamic>{
       'name': instance.name,
       'locality': instance.locality,
-      'country': instance.country,
+      'country': countrySaver.save(instance.country),
       'k': instance.k,
       'hs': instance.hs,
       'landingEase': _$LandingEaseEnumMap[instance.landingEase]!,

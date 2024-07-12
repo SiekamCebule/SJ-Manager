@@ -88,6 +88,36 @@ class NumberInRangeEnforcer extends TextInputFormatter {
   }
 }
 
+class NDecimalPlacesEnforcer extends TextInputFormatter {
+  const NDecimalPlacesEnforcer({
+    required this.decimalPlaces,
+  }) : assert(decimalPlaces > 0);
+
+  final int decimalPlaces;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text.isEmpty) {
+      return newValue;
+    }
+    if (newValue.text == '.') {
+      return newValue;
+    }
+    final value = double.tryParse(newValue.text);
+    if (value == null) {
+      return oldValue;
+    }
+    final decimalIndex = newValue.text.indexOf('.');
+    if (decimalIndex == -1 || newValue.text.length - decimalIndex - 1 <= decimalPlaces) {
+      return newValue;
+    }
+    return oldValue;
+  }
+}
+
 List<TextInputFormatter> get doubleTextInputFormatters {
   return [
     FilteringTextInputFormatter.allow(RegExp(r'[\d\.,]')),
