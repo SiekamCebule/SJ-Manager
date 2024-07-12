@@ -100,7 +100,8 @@ void main() async {
                   imagesDirectory:
                       userDataDirectory(pathsCache, 'database/jumper_images'),
                   toFileName: (jumper) {
-                    return '${jumper.country.code.toLowerCase()}_${jumper.name.toLowerCase()}_${jumper.surname.toLowerCase()}';
+                    return '${jumper.country.code.toLowerCase()}_${jumper.name.toLowerCase()}_${jumper.surname.toLowerCase()}'
+                        .replaceAll(' ', '_');
                   },
                   extension: 'png');
             }),
@@ -108,7 +109,8 @@ void main() async {
               return HillImageGeneratingSetup(
                   imagesDirectory: userDataDirectory(pathsCache, 'database/hill_images'),
                   toFileName: (hill) {
-                    return '${hill.locality.toLowerCase()}_${hill.hs.truncate().toString()}';
+                    return '${hill.locality.toLowerCase()}_${hill.hs.truncate().toString()}'
+                        .replaceAll(' ', '_');
                   });
             }),
             Provider(create: (context) {

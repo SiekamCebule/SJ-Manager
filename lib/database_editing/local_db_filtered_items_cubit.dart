@@ -5,7 +5,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/database_editing/local_db_filtered_items_state.dart';
 import 'package:sj_manager/enums/database_item_type.dart';
 import 'package:sj_manager/filters/filter.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
 import 'package:sj_manager/repositories/database_editing/local_db_repos_repository.dart';
 

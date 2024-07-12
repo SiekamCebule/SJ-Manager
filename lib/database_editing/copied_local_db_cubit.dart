@@ -6,7 +6,6 @@ import 'package:sj_manager/json/db_items_json.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
 import 'package:sj_manager/repositories/database_editing/db_io_parameters_repo.dart';
-import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 import 'package:sj_manager/repositories/database_editing/local_db_repos_repository.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
@@ -82,7 +81,6 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
   }
 
   Future<void> loadExternal(BuildContext context, Directory directory) async {
-    print('dir: $directory');
     final males = await _loadItemsFromJsonByType<MaleJumper>(
       context: context,
       file: fileInDirectory(
