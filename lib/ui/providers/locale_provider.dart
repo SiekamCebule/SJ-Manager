@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class LocaleProvider with ChangeNotifier, WidgetsBindingObserver {
-  Locale? _locale;
+  Locale _locale;
 
   Locale? get locale => _locale;
 
-  LocaleProvider() {
+  // TODO: Embrace it
+  // _locale = Locale(Platform.localeName.substring(0, 2))
+  LocaleProvider({Locale? initial}) : _locale = initial ?? const Locale('pl') {
     WidgetsBinding.instance.addObserver(this);
   }
 

@@ -4,8 +4,8 @@ import 'package:sj_manager/filters/filter.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
 
-class DbFiltersRepository {
-  DbFiltersRepository();
+class DbFiltersRepo {
+  DbFiltersRepo();
 
   final _maleJumpersFilters = BehaviorSubject<List<Filter<Jumper>>>.seeded([]);
   final _femaleJumpersFilters = BehaviorSubject<List<Filter<Jumper>>>.seeded([]);
@@ -48,11 +48,11 @@ class DbFiltersRepository {
     return onMaleJumpers || onFemaleJumpers || onHills;
   }
 
-  List<Filter<dynamic>> filtersByType(DatabaseItemType type) {
+  ValueStream<List<Filter<dynamic>>> byType(DatabaseItemType type) {
     return switch (type) {
-      DatabaseItemType.maleJumper => maleJumpersFilters.value,
-      DatabaseItemType.femaleJumper => femaleJumpersFilters.value,
-      DatabaseItemType.hill => hillsFilters.value,
+      DatabaseItemType.maleJumper => maleJumpersFilters,
+      DatabaseItemType.femaleJumper => femaleJumpersFilters,
+      DatabaseItemType.hill => hillsFilters,
     };
   }
 }

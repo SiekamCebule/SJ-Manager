@@ -9,7 +9,7 @@ import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/hill/hill_profile_type.dart';
 import 'package:sj_manager/models/hill/jumps_variability.dart';
 import 'package:sj_manager/models/hill/landing_ease.dart';
-import 'package:sj_manager/repositories/countries/countries_api.dart';
+import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
@@ -18,7 +18,9 @@ import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/hill_image.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/hill_image_generating_setup.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
+import 'package:sj_manager/utils/context_maybe_read.dart';
 import 'package:sj_manager/utils/platform.dart';
 
 class HillEditor extends StatefulWidget {
@@ -102,6 +104,8 @@ class HillEditorState extends State<HillEditor> {
   Widget build(BuildContext context) {
     const gap = Gap(UiItemEditorsConstants.verticalSpaceBetweenFields);
     return LayoutBuilder(builder: (context, constraints) {
+      final shouldShowImage =
+          _cachedHill != null && context.maybeRead<HillImageGeneratingSetup>() != null;
       return Scrollbar(
         thumbVisibility: platformIsDesktop,
         controller: _scrollController,
@@ -135,14 +139,14 @@ class HillEditorState extends State<HillEditor> {
                             widget.onChange(_constructAndCacheHill());
                           },
                           formatters: const [
-                            UpperCaseTextFormatter(),
+                            CapitalizeTextFormatter(),
                           ],
                           labelText: 'Lokalizacja',
                         ),
                         gap,
                         CountriesDropdown(
                           key: _countriesDropdownKey,
-                          countriesApi: RepositoryProvider.of<CountriesApi>(context),
+                          countriesApi: RepositoryProvider.of<CountriesRepo>(context),
                           onSelected: (maybeCountry) {
                             _country = maybeCountry;
                             widget.onChange(_constructAndCacheHill());
@@ -153,7 +157,7 @@ class HillEditorState extends State<HillEditor> {
                     ),
                   ),
                   const Gap(UiItemEditorsConstants.itemImageHorizontalMargin),
-                  if (_cachedHill != null)
+                  if (shouldShowImage)
                     Flexible(
                       flex: 4,
                       child: HillImage(
@@ -167,7 +171,7 @@ class HillEditorState extends State<HillEditor> {
                         ),
                       ),
                     ),
-                  if (_cachedHill != null)
+                  if (shouldShowImage)
                     const Gap(UiItemEditorsConstants.itemImageHorizontalMargin),
                 ],
               ),

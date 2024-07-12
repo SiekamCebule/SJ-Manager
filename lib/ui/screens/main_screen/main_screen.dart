@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/ui/app.dart';
+import 'package:sj_manager/main.dart';
 import 'package:sj_manager/ui/responsiveness/responsive_builder.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/screens/main_screen/widgets/shaking_app_title.dart';

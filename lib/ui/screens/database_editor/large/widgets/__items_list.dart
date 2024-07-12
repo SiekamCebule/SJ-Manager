@@ -17,8 +17,8 @@ class _ItemsListState extends State<_ItemsList> {
     final copiedLocalDbRepos = copiedLocalDbCubit.state!;
 
     final editableItemsRepoByType = copiedLocalDbRepos.byType(itemsType);
-    final filtersRepo = context.watch<DbFiltersRepository>();
-    final selectedIndexesRepo = context.watch<SelectedIndexesRepository>();
+    final filtersRepo = context.watch<DbFiltersRepo>();
+    final selectedIndexesRepo = context.watch<SelectedIndexesRepo>();
 
     final filteredItemsByType =
         context.watch<LocalDbFilteredItemsCubit>().state.byType(itemsType);
@@ -33,10 +33,6 @@ class _ItemsListState extends State<_ItemsList> {
         ]),
         builder: (context, snapshot) {
           final listShouldBeReorderable = !filtersRepo.hasValidFilter;
-          print('indexes length: ${selectedIndexesRepo.state.length}');
-          print('reorderable: $listShouldBeReorderable');
-          print('filtered; $filteredItemsByType');
-          print('length: ${filteredItemsByType.length}');
           return Focus(
             autofocus: true,
             onKeyEvent: (node, event) {
@@ -54,7 +50,6 @@ class _ItemsListState extends State<_ItemsList> {
               },
               length: filteredItemsByType.length,
               itemBuilder: (context, index) {
-                print('LIST TILE');
                 return AppropiateDbItemListTile(
                   key: ValueKey(index),
                   reorderable: listShouldBeReorderable,

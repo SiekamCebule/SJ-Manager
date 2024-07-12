@@ -18,7 +18,8 @@ class _BodyState extends State<_Body> {
   }
 
   void _setUpEditorFillingAfterSelectionChanges() {
-    final selectedIndexesRepo = context.read<SelectedIndexesRepository>();
+    final filtersRepo = context.read<DbFiltersRepo>();
+    final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
     _selectionChangesSubscription =
         selectedIndexesRepo.selectedIndexes.distinct((prev, curr) {
       return prev == curr;
@@ -26,10 +27,18 @@ class _BodyState extends State<_Body> {
       if (selectedIndexesRepo.state.length == 1) {
         final index = selectedIndexesRepo.state.single;
         final itemsType = context.read<DatabaseItemsTypeCubit>().state;
+        final originalByType = context.read<LocalDbReposRepo>().byType(itemsType);
         final filteredByType =
             context.read<LocalDbFilteredItemsCubit>().state.byType(itemsType);
-        final singleSelectedItem = filteredByType.elementAt(index);
-        _fillEditorBySingleSelected(singleSelectedItem);
+        if (!filtersRepo.hasValidFilter) {
+          final singleSelectedItem = filteredByType.elementAt(index);
+          _fillEditorBySingleSelected(singleSelectedItem);
+        } else {
+          final singleSelectedItem = originalByType.lastItems.elementAt(context
+              .read<LocalDbFilteredItemsCubit>()
+              .findOriginalIndex(index, itemsType));
+          _fillEditorBySingleSelected(singleSelectedItem);
+        }
       }
     });
   }

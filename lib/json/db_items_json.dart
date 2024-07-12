@@ -18,7 +18,7 @@ Future<void> saveItemsListToJsonFile<T>({
   required List<T> items,
   required ToJson<T> toJson,
 }) async {
-  final itemsInJson = items.map((item) => toJson(item));
+  final itemsInJson = items.map((item) => toJson(item)).toList();
   final jsonContent = jsonEncode(itemsInJson);
   await file.writeAsString(jsonContent);
 }

@@ -10,9 +10,9 @@ class _Large extends StatefulWidget {
 class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   late final AnimationController _bodyAnimationController;
 
-  late final LocalDbReposRepository _originalDb;
-  late final DbFiltersRepository _filtersRepo;
-  late final SelectedIndexesRepository _selectedIndexesRepo;
+  late final LocalDbReposRepo _originalDb;
+  late final DbFiltersRepo _filtersRepo;
+  late final SelectedIndexesRepo _selectedIndexesRepo;
 
   late final CopiedLocalDbCubit _copiedDbCubit;
   late final ChangeStatusCubit _dbChangeStatusCubit;
@@ -57,13 +57,13 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   }
 
   void _initializeRepos() {
-    _originalDb = LocalDbReposRepository(
-      maleJumpersRepo: context.read<DbItemsRepository<MaleJumper>>(),
-      femaleJumpersRepo: context.read<DbItemsRepository<FemaleJumper>>(),
-      hillsRepo: context.read<DbItemsRepository<Hill>>(),
+    _originalDb = LocalDbReposRepo(
+      maleJumpersRepo: context.read<DbItemsRepo<MaleJumper>>(),
+      femaleJumpersRepo: context.read<DbItemsRepo<FemaleJumper>>(),
+      hillsRepo: context.read<DbItemsRepo<Hill>>(),
     );
-    _filtersRepo = DbFiltersRepository();
-    _selectedIndexesRepo = SelectedIndexesRepository();
+    _filtersRepo = DbFiltersRepo();
+    _selectedIndexesRepo = SelectedIndexesRepo();
   }
 
   Future<void> _initializeCubits() async {
@@ -158,8 +158,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                       },
                       child: StreamBuilder<Object>(
                           stream: StreamGroup.merge([
-                            _filtersRepo.maleJumpersFilters,
-                            _filtersRepo.femaleJumpersFilters,
+                            _filtersRepo.byType(_itemsTypeCubit.state),
                             _selectedIndexesRepo.selectedIndexes,
                           ]),
                           builder: (context, snapshot) {

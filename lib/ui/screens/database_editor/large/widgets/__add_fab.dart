@@ -6,13 +6,13 @@ class _AddFab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final itemsType = context.watch<DatabaseItemsTypeCubit>().state;
-    final selectedIndexesRepo = context.watch<SelectedIndexesRepository>();
+    final selectedIndexesRepo = context.watch<SelectedIndexesRepo>();
     final filteredItems = context.watch<LocalDbFilteredItemsCubit>().state;
     final dbChangeStatusCubit = context.watch<ChangeStatusCubit>();
     final copiedDbCubit = context.watch<CopiedLocalDbCubit>();
 
     final editableItemsForCurrentType = copiedDbCubit.state!.byType(itemsType);
-    final defaultItems = context.watch<DefaultItemsRepository>();
+    final defaultItems = context.watch<DefaultItemsRepo>();
 
     return StreamBuilder<Object>(
         stream: MergeStream([

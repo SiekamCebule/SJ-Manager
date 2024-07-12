@@ -4,18 +4,18 @@ import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
 import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 
-class LocalDbReposRepository with EquatableMixin {
-  const LocalDbReposRepository({
+class LocalDbReposRepo with EquatableMixin {
+  const LocalDbReposRepo({
     required this.maleJumpersRepo,
     required this.femaleJumpersRepo,
     required this.hillsRepo,
   });
 
-  final DbItemsRepository<Jumper> maleJumpersRepo;
-  final DbItemsRepository<Jumper> femaleJumpersRepo;
-  final DbItemsRepository<Hill> hillsRepo;
+  final DbItemsRepo<Jumper> maleJumpersRepo;
+  final DbItemsRepo<Jumper> femaleJumpersRepo;
+  final DbItemsRepo<Hill> hillsRepo;
 
-  DbItemsRepository<dynamic> byType<T>(DatabaseItemType type) {
+  DbItemsRepo<dynamic> byType<T>(DatabaseItemType type) {
     return switch (type) {
       DatabaseItemType.maleJumper => maleJumpersRepo,
       DatabaseItemType.femaleJumper => femaleJumpersRepo,
@@ -23,19 +23,19 @@ class LocalDbReposRepository with EquatableMixin {
     };
   }
 
-  DbItemsRepository<T> byGenericType<T>() {
-    if (T is MaleJumper) return maleJumpersRepo as DbItemsRepository<T>;
-    if (T is FemaleJumper) return maleJumpersRepo as DbItemsRepository<T>;
-    if (T is Hill) return maleJumpersRepo as DbItemsRepository<T>;
+  DbItemsRepo<T> byGenericType<T>() {
+    if (T == MaleJumper) return maleJumpersRepo as DbItemsRepo<T>;
+    if (T == FemaleJumper) return femaleJumpersRepo as DbItemsRepo<T>;
+    if (T == Hill) return hillsRepo as DbItemsRepo<T>;
     throw ArgumentError('Invalid type');
   }
 
-  LocalDbReposRepository copyWith(
-    DbItemsRepository<Jumper>? maleJumpersRepo,
-    DbItemsRepository<Jumper>? femaleJumpersRepo,
-    DbItemsRepository<Hill>? hillsRepo,
+  LocalDbReposRepo copyWith(
+    DbItemsRepo<Jumper>? maleJumpersRepo,
+    DbItemsRepo<Jumper>? femaleJumpersRepo,
+    DbItemsRepo<Hill>? hillsRepo,
   ) {
-    return LocalDbReposRepository(
+    return LocalDbReposRepo(
       maleJumpersRepo: maleJumpersRepo ?? this.maleJumpersRepo,
       femaleJumpersRepo: femaleJumpersRepo ?? this.femaleJumpersRepo,
       hillsRepo: hillsRepo ?? this.hillsRepo,

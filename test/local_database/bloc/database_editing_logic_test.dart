@@ -9,27 +9,27 @@ import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
 import 'package:sj_manager/models/country.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
-import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
+import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 import 'package:sj_manager/repositories/database_editing/local_db_repos_repository.dart';
 
 import 'database_editing_logic_test.mocks.dart';
 
-@GenerateMocks([DbItemsRepository])
+@GenerateMocks([DbItemsRepo])
 void main() {
   group(LocalDbFilteredItemsCubit, () {
-    late DbFiltersRepository filtersRepo;
-    late LocalDbReposRepository itemsRepo;
+    late DbFiltersRepo filtersRepo;
+    late LocalDbReposRepo itemsRepo;
 
     // To initialize in test()
     late LocalDbFilteredItemsCubit cubit;
 
     setUp(() {
-      filtersRepo = DbFiltersRepository();
-      itemsRepo = LocalDbReposRepository(
-        maleJumpersRepo: MockDbItemsRepository(),
-        femaleJumpersRepo: MockDbItemsRepository(),
-        hillsRepo: MockDbItemsRepository(),
+      filtersRepo = DbFiltersRepo();
+      itemsRepo = LocalDbReposRepo(
+        maleJumpersRepo: MockDbItemsRepo(),
+        femaleJumpersRepo: MockDbItemsRepo(),
+        hillsRepo: MockDbItemsRepo(),
       );
     });
     test('filtering', () async {

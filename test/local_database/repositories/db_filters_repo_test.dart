@@ -7,10 +7,10 @@ import 'package:sj_manager/models/country.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
 
 void main() {
-  group(DbFiltersRepository, () {
-    late DbFiltersRepository repo;
+  group(DbFiltersRepo, () {
+    late DbFiltersRepo repo;
     setUp(() {
-      repo = DbFiltersRepository();
+      repo = DbFiltersRepo();
     });
     test('integration test', () async {
       const jumpersFilters = [

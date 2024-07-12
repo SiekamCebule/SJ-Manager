@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/database_editing/local_db_filtered_items_state.dart';
+import 'package:sj_manager/enums/database_item_type.dart';
+import 'package:sj_manager/filters/filter.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
 import 'package:sj_manager/repositories/database_editing/local_db_repos_repository.dart';
-import 'package:sj_manager/filters/filter.dart';
 
 class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
   LocalDbFilteredItemsCubit({
@@ -15,8 +16,8 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
     _setUp();
   }
 
-  final DbFiltersRepository filtersRepo;
-  final LocalDbReposRepository itemsRepo;
+  final DbFiltersRepo filtersRepo;
+  final LocalDbReposRepo itemsRepo;
 
   late final StreamSubscription _maleJumperChangesSubscription;
   late final StreamSubscription _femaleJumperChangesSubscription;
@@ -46,6 +47,13 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
       final filters = event.$2;
       emit(state.copyWith(hills: Filter.filterAll(hills, filters)));
     });
+  }
+
+  int findOriginalIndex(int indexFromFilteredList, DatabaseItemType type) {
+    final filteredList = state.byType(type);
+    final originalList = itemsRepo.byType(type).lastItems;
+    final filteredItem = filteredList[indexFromFilteredList];
+    return originalList.indexOf(filteredItem);
   }
 
   void dispose() {

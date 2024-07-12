@@ -9,7 +9,7 @@ import 'package:sj_manager/models/jumper/jumper_skills.dart';
 import 'package:sj_manager/models/jumper/jumps_consistency.dart';
 import 'package:sj_manager/models/jumper/landing_style.dart';
 import 'package:sj_manager/models/sex.dart';
-import 'package:sj_manager/repositories/countries/countries_api.dart';
+import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
@@ -19,6 +19,8 @@ import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/jumper_image/jumper_image.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/jumper_image/jumper_image_generating_setup.dart';
+import 'package:sj_manager/utils/context_maybe_read.dart';
 import 'package:sj_manager/utils/platform.dart';
 
 class JumperEditor extends StatefulWidget {
@@ -93,6 +95,8 @@ class JumperEditorState extends State<JumperEditor> {
     const gap = Gap(UiItemEditorsConstants.verticalSpaceBetweenFields);
     return LayoutBuilder(
       builder: (context, constraints) {
+        final shouldShowImage = _cachedJumper != null &&
+            context.maybeRead<JumperImageGeneratingSetup>() != null;
         return Scrollbar(
           thumbVisibility: platformIsDesktop,
           controller: _scrollController,
@@ -136,7 +140,7 @@ class JumperEditorState extends State<JumperEditor> {
                           gap,
                           CountriesDropdown(
                             key: _countriesDropdownKey,
-                            countriesApi: RepositoryProvider.of<CountriesApi>(context),
+                            countriesApi: RepositoryProvider.of<CountriesRepo>(context),
                             onSelected: (maybeCountry) {
                               _country = maybeCountry;
                               widget.onChange(_constructAndCacheJumper());
@@ -147,7 +151,7 @@ class JumperEditorState extends State<JumperEditor> {
                       ),
                     ),
                     const Gap(UiItemEditorsConstants.itemImageHorizontalMargin),
-                    if (_cachedJumper != null)
+                    if (shouldShowImage)
                       Expanded(
                         flex: 4,
                         child: JumperImage(
@@ -162,7 +166,7 @@ class JumperEditorState extends State<JumperEditor> {
                           ),
                         ),
                       ),
-                    if (_cachedJumper != null)
+                    if (shouldShowImage)
                       const Gap(UiItemEditorsConstants.itemImageHorizontalMargin),
                   ],
                 ),
@@ -250,7 +254,6 @@ class JumperEditorState extends State<JumperEditor> {
   }
 
   Jumper? _constructAndCacheJumper() {
-    print('construct and CACHE');
     final name = _nameController.text;
     final surname = _surnameController.text;
     final country = _country!;
@@ -271,7 +274,6 @@ class JumperEditorState extends State<JumperEditor> {
   }
 
   void setUp(Jumper jumper) {
-    print('set up');
     setState(() {
       _cachedJumper = jumper;
     });
@@ -281,7 +283,6 @@ class JumperEditorState extends State<JumperEditor> {
   }
 
   void _fillFields(Jumper jumper) {
-    print('fill');
     _nameController.text = jumper.name;
     _surnameController.text = jumper.surname;
     _ageController.text = jumper.age.toString();

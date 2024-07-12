@@ -33,9 +33,9 @@ class _FakeValueStream_0<T1> extends _i1.SmartFake
         );
 }
 
-class _FakeDbItemsRepository_1<T1> extends _i1.SmartFake
-    implements _i3.DbItemsRepository<T1> {
-  _FakeDbItemsRepository_1(
+class _FakeDbItemsRepo_1<T1> extends _i1.SmartFake
+    implements _i3.DbItemsRepo<T1> {
+  _FakeDbItemsRepo_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -44,12 +44,11 @@ class _FakeDbItemsRepository_1<T1> extends _i1.SmartFake
         );
 }
 
-/// A class which mocks [DbItemsRepository].
+/// A class which mocks [DbItemsRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDbItemsRepository<T> extends _i1.Mock
-    implements _i3.DbItemsRepository<T> {
-  MockDbItemsRepository() {
+class MockDbItemsRepo<T> extends _i1.Mock implements _i3.DbItemsRepo<T> {
+  MockDbItemsRepo() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -69,19 +68,19 @@ class MockDbItemsRepository<T> extends _i1.Mock
       ) as _i2.ValueStream<List<T>>);
 
   @override
-  _i3.DbItemsRepository<T> clone() => (super.noSuchMethod(
+  _i3.DbItemsRepo<T> clone() => (super.noSuchMethod(
         Invocation.method(
           #clone,
           [],
         ),
-        returnValue: _FakeDbItemsRepository_1<T>(
+        returnValue: _FakeDbItemsRepo_1<T>(
           this,
           Invocation.method(
             #clone,
             [],
           ),
         ),
-      ) as _i3.DbItemsRepository<T>);
+      ) as _i3.DbItemsRepo<T>);
 
   @override
   void add(

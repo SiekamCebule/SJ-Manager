@@ -50,17 +50,17 @@ class _ForJumpersState extends State<_ForJumpers> {
     );
   }
 
-  CountriesApi get countries => context.read();
+  CountriesRepo get countries => context.read();
   Country get noneCountry => countries.none;
 
   void _setFilters() {
-    context.read<DbFiltersRepository>().setMaleAndFemaleJumpersFilters([
+    context.read<DbFiltersRepo>().setMaleAndFemaleJumpersFilters([
       _byCountry,
       _bySearchText,
     ]);
   }
 
   void _clearSelection() {
-    context.read<SelectedIndexesRepository>().clearSelection();
+    context.read<SelectedIndexesRepo>().clearSelection();
   }
 }

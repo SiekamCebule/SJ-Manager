@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/models/country.dart';
 
-abstract interface class CountryFlagsApi {
-  const CountryFlagsApi();
+abstract interface class CountryFlagsRepo {
+  const CountryFlagsRepo();
 
   ImageProvider imageData(Country country);
 }

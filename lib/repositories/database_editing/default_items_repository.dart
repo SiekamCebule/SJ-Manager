@@ -2,8 +2,8 @@ import 'package:sj_manager/enums/database_item_type.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
 
-class DefaultItemsRepository {
-  DefaultItemsRepository({
+class DefaultItemsRepo {
+  DefaultItemsRepo({
     required this.defaultFemaleJumper,
     required this.defaultMaleJumper,
     required this.defaultHill,

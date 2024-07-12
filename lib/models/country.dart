@@ -14,6 +14,11 @@ class Country {
 
   static Country fromJson(Json json) => _$CountryFromJson(json);
 
+  static Country fromMultilingualJson(Json json, String languageCode) {
+    final names = json['name'] as Map<String, dynamic>;
+    return Country(code: json['code'] as String, name: names[languageCode]!);
+  }
+
   Json toJson() => _$CountryToJson(this);
 
   @override

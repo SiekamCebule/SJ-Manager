@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/models/country.dart';
-import 'package:sj_manager/repositories/countries/countries_api.dart';
+import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 
 class CountriesDropdown extends StatefulWidget {
@@ -13,7 +13,7 @@ class CountriesDropdown extends StatefulWidget {
     this.focusNode,
   });
 
-  final CountriesApi countriesApi;
+  final CountriesRepo countriesApi;
   final Function(Country?) onSelected;
   final bool firstAsInitial;
   final Widget? label;

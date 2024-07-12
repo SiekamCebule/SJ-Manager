@@ -1,8 +1,8 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/extensions/set_toggle.dart';
 
-class SelectedIndexesRepository {
-  SelectedIndexesRepository();
+class SelectedIndexesRepo {
+  SelectedIndexesRepo();
 
   final _subject = BehaviorSubject<Set<int>>.seeded({});
 

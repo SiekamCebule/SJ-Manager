@@ -15,13 +15,16 @@ class _AnimatedEditor extends StatelessWidget {
     final copiedLocalDbRepos = copiedLocalDbCubit.state!;
     final editableItemsRepoByType = copiedLocalDbRepos.byType(itemsType);
 
-    final selectedIndexesRepo = context.watch<SelectedIndexesRepository>();
+    final filtersRepo = context.watch<DbFiltersRepo>();
+    final selectedIndexesRepo = context.watch<SelectedIndexesRepo>();
     final dbIsChangedCubit = context.watch<ChangeStatusCubit>();
+    final filteredItemsCubit = context.watch<LocalDbFilteredItemsCubit>();
 
     return StreamBuilder(
         stream: MergeStream([
           selectedIndexesRepo.selectedIndexes,
           editableItemsRepoByType.items,
+          filtersRepo.byType(itemsType),
         ]),
         builder: (context, snapshot) {
           final editorShouldBeVisible = selectedIndexesRepo.state.length == 1;
@@ -39,10 +42,19 @@ class _AnimatedEditor extends StatelessWidget {
                 itemType: itemsType,
                 onChange: (changedItem) async {
                   if (selectedIndexesRepo.state.length == 1 && changedItem != null) {
-                    final index = selectedIndexesRepo.state.single;
-                    editableItemsRepoByType.replace(
-                        oldIndex: index, newItem: changedItem);
-                    dbIsChangedCubit.markAsChanged();
+                    if (!filtersRepo.hasValidFilter) {
+                      final index = selectedIndexesRepo.state.single;
+                      editableItemsRepoByType.replace(
+                          oldIndex: index, newItem: changedItem);
+                      dbIsChangedCubit.markAsChanged();
+                    } else {
+                      final indexInFiltered = selectedIndexesRepo.state.single;
+                      final indexInOriginal = filteredItemsCubit.findOriginalIndex(
+                          indexInFiltered, itemsType);
+                      editableItemsRepoByType.replace(
+                          oldIndex: indexInOriginal, newItem: changedItem);
+                      dbIsChangedCubit.markAsChanged();
+                    }
                   }
                 },
               ),

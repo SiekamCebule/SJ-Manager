@@ -1,17 +1,17 @@
 import 'package:rxdart/rxdart.dart';
 
-class DbItemsRepository<T> {
-  DbItemsRepository({
-    List<T>? initialItems,
-  }) : _items = initialItems ?? [] {
+class DbItemsRepo<T> {
+  DbItemsRepo({
+    List<T>? initial,
+  }) : _items = initial ?? [] {
     _subject.add(_items);
   }
 
   List<T> _items;
   final _subject = BehaviorSubject<List<T>>();
 
-  DbItemsRepository<T> clone() {
-    return DbItemsRepository(initialItems: List.of(_items));
+  DbItemsRepo<T> clone() {
+    return DbItemsRepo(initial: List.of(_items));
   }
 
   void add(T item, [int? index]) {

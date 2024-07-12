@@ -6,7 +6,7 @@ class _RemoveFab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final itemsType = context.watch<DatabaseItemsTypeCubit>().state;
-    final selectedIndexesRepo = context.watch<SelectedIndexesRepository>();
+    final selectedIndexesRepo = context.watch<SelectedIndexesRepo>();
     final dbChangeStatusCubit = context.watch<ChangeStatusCubit>();
     final copiedDbCubit = context.watch<CopiedLocalDbCubit>();
 

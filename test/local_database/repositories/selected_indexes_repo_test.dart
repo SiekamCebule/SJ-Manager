@@ -2,10 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 
 void main() {
-  late SelectedIndexesRepository repo;
-  group(SelectedIndexesRepository, () {
+  late SelectedIndexesRepo repo;
+  group(SelectedIndexesRepo, () {
     setUp(() {
-      repo = SelectedIndexesRepository();
+      repo = SelectedIndexesRepo();
     });
     test('setSelection', () async {
       repo.setSelection(2, true);

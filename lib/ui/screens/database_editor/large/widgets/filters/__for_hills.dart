@@ -69,11 +69,11 @@ class _ForHillsState extends State<_ForHills> {
     );
   }
 
-  CountriesApi get countries => context.read();
+  CountriesRepo get countries => context.read();
   Country get noneCountry => countries.none;
 
   void _setFilters() {
-    context.read<DbFiltersRepository>().setHillsFilters([
+    context.read<DbFiltersRepo>().setHillsFilters([
       _byCountry,
       _byTypeBySize,
       _bySearchText,
@@ -81,6 +81,6 @@ class _ForHillsState extends State<_ForHills> {
   }
 
   void _clearSelection() {
-    context.read<SelectedIndexesRepository>().clearSelection();
+    context.read<SelectedIndexesRepo>().clearSelection();
   }
 }
