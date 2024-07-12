@@ -11,8 +11,8 @@ class LocalDbReposRepo with EquatableMixin {
     required this.hillsRepo,
   });
 
-  final DbItemsRepo<Jumper> maleJumpersRepo;
-  final DbItemsRepo<Jumper> femaleJumpersRepo;
+  final DbItemsRepo<MaleJumper> maleJumpersRepo;
+  final DbItemsRepo<FemaleJumper> femaleJumpersRepo;
   final DbItemsRepo<Hill> hillsRepo;
 
   DbItemsRepo<dynamic> byType<T>(DatabaseItemType type) {
@@ -31,8 +31,8 @@ class LocalDbReposRepo with EquatableMixin {
   }
 
   LocalDbReposRepo copyWith(
-    DbItemsRepo<Jumper>? maleJumpersRepo,
-    DbItemsRepo<Jumper>? femaleJumpersRepo,
+    DbItemsRepo<MaleJumper>? maleJumpersRepo,
+    DbItemsRepo<FemaleJumper>? femaleJumpersRepo,
     DbItemsRepo<Hill>? hillsRepo,
   ) {
     return LocalDbReposRepo(

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:path/path.dart';
 import 'package:sj_manager/json/json_types.dart';
 
 class DbIoParametersRepo<T> {
@@ -12,4 +13,6 @@ class DbIoParametersRepo<T> {
   final File storageFile;
   final FromJson<T> fromJson;
   final ToJson<T> toJson;
+
+  String get fileBasename => basename(storageFile.path);
 }

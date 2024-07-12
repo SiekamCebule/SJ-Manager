@@ -166,6 +166,8 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                             final shouldShowFabs = !_filtersRepo.hasValidFilter;
                             const fabsGap =
                                 Gap(UiDatabaseEditorConstants.verticalSpaceBetweenFabs);
+                            final items = _filteredItemsCubit.state;
+                            print(items);
 
                             return Scaffold(
                               appBar: const _AppBar(),

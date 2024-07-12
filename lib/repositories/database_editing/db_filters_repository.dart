@@ -28,6 +28,12 @@ class DbFiltersRepo {
     _hillsFilters.add(filters);
   }
 
+  void clear() {
+    setMaleJumpersFilters([]);
+    setFemaleJumpersFilters([]);
+    setHillsFilters([]);
+  }
+
   void close() {
     _maleJumpersFilters.close();
     _femaleJumpersFilters.close();

@@ -4,7 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/database_editing/database_items_type_cubit.dart';
 import 'package:sj_manager/enums/database_item_type.dart';
-import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/country.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/hill/hill_profile_type.dart';

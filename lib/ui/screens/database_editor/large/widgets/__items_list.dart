@@ -36,6 +36,7 @@ class _ItemsListState extends State<_ItemsList> {
           return Focus(
             autofocus: true,
             onKeyEvent: (node, event) {
+              print('ctrl');
               _ctrlIsPressed = HardwareKeyboard.instance.isControlPressed;
               return KeyEventResult.ignored;
             },
@@ -46,6 +47,7 @@ class _ItemsListState extends State<_ItemsList> {
                   newIndex -= 1;
                 }
                 editableItemsRepoByType.move(from: oldIndex, to: newIndex);
+                selectedIndexesRepo.moveSelection(from: oldIndex, to: newIndex);
                 dbIsChangedCubit.markAsChanged();
               },
               length: filteredItemsByType.length,
@@ -58,6 +60,7 @@ class _ItemsListState extends State<_ItemsList> {
                   indexInList: index,
                   onItemTap: () async {
                     if (_ctrlIsPressed) {
+                      print('with ctrl');
                       selectedIndexesRepo.toggleSelection(index);
                     } else {
                       selectedIndexesRepo.toggleSelectionAtOnly(index);

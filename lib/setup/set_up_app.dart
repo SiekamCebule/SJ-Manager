@@ -32,7 +32,7 @@ class AppConfigurator {
   }
 
   void setUpRouting() {
-    if (routerIsInitialized) {
+    if (!routerIsInitialized) {
       configureRoutes(router);
       routerIsInitialized = true;
     }

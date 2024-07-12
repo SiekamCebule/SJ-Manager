@@ -43,6 +43,7 @@ class DbItemsRepo<T> {
   void move({required int from, required int to}) {
     final removed = _items.removeAt(from);
     _items.insert(to, removed);
+    print(_items);
     _addToStream();
   }
 

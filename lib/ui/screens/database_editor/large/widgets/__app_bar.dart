@@ -7,11 +7,10 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: const Text('Edytor bazy danych'),
-      actions: [
-        TextButton(
-          onPressed: () {},
-          child: const Text('Zapisz jako'),
-        ),
+      actions: const [
+        _SaveAsButton(),
+        Gap(30),
+        _LoadButton(),
       ],
     );
   }

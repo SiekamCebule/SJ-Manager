@@ -11,8 +11,8 @@ class LocalDbFilteredItemsState extends Equatable {
     required this.hills,
   });
 
-  final List<Jumper> maleJumpers;
-  final List<Jumper> femaleJumpers;
+  final List<MaleJumper> maleJumpers;
+  final List<FemaleJumper> femaleJumpers;
   final List<Hill> hills;
 
   List<dynamic> byType(DatabaseItemType type) {
@@ -24,8 +24,8 @@ class LocalDbFilteredItemsState extends Equatable {
   }
 
   LocalDbFilteredItemsState copyWith({
-    List<Jumper>? maleJumpers,
-    List<Jumper>? femaleJumpers,
+    List<MaleJumper>? maleJumpers,
+    List<FemaleJumper>? femaleJumpers,
     List<Hill>? hills,
   }) {
     return LocalDbFilteredItemsState(

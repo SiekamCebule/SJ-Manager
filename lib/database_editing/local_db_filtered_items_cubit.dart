@@ -5,6 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/database_editing/local_db_filtered_items_state.dart';
 import 'package:sj_manager/enums/database_item_type.dart';
 import 'package:sj_manager/filters/filter.dart';
+import 'package:sj_manager/models/jumper/jumper.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
 import 'package:sj_manager/repositories/database_editing/local_db_repos_repository.dart';
 
@@ -29,7 +30,7 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
     _maleJumperChangesSubscription = maleStream.listen((event) {
       final jumpers = event.$1.toList();
       final filters = event.$2;
-      emit(state.copyWith(maleJumpers: Filter.filterAll(jumpers, filters)));
+      emit(state.copyWith(maleJumpers: Filter.filterAll(jumpers, filters).cast()));
     });
 
     final femaleStream = Rx.combineLatest2(itemsRepo.femaleJumpersRepo.items,
@@ -37,7 +38,7 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
     _femaleJumperChangesSubscription = femaleStream.listen((event) {
       final jumpers = event.$1.toList();
       final filters = event.$2;
-      emit(state.copyWith(femaleJumpers: Filter.filterAll(jumpers, filters)));
+      emit(state.copyWith(femaleJumpers: Filter.filterAll(jumpers, filters).cast()));
     });
 
     final hillsStream = Rx.combineLatest2(itemsRepo.hillsRepo.items,
