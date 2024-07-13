@@ -163,6 +163,9 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                           builder: (context, snapshot) {
                             final selectedIndexes = _selectedIndexesRepo.state;
                             final shouldShowFabs = !_filtersRepo.hasValidFilter;
+                            final shouldShowAddFab = selectedIndexes.length <= 1;
+                            final shouldShowRemoveFab = selectedIndexes.isNotEmpty;
+
                             const fabsGap =
                                 Gap(UiDatabaseEditorConstants.verticalSpaceBetweenFabs);
 
@@ -172,26 +175,26 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                               body: Row(
                                 children: [
                                   fabsGap,
-                                  AnimatedOpacity(
+                                  AnimatedVisibility(
                                     duration: Durations.short3,
-                                    opacity: shouldShowFabs ? 1 : 0,
                                     curve: Curves.easeIn,
+                                    visible: shouldShowFabs,
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         fabsGap,
-                                        AnimatedOpacity(
+                                        AnimatedVisibility(
                                           duration: Durations.short3,
                                           curve: Curves.easeIn,
-                                          opacity: selectedIndexes.length <= 1 ? 1 : 0,
+                                          visible: shouldShowAddFab,
                                           child: const _AddFab(),
                                         ),
                                         fabsGap,
-                                        AnimatedOpacity(
+                                        AnimatedVisibility(
                                           duration: Durations.short3,
                                           curve: Curves.easeIn,
-                                          opacity: selectedIndexes.isNotEmpty ? 1 : 0,
+                                          visible: shouldShowRemoveFab,
                                           child: const _RemoveFab(),
                                         ),
                                       ],

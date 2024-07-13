@@ -28,13 +28,11 @@ class ShakingWidgetState extends State<ShakingWidget>
     controller = AnimationController(
       vsync: this,
       duration: widget.shakeDuration ~/ 3,
+      value: 0.5,
     );
     turns = controller.drive(
       Tween(begin: -widget.shakeRange, end: widget.shakeRange),
     );
-    Future.microtask(() async {
-      controller.value = 0.5;
-    });
     super.initState();
   }
 

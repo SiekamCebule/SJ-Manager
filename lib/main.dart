@@ -16,12 +16,12 @@ import 'package:sj_manager/repositories/country_flags.dart/local_storage_country
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/setup/set_up_app.dart';
 import 'package:sj_manager/ui/app.dart';
-import 'package:sj_manager/ui/providers/locale_provider.dart';
+import 'package:sj_manager/ui/providers/locale_notifier.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/hill_image_generating_setup.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/jumper_image/jumper_image_generating_setup.dart';
 import 'package:sj_manager/ui/screens/main_screen/main_screen.dart';
-import 'package:sj_manager/ui/theme/app_theme_brightness_cubit.dart';
-import 'package:sj_manager/ui/theme/color_scheme_cubit.dart';
+import 'package:sj_manager/ui/theme/app_theme_brightness_repo.dart';
+import 'package:sj_manager/ui/theme/app_color_scheme_repo.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
@@ -54,9 +54,8 @@ void main() async {
   }
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => LocaleProvider(),
-      builder: (context, child) => child!,
+    BlocProvider(
+      create: (context) => LocaleCubit(),
       child: MultiRepositoryProvider(
         providers: [
           RepositoryProvider<CountriesRepo>(
@@ -92,6 +91,12 @@ void main() async {
           RepositoryProvider(create: (context) {
             return DbEditingDefaultsRepo.appDefault();
           }),
+          RepositoryProvider(
+            create: (context) => AppThemeBrightnessRepo(),
+          ),
+          RepositoryProvider(
+            create: (context) => AppColorSchemeRepo(),
+          ),
         ],
         child: MultiProvider(
           providers: [
@@ -145,7 +150,7 @@ void main() async {
                 storageFile: userDataFile(pathsCache, 'countries/countries.json'),
                 fromJson: (json) {
                   return Country.fromMultilingualJson(
-                      json, context.read<LocaleProvider>().locale!.languageCode);
+                      json, context.read<LocaleCubit>().languageCode);
                 },
                 toJson: (hill) => {},
               );
@@ -159,20 +164,10 @@ void main() async {
           ],
           child: MultiBlocProvider(
             providers: [
-              BlocProvider(
-                create: (context) => AppThemeBrightnessCubit(),
-              ),
-              BlocProvider(
-                create: (context) => AppColorSchemeCubit(),
-              ),
               BlocProvider(create: (context) {
                 return ThemeCubit(
-                  appSchemeSubscription:
-                      BlocProvider.of<AppColorSchemeCubit>(context).stream.listen(null),
-                  appThemeBrightnessSubscription:
-                      BlocProvider.of<AppThemeBrightnessCubit>(context)
-                          .stream
-                          .listen(null),
+                  colorSchemeRepo: context.read(),
+                  brightnessRepo: context.read(),
                 );
               }),
             ],

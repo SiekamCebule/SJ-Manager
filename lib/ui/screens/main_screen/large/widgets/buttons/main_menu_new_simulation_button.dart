@@ -16,10 +16,9 @@ class MainMenuNewSimulationButton extends StatelessWidget {
           children: [
             Text(
               translate(context).newSimulation,
-              style: GoogleFonts.dosis(
-                color: Theme.of(context).colorScheme.primary,
-                textStyle: Theme.of(context).textTheme.headlineMedium,
-              ),
+              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
             ),
             const Gap(UiMainMenuConstants.verticalSpaceBetweenButtonItems),
             Row(
@@ -28,10 +27,9 @@ class MainMenuNewSimulationButton extends StatelessWidget {
                 Flexible(
                   child: Text(
                     translate(context).newSimulationButtonContent,
-                    style: GoogleFonts.dosis(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      textStyle: Theme.of(context).textTheme.bodyLarge,
-                    ),
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                   ),
                 ),
                 const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),

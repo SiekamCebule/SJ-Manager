@@ -17,18 +17,16 @@ class MainMenuContinueButton extends StatelessWidget {
               children: [
                 Text(
                   translate(context).continueConfirm,
-                  style: GoogleFonts.dosis(
-                    color: Theme.of(context).colorScheme.primary,
-                    textStyle: Theme.of(context).textTheme.headlineMedium,
-                  ),
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                 ),
                 const Spacer(),
                 Text(
                   '28-06-2024 19:05',
-                  style: GoogleFonts.dosis(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    textStyle: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                 ),
                 const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
               ],
@@ -49,12 +47,10 @@ class MainMenuContinueButton extends StatelessWidget {
                     ),
                     Text(
                       'Bułgaria',
-                      style: GoogleFonts.dosis(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
-                              fontWeight: FontWeight.w400,
-                            ),
-                      ),
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontWeight: FontWeight.w400,
+                          ),
                     ),
                   ],
                 ),
@@ -70,12 +66,10 @@ class MainMenuContinueButton extends StatelessWidget {
                     ),
                     Text(
                       'Kwiecień \'26',
-                      style: GoogleFonts.dosis(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
-                              fontWeight: FontWeight.w400,
-                            ),
-                      ),
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontWeight: FontWeight.w400,
+                          ),
                     )
                   ],
                 ),
@@ -91,12 +85,10 @@ class MainMenuContinueButton extends StatelessWidget {
                     ),
                     Text(
                       '5',
-                      style: GoogleFonts.dosis(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
-                              fontWeight: FontWeight.w400,
-                            ),
-                      ),
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
+                            fontWeight: FontWeight.w400,
+                          ),
                     )
                   ],
                 ),

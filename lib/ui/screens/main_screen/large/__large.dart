@@ -8,7 +8,7 @@ class _Large extends StatelessWidget {
     return const Scaffold(
       body: Stack(
         children: [
-          _BackgroundImage(),
+          Positioned.fill(child: _BackgroundImage()),
           Center(
             child: Column(
               children: [

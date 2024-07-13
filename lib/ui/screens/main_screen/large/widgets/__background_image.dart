@@ -5,13 +5,11 @@ class _BackgroundImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: Image.asset(
-        'assets/img/bg/main_menu.jpeg',
-        fit: BoxFit.fill,
-        color: Colors.black.withOpacity(UiGlobalConstants.backgroundImageTransparency),
-        colorBlendMode: BlendMode.dstATop,
-      ),
+    return Image.asset(
+      'assets/img/bg/main_menu.jpeg',
+      fit: BoxFit.fill,
+      color: Colors.black.withOpacity(UiGlobalConstants.backgroundImageTransparency),
+      colorBlendMode: BlendMode.dstATop,
     );
   }
 }

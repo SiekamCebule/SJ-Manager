@@ -41,7 +41,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
   Future<void> _saveChangesByType<T>(BuildContext context) async {
     originalRepositories.byGenericType<T>().setItems(state!.byGenericType<T>().lastItems);
     final parameters = context.read<DbIoParametersRepo<T>>();
-    _saveItemsToJsonByType(context: context, file: parameters.storageFile);
+    _saveItemsToJsonByType<T>(context: context, file: parameters.storageFile);
   }
 
   Future<void> saveAs(BuildContext context, Directory directory) async {

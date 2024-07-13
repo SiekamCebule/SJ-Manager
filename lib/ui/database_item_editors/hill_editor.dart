@@ -15,11 +15,13 @@ import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dar
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
+import 'package:sj_manager/ui/reusable_widgets/arrow_icon.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/hill_image.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/hill_image_generating_setup.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
+import 'package:sj_manager/ui/reusable_widgets/menu_entries/predefined_reusable_entries.dart';
 import 'package:sj_manager/utils/context_maybe_read.dart';
 import 'package:sj_manager/utils/platform.dart';
 
@@ -106,6 +108,8 @@ class HillEditorState extends State<HillEditor> {
     return LayoutBuilder(builder: (context, constraints) {
       final shouldShowImage =
           _cachedHill != null && context.maybeRead<HillImageGeneratingSetup>() != null;
+      final shouldShowArrowIcon = _cachedHill?.typicalWindDirection != null;
+
       return Scrollbar(
         thumbVisibility: platformIsDesktop,
         controller: _scrollController,
@@ -262,12 +266,27 @@ class HillEditorState extends State<HillEditor> {
                   _typicalWindDirection = selected;
                   widget.onChange(_constructAndCacheHill());
                 },
-                entries: TypicalWindDirection.values.map((direction) {
-                  return DropdownMenuEntry(
+                entries: [
+                  noneMenuEntry(context),
+                  ...TypicalWindDirection.values.map((direction) {
+                    return DropdownMenuEntry(
                       value: direction,
                       label: translatedTypicalWindDirectionBriefDescription(
-                          context, direction));
-                }).toList(),
+                        context,
+                        direction,
+                      ),
+                      trailingIcon: SizedBox.square(
+                          dimension: 25, child: arrowIcon(context, direction.degrees)),
+                    );
+                  })
+                ],
+                trailingIcon: shouldShowArrowIcon
+                    ? SizedBox.square(
+                        dimension: 25,
+                        child: arrowIcon(
+                            context, _cachedHill!.typicalWindDirection!.degrees),
+                      )
+                    : null,
                 width: constraints.maxWidth,
                 initial: _typicalWindDirection,
                 label: const Text('Typowy kierunek wiatru'),

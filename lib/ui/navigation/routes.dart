@@ -10,15 +10,18 @@ void configureRoutes(FluroRouter router) {
     router.define(
       routePath,
       handler: Handler(handlerFunc: handlerFunc),
+      transitionDuration: Durations.extralong2,
+      transitionType: TransitionType.custom,
       transitionBuilder: (context, animation, secondaryAnimation, child) {
-        final slideIn = CurvedAnimation(parent: animation, curve: Curves.easeIn).drive(
+        final slideIn =
+            CurvedAnimation(parent: animation, curve: Curves.easeInOutSine).drive(
           Tween<Offset>(
             begin: const Offset(0, 1),
             end: Offset.zero,
           ),
         );
         final slideOut =
-            CurvedAnimation(parent: secondaryAnimation, curve: Curves.easeOut).drive(
+            CurvedAnimation(parent: secondaryAnimation, curve: Curves.easeOutBack).drive(
           Tween<Offset>(
             begin: Offset.zero,
             end: const Offset(0, 1),

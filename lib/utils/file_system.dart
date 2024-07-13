@@ -54,7 +54,6 @@ File fileByNameWithoutExtension(Directory directory, String name) {
       return file;
     }
   }
-  // Handle case when no file is found
   throw FileSystemException('No file found with the base name $name');
 }
 

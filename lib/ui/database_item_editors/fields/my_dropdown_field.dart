@@ -8,6 +8,8 @@ class MyDropdownField<T> extends StatelessWidget {
     this.initial,
     this.width,
     required this.entries,
+    this.leadingIcon,
+    this.trailingIcon,
     this.label,
     this.focusNode,
   });
@@ -18,6 +20,8 @@ class MyDropdownField<T> extends StatelessWidget {
   final double? width;
   final List<DropdownMenuEntry<T>> entries;
   final Widget? label;
+  final Widget? leadingIcon;
+  final Widget? trailingIcon;
   final FocusNode? focusNode;
 
   @override
@@ -26,6 +30,8 @@ class MyDropdownField<T> extends StatelessWidget {
       width: width,
       controller: controller,
       initialSelection: initial,
+      leadingIcon: leadingIcon,
+      trailingIcon: trailingIcon,
       dropdownMenuEntries: entries,
       label: label,
       onSelected: onChange,

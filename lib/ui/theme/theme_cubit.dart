@@ -3,41 +3,44 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
+import 'package:sj_manager/ui/theme/app_color_scheme_repo.dart';
 import 'package:sj_manager/ui/theme/app_schemes.dart';
+import 'package:sj_manager/ui/theme/app_theme.dart';
+import 'package:sj_manager/ui/theme/app_theme_brightness_repo.dart';
 
-class ThemeCubit extends Cubit<ThemeData> {
+class ThemeCubit extends Cubit<AppTheme> {
   ThemeCubit({
-    required this.appSchemeSubscription,
-    required this.appThemeBrightnessSubscription,
+    required this.colorSchemeRepo,
+    required this.brightnessRepo,
   }) : super(
-          _defaultTheme,
+          const AppTheme(
+              brightness: UiGlobalConstants.defaultAppThemeBrightness,
+              colorScheme: UiGlobalConstants.defaultAppColorScheme),
         ) {
-    appSchemeSubscription.onData((scheme) {
-      _lastScheme = scheme;
-      emit(_constructTheme(scheme, _lastBrightness));
+    _setUp();
+  }
+
+  void _setUp() {
+    appSchemeSubscription = colorSchemeRepo.values.listen((scheme) {
+      emit(
+        AppTheme(brightness: state.brightness, colorScheme: scheme),
+      );
     });
-    appThemeBrightnessSubscription.onData((brightness) {
-      _lastBrightness = brightness;
-      emit(_constructTheme(_lastScheme, brightness));
+    appThemeBrightnessSubscription = brightnessRepo.values.listen((brightness) {
+      emit(
+        AppTheme(brightness: brightness, colorScheme: state.colorScheme),
+      );
     });
   }
 
-  final StreamSubscription<AppColorScheme> appSchemeSubscription;
-  final StreamSubscription<Brightness> appThemeBrightnessSubscription;
-
-  AppColorScheme _lastScheme = UiGlobalConstants.defaultAppColorScheme;
-  Brightness _lastBrightness = UiGlobalConstants.defaultAppThemeBrightness;
-
-  static ThemeData get _defaultTheme {
-    return _constructTheme(
-      UiGlobalConstants.defaultAppColorScheme,
-      UiGlobalConstants.defaultAppThemeBrightness,
-    );
+  void dispose() {
+    colorSchemeRepo.dispose();
+    brightnessRepo.dipose();
   }
 
-  static ThemeData _constructTheme(AppColorScheme scheme, Brightness brightness) {
-    return ThemeData.from(
-      colorScheme: scheme.scheme(brightness),
-    );
-  }
+  final AppColorSchemeRepo colorSchemeRepo;
+  final AppThemeBrightnessRepo brightnessRepo;
+
+  late final StreamSubscription<AppColorScheme> appSchemeSubscription;
+  late final StreamSubscription<Brightness> appThemeBrightnessSubscription;
 }

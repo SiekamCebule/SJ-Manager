@@ -39,7 +39,7 @@ class _ForHillsState extends State<_ForHills> {
             _setFilters();
           },
           entries: [
-            DropdownMenuEntry(value: null, label: translate(context).none),
+            noneMenuEntry(context),
             ...HillTypeBySize.values.map((type) {
               return DropdownMenuEntry(
                 value: type,

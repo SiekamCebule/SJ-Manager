@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
-import 'package:sj_manager/ui/reusable_widgets/effects/shaking_widget.dart';
+import 'package:sj_manager/ui/reusable_widgets/animations/shaking_widget.dart';
 import 'package:sj_manager/ui/screens/main_screen/widgets/app_title.dart';
 
 class ShakingAppTitle extends StatefulWidget {

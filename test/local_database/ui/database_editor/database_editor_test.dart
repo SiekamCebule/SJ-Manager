@@ -21,13 +21,13 @@ import 'package:sj_manager/setup/set_up_app.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
-import 'package:sj_manager/ui/providers/locale_provider.dart';
+import 'package:sj_manager/ui/providers/locale_notifier.dart';
 import 'package:sj_manager/ui/screens/database_editor/database_editor_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropiate_db_item_list_tile.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
-import 'package:sj_manager/ui/theme/app_theme_brightness_cubit.dart';
-import 'package:sj_manager/ui/theme/color_scheme_cubit.dart';
+import 'package:sj_manager/ui/theme/app_color_scheme_repo.dart';
+import 'package:sj_manager/ui/theme/app_theme_brightness_repo.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
 
 void main() {
@@ -117,8 +117,8 @@ void main() {
     late Widget appWidget;
 
     setUpAll(() {
-      appWidget = ChangeNotifierProvider(
-        create: (context) => LocaleProvider(
+      appWidget = BlocProvider(
+        create: (context) => LocaleCubit(
           initial: const Locale('en'),
         ),
         child: MultiRepositoryProvider(
@@ -146,6 +146,12 @@ void main() {
             RepositoryProvider(create: (context) {
               return DbEditingDefaultsRepo.appDefault();
             }),
+            RepositoryProvider(
+              create: (context) => AppThemeBrightnessRepo(),
+            ),
+            RepositoryProvider(
+              create: (context) => AppColorSchemeRepo(),
+            ),
           ],
           child: MultiProvider(
             providers: [
@@ -158,18 +164,10 @@ void main() {
             ],
             child: MultiBlocProvider(
               providers: [
-                BlocProvider(create: (context) => AppThemeBrightnessCubit()),
-                BlocProvider(
-                  create: (context) => AppColorSchemeCubit(),
-                ),
                 BlocProvider(create: (context) {
                   return ThemeCubit(
-                    appSchemeSubscription:
-                        BlocProvider.of<AppColorSchemeCubit>(context).stream.listen(null),
-                    appThemeBrightnessSubscription:
-                        BlocProvider.of<AppThemeBrightnessCubit>(context)
-                            .stream
-                            .listen(null),
+                    colorSchemeRepo: context.read(),
+                    brightnessRepo: context.read(),
                   );
                 }),
               ],

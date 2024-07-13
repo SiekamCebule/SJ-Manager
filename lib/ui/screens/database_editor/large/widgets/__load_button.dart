@@ -16,7 +16,6 @@ class _LoadButton extends StatelessWidget {
             builder: (context) => const SelectedDbIsNotValidDialog(),
           );
         } else {
-          print('kk');
           await context.read<CopiedLocalDbCubit>().loadExternal(context, dir);
           if (!context.mounted) return;
           context.read<SelectedIndexesRepo>().clearSelection();

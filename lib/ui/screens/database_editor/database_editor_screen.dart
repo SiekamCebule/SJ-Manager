@@ -19,7 +19,6 @@ import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/hill/hill_type_by_size.dart';
 import 'package:sj_manager/filters/hills/hills_filter.dart';
-import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/l10n/hill_parameters_translations.dart';
 import 'package:sj_manager/models/country.dart';
 import 'package:sj_manager/models/hill/hill.dart';
@@ -37,8 +36,10 @@ import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dar
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
 import 'package:sj_manager/ui/responsiveness/responsive_builder.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
+import 'package:sj_manager/ui/reusable_widgets/animations/animated_visibility.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable_widgets/filtering/search_text_field.dart';
+import 'package:sj_manager/ui/reusable_widgets/menu_entries/predefined_reusable_entries.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/database_editor_unsaved_changes_dialog.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/selected_db_is_not_valid_dialog.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropiate_db_item_list_tile.dart';

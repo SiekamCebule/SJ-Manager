@@ -8,8 +8,6 @@ class _ItemsList extends StatefulWidget {
 }
 
 class _ItemsListState extends State<_ItemsList> {
-  bool _ctrlIsPressed = false;
-
   @override
   Widget build(BuildContext context) {
     final itemsType = context.watch<DatabaseItemsTypeCubit>().state;
@@ -33,43 +31,35 @@ class _ItemsListState extends State<_ItemsList> {
         ]),
         builder: (context, snapshot) {
           final listShouldBeReorderable = !filtersRepo.hasValidFilter;
-          return Focus(
-            autofocus: true,
-            onKeyEvent: (node, event) {
-              print('ctrl');
-              _ctrlIsPressed = HardwareKeyboard.instance.isControlPressed;
-              return KeyEventResult.ignored;
+          return DatabaseItemsList(
+            reorderable: listShouldBeReorderable,
+            onReorder: (oldIndex, newIndex) async {
+              if (newIndex > oldIndex) {
+                newIndex -= 1;
+              }
+              editableItemsRepoByType.move(from: oldIndex, to: newIndex);
+              selectedIndexesRepo.moveSelection(from: oldIndex, to: newIndex);
+              dbIsChangedCubit.markAsChanged();
             },
-            child: DatabaseItemsList(
-              reorderable: listShouldBeReorderable,
-              onReorder: (oldIndex, newIndex) async {
-                if (newIndex > oldIndex) {
-                  newIndex -= 1;
-                }
-                editableItemsRepoByType.move(from: oldIndex, to: newIndex);
-                selectedIndexesRepo.moveSelection(from: oldIndex, to: newIndex);
-                dbIsChangedCubit.markAsChanged();
-              },
-              length: filteredItemsByType.length,
-              itemBuilder: (context, index) {
-                return AppropiateDbItemListTile(
-                  key: ValueKey(index),
-                  reorderable: listShouldBeReorderable,
-                  itemType: itemsType,
-                  item: filteredItemsByType.elementAt(index),
-                  indexInList: index,
-                  onItemTap: () async {
-                    if (_ctrlIsPressed) {
-                      print('with ctrl');
-                      selectedIndexesRepo.toggleSelection(index);
-                    } else {
-                      selectedIndexesRepo.toggleSelectionAtOnly(index);
-                    }
-                  },
-                  selected: selectedIndexesRepo.state.contains(index),
-                );
-              },
-            ),
+            length: filteredItemsByType.length,
+            itemBuilder: (context, index) {
+              return AppropiateDbItemListTile(
+                key: ValueKey(index),
+                reorderable: listShouldBeReorderable,
+                itemType: itemsType,
+                item: filteredItemsByType.elementAt(index),
+                indexInList: index,
+                onItemTap: () async {
+                  bool ctrlIsPressed = HardwareKeyboard.instance.isControlPressed;
+                  if (ctrlIsPressed) {
+                    selectedIndexesRepo.toggleSelection(index);
+                  } else {
+                    selectedIndexesRepo.toggleSelectionAtOnly(index);
+                  }
+                },
+                selected: selectedIndexesRepo.state.contains(index),
+              );
+            },
           );
         });
   }

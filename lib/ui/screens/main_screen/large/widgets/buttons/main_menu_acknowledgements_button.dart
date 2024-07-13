@@ -18,10 +18,9 @@ class MainMenuAcknowledgementsButton extends StatelessWidget {
           const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
           Text(
             translate(context).acknowledgements,
-            style: GoogleFonts.dosis(
-              color: Theme.of(context).colorScheme.primary,
-              textStyle: Theme.of(context).textTheme.headlineMedium,
-            ),
+            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
           ),
         ],
       ),
