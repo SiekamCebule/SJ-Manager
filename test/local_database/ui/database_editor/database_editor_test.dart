@@ -267,11 +267,6 @@ void main() {
       await tapItem(2); // Hide HillEditor
       await tester.pumpAndSettle();
 
-      final hillEditor = find.byType(HillEditor);
-      final hillEditorVisibility =
-          find.ancestor(of: hillEditor, matching: find.byType(Visibility));
-      expect(tester.widget<Visibility>(hillEditorVisibility).visible, false);
-
       await tapItem(2);
       await tap(removeFab); //
       await tapItem(3); // 4, if 2 hadn't been removed

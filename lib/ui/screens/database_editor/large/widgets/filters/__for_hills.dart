@@ -51,7 +51,7 @@ class _ForHillsState extends State<_ForHills> {
         ),
         gap,
         CountriesDropdown(
-          label: const Text('Filtruj wg kraju'),
+          label: Text(translate(context).filterByCountry),
           countriesApi: context.read(),
           firstAsInitial: true,
           onSelected: (selected) async {

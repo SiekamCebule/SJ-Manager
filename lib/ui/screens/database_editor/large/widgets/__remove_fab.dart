@@ -35,7 +35,7 @@ class _RemoveFab extends StatelessWidget {
               }
               dbChangeStatusCubit.markAsChanged();
             },
-            tooltip: 'Usuń',
+            tooltip: translate(context).remove,
             child: const Icon(Symbols.remove),
           );
         });

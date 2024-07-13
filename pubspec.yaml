@@ -141,7 +141,6 @@ flutter:
     - assets/img/bg/
     - assets/img/logos/
     - assets/icons/
-    - assets/country_flags/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

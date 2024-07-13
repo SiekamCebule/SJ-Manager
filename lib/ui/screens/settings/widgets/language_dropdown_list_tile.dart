@@ -26,8 +26,7 @@ class LanguageDropdownListTile extends StatelessWidget {
           dropdownMenuEntries: [
             DropdownMenuEntry(value: 'pl', label: translate(context).polish),
             DropdownMenuEntry(value: 'en', label: translate(context).english),
-            DropdownMenuEntry(value: 'de', label: translate(context).german),
-            DropdownMenuEntry(value: 'fr', label: translate(context).french),
+            DropdownMenuEntry(value: 'cs', label: translate(context).czech),
           ],
           onSelected: (selected) {
             context.read<LocaleCubit>().update(Locale(selected!));

@@ -8,7 +8,7 @@ class _Large extends StatelessWidget {
     const gap = Gap(UiSettingsConstants.gapBetweenSettingTiles);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ustawienia'),
+        title: Text(translate(context).settings),
       ),
       body: const Center(
         child: Column(

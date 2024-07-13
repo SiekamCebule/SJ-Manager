@@ -44,7 +44,7 @@ class _AddFab extends StatelessWidget {
               selectedIndexesRepo.setSelection(addIndex, true);
               dbChangeStatusCubit.markAsChanged();
             },
-            tooltip: 'Dodaj',
+            tooltip: translate(context).add,
             child: const Icon(Symbols.add),
           );
         });

@@ -135,7 +135,7 @@ class HillEditorState extends State<HillEditor> {
                           onChange: () {
                             widget.onChange(_constructAndCacheHill());
                           },
-                          labelText: 'Nazwa',
+                          labelText: translate(context).name,
                         ),
                         gap,
                         MyTextField(
@@ -147,7 +147,7 @@ class HillEditorState extends State<HillEditor> {
                           formatters: const [
                             CapitalizeTextFormatter(),
                           ],
-                          labelText: 'Lokalizacja',
+                          labelText: translate(context).locality,
                         ),
                         gap,
                         CountriesDropdown(
@@ -189,7 +189,7 @@ class HillEditorState extends State<HillEditor> {
                   widget.onChange(_constructAndCacheHill());
                 },
                 formatters: doubleTextInputFormatters,
-                labelText: 'Punkt K',
+                labelText: translate(context).kPoint,
                 step: 1.0,
                 min: 0.0,
                 max: context.read<DbEditingDefaultsRepo>().maxKAndHs,
@@ -202,7 +202,7 @@ class HillEditorState extends State<HillEditor> {
                   widget.onChange(_constructAndCacheHill());
                 },
                 formatters: doubleTextInputFormatters,
-                labelText: 'Punkt HS',
+                labelText: translate(context).hsPoint,
                 step: 1.0,
                 min: 0.0,
                 max: context.read<DbEditingDefaultsRepo>().maxKAndHs,
@@ -222,7 +222,7 @@ class HillEditorState extends State<HillEditor> {
                 }).toList(),
                 width: constraints.maxWidth,
                 initial: _landingEase,
-                label: const Text('Lądowanie'),
+                label: Text(translate(context).landing),
               ),
               gap,
               MyDropdownField(
@@ -239,7 +239,7 @@ class HillEditorState extends State<HillEditor> {
                 }).toList(),
                 width: constraints.maxWidth,
                 initial: _profile,
-                label: const Text('Profil'),
+                label: Text(translate(context).profile),
               ),
               gap,
               MyDropdownField(
@@ -256,7 +256,7 @@ class HillEditorState extends State<HillEditor> {
                 }).toList(),
                 width: constraints.maxWidth,
                 initial: _jumpsVariability,
-                label: const Text('Skoki zawodników'),
+                label: Text(translate(context).jumps),
               ),
               gap,
               MyDropdownField(
@@ -289,7 +289,7 @@ class HillEditorState extends State<HillEditor> {
                     : null,
                 width: constraints.maxWidth,
                 initial: _typicalWindDirection,
-                label: const Text('Typowy kierunek wiatru'),
+                label: Text(translate(context).typicalWindDirection),
               ),
               gap,
               MyNumeralTextField(
@@ -299,7 +299,7 @@ class HillEditorState extends State<HillEditor> {
                   widget.onChange(_constructAndCacheHill());
                 },
                 formatters: doubleTextInputFormatters,
-                labelText: 'Typowa siła wiatru',
+                labelText: translate(context).typicalWindStrength,
                 suffixText: 'm/s',
                 step: 0.5,
                 min: 0.0,
@@ -314,7 +314,7 @@ class HillEditorState extends State<HillEditor> {
                   widget.onChange(_constructAndCacheHill());
                 },
                 formatters: doubleTextInputFormatters,
-                labelText: 'Punkty za belkę',
+                labelText: translate(context).pointsForGate,
                 suffixText: 'pkt.',
                 step: 1.0,
                 min: 0.0,
@@ -329,7 +329,7 @@ class HillEditorState extends State<HillEditor> {
                   widget.onChange(_constructAndCacheHill());
                 },
                 formatters: doubleTextInputFormatters,
-                labelText: 'Punkty za wiatr przedni',
+                labelText: translate(context).pointsForHeadwind,
                 suffixText: 'pkt.',
                 step: 1.0,
                 min: 0.0,
@@ -360,11 +360,11 @@ class HillEditorState extends State<HillEditor> {
                                   _cachedHill!.copyWith(pointsForTailwind: autoTailwind));
                             }
                           },
-                          child: const Text('Automatycznie'),
+                          child: Text(translate(context).automatically),
                         ),
                       ],
                       formatters: doubleTextInputFormatters,
-                      labelText: 'Punkty za wiatr tylny',
+                      labelText: translate(context).pointsForTailwind,
                       suffixText: 'pkt',
                       step: 1.0,
                       min: 0.0,

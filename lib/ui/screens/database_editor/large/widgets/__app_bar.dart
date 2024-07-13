@@ -7,7 +7,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     const gapBetweenActions = Gap(UiDatabaseEditorConstants.gapBetweenAppBarActions);
     return AppBar(
-      title: const Text('Edytor bazy danych'),
+      title: Text(translate(context).databaseEditor),
       actions: const [
         _SaveAsButton(),
         gapBetweenActions,
