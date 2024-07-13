@@ -5,7 +5,7 @@ abstract class UiGlobalConstants {
   static const defaultAppColorScheme = AppColorScheme.blue;
   static const defaultAppThemeBrightness = Brightness.dark;
 
-  static const double backgroundImageTransparency = 0.1;
+  static const double backgroundImageTransparency = 0.3;
 
   static const double smallCountryFlagWidth = 30;
 }

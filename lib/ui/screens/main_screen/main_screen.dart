@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -7,6 +9,7 @@ import 'package:sj_manager/main.dart';
 import 'package:sj_manager/ui/responsiveness/responsive_builder.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/screens/main_screen/widgets/shaking_app_title.dart';
+import 'package:sj_manager/utils/file_system.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 part 'large/__large.dart';

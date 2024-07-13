@@ -1,0 +1,11 @@
+AUTHOR: Farmercarlos
+LICENCE: CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0)
+IMAGE: https://commons.wikimedia.org/wiki/File:Snowflake_ski_jump_(January_23,_2010).JPG
+
+AUTHOR: kallerna
+LICENCE: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0)
+IMAGE: https://commons.wikimedia.org/wiki/File:Lahti_Ski_Jumping_Hills_1.jpg
+
+AUTHOR: LZ6387
+LICENCE: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0)
+IMAGE: https://commons.wikimedia.org/wiki/File:Normal_ski_jumping_hill_in_Falun_(LZ)_2.JPG
