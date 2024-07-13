@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sj_manager/l10n/helpers.dart';
 
 class SelectedDbIsNotValidDialog extends StatelessWidget {
   const SelectedDbIsNotValidDialog({super.key});
@@ -6,14 +7,14 @@ class SelectedDbIsNotValidDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Błąd wczytywania'),
-      content: const Text('Wybrany folder nie zawiera poprawnej bazy danych'),
+      title: Text(translate(context).loadingError),
+      content: Text(translate(context).invalidDatabaseFolderWarning),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text('Ok'),
+          child: Text(translate(context).ok),
         )
       ],
     );

@@ -11,7 +11,7 @@ class _SaveAsButton extends StatelessWidget {
         if (!context.mounted || dir == null) return;
         await context.read<CopiedLocalDbCubit>().saveAs(context, Directory(dir));
       },
-      child: const Text('Zapisz jako'),
+      child: Text(translate(context).saveAs),
     );
   }
 }

@@ -208,18 +208,20 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                                         child: Column(
                                           children: [
                                             TabBar(
-                                              tabs: const [
+                                              tabs: [
                                                 Tab(
-                                                  text: 'Zawodnicy',
-                                                  icon: Icon(Symbols.male),
+                                                  text:
+                                                      translate(context).maleCompetitiors,
+                                                  icon: const Icon(Symbols.male),
                                                 ),
                                                 Tab(
-                                                  text: 'Zawodniczki',
-                                                  icon: Icon(Symbols.female),
+                                                  text: translate(context)
+                                                      .femaleCompetitors,
+                                                  icon: const Icon(Symbols.female),
                                                 ),
                                                 Tab(
-                                                  text: 'Skocznie',
-                                                  icon: ImageIcon(hillIcon),
+                                                  text: translate(context).hills,
+                                                  icon: const ImageIcon(hillIcon),
                                                 ),
                                               ],
                                               onTap: _onChangeTab,

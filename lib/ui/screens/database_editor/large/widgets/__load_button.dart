@@ -22,7 +22,7 @@ class _LoadButton extends StatelessWidget {
           context.read<DbFiltersRepo>().clear();
         }
       },
-      child: const Text('Wczytaj'),
+      child: Text(translate(context).load),
     );
   }
 }

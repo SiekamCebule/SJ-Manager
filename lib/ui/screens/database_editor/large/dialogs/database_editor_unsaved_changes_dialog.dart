@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sj_manager/l10n/helpers.dart';
 
 class DatabaseEditorUnsavedChangesDialog extends StatelessWidget {
   const DatabaseEditorUnsavedChangesDialog({super.key});
@@ -6,15 +7,15 @@ class DatabaseEditorUnsavedChangesDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Zapisać zmiany?'),
+      title: Text(translate(context).saveChangesQuestion),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop('yes'),
-          child: const Text('Tak'),
+          child: Text(translate(context).yes),
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop('no'),
-          child: const Text('Nie'),
+          child: Text(translate(context).no),
         ),
       ],
     );

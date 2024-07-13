@@ -16,6 +16,7 @@ import 'package:sj_manager/database_editing/change_status_cubit.dart';
 import 'package:sj_manager/database_editing/local_db_filtered_items_cubit.dart';
 import 'package:sj_manager/filters/hills/hill_matching_algorithms.dart';
 import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
+import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/hill/hill_type_by_size.dart';
 import 'package:sj_manager/filters/hills/hills_filter.dart';

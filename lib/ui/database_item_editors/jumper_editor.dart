@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/l10n/jumper_skills_translations.dart';
 import 'package:sj_manager/models/country.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
@@ -123,7 +124,7 @@ class JumperEditorState extends State<JumperEditor> {
                             formatters: const [
                               CapitalizeTextFormatter(),
                             ],
-                            labelText: 'Imię',
+                            labelText: translate(context).personalName,
                           ),
                           gap,
                           MyTextField(
@@ -135,7 +136,7 @@ class JumperEditorState extends State<JumperEditor> {
                               if (widget.forceUpperCaseOnSurname)
                                 const UpperCaseTextFormatter(),
                             ],
-                            labelText: 'Nazwisko',
+                            labelText: translate(context).surname,
                           ),
                           gap,
                           CountriesDropdown(
@@ -178,7 +179,7 @@ class JumperEditorState extends State<JumperEditor> {
                   formatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
-                  labelText: 'Wiek',
+                  labelText: translate(context).age,
                   step: 1,
                   min: 0,
                   max: context.read<DbEditingDefaultsRepo>().maxJumperAge,
@@ -200,7 +201,7 @@ class JumperEditorState extends State<JumperEditor> {
                   }).toList(),
                   width: constraints.maxWidth,
                   initial: JumpsConsistency.average,
-                  label: const Text('Skoki'),
+                  label: Text(translate(context).age),
                 ),
                 gap,
                 MyDropdownField(
@@ -216,7 +217,7 @@ class JumperEditorState extends State<JumperEditor> {
                   }).toList(),
                   width: constraints.maxWidth,
                   initial: LandingStyle.average,
-                  label: const Text('Lądowanie'),
+                  label: Text(translate(context).age),
                 ),
                 gap,
                 MyNumeralTextField(
@@ -225,7 +226,7 @@ class JumperEditorState extends State<JumperEditor> {
                     widget.onChange(_constructAndCacheJumper());
                   },
                   formatters: doubleTextInputFormatters,
-                  labelText: 'Na mniejszych skoczniach',
+                  labelText: translate(context).onSmallerHills,
                   step: 1.0,
                   min: 0.0,
                   max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
@@ -238,7 +239,7 @@ class JumperEditorState extends State<JumperEditor> {
                     widget.onChange(_constructAndCacheJumper());
                   },
                   formatters: doubleTextInputFormatters,
-                  labelText: 'Na większych skoczniach',
+                  labelText: translate(context).onLargerHills,
                   step: 1.0,
                   min: 0.0,
                   max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,

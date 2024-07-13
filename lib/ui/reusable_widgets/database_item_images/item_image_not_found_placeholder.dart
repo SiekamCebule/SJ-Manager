@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/item_image_help_dialog.dart';
 
 class ItemImageNotFoundPlaceholder extends StatelessWidget {
@@ -21,9 +22,9 @@ class ItemImageNotFoundPlaceholder extends StatelessWidget {
         children: [
           Placeholder(
             color: Theme.of(context).colorScheme.surfaceContainerHighest,
-            child: const Center(
+            child: Center(
                 child: Text(
-              'Nie znaleziono zdjęcia',
+              translate(context).imageNotFound,
               textAlign: TextAlign.center,
             )),
           ),
