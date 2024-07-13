@@ -6,8 +6,8 @@ class _ButtonsTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SizedBox(
-      width: 900,
-      height: 450,
+      width: UiMainMenuConstants.buttonsTableWidth,
+      height: UiMainMenuConstants.buttonsTableHeight,
       child: Column(
         children: [
           Expanded(

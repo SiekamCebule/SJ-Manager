@@ -200,7 +200,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                                       ],
                                     ),
                                   ),
-                                  const Gap(10),
+                                  const Gap(UiDatabaseEditorConstants.gapBetweenFabs),
                                   DefaultTabController(
                                     length: 3,
                                     child: Expanded(

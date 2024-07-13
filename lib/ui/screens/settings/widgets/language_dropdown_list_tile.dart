@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/ui/providers/locale_notifier.dart';
+import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 
 class LanguageDropdownListTile extends StatelessWidget {
   const LanguageDropdownListTile({super.key});
@@ -12,7 +13,7 @@ class LanguageDropdownListTile extends StatelessWidget {
     return Row(
       children: [
         SizedBox(
-          width: 250,
+          width: UiSettingsConstants.settingListTileWidth,
           child: ListTile(
             title: Text(
               translate(context).language,

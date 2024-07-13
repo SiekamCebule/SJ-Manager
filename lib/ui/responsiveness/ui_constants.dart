@@ -19,13 +19,26 @@ abstract class UiMainMenuConstants {
   static const double continueButtonSimulationInfoVerticalGap = 15;
   static const double continueButtonSimulationInfoIconSize = 45;
 
+  static const double buttonsTableHeight = 450;
+  static const double buttonsTableWidth = 900;
+
   static const appTitleShakeInterval = Duration(seconds: 15);
   static const appTitleShakeDuration = Duration(milliseconds: 1500);
+}
+
+abstract class UiSettingsConstants {
+  static const double settingListTileWidth = 250;
+  static const double gapBetweenSettingTiles = 10;
 }
 
 abstract class UiDatabaseEditorConstants {
   static const double verticalSpaceBetweenFabs = 10;
   static const double horizontalSpaceBetweenListAndEditor = 45;
+
+  static const double gapBetweenFabs = 10;
+  static const double gapBetweenAppBarActions = 30;
+
+  static const double gapBetweenFilters = 30;
 }
 
 abstract class UiItemEditorsConstants {

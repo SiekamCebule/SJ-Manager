@@ -15,6 +15,7 @@ class _ForHillsState extends State<_ForHills> {
 
   @override
   Widget build(BuildContext context) {
+    const gap = Gap(UiDatabaseEditorConstants.gapBetweenFilters);
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -48,7 +49,7 @@ class _ForHillsState extends State<_ForHills> {
             })
           ],
         ),
-        const Gap(30),
+        gap,
         CountriesDropdown(
           label: const Text('Filtruj wg kraju'),
           countriesApi: context.read(),

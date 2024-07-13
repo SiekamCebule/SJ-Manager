@@ -5,6 +5,7 @@ class _Large extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const gap = Gap(UiSettingsConstants.gapBetweenSettingTiles);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ustawienia'),
@@ -13,7 +14,7 @@ class _Large extends StatelessWidget {
         child: Column(
           children: [
             LanguageDropdownListTile(),
-            Gap(8),
+            gap,
             AppColorSchemeDropdownListTile(),
           ],
         ),
