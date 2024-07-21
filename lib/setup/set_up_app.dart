@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
 import 'package:sj_manager/main.dart';
@@ -9,14 +10,17 @@ import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_io_parameters_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 import 'package:sj_manager/ui/navigation/routes.dart';
+import 'package:sj_manager/utils/file_system.dart';
 
 class AppConfigurator {
   AppConfigurator({
     required this.shouldSetUpRouting,
+    required this.shouldSetUpUserData,
     required this.shouldLoadDatabase,
   });
 
   final bool shouldSetUpRouting;
+  final bool shouldSetUpUserData;
   final bool shouldLoadDatabase;
 
   late BuildContext _context;
@@ -25,6 +29,9 @@ class AppConfigurator {
     _context = context;
     if (shouldSetUpRouting) {
       setUpRouting();
+    }
+    if (shouldSetUpUserData) {
+      await setUpUserData();
     }
     if (shouldLoadDatabase) {
       await loadDatabase();
@@ -35,6 +42,21 @@ class AppConfigurator {
     if (!routerIsInitialized) {
       configureRoutes(router);
       routerIsInitialized = true;
+    }
+  }
+
+  Future<void> setUpUserData() async {
+    final countriesFile = userDataFile(_context.read(), 'countries/countries.json');
+    if (!await countriesFile.exists()) {
+      await countriesFile.create(recursive: true);
+      countriesFile
+          .writeAsString(await rootBundle.loadString('assets/defaults/countries.json'));
+    }
+    if (!_context.mounted) return;
+
+    final flagsDir = userDataDirectory(_context.read(), 'countries/country_flags');
+    if (!await flagsDir.exists()) {
+      await copyAssetsDir('defaults/country_flags', flagsDir);
     }
   }
 

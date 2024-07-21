@@ -1,0 +1,10 @@
+Flags Attribution
+=================
+
+The flags used in this project are sourced from Wikimedia Commons.
+
+Each flag is used under the terms of the Wikimedia Commons license.
+
+All flags can be found here:
+https://en.wikipedia.org/wiki/Gallery_of_sovereign_state_flags
+

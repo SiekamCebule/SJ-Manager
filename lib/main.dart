@@ -155,9 +155,13 @@ void main() async {
                 toJson: (hill) => {},
               );
             }),
+            Provider.value(
+              value: pathsCache,
+            ),
             Provider(
               create: (context) => AppConfigurator(
                 shouldSetUpRouting: true,
+                shouldSetUpUserData: true,
                 shouldLoadDatabase: true,
               ),
             ),

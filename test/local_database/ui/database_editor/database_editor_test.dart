@@ -158,6 +158,7 @@ void main() {
               Provider(
                 create: (context) => AppConfigurator(
                   shouldSetUpRouting: true,
+                  shouldSetUpUserData: false,
                   shouldLoadDatabase: false,
                 ),
               ),

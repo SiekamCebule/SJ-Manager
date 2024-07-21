@@ -1,11 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
 import 'package:sj_manager/repositories/database_editing/db_io_parameters_repo.dart';
+import 'package:path/path.dart' as path;
 
 class PlarformSpecificPathsCache {
   PlarformSpecificPathsCache();
@@ -75,4 +78,48 @@ bool directoryIsValidForDatabase(BuildContext context, Directory directory) {
   final currentFolderStructure = directory.listSync().map((file) => file.path).toSet();
 
   return currentFolderStructure.containsAll(correctFolderStructure);
+}
+
+void copyDirectorySync(Directory source, Directory destination) {
+  /// create destination folder if not exist
+  if (!destination.existsSync()) {
+    destination.createSync(recursive: true);
+  }
+
+  /// get all files from source (recursive: false is important here)
+  source.listSync(recursive: false).forEach((entity) {
+    final newPath =
+        destination.path + Platform.pathSeparator + path.basename(entity.path);
+    if (entity is File) {
+      entity.copySync(newPath);
+    } else if (entity is Directory) {
+      copyDirectorySync(entity, Directory(newPath));
+    }
+  });
+}
+
+Future<void> copyAssetsDir(String assetsDirPath, Directory destination) async {
+  try {
+    final manifestContent = await rootBundle.loadString('AssetManifest.json');
+    Map<String, dynamic> manifestMap = jsonDecode(manifestContent);
+
+    final assetPaths = manifestMap.keys
+        .where((String key) => key.startsWith('assets/$assetsDirPath/'))
+        .toList();
+
+    for (String assetPath in assetPaths) {
+      // Load the asset file as bytes
+      ByteData data = await rootBundle.load(assetPath);
+      List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+
+      // Get the file name
+      String fileName = assetPath.split('/').last;
+
+      // Write the file to the target directory
+      File file = File('${destination.path}/$fileName');
+      await file.writeAsBytes(bytes);
+    }
+  } catch (e) {
+    print('Error copying asset directory: $e');
+  }
 }
