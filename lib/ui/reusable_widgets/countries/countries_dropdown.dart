@@ -12,6 +12,8 @@ class CountriesDropdown extends StatefulWidget {
     this.firstAsInitial = false,
     this.label,
     this.focusNode,
+    this.width,
+    this.enabled,
   });
 
   final CountriesRepo countriesApi;
@@ -19,6 +21,8 @@ class CountriesDropdown extends StatefulWidget {
   final bool firstAsInitial;
   final Widget? label;
   final FocusNode? focusNode;
+  final double? width;
+  final bool? enabled;
 
   @override
   State<CountriesDropdown> createState() => CountriesDropdownState();
@@ -43,8 +47,12 @@ class CountriesDropdownState extends State<CountriesDropdown> {
   @override
   Widget build(BuildContext context) {
     final countries = widget.countriesApi.countries;
+    final windowHeight = MediaQuery.of(context).size.height;
     return DropdownMenu<Country>(
-      enableSearch: false,
+      enabled: widget.enabled ?? true,
+      width: widget.width,
+      menuHeight: windowHeight * 0.6,
+      enableSearch: true,
       requestFocusOnTap: false,
       label: widget.label,
       focusNode: widget.focusNode,

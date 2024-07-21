@@ -11,14 +11,14 @@ class _AnimatedEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemsType = context.watch<DatabaseItemsTypeCubit>().state;
 
-    final copiedLocalDbCubit = context.watch<CopiedLocalDbCubit>();
+    final copiedLocalDbCubit = context.read<CopiedLocalDbCubit>();
     final copiedLocalDbRepos = copiedLocalDbCubit.state!;
     final editableItemsRepoByType = copiedLocalDbRepos.byType(itemsType);
 
-    final filtersRepo = context.watch<DbFiltersRepo>();
-    final selectedIndexesRepo = context.watch<SelectedIndexesRepo>();
-    final dbIsChangedCubit = context.watch<ChangeStatusCubit>();
-    final filteredItemsCubit = context.watch<LocalDbFilteredItemsCubit>();
+    final filtersRepo = context.read<DbFiltersRepo>();
+    final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
+    final dbIsChangedCubit = context.read<ChangeStatusCubit>();
+    final filteredItemsCubit = context.read<LocalDbFilteredItemsCubit>();
 
     return StreamBuilder(
       stream: MergeStream([
@@ -28,6 +28,7 @@ class _AnimatedEditor extends StatelessWidget {
       ]),
       builder: (context, snapshot) {
         final editorShouldBeVisible = selectedIndexesRepo.state.length == 1;
+        print('build animated editor');
         return AnimatedVisibility(
           duration: Durations.medium1,
           curve: Curves.easeIn,

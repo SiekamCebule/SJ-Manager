@@ -1,5 +1,13 @@
 [
     {
+        "code": "none",
+        "name": {
+            "pl": "Brak",
+            "en": "None",
+            "cs": "Žádný"
+        }
+    },
+    {
         "code": "AF",
         "name": {
             "pl": "Afganistan",

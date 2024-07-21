@@ -11,7 +11,8 @@ class MyDropdownField<T> extends StatelessWidget {
     this.leadingIcon,
     this.trailingIcon,
     this.label,
-    this.focusNode,
+    this.enableSearch,
+    this.enabled,
   });
 
   final TextEditingController? controller;
@@ -22,11 +23,16 @@ class MyDropdownField<T> extends StatelessWidget {
   final Widget? label;
   final Widget? leadingIcon;
   final Widget? trailingIcon;
-  final FocusNode? focusNode;
+  final bool? enableSearch;
+  final bool? enabled;
 
   @override
   Widget build(BuildContext context) {
+    print('dropdown build');
     return DropdownMenu<T>(
+      enabled: enabled ?? true,
+      enableSearch: enableSearch ?? true,
+      requestFocusOnTap: false,
       width: width,
       controller: controller,
       initialSelection: initial,

@@ -21,7 +21,11 @@ class LocalStorageCountryFlagsRepo implements CountryFlagsRepo {
       return _cache[country]!;
     } else {
       final path = '${imagesDirectory.path}/${country.code}.$imagesExtension';
-      final imageData = FileImage(File(path));
+      var file = File(path);
+      if (!file.existsSync()) {
+        file = File('${imagesDirectory.path}/none.$imagesExtension');
+      }
+      final imageData = FileImage(file);
       _cache[country] = imageData;
       return imageData;
     }

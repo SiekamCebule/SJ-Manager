@@ -16,7 +16,6 @@ import 'package:sj_manager/repositories/country_flags.dart/local_storage_country
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/setup/set_up_app.dart';
 import 'package:sj_manager/ui/app.dart';
-import 'package:sj_manager/ui/app_initializer.dart';
 import 'package:sj_manager/ui/providers/locale_notifier.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/hill_image_generating_setup.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/jumper_image/jumper_image_generating_setup.dart';

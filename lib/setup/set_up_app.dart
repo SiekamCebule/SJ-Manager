@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,12 +9,10 @@ import 'package:sj_manager/models/country.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
-import 'package:sj_manager/repositories/country_flags.dart/local_storage_country_flags_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_io_parameters_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 import 'package:sj_manager/ui/dialogs/loading_items_failed_dialog.dart';
 import 'package:sj_manager/ui/navigation/routes.dart';
-import 'package:sj_manager/utils/context_maybe_read.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
 class AppConfigurator {
@@ -57,15 +57,15 @@ class AppConfigurator {
     }
     if (!_context.mounted) return;
 
-    final flagsDir = _context.maybeRead<LocalStorageCountryFlagsRepo>()?.imagesDirectory;
-    if (flagsDir != null) {
-      if (!await flagsDir.exists()) {
-        await copyAssetsDir('defaults/country_flags', flagsDir);
-      }
+    final flagsDir = userDataDirectory(_context.read(), 'countries/country_flags');
+    if (!await flagsDir.exists()) {
+      await copyAssetsDir('defaults/country_flags', flagsDir);
     }
   }
 
   Future<void> loadDatabase() async {
+    if (!_context.mounted) return;
+    final file = _context.read<DbIoParametersRepo<Country>>().storageFile;
     try {
       await _loadCountries();
     } catch (e) {
@@ -74,49 +74,33 @@ class AppConfigurator {
         context: _context,
         builder: (context) => LoadingItemsFailedDialog(
           titleText: 'Błąd wczytywania krajów',
-          filePath: context.read<DbIoParametersRepo<Country>>().storageFile.path,
+          filePath: file.path,
           error: e,
         ),
       );
     }
 
-    try {
-      await _loadItems<MaleJumper>();
-    } catch (e) {
-      if (!_context.mounted) return;
-      await showDialog(
-        context: _context,
-        builder: (context) => LoadingItemsFailedDialog(
-          titleText: 'Błąd wczytywania skoczków',
-          filePath: context.read<DbIoParametersRepo<MaleJumper>>().storageFile.path,
-          error: e,
-        ),
-      );
-    }
+    await _tryLoadItems<MaleJumper>(dialogTitleText: 'Błąd wczytywania skoczków');
+    await _tryLoadItems<FemaleJumper>(dialogTitleText: 'Błąd wczytywania skoczkiń');
+    await _tryLoadItems<Hill>(dialogTitleText: 'Błąd wczytywania skoczni');
+  }
 
+  Future<void> _tryLoadItems<T>({required String dialogTitleText}) async {
+    if (!_context.mounted) return;
+    final file = _context.read<DbIoParametersRepo<T>>().storageFile;
     try {
-      await _loadItems<FemaleJumper>();
+      await _loadItems<T>();
+    } on PathNotFoundException {
+      file.createSync();
+      file.writeAsStringSync('[]');
     } catch (e) {
       if (!_context.mounted) return;
       await showDialog(
+        barrierDismissible: false,
         context: _context,
         builder: (context) => LoadingItemsFailedDialog(
-          titleText: 'Błąd wczytywania skoczkiń',
-          filePath: context.read<DbIoParametersRepo<FemaleJumper>>().storageFile.path,
-          error: e,
-        ),
-      );
-    }
-
-    try {
-      await _loadItems<Hill>();
-    } catch (e) {
-      if (!_context.mounted) return;
-      await showDialog(
-        context: _context,
-        builder: (context) => LoadingItemsFailedDialog(
-          titleText: 'Błąd wczytywania skoczni',
-          filePath: context.read<DbIoParametersRepo<Hill>>().storageFile.path,
+          titleText: dialogTitleText,
+          filePath: file.path,
           error: e,
         ),
       );
@@ -130,7 +114,8 @@ class AppConfigurator {
       fromJson: parameters.fromJson,
     );
     if (!_context.mounted) return;
-    _context.read<CountriesRepo>().setCountries(countries);
+    _context.read<CountriesRepo>().setCountries(
+        countries.map((c) => c.copyWith(code: c.code.toLowerCase())).toList());
   }
 
   Future<void> _loadItems<T>() async {

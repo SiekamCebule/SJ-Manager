@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,9 +31,15 @@ class JumperEditor extends StatefulWidget {
     super.key,
     required this.onChange,
     this.forceUpperCaseOnSurname = false,
+    this.enableEditingCountry = true,
+    this.enableEditingName = true,
+    this.enableEditingSurname = true,
   });
 
   final bool forceUpperCaseOnSurname;
+  final bool enableEditingCountry;
+  final bool enableEditingSurname;
+  final bool enableEditingName;
 
   /// Callback executed when some fields change.
   ///
@@ -98,6 +106,7 @@ class JumperEditorState extends State<JumperEditor> {
       builder: (context, constraints) {
         final shouldShowImage = _cachedJumper != null &&
             context.maybeRead<JumperImageGeneratingSetup>() != null;
+        print('jumper editor build');
         return Scrollbar(
           thumbVisibility: platformIsDesktop,
           controller: _scrollController,
@@ -116,11 +125,10 @@ class JumperEditorState extends State<JumperEditor> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           MyTextField(
-                            focusNode: _firstFocusNode,
+                            //focusNode: _firstFocusNode,
+                            enabled: widget.enableEditingName,
                             controller: _nameController,
-                            onChange: () {
-                              widget.onChange(_constructAndCacheJumper());
-                            },
+                            onChange: _onChange,
                             formatters: const [
                               CapitalizeTextFormatter(),
                             ],
@@ -128,10 +136,9 @@ class JumperEditorState extends State<JumperEditor> {
                           ),
                           gap,
                           MyTextField(
+                            enabled: widget.enableEditingSurname,
                             controller: _surnameController,
-                            onChange: () {
-                              widget.onChange(_constructAndCacheJumper());
-                            },
+                            onChange: _onChange,
                             formatters: [
                               if (widget.forceUpperCaseOnSurname)
                                 const UpperCaseTextFormatter(),
@@ -139,12 +146,19 @@ class JumperEditorState extends State<JumperEditor> {
                             labelText: translate(context).surname,
                           ),
                           gap,
-                          CountriesDropdown(
-                            key: _countriesDropdownKey,
-                            countriesApi: RepositoryProvider.of<CountriesRepo>(context),
-                            onSelected: (maybeCountry) {
-                              _country = maybeCountry;
-                              widget.onChange(_constructAndCacheJumper());
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              return CountriesDropdown(
+                                enabled: widget.enableEditingCountry,
+                                width: constraints.maxWidth,
+                                key: _countriesDropdownKey,
+                                countriesApi:
+                                    RepositoryProvider.of<CountriesRepo>(context),
+                                onSelected: (maybeCountry) {
+                                  _country = maybeCountry;
+                                  _onChange();
+                                },
+                              );
                             },
                           ),
                           gap,
@@ -173,9 +187,7 @@ class JumperEditorState extends State<JumperEditor> {
                 ),
                 MyNumeralTextField(
                   controller: _ageController,
-                  onChange: () {
-                    widget.onChange(_constructAndCacheJumper());
-                  },
+                  onChange: _onChange,
                   formatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
@@ -191,7 +203,7 @@ class JumperEditorState extends State<JumperEditor> {
                   controller: _jumpsConsistencyController,
                   onChange: (selected) {
                     _jumpsConsistency = selected!;
-                    widget.onChange(_constructAndCacheJumper());
+                    _onChange();
                   },
                   entries: JumpsConsistency.values.map((consistency) {
                     return DropdownMenuEntry(
@@ -201,14 +213,14 @@ class JumperEditorState extends State<JumperEditor> {
                   }).toList(),
                   width: constraints.maxWidth,
                   initial: JumpsConsistency.average,
-                  label: Text(translate(context).age),
+                  label: Text(translate(context).jumps),
                 ),
                 gap,
                 MyDropdownField(
                   controller: _landingStyleController,
                   onChange: (selected) {
                     _landingStyle = selected!;
-                    widget.onChange(_constructAndCacheJumper());
+                    _onChange();
                   },
                   entries: LandingStyle.values.map((style) {
                     return DropdownMenuEntry(
@@ -217,14 +229,12 @@ class JumperEditorState extends State<JumperEditor> {
                   }).toList(),
                   width: constraints.maxWidth,
                   initial: LandingStyle.average,
-                  label: Text(translate(context).age),
+                  label: Text(translate(context).landing),
                 ),
                 gap,
                 MyNumeralTextField(
                   controller: _qualityOnSmallerHillsController,
-                  onChange: () {
-                    widget.onChange(_constructAndCacheJumper());
-                  },
+                  onChange: _onChange,
                   formatters: doubleTextInputFormatters,
                   labelText: translate(context).onSmallerHills,
                   step: 1.0,
@@ -235,9 +245,7 @@ class JumperEditorState extends State<JumperEditor> {
                 gap,
                 MyNumeralTextField(
                   controller: _qualityOnLargerHillsController,
-                  onChange: () {
-                    widget.onChange(_constructAndCacheJumper());
-                  },
+                  onChange: _onChange,
                   formatters: doubleTextInputFormatters,
                   labelText: translate(context).onLargerHills,
                   step: 1.0,
@@ -254,7 +262,12 @@ class JumperEditorState extends State<JumperEditor> {
     );
   }
 
+  void _onChange() {
+    widget.onChange(_constructAndCacheJumper());
+  }
+
   Jumper? _constructAndCacheJumper() {
+    print('construct and cache');
     final name = _nameController.text;
     final surname = _surnameController.text;
     final country = _country!;
@@ -275,6 +288,7 @@ class JumperEditorState extends State<JumperEditor> {
   }
 
   void setUp(Jumper jumper) {
+    print('setup');
     setState(() {
       _cachedJumper = jumper;
     });
@@ -284,6 +298,7 @@ class JumperEditorState extends State<JumperEditor> {
   }
 
   void _fillFields(Jumper jumper) {
+    print('fill');
     _nameController.text = jumper.name;
     _surnameController.text = jumper.surname;
     _ageController.text = jumper.age.toString();

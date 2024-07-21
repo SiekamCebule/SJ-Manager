@@ -47,6 +47,7 @@ import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropiate_d
 import 'package:sj_manager/ui/database_item_editors/jumper_editor.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
 import 'package:sj_manager/utils/file_system.dart';
+import 'package:sj_manager/utils/single_where_type.dart';
 
 part 'large/__large.dart';
 part 'large/widgets/__body.dart';

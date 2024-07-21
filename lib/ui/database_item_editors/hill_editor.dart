@@ -29,9 +29,17 @@ class HillEditor extends StatefulWidget {
   const HillEditor({
     super.key,
     required this.onChange,
+    this.enableEditingDimensions = true,
+    this.enableEditingLocality = true,
+    this.enableEditingName = true,
+    this.enableEditingCountry = true,
   });
 
   final Function(Hill? current) onChange;
+  final bool enableEditingDimensions;
+  final bool enableEditingLocality;
+  final bool enableEditingName;
+  final bool enableEditingCountry;
 
   @override
   State<HillEditor> createState() => HillEditorState();
@@ -130,6 +138,7 @@ class HillEditorState extends State<HillEditor> {
                       children: [
                         MyTextField(
                           key: const Key('name'),
+                          enabled: widget.enableEditingName,
                           focusNode: _firstFocusNode,
                           controller: _nameController,
                           onChange: () {
@@ -140,6 +149,7 @@ class HillEditorState extends State<HillEditor> {
                         gap,
                         MyTextField(
                           key: const Key('locality'),
+                          enabled: widget.enableEditingLocality,
                           controller: _localityController,
                           onChange: () {
                             widget.onChange(_constructAndCacheHill());
@@ -151,6 +161,7 @@ class HillEditorState extends State<HillEditor> {
                         ),
                         gap,
                         CountriesDropdown(
+                          enabled: widget.enableEditingCountry,
                           key: _countriesDropdownKey,
                           countriesApi: RepositoryProvider.of<CountriesRepo>(context),
                           onSelected: (maybeCountry) {
@@ -184,6 +195,7 @@ class HillEditorState extends State<HillEditor> {
               ),
               MyNumeralTextField(
                 key: const Key('k'),
+                enabled: widget.enableEditingDimensions,
                 controller: _kController,
                 onChange: () {
                   widget.onChange(_constructAndCacheHill());
@@ -197,6 +209,7 @@ class HillEditorState extends State<HillEditor> {
               gap,
               MyNumeralTextField(
                 key: const Key('hs'),
+                enabled: widget.enableEditingDimensions,
                 controller: _hsController,
                 onChange: () {
                   widget.onChange(_constructAndCacheHill());

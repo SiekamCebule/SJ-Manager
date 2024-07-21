@@ -9,8 +9,10 @@ class MyTextField extends StatelessWidget {
     this.formatters,
     required this.labelText,
     this.focusNode,
+    this.enabled = true,
   });
 
+  final bool enabled;
   final VoidCallback onChange;
   final TextEditingController controller;
   final List<TextInputFormatter>? formatters;
@@ -20,6 +22,7 @@ class MyTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      enabled: enabled,
       controller: controller,
       decoration: InputDecoration(
         label: Text(labelText),

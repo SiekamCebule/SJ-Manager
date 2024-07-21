@@ -8,6 +8,7 @@ import 'package:sj_manager/utils/math.dart';
 class MyNumeralTextField extends StatelessWidget {
   const MyNumeralTextField({
     super.key,
+    this.enabled = true,
     required this.controller,
     this.buttons,
     required this.onChange,
@@ -21,6 +22,7 @@ class MyNumeralTextField extends StatelessWidget {
     this.maxDecimalPlaces,
   });
 
+  final bool enabled;
   final VoidCallback onChange;
   final TextEditingController controller;
   final List<TextInputFormatter> formatters;
@@ -40,6 +42,7 @@ class MyNumeralTextField extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
+              enabled: enabled,
               controller: controller,
               decoration: InputDecoration(
                 label: Text(labelText),
@@ -59,33 +62,37 @@ class MyNumeralTextField extends StatelessWidget {
           ),
           ...buttons ?? [],
           IconButton(
-            onPressed: () {
-              var decremented = _numberFromController - step;
-              if (maxDecimalPlaces != null) {
-                decremented = preparedNumber(decremented.toDouble());
-              }
-              controller.text = _numberInRangeEnforcer
-                  .formatEditUpdate(controller.value,
-                      controller.value.copyWith(text: decremented.toString()))
-                  .text;
-              onChange();
-            },
+            onPressed: enabled
+                ? () {
+                    var decremented = _numberFromController - step;
+                    if (maxDecimalPlaces != null) {
+                      decremented = preparedNumber(decremented.toDouble());
+                    }
+                    controller.text = _numberInRangeEnforcer
+                        .formatEditUpdate(controller.value,
+                            controller.value.copyWith(text: decremented.toString()))
+                        .text;
+                    onChange();
+                  }
+                : null,
             icon: const Icon(
               Symbols.remove,
             ),
           ),
           IconButton(
-            onPressed: () {
-              var incremented = _numberFromController + step;
-              if (maxDecimalPlaces != null) {
-                incremented = preparedNumber(incremented.toDouble());
-              }
-              controller.text = _numberInRangeEnforcer
-                  .formatEditUpdate(controller.value,
-                      controller.value.copyWith(text: incremented.toString()))
-                  .text;
-              onChange();
-            },
+            onPressed: enabled
+                ? () {
+                    var incremented = _numberFromController + step;
+                    if (maxDecimalPlaces != null) {
+                      incremented = preparedNumber(incremented.toDouble());
+                    }
+                    controller.text = _numberInRangeEnforcer
+                        .formatEditUpdate(controller.value,
+                            controller.value.copyWith(text: incremented.toString()))
+                        .text;
+                    onChange();
+                  }
+                : null,
             icon: const Icon(Symbols.add),
           ),
         ],
