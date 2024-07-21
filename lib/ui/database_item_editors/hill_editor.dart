@@ -23,6 +23,7 @@ import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/h
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
 import 'package:sj_manager/ui/reusable_widgets/menu_entries/predefined_reusable_entries.dart';
 import 'package:sj_manager/utils/context_maybe_read.dart';
+import 'package:sj_manager/utils/math.dart';
 import 'package:sj_manager/utils/platform.dart';
 
 class HillEditor extends StatefulWidget {
@@ -70,7 +71,6 @@ class HillEditorState extends State<HillEditor> {
 
   Hill? _cachedHill;
 
-  final _firstFocusNode = FocusNode();
   late final ScrollController _scrollController;
 
   @override
@@ -105,7 +105,6 @@ class HillEditorState extends State<HillEditor> {
     _profileController.dispose();
     _jumpsVariabilityController.dispose();
     _typicalWindDirectionController.dispose();
-    _firstFocusNode.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -139,7 +138,6 @@ class HillEditorState extends State<HillEditor> {
                         MyTextField(
                           key: const Key('name'),
                           enabled: widget.enableEditingName,
-                          focusNode: _firstFocusNode,
                           controller: _nameController,
                           onChange: () {
                             widget.onChange(_constructAndCacheHill());
@@ -160,13 +158,18 @@ class HillEditorState extends State<HillEditor> {
                           labelText: translate(context).locality,
                         ),
                         gap,
-                        CountriesDropdown(
-                          enabled: widget.enableEditingCountry,
-                          key: _countriesDropdownKey,
-                          countriesApi: RepositoryProvider.of<CountriesRepo>(context),
-                          onSelected: (maybeCountry) {
-                            _country = maybeCountry;
-                            widget.onChange(_constructAndCacheHill());
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            return CountriesDropdown(
+                              enabled: widget.enableEditingCountry,
+                              width: constraints.maxWidth,
+                              key: _countriesDropdownKey,
+                              countriesApi: RepositoryProvider.of<CountriesRepo>(context),
+                              onSelected: (maybeCountry) {
+                                _country = maybeCountry;
+                                widget.onChange(_constructAndCacheHill());
+                              },
+                            );
                           },
                         ),
                         gap,
@@ -363,10 +366,11 @@ class HillEditorState extends State<HillEditor> {
                         TextButton(
                           onPressed: () {
                             if (_cachedHill != null) {
-                              final double autoTailwind = _cachedHill!.pointsForHeadwind *
+                              var autoTailwind = _cachedHill!.pointsForHeadwind *
                                   context
                                       .read<DbEditingDefaultsRepo>()
                                       .autoPointsForTailwindMultiplier;
+                              autoTailwind = roundToNDecimalPlaces(autoTailwind, 2);
                               _pointsForTailwindController.text = autoTailwind.toString();
 
                               widget.onChange(
@@ -421,7 +425,6 @@ class HillEditorState extends State<HillEditor> {
     });
     _fillFields(hill);
     FocusScope.of(context).unfocus();
-    FocusScope.of(context).requestFocus(_firstFocusNode);
   }
 
   void _fillFields(Hill hill) {

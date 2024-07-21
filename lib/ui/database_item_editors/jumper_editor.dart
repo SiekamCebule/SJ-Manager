@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,8 +66,6 @@ class JumperEditorState extends State<JumperEditor> {
   Country? _country;
 
   Jumper? _cachedJumper;
-
-  final _firstFocusNode = FocusNode();
   late final ScrollController _scrollController;
 
   @override
@@ -94,7 +90,6 @@ class JumperEditorState extends State<JumperEditor> {
     _qualityOnLargerHillsController.dispose();
     _jumpsConsistencyController.dispose();
     _landingStyleController.dispose();
-    _firstFocusNode.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -125,7 +120,6 @@ class JumperEditorState extends State<JumperEditor> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           MyTextField(
-                            //focusNode: _firstFocusNode,
                             enabled: widget.enableEditingName,
                             controller: _nameController,
                             onChange: _onChange,
@@ -294,7 +288,6 @@ class JumperEditorState extends State<JumperEditor> {
     });
     _fillFields(jumper);
     FocusScope.of(context).unfocus();
-    FocusScope.of(context).requestFocus(_firstFocusNode);
   }
 
   void _fillFields(Jumper jumper) {

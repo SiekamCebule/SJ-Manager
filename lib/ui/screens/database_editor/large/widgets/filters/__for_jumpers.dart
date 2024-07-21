@@ -31,6 +31,7 @@ class _ForJumpersState extends State<_ForJumpers> {
         ),
         const Spacer(),
         CountriesDropdown(
+          width: 220,
           label: Text(translate(context).filterByCountry),
           countriesApi: context.read(),
           firstAsInitial: true,

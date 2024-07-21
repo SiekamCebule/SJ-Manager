@@ -265,8 +265,9 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   }
 
   Future<void> _onChangeTab(int index) async {
-    _itemsTypeCubit.select(DatabaseItemType.fromIndex(index));
     _selectedIndexesRepo.clearSelection();
+    _filtersRepo.clear();
+    _itemsTypeCubit.select(DatabaseItemType.fromIndex(index));
     if (index != _currentTabIndex) {
       await _animateBodyFromZero();
       _currentTabIndex = index;
