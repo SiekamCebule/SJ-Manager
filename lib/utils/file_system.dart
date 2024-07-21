@@ -99,27 +99,23 @@ void copyDirectorySync(Directory source, Directory destination) {
 }
 
 Future<void> copyAssetsDir(String assetsDirPath, Directory destination) async {
-  try {
-    final manifestContent = await rootBundle.loadString('AssetManifest.json');
-    Map<String, dynamic> manifestMap = jsonDecode(manifestContent);
+  final manifestContent = await rootBundle.loadString('AssetManifest.json');
+  Map<String, dynamic> manifestMap = jsonDecode(manifestContent);
 
-    final assetPaths = manifestMap.keys
-        .where((String key) => key.startsWith('assets/$assetsDirPath/'))
-        .toList();
+  final assetPaths = manifestMap.keys
+      .where((String key) => key.startsWith('assets/$assetsDirPath/'))
+      .toList();
 
-    for (String assetPath in assetPaths) {
-      // Load the asset file as bytes
-      ByteData data = await rootBundle.load(assetPath);
-      List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  for (String assetPath in assetPaths) {
+    // Load the asset file as bytes
+    ByteData data = await rootBundle.load(assetPath);
+    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
-      // Get the file name
-      String fileName = assetPath.split('/').last;
+    // Get the file name
+    String fileName = assetPath.split('/').last;
 
-      // Write the file to the target directory
-      File file = File('${destination.path}/$fileName');
-      await file.writeAsBytes(bytes);
-    }
-  } catch (e) {
-    print('Error copying asset directory: $e');
+    // Write the file to the target directory
+    File file = File('${destination.path}/$fileName');
+    await file.writeAsBytes(bytes);
   }
 }

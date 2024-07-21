@@ -7,6 +7,19 @@ abstract interface class JsonCountryLoader<I> implements JsonObjectLoader<I, Cou
 
 abstract interface class JsonCountrySaver<R> implements JsonObjectSaver<Country, R> {}
 
+class CountryByCodeNotFoundError {
+  CountryByCodeNotFoundError({
+    required this.countryCode,
+  });
+
+  final String countryCode;
+
+  @override
+  String toString() {
+    return 'Unable to find a country with the code of \'$countryCode\'';
+  }
+}
+
 class JsonCountryLoaderByCode implements JsonCountryLoader<String> {
   const JsonCountryLoaderByCode({required this.repo});
 
@@ -14,8 +27,12 @@ class JsonCountryLoaderByCode implements JsonCountryLoader<String> {
 
   @override
   Country load(String code) {
-    return repo.countries
-        .singleWhere((country) => country.code.toLowerCase() == code.toLowerCase());
+    try {
+      return repo.countries
+          .singleWhere((country) => country.code.toLowerCase() == code.toLowerCase());
+    } on StateError {
+      throw CountryByCodeNotFoundError(countryCode: code);
+    }
   }
 }
 

@@ -7,9 +7,12 @@ import 'package:sj_manager/models/country.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
+import 'package:sj_manager/repositories/country_flags.dart/local_storage_country_flags_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_io_parameters_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
+import 'package:sj_manager/ui/dialogs/loading_items_failed_dialog.dart';
 import 'package:sj_manager/ui/navigation/routes.dart';
+import 'package:sj_manager/utils/context_maybe_read.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
 class AppConfigurator {
@@ -54,17 +57,70 @@ class AppConfigurator {
     }
     if (!_context.mounted) return;
 
-    final flagsDir = userDataDirectory(_context.read(), 'countries/country_flags');
-    if (!await flagsDir.exists()) {
-      await copyAssetsDir('defaults/country_flags', flagsDir);
+    final flagsDir = _context.maybeRead<LocalStorageCountryFlagsRepo>()?.imagesDirectory;
+    if (flagsDir != null) {
+      if (!await flagsDir.exists()) {
+        await copyAssetsDir('defaults/country_flags', flagsDir);
+      }
     }
   }
 
   Future<void> loadDatabase() async {
-    await _loadCountries();
-    await _loadItems<MaleJumper>();
-    await _loadItems<FemaleJumper>();
-    await _loadItems<Hill>();
+    try {
+      await _loadCountries();
+    } catch (e) {
+      if (!_context.mounted) return;
+      await showDialog(
+        context: _context,
+        builder: (context) => LoadingItemsFailedDialog(
+          titleText: 'Błąd wczytywania krajów',
+          filePath: context.read<DbIoParametersRepo<Country>>().storageFile.path,
+          error: e,
+        ),
+      );
+    }
+
+    try {
+      await _loadItems<MaleJumper>();
+    } catch (e) {
+      if (!_context.mounted) return;
+      await showDialog(
+        context: _context,
+        builder: (context) => LoadingItemsFailedDialog(
+          titleText: 'Błąd wczytywania skoczków',
+          filePath: context.read<DbIoParametersRepo<MaleJumper>>().storageFile.path,
+          error: e,
+        ),
+      );
+    }
+
+    try {
+      await _loadItems<FemaleJumper>();
+    } catch (e) {
+      if (!_context.mounted) return;
+      await showDialog(
+        context: _context,
+        builder: (context) => LoadingItemsFailedDialog(
+          titleText: 'Błąd wczytywania skoczkiń',
+          filePath: context.read<DbIoParametersRepo<FemaleJumper>>().storageFile.path,
+          error: e,
+        ),
+      );
+    }
+
+    try {
+      await _loadItems<Hill>();
+    } catch (e) {
+      if (!_context.mounted) return;
+      await showDialog(
+        context: _context,
+        builder: (context) => LoadingItemsFailedDialog(
+          titleText: 'Błąd wczytywania skoczni',
+          filePath: context.read<DbIoParametersRepo<Hill>>().storageFile.path,
+          error: e,
+        ),
+      );
+    }
   }
 
   Future<void> _loadCountries() async {
