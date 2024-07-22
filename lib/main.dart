@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/models/country.dart';
+import 'package:sj_manager/models/db_items_file_system_entity.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
-import 'package:sj_manager/repositories/database_editing/db_io_parameters_repo.dart';
+import 'package:sj_manager/repositories/database_editing/db_items_json_configuration.dart';
 import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
@@ -17,6 +18,7 @@ import 'package:sj_manager/repositories/database_editing/default_items_repositor
 import 'package:sj_manager/setup/set_up_app.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/providers/locale_notifier.dart';
+import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/hill_image_generating_setup.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/jumper_image/jumper_image_generating_setup.dart';
 import 'package:sj_manager/ui/screens/main_screen/main_screen.dart';
@@ -118,9 +120,28 @@ void main() async {
                         .replaceAll(' ', '_');
                   });
             }),
+            Provider(
+              create: (context) => DbItemsFileSystemEntity<MaleJumper>(
+                  userDataFile(pathsCache, 'database/jumpers_male.json')),
+            ),
+            Provider(
+              create: (context) => DbItemsFileSystemEntity<FemaleJumper>(
+                  userDataFile(pathsCache, 'database/jumpers_female.json')),
+            ),
+            Provider(
+              create: (context) => DbItemsFileSystemEntity<Hill>(
+                  userDataFile(pathsCache, 'database/hills.json')),
+            ),
+            Provider(
+              create: (context) => DbItemsFileSystemEntity<Country>(
+                  userDataFile(pathsCache, 'countries/countries.json')),
+            ),
+            Provider(
+              create: (context) => DbItemsFileSystemEntity<CountryFlag>(
+                  userDataDirectory(pathsCache, 'countries/country_flags')),
+            ),
             Provider(create: (context) {
-              return DbIoParametersRepo<MaleJumper>(
-                storageFile: userDataFile(pathsCache, 'database/jumpers_male.json'),
+              return DbItemsJsonConfiguration<MaleJumper>(
                 fromJson: (json) => maleJumperFromJson(json, context),
                 toJson: (jumper) => jumper.toJson(
                   countrySaver: const JsonCountryCodeSaver(),
@@ -128,8 +149,7 @@ void main() async {
               );
             }),
             Provider(create: (context) {
-              return DbIoParametersRepo<FemaleJumper>(
-                storageFile: userDataFile(pathsCache, 'database/jumpers_female.json'),
+              return DbItemsJsonConfiguration<FemaleJumper>(
                 fromJson: (json) => femaleJumperFromJson(json, context),
                 toJson: (jumper) => jumper.toJson(
                   countrySaver: const JsonCountryCodeSaver(),
@@ -137,8 +157,7 @@ void main() async {
               );
             }),
             Provider(create: (context) {
-              return DbIoParametersRepo<Hill>(
-                storageFile: userDataFile(pathsCache, 'database/hills.json'),
+              return DbItemsJsonConfiguration<Hill>(
                 fromJson: (json) => hillFromJson(json, context),
                 toJson: (hill) => hill.toJson(
                   countrySaver: const JsonCountryCodeSaver(),
@@ -146,8 +165,7 @@ void main() async {
               );
             }),
             Provider(create: (context) {
-              return DbIoParametersRepo<Country>(
-                storageFile: userDataFile(pathsCache, 'countries/countries.json'),
+              return DbItemsJsonConfiguration<Country>(
                 fromJson: (json) {
                   return Country.fromMultilingualJson(
                       json, context.read<LocaleCubit>().languageCode);

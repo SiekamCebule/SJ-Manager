@@ -3,9 +3,10 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
+import 'package:sj_manager/models/db_items_file_system_entity.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
-import 'package:sj_manager/repositories/database_editing/db_io_parameters_repo.dart';
+import 'package:sj_manager/repositories/database_editing/db_items_json_configuration.dart';
 import 'package:sj_manager/repositories/database_editing/local_db_repos_repository.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
@@ -40,8 +41,10 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
 
   Future<void> _saveChangesByType<T>(BuildContext context) async {
     originalRepositories.byGenericType<T>().setItems(state!.byGenericType<T>().lastItems);
-    final parameters = context.read<DbIoParametersRepo<T>>();
-    _saveItemsToJsonByType<T>(context: context, file: parameters.storageFile);
+    _saveItemsToJsonByType<T>(
+      context: context,
+      file: context.read<DbItemsFileSystemEntity<T>>().entity as File,
+    );
   }
 
   Future<void> saveAs(BuildContext context, Directory directory) async {
@@ -49,7 +52,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
       context: context,
       file: fileInDirectory(
         directory,
-        context.read<DbIoParametersRepo<MaleJumper>>().fileBasename,
+        context.read<DbItemsFileSystemEntity<MaleJumper>>().basename,
       ),
     );
     if (!context.mounted) return;
@@ -57,7 +60,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
       context: context,
       file: fileInDirectory(
         directory,
-        context.read<DbIoParametersRepo<FemaleJumper>>().fileBasename,
+        context.read<DbItemsFileSystemEntity<FemaleJumper>>().basename,
       ),
     );
     if (!context.mounted) return;
@@ -65,14 +68,14 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
       context: context,
       file: fileInDirectory(
         directory,
-        context.read<DbIoParametersRepo<Hill>>().fileBasename,
+        context.read<DbItemsFileSystemEntity<Hill>>().basename,
       ),
     );
   }
 
   Future<void> _saveItemsToJsonByType<T>(
       {required BuildContext context, required File file}) async {
-    final parameters = context.read<DbIoParametersRepo<T>>();
+    final parameters = context.read<DbItemsJsonConfiguration<T>>();
     await saveItemsListToJsonFile(
       file: file,
       items: state!.byGenericType<T>().lastItems,
@@ -85,7 +88,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
       context: context,
       file: fileInDirectory(
         directory,
-        context.read<DbIoParametersRepo<MaleJumper>>().fileBasename,
+        context.read<DbItemsFileSystemEntity<MaleJumper>>().basename,
       ),
     );
     state!.maleJumpersRepo.setItems(males);
@@ -94,7 +97,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
       context: context,
       file: fileInDirectory(
         directory,
-        context.read<DbIoParametersRepo<FemaleJumper>>().fileBasename,
+        context.read<DbItemsFileSystemEntity<FemaleJumper>>().basename,
       ),
     );
     state!.femaleJumpersRepo.setItems(females);
@@ -103,7 +106,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
       context: context,
       file: fileInDirectory(
         directory,
-        context.read<DbIoParametersRepo<Hill>>().fileBasename,
+        context.read<DbItemsFileSystemEntity<Hill>>().basename,
       ),
     );
     state!.hillsRepo.setItems(hills);
@@ -117,7 +120,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
 
   Future<List<T>> _loadItemsFromJsonByType<T>(
       {required BuildContext context, required File file}) async {
-    final parameters = context.read<DbIoParametersRepo<T>>();
+    final parameters = context.read<DbItemsJsonConfiguration<T>>();
     return await loadItemsListFromJsonFile(
       file: file,
       fromJson: parameters.fromJson,

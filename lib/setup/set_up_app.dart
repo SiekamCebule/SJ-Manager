@@ -6,13 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/country.dart';
+import 'package:sj_manager/models/db_items_file_system_entity.dart';
 import 'package:sj_manager/models/hill/hill.dart';
 import 'package:sj_manager/models/jumper/jumper.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
-import 'package:sj_manager/repositories/database_editing/db_io_parameters_repo.dart';
+import 'package:sj_manager/repositories/database_editing/db_items_json_configuration.dart';
 import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 import 'package:sj_manager/ui/dialogs/loading_items_failed_dialog.dart';
 import 'package:sj_manager/ui/navigation/routes.dart';
+import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
 class AppConfigurator {
@@ -49,7 +51,8 @@ class AppConfigurator {
   }
 
   Future<void> setUpUserData() async {
-    final countriesFile = userDataFile(_context.read(), 'countries/countries.json');
+    final countriesFile =
+        _context.read<DbItemsFileSystemEntity<Country>>().entity as File;
     if (!await countriesFile.exists()) {
       await countriesFile.create(recursive: true);
       countriesFile
@@ -57,7 +60,8 @@ class AppConfigurator {
     }
     if (!_context.mounted) return;
 
-    final flagsDir = userDataDirectory(_context.read(), 'countries/country_flags');
+    final flagsDir =
+        _context.read<DbItemsFileSystemEntity<CountryFlag>>().entity as Directory;
     if (!await flagsDir.exists()) {
       await copyAssetsDir('defaults/country_flags', flagsDir);
     }
@@ -65,7 +69,7 @@ class AppConfigurator {
 
   Future<void> loadDatabase() async {
     if (!_context.mounted) return;
-    final file = _context.read<DbIoParametersRepo<Country>>().storageFile;
+    final file = _context.read<DbItemsFileSystemEntity<Country>>().entity as File;
     try {
       await _loadCountries();
     } catch (e) {
@@ -87,7 +91,7 @@ class AppConfigurator {
 
   Future<void> _tryLoadItems<T>({required String dialogTitleText}) async {
     if (!_context.mounted) return;
-    final file = _context.read<DbIoParametersRepo<T>>().storageFile;
+    final file = _context.read<DbItemsFileSystemEntity<T>>().entity as File;
     try {
       await _loadItems<T>();
     } on PathNotFoundException {
@@ -108,9 +112,9 @@ class AppConfigurator {
   }
 
   Future<void> _loadCountries() async {
-    final parameters = _context.read<DbIoParametersRepo<Country>>();
+    final parameters = _context.read<DbItemsJsonConfiguration<Country>>();
     final countries = await loadItemsListFromJsonFile<Country>(
-      file: parameters.storageFile,
+      file: _context.read<DbItemsFileSystemEntity<Country>>().entity as File,
       fromJson: parameters.fromJson,
     );
     if (!_context.mounted) return;
@@ -120,9 +124,11 @@ class AppConfigurator {
 
   Future<void> _loadItems<T>() async {
     if (!_context.mounted) return;
-    final parameters = _context.read<DbIoParametersRepo<T>>();
+    final parameters = _context.read<DbItemsJsonConfiguration<T>>();
     final loadedMales = await loadItemsListFromJsonFile(
-        file: parameters.storageFile, fromJson: parameters.fromJson);
+      file: _context.read<DbItemsFileSystemEntity<T>>().entity as File,
+      fromJson: parameters.fromJson,
+    );
     if (!_context.mounted) return;
     _context.read<DbItemsRepo<T>>().setItems(loadedMales);
   }
