@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/models/jumper/jumps_consistency.dart';
-import 'package:sj_manager/models/jumper/landing_style.dart';
+import 'package:sj_manager/models/db/jumper/jumps_consistency.dart';
+import 'package:sj_manager/models/db/jumper/landing_style.dart';
 
 String translatedLandingStyleDescription(
     BuildContext context, LandingStyle landingStyle) {

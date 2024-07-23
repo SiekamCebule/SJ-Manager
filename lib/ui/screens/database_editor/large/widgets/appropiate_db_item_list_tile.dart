@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/enums/database_item_type.dart';
+import 'package:sj_manager/enums/db_editable_item_type.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/hill_info_list_tile.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/jumper_info_list_tile.dart';
 
@@ -14,7 +14,7 @@ class AppropiateDbItemListTile extends StatelessWidget {
     required this.reorderable,
   });
 
-  final DatabaseItemType itemType;
+  final DbEditableItemType itemType;
   final int indexInList;
   final dynamic item;
   final Function() onItemTap;
@@ -24,14 +24,16 @@ class AppropiateDbItemListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (itemType) {
-      DatabaseItemType.maleJumper || DatabaseItemType.femaleJumper => JumperInfoListTile(
+      DbEditableItemType.maleJumper ||
+      DbEditableItemType.femaleJumper =>
+        JumperInfoListTile(
           reorderable: reorderable,
           indexInList: indexInList,
           jumper: item,
           onTap: onItemTap,
           selected: selected,
         ),
-      DatabaseItemType.hill => HillInfoListTile(
+      DbEditableItemType.hill => HillInfoListTile(
           reorderable: reorderable,
           indexInList: indexInList,
           hill: item,

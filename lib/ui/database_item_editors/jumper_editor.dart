@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/l10n/jumper_skills_translations.dart';
-import 'package:sj_manager/models/country.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
-import 'package:sj_manager/models/jumper/jumper_skills.dart';
-import 'package:sj_manager/models/jumper/jumps_consistency.dart';
-import 'package:sj_manager/models/jumper/landing_style.dart';
-import 'package:sj_manager/models/sex.dart';
-import 'package:sj_manager/repositories/countries/countries_repo.dart';
+import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/db/jumper/jumper_skills.dart';
+import 'package:sj_manager/models/db/jumper/jumps_consistency.dart';
+import 'package:sj_manager/models/db/jumper/landing_style.dart';
+import 'package:sj_manager/models/db/local_db_repo.dart';
+import 'package:sj_manager/models/db/sex.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
@@ -101,7 +101,6 @@ class JumperEditorState extends State<JumperEditor> {
       builder: (context, constraints) {
         final shouldShowImage = _cachedJumper != null &&
             context.maybeRead<JumperImageGeneratingSetup>() != null;
-        print('jumper editor build');
         return Scrollbar(
           thumbVisibility: platformIsDesktop,
           controller: _scrollController,
@@ -147,7 +146,7 @@ class JumperEditorState extends State<JumperEditor> {
                                 width: constraints.maxWidth,
                                 key: _countriesDropdownKey,
                                 countriesApi:
-                                    RepositoryProvider.of<CountriesRepo>(context),
+                                    RepositoryProvider.of<LocalDbRepo>(context).countries,
                                 onSelected: (maybeCountry) {
                                   _country = maybeCountry;
                                   _onChange();
@@ -261,7 +260,6 @@ class JumperEditorState extends State<JumperEditor> {
   }
 
   Jumper? _constructAndCacheJumper() {
-    print('construct and cache');
     final name = _nameController.text;
     final surname = _surnameController.text;
     final country = _country!;
@@ -282,7 +280,6 @@ class JumperEditorState extends State<JumperEditor> {
   }
 
   void setUp(Jumper jumper) {
-    print('setup');
     setState(() {
       _cachedJumper = jumper;
     });
@@ -291,7 +288,6 @@ class JumperEditorState extends State<JumperEditor> {
   }
 
   void _fillFields(Jumper jumper) {
-    print('fill');
     _nameController.text = jumper.name;
     _surnameController.text = jumper.surname;
     _ageController.text = jumper.age.toString();

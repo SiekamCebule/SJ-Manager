@@ -5,40 +5,44 @@ class MainMenuNewSimulationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _Button(
-      child: Padding(
-        padding: const EdgeInsets.only(
-          left: UiMainMenuConstants.horizontalSpaceBetweenButtonItems,
-          top: UiMainMenuConstants.verticalSpaceBetweenButtonItems,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              translate(context).newSimulation,
-              style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-            ),
-            const Gap(UiMainMenuConstants.verticalSpaceBetweenButtonItems),
-            Row(
-              children: [
-                const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
-                Flexible(
-                  child: Text(
-                    translate(context).newSimulationButtonContent,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                  ),
-                ),
-                const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
-              ],
-            ),
-          ],
-        ),
-      ),
-      onTap: () {},
+    return MainMenuTextContentButton(
+      titleText: translate(context).newSimulation,
+      contentText: translate(context).newSimulationButtonContent,
+      onTap: () async {
+        // TODO: Show overlay and handle everything
+        // TODO: Add dialog dimensions to UI constants
+        final shouldCreateSimulation = await showGeneralDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          barrierColor: Colors.black.withOpacity(0.9),
+          barrierLabel: 'dismiss new simulation dialog',
+          pageBuilder: (context, animationIn, animationOut) {
+            return const Center(
+              child: SizedBox(
+                width: 900,
+                height: 450,
+                child: SimulationWizardDialog(),
+              ),
+            );
+          },
+          transitionDuration: Durations.medium1,
+          transitionBuilder: (context, animation, secondaryAnimation, child) {
+            final fadeIn =
+                CurvedAnimation(parent: animation, curve: Curves.easeInOutCirc);
+            final fadeOut =
+                CurvedAnimation(parent: secondaryAnimation, curve: Curves.easeOutCirc)
+                    .drive(Tween(begin: 1.0, end: 0.0));
+            return FadeTransition(
+              opacity: fadeIn,
+              child: FadeTransition(
+                opacity: fadeOut,
+                child: child,
+              ),
+            );
+          },
+        );
+        print('shouldCreateSimulation: $shouldCreateSimulation');
+      },
     );
   }
 }

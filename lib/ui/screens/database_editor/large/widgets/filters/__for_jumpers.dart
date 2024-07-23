@@ -33,7 +33,7 @@ class _ForJumpersState extends State<_ForJumpers> {
         CountriesDropdown(
           width: 220,
           label: Text(translate(context).filterByCountry),
-          countriesApi: context.read(),
+          countriesApi: countriesRepo,
           firstAsInitial: true,
           onSelected: (selected) async {
             _clearSelection();
@@ -51,8 +51,8 @@ class _ForJumpersState extends State<_ForJumpers> {
     );
   }
 
-  CountriesRepo get countries => context.read();
-  Country get noneCountry => countries.none;
+  CountriesRepo get countriesRepo => context.read<LocalDbRepo>().countries;
+  Country get noneCountry => countriesRepo.none;
 
   void _setFilters() {
     context.read<DbFiltersRepo>().setMaleAndFemaleJumpersFilters([

@@ -7,7 +7,7 @@ class _AppropiateItemEditor extends StatefulWidget {
     required this.onChange,
   });
 
-  final DatabaseItemType itemType;
+  final DbEditableItemType itemType;
   final Function(Object?) onChange;
 
   @override
@@ -25,16 +25,14 @@ class _AppropiateItemEditorState extends State<_AppropiateItemEditor> {
     return StreamBuilder(
         stream: filtersRepo.byType(context.watch<DatabaseItemsTypeCubit>().state),
         builder: (context, filters) {
-          print('Appriopiate item editor rebuild');
           switch (widget.itemType) {
-            case DatabaseItemType.maleJumper:
+            case DbEditableItemType.maleJumper:
               {
                 final searchActive = filtersRepo.maleJumpersFilters.value
                         .maybeSingleWhereType<JumpersFilterBySearch>()
                         ?.isValid ??
                     false;
 
-                print(searchActive);
                 final countryFilterActive = filtersRepo.maleJumpersFilters.value
                         .maybeSingleWhereType<JumpersFilterByCountry>()
                         ?.isValid ??
@@ -48,7 +46,7 @@ class _AppropiateItemEditorState extends State<_AppropiateItemEditor> {
                   enableEditingCountry: !countryFilterActive,
                 );
               }
-            case DatabaseItemType.femaleJumper:
+            case DbEditableItemType.femaleJumper:
               {
                 final searchActive = filtersRepo.femaleJumpersFilters.value
                         .maybeSingleWhereType<JumpersFilterBySearch>()
@@ -67,7 +65,7 @@ class _AppropiateItemEditorState extends State<_AppropiateItemEditor> {
                   enableEditingCountry: !countryFilterActive,
                 );
               }
-            case DatabaseItemType.hill:
+            case DbEditableItemType.hill:
               {
                 final searchActive = filtersRepo.hillsFilters.value
                         .maybeSingleWhereType<HillsFilterBySearch>()
@@ -97,10 +95,10 @@ class _AppropiateItemEditorState extends State<_AppropiateItemEditor> {
 
   void fill(dynamic item) {
     switch (widget.itemType) {
-      case DatabaseItemType.maleJumper:
-      case DatabaseItemType.femaleJumper:
+      case DbEditableItemType.maleJumper:
+      case DbEditableItemType.femaleJumper:
         _jumperEditorKey.currentState?.setUp(item);
-      case DatabaseItemType.hill:
+      case DbEditableItemType.hill:
         _hillEditorKey.currentState?.setUp(item);
     }
   }

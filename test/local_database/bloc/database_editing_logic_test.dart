@@ -2,34 +2,36 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:sj_manager/database_editing/local_db_filtered_items_cubit.dart';
+import 'package:sj_manager/bloc/database_editing/local_db_filtered_items_cubit.dart';
 import 'package:sj_manager/filters/hills/hill_matching_algorithms.dart';
 import 'package:sj_manager/filters/hills/hills_filter.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
-import 'package:sj_manager/models/country.dart';
-import 'package:sj_manager/models/hill/hill.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
+import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/hill/hill.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/db/local_db_repo.dart';
+import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
-import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
-import 'package:sj_manager/repositories/database_editing/local_db_repos_repository.dart';
+import 'package:sj_manager/repositories/database_editing/editable_db_items_repo.dart';
 
 import 'database_editing_logic_test.mocks.dart';
 
-@GenerateMocks([DbItemsRepo])
+@GenerateMocks([EditableDbItemsRepo, CountriesRepo])
 void main() {
   group(LocalDbFilteredItemsCubit, () {
     late DbFiltersRepo filtersRepo;
-    late LocalDbReposRepo itemsRepo;
+    late LocalDbRepo itemsRepo;
 
     // To initialize in test()
     late LocalDbFilteredItemsCubit cubit;
 
     setUp(() {
       filtersRepo = DbFiltersRepo();
-      itemsRepo = LocalDbReposRepo(
-        maleJumpersRepo: MockDbItemsRepo(),
-        femaleJumpersRepo: MockDbItemsRepo(),
-        hillsRepo: MockDbItemsRepo(),
+      itemsRepo = LocalDbRepo(
+        maleJumpers: MockEditableDbItemsRepo(),
+        femaleJumpers: MockEditableDbItemsRepo(),
+        hills: MockEditableDbItemsRepo(),
+        countries: MockCountriesRepo(),
       );
     });
     test('filtering', () async {
@@ -54,15 +56,15 @@ void main() {
       final femalesSubject = BehaviorSubject<List<FemaleJumper>>.seeded([]);
       final hillsSubject = BehaviorSubject<List<Hill>>.seeded([]);
 
-      when(itemsRepo.maleJumpersRepo.items).thenAnswer((_) {
+      when(itemsRepo.maleJumpers.items).thenAnswer((_) {
         malesSubject.add(males);
         return malesSubject;
       });
-      when(itemsRepo.femaleJumpersRepo.items).thenAnswer((_) {
+      when(itemsRepo.femaleJumpers.items).thenAnswer((_) {
         femalesSubject.add(females);
         return femalesSubject;
       });
-      when(itemsRepo.hillsRepo.items).thenAnswer((_) {
+      when(itemsRepo.hills.items).thenAnswer((_) {
         hillsSubject.add(hills);
         return hillsSubject;
       });

@@ -1,6 +1,6 @@
 import 'package:sj_manager/json/json_object_loader.dart';
 import 'package:sj_manager/json/json_object_saver.dart';
-import 'package:sj_manager/models/country.dart';
+import 'package:sj_manager/models/db/country.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 
 abstract interface class JsonCountryLoader<I> implements JsonObjectLoader<I, Country> {}
@@ -28,7 +28,7 @@ class JsonCountryLoaderByCode implements JsonCountryLoader<String> {
   @override
   Country load(String code) {
     try {
-      return repo.countries
+      return repo.lastItems
           .singleWhere((country) => country.code.toLowerCase() == code.toLowerCase());
     } on StateError {
       throw CountryByCodeNotFoundError(countryCode: code);

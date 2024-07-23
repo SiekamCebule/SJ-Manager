@@ -11,7 +11,7 @@ class _AddFab extends StatelessWidget {
     final dbChangeStatusCubit = context.watch<ChangeStatusCubit>();
     final copiedDbCubit = context.watch<CopiedLocalDbCubit>();
 
-    final editableItemsForCurrentType = copiedDbCubit.state!.byType(itemsType);
+    final editableItemsForCurrentType = copiedDbCubit.state!.editableByType(itemsType);
     final defaultItems = context.watch<DefaultItemsRepo>();
 
     return StreamBuilder<Object>(

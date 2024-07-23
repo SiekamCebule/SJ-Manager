@@ -3,14 +3,14 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/country.dart';
-import 'package:sj_manager/models/hill/hill_profile_type.dart';
-import 'package:sj_manager/models/hill/hill_type_by_size.dart';
-import 'package:sj_manager/models/hill/jumps_variability.dart';
-import 'package:sj_manager/models/hill/landing_ease.dart';
-import 'package:sj_manager/models/hill/typical_wind_direction.dart';
+import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/hill/hill_profile_type.dart';
+import 'package:sj_manager/models/db/hill/hill_type_by_size.dart';
+import 'package:sj_manager/models/db/hill/jumps_variability.dart';
+import 'package:sj_manager/models/db/hill/landing_ease.dart';
+import 'package:sj_manager/models/db/hill/typical_wind_direction.dart';
 
-part '../../json/manual_json/hill_json.dart';
+part '../../../json/manual_json/hill_json.dart';
 
 class Hill with EquatableMixin {
   const Hill({

@@ -1,9 +1,9 @@
-import 'package:sj_manager/models/country.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
-import 'package:sj_manager/models/jumper/jumper_skills.dart';
-import 'package:sj_manager/models/jumper/jumps_consistency.dart';
-import 'package:sj_manager/models/jumper/landing_style.dart';
-import 'package:sj_manager/models/sex.dart';
+import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/db/jumper/jumper_skills.dart';
+import 'package:sj_manager/models/db/jumper/jumps_consistency.dart';
+import 'package:sj_manager/models/db/jumper/landing_style.dart';
+import 'package:sj_manager/models/db/sex.dart';
 
 const jumpersMale = [
   Jumper(

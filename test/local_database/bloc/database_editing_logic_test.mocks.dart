@@ -4,9 +4,11 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i4;
+import 'package:mockito/src/dummies.dart' as _i5;
 import 'package:rxdart/rxdart.dart' as _i2;
-import 'package:sj_manager/repositories/database_editing/db_items_repository.dart'
+import 'package:sj_manager/models/db/country.dart' as _i4;
+import 'package:sj_manager/repositories/countries/countries_repo.dart' as _i6;
+import 'package:sj_manager/repositories/database_editing/editable_db_items_repo.dart'
     as _i3;
 
 // ignore_for_file: type=lint
@@ -33,9 +35,9 @@ class _FakeValueStream_0<T1> extends _i1.SmartFake
         );
 }
 
-class _FakeDbItemsRepo_1<T1> extends _i1.SmartFake
-    implements _i3.DbItemsRepo<T1> {
-  _FakeDbItemsRepo_1(
+class _FakeEditableDbItemsRepo_1<T1> extends _i1.SmartFake
+    implements _i3.EditableDbItemsRepo<T1> {
+  _FakeEditableDbItemsRepo_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -44,11 +46,22 @@ class _FakeDbItemsRepo_1<T1> extends _i1.SmartFake
         );
 }
 
-/// A class which mocks [DbItemsRepo].
+class _FakeCountry_2 extends _i1.SmartFake implements _i4.Country {
+  _FakeCountry_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+/// A class which mocks [EditableDbItemsRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDbItemsRepo<T> extends _i1.Mock implements _i3.DbItemsRepo<T> {
-  MockDbItemsRepo() {
+class MockEditableDbItemsRepo<T> extends _i1.Mock
+    implements _i3.EditableDbItemsRepo<T> {
+  MockEditableDbItemsRepo() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -68,19 +81,25 @@ class MockDbItemsRepo<T> extends _i1.Mock implements _i3.DbItemsRepo<T> {
       ) as _i2.ValueStream<List<T>>);
 
   @override
-  _i3.DbItemsRepo<T> clone() => (super.noSuchMethod(
+  int get lastLength => (super.noSuchMethod(
+        Invocation.getter(#lastLength),
+        returnValue: 0,
+      ) as int);
+
+  @override
+  _i3.EditableDbItemsRepo<T> clone() => (super.noSuchMethod(
         Invocation.method(
           #clone,
           [],
         ),
-        returnValue: _FakeDbItemsRepo_1<T>(
+        returnValue: _FakeEditableDbItemsRepo_1<T>(
           this,
           Invocation.method(
             #clone,
             [],
           ),
         ),
-      ) as _i3.DbItemsRepo<T>);
+      ) as _i3.EditableDbItemsRepo<T>);
 
   @override
   void add(
@@ -113,7 +132,7 @@ class MockDbItemsRepo<T> extends _i1.Mock implements _i3.DbItemsRepo<T> {
           #removeAt,
           [index],
         ),
-        returnValue: _i4.dummyValue<T>(
+        returnValue: _i5.dummyValue<T>(
           this,
           Invocation.method(
             #removeAt,
@@ -170,6 +189,87 @@ class MockDbItemsRepo<T> extends _i1.Mock implements _i3.DbItemsRepo<T> {
             #oldIndex: oldIndex,
             #newItem: newItem,
           },
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [CountriesRepo].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCountriesRepo extends _i1.Mock implements _i6.CountriesRepo {
+  MockCountriesRepo() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.ValueStream<List<_i4.Country>> get items => (super.noSuchMethod(
+        Invocation.getter(#items),
+        returnValue: _FakeValueStream_0<List<_i4.Country>>(
+          this,
+          Invocation.getter(#items),
+        ),
+      ) as _i2.ValueStream<List<_i4.Country>>);
+
+  @override
+  _i4.Country get none => (super.noSuchMethod(
+        Invocation.getter(#none),
+        returnValue: _FakeCountry_2(
+          this,
+          Invocation.getter(#none),
+        ),
+      ) as _i4.Country);
+
+  @override
+  List<_i4.Country> get lastItems => (super.noSuchMethod(
+        Invocation.getter(#lastItems),
+        returnValue: <_i4.Country>[],
+      ) as List<_i4.Country>);
+
+  @override
+  int get lastLength => (super.noSuchMethod(
+        Invocation.getter(#lastLength),
+        returnValue: 0,
+      ) as int);
+
+  @override
+  void setCountries(List<_i4.Country>? countries) => super.noSuchMethod(
+        Invocation.method(
+          #setCountries,
+          [countries],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i4.Country byCode(String? code) => (super.noSuchMethod(
+        Invocation.method(
+          #byCode,
+          [code],
+        ),
+        returnValue: _FakeCountry_2(
+          this,
+          Invocation.method(
+            #byCode,
+            [code],
+          ),
+        ),
+      ) as _i4.Country);
+
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
         ),
         returnValueForMissingStub: null,
       );

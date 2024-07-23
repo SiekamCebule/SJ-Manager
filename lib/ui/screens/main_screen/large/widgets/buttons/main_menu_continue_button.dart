@@ -5,7 +5,7 @@ class MainMenuContinueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _Button(
+    return MainMenuCard(
       child: Padding(
         padding: const EdgeInsets.only(
             left: UiMainMenuConstants.horizontalSpaceBetweenButtonItems,

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:sj_manager/models/hill/typical_wind_direction.dart';
+import 'package:sj_manager/models/db/hill/typical_wind_direction.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/l10n/hill_parameters_translations.dart';
-import 'package:sj_manager/models/country.dart';
-import 'package:sj_manager/models/hill/hill.dart';
-import 'package:sj_manager/models/hill/hill_profile_type.dart';
-import 'package:sj_manager/models/hill/jumps_variability.dart';
-import 'package:sj_manager/models/hill/landing_ease.dart';
-import 'package:sj_manager/repositories/countries/countries_repo.dart';
+import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/hill/hill.dart';
+import 'package:sj_manager/models/db/hill/hill_profile_type.dart';
+import 'package:sj_manager/models/db/hill/jumps_variability.dart';
+import 'package:sj_manager/models/db/hill/landing_ease.dart';
+import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
@@ -164,7 +164,8 @@ class HillEditorState extends State<HillEditor> {
                               enabled: widget.enableEditingCountry,
                               width: constraints.maxWidth,
                               key: _countriesDropdownKey,
-                              countriesApi: RepositoryProvider.of<CountriesRepo>(context),
+                              countriesApi:
+                                  RepositoryProvider.of<LocalDbRepo>(context).countries,
                               onSelected: (maybeCountry) {
                                 _country = maybeCountry;
                                 widget.onChange(_constructAndCacheHill());

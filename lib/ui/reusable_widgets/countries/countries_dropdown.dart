@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/country.dart';
+import 'package:sj_manager/models/db/country.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
@@ -46,7 +46,7 @@ class CountriesDropdownState extends State<CountriesDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    final countries = widget.countriesApi.countries;
+    final countries = widget.countriesApi.lastItems;
     final windowHeight = MediaQuery.of(context).size.height;
     return DropdownMenu<Country>(
       enabled: widget.enabled ?? true,

@@ -53,7 +53,7 @@ class _ForHillsState extends State<_ForHills> {
         CountriesDropdown(
           width: 220,
           label: Text(translate(context).filterByCountry),
-          countriesApi: context.read(),
+          countriesApi: countriesRepo,
           firstAsInitial: true,
           onSelected: (selected) async {
             _clearSelection();
@@ -71,8 +71,8 @@ class _ForHillsState extends State<_ForHills> {
     );
   }
 
-  CountriesRepo get countries => context.read();
-  Country get noneCountry => countries.none;
+  CountriesRepo get countriesRepo => context.read<LocalDbRepo>().countries;
+  Country get noneCountry => countriesRepo.none;
 
   void _setFilters() {
     context.read<DbFiltersRepo>().setHillsFilters([

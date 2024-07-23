@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:sj_manager/models/hill/hill.dart';
+import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
 class HillImageGeneratingSetup {

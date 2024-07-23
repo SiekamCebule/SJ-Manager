@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/enums/database_item_type.dart';
-import 'package:sj_manager/models/hill/hill.dart';
+import 'package:sj_manager/enums/db_editable_item_type.dart';
+import 'package:sj_manager/models/db/hill/hill.dart';
 
-import 'package:sj_manager/models/jumper/jumper.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
 
 class LocalDbFilteredItemsState extends Equatable {
   const LocalDbFilteredItemsState({
@@ -15,11 +15,11 @@ class LocalDbFilteredItemsState extends Equatable {
   final List<FemaleJumper> femaleJumpers;
   final List<Hill> hills;
 
-  List<dynamic> byType(DatabaseItemType type) {
+  List<dynamic> byType(DbEditableItemType type) {
     return switch (type) {
-      DatabaseItemType.maleJumper => maleJumpers,
-      DatabaseItemType.femaleJumper => femaleJumpers,
-      DatabaseItemType.hill => hills,
+      DbEditableItemType.maleJumper => maleJumpers,
+      DbEditableItemType.femaleJumper => femaleJumpers,
+      DbEditableItemType.hill => hills,
     };
   }
 

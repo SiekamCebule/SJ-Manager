@@ -1,7 +1,8 @@
 import 'package:rxdart/rxdart.dart';
+import 'package:sj_manager/repositories/database_editing/db_items_repo.dart';
 
-class DbItemsRepo<T> {
-  DbItemsRepo({
+class EditableDbItemsRepo<T> extends DbItemsRepo<T> {
+  EditableDbItemsRepo({
     List<T>? initial,
   }) : _items = initial ?? [] {
     _subject.add(_items);
@@ -10,8 +11,8 @@ class DbItemsRepo<T> {
   List<T> _items;
   final _subject = BehaviorSubject<List<T>>();
 
-  DbItemsRepo<T> clone() {
-    return DbItemsRepo(initial: List.of(_items));
+  EditableDbItemsRepo<T> clone() {
+    return EditableDbItemsRepo(initial: List.of(_items));
   }
 
   void add(T item, [int? index]) {
@@ -55,6 +56,12 @@ class DbItemsRepo<T> {
     _subject.add(_items);
   }
 
+  void dispose() {
+    _subject.close();
+  }
+
+  @override
   List<T> get lastItems => items.value;
+  @override
   ValueStream<List<T>> get items => _subject.stream;
 }

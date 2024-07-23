@@ -5,25 +5,9 @@ class MainMenuAcknowledgementsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _Button(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
-          Icon(
-            Symbols.folded_hands,
-            size: UiMainMenuConstants.smallerButtonIconSize,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-          const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
-          Text(
-            translate(context).acknowledgements,
-            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-          ),
-        ],
-      ),
+    return MainMenuOnlyTitleButton(
+      titleText: translate(context).acknowledgements,
+      iconData: Symbols.folded_hands,
       onTap: () {},
     );
   }

@@ -5,13 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
 import 'package:sj_manager/main.dart';
-import 'package:sj_manager/models/country.dart';
-import 'package:sj_manager/models/db_items_file_system_entity.dart';
-import 'package:sj_manager/models/hill/hill.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
-import 'package:sj_manager/repositories/countries/countries_repo.dart';
+import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/db_items_file_system_entity.dart';
+import 'package:sj_manager/models/db/hill/hill.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_items_json_configuration.dart';
-import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 import 'package:sj_manager/ui/dialogs/loading_items_failed_dialog.dart';
 import 'package:sj_manager/ui/navigation/routes.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
@@ -118,18 +117,18 @@ class AppConfigurator {
       fromJson: parameters.fromJson,
     );
     if (!_context.mounted) return;
-    _context.read<CountriesRepo>().setCountries(
+    _context.read<LocalDbRepo>().countries.setCountries(
         countries.map((c) => c.copyWith(code: c.code.toLowerCase())).toList());
   }
 
   Future<void> _loadItems<T>() async {
     if (!_context.mounted) return;
     final parameters = _context.read<DbItemsJsonConfiguration<T>>();
-    final loadedMales = await loadItemsListFromJsonFile(
+    final loaded = await loadItemsListFromJsonFile(
       file: _context.read<DbItemsFileSystemEntity<T>>().entity as File,
       fromJson: parameters.fromJson,
     );
     if (!_context.mounted) return;
-    _context.read<DbItemsRepo<T>>().setItems(loadedMales);
+    _context.read<LocalDbRepo>().editableByGenericType<T>().setItems(loaded);
   }
 }

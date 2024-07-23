@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 

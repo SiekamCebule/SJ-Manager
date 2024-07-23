@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sj_manager/models/db_items_file_system_entity.dart';
-import 'package:sj_manager/models/hill/hill.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
+import 'package:sj_manager/models/db/db_items_file_system_entity.dart';
+import 'package:sj_manager/models/db/hill/hill.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:path/path.dart' as path;
 
 class PlarformSpecificPathsCache {

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/hill/hill.dart';
+import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/hill_image_generating_setup.dart';
 
 class HillImage extends StatelessWidget {

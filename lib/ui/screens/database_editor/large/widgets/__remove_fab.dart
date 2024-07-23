@@ -10,7 +10,7 @@ class _RemoveFab extends StatelessWidget {
     final dbChangeStatusCubit = context.watch<ChangeStatusCubit>();
     final copiedDbCubit = context.watch<CopiedLocalDbCubit>();
 
-    final editableItemsForCurrentType = copiedDbCubit.state!.byType(itemsType);
+    final editableItemsForCurrentType = copiedDbCubit.state!.editableByType(itemsType);
 
     return StreamBuilder(
         stream: MergeStream([selectedIndexesRepo.selectedIndexes]),

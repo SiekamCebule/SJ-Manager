@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/country.dart';
+import 'package:sj_manager/models/db/country.dart';
 import 'package:sj_manager/repositories/country_flags.dart/country_flags_repo.dart';
 import 'package:sj_manager/utils/context_maybe_read.dart';
 

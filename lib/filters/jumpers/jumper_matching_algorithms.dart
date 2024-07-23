@@ -1,5 +1,5 @@
 import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
 
 final class DefaultJumperMatchingByTextAlgorithm
     extends DbItemMatchingByTextAlgorithm<Jumper> {

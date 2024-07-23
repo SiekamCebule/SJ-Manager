@@ -2,26 +2,28 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/database_editing/database_items_type_cubit.dart';
-import 'package:sj_manager/enums/database_item_type.dart';
-import 'package:sj_manager/models/country.dart';
-import 'package:sj_manager/models/hill/hill.dart';
-import 'package:sj_manager/models/hill/hill_profile_type.dart';
-import 'package:sj_manager/models/hill/jumps_variability.dart';
-import 'package:sj_manager/models/hill/landing_ease.dart';
-import 'package:sj_manager/models/hill/typical_wind_direction.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
-import 'package:sj_manager/models/jumper/jumper_skills.dart';
+import 'package:sj_manager/bloc/database_editing/database_items_type_cubit.dart';
+import 'package:sj_manager/enums/db_editable_item_type.dart';
+import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/hill/hill.dart';
+import 'package:sj_manager/models/db/hill/hill_profile_type.dart';
+import 'package:sj_manager/models/db/hill/jumps_variability.dart';
+import 'package:sj_manager/models/db/hill/landing_ease.dart';
+import 'package:sj_manager/models/db/hill/typical_wind_direction.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/db/jumper/jumper_skills.dart';
+import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
-import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
+import 'package:sj_manager/repositories/database_editing/editable_db_items_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/setup/set_up_app.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
 import 'package:sj_manager/ui/providers/locale_notifier.dart';
+import 'package:sj_manager/ui/reusable_widgets/animations/animated_visibility.dart';
 import 'package:sj_manager/ui/screens/database_editor/database_editor_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropiate_db_item_list_tile.dart';
@@ -123,20 +125,16 @@ void main() {
         ),
         child: MultiRepositoryProvider(
           providers: [
-            RepositoryProvider<CountriesRepo>(
-              create: (context) => CountriesRepo(initial: countries),
-            ),
             RepositoryProvider(
-              create: (context) => DbItemsRepo<MaleJumper>(initial: maleJumpers),
-            ),
-            RepositoryProvider(
-              create: (context) => DbItemsRepo<FemaleJumper>(initial: femaleJumpers),
-            ),
-            RepositoryProvider(
-              create: (context) => DbItemsRepo<Hill>(initial: hills),
+              create: (context) => LocalDbRepo(
+                maleJumpers: EditableDbItemsRepo<MaleJumper>(initial: maleJumpers),
+                femaleJumpers: EditableDbItemsRepo<FemaleJumper>(initial: femaleJumpers),
+                hills: EditableDbItemsRepo<Hill>(initial: hills),
+                countries: CountriesRepo(initial: countries),
+              ),
             ),
             RepositoryProvider(create: (context) {
-              final noneCountry = context.read<CountriesRepo>().none;
+              final noneCountry = context.read<LocalDbRepo>().countries.none;
               return DefaultItemsRepo(
                 defaultFemaleJumper: FemaleJumper.empty(country: noneCountry),
                 defaultMaleJumper: MaleJumper.empty(country: noneCountry),
@@ -187,15 +185,28 @@ void main() {
 
       final itemsTypeCubit = context.read<DatabaseItemsTypeCubit>();
       final itemsList = find.byType(DatabaseItemsList);
-      expect(itemsTypeCubit.state, DatabaseItemType.maleJumper);
+      expect(itemsTypeCubit.state, DbEditableItemType.maleJumper);
       expect(tester.widget<DatabaseItemsList>(itemsList).length, maleJumpers.length);
+
       expect(find.byType(FloatingActionButton), findsNWidgets(2));
+      final addFabVisibility = find
+          .ancestor(
+              of: find.byKey(const Key('addFab')),
+              matching: find.byType(AnimatedVisibility))
+          .first;
+      expect(tester.widget<AnimatedVisibility>(addFabVisibility).visible, true);
+      final removeFabVisibility = find
+          .ancestor(
+              of: find.byKey(const Key('removeFab')),
+              matching: find.byType(AnimatedVisibility))
+          .first;
+      expect(tester.widget<AnimatedVisibility>(removeFabVisibility).visible, false);
 
       final tabBar = find.byType(TabBar);
       final femaleJumpersTab = tester.widget<TabBar>(tabBar).tabs[1];
       await tester.tap(find.byWidget(femaleJumpersTab));
       await tester.pumpAndSettle();
-      expect(itemsTypeCubit.state, DatabaseItemType.femaleJumper);
+      expect(itemsTypeCubit.state, DbEditableItemType.femaleJumper);
       expect(tester.widget<DatabaseItemsList>(itemsList).length, femaleJumpers.length);
 
       final secondTile = find.descendant(
@@ -227,7 +238,7 @@ void main() {
       final addFab = find.byKey(const Key('addFab'));
       final removeFab = find.byKey(const Key('removeFab'));
 
-      Future<void> selectTab(DatabaseItemType itemsType) async {
+      Future<void> selectTab(DbEditableItemType itemsType) async {
         final tab = tester.widget<TabBar>(tabBar).tabs[itemsType.index];
         await tester.tap(find.byWidget(tab));
         await tester.pumpAndSettle();
@@ -245,9 +256,9 @@ void main() {
         await tester.pumpAndSettle();
       }
 
-      expect(itemsTypeCubit.state, DatabaseItemType.maleJumper);
-      await selectTab(DatabaseItemType.hill);
-      expect(itemsTypeCubit.state, DatabaseItemType.hill);
+      expect(itemsTypeCubit.state, DbEditableItemType.maleJumper);
+      await selectTab(DbEditableItemType.hill);
+      expect(itemsTypeCubit.state, DbEditableItemType.hill);
       expect(tester.widget<DatabaseItemsList>(itemsList).length, hills.length);
       await tapItem(1);
       await tap(addFab); // index: 2

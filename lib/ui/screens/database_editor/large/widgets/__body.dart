@@ -27,7 +27,7 @@ class _BodyState extends State<_Body> {
       if (selectedIndexesRepo.state.length == 1) {
         final index = selectedIndexesRepo.state.single;
         final itemsType = context.read<DatabaseItemsTypeCubit>().state;
-        final originalByType = context.read<LocalDbReposRepo>().byType(itemsType);
+        final originalByType = context.read<LocalDbRepo>().editableByType(itemsType);
         final filteredByType =
             context.read<LocalDbFilteredItemsCubit>().state.byType(itemsType);
         if (!filtersRepo.hasValidFilter) {

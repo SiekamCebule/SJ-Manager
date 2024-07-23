@@ -5,24 +5,9 @@ class MainMenuSettingsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _Button(
-      child: Row(
-        children: [
-          const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
-          Icon(
-            Symbols.settings,
-            size: UiMainMenuConstants.smallerButtonIconSize,
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-          ),
-          const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
-          Text(
-            translate(context).settings,
-            style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-          ),
-        ],
-      ),
+    return MainMenuOnlyTitleButton(
+      titleText: translate(context).settings,
+      iconData: Symbols.settings,
       onTap: () {
         router.navigateTo(context, '/settings');
       },

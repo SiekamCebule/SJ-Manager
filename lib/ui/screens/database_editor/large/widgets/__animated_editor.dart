@@ -13,7 +13,7 @@ class _AnimatedEditor extends StatelessWidget {
 
     final copiedLocalDbCubit = context.read<CopiedLocalDbCubit>();
     final copiedLocalDbRepos = copiedLocalDbCubit.state!;
-    final editableItemsRepoByType = copiedLocalDbRepos.byType(itemsType);
+    final editableItemsRepoByType = copiedLocalDbRepos.editableByType(itemsType);
 
     final filtersRepo = context.read<DbFiltersRepo>();
     final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
@@ -28,7 +28,6 @@ class _AnimatedEditor extends StatelessWidget {
       ]),
       builder: (context, snapshot) {
         final editorShouldBeVisible = selectedIndexesRepo.state.length == 1;
-        print('build animated editor');
         return AnimatedVisibility(
           duration: Durations.medium1,
           curve: Curves.easeIn,

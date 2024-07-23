@@ -1,5 +1,5 @@
 import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
-import 'package:sj_manager/models/hill/hill.dart';
+import 'package:sj_manager/models/db/hill/hill.dart';
 
 class DefaultHillMatchingByTextAlgorithm extends DbItemMatchingByTextAlgorithm<Hill> {
   const DefaultHillMatchingByTextAlgorithm({required super.text});

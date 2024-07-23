@@ -28,7 +28,6 @@ class MyDropdownField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('dropdown build');
     return DropdownMenu<T>(
       enabled: enabled ?? true,
       enableSearch: enableSearch ?? true,

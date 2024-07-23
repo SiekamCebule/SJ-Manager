@@ -3,11 +3,11 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/country.dart';
-import 'package:sj_manager/models/jumper/jumper_skills.dart';
-import 'package:sj_manager/models/sex.dart';
+import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/jumper/jumper_skills.dart';
+import 'package:sj_manager/models/db/sex.dart';
 
-part '../../json/manual_json/jumper_json.dart';
+part '../../../json/manual_json/jumper_json.dart';
 
 class Jumper with EquatableMixin {
   const Jumper({

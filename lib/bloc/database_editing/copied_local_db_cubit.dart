@@ -3,30 +3,31 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
-import 'package:sj_manager/models/db_items_file_system_entity.dart';
-import 'package:sj_manager/models/hill/hill.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
+import 'package:sj_manager/models/db/db_items_file_system_entity.dart';
+import 'package:sj_manager/models/db/hill/hill.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_items_json_configuration.dart';
-import 'package:sj_manager/repositories/database_editing/local_db_repos_repository.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
-class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
+class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
   CopiedLocalDbCubit({
-    required this.originalRepositories,
+    required this.originalDb,
   }) : super(null);
 
-  LocalDbReposRepo originalRepositories;
+  LocalDbRepo originalDb;
 
   Future<void> setUp() async {
-    final editableMaleJumpersRepo = originalRepositories.maleJumpersRepo.clone();
-    final editableFemaleJumpersRepo = originalRepositories.femaleJumpersRepo.clone();
-    final editableHillsRepo = originalRepositories.hillsRepo.clone();
+    final editableMaleJumpers = originalDb.maleJumpers.clone();
+    final editableFemaleJumpers = originalDb.femaleJumpers.clone();
+    final editableHills = originalDb.hills.clone();
 
     emit(
-      LocalDbReposRepo(
-        maleJumpersRepo: editableMaleJumpersRepo,
-        femaleJumpersRepo: editableFemaleJumpersRepo,
-        hillsRepo: editableHillsRepo,
+      LocalDbRepo(
+        maleJumpers: editableMaleJumpers,
+        femaleJumpers: editableFemaleJumpers,
+        hills: editableHills,
+        countries: originalDb.countries,
       ),
     );
   }
@@ -40,7 +41,9 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
   }
 
   Future<void> _saveChangesByType<T>(BuildContext context) async {
-    originalRepositories.byGenericType<T>().setItems(state!.byGenericType<T>().lastItems);
+    originalDb
+        .editableByGenericType<T>()
+        .setItems(state!.editableByGenericType<T>().lastItems);
     _saveItemsToJsonByType<T>(
       context: context,
       file: context.read<DbItemsFileSystemEntity<T>>().entity as File,
@@ -78,7 +81,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
     final parameters = context.read<DbItemsJsonConfiguration<T>>();
     await saveItemsListToJsonFile(
       file: file,
-      items: state!.byGenericType<T>().lastItems,
+      items: state!.editableByGenericType<T>().lastItems,
       toJson: parameters.toJson,
     );
   }
@@ -91,7 +94,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
         context.read<DbItemsFileSystemEntity<MaleJumper>>().basename,
       ),
     );
-    state!.maleJumpersRepo.setItems(males);
+    state!.maleJumpers.setItems(males);
     if (!context.mounted) return;
     final females = await _loadItemsFromJsonByType<FemaleJumper>(
       context: context,
@@ -100,7 +103,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
         context.read<DbItemsFileSystemEntity<FemaleJumper>>().basename,
       ),
     );
-    state!.femaleJumpersRepo.setItems(females);
+    state!.femaleJumpers.setItems(females);
     if (!context.mounted) return;
     final hills = await _loadItemsFromJsonByType<Hill>(
       context: context,
@@ -109,12 +112,13 @@ class CopiedLocalDbCubit extends Cubit<LocalDbReposRepo?> {
         context.read<DbItemsFileSystemEntity<Hill>>().basename,
       ),
     );
-    state!.hillsRepo.setItems(hills);
+    state!.hills.setItems(hills);
 
-    emit(LocalDbReposRepo(
-      maleJumpersRepo: state!.maleJumpersRepo,
-      femaleJumpersRepo: state!.femaleJumpersRepo,
-      hillsRepo: state!.hillsRepo,
+    emit(LocalDbRepo(
+      maleJumpers: state!.maleJumpers,
+      femaleJumpers: state!.femaleJumpers,
+      hills: state!.hills,
+      countries: state!.countries,
     ));
   }
 

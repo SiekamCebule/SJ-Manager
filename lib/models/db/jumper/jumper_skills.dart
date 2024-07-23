@@ -3,8 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/jumper/jumps_consistency.dart';
-import 'package:sj_manager/models/jumper/landing_style.dart';
+import 'package:sj_manager/models/db/jumper/jumps_consistency.dart';
+import 'package:sj_manager/models/db/jumper/landing_style.dart';
 
 part 'jumper_skills.g.dart';
 

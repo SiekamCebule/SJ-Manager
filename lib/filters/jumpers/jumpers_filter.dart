@@ -1,7 +1,7 @@
 import 'package:sj_manager/filters/filter.dart';
 import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
-import 'package:sj_manager/models/country.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
+import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
 
 abstract class JumpersFilter extends Filter<Jumper> {
   const JumpersFilter();

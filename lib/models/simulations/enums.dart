@@ -1,0 +1,4 @@
+enum SimulationMode {
+  coach,
+  observer,
+}

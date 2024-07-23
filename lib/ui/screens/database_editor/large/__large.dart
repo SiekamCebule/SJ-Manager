@@ -10,7 +10,6 @@ class _Large extends StatefulWidget {
 class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   late final AnimationController _bodyAnimationController;
 
-  late final LocalDbReposRepo _originalDb;
   late final DbFiltersRepo _filtersRepo;
   late final SelectedIndexesRepo _selectedIndexesRepo;
 
@@ -57,11 +56,6 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   }
 
   void _initializeRepos() {
-    _originalDb = LocalDbReposRepo(
-      maleJumpersRepo: context.read<DbItemsRepo<MaleJumper>>(),
-      femaleJumpersRepo: context.read<DbItemsRepo<FemaleJumper>>(),
-      hillsRepo: context.read<DbItemsRepo<Hill>>(),
-    );
     _filtersRepo = DbFiltersRepo();
     _selectedIndexesRepo = SelectedIndexesRepo();
   }
@@ -69,7 +63,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   Future<void> _initializeCubits() async {
     _dbChangeStatusCubit = ChangeStatusCubit();
     _itemsTypeCubit = DatabaseItemsTypeCubit();
-    _copiedDbCubit = CopiedLocalDbCubit(originalRepositories: _originalDb);
+    _copiedDbCubit = CopiedLocalDbCubit(originalDb: context.read());
     await _copiedDbCubit.setUp();
     _filteredItemsCubit = LocalDbFilteredItemsCubit(
       filtersRepo: _filtersRepo,
@@ -118,7 +112,6 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
         final child = prepared
             ? MultiRepositoryProvider(
                 providers: [
-                  RepositoryProvider.value(value: _originalDb),
                   RepositoryProvider.value(value: _filtersRepo),
                   RepositoryProvider.value(value: _selectedIndexesRepo),
                 ],
@@ -267,7 +260,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   Future<void> _onChangeTab(int index) async {
     _selectedIndexesRepo.clearSelection();
     _filtersRepo.clear();
-    _itemsTypeCubit.select(DatabaseItemType.fromIndex(index));
+    _itemsTypeCubit.select(DbEditableItemType.fromIndex(index));
     if (index != _currentTabIndex) {
       await _animateBodyFromZero();
       _currentTabIndex = index;

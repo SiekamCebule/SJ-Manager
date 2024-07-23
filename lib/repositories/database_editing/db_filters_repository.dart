@@ -1,8 +1,8 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:sj_manager/enums/database_item_type.dart';
+import 'package:sj_manager/enums/db_editable_item_type.dart';
 import 'package:sj_manager/filters/filter.dart';
-import 'package:sj_manager/models/hill/hill.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
+import 'package:sj_manager/models/db/hill/hill.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
 
 class DbFiltersRepo {
   DbFiltersRepo();
@@ -54,11 +54,11 @@ class DbFiltersRepo {
     return onMaleJumpers || onFemaleJumpers || onHills;
   }
 
-  ValueStream<List<Filter<dynamic>>> byType(DatabaseItemType type) {
+  ValueStream<List<Filter<dynamic>>> byType(DbEditableItemType type) {
     return switch (type) {
-      DatabaseItemType.maleJumper => maleJumpersFilters,
-      DatabaseItemType.femaleJumper => femaleJumpersFilters,
-      DatabaseItemType.hill => hillsFilters,
+      DbEditableItemType.maleJumper => maleJumpersFilters,
+      DbEditableItemType.femaleJumper => femaleJumpersFilters,
+      DbEditableItemType.hill => hillsFilters,
     };
   }
 }

@@ -1,6 +1,6 @@
-import 'package:sj_manager/enums/database_item_type.dart';
-import 'package:sj_manager/models/hill/hill.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
+import 'package:sj_manager/enums/db_editable_item_type.dart';
+import 'package:sj_manager/models/db/hill/hill.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
 
 class DefaultItemsRepo {
   DefaultItemsRepo({
@@ -13,11 +13,11 @@ class DefaultItemsRepo {
   final FemaleJumper defaultFemaleJumper;
   final Hill defaultHill;
 
-  dynamic byDatabaseItemType(DatabaseItemType type) {
+  dynamic byDatabaseItemType(DbEditableItemType type) {
     return switch (type) {
-      DatabaseItemType.maleJumper => defaultMaleJumper,
-      DatabaseItemType.femaleJumper => defaultFemaleJumper,
-      DatabaseItemType.hill => defaultHill,
+      DbEditableItemType.maleJumper => defaultMaleJumper,
+      DbEditableItemType.femaleJumper => defaultFemaleJumper,
+      DbEditableItemType.hill => defaultHill,
     };
   }
 }

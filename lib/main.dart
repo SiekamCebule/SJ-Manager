@@ -2,19 +2,20 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/models/country.dart';
-import 'package:sj_manager/models/db_items_file_system_entity.dart';
-import 'package:sj_manager/models/hill/hill.dart';
+import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/db_items_file_system_entity.dart';
+import 'package:sj_manager/models/db/hill/hill.dart';
+import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_items_json_configuration.dart';
-import 'package:sj_manager/repositories/database_editing/db_items_repository.dart';
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/jumper/jumper.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/country_flags.dart/country_flags_repo.dart';
 import 'package:sj_manager/repositories/country_flags.dart/local_storage_country_flags_repo.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
+import 'package:sj_manager/repositories/database_editing/editable_db_items_repo.dart';
 import 'package:sj_manager/setup/set_up_app.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/providers/locale_notifier.dart';
@@ -34,24 +35,27 @@ void main() async {
   final pathsCache = PlarformSpecificPathsCache();
   await pathsCache.setup();
 
+  CountriesRepo countriesRepo(BuildContext context) =>
+      context.read<LocalDbRepo>().countries;
+
   MaleJumper maleJumperFromJson(Json json, BuildContext context) {
     return MaleJumper.fromJson(
       json,
-      countryLoader: JsonCountryLoaderByCode(repo: context.read()),
+      countryLoader: JsonCountryLoaderByCode(repo: countriesRepo(context)),
     );
   }
 
   FemaleJumper femaleJumperFromJson(Json json, BuildContext context) {
     return FemaleJumper.fromJson(
       json,
-      countryLoader: JsonCountryLoaderByCode(repo: context.read()),
+      countryLoader: JsonCountryLoaderByCode(repo: countriesRepo(context)),
     );
   }
 
   Hill hillFromJson(Json json, BuildContext context) {
     return Hill.fromJson(
       json,
-      countryLoader: JsonCountryLoaderByCode(repo: context.read()),
+      countryLoader: JsonCountryLoaderByCode(repo: countriesRepo(context)),
     );
   }
 
@@ -60,13 +64,10 @@ void main() async {
       create: (context) => LocaleCubit(),
       child: MultiRepositoryProvider(
         providers: [
-          RepositoryProvider<CountriesRepo>(
-            create: (context) => CountriesRepo(),
-          ),
           RepositoryProvider<CountryFlagsRepo>(
             create: (context) {
               final storageDirectory =
-                  userDataDirectory(pathsCache, 'countries/country_flags');
+                  userDataDirectory(pathsCache, 'database/country_flags');
               return LocalStorageCountryFlagsRepo(
                 imagesDirectory: storageDirectory,
                 imagesExtension: 'png',
@@ -74,16 +75,15 @@ void main() async {
             },
           ),
           RepositoryProvider(
-            create: (context) => DbItemsRepo<MaleJumper>(),
-          ),
-          RepositoryProvider(
-            create: (context) => DbItemsRepo<FemaleJumper>(),
-          ),
-          RepositoryProvider(
-            create: (context) => DbItemsRepo<Hill>(),
+            create: (context) => LocalDbRepo(
+              maleJumpers: EditableDbItemsRepo<MaleJumper>(),
+              femaleJumpers: EditableDbItemsRepo<FemaleJumper>(),
+              hills: EditableDbItemsRepo<Hill>(),
+              countries: CountriesRepo(),
+            ),
           ),
           RepositoryProvider(create: (context) {
-            final noneCountry = context.read<CountriesRepo>().none;
+            final noneCountry = context.read<LocalDbRepo>().countries.none;
             return DefaultItemsRepo(
               defaultFemaleJumper: FemaleJumper.empty(country: noneCountry),
               defaultMaleJumper: MaleJumper.empty(country: noneCountry),
@@ -104,13 +104,12 @@ void main() async {
           providers: [
             Provider(create: (context) {
               return JumperImageGeneratingSetup(
-                  imagesDirectory:
-                      userDataDirectory(pathsCache, 'database/jumper_images'),
-                  toFileName: (jumper) {
-                    return '${jumper.country.code.toLowerCase()}_${jumper.name.toLowerCase()}_${jumper.surname.toLowerCase()}'
-                        .replaceAll(' ', '_');
-                  },
-                  extension: 'png');
+                imagesDirectory: userDataDirectory(pathsCache, 'database/jumper_images'),
+                toFileName: (jumper) {
+                  return '${jumper.country.code.toLowerCase()}_${jumper.name.toLowerCase()}_${jumper.surname.toLowerCase()}'
+                      .replaceAll(' ', '_');
+                },
+              );
             }),
             Provider(create: (context) {
               return HillImageGeneratingSetup(
@@ -134,11 +133,11 @@ void main() async {
             ),
             Provider(
               create: (context) => DbItemsFileSystemEntity<Country>(
-                  userDataFile(pathsCache, 'countries/countries.json')),
+                  userDataFile(pathsCache, 'database/countries.json')),
             ),
             Provider(
               create: (context) => DbItemsFileSystemEntity<CountryFlag>(
-                  userDataDirectory(pathsCache, 'countries/country_flags')),
+                  userDataDirectory(pathsCache, 'database/country_flags')),
             ),
             Provider(create: (context) {
               return DbItemsJsonConfiguration<MaleJumper>(
