@@ -25,12 +25,44 @@ class _DynamicContent extends StatelessWidget {
         },
         child: switch (screen) {
           SimulationWizardScreen.mode => _ModeScreen(onChange: (mode) {
-              context.read<SimulationSetupConfig>().mode = mode;
+              context.read<SimulationWizardOptionsRepo>().mode = mode;
+              if (mode != null) {
+                updateCanGoForward(true, context);
+              } else {
+                updateCanGoForward(false, context);
+              }
             }),
-          SimulationWizardScreen.country => const _CountryScreen(),
+          SimulationWizardScreen.country => _CountryScreen(
+              onChange: (country) {
+                context.read<SimulationWizardOptionsRepo>().country = country;
+                if (country != null) {
+                  updateCanGoForward(true, context);
+                } else {
+                  updateCanGoForward(false, context);
+                }
+              },
+            ),
           _ => const Placeholder(),
         },
       ),
     );
+  }
+
+  void updateCanGoForward(bool can, BuildContext context) {
+    final navCubit = context.read<SimulationWizardNavigationCubit>();
+    final navState = navCubit.state;
+    if (navState is InitializedSimulationWizardNavigationState) {
+      final navPermissions = context.read<LinearNavigationPermissionsRepo>();
+      navPermissions.canGoForward = navState.indexAllowsGoingForward && can;
+    }
+  }
+
+  void updateCanGoBack(bool can, BuildContext context) {
+    final navCubit = context.read<SimulationWizardNavigationCubit>();
+    final navState = navCubit.state;
+    if (navState is InitializedSimulationWizardNavigationState) {
+      final navPermissions = context.read<LinearNavigationPermissionsRepo>();
+      navPermissions.canGoBack = navState.indexAllowsGoingBack && can;
+    }
   }
 }

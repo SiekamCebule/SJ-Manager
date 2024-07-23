@@ -5,9 +5,7 @@ class MainMenuNewSimulationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MainMenuTextContentButton(
-      titleText: translate(context).newSimulation,
-      contentText: translate(context).newSimulationButtonContent,
+    return MainMenuCard(
       onTap: () async {
         // TODO: Show overlay and handle everything
         // TODO: Add dialog dimensions to UI constants
@@ -20,7 +18,7 @@ class MainMenuNewSimulationButton extends StatelessWidget {
             return const Center(
               child: SizedBox(
                 width: 900,
-                height: 450,
+                height: 550,
                 child: SimulationWizardDialog(),
               ),
             );
@@ -43,6 +41,10 @@ class MainMenuNewSimulationButton extends StatelessWidget {
         );
         print('shouldCreateSimulation: $shouldCreateSimulation');
       },
+      child: MainMenuTextContentButtonBody(
+        titleText: translate(context).newSimulation,
+        contentText: translate(context).newSimulationButtonContent,
+      ),
     );
   }
 }

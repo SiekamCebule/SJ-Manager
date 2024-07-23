@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
-import 'package:sj_manager/models/db/db_items_file_system_entity.dart';
+import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_items_json_configuration.dart';
 import 'package:sj_manager/utils/file_system.dart';
+
+import 'package:path/path.dart' as path;
 
 class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
   CopiedLocalDbCubit({
@@ -46,7 +48,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
         .setItems(state!.editableByGenericType<T>().lastItems);
     _saveItemsToJsonByType<T>(
       context: context,
-      file: context.read<DbItemsFileSystemEntity<T>>().entity as File,
+      file: File(context.read<DbFileSystemEntityNames>().byGenericType<T>()),
     );
   }
 
@@ -55,7 +57,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
       context: context,
       file: fileInDirectory(
         directory,
-        context.read<DbItemsFileSystemEntity<MaleJumper>>().basename,
+        path.basename(context.read<DbFileSystemEntityNames>().maleJumpers),
       ),
     );
     if (!context.mounted) return;
@@ -63,7 +65,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
       context: context,
       file: fileInDirectory(
         directory,
-        context.read<DbItemsFileSystemEntity<FemaleJumper>>().basename,
+        path.basename(context.read<DbFileSystemEntityNames>().femaleJumpers),
       ),
     );
     if (!context.mounted) return;
@@ -71,7 +73,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
       context: context,
       file: fileInDirectory(
         directory,
-        context.read<DbItemsFileSystemEntity<Hill>>().basename,
+        path.basename(context.read<DbFileSystemEntityNames>().hills),
       ),
     );
   }
@@ -91,7 +93,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
       context: context,
       file: fileInDirectory(
         directory,
-        context.read<DbItemsFileSystemEntity<MaleJumper>>().basename,
+        path.basename(context.read<DbFileSystemEntityNames>().maleJumpers),
       ),
     );
     state!.maleJumpers.setItems(males);
@@ -100,7 +102,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
       context: context,
       file: fileInDirectory(
         directory,
-        context.read<DbItemsFileSystemEntity<FemaleJumper>>().basename,
+        path.basename(context.read<DbFileSystemEntityNames>().femaleJumpers),
       ),
     );
     state!.femaleJumpers.setItems(females);
@@ -109,7 +111,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
       context: context,
       file: fileInDirectory(
         directory,
-        context.read<DbItemsFileSystemEntity<Hill>>().basename,
+        path.basename(context.read<DbFileSystemEntityNames>().hills),
       ),
     );
     state!.hills.setItems(hills);

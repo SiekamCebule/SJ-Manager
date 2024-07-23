@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sj_manager/models/db/db_items_file_system_entity.dart';
-import 'package:sj_manager/models/db/hill/hill.dart';
-import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
+
 import 'package:path/path.dart' as path;
 
 class PlarformSpecificPathsCache {
@@ -35,6 +34,10 @@ File userDataFile(PlarformSpecificPathsCache pathsCache, String fileName) {
   return file;
 }
 
+File databaseFile(PlarformSpecificPathsCache pathsCache, String fileName) {
+  return userDataFile(pathsCache, 'database/$fileName');
+}
+
 Directory userDataDirectory(PlarformSpecificPathsCache pathsCache, String directoryName) {
   final documentsDir = pathsCache.applicationDocumentsDirectory;
   final databaseDir = Directory('${documentsDir.path}/sj_manager/user_data');
@@ -47,6 +50,10 @@ Directory userDataDirectory(PlarformSpecificPathsCache pathsCache, String direct
     dir.create(recursive: true);
   }
   return dir;
+}
+
+Directory databaseDirectory(PlarformSpecificPathsCache pathsCache, String fileName) {
+  return userDataDirectory(pathsCache, 'database/$fileName');
 }
 
 File fileByNameWithoutExtension(Directory directory, String name) {
@@ -67,12 +74,13 @@ File fileInDirectory(Directory directory, String name) {
 bool directoryIsValidForDatabase(BuildContext context, Directory directory) {
   final correctFolderStructure = {
     fileInDirectory(
-            directory, context.read<DbItemsFileSystemEntity<MaleJumper>>().basename)
+            directory, path.basename(context.read<DbFileSystemEntityNames>().maleJumpers))
+        .path,
+    fileInDirectory(directory,
+            path.basename(context.read<DbFileSystemEntityNames>().femaleJumpers))
         .path,
     fileInDirectory(
-            directory, context.read<DbItemsFileSystemEntity<FemaleJumper>>().basename)
-        .path,
-    fileInDirectory(directory, context.read<DbItemsFileSystemEntity<Hill>>().basename)
+            directory, path.basename(context.read<DbFileSystemEntityNames>().hills))
         .path,
   };
   final currentFolderStructure = directory.listSync().map((file) => file.path).toSet();

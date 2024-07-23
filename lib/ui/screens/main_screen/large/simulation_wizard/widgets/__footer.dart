@@ -10,50 +10,71 @@ class _Footer extends StatefulWidget {
 class _FooterState extends State<_Footer> {
   @override
   Widget build(BuildContext context) {
-    final currentScreenCubit = context.watch<SimulationWizardNavigationCubit>();
-    final currentScreenState = currentScreenCubit.state;
+    final navCubit = context.watch<SimulationWizardNavigationCubit>();
+    final navCubitState = navCubit.state;
+    final navPermissions = context.watch<LinearNavigationPermissionsRepo>();
+    final selectedOptions = context.watch<SimulationWizardOptionsRepo>();
 
     return SizedBox(
       height: 70,
       child: ClipRect(
         child: MainMenuCard(
-          child: Row(
-            children: [
-              Visibility(
-                maintainState: false,
-                visible:
-                    currentScreenState is InitializedSimulationWizardNavigationState &&
-                        currentScreenState.canGoBack,
-                child: SizedBox(
-                  width: 80,
-                  child: IconButton(
-                    onPressed: () {
-                      currentScreenCubit.goBack();
-                    },
-                    icon: const Icon(Symbols.arrow_back),
-                    style: IconButton.styleFrom(iconSize: 35),
-                  ),
-                ),
-              ),
-              const Spacer(),
-              Visibility(
-                maintainState: false,
-                visible:
-                    currentScreenState is InitializedSimulationWizardNavigationState &&
-                        currentScreenState.canGoForward,
-                child: SizedBox(
-                  width: 80,
-                  child: IconButton(
-                    onPressed: () {
-                      currentScreenCubit.goForward();
-                    },
-                    icon: const Icon(Symbols.arrow_forward),
-                    style: IconButton.styleFrom(iconSize: 35),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          child: StreamBuilder(
+              stream: selectedOptions.countryStream,
+              builder: (context, snapshot) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    StreamBuilder(
+                        stream: navPermissions.canGoBackStream,
+                        builder: (context, snapshot) {
+                          print('can go back: ${navPermissions.canGoBack}');
+
+                          return Visibility(
+                            maintainState: false,
+                            visible: navPermissions.canGoBack,
+                            child: SizedBox(
+                              width: 80,
+                              child: IconButton(
+                                onPressed: () {
+                                  navCubit.goBack();
+                                },
+                                icon: const Icon(Symbols.arrow_back),
+                                style: IconButton.styleFrom(iconSize: 35),
+                              ),
+                            ),
+                          );
+                        }),
+                    if (navCubitState is InitializedSimulationWizardNavigationState &&
+                        navCubitState.currentScreen == SimulationWizardScreen.country &&
+                        selectedOptions.country != null)
+                      Center(
+                        child: SelectedCountryCaption(
+                          country: selectedOptions.country!,
+                          stars: 5, // TODO: Calculate stars
+                        ),
+                      ),
+                    StreamBuilder(
+                        stream: navPermissions.canGoForwardStream,
+                        builder: (context, snapshot) {
+                          return Visibility(
+                            maintainState: false,
+                            visible: navPermissions.canGoForward,
+                            child: SizedBox(
+                              width: 80,
+                              child: IconButton(
+                                onPressed: () {
+                                  navCubit.goForward();
+                                },
+                                icon: const Icon(Symbols.arrow_forward),
+                                style: IconButton.styleFrom(iconSize: 35),
+                              ),
+                            ),
+                          );
+                        }),
+                  ],
+                );
+              }),
         ),
       ),
     );

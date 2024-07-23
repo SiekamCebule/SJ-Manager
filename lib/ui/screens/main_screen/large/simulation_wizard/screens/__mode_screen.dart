@@ -12,45 +12,57 @@ class _ModeScreen extends StatefulWidget {
 }
 
 class _ModeScreenState extends State<_ModeScreen> {
-  var _selected = SimulationMode.coach;
+  SimulationMode? _selected;
+
+  @override
+  void initState() {
+    widget.onChange(_selected);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
-          child: MainMenuTextContentButton(
+          child: SimulationWizardOptionButton(
             isSelected: _selected == SimulationMode.coach,
-            titleText: 'Zostań trenerem',
-            contentText:
-                'Minim reprehenderit pariatur quis veniam laborum ipsum aliqua minim esse consectetur qui eiusmod dolore. Culpa sint velit reprehenderit do culpa enim magna consectetur labore quis occaecat pariatur.',
             onTap: () {
               setState(() {
-                _selected = SimulationMode.coach;
+                _selected =
+                    _selected != SimulationMode.coach ? SimulationMode.coach : null;
               });
-              widget.onChange(SimulationMode.coach);
+              widget.onChange(_selected);
             },
-            decorationWidget: const Icon(
-              Symbols.person,
-              size: 140,
+            child: const MainMenuTextContentButtonBody(
+              titleText: 'Zostań trenerem',
+              contentText:
+                  'Wybierz swoją wymarzoną reprezentację i stań się odpowiedzialny za każdy aspekt prowadzenia drużyny! Samemu wybierzesz grupę skoczków, z którymi będziesz pracował, zajmiesz się powołaniami na zawody, będziesz nadzorował treningiem, i wiele więcej...',
+              decorationWidget: Icon(
+                Symbols.person,
+                size: 140,
+              ),
             ),
           ),
         ),
         Expanded(
-          child: MainMenuTextContentButton(
+          child: SimulationWizardOptionButton(
             isSelected: _selected == SimulationMode.observer,
-            titleText: 'Zostań obserwatorem',
-            contentText:
-                'Minim reprehenderit pariatur quis veniam laborum ipsum aliqua minim esse consectetur qui eiusmod dolore. Culpa sint velit reprehenderit do culpa enim magna consectetur labore quis occaecat pariatur. ',
             onTap: () {
               setState(() {
-                _selected = SimulationMode.observer;
+                _selected =
+                    _selected != SimulationMode.observer ? SimulationMode.observer : null;
               });
-              widget.onChange(SimulationMode.observer);
+              widget.onChange(_selected);
             },
-            decorationWidget: const Icon(
-              Symbols.eye_tracking,
-              size: 140,
+            child: const MainMenuTextContentButtonBody(
+              titleText: 'Zostań obserwatorem',
+              contentText:
+                  'Nie zaprzątaj swojej głowy prowadzeniem drużyny. Zajmij swoją głowę uważną obserwacją wszystkich emocjonujących wydarzeń ze świata skoków, oglądaj interesujące cię zawody, przeglądaj newsy... Jeśli chcesz, możesz zacząć tajnie wpływać na rzeczywistość za pomocą edytora symulacji in-game',
+              decorationWidget: Icon(
+                Symbols.eye_tracking,
+                size: 140,
+              ),
             ),
           ),
         ),

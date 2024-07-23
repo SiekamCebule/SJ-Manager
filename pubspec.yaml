@@ -63,6 +63,7 @@ dependencies:
   mockito: ^5.4.4
   file_picker: ^8.0.6
   path: ^1.9.0
+  dotted_border: ^2.1.0
 
 dev_dependencies:
   flutter_test:

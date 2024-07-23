@@ -31,7 +31,7 @@ class AppThemeDataCreator {
       ),
       headlineLarge: base.headlineLarge?.copyWith(
         fontFamily: 'Raleway',
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w300,
       ),
       headlineMedium: base.headlineMedium?.copyWith(
         fontFamily: 'Raleway',
@@ -39,7 +39,7 @@ class AppThemeDataCreator {
       ),
       headlineSmall: base.headlineSmall?.copyWith(
         fontFamily: 'Raleway',
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w300,
       ),
       titleLarge: base.titleLarge?.copyWith(
         fontFamily: 'Raleway',
@@ -47,35 +47,35 @@ class AppThemeDataCreator {
       ),
       titleMedium: base.titleMedium?.copyWith(
         fontFamily: 'Raleway',
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
       ),
       titleSmall: base.titleSmall?.copyWith(
         fontFamily: 'Raleway',
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
       ),
       bodyLarge: base.bodyLarge?.copyWith(
         fontFamily: 'Raleway',
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w300,
       ),
       bodyMedium: base.bodyMedium?.copyWith(
         fontFamily: 'Raleway',
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w300,
       ),
       bodySmall: base.bodySmall?.copyWith(
         fontFamily: 'Raleway',
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w300,
       ),
       labelLarge: base.labelLarge?.copyWith(
         fontFamily: 'Raleway',
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
       ),
       labelMedium: base.labelMedium?.copyWith(
         fontFamily: 'Raleway',
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
       ),
       labelSmall: base.labelSmall?.copyWith(
         fontFamily: 'Raleway',
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
       ),
     );
   }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/models/db/country.dart';
-import 'package:sj_manager/models/db/db_items_file_system_entity.dart';
+import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
@@ -19,7 +19,6 @@ import 'package:sj_manager/repositories/database_editing/editable_db_items_repo.
 import 'package:sj_manager/setup/set_up_app.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/providers/locale_notifier.dart';
-import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/hill_image_generating_setup.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/jumper_image/jumper_image_generating_setup.dart';
 import 'package:sj_manager/ui/screens/main_screen/main_screen.dart';
@@ -120,24 +119,13 @@ void main() async {
                   });
             }),
             Provider(
-              create: (context) => DbItemsFileSystemEntity<MaleJumper>(
-                  userDataFile(pathsCache, 'database/jumpers_male.json')),
-            ),
-            Provider(
-              create: (context) => DbItemsFileSystemEntity<FemaleJumper>(
-                  userDataFile(pathsCache, 'database/jumpers_female.json')),
-            ),
-            Provider(
-              create: (context) => DbItemsFileSystemEntity<Hill>(
-                  userDataFile(pathsCache, 'database/hills.json')),
-            ),
-            Provider(
-              create: (context) => DbItemsFileSystemEntity<Country>(
-                  userDataFile(pathsCache, 'database/countries.json')),
-            ),
-            Provider(
-              create: (context) => DbItemsFileSystemEntity<CountryFlag>(
-                  userDataDirectory(pathsCache, 'database/country_flags')),
+              create: (context) => const DbFileSystemEntityNames(
+                maleJumpers: 'jumpers_male.json',
+                femaleJumpers: 'jumpers_female.json',
+                hills: 'hills.json',
+                countries: 'countries.json',
+                countryFlags: 'country_flags',
+              ),
             ),
             Provider(create: (context) {
               return DbItemsJsonConfiguration<MaleJumper>(

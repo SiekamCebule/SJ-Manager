@@ -5,23 +5,19 @@ class MainMenuCard extends StatelessWidget {
     super.key,
     this.onTap,
     required this.child,
-    this.isSelected = false,
   });
 
   final Widget child;
   final VoidCallback? onTap;
-  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: isSelected
-          ? Theme.of(context).colorScheme.secondaryContainer
-          : Theme.of(context).colorScheme.surfaceContainer,
+      color: Theme.of(context).colorScheme.surfaceContainer,
       child: InkWell(
-        hoverColor: Theme.of(context).colorScheme.secondaryContainer,
-        splashColor: Theme.of(context).colorScheme.secondaryContainer,
-        highlightColor: Theme.of(context).colorScheme.secondaryContainer,
+        hoverColor: Theme.of(context).colorScheme.surfaceContainerLowest,
+        splashColor: Theme.of(context).colorScheme.surfaceContainerHigh,
+        highlightColor: Theme.of(context).colorScheme.surfaceContainerHighest,
         onTap: onTap,
         child: child,
       ),

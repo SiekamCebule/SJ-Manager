@@ -7,21 +7,26 @@ class CountryFlag extends StatelessWidget {
   const CountryFlag({
     super.key,
     required this.country,
-    required this.width,
-  });
+    this.width,
+    this.height,
+  }) : assert((width != null || height != null) && !(width != null && height != null));
 
   final Country country;
-  final double width;
+  final double? width;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
     final flagsRepo = context.maybeRead<CountryFlagsRepo>();
     final countryFlagsRepoExists = flagsRepo != null;
+
+    final imageFit = width != null ? BoxFit.fitWidth : BoxFit.fitHeight;
     return countryFlagsRepoExists
         ? Image(
             image: flagsRepo.imageData(country),
             width: width,
-            fit: BoxFit.fitWidth,
+            height: height,
+            fit: imageFit,
           )
         : AspectRatio(
             aspectRatio: 4 / 3,

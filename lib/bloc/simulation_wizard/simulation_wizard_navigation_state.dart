@@ -17,15 +17,20 @@ class InitializedSimulationWizardNavigationState extends SimulationWizardNavigat
   const InitializedSimulationWizardNavigationState({
     required this.screens,
     required this.currentScreenIndex,
-    required this.canGoForward,
-    required this.canGoBack,
   });
 
   final List<SimulationWizardScreen> screens;
   final int currentScreenIndex;
-  final bool canGoForward;
-  final bool canGoBack;
+
   SimulationWizardScreen get currentScreen => screens[currentScreenIndex];
+
+  bool get indexAllowsGoingBack {
+    return currentScreenIndex > 0;
+  }
+
+  bool get indexAllowsGoingForward {
+    return currentScreenIndex + 1 < screens.length;
+  }
 
   @override
   List<Object?> get props => [screens, currentScreenIndex];

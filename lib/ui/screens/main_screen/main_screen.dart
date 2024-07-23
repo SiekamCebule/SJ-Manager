@@ -9,7 +9,7 @@ import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/simulation_wizard_dialog.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_menu_card.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_menu_only_title_button.dart';
-import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_menu_text_content_button.dart';
+import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_menu_text_content_button_body.dart';
 import 'package:sj_manager/ui/screens/main_screen/widgets/shaking_app_title.dart';
 import 'package:url_launcher/url_launcher.dart';
 
