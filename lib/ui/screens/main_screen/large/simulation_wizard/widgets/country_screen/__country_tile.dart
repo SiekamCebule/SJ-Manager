@@ -16,26 +16,25 @@ class _CountryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        side: BorderSide.none,
+        side: BorderSide(width: 0.5),
         borderRadius: BorderRadius.circular(4),
       ),
-      color: Theme.of(context).colorScheme.surfaceContainer,
       child: SimulationWizardOptionButton(
         onTap: onTap,
         isSelected: isSelected,
         child: Column(
           children: [
-            const Gap(20),
+            const Gap(10),
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) => CountryFlag(
                   country: country,
-                  height: constraints.maxHeight,
+                  width: constraints.maxWidth * 0.8,
                 ),
               ),
             ),
             SizedBox(
-              height: 40,
+              height: 50,
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Text(

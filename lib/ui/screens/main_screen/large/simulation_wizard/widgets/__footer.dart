@@ -20,7 +20,7 @@ class _FooterState extends State<_Footer> {
       child: ClipRect(
         child: MainMenuCard(
           child: StreamBuilder(
-              stream: selectedOptions.countryStream,
+              stream: selectedOptions.teamStream,
               builder: (context, snapshot) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

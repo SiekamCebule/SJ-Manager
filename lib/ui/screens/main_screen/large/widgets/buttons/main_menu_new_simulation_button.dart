@@ -18,7 +18,7 @@ class MainMenuNewSimulationButton extends StatelessWidget {
             return const Center(
               child: SizedBox(
                 width: 1000,
-                height: 550,
+                height: 650,
                 child: SimulationWizardDialog(),
               ),
             );

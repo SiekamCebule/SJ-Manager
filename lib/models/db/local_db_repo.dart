@@ -138,6 +138,7 @@ class LocalDbRepo with EquatableMixin {
       ];
 
   void dispose() {
+    print('DISPOZE');
     maleJumpers.dispose();
     femaleJumpers.dispose();
     hills.dispose();

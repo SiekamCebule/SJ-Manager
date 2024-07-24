@@ -75,6 +75,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   void dispose() {
     _bodyAnimationController.dispose();
     _copiedDbCubit.close();
+    _copiedDbCubit.dispose();
     _dbChangeStatusCubit.close();
     _itemsTypeCubit.close();
     _selectedIndexesRepo.close();

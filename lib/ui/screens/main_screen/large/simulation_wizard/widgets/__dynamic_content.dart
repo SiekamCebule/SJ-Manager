@@ -32,9 +32,9 @@ class _DynamicContent extends StatelessWidget {
                 updateCanGoForward(false, context);
               }
             }),
-          SimulationWizardScreen.country => _CountryScreen(
+          SimulationWizardScreen.country => _TeamScreen(
               onChange: (country) {
-                context.read<SimulationWizardOptionsRepo>().country = country;
+                context.read<SimulationWizardOptionsRepo>().team = country;
                 if (country != null) {
                   updateCanGoForward(true, context);
                 } else {

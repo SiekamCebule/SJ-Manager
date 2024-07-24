@@ -57,10 +57,6 @@ class EditableDbItemsRepo<T> extends DbItemsRepo<T> {
     _subject.add(_items);
   }
 
-  void dispose() {
-    _subject.close();
-  }
-
   @override
   List<T> get lastItems => items.value;
   @override

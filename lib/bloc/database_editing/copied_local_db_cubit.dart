@@ -136,4 +136,8 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
       fromJson: parameters.fromJson,
     );
   }
+
+  void dispose() {
+    originalDb.dispose();
+  }
 }

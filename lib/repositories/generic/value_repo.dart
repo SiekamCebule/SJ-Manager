@@ -14,6 +14,7 @@ class ValueRepo<T> {
   }
 
   void dispose() {
+    print('VALUEREPO DISPOSE');
     _subject.close();
   }
 

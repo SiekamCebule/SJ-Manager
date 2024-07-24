@@ -34,3 +34,20 @@ extension CountryFactByCountry on Iterable<CountryFacts> {
     return where((facts) => facts.countryCode == countryCode).singleOrNull;
   }
 }
+
+Map<Country, List<Jumper>> jumpersByCountry(
+    Iterable<Jumper> jumpers, Iterable<Country> countries,
+    {bool excludeEmpty = false}) {
+  final map = <Country, List<Jumper>>{};
+  for (var country in countries) {
+    map[country] = [];
+  }
+  for (var jumper in jumpers) {
+    map[jumper.country]!.add(jumper);
+  }
+  if (excludeEmpty) {
+    map.removeWhere((country, jumpers) => jumpers.isEmpty);
+  }
+
+  return map;
+}
