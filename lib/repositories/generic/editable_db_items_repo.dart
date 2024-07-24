@@ -1,5 +1,5 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:sj_manager/repositories/database_editing/db_items_repo.dart';
+import 'package:sj_manager/repositories/generic/db_items_repo.dart';
 
 class EditableDbItemsRepo<T> extends DbItemsRepo<T> {
   EditableDbItemsRepo({
@@ -36,8 +36,9 @@ class EditableDbItemsRepo<T> extends DbItemsRepo<T> {
     _addToStream();
   }
 
-  void setItems(Iterable<T> items) {
-    _items = items.toList();
+  @override
+  void set(Iterable<T> value) {
+    _items = value.toList();
     _addToStream();
   }
 

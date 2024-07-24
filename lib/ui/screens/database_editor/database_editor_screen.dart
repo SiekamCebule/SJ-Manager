@@ -21,7 +21,7 @@ import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/db/hill/hill_type_by_size.dart';
 import 'package:sj_manager/filters/hills/hills_filter.dart';
 import 'package:sj_manager/l10n/hill_parameters_translations.dart';
-import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/country/country.dart';
 import 'package:sj_manager/enums/db_editable_item_type.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';

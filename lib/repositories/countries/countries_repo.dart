@@ -1,6 +1,6 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:sj_manager/models/db/country.dart';
-import 'package:sj_manager/repositories/database_editing/db_items_repo.dart';
+import 'package:sj_manager/models/db/country/country.dart';
+import 'package:sj_manager/repositories/generic/db_items_repo.dart';
 
 class CountriesRepo extends DbItemsRepo<Country> {
   CountriesRepo({List<Country>? initial}) : _countries = initial ?? [] {

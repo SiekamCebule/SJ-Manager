@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -11,15 +12,21 @@ import 'package:sj_manager/bloc/simulation_wizard/linear_navigation_permissions_
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_screen.dart';
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_navigation_cubit.dart';
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_navigation_state.dart';
-import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/country/country.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/models/simulations/enums.dart';
 import 'package:sj_manager/models/simulations/simulation_wizard_options_repo.dart';
+import 'package:sj_manager/repositories/countries/country_facts/country_facts_repo.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
-import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/country_screen/selected_country_caption.dart';
+import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/country_screen/country_title.dart';
+import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/country_screen/stars.dart';
+import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/country_screen/preview_stat_texts.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_menu_card.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/simulation_wizard_option_button.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_menu_text_content_button_body.dart';
+import 'package:sj_manager/utils/country_preview_creator.dart';
+import 'package:sj_manager/utils/db_items.dart';
+import 'package:sj_manager/utils/file_system.dart';
 
 part 'screens/__mode_screen.dart';
 part 'screens/__country_screen.dart';

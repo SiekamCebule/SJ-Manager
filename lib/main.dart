@@ -2,20 +2,22 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/country/country.dart';
+import 'package:sj_manager/models/db/country/country_facts.dart';
 import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
+import 'package:sj_manager/repositories/countries/country_facts/country_facts_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
-import 'package:sj_manager/repositories/database_editing/db_items_json_configuration.dart';
+import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
-import 'package:sj_manager/repositories/country_flags.dart/country_flags_repo.dart';
-import 'package:sj_manager/repositories/country_flags.dart/local_storage_country_flags_repo.dart';
+import 'package:sj_manager/repositories/countries/country_flags/country_flags_repo.dart';
+import 'package:sj_manager/repositories/countries/country_flags/local_storage_country_flags_repo.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
-import 'package:sj_manager/repositories/database_editing/editable_db_items_repo.dart';
+import 'package:sj_manager/repositories/generic/editable_db_items_repo.dart';
 import 'package:sj_manager/setup/set_up_app.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/providers/locale_notifier.dart';
@@ -66,7 +68,7 @@ void main() async {
           RepositoryProvider<CountryFlagsRepo>(
             create: (context) {
               final storageDirectory =
-                  userDataDirectory(pathsCache, 'database/country_flags');
+                  userDataDirectory(pathsCache, 'database/countries/country_flags');
               return LocalStorageCountryFlagsRepo(
                 imagesDirectory: storageDirectory,
                 imagesExtension: 'png',
@@ -79,6 +81,8 @@ void main() async {
               femaleJumpers: EditableDbItemsRepo<FemaleJumper>(),
               hills: EditableDbItemsRepo<Hill>(),
               countries: CountriesRepo(),
+              maleCountryFacts: MaleCountryFactsRepo(),
+              femaleCountryFacts: FemaleCountryFactsRepo(),
             ),
           ),
           RepositoryProvider(create: (context) {
@@ -123,8 +127,10 @@ void main() async {
                 maleJumpers: 'jumpers_male.json',
                 femaleJumpers: 'jumpers_female.json',
                 hills: 'hills.json',
-                countries: 'countries.json',
-                countryFlags: 'country_flags',
+                countries: 'countries/countries.json',
+                countryFlags: 'countries/country_flags',
+                maleCountryFacts: 'countries/country_facts_male.json',
+                femaleCountryFacts: 'countries/country_facts_female.json',
               ),
             ),
             Provider(create: (context) {
@@ -158,6 +164,18 @@ void main() async {
                       json, context.read<LocaleCubit>().languageCode);
                 },
                 toJson: (hill) => {},
+              );
+            }),
+            Provider(create: (context) {
+              return DbItemsJsonConfiguration<MaleCountryFacts>(
+                fromJson: MaleCountryFacts.fromJson,
+                toJson: (facts) => facts.toJson(),
+              );
+            }),
+            Provider(create: (context) {
+              return DbItemsJsonConfiguration<FemaleCountryFacts>(
+                fromJson: FemaleCountryFacts.fromJson,
+                toJson: (facts) => facts.toJson(),
               );
             }),
             Provider.value(

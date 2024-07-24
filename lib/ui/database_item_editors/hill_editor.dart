@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:sj_manager/models/db/hill/typical_wind_direction.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/l10n/hill_parameters_translations.dart';
-import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/country/country.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/hill/hill_profile_type.dart';
 import 'package:sj_manager/models/db/hill/jumps_variability.dart';

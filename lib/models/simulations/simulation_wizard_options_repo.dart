@@ -1,5 +1,5 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/country/country.dart';
 import 'package:sj_manager/models/simulations/enums.dart';
 
 class SimulationWizardOptionsRepo {

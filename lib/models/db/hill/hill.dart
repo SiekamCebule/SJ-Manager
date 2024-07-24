@@ -3,12 +3,13 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/country/country.dart';
 import 'package:sj_manager/models/db/hill/hill_profile_type.dart';
 import 'package:sj_manager/models/db/hill/hill_type_by_size.dart';
 import 'package:sj_manager/models/db/hill/jumps_variability.dart';
 import 'package:sj_manager/models/db/hill/landing_ease.dart';
 import 'package:sj_manager/models/db/hill/typical_wind_direction.dart';
+import 'package:sj_manager/utils/doubles.dart';
 
 part '../../../json/manual_json/hill_json.dart';
 
@@ -70,6 +71,11 @@ class Hill with EquatableMixin {
 
   static Hill fromJson(Json json, {required JsonCountryLoader countryLoader}) {
     return _hillFromJson(json, countryLoader: countryLoader);
+  }
+
+  @override
+  String toString() {
+    return '$locality HS${minimizeDecimalPlaces(hs)}';
   }
 
   @override

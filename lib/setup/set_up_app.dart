@@ -5,12 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
 import 'package:sj_manager/main.dart';
-import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/country/country.dart';
+import 'package:sj_manager/models/db/country/country_facts.dart';
 import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
-import 'package:sj_manager/repositories/database_editing/db_items_json_configuration.dart';
+import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/ui/dialogs/loading_items_failed_dialog.dart';
 import 'package:sj_manager/ui/navigation/routes.dart';
 import 'package:sj_manager/utils/file_system.dart';
@@ -86,6 +87,10 @@ class AppConfigurator {
     await _tryLoadItems<MaleJumper>(dialogTitleText: 'Błąd wczytywania skoczków');
     await _tryLoadItems<FemaleJumper>(dialogTitleText: 'Błąd wczytywania skoczkiń');
     await _tryLoadItems<Hill>(dialogTitleText: 'Błąd wczytywania skoczni');
+    await _tryLoadItems<MaleCountryFacts>(
+        dialogTitleText: 'Błąd wczytywania faktów męskich drużyn');
+    await _tryLoadItems<FemaleCountryFacts>(
+        dialogTitleText: 'Błąd wczytywania faktów żeńskich drużyn');
   }
 
   Future<void> _tryLoadItems<T>({required String dialogTitleText}) async {
@@ -124,7 +129,6 @@ class AppConfigurator {
   }
 
   Future<void> _loadItems<T>() async {
-    if (!_context.mounted) return;
     final parameters = _context.read<DbItemsJsonConfiguration<T>>();
     final loaded = await loadItemsListFromJsonFile(
       file: databaseFile(
@@ -132,6 +136,17 @@ class AppConfigurator {
       fromJson: parameters.fromJson,
     );
     if (!_context.mounted) return;
-    _context.read<LocalDbRepo>().editableByGenericType<T>().setItems(loaded);
+    _context.read<LocalDbRepo>().byType<T>().set(loaded);
   }
+
+  /*Future<void> _loadCountryFacts<T extends CountryFacts>() async {
+    final parameters = _context.read<DbItemsJsonConfiguration<T>>();
+    final loaded = await loadItemsListFromJsonFile(
+      file: databaseFile(
+          _context.read(), _context.read<DbFileSystemEntityNames>().byGenericType<T>()),
+      fromJson: parameters.fromJson,
+    );
+    if (!_context.mounted) return;
+    _context.read<LocalDbRepo>().byType<T>().set(loaded);
+  }*/
 }

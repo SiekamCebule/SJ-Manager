@@ -1,7 +1,7 @@
 import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
 import 'package:sj_manager/models/db/hill/hill_type_by_size.dart';
 import 'package:sj_manager/filters/filter.dart';
-import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/country/country.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 
 abstract class HillsFilter extends Filter<Hill> {

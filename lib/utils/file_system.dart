@@ -44,6 +44,7 @@ Directory userDataDirectory(PlarformSpecificPathsCache pathsCache, String direct
   if (!databaseDir.existsSync()) {
     databaseDir.createSync(recursive: true);
   }
+  if (directoryName.isEmpty) return Directory(databaseDir.path);
   final dir = Directory('${databaseDir.path}/$directoryName');
 
   if (!dir.existsSync()) {
@@ -53,6 +54,7 @@ Directory userDataDirectory(PlarformSpecificPathsCache pathsCache, String direct
 }
 
 Directory databaseDirectory(PlarformSpecificPathsCache pathsCache, String fileName) {
+  if (fileName.isEmpty) return userDataDirectory(pathsCache, 'database');
   return userDataDirectory(pathsCache, 'database/$fileName');
 }
 

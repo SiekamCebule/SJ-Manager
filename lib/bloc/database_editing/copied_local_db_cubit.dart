@@ -7,7 +7,7 @@ import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
-import 'package:sj_manager/repositories/database_editing/db_items_json_configuration.dart';
+import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
 import 'package:path/path.dart' as path;
@@ -30,6 +30,8 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
         femaleJumpers: editableFemaleJumpers,
         hills: editableHills,
         countries: originalDb.countries,
+        maleCountryFacts: originalDb.maleCountryFacts,
+        femaleCountryFacts: originalDb.femaleCountryFacts,
       ),
     );
   }
@@ -45,7 +47,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
   Future<void> _saveChangesByType<T>(BuildContext context) async {
     originalDb
         .editableByGenericType<T>()
-        .setItems(state!.editableByGenericType<T>().lastItems);
+        .set(state!.editableByGenericType<T>().lastItems);
     _saveItemsToJsonByType<T>(
       context: context,
       file: File(context.read<DbFileSystemEntityNames>().byGenericType<T>()),
@@ -96,7 +98,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
         path.basename(context.read<DbFileSystemEntityNames>().maleJumpers),
       ),
     );
-    state!.maleJumpers.setItems(males);
+    state!.maleJumpers.set(males);
     if (!context.mounted) return;
     final females = await _loadItemsFromJsonByType<FemaleJumper>(
       context: context,
@@ -105,7 +107,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
         path.basename(context.read<DbFileSystemEntityNames>().femaleJumpers),
       ),
     );
-    state!.femaleJumpers.setItems(females);
+    state!.femaleJumpers.set(females);
     if (!context.mounted) return;
     final hills = await _loadItemsFromJsonByType<Hill>(
       context: context,
@@ -114,13 +116,15 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
         path.basename(context.read<DbFileSystemEntityNames>().hills),
       ),
     );
-    state!.hills.setItems(hills);
+    state!.hills.set(hills);
 
     emit(LocalDbRepo(
       maleJumpers: state!.maleJumpers,
       femaleJumpers: state!.femaleJumpers,
       hills: state!.hills,
       countries: state!.countries,
+      maleCountryFacts: state!.maleCountryFacts,
+      femaleCountryFacts: state!.femaleCountryFacts,
     ));
   }
 

@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/country/country.dart';
 import 'package:sj_manager/models/db/jumper/jumper_skills.dart';
 import 'package:sj_manager/models/db/sex.dart';
 

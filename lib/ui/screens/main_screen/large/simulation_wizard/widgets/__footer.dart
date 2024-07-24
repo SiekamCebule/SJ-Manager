@@ -45,15 +45,6 @@ class _FooterState extends State<_Footer> {
                             ),
                           );
                         }),
-                    if (navCubitState is InitializedSimulationWizardNavigationState &&
-                        navCubitState.currentScreen == SimulationWizardScreen.country &&
-                        selectedOptions.country != null)
-                      Center(
-                        child: SelectedCountryCaption(
-                          country: selectedOptions.country!,
-                          stars: 5, // TODO: Calculate stars
-                        ),
-                      ),
                     StreamBuilder(
                         stream: navPermissions.canGoForwardStream,
                         builder: (context, snapshot) {

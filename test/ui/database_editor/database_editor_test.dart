@@ -1,10 +1,11 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/bloc/database_editing/database_items_type_cubit.dart';
 import 'package:sj_manager/enums/db_editable_item_type.dart';
-import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/country/country.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/hill/hill_profile_type.dart';
 import 'package:sj_manager/models/db/hill/jumps_variability.dart';
@@ -14,9 +15,10 @@ import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/models/db/jumper/jumper_skills.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
+import 'package:sj_manager/repositories/countries/country_facts/country_facts_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
-import 'package:sj_manager/repositories/database_editing/editable_db_items_repo.dart';
+import 'package:sj_manager/repositories/generic/editable_db_items_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/setup/set_up_app.dart';
 import 'package:sj_manager/ui/app.dart';
@@ -32,6 +34,9 @@ import 'package:sj_manager/ui/theme/app_color_scheme_repo.dart';
 import 'package:sj_manager/ui/theme/app_theme_brightness_repo.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
 
+import '../../local_database/bloc/database_editing_logic_test.mocks.dart';
+
+@GenerateMocks([MaleCountryFactsRepo, FemaleCountryFactsRepo])
 void main() {
   const MethodChannel flutterWindowCloseChannel = MethodChannel('flutter_window_close');
 
@@ -131,6 +136,8 @@ void main() {
                 femaleJumpers: EditableDbItemsRepo<FemaleJumper>(initial: femaleJumpers),
                 hills: EditableDbItemsRepo<Hill>(initial: hills),
                 countries: CountriesRepo(initial: countries),
+                maleCountryFacts: MockMaleCountryFactsRepo(),
+                femaleCountryFacts: MockFemaleCountryFactsRepo(),
               ),
             ),
             RepositoryProvider(create: (context) {

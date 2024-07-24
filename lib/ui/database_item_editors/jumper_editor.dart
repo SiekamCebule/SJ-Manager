@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/l10n/jumper_skills_translations.dart';
-import 'package:sj_manager/models/db/country.dart';
+import 'package:sj_manager/models/db/country/country.dart';
 import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/models/db/jumper/jumper_skills.dart';
 import 'package:sj_manager/models/db/jumper/jumps_consistency.dart';

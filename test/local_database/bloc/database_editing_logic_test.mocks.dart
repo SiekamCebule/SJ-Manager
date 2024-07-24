@@ -6,9 +6,12 @@
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i5;
 import 'package:rxdart/rxdart.dart' as _i2;
-import 'package:sj_manager/models/db/country.dart' as _i4;
+import 'package:sj_manager/models/db/country/country.dart' as _i4;
+import 'package:sj_manager/models/db/country/country_facts.dart' as _i8;
 import 'package:sj_manager/repositories/countries/countries_repo.dart' as _i6;
-import 'package:sj_manager/repositories/database_editing/editable_db_items_repo.dart'
+import 'package:sj_manager/repositories/countries/country_facts/country_facts_repo.dart'
+    as _i7;
+import 'package:sj_manager/repositories/generic/editable_db_items_repo.dart'
     as _i3;
 
 // ignore_for_file: type=lint
@@ -151,10 +154,10 @@ class MockEditableDbItemsRepo<T> extends _i1.Mock
       );
 
   @override
-  void setItems(Iterable<T>? items) => super.noSuchMethod(
+  void set(Iterable<T>? value) => super.noSuchMethod(
         Invocation.method(
-          #setItems,
-          [items],
+          #set,
+          [value],
         ),
         returnValueForMissingStub: null,
       );
@@ -264,6 +267,114 @@ class MockCountriesRepo extends _i1.Mock implements _i6.CountriesRepo {
           ),
         ),
       ) as _i4.Country);
+
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void set(List<_i4.Country>? value) => super.noSuchMethod(
+        Invocation.method(
+          #set,
+          [value],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [MaleCountryFactsRepo].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockMaleCountryFactsRepo extends _i1.Mock
+    implements _i7.MaleCountryFactsRepo {
+  MockMaleCountryFactsRepo() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.ValueStream<List<_i8.MaleCountryFacts>> get items => (super.noSuchMethod(
+        Invocation.getter(#items),
+        returnValue: _FakeValueStream_0<List<_i8.MaleCountryFacts>>(
+          this,
+          Invocation.getter(#items),
+        ),
+      ) as _i2.ValueStream<List<_i8.MaleCountryFacts>>);
+
+  @override
+  List<_i8.MaleCountryFacts> get lastItems => (super.noSuchMethod(
+        Invocation.getter(#lastItems),
+        returnValue: <_i8.MaleCountryFacts>[],
+      ) as List<_i8.MaleCountryFacts>);
+
+  @override
+  int get lastLength => (super.noSuchMethod(
+        Invocation.getter(#lastLength),
+        returnValue: 0,
+      ) as int);
+
+  @override
+  void set(List<_i8.MaleCountryFacts>? value) => super.noSuchMethod(
+        Invocation.method(
+          #set,
+          [value],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [FemaleCountryFactsRepo].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFemaleCountryFactsRepo extends _i1.Mock
+    implements _i7.FemaleCountryFactsRepo {
+  MockFemaleCountryFactsRepo() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.ValueStream<List<_i8.FemaleCountryFacts>> get items =>
+      (super.noSuchMethod(
+        Invocation.getter(#items),
+        returnValue: _FakeValueStream_0<List<_i8.FemaleCountryFacts>>(
+          this,
+          Invocation.getter(#items),
+        ),
+      ) as _i2.ValueStream<List<_i8.FemaleCountryFacts>>);
+
+  @override
+  List<_i8.FemaleCountryFacts> get lastItems => (super.noSuchMethod(
+        Invocation.getter(#lastItems),
+        returnValue: <_i8.FemaleCountryFacts>[],
+      ) as List<_i8.FemaleCountryFacts>);
+
+  @override
+  int get lastLength => (super.noSuchMethod(
+        Invocation.getter(#lastLength),
+        returnValue: 0,
+      ) as int);
+
+  @override
+  void set(List<_i8.FemaleCountryFacts>? value) => super.noSuchMethod(
+        Invocation.method(
+          #set,
+          [value],
+        ),
+        returnValueForMissingStub: null,
+      );
 
   @override
   void dispose() => super.noSuchMethod(

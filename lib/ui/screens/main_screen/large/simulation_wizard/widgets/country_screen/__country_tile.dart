@@ -25,7 +25,7 @@ class _CountryTile extends StatelessWidget {
         isSelected: isSelected,
         child: Column(
           children: [
-            const Gap(30),
+            const Gap(20),
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) => CountryFlag(
@@ -35,7 +35,7 @@ class _CountryTile extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 50,
+              height: 40,
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Text(
