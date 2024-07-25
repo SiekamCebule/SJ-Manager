@@ -19,7 +19,6 @@ import 'package:sj_manager/models/db/team/country_team.dart';
 import 'package:sj_manager/models/simulations/enums.dart';
 import 'package:sj_manager/models/simulations/simulation_wizard_options_repo.dart';
 import 'package:sj_manager/models/db/team/team.dart';
-import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/country_screen/country_title.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/country_screen/preview_stat_texts.dart';
