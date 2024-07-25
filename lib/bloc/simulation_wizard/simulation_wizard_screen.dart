@@ -1,7 +1,7 @@
 enum SimulationWizardScreen {
   mode,
   simulationDepth,
-  country,
+  team,
   otherOptions,
   calendars,
   startDate,

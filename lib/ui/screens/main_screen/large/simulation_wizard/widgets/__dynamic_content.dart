@@ -25,17 +25,17 @@ class _DynamicContent extends StatelessWidget {
         },
         child: switch (screen) {
           SimulationWizardScreen.mode => _ModeScreen(onChange: (mode) {
-              context.read<SimulationWizardOptionsRepo>().mode = mode;
+              context.read<SimulationWizardOptionsRepo>().mode.set(mode);
               if (mode != null) {
                 updateCanGoForward(true, context);
               } else {
                 updateCanGoForward(false, context);
               }
             }),
-          SimulationWizardScreen.country => _TeamScreen(
-              onChange: (country) {
-                context.read<SimulationWizardOptionsRepo>().team = country;
-                if (country != null) {
+          SimulationWizardScreen.team => _TeamScreen(
+              onChange: (team) {
+                context.read<SimulationWizardOptionsRepo>().team.set(team);
+                if (team != null) {
                   updateCanGoForward(true, context);
                 } else {
                   updateCanGoForward(false, context);

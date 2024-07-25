@@ -111,7 +111,7 @@ class AppConfigurator {
     await _tryLoadItems<Hill>(dialogTitleText: 'Błąd wczytywania skoczni');
     await _tryLoadItems<Team>(dialogTitleText: 'Błąd wczytywania zespołów');
 
-    _processCountries();
+    // _processCountries(); // TODO, maybe remove the function and its components
   }
 
   Future<void> _tryLoadItems<T>({required String dialogTitleText}) async {
@@ -155,12 +155,12 @@ class AppConfigurator {
     final noneCountry = repo.none;
     _filterCountriesByTeams();
     _sortCountries();
-    repo.set([noneCountry, ...repo.lastItems]);
+    repo.set([noneCountry, ...repo.last]);
   }
 
   void _filterCountriesByTeams() {
-    final countries = _context.read<LocalDbRepo>().countries.lastItems;
-    final teams = _context.read<LocalDbRepo>().teams.lastItems.cast<CountryTeam>();
+    final countries = _context.read<LocalDbRepo>().countries.last;
+    final teams = _context.read<LocalDbRepo>().teams.last.cast<CountryTeam>();
     final countriesHavingTeam = <Country>{};
     for (var team in teams) {
       if (!countries.contains(team.country)) {
@@ -173,7 +173,7 @@ class AppConfigurator {
   }
 
   void _sortCountries() {
-    final teams = _context.read<LocalDbRepo>().teams.lastItems.cast<CountryTeam>();
+    final teams = _context.read<LocalDbRepo>().teams.last.cast<CountryTeam>();
     final countryStars = {
       for (var team in teams) team.country: team.facts.stars,
     };

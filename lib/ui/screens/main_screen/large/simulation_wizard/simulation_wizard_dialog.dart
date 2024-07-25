@@ -27,6 +27,7 @@ import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widget
 import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_menu_card.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/simulation_wizard_option_button.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_menu_text_content_button_body.dart';
+import 'package:sj_manager/utils/file_dialogs.dart';
 import 'package:sj_manager/utils/team_preview_creator.dart';
 
 part 'screens/__mode_screen.dart';
@@ -66,7 +67,7 @@ class _SimulationWizardDialogState extends State<SimulationWizardDialog>
     scheduleMicrotask(() {
       _navCubit.setUp(screens: [
         SimulationWizardScreen.mode,
-        SimulationWizardScreen.country,
+        SimulationWizardScreen.team,
         SimulationWizardScreen.mode
       ]);
     });

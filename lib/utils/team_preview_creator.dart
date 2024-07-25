@@ -26,7 +26,7 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
 
   @override
   Hill? largestHill(CountryTeam team) {
-    final fromCountry = database.hills.lastItems.fromCountryByCode(team.country.code);
+    final fromCountry = database.hills.last.fromCountryByCode(team.country.code);
     if (fromCountry.isEmpty) return null;
     return fromCountry.reduce((previous, current) {
       return previous.hs > current.hs ? previous : current;
@@ -46,8 +46,7 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
   @override
   Jumper? bestJumper(CountryTeam team) {
     // TODO: Some algorithm
-    final fromCountry =
-        database.maleJumpers.lastItems.fromCountryByCode(team.country.code);
+    final fromCountry = database.maleJumpers.last.fromCountryByCode(team.country.code);
     if (fromCountry.isEmpty) return null;
     return fromCountry.randomElement();
   }
@@ -55,8 +54,7 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
   @override
   Jumper? risingStar(CountryTeam team) {
     // TODO: Some algorithm
-    final fromCountry =
-        database.maleJumpers.lastItems.fromCountryByCode(team.country.code);
+    final fromCountry = database.maleJumpers.last.fromCountryByCode(team.country.code);
     if (fromCountry.isEmpty) return null;
     return fromCountry.first;
   }

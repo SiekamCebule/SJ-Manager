@@ -165,7 +165,7 @@ void main() async {
                 toJson: (hill) => {},
               );
             }),
-            Provider<DbItemsJsonConfiguration<Team>>(create: (context) {
+            Provider(create: (context) {
               return DbItemsJsonConfiguration<Team>(
                 fromJson: (json) => JsonTeamParser(
                         countryLoader:

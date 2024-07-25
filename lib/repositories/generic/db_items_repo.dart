@@ -8,7 +8,7 @@ class DbItemsRepo<T> extends ValueRepo<List<T>> {
   ValueStream<List<T>> get items;
 
   @override
-  List<T> get lastItems => items.value;
+  List<T> get last => items.value;
 
-  int get lastLength => lastItems.length;
+  int get lastLength => last.length;
 }

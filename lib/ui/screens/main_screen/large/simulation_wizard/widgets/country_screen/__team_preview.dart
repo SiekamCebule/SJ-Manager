@@ -42,7 +42,7 @@ class _TeamPreview extends StatelessWidget {
           ),
           const Gap(5),
           PreviewStatTexts(
-            description: 'Rekord krajowy: ',
+            description: 'Rekord: ',
             contentText: recordText,
           ),
           const Gap(5),

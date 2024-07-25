@@ -6,8 +6,7 @@
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:rxdart/rxdart.dart' as _i2;
 import 'package:sj_manager/models/db/team/team.dart' as _i4;
-import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart'
-    as _i3;
+import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart' as _i3;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -22,8 +21,7 @@ import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart'
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeValueStream_0<T> extends _i1.SmartFake
-    implements _i2.ValueStream<T> {
+class _FakeValueStream_0<T> extends _i1.SmartFake implements _i2.ValueStream<T> {
   _FakeValueStream_0(
     Object parent,
     Invocation parentInvocation,
@@ -51,7 +49,7 @@ class MockTeamsRepo extends _i1.Mock implements _i3.TeamsRepo {
       ) as _i2.ValueStream<List<_i4.Team>>);
 
   @override
-  List<_i4.Team> get lastItems => (super.noSuchMethod(
+  List<_i4.Team> get last => (super.noSuchMethod(
         Invocation.getter(#lastItems),
         returnValue: <_i4.Team>[],
       ) as List<_i4.Team>);

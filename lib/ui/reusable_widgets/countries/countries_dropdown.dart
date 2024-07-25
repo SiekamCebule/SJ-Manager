@@ -7,7 +7,7 @@ import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 class CountriesDropdown extends StatefulWidget {
   const CountriesDropdown({
     super.key,
-    required this.countriesApi,
+    required this.countriesRepo,
     required this.onSelected,
     this.firstAsInitial = false,
     this.label,
@@ -16,7 +16,7 @@ class CountriesDropdown extends StatefulWidget {
     this.enabled,
   });
 
-  final CountriesRepo countriesApi;
+  final CountriesRepo countriesRepo;
   final Function(Country?) onSelected;
   final bool firstAsInitial;
   final Widget? label;
@@ -46,7 +46,7 @@ class CountriesDropdownState extends State<CountriesDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    final countries = widget.countriesApi.lastItems;
+    final countries = widget.countriesRepo.last;
     final windowHeight = MediaQuery.of(context).size.height;
     return DropdownMenu<Country>(
       enabled: widget.enabled ?? true,

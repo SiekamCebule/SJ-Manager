@@ -33,7 +33,7 @@ class _ForJumpersState extends State<_ForJumpers> {
         CountriesDropdown(
           width: 220,
           label: Text(translate(context).filterByCountry),
-          countriesApi: countriesRepo,
+          countriesRepo: countriesRepo,
           firstAsInitial: true,
           onSelected: (selected) async {
             _clearSelection();

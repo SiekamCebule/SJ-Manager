@@ -9,8 +9,8 @@ import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/models/db/jumper/jumper_skills.dart';
 import 'package:sj_manager/models/db/jumper/jumps_consistency.dart';
 import 'package:sj_manager/models/db/jumper/landing_style.dart';
-import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/models/db/sex.dart';
+import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
@@ -32,12 +32,14 @@ class JumperEditor extends StatefulWidget {
     this.enableEditingCountry = true,
     this.enableEditingName = true,
     this.enableEditingSurname = true,
+    required this.countriesRepo,
   });
 
   final bool forceUpperCaseOnSurname;
   final bool enableEditingCountry;
   final bool enableEditingSurname;
   final bool enableEditingName;
+  final CountriesRepo countriesRepo;
 
   /// Callback executed when some fields change.
   ///
@@ -145,8 +147,7 @@ class JumperEditorState extends State<JumperEditor> {
                                 enabled: widget.enableEditingCountry,
                                 width: constraints.maxWidth,
                                 key: _countriesDropdownKey,
-                                countriesApi:
-                                    RepositoryProvider.of<LocalDbRepo>(context).countries,
+                                countriesRepo: widget.countriesRepo,
                                 onSelected: (maybeCountry) {
                                   _country = maybeCountry;
                                   _onChange();

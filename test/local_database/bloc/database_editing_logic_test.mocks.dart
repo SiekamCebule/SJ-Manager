@@ -9,10 +9,8 @@ import 'package:rxdart/rxdart.dart' as _i2;
 import 'package:sj_manager/models/db/country/country.dart' as _i4;
 import 'package:sj_manager/models/db/team/team.dart' as _i8;
 import 'package:sj_manager/repositories/countries/countries_repo.dart' as _i6;
-import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart'
-    as _i7;
-import 'package:sj_manager/repositories/generic/editable_db_items_repo.dart'
-    as _i3;
+import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart' as _i7;
+import 'package:sj_manager/repositories/generic/editable_db_items_repo.dart' as _i3;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -27,8 +25,7 @@ import 'package:sj_manager/repositories/generic/editable_db_items_repo.dart'
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeValueStream_0<T1> extends _i1.SmartFake
-    implements _i2.ValueStream<T1> {
+class _FakeValueStream_0<T1> extends _i1.SmartFake implements _i2.ValueStream<T1> {
   _FakeValueStream_0(
     Object parent,
     Invocation parentInvocation,
@@ -62,14 +59,13 @@ class _FakeCountry_2 extends _i1.SmartFake implements _i4.Country {
 /// A class which mocks [EditableDbItemsRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockEditableDbItemsRepo<T> extends _i1.Mock
-    implements _i3.EditableDbItemsRepo<T> {
+class MockEditableDbItemsRepo<T> extends _i1.Mock implements _i3.EditableDbItemsRepo<T> {
   MockEditableDbItemsRepo() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  List<T> get lastItems => (super.noSuchMethod(
+  List<T> get last => (super.noSuchMethod(
         Invocation.getter(#lastItems),
         returnValue: <T>[],
       ) as List<T>);
@@ -233,7 +229,7 @@ class MockCountriesRepo extends _i1.Mock implements _i6.CountriesRepo {
       ) as _i4.Country);
 
   @override
-  List<_i4.Country> get lastItems => (super.noSuchMethod(
+  List<_i4.Country> get last => (super.noSuchMethod(
         Invocation.getter(#lastItems),
         returnValue: <_i4.Country>[],
       ) as List<_i4.Country>);
@@ -305,7 +301,7 @@ class MockTeamsRepo extends _i1.Mock implements _i7.TeamsRepo {
       ) as _i2.ValueStream<List<_i8.Team>>);
 
   @override
-  List<_i8.Team> get lastItems => (super.noSuchMethod(
+  List<_i8.Team> get last => (super.noSuchMethod(
         Invocation.getter(#lastItems),
         returnValue: <_i8.Team>[],
       ) as List<_i8.Team>);

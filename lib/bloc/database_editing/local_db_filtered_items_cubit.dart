@@ -51,7 +51,7 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
 
   int findOriginalIndex(int indexFromFilteredList, DbEditableItemType type) {
     final filteredList = state.byType(type);
-    final originalList = itemsRepo.editableByType(type).lastItems;
+    final originalList = itemsRepo.editableByType(type).last;
     final filteredItem = filteredList[indexFromFilteredList];
     return originalList.indexOf(filteredItem);
   }

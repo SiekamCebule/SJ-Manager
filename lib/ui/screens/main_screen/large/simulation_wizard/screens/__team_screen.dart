@@ -12,34 +12,47 @@ class _TeamScreen extends StatefulWidget {
 }
 
 class _TeamScreenState extends State<_TeamScreen> {
-  late LocalDbRepo _database;
+  // Zrobić dispose() na bazie danych - tutaj lub z poziomu zapisanych opcji wizarda
   late TeamPreviewCreator _teamPreviewCreator;
-  late bool _databaseIsExternal = false; // TODO: Loading external database
 
   var _selectedSex = Sex.male;
   CountryTeam? _selectedTeam;
   late List<CountryTeam> _maleTeams;
   late List<CountryTeam> _femaleTeams;
+  late final StreamSubscription _dbChangesSubscription;
 
   @override
   void initState() {
     widget.onChange(_selectedTeam);
     _setDatabaseToLocal();
-    _teamPreviewCreator = DefaultCountryTeamPreviewCreator(database: _database);
-    _maleTeams = _database.teams.lastItems
-        .cast<CountryTeam>()
-        .where((team) => team.sex == Sex.male)
-        .toList();
-    _femaleTeams = _database.teams.lastItems
-        .cast<CountryTeam>()
-        .where((team) => team.sex == Sex.female)
-        .toList();
+    final db = context.read<SimulationWizardOptionsRepo>().database.last;
+    _teamPreviewCreator = DefaultCountryTeamPreviewCreator(database: db);
+    _dbChangesSubscription =
+        context.read<SimulationWizardOptionsRepo>().database.items.listen((_) {
+      _setUpMaleAndFemaleTeams();
+    });
+    _setUpMaleAndFemaleTeams();
+
     super.initState();
+  }
+
+  void _setUpMaleAndFemaleTeams() {
+    final db = context.read<SimulationWizardOptionsRepo>().database.last;
+    setState(() {
+      _maleTeams = db.teams.last
+          .cast<CountryTeam>()
+          .where((team) => team.sex == Sex.male)
+          .toList();
+      _femaleTeams = db.teams.last
+          .cast<CountryTeam>()
+          .where((team) => team.sex == Sex.female)
+          .toList();
+    });
   }
 
   @override
   void dispose() {
-    _database.dispose();
+    _dbChangesSubscription.cancel();
     super.dispose();
   }
 
@@ -118,19 +131,11 @@ class _TeamScreenState extends State<_TeamScreen> {
 
   void _setDatabaseToLocal() {
     setState(() {
-      _database = context.read<LocalDbRepo>();
-      _databaseIsExternal = false;
+      context
+          .read<SimulationWizardOptionsRepo>()
+          .database
+          .set(context.read<LocalDbRepo>());
+      context.read<SimulationWizardOptionsRepo>().databaseIsExternal.set(false);
     });
   }
-
-  Future<void> _loadExternalDatabase(Directory directory) async {
-    _database = await LocalDbRepo.fromDirectory(
-      directory,
-      context: context,
-      teamFromJson: context.read<DbItemsJsonConfiguration<Team>>().fromJson,
-    );
-  }
-
-  // wiecej na text
-  // ogolnie zmniejszyc
 }

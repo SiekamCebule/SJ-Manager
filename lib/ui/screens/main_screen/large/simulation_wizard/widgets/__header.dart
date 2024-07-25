@@ -46,7 +46,7 @@ class _Header extends StatelessWidget {
     return switch (screen) {
       SimulationWizardScreen.mode => "Wybierz tryb rozgrywki",
       SimulationWizardScreen.calendars => "Wybierz kalendarze",
-      SimulationWizardScreen.country => "Wybierz swój kraj",
+      SimulationWizardScreen.team => "Wybierz swój kraj",
       SimulationWizardScreen.formGenerating => "Skonfiguruj generator formy",
       SimulationWizardScreen.otherOptions => "Przyjrzyj się innym opcjom",
       SimulationWizardScreen.simulationDepth => "Wybierz głębię symulacji",

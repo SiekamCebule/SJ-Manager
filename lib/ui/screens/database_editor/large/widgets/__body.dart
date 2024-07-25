@@ -34,7 +34,7 @@ class _BodyState extends State<_Body> {
           final singleSelectedItem = filteredByType.elementAt(index);
           _fillEditorBySingleSelected(singleSelectedItem);
         } else {
-          final singleSelectedItem = originalByType.lastItems.elementAt(context
+          final singleSelectedItem = originalByType.last.elementAt(context
               .read<LocalDbFilteredItemsCubit>()
               .findOriginalIndex(index, itemsType));
           _fillEditorBySingleSelected(singleSelectedItem);

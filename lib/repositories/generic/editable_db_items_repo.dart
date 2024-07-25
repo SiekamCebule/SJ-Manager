@@ -58,7 +58,7 @@ class EditableDbItemsRepo<T> extends DbItemsRepo<T> {
   }
 
   @override
-  List<T> get lastItems => items.value;
+  List<T> get last => items.value;
   @override
   ValueStream<List<T>> get items => _subject.stream;
 }

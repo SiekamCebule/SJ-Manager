@@ -28,7 +28,7 @@ class JsonCountryLoaderByCode implements JsonCountryLoader<String> {
   @override
   Country load(String code) {
     try {
-      return repo.lastItems
+      return repo.last
           .singleWhere((country) => country.code.toLowerCase() == code.toLowerCase());
     } on StateError {
       throw CountryByCodeNotFoundError(countryCode: code);

@@ -14,10 +14,18 @@ class ValueRepo<T> {
   }
 
   void dispose() {
-    print('VALUEREPO DISPOSE');
+    print('ValueRepo dispose()');
     _subject.close();
   }
 
   ValueStream<T> get items => _subject.stream;
-  T get lastItems => items.value;
+  T get last => items.value;
+}
+
+class NullableValueRepo<T> extends ValueRepo<T?> {
+  NullableValueRepo({T? initial, bool init = true}) {
+    if (init) {
+      _subject.add(initial);
+    }
+  }
 }

@@ -37,10 +37,12 @@ class MainMenuContinueButton extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    SvgPicture.network(
-                      'https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Bulgaria.svg',
+                    const CountryFlag(
+                      country: Country(
+                        code: 'bg',
+                        name: 'Bułgaria',
+                      ),
                       height: UiMainMenuConstants.continueButtonSimulationInfoIconSize,
-                      fit: BoxFit.fitHeight,
                     ),
                     const Gap(
                       UiMainMenuConstants.continueButtonSimulationInfoVerticalGap,

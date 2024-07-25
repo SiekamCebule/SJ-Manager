@@ -9,7 +9,7 @@ import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
 import 'package:sj_manager/models/db/team/team.dart';
 import 'package:sj_manager/repositories/generic/db_items_repo.dart';
 
-class TeamsRepo extends DbItemsRepo<Team> {
+class TeamsRepo<T extends Team> extends DbItemsRepo<T> {
   TeamsRepo({super.initial});
 
   static Future<TeamsRepo> fromDirectory(Directory dir,

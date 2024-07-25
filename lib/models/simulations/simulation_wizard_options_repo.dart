@@ -1,21 +1,24 @@
-import 'package:rxdart/rxdart.dart';
-import 'package:sj_manager/models/simulations/enums.dart';
+import 'package:async/async.dart';
+import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/models/db/team/team.dart';
+import 'package:sj_manager/models/simulations/enums.dart';
+import 'package:sj_manager/repositories/generic/value_repo.dart';
 
 class SimulationWizardOptionsRepo {
-  SimulationWizardOptionsRepo();
-
-  final _modeSubject = BehaviorSubject<SimulationMode?>.seeded(null);
-  ValueStream<SimulationMode?> get modeStream => _modeSubject.stream;
-  SimulationMode? get mode => modeStream.value;
-  set mode(SimulationMode? value) {
-    _modeSubject.add(value);
+  SimulationWizardOptionsRepo() {
+    _changes = StreamGroup.merge([
+      mode.items,
+      team.items,
+      database.items,
+      databaseIsExternal.items,
+    ]);
   }
 
-  final _teamSubject = BehaviorSubject<Team?>.seeded(null);
-  ValueStream<Team?> get teamStream => _teamSubject.stream;
-  Team? get team => teamStream.value;
-  set team(Team? value) {
-    _teamSubject.add(value);
-  }
+  final mode = NullableValueRepo<SimulationMode?>(initial: null, init: true);
+  final team = NullableValueRepo<Team?>(initial: null, init: true);
+  final database = ValueRepo<LocalDbRepo>();
+  final databaseIsExternal = ValueRepo<bool>(initial: false);
+
+  late final Stream<void> _changes;
+  Stream<void> get changes => _changes;
 }

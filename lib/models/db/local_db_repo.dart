@@ -32,7 +32,7 @@ class LocalDbRepo with EquatableMixin {
   final EditableDbItemsRepo<FemaleJumper> femaleJumpers;
   final EditableDbItemsRepo<Hill> hills;
   final CountriesRepo countries;
-  final TeamsRepo teams;
+  final TeamsRepo<Team> teams;
 
   EditableDbItemsRepo<dynamic> editableByType(DbEditableItemType type) {
     return switch (type) {
@@ -59,7 +59,7 @@ class LocalDbRepo with EquatableMixin {
   }
 
   static Future<LocalDbRepo> fromDirectory(Directory dir,
-      {required BuildContext context, required FromJson<Team> teamFromJson}) async {
+      {required BuildContext context}) async {
     final dbFsEntityNames = context.read<DbFileSystemEntityNames>();
     File getFile(String fileName) => File('${dir.path}/$fileName');
 
@@ -90,14 +90,15 @@ class LocalDbRepo with EquatableMixin {
     final teams = await TeamsRepo.fromDirectory(
       dir,
       context: context,
-      fromJson: teamFromJson,
+      fromJson: context.read<DbItemsJsonConfiguration<Team>>().fromJson,
     );
     return LocalDbRepo(
-        maleJumpers: maleJumpers,
-        femaleJumpers: femaleJumpers,
-        hills: hills,
-        countries: countries,
-        teams: teams);
+      maleJumpers: maleJumpers,
+      femaleJumpers: femaleJumpers,
+      hills: hills,
+      countries: countries,
+      teams: TeamsRepo<Team>(initial: teams.last.cast()),
+    );
   }
 
   LocalDbRepo copyWith({
@@ -105,7 +106,7 @@ class LocalDbRepo with EquatableMixin {
     EditableDbItemsRepo<FemaleJumper>? femaleJumpers,
     EditableDbItemsRepo<Hill>? hills,
     CountriesRepo? countries,
-    TeamsRepo? teams,
+    TeamsRepo<Team>? teams,
   }) {
     return LocalDbRepo(
       maleJumpers: maleJumpers ?? this.maleJumpers,
@@ -125,7 +126,7 @@ class LocalDbRepo with EquatableMixin {
       ];
 
   void dispose() {
-    print('DISPOZE');
+    print('LocalDbRepo dispose()');
     maleJumpers.dispose();
     femaleJumpers.dispose();
     hills.dispose();

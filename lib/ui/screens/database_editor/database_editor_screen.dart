@@ -25,10 +25,12 @@ import 'package:sj_manager/models/db/country/country.dart';
 import 'package:sj_manager/enums/db_editable_item_type.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
+import 'package:sj_manager/models/db/sex.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
+import 'package:sj_manager/repositories/generic/value_repo.dart';
 import 'package:sj_manager/ui/assets/icons.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
@@ -45,6 +47,7 @@ import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropiate_d
 import 'package:sj_manager/ui/database_item_editors/jumper_editor.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
 import 'package:sj_manager/utils/file_system.dart';
+import 'package:sj_manager/utils/filtering_countries.dart';
 import 'package:sj_manager/utils/single_where_type.dart';
 
 part 'large/__large.dart';

@@ -21,6 +21,7 @@ class _AppropiateItemEditorState extends State<_AppropiateItemEditor> {
   @override
   Widget build(BuildContext context) {
     final filtersRepo = context.watch<DbFiltersRepo>();
+    context.watch<ValueRepo<_SelectedTabIndex>>();
 
     return StreamBuilder(
         stream: filtersRepo.byType(context.watch<DatabaseItemsTypeCubit>().state),
@@ -44,6 +45,7 @@ class _AppropiateItemEditorState extends State<_AppropiateItemEditor> {
                   enableEditingName: !searchActive,
                   enableEditingSurname: !searchActive,
                   enableEditingCountry: !countryFilterActive,
+                  countriesRepo: context.read(),
                 );
               }
             case DbEditableItemType.femaleJumper:
@@ -63,6 +65,7 @@ class _AppropiateItemEditorState extends State<_AppropiateItemEditor> {
                   enableEditingName: !searchActive,
                   enableEditingSurname: !searchActive,
                   enableEditingCountry: !countryFilterActive,
+                  countriesRepo: context.read(),
                 );
               }
             case DbEditableItemType.hill:
@@ -87,6 +90,7 @@ class _AppropiateItemEditorState extends State<_AppropiateItemEditor> {
                   enableEditingLocality: !searchActive,
                   enableEditingDimensions: !sizeFilterActive,
                   enableEditingCountry: !countryFilterActive,
+                  countriesRepo: context.read(),
                 );
               }
           }

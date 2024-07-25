@@ -1,5 +1,7 @@
 part of '../database_editor_screen.dart';
 
+extension type _SelectedTabIndex(int index) {}
+
 class _Large extends StatefulWidget {
   const _Large();
 
@@ -18,9 +20,14 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   late final DatabaseItemsTypeCubit _itemsTypeCubit;
   late final LocalDbFilteredItemsCubit _filteredItemsCubit;
 
+  late CountriesRepo _countriesForMales;
+  late CountriesRepo _countriesForFemales;
+  late CountriesRepo _countriesForBothSexes;
+  late CountriesRepo _currentCountries;
+
   final _initialized = ValueNotifier<bool>(false);
   var _closed = false;
-  var _currentTabIndex = 0;
+  var _currentTabIndex = _SelectedTabIndex(0);
 
   @override
   void initState() {
@@ -34,6 +41,23 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       _initializeRepos();
       await _initializeCubits();
       _initialized.value = true;
+
+      _countriesForMales = CountriesRepo(
+          initial: countriesHavingTeam(
+        countryTeamsBySex(
+            teamsByStars(_copiedDbCubit.state!.teams.last.cast()), Sex.male),
+      ));
+      _countriesForFemales = CountriesRepo(
+          initial: countriesHavingTeam(
+        countryTeamsBySex(
+            teamsByStars(_copiedDbCubit.state!.teams.last.cast()), Sex.female),
+      ));
+      _countriesForBothSexes = CountriesRepo(
+          initial: {
+        ..._countriesForMales.last,
+        ..._countriesForFemales.last,
+      }.toList());
+      _updateCountries();
     });
 
     FlutterWindowClose.setWindowShouldCloseHandler(() async {
@@ -80,6 +104,9 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     _itemsTypeCubit.close();
     _selectedIndexesRepo.close();
     _filtersRepo.close();
+    _countriesForMales.dispose();
+    _countriesForFemales.dispose();
+    _countriesForBothSexes.dispose();
     FlutterWindowClose.setWindowShouldCloseHandler(null);
     super.dispose();
   }
@@ -101,6 +128,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    print('build()');
     return ValueListenableBuilder(
       valueListenable: _initialized,
       builder: (context, prepared, child) {
@@ -115,6 +143,9 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                 providers: [
                   RepositoryProvider.value(value: _filtersRepo),
                   RepositoryProvider.value(value: _selectedIndexesRepo),
+                  RepositoryProvider(
+                    create: (context) => ValueRepo(initial: _currentTabIndex),
+                  )
                 ],
                 child: MultiBlocProvider(
                   providers: [
@@ -128,121 +159,125 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                     context.watch<ChangeStatusCubit>();
                     context.watch<DatabaseItemsTypeCubit>();
                     context.watch<LocalDbFilteredItemsCubit>();
-                    return PopScope(
-                      canPop: false,
-                      onPopInvoked: (didPop) async {
-                        if (didPop || _closed) {
-                          return;
-                        } else if (!_dbChangeStatusCubit.state) {
-                          Navigator.pop(context);
-                          return;
-                        }
-                        String? action = await _showSaveChangesDialog();
-                        bool shouldClose = await _shouldCloseAfterDialog(action);
-                        if (action == 'yes') {
-                          if (!context.mounted) return;
-                          await _copiedDbCubit.saveChangesToOriginalRepos(context);
-                        }
-                        if (shouldClose) {
-                          _closed = true;
-                          if (!context.mounted) return;
-                          router.pop(context);
-                        }
-                      },
-                      child: StreamBuilder<Object>(
-                          stream: StreamGroup.merge([
-                            _filtersRepo.byType(_itemsTypeCubit.state),
-                            _selectedIndexesRepo.selectedIndexes,
-                          ]),
-                          builder: (context, snapshot) {
-                            final selectedIndexes = _selectedIndexesRepo.state;
-                            final shouldShowFabs = !_filtersRepo.hasValidFilter;
-                            final shouldShowAddFab = selectedIndexes.length <= 1;
-                            final shouldShowRemoveFab = selectedIndexes.isNotEmpty;
+                    print('Builder rebuild');
+                    return RepositoryProvider.value(
+                      value: _currentCountries,
+                      child: PopScope(
+                        canPop: false,
+                        onPopInvoked: (didPop) async {
+                          if (didPop || _closed) {
+                            return;
+                          } else if (!_dbChangeStatusCubit.state) {
+                            Navigator.pop(context);
+                            return;
+                          }
+                          String? action = await _showSaveChangesDialog();
+                          bool shouldClose = await _shouldCloseAfterDialog(action);
+                          if (action == 'yes') {
+                            if (!context.mounted) return;
+                            await _copiedDbCubit.saveChangesToOriginalRepos(context);
+                          }
+                          if (shouldClose) {
+                            _closed = true;
+                            if (!context.mounted) return;
+                            router.pop(context);
+                          }
+                        },
+                        child: StreamBuilder<Object>(
+                            stream: StreamGroup.merge([
+                              _filtersRepo.byType(_itemsTypeCubit.state),
+                              _selectedIndexesRepo.selectedIndexes,
+                            ]),
+                            builder: (context, snapshot) {
+                              final selectedIndexes = _selectedIndexesRepo.state;
+                              final shouldShowFabs = !_filtersRepo.hasValidFilter;
+                              final shouldShowAddFab = selectedIndexes.length <= 1;
+                              final shouldShowRemoveFab = selectedIndexes.isNotEmpty;
 
-                            const fabsGap =
-                                Gap(UiDatabaseEditorConstants.verticalSpaceBetweenFabs);
+                              const fabsGap =
+                                  Gap(UiDatabaseEditorConstants.verticalSpaceBetweenFabs);
 
-                            return Scaffold(
-                              appBar: const _AppBar(),
-                              bottomNavigationBar: const _BottomAppBar(),
-                              body: Row(
-                                children: [
-                                  fabsGap,
-                                  AnimatedVisibility(
-                                    duration: Durations.short3,
-                                    curve: Curves.easeIn,
-                                    visible: shouldShowFabs,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        fabsGap,
-                                        AnimatedVisibility(
-                                          duration: Durations.short3,
-                                          curve: Curves.easeIn,
-                                          visible: shouldShowAddFab,
-                                          child: const _AddFab(),
-                                        ),
-                                        fabsGap,
-                                        AnimatedVisibility(
-                                          duration: Durations.short3,
-                                          curve: Curves.easeIn,
-                                          visible: shouldShowRemoveFab,
-                                          child: const _RemoveFab(),
-                                        ),
-                                      ],
+                              return Scaffold(
+                                appBar: const _AppBar(),
+                                bottomNavigationBar: const _BottomAppBar(),
+                                body: Row(
+                                  children: [
+                                    fabsGap,
+                                    AnimatedVisibility(
+                                      duration: Durations.short3,
+                                      curve: Curves.easeIn,
+                                      visible: shouldShowFabs,
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          fabsGap,
+                                          AnimatedVisibility(
+                                            duration: Durations.short3,
+                                            curve: Curves.easeIn,
+                                            visible: shouldShowAddFab,
+                                            child: const _AddFab(),
+                                          ),
+                                          fabsGap,
+                                          AnimatedVisibility(
+                                            duration: Durations.short3,
+                                            curve: Curves.easeIn,
+                                            visible: shouldShowRemoveFab,
+                                            child: const _RemoveFab(),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  const Gap(UiDatabaseEditorConstants.gapBetweenFabs),
-                                  DefaultTabController(
-                                    length: 3,
-                                    child: Expanded(
-                                      child: Center(
-                                        child: Column(
-                                          children: [
-                                            TabBar(
-                                              tabs: [
-                                                Tab(
-                                                  text:
-                                                      translate(context).maleCompetitiors,
-                                                  icon: const Icon(Symbols.male),
-                                                ),
-                                                Tab(
-                                                  text: translate(context)
-                                                      .femaleCompetitors,
-                                                  icon: const Icon(Symbols.female),
-                                                ),
-                                                Tab(
-                                                  text: translate(context).hills,
-                                                  icon: const ImageIcon(hillIcon),
-                                                ),
-                                              ],
-                                              onTap: _onChangeTab,
-                                            ),
-                                            Expanded(
-                                              child: Builder(
-                                                builder: (context) {
-                                                  final opacity = CurvedAnimation(
-                                                    parent: _bodyAnimationController,
-                                                    curve: Curves.easeIn,
-                                                  );
-                                                  return FadeTransition(
-                                                    opacity: opacity,
-                                                    child: const _Body(),
-                                                  );
-                                                },
+                                    const Gap(UiDatabaseEditorConstants.gapBetweenFabs),
+                                    DefaultTabController(
+                                      length: 3,
+                                      child: Expanded(
+                                        child: Center(
+                                          child: Column(
+                                            children: [
+                                              TabBar(
+                                                tabs: [
+                                                  Tab(
+                                                    text: translate(context)
+                                                        .maleCompetitiors,
+                                                    icon: const Icon(Symbols.male),
+                                                  ),
+                                                  Tab(
+                                                    text: translate(context)
+                                                        .femaleCompetitors,
+                                                    icon: const Icon(Symbols.female),
+                                                  ),
+                                                  Tab(
+                                                    text: translate(context).hills,
+                                                    icon: const ImageIcon(hillIcon),
+                                                  ),
+                                                ],
+                                                onTap: _onChangeTab,
                                               ),
-                                            ),
-                                          ],
+                                              Expanded(
+                                                child: Builder(
+                                                  builder: (context) {
+                                                    final opacity = CurvedAnimation(
+                                                      parent: _bodyAnimationController,
+                                                      curve: Curves.easeIn,
+                                                    );
+                                                    return FadeTransition(
+                                                      opacity: opacity,
+                                                      child: const _Body(),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
+                                  ],
+                                ),
+                              );
+                            }),
+                      ),
                     );
                   }),
                 ),
@@ -259,13 +294,23 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   }
 
   Future<void> _onChangeTab(int index) async {
-    _selectedIndexesRepo.clearSelection();
-    _filtersRepo.clear();
-    _itemsTypeCubit.select(DbEditableItemType.fromIndex(index));
-    if (index != _currentTabIndex) {
+    if (_currentTabIndex.index != index) {
+      _selectedIndexesRepo.clearSelection();
+      _filtersRepo.clear();
+      _itemsTypeCubit.select(DbEditableItemType.fromIndex(index));
+      _currentTabIndex = _SelectedTabIndex(index);
+      _updateCountries();
       await _animateBodyFromZero();
-      _currentTabIndex = index;
     }
+  }
+
+  void _updateCountries() {
+    _currentCountries = switch (_currentTabIndex) {
+      0 => _countriesForMales,
+      1 => _countriesForFemales,
+      2 => _countriesForBothSexes,
+      _ => throw StateError('Invalid tab index'),
+    };
   }
 
   Future<void> _animateBodyFromZero() async {

@@ -44,9 +44,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
   }
 
   Future<void> _saveChangesByType<T>(BuildContext context) async {
-    originalDb
-        .editableByGenericType<T>()
-        .set(state!.editableByGenericType<T>().lastItems);
+    originalDb.editableByGenericType<T>().set(state!.editableByGenericType<T>().last);
     _saveItemsToJsonByType<T>(
       context: context,
       file: File(context.read<DbFileSystemEntityNames>().byGenericType<T>()),
@@ -84,55 +82,16 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
     final parameters = context.read<DbItemsJsonConfiguration<T>>();
     await saveItemsListToJsonFile(
       file: file,
-      items: state!.editableByGenericType<T>().lastItems,
+      items: state!.editableByGenericType<T>().last,
       toJson: parameters.toJson,
     );
   }
 
   Future<void> loadExternal(BuildContext context, Directory directory) async {
-    final males = await _loadItemsFromJsonByType<MaleJumper>(
+    emit(await LocalDbRepo.fromDirectory(
+      directory,
       context: context,
-      file: fileInDirectory(
-        directory,
-        path.basename(context.read<DbFileSystemEntityNames>().maleJumpers),
-      ),
-    );
-    state!.maleJumpers.set(males);
-    if (!context.mounted) return;
-    final females = await _loadItemsFromJsonByType<FemaleJumper>(
-      context: context,
-      file: fileInDirectory(
-        directory,
-        path.basename(context.read<DbFileSystemEntityNames>().femaleJumpers),
-      ),
-    );
-    state!.femaleJumpers.set(females);
-    if (!context.mounted) return;
-    final hills = await _loadItemsFromJsonByType<Hill>(
-      context: context,
-      file: fileInDirectory(
-        directory,
-        path.basename(context.read<DbFileSystemEntityNames>().hills),
-      ),
-    );
-    state!.hills.set(hills);
-
-    emit(LocalDbRepo(
-      maleJumpers: state!.maleJumpers,
-      femaleJumpers: state!.femaleJumpers,
-      hills: state!.hills,
-      countries: state!.countries,
-      teams: state!.teams,
     ));
-  }
-
-  Future<List<T>> _loadItemsFromJsonByType<T>(
-      {required BuildContext context, required File file}) async {
-    final parameters = context.read<DbItemsJsonConfiguration<T>>();
-    return await loadItemsListFromJsonFile(
-      file: file,
-      fromJson: parameters.fromJson,
-    );
   }
 
   void dispose() {

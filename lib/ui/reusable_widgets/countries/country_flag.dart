@@ -25,7 +25,7 @@ class CountryFlag extends StatelessWidget {
 
     final imageFit = width != null ? BoxFit.fitWidth : BoxFit.fitHeight;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(circularBorderRadius!),
+      borderRadius: BorderRadius.circular(circularBorderRadius),
       child: countryFlagsRepoExists
           ? Image(
               image: flagsRepo.imageData(country),

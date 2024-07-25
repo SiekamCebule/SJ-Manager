@@ -9,7 +9,7 @@ import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/hill/hill_profile_type.dart';
 import 'package:sj_manager/models/db/hill/jumps_variability.dart';
 import 'package:sj_manager/models/db/hill/landing_ease.dart';
-import 'package:sj_manager/models/db/local_db_repo.dart';
+import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
@@ -34,6 +34,7 @@ class HillEditor extends StatefulWidget {
     this.enableEditingLocality = true,
     this.enableEditingName = true,
     this.enableEditingCountry = true,
+    required this.countriesRepo,
   });
 
   final Function(Hill? current) onChange;
@@ -41,6 +42,7 @@ class HillEditor extends StatefulWidget {
   final bool enableEditingLocality;
   final bool enableEditingName;
   final bool enableEditingCountry;
+  final CountriesRepo countriesRepo;
 
   @override
   State<HillEditor> createState() => HillEditorState();
@@ -164,8 +166,7 @@ class HillEditorState extends State<HillEditor> {
                               enabled: widget.enableEditingCountry,
                               width: constraints.maxWidth,
                               key: _countriesDropdownKey,
-                              countriesApi:
-                                  RepositoryProvider.of<LocalDbRepo>(context).countries,
+                              countriesRepo: widget.countriesRepo,
                               onSelected: (maybeCountry) {
                                 _country = maybeCountry;
                                 widget.onChange(_constructAndCacheHill());
