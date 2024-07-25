@@ -15,7 +15,7 @@ import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/models/db/jumper/jumper_skills.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
-import 'package:sj_manager/repositories/countries/country_facts/country_facts_repo.dart';
+import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/repositories/generic/editable_db_items_repo.dart';
@@ -36,7 +36,7 @@ import 'package:sj_manager/ui/theme/theme_cubit.dart';
 
 import '../../local_database/bloc/database_editing_logic_test.mocks.dart';
 
-@GenerateMocks([MaleCountryFactsRepo, FemaleCountryFactsRepo])
+@GenerateMocks([TeamsRepo])
 void main() {
   const MethodChannel flutterWindowCloseChannel = MethodChannel('flutter_window_close');
 
@@ -136,8 +136,7 @@ void main() {
                 femaleJumpers: EditableDbItemsRepo<FemaleJumper>(initial: femaleJumpers),
                 hills: EditableDbItemsRepo<Hill>(initial: hills),
                 countries: CountriesRepo(initial: countries),
-                maleCountryFacts: MockMaleCountryFactsRepo(),
-                femaleCountryFacts: MockFemaleCountryFactsRepo(),
+                teams: MockTeamsRepo(),
               ),
             ),
             RepositoryProvider(create: (context) {

@@ -11,14 +11,13 @@ import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
-import 'package:sj_manager/repositories/countries/country_facts/country_facts_repo.dart';
+import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
 import 'package:sj_manager/repositories/generic/editable_db_items_repo.dart';
 
 import 'database_editing_logic_test.mocks.dart';
 
-@GenerateMocks(
-    [EditableDbItemsRepo, CountriesRepo, MaleCountryFactsRepo, FemaleCountryFactsRepo])
+@GenerateMocks([EditableDbItemsRepo, CountriesRepo, TeamsRepo])
 void main() {
   group(LocalDbFilteredItemsCubit, () {
     late DbFiltersRepo filtersRepo;
@@ -34,8 +33,7 @@ void main() {
         femaleJumpers: MockEditableDbItemsRepo(),
         hills: MockEditableDbItemsRepo(),
         countries: MockCountriesRepo(),
-        maleCountryFacts: MockMaleCountryFactsRepo(),
-        femaleCountryFacts: MockFemaleCountryFactsRepo(),
+        teams: MockTeamsRepo(),
       );
     });
     test('filtering', () async {

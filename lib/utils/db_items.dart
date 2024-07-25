@@ -1,5 +1,4 @@
 import 'package:sj_manager/models/db/country/country.dart';
-import 'package:sj_manager/models/db/country/country_facts.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/jumper/jumper.dart';
 
@@ -26,12 +25,6 @@ extension HillByCountry on Iterable<Hill> {
 
   Iterable<Hill> fromCountryByCode(String countryCode) {
     return where((hill) => hill.country.code == countryCode);
-  }
-}
-
-extension CountryFactByCountry on Iterable<CountryFacts> {
-  CountryFacts? byCountryCode(String countryCode) {
-    return where((facts) => facts.countryCode == countryCode).singleOrNull;
   }
 }
 

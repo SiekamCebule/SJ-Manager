@@ -7,7 +7,6 @@ class MainMenuNewSimulationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return MainMenuCard(
       onTap: () async {
-        // TODO: Show overlay and handle everything
         // TODO: Add dialog dimensions to UI constants
         final shouldCreateSimulation = await showGeneralDialog<bool>(
           context: context,

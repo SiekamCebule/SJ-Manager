@@ -6,11 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/db/country/country.dart';
-import 'package:sj_manager/models/db/country/country_facts.dart';
 import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
+import 'package:sj_manager/models/db/team/country_team.dart';
+import 'package:sj_manager/models/db/team/team.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/ui/dialogs/loading_items_failed_dialog.dart';
 import 'package:sj_manager/ui/navigation/routes.dart';
@@ -64,6 +65,27 @@ class AppConfigurator {
     if (!await flagsDir.exists()) {
       await copyAssetsDir('defaults/country_flags', flagsDir);
     }
+
+    final forMaleJumpers = await _createFileIfNotExists<MaleJumper>();
+    if (forMaleJumpers.$2 == false) await forMaleJumpers.$1.writeAsString('[]');
+
+    final forFemaleJumpers = await _createFileIfNotExists<FemaleJumper>();
+    if (forFemaleJumpers.$2 == false) await forFemaleJumpers.$1.writeAsString('[]');
+
+    final forHills = await _createFileIfNotExists<Hill>();
+    if (forHills.$2 == false) await forHills.$1.writeAsString('[]');
+
+    final forTeams = await _createFileIfNotExists<Team>();
+    if (forTeams.$2 == false) await forTeams.$1.writeAsString('[]');
+  }
+
+  Future<(File, bool)> _createFileIfNotExists<T>() async {
+    final file = databaseFile(
+        _context.read(), _context.read<DbFileSystemEntityNames>().byGenericType<T>());
+    if (!await file.exists()) {
+      return (await file.create(recursive: true), false);
+    }
+    return (file, true);
   }
 
   Future<void> loadDatabase() async {
@@ -87,10 +109,9 @@ class AppConfigurator {
     await _tryLoadItems<MaleJumper>(dialogTitleText: 'Błąd wczytywania skoczków');
     await _tryLoadItems<FemaleJumper>(dialogTitleText: 'Błąd wczytywania skoczkiń');
     await _tryLoadItems<Hill>(dialogTitleText: 'Błąd wczytywania skoczni');
-    await _tryLoadItems<MaleCountryFacts>(
-        dialogTitleText: 'Błąd wczytywania faktów męskich drużyn');
-    await _tryLoadItems<FemaleCountryFacts>(
-        dialogTitleText: 'Błąd wczytywania faktów żeńskich drużyn');
+    await _tryLoadItems<Team>(dialogTitleText: 'Błąd wczytywania zespołów');
+
+    _processCountries();
   }
 
   Future<void> _tryLoadItems<T>({required String dialogTitleText}) async {
@@ -124,8 +145,50 @@ class AppConfigurator {
       fromJson: parameters.fromJson,
     );
     if (!_context.mounted) return;
-    _context.read<LocalDbRepo>().countries.setCountries(
-        countries.map((c) => c.copyWith(code: c.code.toLowerCase())).toList());
+    final countriesWithLowerCaseCodes =
+        countries.map((c) => c.copyWith(code: c.code.toLowerCase())).toList();
+    _context.read<LocalDbRepo>().countries.set(countriesWithLowerCaseCodes);
+  }
+
+  void _processCountries() {
+    final repo = _context.read<LocalDbRepo>().countries;
+    final noneCountry = repo.none;
+    _filterCountriesByTeams();
+    _sortCountries();
+    repo.set([noneCountry, ...repo.lastItems]);
+  }
+
+  void _filterCountriesByTeams() {
+    final countries = _context.read<LocalDbRepo>().countries.lastItems;
+    final teams = _context.read<LocalDbRepo>().teams.lastItems.cast<CountryTeam>();
+    final countriesHavingTeam = <Country>{};
+    for (var team in teams) {
+      if (!countries.contains(team.country)) {
+        throw StateError(
+            'Team has country, which is not contained in loaded countries list (team\'s country: ${team.country})');
+      }
+      countriesHavingTeam.add(team.country);
+    }
+    _context.read<LocalDbRepo>().countries.set(countriesHavingTeam.toList());
+  }
+
+  void _sortCountries() {
+    final teams = _context.read<LocalDbRepo>().teams.lastItems.cast<CountryTeam>();
+    final countryStars = {
+      for (var team in teams) team.country: team.facts.stars,
+    };
+    final countries = countryStars.keys.toList();
+
+    countries.sort((first, second) {
+      final starsComparsion = countryStars[first]!.compareTo(countryStars[second]!);
+      if (starsComparsion == 0) {
+        return first.name.compareTo(second.name);
+      } else {
+        return starsComparsion;
+      }
+    });
+
+    _context.read<LocalDbRepo>().countries.set(countries);
   }
 
   Future<void> _loadItems<T>() async {
@@ -138,15 +201,4 @@ class AppConfigurator {
     if (!_context.mounted) return;
     _context.read<LocalDbRepo>().byType<T>().set(loaded);
   }
-
-  /*Future<void> _loadCountryFacts<T extends CountryFacts>() async {
-    final parameters = _context.read<DbItemsJsonConfiguration<T>>();
-    final loaded = await loadItemsListFromJsonFile(
-      file: databaseFile(
-          _context.read(), _context.read<DbFileSystemEntityNames>().byGenericType<T>()),
-      fromJson: parameters.fromJson,
-    );
-    if (!_context.mounted) return;
-    _context.read<LocalDbRepo>().byType<T>().set(loaded);
-  }*/
 }

@@ -14,6 +14,10 @@ class Country {
   final String code;
   final String name;
 
+  const Country.emptyNone()
+      : code = 'none',
+        name = '';
+
   static Country fromJson(Json json) => _$CountryFromJson(json);
 
   static Country fromMultilingualJson(Json json, String languageCode) {

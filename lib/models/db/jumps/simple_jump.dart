@@ -1,11 +1,11 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:sj_manager/json/json_types.dart';
 
-part 'simple_jump_record.g.dart';
+part 'simple_jump.g.dart';
 
 @JsonSerializable()
-class SimpleJumpRecord {
-  const SimpleJumpRecord({
+class SimpleJump {
+  const SimpleJump({
     required this.jumperNameAndSurname,
     required this.distance,
   });
@@ -14,7 +14,7 @@ class SimpleJumpRecord {
 
   final double distance;
 
-  static SimpleJumpRecord fromJson(Json json) => _$SimpleJumpRecordFromJson(json);
+  static SimpleJump fromJson(Json json) => _$SimpleJumpFromJson(json);
 
-  Json toJson() => _$SimpleJumpRecordToJson(this);
+  Json toJson() => _$SimpleJumpToJson(this);
 }

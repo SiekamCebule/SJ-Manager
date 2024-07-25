@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
 enum Sex {
-  @JsonValue(0)
+  @JsonValue('male')
   male,
 
-  @JsonValue(1)
+  @JsonValue('female')
   female,
 }

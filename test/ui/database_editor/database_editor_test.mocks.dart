@@ -5,8 +5,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:rxdart/rxdart.dart' as _i2;
-import 'package:sj_manager/models/db/country/country_facts.dart' as _i4;
-import 'package:sj_manager/repositories/countries/country_facts/country_facts_repo.dart'
+import 'package:sj_manager/models/db/team/team.dart' as _i4;
+import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart'
     as _i3;
 
 // ignore_for_file: type=lint
@@ -33,29 +33,28 @@ class _FakeValueStream_0<T> extends _i1.SmartFake
         );
 }
 
-/// A class which mocks [MaleCountryFactsRepo].
+/// A class which mocks [TeamsRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMaleCountryFactsRepo extends _i1.Mock
-    implements _i3.MaleCountryFactsRepo {
-  MockMaleCountryFactsRepo() {
+class MockTeamsRepo extends _i1.Mock implements _i3.TeamsRepo {
+  MockTeamsRepo() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.ValueStream<List<_i4.MaleCountryFacts>> get items => (super.noSuchMethod(
+  _i2.ValueStream<List<_i4.Team>> get items => (super.noSuchMethod(
         Invocation.getter(#items),
-        returnValue: _FakeValueStream_0<List<_i4.MaleCountryFacts>>(
+        returnValue: _FakeValueStream_0<List<_i4.Team>>(
           this,
           Invocation.getter(#items),
         ),
-      ) as _i2.ValueStream<List<_i4.MaleCountryFacts>>);
+      ) as _i2.ValueStream<List<_i4.Team>>);
 
   @override
-  List<_i4.MaleCountryFacts> get lastItems => (super.noSuchMethod(
+  List<_i4.Team> get lastItems => (super.noSuchMethod(
         Invocation.getter(#lastItems),
-        returnValue: <_i4.MaleCountryFacts>[],
-      ) as List<_i4.MaleCountryFacts>);
+        returnValue: <_i4.Team>[],
+      ) as List<_i4.Team>);
 
   @override
   int get lastLength => (super.noSuchMethod(
@@ -64,57 +63,7 @@ class MockMaleCountryFactsRepo extends _i1.Mock
       ) as int);
 
   @override
-  void set(List<_i4.MaleCountryFacts>? value) => super.noSuchMethod(
-        Invocation.method(
-          #set,
-          [value],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void dispose() => super.noSuchMethod(
-        Invocation.method(
-          #dispose,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
-}
-
-/// A class which mocks [FemaleCountryFactsRepo].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockFemaleCountryFactsRepo extends _i1.Mock
-    implements _i3.FemaleCountryFactsRepo {
-  MockFemaleCountryFactsRepo() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  _i2.ValueStream<List<_i4.FemaleCountryFacts>> get items =>
-      (super.noSuchMethod(
-        Invocation.getter(#items),
-        returnValue: _FakeValueStream_0<List<_i4.FemaleCountryFacts>>(
-          this,
-          Invocation.getter(#items),
-        ),
-      ) as _i2.ValueStream<List<_i4.FemaleCountryFacts>>);
-
-  @override
-  List<_i4.FemaleCountryFacts> get lastItems => (super.noSuchMethod(
-        Invocation.getter(#lastItems),
-        returnValue: <_i4.FemaleCountryFacts>[],
-      ) as List<_i4.FemaleCountryFacts>);
-
-  @override
-  int get lastLength => (super.noSuchMethod(
-        Invocation.getter(#lastLength),
-        returnValue: 0,
-      ) as int);
-
-  @override
-  void set(List<_i4.FemaleCountryFacts>? value) => super.noSuchMethod(
+  void set(List<_i4.Team>? value) => super.noSuchMethod(
         Invocation.method(
           #set,
           [value],

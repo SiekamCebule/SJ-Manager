@@ -2,12 +2,13 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:sj_manager/json/manual_json/json_team.dart';
 import 'package:sj_manager/models/db/country/country.dart';
-import 'package:sj_manager/models/db/country/country_facts.dart';
 import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
-import 'package:sj_manager/repositories/countries/country_facts/country_facts_repo.dart';
+import 'package:sj_manager/models/db/team/team.dart';
+import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/json/countries.dart';
@@ -81,8 +82,7 @@ void main() async {
               femaleJumpers: EditableDbItemsRepo<FemaleJumper>(),
               hills: EditableDbItemsRepo<Hill>(),
               countries: CountriesRepo(),
-              maleCountryFacts: MaleCountryFactsRepo(),
-              femaleCountryFacts: FemaleCountryFactsRepo(),
+              teams: TeamsRepo(),
             ),
           ),
           RepositoryProvider(create: (context) {
@@ -129,8 +129,7 @@ void main() async {
                 hills: 'hills.json',
                 countries: 'countries/countries.json',
                 countryFlags: 'countries/country_flags',
-                maleCountryFacts: 'countries/country_facts_male.json',
-                femaleCountryFacts: 'countries/country_facts_female.json',
+                teams: 'teams/teams.json',
               ),
             ),
             Provider(create: (context) {
@@ -166,16 +165,15 @@ void main() async {
                 toJson: (hill) => {},
               );
             }),
-            Provider(create: (context) {
-              return DbItemsJsonConfiguration<MaleCountryFacts>(
-                fromJson: MaleCountryFacts.fromJson,
-                toJson: (facts) => facts.toJson(),
-              );
-            }),
-            Provider(create: (context) {
-              return DbItemsJsonConfiguration<FemaleCountryFacts>(
-                fromJson: FemaleCountryFacts.fromJson,
-                toJson: (facts) => facts.toJson(),
+            Provider<DbItemsJsonConfiguration<Team>>(create: (context) {
+              return DbItemsJsonConfiguration<Team>(
+                fromJson: (json) => JsonTeamParser(
+                        countryLoader:
+                            JsonCountryLoaderByCode(repo: countriesRepo(context)))
+                    .parseTeam(json),
+                toJson: (team) =>
+                    JsonTeamSerializer(countrySaver: const JsonCountryCodeSaver())
+                        .serializeTeam(team),
               );
             }),
             Provider.value(

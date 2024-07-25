@@ -11,7 +11,6 @@ class _FooterState extends State<_Footer> {
   @override
   Widget build(BuildContext context) {
     final navCubit = context.watch<SimulationWizardNavigationCubit>();
-    final navCubitState = navCubit.state;
     final navPermissions = context.watch<LinearNavigationPermissionsRepo>();
     final selectedOptions = context.watch<SimulationWizardOptionsRepo>();
 
@@ -28,8 +27,6 @@ class _FooterState extends State<_Footer> {
                     StreamBuilder(
                         stream: navPermissions.canGoBackStream,
                         builder: (context, snapshot) {
-                          print('can go back: ${navPermissions.canGoBack}');
-
                           return Visibility(
                             maintainState: false,
                             visible: navPermissions.canGoBack,

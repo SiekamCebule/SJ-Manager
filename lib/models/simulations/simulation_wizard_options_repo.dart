@@ -1,6 +1,6 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/models/simulations/enums.dart';
-import 'package:sj_manager/models/simulations/team.dart';
+import 'package:sj_manager/models/db/team/team.dart';
 
 class SimulationWizardOptionsRepo {
   SimulationWizardOptionsRepo();
@@ -12,10 +12,10 @@ class SimulationWizardOptionsRepo {
     _modeSubject.add(value);
   }
 
-  final _teamSubject = BehaviorSubject<CountryTeam?>.seeded(null);
-  ValueStream<CountryTeam?> get teamStream => _teamSubject.stream;
-  CountryTeam? get team => teamStream.value;
-  set team(CountryTeam? value) {
+  final _teamSubject = BehaviorSubject<Team?>.seeded(null);
+  ValueStream<Team?> get teamStream => _teamSubject.stream;
+  Team? get team => teamStream.value;
+  set team(Team? value) {
     _teamSubject.add(value);
   }
 }

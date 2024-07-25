@@ -16,8 +16,8 @@ class _CountryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        side: BorderSide(width: 0.5),
-        borderRadius: BorderRadius.circular(4),
+        side: const BorderSide(width: 0.6),
+        borderRadius: BorderRadius.circular(2.5),
       ),
       child: SimulationWizardOptionButton(
         onTap: onTap,

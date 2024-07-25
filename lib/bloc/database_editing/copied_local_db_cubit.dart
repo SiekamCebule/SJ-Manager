@@ -30,8 +30,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
         femaleJumpers: editableFemaleJumpers,
         hills: editableHills,
         countries: originalDb.countries,
-        maleCountryFacts: originalDb.maleCountryFacts,
-        femaleCountryFacts: originalDb.femaleCountryFacts,
+        teams: originalDb.teams,
       ),
     );
   }
@@ -123,8 +122,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
       femaleJumpers: state!.femaleJumpers,
       hills: state!.hills,
       countries: state!.countries,
-      maleCountryFacts: state!.maleCountryFacts,
-      femaleCountryFacts: state!.femaleCountryFacts,
+      teams: state!.teams,
     ));
   }
 
