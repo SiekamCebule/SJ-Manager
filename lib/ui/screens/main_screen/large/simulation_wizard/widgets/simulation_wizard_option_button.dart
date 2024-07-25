@@ -7,20 +7,24 @@ class SimulationWizardOptionButton extends StatelessWidget {
     required this.child,
     this.onTap,
     required this.isSelected,
+    this.borderRadius,
   });
 
   final Widget child;
   final VoidCallback? onTap;
   final bool isSelected;
+  final BorderRadius? borderRadius;
 
   @override
   Widget build(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     return Material(
+      borderRadius: borderRadius,
       color: isSelected
           ? Theme.of(context).colorScheme.secondaryContainer.blendWithBg(brightness, 0.06)
           : Theme.of(context).colorScheme.surfaceContainer,
       child: InkWell(
+        borderRadius: borderRadius,
         hoverColor: isSelected
             ? Theme.of(context)
                 .colorScheme

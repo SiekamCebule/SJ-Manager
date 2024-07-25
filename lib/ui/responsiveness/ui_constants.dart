@@ -8,6 +8,7 @@ abstract class UiGlobalConstants {
   static const double backgroundImageTransparency = 0.3;
 
   static const double smallCountryFlagWidth = 30;
+  static const double defaultCountryFlagBorderRadius = 6;
 }
 
 abstract class UiMainMenuConstants {

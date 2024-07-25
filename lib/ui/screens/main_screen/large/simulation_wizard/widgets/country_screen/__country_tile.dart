@@ -16,10 +16,11 @@ class _CountryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        side: const BorderSide(width: 0.6),
-        borderRadius: BorderRadius.circular(2.5),
+        side: const BorderSide(width: 1),
+        borderRadius: BorderRadius.circular(13),
       ),
       child: SimulationWizardOptionButton(
+        borderRadius: BorderRadius.circular(13),
         onTap: onTap,
         isSelected: isSelected,
         child: Column(
@@ -27,9 +28,12 @@ class _CountryTile extends StatelessWidget {
             const Gap(10),
             Expanded(
               child: LayoutBuilder(
-                builder: (context, constraints) => CountryFlag(
-                  country: country,
-                  width: constraints.maxWidth * 0.8,
+                builder: (context, constraints) => ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: CountryFlag(
+                    country: country,
+                    width: constraints.maxWidth * 0.8,
+                  ),
                 ),
               ),
             ),
