@@ -32,7 +32,10 @@ class _FooterState extends State<_Footer> {
                         stream: navPermissions.canGoBackStream,
                         builder: (context, snapshot) {
                           return Visibility(
-                            maintainState: false,
+                            maintainAnimation: true,
+                            maintainSize: true,
+                            maintainState: true,
+                            maintainInteractivity: false,
                             visible: navPermissions.canGoBack,
                             child: SizedBox(
                               width: 80,
@@ -64,7 +67,10 @@ class _FooterState extends State<_Footer> {
                         stream: navPermissions.canGoForwardStream,
                         builder: (context, snapshot) {
                           return Visibility(
-                            maintainState: false,
+                            maintainAnimation: true,
+                            maintainSize: true,
+                            maintainState: true,
+                            maintainInteractivity: false,
                             visible: navPermissions.canGoForward,
                             child: SizedBox(
                               width: 80,

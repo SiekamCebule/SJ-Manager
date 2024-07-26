@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/enums/db_editable_item_type.dart';
 import 'package:sj_manager/json/db_items_json.dart';
-import 'package:sj_manager/json/json_types.dart';
 
 import 'package:sj_manager/models/db/country/country.dart';
 import 'package:sj_manager/models/db/db_file_system_entity_names.dart';

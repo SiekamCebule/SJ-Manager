@@ -45,9 +45,11 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
 
   Future<void> _saveChangesByType<T>(BuildContext context) async {
     originalDb.editableByGenericType<T>().set(state!.editableByGenericType<T>().last);
-    _saveItemsToJsonByType<T>(
+    final file = databaseFile(
+        context.read(), context.read<DbFileSystemEntityNames>().byGenericType<T>());
+    await _saveItemsToJsonByType<T>(
       context: context,
-      file: File(context.read<DbFileSystemEntityNames>().byGenericType<T>()),
+      file: file,
     );
   }
 
@@ -82,7 +84,7 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
     final parameters = context.read<DbItemsJsonConfiguration<T>>();
     await saveItemsListToJsonFile(
       file: file,
-      items: state!.editableByGenericType<T>().last,
+      items: originalDb.editableByGenericType<T>().last,
       toJson: parameters.toJson,
     );
   }
@@ -96,5 +98,6 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
 
   void dispose() {
     originalDb.dispose();
+    state?.dispose();
   }
 }

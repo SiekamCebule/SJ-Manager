@@ -10,7 +10,6 @@ import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
-import 'package:sj_manager/models/db/team/country_team.dart';
 import 'package:sj_manager/models/db/team/team.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/ui/dialogs/loading_items_failed_dialog.dart';
@@ -110,8 +109,6 @@ class AppConfigurator {
     await _tryLoadItems<FemaleJumper>(dialogTitleText: 'Błąd wczytywania skoczkiń');
     await _tryLoadItems<Hill>(dialogTitleText: 'Błąd wczytywania skoczni');
     await _tryLoadItems<Team>(dialogTitleText: 'Błąd wczytywania zespołów');
-
-    // _processCountries(); // TODO, maybe remove the function and its components
   }
 
   Future<void> _tryLoadItems<T>({required String dialogTitleText}) async {
@@ -148,47 +145,6 @@ class AppConfigurator {
     final countriesWithLowerCaseCodes =
         countries.map((c) => c.copyWith(code: c.code.toLowerCase())).toList();
     _context.read<LocalDbRepo>().countries.set(countriesWithLowerCaseCodes);
-  }
-
-  void _processCountries() {
-    final repo = _context.read<LocalDbRepo>().countries;
-    final noneCountry = repo.none;
-    _filterCountriesByTeams();
-    _sortCountries();
-    repo.set([noneCountry, ...repo.last]);
-  }
-
-  void _filterCountriesByTeams() {
-    final countries = _context.read<LocalDbRepo>().countries.last;
-    final teams = _context.read<LocalDbRepo>().teams.last.cast<CountryTeam>();
-    final countriesHavingTeam = <Country>{};
-    for (var team in teams) {
-      if (!countries.contains(team.country)) {
-        throw StateError(
-            'Team has country, which is not contained in loaded countries list (team\'s country: ${team.country})');
-      }
-      countriesHavingTeam.add(team.country);
-    }
-    _context.read<LocalDbRepo>().countries.set(countriesHavingTeam.toList());
-  }
-
-  void _sortCountries() {
-    final teams = _context.read<LocalDbRepo>().teams.last.cast<CountryTeam>();
-    final countryStars = {
-      for (var team in teams) team.country: team.facts.stars,
-    };
-    final countries = countryStars.keys.toList();
-
-    countries.sort((first, second) {
-      final starsComparsion = countryStars[first]!.compareTo(countryStars[second]!);
-      if (starsComparsion == 0) {
-        return first.name.compareTo(second.name);
-      } else {
-        return starsComparsion;
-      }
-    });
-
-    _context.read<LocalDbRepo>().countries.set(countries);
   }
 
   Future<void> _loadItems<T>() async {

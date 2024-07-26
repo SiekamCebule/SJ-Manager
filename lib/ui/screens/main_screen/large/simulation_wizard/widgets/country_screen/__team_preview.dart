@@ -24,8 +24,11 @@ class _TeamPreview extends StatelessWidget {
     final largestHillText = previewCreator.largestHill(team)?.toString() ?? 'Brak';
 
     return Container(
+      decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerLowest,
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20), topLeft: Radius.circular(20))),
       padding: const EdgeInsets.only(left: 10),
-      color: Theme.of(context).colorScheme.surfaceContainerLow,
       child: Column(
         children: [
           const Gap(15),

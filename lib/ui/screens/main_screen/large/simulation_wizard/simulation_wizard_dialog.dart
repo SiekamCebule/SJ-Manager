@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,7 +26,8 @@ import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_men
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/simulation_wizard_option_button.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_menu_text_content_button_body.dart';
 import 'package:sj_manager/utils/file_dialogs.dart';
-import 'package:sj_manager/utils/team_preview_creator.dart';
+import 'package:sj_manager/utils/team_preview_creator/default_team_preview_creator.dart';
+import 'package:sj_manager/utils/team_preview_creator/team_preview_creator.dart';
 
 part 'screens/__mode_screen.dart';
 part 'screens/__team_screen.dart';

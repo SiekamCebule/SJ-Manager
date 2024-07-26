@@ -41,10 +41,6 @@ class JumperEditor extends StatefulWidget {
   final bool enableEditingName;
   final CountriesRepo countriesRepo;
 
-  /// Callback executed when some fields change.
-  ///
-  /// Returns 'null', if has some nullable fields (so jumper is unfinished)
-  /// Returns [Jumper] object, if the current jumper is ready to use
   final Function(Jumper? current) onChange;
 
   @override

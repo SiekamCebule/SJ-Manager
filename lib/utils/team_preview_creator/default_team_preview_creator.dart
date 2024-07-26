@@ -6,18 +6,8 @@ import 'package:sj_manager/models/db/jumps/simple_jump.dart';
 import 'package:sj_manager/models/db/local_db_repo.dart';
 import 'package:sj_manager/models/db/sex.dart';
 import 'package:sj_manager/models/db/team/country_team.dart';
-import 'package:sj_manager/models/db/team/team.dart';
 import 'package:sj_manager/utils/db_items.dart';
-
-abstract class TeamPreviewCreator<T extends Team> {
-  const TeamPreviewCreator();
-
-  int? stars(T team);
-  SimpleJump? record(T team);
-  Jumper? bestJumper(T team);
-  Jumper? risingStar(T team);
-  Hill? largestHill(T team);
-}
+import 'package:sj_manager/utils/team_preview_creator/team_preview_creator.dart';
 
 class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
   const DefaultCountryTeamPreviewCreator({
@@ -47,36 +37,67 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
 
   @override
   Jumper? bestJumper(CountryTeam team) {
-    final jumpers =
-        team.sex == Sex.male ? database.maleJumpers.last : database.femaleJumpers.last;
+    final jumpers = _jumpersBySex(team.sex);
     final jumpersFromCountry = jumpers.fromCountryByCode(team.country.code);
     if (jumpersFromCountry.isEmpty) return null;
     final jumperRatings = {
       for (var jumper in jumpersFromCountry) jumper: _calculateRating(jumper),
     };
-    return _bestJumper(jumperRatings);
+    return _atPositionFromRatings(jumperRatings, position: 1);
   }
 
   @override
   Jumper? risingStar(CountryTeam team) {
-    final jumpers =
-        team.sex == Sex.male ? database.maleJumpers.last : database.femaleJumpers.last;
+    final jumpers = _jumpersBySex(team.sex);
     final jumpersFromCountry = jumpers.fromCountryByCode(team.country.code);
     if (jumpersFromCountry.isEmpty) return null;
+
     final jumperRatings = {
       for (var jumper in jumpersFromCountry)
         jumper: _calculateRatingForRisingStar(jumper),
     };
-    return _bestJumper(jumperRatings);
+    final best = bestJumper(team);
+    final bestForRisingStar = _atPositionFromRatings(jumperRatings, position: 1);
+    if (jumperRatings.values.every((rating) => rating == 0) ||
+        (best == bestForRisingStar && jumperRatings.length == 1)) {
+      return null;
+    } else if (best == bestForRisingStar) {
+      return _atPositionFromRatings(jumperRatings, position: 2);
+    } else {
+      return bestForRisingStar;
+    }
+  }
+
+  List<Jumper> _jumpersBySex(Sex sex) {
+    return sex == Sex.male ? database.maleJumpers.last : database.femaleJumpers.last;
   }
 
   double _calculateRatingForRisingStar(Jumper jumper) {
     final base = _calculateRating(jumper);
     final age = jumper.age;
-    const k = 27;
-    final multiplierByAge = (age == 17) ? 1.0 : (1.0 / (1.0 + (age - 18).abs() / k));
-    print('multiplier by age ($age): $multiplierByAge');
-    return base * multiplierByAge;
+    final multiplierByAge = _multiplierByAge(age);
+    print('$jumper multiplier by age ($age): $multiplierByAge');
+    final rating = base * multiplierByAge;
+    print('$jumper: rating: $rating');
+    return rating;
+  }
+
+  double _multiplierByAge(int age) {
+    return switch (age) {
+      12 => 1.0,
+      13 => 1.0,
+      14 => 1.0,
+      15 => 1.0,
+      16 => 1.05,
+      17 => 1.05,
+      18 => 1.1,
+      19 => 1.1,
+      20 => 1.05,
+      21 => 0.95,
+      22 => 0.9,
+      23 => 0.8,
+      _ => 0.0
+    };
   }
 
   double _calculateRating(Jumper jumper) {
@@ -105,7 +126,14 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
     return rating;
   }
 
-  Jumper _bestJumper(Map<Jumper, double> jumperRatings) {
-    return jumperRatings.entries.reduce((a, b) => a.value > b.value ? a : b).key;
+  Jumper _atPositionFromRatings(Map<Jumper, double> jumperRatings,
+      {required int position}) {
+    if (position < 1 || position > jumperRatings.length) {
+      throw ArgumentError('Position out of range');
+    }
+    List<MapEntry<Jumper, double>> sortedEntries = jumperRatings.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    return sortedEntries[position - 1].key;
   }
 }
