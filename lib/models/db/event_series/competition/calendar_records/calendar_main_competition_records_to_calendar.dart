@@ -1,7 +1,7 @@
 import 'package:sj_manager/models/db/event_series/competition/calendar_records/calendar_main_competition_record.dart';
 import 'package:sj_manager/models/db/event_series/competition/calendar_records/converter.dart';
 import 'package:sj_manager/models/db/event_series/competition/competition.dart';
-import 'package:sj_manager/models/db/event_series/competition/rules/competition_rules.dart';
+import 'package:sj_manager/models/db/event_series/competition/rules/competition_rules/competition_rules.dart';
 import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/models/db/team/team.dart';
 import 'package:sj_manager/utils/iterable.dart';
@@ -37,13 +37,14 @@ class CalendarMainCompetitionRecordsToCalendarConveter
       if (competitionsWhichShouldMoveBackIfHaveTeamCompBehind.contains(currentRawComp)) {
         final previous = _previous(current: currentRawComp, competitions: calendar);
         if (previous != null && previous.rules is CompetitionRules<Team>) {
-          // TODO: with the same hill!
           final currentIndex = calendar.indexOf(currentRawComp);
+          final teamComps = <Competition>[previous];
           var firstTeamComp = previous;
           for (var i = currentIndex - 2;; i--) {
             final comp = calendar[currentIndex];
             if (comp.rules is CompetitionRules<Team> && comp.hill == previous.hill) {
               firstTeamComp = comp;
+              teamComps.add(comp);
             } else {
               print('break at i of $i (starting was $currentIndex - 2)');
               break;
@@ -53,6 +54,12 @@ class CalendarMainCompetitionRecordsToCalendarConveter
           calendar.removeAt(currentIndex);
           calendar.insert(
               firstTeamCompIndex - currentRawCompOndexSubtraction, currentRawComp);
+          calendar[firstTeamCompIndex - currentRawCompOndexSubtraction] = currentRawComp
+              .copyWith(date: currentRawComp.date.subtract(const Duration(days: 1)));
+          for (int i = 0; i < teamComps.length; i++) {
+            teamComps[i] = teamComps[i]
+                .copyWith(date: teamComps[i].date.add(const Duration(days: 1)));
+          }
           currentRawCompOndexSubtraction += 1;
 
           // Jeszcze kolejność będzie kuleć trochę.
@@ -64,6 +71,7 @@ class CalendarMainCompetitionRecordsToCalendarConveter
         // 2. Znajdź index pierwszego drużynowego konkursu
         // 3. Dodaj wszystkie zebrane konkursy ind. przed znalezionym powyżej indeksem
         // 4. Upewnij się, że kolejność jest okej (w razie potrzeby Iterable.reversed albo coś)
+        // TODO: Max 3 trainings in a day
       }
     }
     return calendar;

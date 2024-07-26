@@ -30,21 +30,20 @@ class Hill with EquatableMixin {
     required this.pointsForTailwind,
   });
 
-  factory Hill.empty({required Country country}) {
-    return Hill(
-      name: '',
-      locality: '',
-      country: country,
-      k: 0,
-      hs: 0,
-      landingEase: LandingEase.average,
-      profileType: HillProfileType.balanced,
-      jumpsVariability: JumpsVariability.average,
-      pointsForGate: 0,
-      pointsForHeadwind: 0,
-      pointsForTailwind: 0,
-    );
-  }
+  const Hill.empty({required Country country})
+      : this(
+          name: '',
+          locality: '',
+          country: country,
+          k: 0,
+          hs: 0,
+          landingEase: LandingEase.average,
+          profileType: HillProfileType.balanced,
+          jumpsVariability: JumpsVariability.average,
+          pointsForGate: 0,
+          pointsForHeadwind: 0,
+          pointsForTailwind: 0,
+        );
 
   final String name;
   final String locality;

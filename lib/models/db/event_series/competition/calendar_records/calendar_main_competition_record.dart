@@ -22,11 +22,13 @@ class CalendarMainCompetitionRecord implements EncapsulatedCompetitionRecord {
 
 class _Converter {
   List<Competition> convert(CalendarMainCompetitionRecord record) {
-    var trainingsDateSubtraction = Duration.zero;
+    var trainingsDateBaseSubtraction = Duration.zero;
+    var qualificationsDateSubtraction = Duration.zero;
 
     Competition? trialRound;
     if (record.preset.trialRoundRules != null) {
-      trainingsDateSubtraction = const Duration(days: 1);
+      trainingsDateBaseSubtraction += const Duration(days: 1);
+      qualificationsDateSubtraction += const Duration(days: 1);
       trialRound = Competition(
         hill: record.hill,
         date: record.date,
@@ -34,13 +36,29 @@ class _Converter {
       );
     }
 
-    final trainings = record.preset.trainingsRules.map((rules) {
-      return Competition(
+    int trainingIndex = 0;
+    final trainings = record.preset.trainingsRules
+        .map((rules) {
+          trainingIndex++;
+          final daysSubtraction =
+              trainingsDateBaseSubtraction + Duration(days: trainingIndex ~/ 3);
+          return Competition(
+            hill: record.hill,
+            date: record.date.subtract(daysSubtraction),
+            rules: rules,
+          );
+        })
+        .toList()
+        .reversed;
+
+    Competition? quals;
+    if (record.preset.qualificationsRules != null) {
+      quals = Competition(
         hill: record.hill,
-        date: record.date.subtract(trainingsDateSubtraction),
-        rules: rules,
+        date: record.date.subtract(qualificationsDateSubtraction),
+        rules: record.preset.qualificationsRules!,
       );
-    });
+    }
 
     final mainCompetition = Competition(
       hill: record.hill,
@@ -50,6 +68,7 @@ class _Converter {
 
     final comps = [
       ...trainings,
+      if (quals != null) quals,
       if (trialRound != null) trialRound,
       mainCompetition,
     ];
