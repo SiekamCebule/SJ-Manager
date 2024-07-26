@@ -1,8 +1,8 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
 
-class DbItemsRepo<T> extends ValueRepo<List<T>> {
-  DbItemsRepo({super.initial});
+class ItemsRepo<T> extends ValueRepo<List<T>> {
+  ItemsRepo({super.initial});
 
   @override
   ValueStream<List<T>> get items;

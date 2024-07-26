@@ -18,7 +18,7 @@ import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_flags/country_flags_repo.dart';
 import 'package:sj_manager/repositories/countries/country_flags/local_storage_country_flags_repo.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
-import 'package:sj_manager/repositories/generic/editable_db_items_repo.dart';
+import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/setup/set_up_app.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/providers/locale_notifier.dart';
@@ -78,9 +78,9 @@ void main() async {
           ),
           RepositoryProvider(
             create: (context) => LocalDbRepo(
-              maleJumpers: EditableDbItemsRepo<MaleJumper>(),
-              femaleJumpers: EditableDbItemsRepo<FemaleJumper>(),
-              hills: EditableDbItemsRepo<Hill>(),
+              maleJumpers: EditableItemsRepo<MaleJumper>(),
+              femaleJumpers: EditableItemsRepo<FemaleJumper>(),
+              hills: EditableItemsRepo<Hill>(),
               countries: CountriesRepo(),
               teams: TeamsRepo(),
             ),

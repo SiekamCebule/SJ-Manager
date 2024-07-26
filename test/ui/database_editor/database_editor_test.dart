@@ -18,7 +18,7 @@ import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
-import 'package:sj_manager/repositories/generic/editable_db_items_repo.dart';
+import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/setup/set_up_app.dart';
 import 'package:sj_manager/ui/app.dart';
@@ -132,9 +132,9 @@ void main() {
           providers: [
             RepositoryProvider(
               create: (context) => LocalDbRepo(
-                maleJumpers: EditableDbItemsRepo<MaleJumper>(initial: maleJumpers),
-                femaleJumpers: EditableDbItemsRepo<FemaleJumper>(initial: femaleJumpers),
-                hills: EditableDbItemsRepo<Hill>(initial: hills),
+                maleJumpers: EditableItemsRepo<MaleJumper>(initial: maleJumpers),
+                femaleJumpers: EditableItemsRepo<FemaleJumper>(initial: femaleJumpers),
+                hills: EditableItemsRepo<Hill>(initial: hills),
                 countries: CountriesRepo(initial: countries),
                 teams: MockTeamsRepo(),
               ),

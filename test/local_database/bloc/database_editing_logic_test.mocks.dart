@@ -10,7 +10,7 @@ import 'package:sj_manager/models/db/country/country.dart' as _i4;
 import 'package:sj_manager/models/db/team/team.dart' as _i8;
 import 'package:sj_manager/repositories/countries/countries_repo.dart' as _i6;
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart' as _i7;
-import 'package:sj_manager/repositories/generic/editable_db_items_repo.dart' as _i3;
+import 'package:sj_manager/repositories/generic/editable_items_repo.dart' as _i3;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -36,7 +36,7 @@ class _FakeValueStream_0<T1> extends _i1.SmartFake implements _i2.ValueStream<T1
 }
 
 class _FakeEditableDbItemsRepo_1<T1> extends _i1.SmartFake
-    implements _i3.EditableDbItemsRepo<T1> {
+    implements _i3.EditableItemsRepo<T1> {
   _FakeEditableDbItemsRepo_1(
     Object parent,
     Invocation parentInvocation,
@@ -59,7 +59,7 @@ class _FakeCountry_2 extends _i1.SmartFake implements _i4.Country {
 /// A class which mocks [EditableDbItemsRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockEditableDbItemsRepo<T> extends _i1.Mock implements _i3.EditableDbItemsRepo<T> {
+class MockEditableDbItemsRepo<T> extends _i1.Mock implements _i3.EditableItemsRepo<T> {
   MockEditableDbItemsRepo() {
     _i1.throwOnMissingStub(this);
   }
@@ -86,7 +86,7 @@ class MockEditableDbItemsRepo<T> extends _i1.Mock implements _i3.EditableDbItems
       ) as int);
 
   @override
-  _i3.EditableDbItemsRepo<T> clone() => (super.noSuchMethod(
+  _i3.EditableItemsRepo<T> clone() => (super.noSuchMethod(
         Invocation.method(
           #clone,
           [],
@@ -98,7 +98,7 @@ class MockEditableDbItemsRepo<T> extends _i1.Mock implements _i3.EditableDbItems
             [],
           ),
         ),
-      ) as _i3.EditableDbItemsRepo<T>);
+      ) as _i3.EditableItemsRepo<T>);
 
   @override
   void add(

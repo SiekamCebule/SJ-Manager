@@ -7,9 +7,9 @@ import 'package:sj_manager/json/db_items_json.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
 import 'package:sj_manager/models/db/team/team.dart';
-import 'package:sj_manager/repositories/generic/db_items_repo.dart';
+import 'package:sj_manager/repositories/generic/items_repo.dart';
 
-class TeamsRepo<T extends Team> extends DbItemsRepo<T> {
+class TeamsRepo<T extends Team> extends ItemsRepo<T> {
   TeamsRepo({super.initial});
 
   static Future<TeamsRepo> fromDirectory(Directory dir,

@@ -48,8 +48,8 @@ class _Header extends StatelessWidget {
       SimulationWizardScreen.calendars => "Wybierz kalendarze",
       SimulationWizardScreen.team => "Wybierz swój kraj",
       SimulationWizardScreen.formGenerating => "Skonfiguruj generator formy",
-      SimulationWizardScreen.otherOptions => "Przyjrzyj się innym opcjom",
-      SimulationWizardScreen.simulationDepth => "Wybierz głębię symulacji",
+      SimulationWizardScreen.otherOptions => "Przyjrzyj się innym opcjom",
+      SimulationWizardScreen.eventsSeries => "Ustal cykle rozgrywek",
       SimulationWizardScreen.startDate => "Wybierz datę startową",
     };
   }

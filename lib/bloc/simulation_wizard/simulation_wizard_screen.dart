@@ -1,6 +1,6 @@
 enum SimulationWizardScreen {
   mode,
-  simulationDepth,
+  eventsSeries,
   team,
   otherOptions,
   calendars,

@@ -6,3 +6,7 @@ extension IterableRandomAccess<T> on Iterable<T> {
     return elementAt(random.nextInt(length));
   }
 }
+
+extension PenultimateElement<T> on Iterable<T> {
+  T get penultimate => elementAt(length - 2);
+}

@@ -1,8 +1,8 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:sj_manager/repositories/generic/db_items_repo.dart';
+import 'package:sj_manager/repositories/generic/items_repo.dart';
 
-class EditableDbItemsRepo<T> extends DbItemsRepo<T> {
-  EditableDbItemsRepo({
+class EditableItemsRepo<T> extends ItemsRepo<T> {
+  EditableItemsRepo({
     List<T>? initial,
   }) : _items = initial ?? [] {
     _subject.add(_items);
@@ -11,8 +11,8 @@ class EditableDbItemsRepo<T> extends DbItemsRepo<T> {
   List<T> _items;
   final _subject = BehaviorSubject<List<T>>();
 
-  EditableDbItemsRepo<T> clone() {
-    return EditableDbItemsRepo(initial: List.of(_items));
+  EditableItemsRepo<T> clone() {
+    return EditableItemsRepo(initial: List.of(_items));
   }
 
   void add(T item, [int? index]) {

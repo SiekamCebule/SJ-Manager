@@ -67,7 +67,7 @@ class _SimulationWizardDialogState extends State<SimulationWizardDialog>
       _navCubit.setUp(screens: [
         SimulationWizardScreen.mode,
         SimulationWizardScreen.team,
-        SimulationWizardScreen.mode
+        SimulationWizardScreen.eventsSeries
       ]);
     });
 

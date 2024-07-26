@@ -15,8 +15,8 @@ import 'package:sj_manager/models/db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
-import 'package:sj_manager/repositories/generic/db_items_repo.dart';
-import 'package:sj_manager/repositories/generic/editable_db_items_repo.dart';
+import 'package:sj_manager/repositories/generic/items_repo.dart';
+import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 
 class LocalDbRepo with EquatableMixin {
   const LocalDbRepo({
@@ -27,13 +27,13 @@ class LocalDbRepo with EquatableMixin {
     required this.teams,
   });
 
-  final EditableDbItemsRepo<MaleJumper> maleJumpers;
-  final EditableDbItemsRepo<FemaleJumper> femaleJumpers;
-  final EditableDbItemsRepo<Hill> hills;
+  final EditableItemsRepo<MaleJumper> maleJumpers;
+  final EditableItemsRepo<FemaleJumper> femaleJumpers;
+  final EditableItemsRepo<Hill> hills;
   final CountriesRepo countries;
   final TeamsRepo<Team> teams;
 
-  EditableDbItemsRepo<dynamic> editableByType(DbEditableItemType type) {
+  EditableItemsRepo<dynamic> editableByType(DbEditableItemType type) {
     return switch (type) {
       DbEditableItemType.maleJumper => maleJumpers,
       DbEditableItemType.femaleJumper => femaleJumpers,
@@ -41,19 +41,19 @@ class LocalDbRepo with EquatableMixin {
     };
   }
 
-  EditableDbItemsRepo<T> editableByGenericType<T>() {
-    if (T == MaleJumper) return maleJumpers as EditableDbItemsRepo<T>;
-    if (T == FemaleJumper) return femaleJumpers as EditableDbItemsRepo<T>;
-    if (T == Hill) return hills as EditableDbItemsRepo<T>;
+  EditableItemsRepo<T> editableByGenericType<T>() {
+    if (T == MaleJumper) return maleJumpers as EditableItemsRepo<T>;
+    if (T == FemaleJumper) return femaleJumpers as EditableItemsRepo<T>;
+    if (T == Hill) return hills as EditableItemsRepo<T>;
     throw ArgumentError('Invalid type (Type: $T)');
   }
 
-  DbItemsRepo<T> byType<T>() {
-    if (T == MaleJumper) return maleJumpers as DbItemsRepo<T>;
-    if (T == FemaleJumper) return femaleJumpers as DbItemsRepo<T>;
-    if (T == Hill) return hills as DbItemsRepo<T>;
-    if (T == Country) return countries as DbItemsRepo<T>;
-    if (T == Team) return teams as DbItemsRepo<T>;
+  ItemsRepo<T> byType<T>() {
+    if (T == MaleJumper) return maleJumpers as ItemsRepo<T>;
+    if (T == FemaleJumper) return femaleJumpers as ItemsRepo<T>;
+    if (T == Hill) return hills as ItemsRepo<T>;
+    if (T == Country) return countries as ItemsRepo<T>;
+    if (T == Team) return teams as ItemsRepo<T>;
     throw ArgumentError('Invalid type');
   }
 
@@ -62,19 +62,19 @@ class LocalDbRepo with EquatableMixin {
     final dbFsEntityNames = context.read<DbFileSystemEntityNames>();
     File getFile(String fileName) => File('${dir.path}/$fileName');
 
-    final maleJumpers = EditableDbItemsRepo(
+    final maleJumpers = EditableItemsRepo(
         initial: await loadItemsListFromJsonFile(
       file: getFile(dbFsEntityNames.maleJumpers),
       fromJson: context.read<DbItemsJsonConfiguration<MaleJumper>>().fromJson,
     ));
     if (!context.mounted) throw StateError('The context is unmounted');
-    final femaleJumpers = EditableDbItemsRepo(
+    final femaleJumpers = EditableItemsRepo(
         initial: await loadItemsListFromJsonFile(
       file: getFile(dbFsEntityNames.femaleJumpers),
       fromJson: context.read<DbItemsJsonConfiguration<FemaleJumper>>().fromJson,
     ));
     if (!context.mounted) throw StateError('The context is unmounted');
-    final hills = EditableDbItemsRepo(
+    final hills = EditableItemsRepo(
         initial: await loadItemsListFromJsonFile(
       file: getFile(dbFsEntityNames.hills),
       fromJson: context.read<DbItemsJsonConfiguration<Hill>>().fromJson,
@@ -101,9 +101,9 @@ class LocalDbRepo with EquatableMixin {
   }
 
   LocalDbRepo copyWith({
-    EditableDbItemsRepo<MaleJumper>? maleJumpers,
-    EditableDbItemsRepo<FemaleJumper>? femaleJumpers,
-    EditableDbItemsRepo<Hill>? hills,
+    EditableItemsRepo<MaleJumper>? maleJumpers,
+    EditableItemsRepo<FemaleJumper>? femaleJumpers,
+    EditableItemsRepo<Hill>? hills,
     CountriesRepo? countries,
     TeamsRepo<Team>? teams,
   }) {

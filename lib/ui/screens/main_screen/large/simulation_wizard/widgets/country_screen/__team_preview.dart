@@ -26,7 +26,7 @@ class _TeamPreview extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainerLowest,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(20), topLeft: Radius.circular(20))),
       padding: const EdgeInsets.only(left: 10),
       child: Column(
