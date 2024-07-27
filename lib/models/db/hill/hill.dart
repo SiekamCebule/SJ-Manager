@@ -89,6 +89,9 @@ class Hill with EquatableMixin {
         jumpsVariability,
         typicalWindDirection,
         typicalWindStrength,
+        pointsForGate,
+        pointsForHeadwind,
+        pointsForTailwind,
       ];
 
   Hill copyWith({

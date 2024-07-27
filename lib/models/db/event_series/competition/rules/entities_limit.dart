@@ -1,10 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 
 enum EntitiesLimitType {
   exact,
-  soft,
-  none;
+  soft;
 }
 
 class EntitiesLimit with EquatableMixin {
@@ -13,8 +11,12 @@ class EntitiesLimit with EquatableMixin {
     required this.count,
   });
 
+  const EntitiesLimit.soft(int count) : this(type: EntitiesLimitType.soft, count: count);
+  const EntitiesLimit.exact(int count)
+      : this(type: EntitiesLimitType.exact, count: count);
+
   final EntitiesLimitType type;
-  final int? count;
+  final int count;
 
   EntitiesLimit copyWith({
     EntitiesLimitType? type,

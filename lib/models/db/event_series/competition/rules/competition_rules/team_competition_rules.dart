@@ -7,5 +7,8 @@ class TeamCompetitionRules extends CompetitionRules<Team> {
   const TeamCompetitionRules({
     required super.rounds,
     required super.allowChangingGates,
+    required this.jumpersCountInTeam,
   });
+
+  final int jumpersCountInTeam;
 }

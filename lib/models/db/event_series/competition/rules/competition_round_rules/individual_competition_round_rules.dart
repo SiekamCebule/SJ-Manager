@@ -4,6 +4,8 @@ import 'package:sj_manager/models/db/jumper/jumper.dart';
 class IndividualCompetitionRoundRules extends CompetitionRoundRules<Jumper> {
   const IndividualCompetitionRoundRules({
     required super.limit,
-    required super.sortBeforeRound,
+    required this.sortBeforeRound,
   });
+
+  final bool sortBeforeRound;
 }

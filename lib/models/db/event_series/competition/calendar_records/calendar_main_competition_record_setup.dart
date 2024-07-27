@@ -1,19 +1,21 @@
 import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/db/event_series/competition/rules/competition_rules/competition_rules.dart';
 
-class CalendarMainCompetitionRecordSetup<T> with EquatableMixin {
+class CalendarMainCompetitionRecordSetup with EquatableMixin {
   const CalendarMainCompetitionRecordSetup({
-    required this.rules,
-    required this.trainingsRules,
-    required this.trialRoundRules,
-    required this.qualificationsRules,
-    required this.moveQualificationsBeforeTeamCompetition,
-  });
+    required this.mainCompRules,
+    this.trainingsRules,
+    this.trialRoundRules,
+    this.qualificationsRules,
+    this.moveQualificationsBeforeTeamCompetition = false,
+  }) : assert(
+          !(moveQualificationsBeforeTeamCompetition == true && trialRoundRules == null),
+        );
 
-  final CompetitionRules<T> rules;
-  final List<CompetitionRules<T>> trainingsRules;
-  final CompetitionRules<T>? trialRoundRules;
-  final CompetitionRules<T>? qualificationsRules;
+  final CompetitionRules mainCompRules;
+  final List<CompetitionRules>? trainingsRules;
+  final CompetitionRules? trialRoundRules;
+  final CompetitionRules? qualificationsRules;
   final bool moveQualificationsBeforeTeamCompetition;
 
   @override
