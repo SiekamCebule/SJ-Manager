@@ -20,8 +20,8 @@ class CalendarMainCompetitionRecordsToCalendarConverter
   static const _day = Duration(days: 1);
 
   @override
-  List<Competition> convert(List<CalendarMainCompetitionRecord> records) {
-    _highLevelCalendar = records;
+  List<Competition> convert(List<CalendarMainCompetitionRecord> highLevelCalendar) {
+    _highLevelCalendar = highLevelCalendar;
     _competitionsWhichShouldMoveBackIfHaveTeamCompBehind = {};
     _createLowCalendarAndAppropiatelyMarkCompetitions();
     _moveAppropriateCompetitionsBehindTeamComps();

@@ -349,6 +349,92 @@ void main() {
       ]);
     });
 
-    test('The limit of 3 trainings in a day', () {});
+    test(
+        'The limit of 3 trainings in a day (example of a few pseudo days of world championships)',
+        () {
+      final startDate = DateTime(2022, 6, 1);
+      final highLevelCalendar = [
+        CalendarMainCompetitionRecord(
+          hill: zakopane,
+          date: startDate,
+          setup: CalendarMainCompetitionRecordSetup(
+            qualificationsRules: ind,
+            trialRoundRules: ind,
+            trainingsRules: List.generate(
+              7,
+              (_) => ind,
+            ), // One of the trainings is instead of the trial round (cannot have two trial rounds)
+            mainCompRules: ind,
+          ),
+        ),
+      ];
+      final lowLevelCalendar =
+          CalendarMainCompetitionRecordsToCalendarConverter().convert(highLevelCalendar);
+      expect(
+        lowLevelCalendar,
+        [
+          Competition(
+            hill: zakopane,
+            date: DateTime(2022, 5, 29),
+            rules: ind,
+            type: CompetitionType.training,
+          ),
+          Competition(
+            hill: zakopane,
+            date: DateTime(2022, 5, 29),
+            rules: ind,
+            type: CompetitionType.training,
+          ),
+          Competition(
+            hill: zakopane,
+            date: DateTime(2022, 5, 30),
+            rules: ind,
+            type: CompetitionType.training,
+          ),
+          Competition(
+            hill: zakopane,
+            date: DateTime(2022, 5, 30),
+            rules: ind,
+            type: CompetitionType.training,
+          ),
+          Competition(
+            hill: zakopane,
+            date: DateTime(2022, 5, 30),
+            rules: ind,
+            type: CompetitionType.training,
+          ),
+          Competition(
+            hill: zakopane,
+            date: DateTime(2022, 5, 31),
+            rules: ind,
+            type: CompetitionType.training,
+          ),
+          Competition(
+            hill: zakopane,
+            date: DateTime(2022, 5, 31),
+            rules: ind,
+            type: CompetitionType.training,
+          ),
+          Competition(
+            hill: zakopane,
+            date: DateTime(2022, 5, 31),
+            rules: ind,
+            type: CompetitionType.qualifications,
+          ),
+          Competition(
+            hill: zakopane,
+            date: DateTime(2022, 6, 1),
+            rules: ind,
+            type: CompetitionType.trialRound,
+          ),
+          Competition(
+            hill: zakopane,
+            date: DateTime(2022, 6, 1),
+            rules: ind,
+            type: CompetitionType.competition,
+          ),
+        ],
+      );
+    });
   });
 }

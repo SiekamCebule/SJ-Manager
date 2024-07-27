@@ -4,5 +4,5 @@ import 'package:sj_manager/models/db/event_series/competition/competition.dart';
 abstract interface class LowLevelCalendarCreator<T extends HighLevelCompetitionRecord> {
   const LowLevelCalendarCreator();
 
-  List<Competition> convert(List<T> records);
+  List<Competition> convert(List<T> highLevelCalendar);
 }
