@@ -7,10 +7,12 @@ import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i5;
 import 'package:rxdart/rxdart.dart' as _i2;
 import 'package:sj_manager/models/db/country/country.dart' as _i4;
-import 'package:sj_manager/models/db/team/team.dart' as _i8;
+import 'package:sj_manager/models/db/team/team.dart' as _i7;
 import 'package:sj_manager/repositories/countries/countries_repo.dart' as _i6;
-import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart' as _i7;
-import 'package:sj_manager/repositories/generic/editable_items_repo.dart' as _i3;
+import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart'
+    as _i8;
+import 'package:sj_manager/repositories/generic/editable_items_repo.dart'
+    as _i3;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -25,7 +27,8 @@ import 'package:sj_manager/repositories/generic/editable_items_repo.dart' as _i3
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeValueStream_0<T1> extends _i1.SmartFake implements _i2.ValueStream<T1> {
+class _FakeValueStream_0<T1> extends _i1.SmartFake
+    implements _i2.ValueStream<T1> {
   _FakeValueStream_0(
     Object parent,
     Invocation parentInvocation,
@@ -35,9 +38,9 @@ class _FakeValueStream_0<T1> extends _i1.SmartFake implements _i2.ValueStream<T1
         );
 }
 
-class _FakeEditableDbItemsRepo_1<T1> extends _i1.SmartFake
+class _FakeEditableItemsRepo_1<T1> extends _i1.SmartFake
     implements _i3.EditableItemsRepo<T1> {
-  _FakeEditableDbItemsRepo_1(
+  _FakeEditableItemsRepo_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -56,17 +59,18 @@ class _FakeCountry_2 extends _i1.SmartFake implements _i4.Country {
         );
 }
 
-/// A class which mocks [EditableDbItemsRepo].
+/// A class which mocks [EditableItemsRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockEditableDbItemsRepo<T> extends _i1.Mock implements _i3.EditableItemsRepo<T> {
-  MockEditableDbItemsRepo() {
+class MockEditableItemsRepo<T> extends _i1.Mock
+    implements _i3.EditableItemsRepo<T> {
+  MockEditableItemsRepo() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
   List<T> get last => (super.noSuchMethod(
-        Invocation.getter(#lastItems),
+        Invocation.getter(#last),
         returnValue: <T>[],
       ) as List<T>);
 
@@ -91,7 +95,7 @@ class MockEditableDbItemsRepo<T> extends _i1.Mock implements _i3.EditableItemsRe
           #clone,
           [],
         ),
-        returnValue: _FakeEditableDbItemsRepo_1<T>(
+        returnValue: _FakeEditableItemsRepo_1<T>(
           this,
           Invocation.method(
             #clone,
@@ -211,15 +215,6 @@ class MockCountriesRepo extends _i1.Mock implements _i6.CountriesRepo {
   }
 
   @override
-  _i2.ValueStream<List<_i4.Country>> get items => (super.noSuchMethod(
-        Invocation.getter(#items),
-        returnValue: _FakeValueStream_0<List<_i4.Country>>(
-          this,
-          Invocation.getter(#items),
-        ),
-      ) as _i2.ValueStream<List<_i4.Country>>);
-
-  @override
   _i4.Country get none => (super.noSuchMethod(
         Invocation.getter(#none),
         returnValue: _FakeCountry_2(
@@ -229,8 +224,17 @@ class MockCountriesRepo extends _i1.Mock implements _i6.CountriesRepo {
       ) as _i4.Country);
 
   @override
+  _i2.ValueStream<List<_i4.Country>> get items => (super.noSuchMethod(
+        Invocation.getter(#items),
+        returnValue: _FakeValueStream_0<List<_i4.Country>>(
+          this,
+          Invocation.getter(#items),
+        ),
+      ) as _i2.ValueStream<List<_i4.Country>>);
+
+  @override
   List<_i4.Country> get last => (super.noSuchMethod(
-        Invocation.getter(#lastItems),
+        Invocation.getter(#last),
         returnValue: <_i4.Country>[],
       ) as List<_i4.Country>);
 
@@ -239,15 +243,6 @@ class MockCountriesRepo extends _i1.Mock implements _i6.CountriesRepo {
         Invocation.getter(#lastLength),
         returnValue: 0,
       ) as int);
-
-  @override
-  void setCountries(List<_i4.Country>? countries) => super.noSuchMethod(
-        Invocation.method(
-          #setCountries,
-          [countries],
-        ),
-        returnValueForMissingStub: null,
-      );
 
   @override
   _i4.Country byCode(String? code) => (super.noSuchMethod(
@@ -265,19 +260,19 @@ class MockCountriesRepo extends _i1.Mock implements _i6.CountriesRepo {
       ) as _i4.Country);
 
   @override
-  void dispose() => super.noSuchMethod(
+  void set(List<_i4.Country>? value) => super.noSuchMethod(
         Invocation.method(
-          #dispose,
-          [],
+          #set,
+          [value],
         ),
         returnValueForMissingStub: null,
       );
 
   @override
-  void set(List<_i4.Country>? value) => super.noSuchMethod(
+  void dispose() => super.noSuchMethod(
         Invocation.method(
-          #set,
-          [value],
+          #dispose,
+          [],
         ),
         returnValueForMissingStub: null,
       );
@@ -286,25 +281,26 @@ class MockCountriesRepo extends _i1.Mock implements _i6.CountriesRepo {
 /// A class which mocks [TeamsRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTeamsRepo extends _i1.Mock implements _i7.TeamsRepo {
+class MockTeamsRepo<T extends _i7.Team> extends _i1.Mock
+    implements _i8.TeamsRepo<T> {
   MockTeamsRepo() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.ValueStream<List<_i8.Team>> get items => (super.noSuchMethod(
+  _i2.ValueStream<List<T>> get items => (super.noSuchMethod(
         Invocation.getter(#items),
-        returnValue: _FakeValueStream_0<List<_i8.Team>>(
+        returnValue: _FakeValueStream_0<List<T>>(
           this,
           Invocation.getter(#items),
         ),
-      ) as _i2.ValueStream<List<_i8.Team>>);
+      ) as _i2.ValueStream<List<T>>);
 
   @override
-  List<_i8.Team> get last => (super.noSuchMethod(
-        Invocation.getter(#lastItems),
-        returnValue: <_i8.Team>[],
-      ) as List<_i8.Team>);
+  List<T> get last => (super.noSuchMethod(
+        Invocation.getter(#last),
+        returnValue: <T>[],
+      ) as List<T>);
 
   @override
   int get lastLength => (super.noSuchMethod(
@@ -313,7 +309,7 @@ class MockTeamsRepo extends _i1.Mock implements _i7.TeamsRepo {
       ) as int);
 
   @override
-  void set(List<_i8.Team>? value) => super.noSuchMethod(
+  void set(List<T>? value) => super.noSuchMethod(
         Invocation.method(
           #set,
           [value],

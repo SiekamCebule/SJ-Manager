@@ -29,9 +29,9 @@ void main() {
     setUp(() {
       filtersRepo = DbFiltersRepo();
       itemsRepo = LocalDbRepo(
-        maleJumpers: MockEditableDbItemsRepo(),
-        femaleJumpers: MockEditableDbItemsRepo(),
-        hills: MockEditableDbItemsRepo(),
+        maleJumpers: MockEditableItemsRepo(),
+        femaleJumpers: MockEditableItemsRepo(),
+        hills: MockEditableItemsRepo(),
         countries: MockCountriesRepo(),
         teams: MockTeamsRepo(),
       );
@@ -50,8 +50,8 @@ void main() {
         FemaleJumper.empty(country: norway)
       ];
       final hills = [
-        Hill.empty(country: norway).copyWith(locality: 'Lillehammer'),
-        Hill.empty(country: norway).copyWith(locality: 'Oslo')
+        const Hill.empty(country: norway).copyWith(locality: 'Lillehammer'),
+        const Hill.empty(country: norway).copyWith(locality: 'Oslo')
       ];
 
       final malesSubject = BehaviorSubject<List<MaleJumper>>.seeded([]);
