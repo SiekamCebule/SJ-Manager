@@ -38,11 +38,11 @@ class Jumper with EquatableMixin {
   final JumperSkills skills;
 
   String nameAndSurname({bool capitalizeSurname = false, bool reverse = false}) {
-    var appropiateSurname = surname;
+    var appropriateSurname = surname;
     if (capitalizeSurname) {
-      appropiateSurname = appropiateSurname.toUpperCase();
+      appropriateSurname = appropriateSurname.toUpperCase();
     }
-    return reverse ? '$appropiateSurname $name ' : '$name $appropiateSurname';
+    return reverse ? '$appropriateSurname $name ' : '$name $appropriateSurname';
   }
 
   static Jumper fromJson(Json json, {required JsonCountryLoader countryLoader}) {

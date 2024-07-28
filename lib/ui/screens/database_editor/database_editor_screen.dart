@@ -34,6 +34,7 @@ import 'package:sj_manager/repositories/generic/value_repo.dart';
 import 'package:sj_manager/ui/assets/icons.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
+import 'package:sj_manager/ui/database_item_editors/jumper_editor.dart';
 import 'package:sj_manager/ui/responsiveness/responsive_builder.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/animations/animated_visibility.dart';
@@ -43,8 +44,7 @@ import 'package:sj_manager/ui/reusable_widgets/menu_entries/predefined_reusable_
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/database_editor_unsaved_changes_dialog.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/database_successfully_saved_dialog.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/selected_db_is_not_valid_dialog.dart';
-import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropiate_db_item_list_tile.dart';
-import 'package:sj_manager/ui/database_item_editors/jumper_editor.dart';
+import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropriate_db_item_list_tile.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/filtering_countries.dart';
@@ -52,7 +52,7 @@ import 'package:sj_manager/utils/single_where_type.dart';
 
 part 'large/__large.dart';
 part 'large/widgets/__body.dart';
-part 'large/widgets/__appropiate_item_editor.dart';
+part 'large/widgets/__appropriate_item_editor.dart';
 part 'large/widgets/__app_bar.dart';
 part 'large/widgets/__bottom_app_bar.dart';
 part 'large/widgets/filters/__for_jumpers.dart';

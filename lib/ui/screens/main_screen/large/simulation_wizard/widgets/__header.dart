@@ -15,7 +15,7 @@ class _Header extends StatelessWidget {
                   SimulationWizardNavigationState>(
                 builder: (context, state) {
                   return Text(
-                    _appropiateTitleText(
+                    _appropriateTitleText(
                         context,
                         (state as InitializedSimulationWizardNavigationState)
                             .currentScreen),
@@ -42,7 +42,7 @@ class _Header extends StatelessWidget {
     );
   }
 
-  String _appropiateTitleText(BuildContext context, SimulationWizardScreen screen) {
+  String _appropriateTitleText(BuildContext context, SimulationWizardScreen screen) {
     return switch (screen) {
       SimulationWizardScreen.mode => "Wybierz tryb rozgrywki",
       SimulationWizardScreen.calendars => "Wybierz kalendarze",

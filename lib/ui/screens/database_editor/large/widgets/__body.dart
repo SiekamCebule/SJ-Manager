@@ -8,7 +8,7 @@ class _Body extends StatefulWidget {
 }
 
 class _BodyState extends State<_Body> {
-  final _editorKey = GlobalKey<_AppropiateItemEditorState>();
+  final _editorKey = GlobalKey<_AppropriateItemEditorState>();
   late final StreamSubscription _selectionChangesSubscription;
 
   @override

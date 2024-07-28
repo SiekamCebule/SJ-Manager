@@ -5,7 +5,7 @@ class _AnimatedEditor extends StatelessWidget {
     this.editorKey,
   });
 
-  final GlobalKey<_AppropiateItemEditorState>? editorKey;
+  final GlobalKey<_AppropriateItemEditorState>? editorKey;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class _AnimatedEditor extends StatelessWidget {
           duration: Durations.medium1,
           curve: Curves.easeIn,
           visible: editorShouldBeVisible,
-          child: _AppropiateItemEditor(
+          child: _AppropriateItemEditor(
             key: editorKey,
             itemType: itemsType,
             onChange: (changedItem) async {

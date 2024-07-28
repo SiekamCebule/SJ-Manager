@@ -3,8 +3,8 @@ import 'package:sj_manager/enums/db_editable_item_type.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/hill_info_list_tile.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/jumper_info_list_tile.dart';
 
-class AppropiateDbItemListTile extends StatelessWidget {
-  const AppropiateDbItemListTile({
+class AppropriateDbItemListTile extends StatelessWidget {
+  const AppropriateDbItemListTile({
     super.key,
     required this.itemType,
     required this.item,

@@ -128,7 +128,6 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    print('build()');
     return ValueListenableBuilder(
       valueListenable: _initialized,
       builder: (context, prepared, child) {
@@ -159,7 +158,6 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                     context.watch<ChangeStatusCubit>();
                     context.watch<DatabaseItemsTypeCubit>();
                     context.watch<LocalDbFilteredItemsCubit>();
-                    print('Builder rebuild');
                     return RepositoryProvider.value(
                       value: _currentCountries,
                       child: PopScope(

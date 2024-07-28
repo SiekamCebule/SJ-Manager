@@ -42,7 +42,7 @@ class _AnimatedVisibilityState extends State<AnimatedVisibility>
         _shouldShowVisibility = false;
       }
     });
-    _animateInAppropiateDirection();
+    _animateInAppropriateDirection();
 
     super.initState();
   }
@@ -56,12 +56,12 @@ class _AnimatedVisibilityState extends State<AnimatedVisibility>
   @override
   void didUpdateWidget(covariant AnimatedVisibility oldWidget) {
     if (oldWidget.visible != widget.visible) {
-      _animateInAppropiateDirection();
+      _animateInAppropriateDirection();
     }
     super.didUpdateWidget(oldWidget);
   }
 
-  Future<void> _animateInAppropiateDirection() async {
+  Future<void> _animateInAppropriateDirection() async {
     if (widget.visible) {
       _controller.forward();
     } else {

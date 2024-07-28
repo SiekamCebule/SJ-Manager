@@ -28,7 +28,7 @@ import 'package:sj_manager/ui/providers/locale_notifier.dart';
 import 'package:sj_manager/ui/reusable_widgets/animations/animated_visibility.dart';
 import 'package:sj_manager/ui/screens/database_editor/database_editor_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropiate_db_item_list_tile.dart';
+import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropriate_db_item_list_tile.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
 import 'package:sj_manager/ui/theme/app_color_scheme_repo.dart';
 import 'package:sj_manager/ui/theme/app_theme_brightness_repo.dart';
@@ -183,7 +183,7 @@ void main() {
       );
     });
 
-    testWidgets('Appropiate displaying', (tester) async {
+    testWidgets('Appropriate displaying', (tester) async {
       await tester.pumpWidget(appWidget);
       await tester.pumpAndSettle();
 
@@ -217,10 +217,10 @@ void main() {
 
       final secondTile = find.descendant(
           of: find.byType(DatabaseItemsList), matching: find.byKey(const ValueKey(1)));
-      expect(tester.widget<AppropiateDbItemListTile>(secondTile).selected, false);
+      expect(tester.widget<AppropriateDbItemListTile>(secondTile).selected, false);
       await tester.tap(secondTile);
       await tester.pumpAndSettle();
-      expect(tester.widget<AppropiateDbItemListTile>(secondTile).selected, true);
+      expect(tester.widget<AppropriateDbItemListTile>(secondTile).selected, true);
     });
 
     testWidgets('Editing hills and changing between them', (tester) async {

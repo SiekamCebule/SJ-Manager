@@ -23,13 +23,13 @@ class CalendarMainCompetitionRecordsToCalendarConverter
   List<Competition> convert(List<CalendarMainCompetitionRecord> highLevelCalendar) {
     _highLevelCalendar = highLevelCalendar;
     _competitionsWhichShouldMoveBackIfHaveTeamCompBehind = {};
-    _createLowCalendarAndAppropiatelyMarkCompetitions();
+    _createLowCalendarAndAppropriatelyMarkCompetitions();
     _moveAppropriateCompetitionsBehindTeamComps();
     _addDayForTrainingsAndTrialRoundsAfterCompetitionOrQualificationsIfSameDay();
     return _lowLevelCalendar;
   }
 
-  void _createLowCalendarAndAppropiatelyMarkCompetitions() {
+  void _createLowCalendarAndAppropriatelyMarkCompetitions() {
     _lowLevelCalendar = _highLevelCalendar.expand((highLevelComp) {
       final rawComps = highLevelComp.createRawCompetitions();
       _maybeMarkCompetitionItShouldMoveBehindTeamComp(

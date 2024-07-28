@@ -1,7 +1,7 @@
 part of '../../database_editor_screen.dart';
 
-class _AppropiateItemEditor extends StatefulWidget {
-  const _AppropiateItemEditor({
+class _AppropriateItemEditor extends StatefulWidget {
+  const _AppropriateItemEditor({
     super.key,
     required this.itemType,
     required this.onChange,
@@ -11,10 +11,10 @@ class _AppropiateItemEditor extends StatefulWidget {
   final Function(Object?) onChange;
 
   @override
-  State<_AppropiateItemEditor> createState() => _AppropiateItemEditorState();
+  State<_AppropriateItemEditor> createState() => _AppropriateItemEditorState();
 }
 
-class _AppropiateItemEditorState extends State<_AppropiateItemEditor> {
+class _AppropriateItemEditorState extends State<_AppropriateItemEditor> {
   final _jumperEditorKey = GlobalKey<JumperEditorState>();
   final _hillEditorKey = GlobalKey<HillEditorState>();
 

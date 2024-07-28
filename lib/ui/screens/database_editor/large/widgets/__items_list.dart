@@ -43,7 +43,7 @@ class _ItemsListState extends State<_ItemsList> {
             },
             length: filteredItemsByType.length,
             itemBuilder: (context, index) {
-              return AppropiateDbItemListTile(
+              return AppropriateDbItemListTile(
                 key: ValueKey(index),
                 reorderable: listShouldBeReorderable,
                 itemType: itemsType,
