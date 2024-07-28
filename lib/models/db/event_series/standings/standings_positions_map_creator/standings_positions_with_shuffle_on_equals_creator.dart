@@ -6,28 +6,30 @@ import 'package:sj_manager/models/db/event_series/standings/standings_record.dar
 class StandingsPositionsWithShuffleOnEqualsCreator<T extends StandingsRecord>
     implements StandingsPositionsCreator<T> {
   final Random _random = Random();
+  late List<T> _records;
 
   @override
   Map<int, List<T>> create(List<T> records) {
-    _sortRecords(records);
-    return _generatePositionsMap(records);
+    _records = List.of(records);
+    _sortRecords();
+    return _generatePositionsMap();
   }
 
-  void _sortRecords(List<T> records) {
-    records.sort((a, b) => a.score > b.score ? -1 : 1);
+  void _sortRecords() {
+    _records.sort((a, b) => a.score > b.score ? -1 : 1);
   }
 
-  Map<int, List<T>> _generatePositionsMap(List<T> records) {
+  Map<int, List<T>> _generatePositionsMap() {
     Map<int, List<T>> positionsMap = {};
     int currentPosition = 1;
     int currentRank = 1;
 
-    for (int i = 0; i < records.length; i++) {
-      if (i > 0 && records[i].score < records[i - 1].score) {
+    for (int i = 0; i < _records.length; i++) {
+      if (i > 0 && _records[i].score < _records[i - 1].score) {
         currentRank = currentPosition;
       }
 
-      positionsMap.putIfAbsent(currentRank, () => []).add(records[i]);
+      positionsMap.putIfAbsent(currentRank, () => []).add(_records[i]);
       currentPosition++;
     }
 

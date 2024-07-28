@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:sj_manager/models/db/event_series/classification/classification_scoring_delegate/callback_classification_scoring_delegates.dart';
-import 'package:sj_manager/models/db/event_series/classification/classification_scoring_delegate/classification_scoring_delegate.dart';
 import 'package:sj_manager/models/db/event_series/event_series.dart';
 
 import 'callback_classification_scoring_delegate_by_event_series_test.mocks.dart';
