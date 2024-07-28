@@ -8,7 +8,7 @@ class StandingsRepo<E, S extends Score, R extends StandingsRecord<E, S>>
     implements ValueRepo<Map<int, List<R>>> {
   StandingsRepo({required this.positionsCreator, List<R>? initialRecords}) {
     if (initialRecords != null) {
-      _records = initialRecords;
+      _records = List.of(initialRecords);
       _updateStandings();
       set(_standings);
     }
@@ -28,18 +28,28 @@ class StandingsRepo<E, S extends Score, R extends StandingsRecord<E, S>>
       }
     }
 
-    if (recordToChange != null) {
-      throw StateError('Standings does not have the entiy (${newRecord.entity})');
+    if (recordToChange == null) {
+      _records.add(newRecord);
+    } else {
+      _records[_records.indexOf(recordToChange)] = newRecord;
     }
 
-    _records[_records.indexOf(recordToChange!)] = newRecord;
+    _updateStandings();
+    set(_standings);
+  }
 
+  void remove({required R record}) {
+    _records.remove(record);
     _updateStandings();
     set(_standings);
   }
 
   void _updateStandings() {
     _standings = positionsCreator.create(_records);
+  }
+
+  List<R> get leaders {
+    return atPosition(1);
   }
 
   List<R> atPosition(int position) {
@@ -50,28 +60,40 @@ class StandingsRepo<E, S extends Score, R extends StandingsRecord<E, S>>
   }
 
   int positionOf(E entity) {
-    int? toReturn;
-    _standings.forEach((position, entities) {
-      if (entities.contains(entity)) {
-        toReturn = position;
+    for (var entry in _standings.entries) {
+      bool hasRecordWithEntity =
+          entry.value.where((record) => record.entity == entity).length == 1;
+      if (hasRecordWithEntity) {
+        return entry.key;
       }
-    });
-    if (toReturn == null) {
-      throw StateError('The entity ($entity) is not contained by standings');
     }
-    return toReturn!;
+    throw _notContainEntityError(entity);
   }
 
-  S? scoreOf(E entity) {
+  S scoreOf(E entity) {
     for (var record in _records) {
       if (record.entity == entity) {
         return record.score;
       }
     }
-    return null;
+    throw _notContainEntityError(entity);
   }
 
-  int get length => last.length;
+  Error _notContainEntityError(E entity) {
+    return StateError('The entity ($entity) is not contained by standings');
+  }
+
+  int get length => _records.length;
+
+  int get lastPosition {
+    return _standings.keys.reduce((first, second) {
+      if (second > first) {
+        return second;
+      } else {
+        return first;
+      }
+    });
+  }
 
   bool containsEntity(E entity) {
     return _records.where((record) => record.entity == entity).isNotEmpty;

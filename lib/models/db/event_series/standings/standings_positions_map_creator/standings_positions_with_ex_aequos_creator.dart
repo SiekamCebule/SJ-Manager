@@ -13,7 +13,11 @@ class StandingsPositionsWithExAequosCreator<T extends StandingsRecord>
   }
 
   void _sortRecords() {
-    _records.sort((a, b) => b.compareTo(a));
+    _records.sort((a, b) {
+      if (a.score > b.score) return -1;
+      if (a.score < b.score) return 1;
+      return 0; // Maintain original order if scores are equal
+    });
   }
 
   Map<int, List<T>> _generatePositionsMap() {
