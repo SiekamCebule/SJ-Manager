@@ -1,7 +1,14 @@
-class TeamCompetitionGroupRules {
+import 'package:equatable/equatable.dart';
+
+class TeamCompetitionGroupRules with EquatableMixin {
   const TeamCompetitionGroupRules({
-    required this.sortBeforeGroup,
+    required this.sortStartList,
   });
 
-  final bool sortBeforeGroup;
+  final bool sortStartList;
+
+  @override
+  List<Object?> get props => [
+        sortStartList,
+      ];
 }

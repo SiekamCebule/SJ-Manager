@@ -1,29 +1,14 @@
+import 'package:sj_manager/models/db/event_series/standings/score/has_points_mixin.dart';
 import 'package:sj_manager/models/db/event_series/standings/score/score.dart';
 
-abstract class SingleValueScore<T> extends Score {
-  const SingleValueScore(this.value);
+class SimplePointsScore extends Score with HasPointsMixin {
+  const SimplePointsScore(double points) : _points = points;
 
-  final T value;
-
-  @override
-  List<Object?> get props => [value];
-}
-
-class PointsScore extends SingleValueScore<double> {
-  const PointsScore(super.value);
+  final double _points;
 
   @override
-  bool operator >(covariant PointsScore other) {
-    return value > other.value;
-  }
+  List<Object?> get props => [points];
 
   @override
-  bool operator <(covariant PointsScore other) {
-    return value < other.value;
-  }
-
-  @override
-  int compareTo(covariant PointsScore other) {
-    return value.compareTo(other.value);
-  }
+  List<double> get components => [_points];
 }

@@ -1,14 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 import 'package:sj_manager/models/db/country/country.dart';
 import 'package:sj_manager/models/db/event_series/competition/calendar_records/calendar_main_competition_record.dart';
 import 'package:sj_manager/models/db/event_series/competition/calendar_records/calendar_main_competition_record_setup.dart';
 import 'package:sj_manager/models/db/event_series/competition/calendar_records/calendar_main_competition_records_to_calendar.dart';
 import 'package:sj_manager/models/db/event_series/competition/competition.dart';
 import 'package:sj_manager/models/db/event_series/competition/competition_type.dart';
-import 'package:sj_manager/models/db/event_series/competition/rules/competition_rules/individual_competition_rules.dart';
-import 'package:sj_manager/models/db/event_series/competition/rules/competition_rules/team_competition_rules.dart';
+import 'package:sj_manager/models/db/event_series/competition/high_level_calendar.dart';
+import 'package:sj_manager/models/db/event_series/competition/rules/competition_rules/competition_rules.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
+import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/db/team/team.dart';
 
+import 'creating_low_level_calendars_test.mocks.dart';
+
+@GenerateMocks([CompetitionRules])
 void main() {
   group(CalendarMainCompetitionRecordsToCalendarConverter, () {
     final zakopane = const Hill.empty(country: Country.emptyNone())
@@ -17,15 +23,8 @@ void main() {
         .copyWith(locality: 'Sapporo', hs: 137);
     final vikersund = const Hill.empty(country: Country.emptyNone())
         .copyWith(locality: 'Vikersund', hs: 240);
-    const ind = IndividualCompetitionRules(
-      rounds: [],
-      allowChangingGates: false,
-    );
-    const team = TeamCompetitionRules(
-      jumpersCountInTeam: 4,
-      rounds: [],
-      allowChangingGates: true,
-    );
+    final ind = MockCompetitionRules<Jumper>();
+    final team = MockCompetitionRules<Team>();
 
     const week = Duration(days: 7);
     const day = Duration(days: 1);
@@ -33,11 +32,11 @@ void main() {
     test('Converting a high-level to the low-level calendar', () {
       final startDate = DateTime(2022, 1, 15);
 
-      final highLevelCalendar = [
+      final highLevelComps = [
         CalendarMainCompetitionRecord(
           hill: sapporo,
           date: startDate,
-          setup: const CalendarMainCompetitionRecordSetup(
+          setup: CalendarMainCompetitionRecordSetup(
             mainCompRules: ind,
             trainingsRules: [
               ind,
@@ -50,7 +49,7 @@ void main() {
         CalendarMainCompetitionRecord(
           hill: sapporo,
           date: startDate.add(day),
-          setup: const CalendarMainCompetitionRecordSetup(
+          setup: CalendarMainCompetitionRecordSetup(
             mainCompRules: team,
             trialRoundRules: ind,
           ),
@@ -58,7 +57,7 @@ void main() {
         CalendarMainCompetitionRecord(
           hill: zakopane,
           date: startDate.add(week),
-          setup: const CalendarMainCompetitionRecordSetup(
+          setup: CalendarMainCompetitionRecordSetup(
             mainCompRules: team,
             trialRoundRules: ind,
           ),
@@ -66,7 +65,7 @@ void main() {
         CalendarMainCompetitionRecord(
           hill: zakopane,
           date: startDate.add(week + day),
-          setup: const CalendarMainCompetitionRecordSetup(
+          setup: CalendarMainCompetitionRecordSetup(
             mainCompRules: ind,
             trainingsRules: [
               ind,
@@ -80,7 +79,7 @@ void main() {
         CalendarMainCompetitionRecord(
           hill: vikersund,
           date: startDate.add(week * 2),
-          setup: const CalendarMainCompetitionRecordSetup(
+          setup: CalendarMainCompetitionRecordSetup(
             mainCompRules: team,
             trainingsRules: [
               ind,
@@ -91,7 +90,7 @@ void main() {
         CalendarMainCompetitionRecord(
           hill: vikersund,
           date: startDate.add(week * 2 + day * 2),
-          setup: const CalendarMainCompetitionRecordSetup(
+          setup: CalendarMainCompetitionRecordSetup(
             mainCompRules: ind,
             trialRoundRules: ind,
             trainingsRules: [
@@ -101,10 +100,14 @@ void main() {
           ),
         ),
       ];
+      final highLevelCalendar = HighLevelCalendar(
+        highLevelCompetitions: highLevelComps,
+        classifications: [],
+      );
       final lowLevelCalendar =
           CalendarMainCompetitionRecordsToCalendarConverter().convert(highLevelCalendar);
       expect(
-        lowLevelCalendar,
+        lowLevelCalendar.competitions,
         [
           Competition(
             hill: sapporo,
@@ -240,11 +243,11 @@ void main() {
         'Should not move any competition (ind. comp does not have trial round, and it cannot be alone, so qualifications will not move)',
         () {
       final startDate = DateTime(2022, 6, 1);
-      final highLevelCalendar = [
+      final highLevelComps = [
         CalendarMainCompetitionRecord(
           hill: vikersund,
           date: startDate,
-          setup: const CalendarMainCompetitionRecordSetup(
+          setup: CalendarMainCompetitionRecordSetup(
             mainCompRules: team,
             trialRoundRules: ind,
           ),
@@ -252,16 +255,20 @@ void main() {
         CalendarMainCompetitionRecord(
           hill: vikersund,
           date: startDate.add(day),
-          setup: const CalendarMainCompetitionRecordSetup(
+          setup: CalendarMainCompetitionRecordSetup(
             qualificationsRules: ind,
             mainCompRules: ind,
           ),
         ),
       ];
+      final highLevelCalendar = HighLevelCalendar(
+        highLevelCompetitions: highLevelComps,
+        classifications: [],
+      );
       final lowLevelCalendar =
           CalendarMainCompetitionRecordsToCalendarConverter().convert(highLevelCalendar);
       expect(
-        lowLevelCalendar,
+        lowLevelCalendar.competitions,
         [
           Competition(
             hill: vikersund,
@@ -293,11 +300,11 @@ void main() {
 
     test('Should move the qualifications to the beginning', () {
       final startDate = DateTime(2022, 6, 1);
-      final highLevelCalendar = [
+      final highLevelComps = [
         CalendarMainCompetitionRecord(
           hill: vikersund,
           date: startDate,
-          setup: const CalendarMainCompetitionRecordSetup(
+          setup: CalendarMainCompetitionRecordSetup(
             mainCompRules: team,
             trialRoundRules: ind,
           ),
@@ -305,7 +312,7 @@ void main() {
         CalendarMainCompetitionRecord(
           hill: vikersund,
           date: startDate.add(day),
-          setup: const CalendarMainCompetitionRecordSetup(
+          setup: CalendarMainCompetitionRecordSetup(
             qualificationsRules: ind,
             trialRoundRules: ind,
             mainCompRules: ind,
@@ -313,47 +320,54 @@ void main() {
           ),
         ),
       ];
+      final highLevelCalendar = HighLevelCalendar(
+        highLevelCompetitions: highLevelComps,
+        classifications: [],
+      );
       final lowLevelCalendar =
           CalendarMainCompetitionRecordsToCalendarConverter().convert(highLevelCalendar);
-      expect(lowLevelCalendar, [
-        Competition(
-          hill: vikersund,
-          date: DateTime(2022, 5, 31),
-          rules: ind,
-          type: CompetitionType.qualifications,
-        ),
-        Competition(
-          hill: vikersund,
-          date: DateTime(2022, 6, 1),
-          rules: ind,
-          type: CompetitionType.trialRound,
-        ),
-        Competition(
-          hill: vikersund,
-          date: DateTime(2022, 6, 1),
-          rules: team,
-          type: CompetitionType.competition,
-        ),
-        Competition(
-          hill: vikersund,
-          date: DateTime(2022, 6, 2),
-          rules: ind,
-          type: CompetitionType.trialRound,
-        ),
-        Competition(
-          hill: vikersund,
-          date: DateTime(2022, 6, 2),
-          rules: ind,
-          type: CompetitionType.competition,
-        ),
-      ]);
+      expect(
+        lowLevelCalendar.competitions,
+        [
+          Competition(
+            hill: vikersund,
+            date: DateTime(2022, 5, 31),
+            rules: ind,
+            type: CompetitionType.qualifications,
+          ),
+          Competition(
+            hill: vikersund,
+            date: DateTime(2022, 6, 1),
+            rules: ind,
+            type: CompetitionType.trialRound,
+          ),
+          Competition(
+            hill: vikersund,
+            date: DateTime(2022, 6, 1),
+            rules: team,
+            type: CompetitionType.competition,
+          ),
+          Competition(
+            hill: vikersund,
+            date: DateTime(2022, 6, 2),
+            rules: ind,
+            type: CompetitionType.trialRound,
+          ),
+          Competition(
+            hill: vikersund,
+            date: DateTime(2022, 6, 2),
+            rules: ind,
+            type: CompetitionType.competition,
+          ),
+        ],
+      );
     });
 
     test(
         'The limit of 3 trainings in a day (example of a few pseudo days of world championships)',
         () {
       final startDate = DateTime(2022, 6, 1);
-      final highLevelCalendar = [
+      final highLevelComps = [
         CalendarMainCompetitionRecord(
           hill: zakopane,
           date: startDate,
@@ -368,10 +382,14 @@ void main() {
           ),
         ),
       ];
+      final highLevelCalendar = HighLevelCalendar(
+        highLevelCompetitions: highLevelComps,
+        classifications: [],
+      );
       final lowLevelCalendar =
           CalendarMainCompetitionRecordsToCalendarConverter().convert(highLevelCalendar);
       expect(
-        lowLevelCalendar,
+        lowLevelCalendar.competitions,
         [
           Competition(
             hill: zakopane,

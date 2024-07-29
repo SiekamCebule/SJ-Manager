@@ -6,15 +6,19 @@ import 'package:sj_manager/models/db/event_series/standings/standings_repo.dart'
 
 void main() {
   group(StandingsRepo, () {
-    late StandingsRepo<String, PointsScore, StandingsRecord<String, PointsScore>> repo;
+    late StandingsRepo<String, SimplePointsScore,
+        StandingsRecord<String, SimplePointsScore>> repo;
 
     test('Adding, editing and removing; updating standings', () {
-      const stoch = StandingsRecord(entity: 'Kamil Stoch', score: PointsScore(315.5));
-      const kubacki = StandingsRecord(entity: 'Dawid Kubacki', score: PointsScore(333.4));
-      const zyla = StandingsRecord(entity: 'Piotr Żyła', score: PointsScore(315.5));
-      const geiger = StandingsRecord(entity: 'Karl Geiger', score: PointsScore(330.0));
+      const stoch =
+          StandingsRecord(entity: 'Kamil Stoch', score: SimplePointsScore(315.5));
+      const kubacki =
+          StandingsRecord(entity: 'Dawid Kubacki', score: SimplePointsScore(333.4));
+      const zyla = StandingsRecord(entity: 'Piotr Żyła', score: SimplePointsScore(315.5));
+      const geiger =
+          StandingsRecord(entity: 'Karl Geiger', score: SimplePointsScore(330.0));
       const eisenbichler =
-          StandingsRecord(entity: 'Markus Eisenbichler', score: PointsScore(350.1));
+          StandingsRecord(entity: 'Markus Eisenbichler', score: SimplePointsScore(350.1));
 
       repo = StandingsRepo(
         positionsCreator: StandingsPositionsWithExAequosCreator(),
@@ -30,7 +34,7 @@ void main() {
       expect(repo.leaders.single, kubacki);
       expect(repo.length, 4);
       expect(repo.containsEntity('Markus Eisenbichler'), false);
-      repo.update(newRecord: stoch.copyWith(score: const PointsScore(441.4)));
+      repo.update(newRecord: stoch.copyWith(score: const SimplePointsScore(441.4)));
       expect(repo.leaders.single.entity, 'Kamil Stoch');
       expect(repo.length, 4);
 
@@ -38,19 +42,22 @@ void main() {
     });
 
     group('Repo view utilities', () {
-      const kot = StandingsRecord(entity: 'Maciej Kot', score: PointsScore(116.4));
-      const hula = StandingsRecord(entity: 'Stefan Hula', score: PointsScore(116.4));
+      const kot = StandingsRecord(entity: 'Maciej Kot', score: SimplePointsScore(116.4));
+      const hula =
+          StandingsRecord(entity: 'Stefan Hula', score: SimplePointsScore(116.4));
       const kobayashi =
-          StandingsRecord(entity: 'Ryoyu Kobayashi', score: PointsScore(137.8));
+          StandingsRecord(entity: 'Ryoyu Kobayashi', score: SimplePointsScore(137.8));
       const danielHuber =
-          StandingsRecord(entity: 'Daniel Huber', score: PointsScore(137.8));
+          StandingsRecord(entity: 'Daniel Huber', score: SimplePointsScore(137.8));
       const stefanHuber =
-          StandingsRecord(entity: 'Stefan Huber', score: PointsScore(120.1));
+          StandingsRecord(entity: 'Stefan Huber', score: SimplePointsScore(120.1));
       const wohlgenannt =
-          StandingsRecord(entity: 'Ulrich Wohlgenannt', score: PointsScore(111.5));
-      const kos = StandingsRecord(entity: 'Lovro Kos', score: PointsScore(127.5));
-      const prevc = StandingsRecord(entity: 'Domen Prevc', score: PointsScore(114.9));
-      const peier = StandingsRecord(entity: 'Killian Peier', score: PointsScore(110.8));
+          StandingsRecord(entity: 'Ulrich Wohlgenannt', score: SimplePointsScore(111.5));
+      const kos = StandingsRecord(entity: 'Lovro Kos', score: SimplePointsScore(127.5));
+      const prevc =
+          StandingsRecord(entity: 'Domen Prevc', score: SimplePointsScore(114.9));
+      const peier =
+          StandingsRecord(entity: 'Killian Peier', score: SimplePointsScore(110.8));
 
       setUpAll(() {
         repo = StandingsRepo(
@@ -88,8 +95,8 @@ void main() {
       });
 
       test('score by entity', () {
-        expect(repo.scoreOf('Domen Prevc'), const PointsScore(114.9));
-        expect(repo.scoreOf('Daniel Huber'), const PointsScore(137.8));
+        expect(repo.scoreOf('Domen Prevc'), const SimplePointsScore(114.9));
+        expect(repo.scoreOf('Daniel Huber'), const SimplePointsScore(137.8));
         expect(() => repo.scoreOf('Peter Prevc'), throwsA(isA<StateError>()));
       });
 

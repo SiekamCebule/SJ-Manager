@@ -2,7 +2,9 @@ import 'package:sj_manager/models/db/event_series/competition/calendar_records/c
 import 'package:sj_manager/models/db/event_series/competition/calendar_records/converter.dart';
 import 'package:sj_manager/models/db/event_series/competition/competition.dart';
 import 'package:sj_manager/models/db/event_series/competition/competition_type.dart';
+import 'package:sj_manager/models/db/event_series/competition/high_level_calendar.dart';
 import 'package:sj_manager/models/db/event_series/competition/rules/competition_rules/competition_rules.dart';
+import 'package:sj_manager/models/db/event_series/event_series_calendar.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/models/db/team/team.dart';
@@ -10,8 +12,9 @@ import 'package:sj_manager/utils/iterable.dart';
 
 class CalendarMainCompetitionRecordsToCalendarConverter
     implements LowLevelCalendarCreator<CalendarMainCompetitionRecord> {
-  late List<CalendarMainCompetitionRecord> _highLevelCalendar;
-  late List<Competition> _lowLevelCalendar;
+  late List<CalendarMainCompetitionRecord> _highLevelComps;
+  late List<Competition> _lowLevelComps;
+  var _qualifications = <Competition, Competition>{};
   late Set<Competition> _competitionsWhichShouldMoveBackIfHaveTeamCompBehind;
   late List<Competition> _compsBelongingToTeamComp;
   late Competition _firstBelongingToTeamComp;
@@ -20,18 +23,28 @@ class CalendarMainCompetitionRecordsToCalendarConverter
   static const _day = Duration(days: 1);
 
   @override
-  List<Competition> convert(List<CalendarMainCompetitionRecord> highLevelCalendar) {
-    _highLevelCalendar = highLevelCalendar;
+  EventSeriesCalendar convert(
+      HighLevelCalendar<CalendarMainCompetitionRecord> highLevelCalendar) {
+    _qualifications = {};
+    _highLevelComps = highLevelCalendar.highLevelCompetitions;
     _competitionsWhichShouldMoveBackIfHaveTeamCompBehind = {};
     _createLowCalendarAndAppropriatelyMarkCompetitions();
     _moveAppropriateCompetitionsBehindTeamComps();
     _addDayForTrainingsAndTrialRoundsAfterCompetitionOrQualificationsIfSameDay();
-    return _lowLevelCalendar;
+
+    return EventSeriesCalendar(
+      competitions: _lowLevelComps,
+      classifications: highLevelCalendar.classifications,
+      qualifications: _qualifications,
+    );
   }
 
   void _createLowCalendarAndAppropriatelyMarkCompetitions() {
-    _lowLevelCalendar = _highLevelCalendar.expand((highLevelComp) {
+    _lowLevelComps = _highLevelComps.expand((highLevelComp) {
       final rawComps = highLevelComp.createRawCompetitions();
+      if (highLevelComp.setup.qualificationsRules != null) {
+        _qualifications[rawComps.last] = rawComps.penultimate;
+      }
       _maybeMarkCompetitionItShouldMoveBehindTeamComp(
           highLevelComp: highLevelComp, rawComps: rawComps);
       return rawComps;
@@ -63,7 +76,7 @@ class CalendarMainCompetitionRecordsToCalendarConverter
   }
 
   void _moveAppropriateCompetitionsBehindTeamComps() {
-    for (var current in _lowLevelCalendar) {
+    for (var current in _lowLevelComps) {
       if (_compShouldMoveBackIfHaveTeamCompBehind(current)) {
         final prev = _previous(current: current);
         if (prev == null) break;
@@ -83,14 +96,14 @@ class CalendarMainCompetitionRecordsToCalendarConverter
   }
 
   Competition? _previous({required Competition current}) {
-    final currentIndex = _lowLevelCalendar.indexOf(current);
+    final currentIndex = _lowLevelComps.indexOf(current);
     if (currentIndex == 0) return null;
     if (currentIndex == -1) {
       throw StateError(
         'Cannot find the previous competition before $current, because competitions list does not even contain it',
       );
     }
-    return _lowLevelCalendar[currentIndex - 1];
+    return _lowLevelComps[currentIndex - 1];
   }
 
   bool _isTeamCompWithSameHill(Competition? comp, {required Hill requiredHill}) {
@@ -108,9 +121,9 @@ class CalendarMainCompetitionRecordsToCalendarConverter
     if (teamComp == firstOfTeamComp) {
       _firstBelongingToTeamComp = teamComp;
     } else {
-      _compsBelongingToTeamComp = _lowLevelCalendar.sublist(
-        _lowLevelCalendar.indexOf(firstOfTeamComp),
-        _lowLevelCalendar.indexOf(teamComp),
+      _compsBelongingToTeamComp = _lowLevelComps.sublist(
+        _lowLevelComps.indexOf(firstOfTeamComp),
+        _lowLevelComps.indexOf(teamComp),
       );
       _firstBelongingToTeamComp = _compsBelongingToTeamComp.first;
     }
@@ -137,29 +150,29 @@ class CalendarMainCompetitionRecordsToCalendarConverter
 
   Competition _moveCompetitionBehindOther(
       {required Competition toMove, required Competition other}) {
-    _lowLevelCalendar.remove(toMove);
-    _lowLevelCalendar.insert(_lowLevelCalendar.indexOf(other), toMove);
-    final toMoveIndex = _lowLevelCalendar.indexOf(toMove);
-    return _lowLevelCalendar[toMoveIndex];
+    _lowLevelComps.remove(toMove);
+    _lowLevelComps.insert(_lowLevelComps.indexOf(other), toMove);
+    final toMoveIndex = _lowLevelComps.indexOf(toMove);
+    return _lowLevelComps[toMoveIndex];
   }
 
   void _addCompDate({required Competition comp, required Duration delta}) {
-    final index = _lowLevelCalendar.indexOf(comp);
-    _lowLevelCalendar[index] =
-        _lowLevelCalendar[index].copyWith(date: _lowLevelCalendar[index].date.add(delta));
+    final index = _lowLevelComps.indexOf(comp);
+    _lowLevelComps[index] =
+        _lowLevelComps[index].copyWith(date: _lowLevelComps[index].date.add(delta));
   }
 
   void _subtractCompDate({required Competition comp, required Duration delta}) {
-    final index = _lowLevelCalendar.indexOf(comp);
-    _lowLevelCalendar[index] = _lowLevelCalendar[index]
-        .copyWith(date: _lowLevelCalendar[index].date.subtract(delta));
+    final index = _lowLevelComps.indexOf(comp);
+    _lowLevelComps[index] =
+        _lowLevelComps[index].copyWith(date: _lowLevelComps[index].date.subtract(delta));
   }
 
   void _addDayForTrainingsAndTrialRoundsAfterCompetitionOrQualificationsIfSameDay() {
     final compsToChange = <Competition>[];
     CompetitionType? prevCompType;
     DateTime? prevCompDate;
-    for (var comp in _lowLevelCalendar) {
+    for (var comp in _lowLevelComps) {
       final byCurrentCompType = comp.type == CompetitionType.training ||
           comp.type == CompetitionType.trialRound;
       final byPrevCompType = prevCompType != null &&
