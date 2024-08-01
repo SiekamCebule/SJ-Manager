@@ -47,7 +47,8 @@ class MainMenuTextContentButtonBody extends StatelessWidget {
                             ),
                       ),
                     ),
-                    const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
+                    const Gap(
+                        UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
                     if (decorationWidget != null) ...[
                       Expanded(
                         flex: 4,
@@ -56,7 +57,8 @@ class MainMenuTextContentButtonBody extends StatelessWidget {
                           child: decorationWidget!,
                         ),
                       ),
-                      const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
+                      const Gap(UiMainMenuConstants
+                          .horizontalSpaceBetweenButtonItems),
                     ],
                   ],
                 ),

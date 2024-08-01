@@ -26,7 +26,8 @@ class _ForHillsState extends State<_ForHills> {
               _clearSelection();
               await Future.delayed(Duration.zero);
               _bySearchText = HillsFilterBySearch(
-                  searchAlgorithm: DefaultHillMatchingByTextAlgorithm(text: changed));
+                  searchAlgorithm:
+                      DefaultHillMatchingByTextAlgorithm(text: changed));
               _setFilters();
             },
           ),
@@ -62,8 +63,8 @@ class _ForHillsState extends State<_ForHills> {
             if (selected != noneCountry || selected != null) {
               countries = {selected!};
             }
-            _byCountry =
-                HillsFilterByCountry(countries: countries, noneCountry: noneCountry);
+            _byCountry = HillsFilterByCountry(
+                countries: countries, noneCountry: noneCountry);
             _setFilters();
           },
         ),

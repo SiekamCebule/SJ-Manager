@@ -166,13 +166,15 @@ class JumperEditorState extends State<JumperEditor> {
                           fit: BoxFit.fitHeight,
                           errorBuilder: (_, __, ___) =>
                               const ItemImageNotFoundPlaceholder(
-                            width: UiItemEditorsConstants.jumperImagePlaceholderWidth,
+                            width: UiItemEditorsConstants
+                                .jumperImagePlaceholderWidth,
                             height: UiItemEditorsConstants.jumperImageHeight,
                           ),
                         ),
                       ),
                     if (shouldShowImage)
-                      const Gap(UiItemEditorsConstants.itemImageHorizontalMargin),
+                      const Gap(
+                          UiItemEditorsConstants.itemImageHorizontalMargin),
                   ],
                 ),
                 MyNumeralTextField(
@@ -198,8 +200,8 @@ class JumperEditorState extends State<JumperEditor> {
                   entries: JumpsConsistency.values.map((consistency) {
                     return DropdownMenuEntry(
                         value: consistency,
-                        label:
-                            translatedJumpsConsistencyDescription(context, consistency));
+                        label: translatedJumpsConsistencyDescription(
+                            context, consistency));
                   }).toList(),
                   width: constraints.maxWidth,
                   initial: JumpsConsistency.average,
@@ -215,7 +217,8 @@ class JumperEditorState extends State<JumperEditor> {
                   entries: LandingStyle.values.map((style) {
                     return DropdownMenuEntry(
                         value: style,
-                        label: translatedLandingStyleDescription(context, style));
+                        label:
+                            translatedLandingStyleDescription(context, style));
                   }).toList(),
                   width: constraints.maxWidth,
                   initial: LandingStyle.average,
@@ -229,7 +232,9 @@ class JumperEditorState extends State<JumperEditor> {
                   labelText: translate(context).onSmallerHills,
                   step: 1.0,
                   min: 0.0,
-                  max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
+                  max: context
+                      .read<DbEditingDefaultsRepo>()
+                      .maxJumperQualitySkill,
                   maxDecimalPlaces: 2,
                 ),
                 gap,
@@ -240,7 +245,9 @@ class JumperEditorState extends State<JumperEditor> {
                   labelText: translate(context).onLargerHills,
                   step: 1.0,
                   min: 0.0,
-                  max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
+                  max: context
+                      .read<DbEditingDefaultsRepo>()
+                      .maxJumperQualitySkill,
                   maxDecimalPlaces: 2,
                 ),
                 gap,
@@ -262,16 +269,25 @@ class JumperEditorState extends State<JumperEditor> {
     final country = _country!;
     final age = int.parse(_ageController.text);
     final skills = JumperSkills(
-      qualityOnSmallerHills: double.parse(_qualityOnSmallerHillsController.text),
+      qualityOnSmallerHills:
+          double.parse(_qualityOnSmallerHillsController.text),
       qualityOnLargerHills: double.parse(_qualityOnLargerHillsController.text),
       landingStyle: _landingStyle,
       jumpsConsistency: _jumpsConsistency,
     );
     final jumper = _sex == Sex.male
         ? MaleJumper(
-            name: name, surname: surname, country: country, age: age, skills: skills)
+            name: name,
+            surname: surname,
+            country: country,
+            age: age,
+            skills: skills)
         : FemaleJumper(
-            name: name, surname: surname, country: country, age: age, skills: skills);
+            name: name,
+            surname: surname,
+            country: country,
+            age: age,
+            skills: skills);
     _cachedJumper = jumper;
     return jumper;
   }
@@ -290,7 +306,8 @@ class JumperEditorState extends State<JumperEditor> {
     _ageController.text = jumper.age.toString();
     _qualityOnSmallerHillsController.text =
         jumper.skills.qualityOnSmallerHills.toString();
-    _qualityOnLargerHillsController.text = jumper.skills.qualityOnLargerHills.toString();
+    _qualityOnLargerHillsController.text =
+        jumper.skills.qualityOnLargerHills.toString();
     setState(() {
       _sex = jumper.sex;
     });

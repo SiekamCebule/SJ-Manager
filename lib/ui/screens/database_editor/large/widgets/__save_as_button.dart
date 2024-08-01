@@ -9,7 +9,9 @@ class _SaveAsButton extends StatelessWidget {
       onPressed: () async {
         final dirPath = await FilePicker.platform.getDirectoryPath();
         if (!context.mounted || dirPath == null) return;
-        await context.read<CopiedLocalDbCubit>().saveAs(context, Directory(dirPath));
+        await context
+            .read<CopiedLocalDbCubit>()
+            .saveAs(context, Directory(dirPath));
         if (!context.mounted) return;
         await showDialog(
           context: context,

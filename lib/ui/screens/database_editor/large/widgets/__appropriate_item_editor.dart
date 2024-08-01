@@ -24,7 +24,8 @@ class _AppropriateItemEditorState extends State<_AppropriateItemEditor> {
     context.watch<ValueRepo<_SelectedTabIndex>>();
 
     return StreamBuilder(
-        stream: filtersRepo.byType(context.watch<DatabaseItemsTypeCubit>().state),
+        stream:
+            filtersRepo.byType(context.watch<DatabaseItemsTypeCubit>().state),
         builder: (context, filters) {
           switch (widget.itemType) {
             case DbEditableItemType.maleJumper:
@@ -54,7 +55,8 @@ class _AppropriateItemEditorState extends State<_AppropriateItemEditor> {
                         .maybeSingleWhereType<JumpersFilterBySearch>()
                         ?.isValid ??
                     false;
-                final countryFilterActive = filtersRepo.femaleJumpersFilters.value
+                final countryFilterActive = filtersRepo
+                        .femaleJumpersFilters.value
                         .maybeSingleWhereType<JumpersFilterByCountry>()
                         ?.isValid ??
                     false;

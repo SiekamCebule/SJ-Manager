@@ -37,7 +37,8 @@ class Jumper with EquatableMixin {
   final Sex sex;
   final JumperSkills skills;
 
-  String nameAndSurname({bool capitalizeSurname = false, bool reverse = false}) {
+  String nameAndSurname(
+      {bool capitalizeSurname = false, bool reverse = false}) {
     var appropriateSurname = surname;
     if (capitalizeSurname) {
       appropriateSurname = appropriateSurname.toUpperCase();
@@ -45,7 +46,8 @@ class Jumper with EquatableMixin {
     return reverse ? '$appropriateSurname $name ' : '$name $appropriateSurname';
   }
 
-  static Jumper fromJson(Json json, {required JsonCountryLoader countryLoader}) {
+  static Jumper fromJson(Json json,
+      {required JsonCountryLoader countryLoader}) {
     return _jumperFromJson(json, countryLoader: countryLoader);
   }
 
@@ -97,7 +99,8 @@ class MaleJumper extends Jumper {
     required super.skills,
   }) : super(sex: Sex.male);
 
-  static MaleJumper fromJson(Json json, {required JsonCountryLoader countryLoader}) {
+  static MaleJumper fromJson(Json json,
+      {required JsonCountryLoader countryLoader}) {
     final jumper = Jumper.fromJson(json, countryLoader: countryLoader);
     return MaleJumper(
       name: jumper.name,
@@ -146,7 +149,8 @@ class FemaleJumper extends Jumper {
     required super.skills,
   }) : super(sex: Sex.female);
 
-  static FemaleJumper fromJson(Json json, {required JsonCountryLoader countryLoader}) {
+  static FemaleJumper fromJson(Json json,
+      {required JsonCountryLoader countryLoader}) {
     final jumper = Jumper.fromJson(json, countryLoader: countryLoader);
     return FemaleJumper(
       name: jumper.name,

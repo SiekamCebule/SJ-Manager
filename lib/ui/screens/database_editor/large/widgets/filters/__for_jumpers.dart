@@ -24,7 +24,8 @@ class _ForJumpersState extends State<_ForJumpers> {
               _clearSelection();
               await Future.delayed(Duration.zero);
               _bySearchText = JumpersFilterBySearch(
-                  searchAlgorithm: DefaultJumperMatchingByTextAlgorithm(text: changed));
+                  searchAlgorithm:
+                      DefaultJumperMatchingByTextAlgorithm(text: changed));
               _setFilters();
             },
           ),
@@ -42,8 +43,8 @@ class _ForJumpersState extends State<_ForJumpers> {
             if (selected != noneCountry || selected != null) {
               countries = {selected!};
             }
-            _byCountry =
-                JumpersFilterByCountry(countries: countries, noneCountry: noneCountry);
+            _byCountry = JumpersFilterByCountry(
+                countries: countries, noneCountry: noneCountry);
             _setFilters();
           },
         ),

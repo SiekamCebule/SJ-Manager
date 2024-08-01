@@ -14,7 +14,8 @@ class _ItemsListState extends State<_ItemsList> {
     final copiedLocalDbCubit = context.watch<CopiedLocalDbCubit>();
     final copiedLocalDbRepos = copiedLocalDbCubit.state!;
 
-    final editableItemsRepoByType = copiedLocalDbRepos.editableByType(itemsType);
+    final editableItemsRepoByType =
+        copiedLocalDbRepos.editableByType(itemsType);
     final filtersRepo = context.watch<DbFiltersRepo>();
     final selectedIndexesRepo = context.watch<SelectedIndexesRepo>();
 
@@ -50,7 +51,8 @@ class _ItemsListState extends State<_ItemsList> {
                 item: filteredItemsByType.elementAt(index),
                 indexInList: index,
                 onItemTap: () async {
-                  bool ctrlIsPressed = HardwareKeyboard.instance.isControlPressed;
+                  bool ctrlIsPressed =
+                      HardwareKeyboard.instance.isControlPressed;
                   if (ctrlIsPressed) {
                     selectedIndexesRepo.toggleSelection(index);
                   } else {

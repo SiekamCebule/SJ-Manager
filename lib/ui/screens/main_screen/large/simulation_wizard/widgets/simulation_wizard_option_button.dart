@@ -21,7 +21,10 @@ class SimulationWizardOptionButton extends StatelessWidget {
     return Material(
       borderRadius: borderRadius,
       color: isSelected
-          ? Theme.of(context).colorScheme.secondaryContainer.blendWithBg(brightness, 0.06)
+          ? Theme.of(context)
+              .colorScheme
+              .secondaryContainer
+              .blendWithBg(brightness, 0.06)
           : Theme.of(context).colorScheme.surfaceContainer,
       child: InkWell(
         borderRadius: borderRadius,

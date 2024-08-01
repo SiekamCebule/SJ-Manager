@@ -4,14 +4,16 @@ import 'package:rxdart/subjects.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 
 class AppThemeBrightnessRepo {
-  final _subject = BehaviorSubject.seeded(UiGlobalConstants.defaultAppThemeBrightness);
+  final _subject =
+      BehaviorSubject.seeded(UiGlobalConstants.defaultAppThemeBrightness);
 
   void update(Brightness brightness) {
     _subject.add(brightness);
   }
 
   void toggle() {
-    _subject.add(state == Brightness.light ? Brightness.dark : Brightness.light);
+    _subject
+        .add(state == Brightness.light ? Brightness.dark : Brightness.light);
   }
 
   void dipose() => _subject.close();

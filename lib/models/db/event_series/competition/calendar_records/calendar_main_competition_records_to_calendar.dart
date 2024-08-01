@@ -137,8 +137,9 @@ class CalendarMainCompetitionRecordsToCalendarConverter
       if (previous != null) {
         currentlyChecked = previous;
       }
-      bool shouldGoFurther = begin.type.index >= currentlyChecked.type.index &&
-          requiredHill == currentlyChecked.hill;
+      bool shouldGoFurther =
+          _competitionType(begin)!.index >= _competitionType(currentlyChecked)!.index &&
+              requiredHill == currentlyChecked.hill;
       if (shouldGoFurther) {
         continue;
       } else {
@@ -146,6 +147,15 @@ class CalendarMainCompetitionRecordsToCalendarConverter
       }
     }
     return currentlyChecked;
+  }
+
+  CompetitionType? _competitionType(Competition competition) {
+    final types = competition.labels.whereType<CompetitionType>();
+    if (types.length > 1) {
+      throw StateError(
+          'The competition ($competition) has more than two competition types');
+    }
+    return types.singleOrNull;
   }
 
   Competition _moveCompetitionBehindOther(
@@ -173,8 +183,9 @@ class CalendarMainCompetitionRecordsToCalendarConverter
     CompetitionType? prevCompType;
     DateTime? prevCompDate;
     for (var comp in _lowLevelComps) {
-      final byCurrentCompType = comp.type == CompetitionType.training ||
-          comp.type == CompetitionType.trialRound;
+      final compType = _competitionType(comp);
+      final byCurrentCompType =
+          compType == CompetitionType.training || compType == CompetitionType.trialRound;
       final byPrevCompType = prevCompType != null &&
           (prevCompType == CompetitionType.competition ||
               prevCompType == CompetitionType.qualifications);
@@ -184,7 +195,7 @@ class CalendarMainCompetitionRecordsToCalendarConverter
       if (shouldBeChanged) {
         compsToChange.add(comp);
       }
-      prevCompType = comp.type;
+      prevCompType = compType;
       prevCompDate = comp.date;
     }
     for (var compToChange in compsToChange) {

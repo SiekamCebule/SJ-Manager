@@ -14,9 +14,11 @@ void main() {
     });
     test('integration test', () async {
       const jumpersFilters = [
-        JumpersFilterByCountry(countries: {Country(code: 'pl', name: 'Polska')}),
+        JumpersFilterByCountry(
+            countries: {Country(code: 'pl', name: 'Polska')}),
         JumpersFilterBySearch(
-            searchAlgorithm: DefaultJumperMatchingByTextAlgorithm(text: 'Kamil Sto')),
+            searchAlgorithm:
+                DefaultJumperMatchingByTextAlgorithm(text: 'Kamil Sto')),
       ];
       const hillsFilters = [
         HillsFilterByTypeBySie(type: HillTypeBySize.large),

@@ -10,8 +10,10 @@ class CountryFlag extends StatelessWidget {
     required this.country,
     this.width,
     this.height,
-    this.circularBorderRadius = UiGlobalConstants.defaultCountryFlagBorderRadius,
-  }) : assert((width != null || height != null) && !(width != null && height != null));
+    this.circularBorderRadius =
+        UiGlobalConstants.defaultCountryFlagBorderRadius,
+  }) : assert((width != null || height != null) &&
+            !(width != null && height != null));
 
   final Country country;
   final double? width;

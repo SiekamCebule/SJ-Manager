@@ -1,6 +1,6 @@
 import 'package:sj_manager/models/db/event_series/standings/score/score.dart';
 
-mixin HasPointsMixin on Score {
+mixin HasPointsMixin<E> on Score<E> {
   List<double> get components;
   double get points {
     return components.reduce((first, second) => first + second);

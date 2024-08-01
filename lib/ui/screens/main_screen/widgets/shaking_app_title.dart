@@ -18,7 +18,8 @@ class _ShakingAppTitleState extends State<ShakingAppTitle> {
 
   @override
   void initState() {
-    final shakeTicks = Stream<void>.periodic(UiMainMenuConstants.appTitleShakeInterval);
+    final shakeTicks =
+        Stream<void>.periodic(UiMainMenuConstants.appTitleShakeInterval);
     _shakeTicksSubscription = shakeTicks.listen((_) {
       _shakingWidgetKey.currentState?.shake();
     });

@@ -1,32 +1,22 @@
-import 'package:equatable/equatable.dart';
+import 'dart:io';
 
-class EventSeriesAssets with EquatableMixin {
-  const EventSeriesAssets({
-    this.logoPath,
-    this.trophyPath,
-    this.introPath,
+import 'package:flutter/material.dart';
+import 'package:sj_manager/utils/file_system.dart';
+
+class EventSeriesAssetsProvider {
+  const EventSeriesAssetsProvider({
+    required this.eventSeriesDirectory,
   });
 
-  final String? logoPath;
-  final String? trophyPath;
-  final String? introPath;
+  final Directory eventSeriesDirectory;
 
-  EventSeriesAssets copyWith({
-    String? logoPath,
-    String? trophyPath,
-    String? introPath,
-  }) {
-    return EventSeriesAssets(
-      logoPath: logoPath ?? this.logoPath,
-      trophyPath: trophyPath ?? this.trophyPath,
-      introPath: introPath ?? this.introPath,
-    );
+  ImageProvider logo() {
+    final file = fileByNameWithoutExtension(eventSeriesDirectory, 'logo');
+    return FileImage(file);
   }
 
-  @override
-  List<Object?> get props => [
-        logoPath,
-        trophyPath,
-        introPath,
-      ];
+  ImageProvider trophy() {
+    final file = fileByNameWithoutExtension(eventSeriesDirectory, 'trophy');
+    return FileImage(file);
+  }
 }

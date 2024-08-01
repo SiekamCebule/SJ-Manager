@@ -16,7 +16,8 @@ class TeamsRepo<T extends Team> extends ItemsRepo<T> {
       {required BuildContext context, required FromJson<Team> fromJson}) async {
     final dbFsEntityNames = context.read<DbFileSystemEntityNames>();
     final file = File('${dir.path}/${dbFsEntityNames.teams}');
-    final items = await loadItemsListFromJsonFile(file: file, fromJson: fromJson);
+    final items =
+        await loadItemsListFromJsonFile(file: file, fromJson: fromJson);
     return TeamsRepo(initial: items);
   }
 }

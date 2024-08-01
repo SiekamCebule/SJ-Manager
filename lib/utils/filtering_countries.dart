@@ -14,11 +14,13 @@ List<Country> countriesHavingTeam(List<CountryTeam> teams) {
   return countries.toList();
 }
 
-List<CountryTeam> teamsByStars(List<CountryTeam> teams, {bool ascending = false}) {
+List<CountryTeam> teamsByStars(List<CountryTeam> teams,
+    {bool ascending = false}) {
   var copiedTeams = List.of(teams);
   final descending = !ascending;
 
-  copiedTeams.sort((first, second) => first.facts.stars.compareTo(second.facts.stars));
+  copiedTeams
+      .sort((first, second) => first.facts.stars.compareTo(second.facts.stars));
   if (descending) {
     copiedTeams = copiedTeams.reversed.toList();
   }

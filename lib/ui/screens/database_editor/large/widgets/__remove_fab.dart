@@ -10,7 +10,8 @@ class _RemoveFab extends StatelessWidget {
     final dbChangeStatusCubit = context.watch<ChangeStatusCubit>();
     final copiedDbCubit = context.watch<CopiedLocalDbCubit>();
 
-    final editableItemsForCurrentType = copiedDbCubit.state!.editableByType(itemsType);
+    final editableItemsForCurrentType =
+        copiedDbCubit.state!.editableByType(itemsType);
 
     return StreamBuilder(
         stream: MergeStream([selectedIndexesRepo.selectedIndexes]),
@@ -31,7 +32,8 @@ class _RemoveFab extends StatelessWidget {
                 selectedIndexesRepo.clearSelection();
               } else if (selectedIndexesRepo.state.length == 1 &&
                   selectedIndexesRepo.state.single != 0) {
-                selectedIndexesRepo.selectOnlyAt(selectedIndexesRepo.state.single - 1);
+                selectedIndexesRepo
+                    .selectOnlyAt(selectedIndexesRepo.state.single - 1);
               }
               dbChangeStatusCubit.markAsChanged();
             },

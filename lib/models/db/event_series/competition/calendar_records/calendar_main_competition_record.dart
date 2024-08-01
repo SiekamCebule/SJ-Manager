@@ -3,6 +3,7 @@ import 'package:sj_manager/models/db/event_series/competition/calendar_records/c
 import 'package:sj_manager/models/db/event_series/competition/competition.dart';
 import 'package:sj_manager/models/db/event_series/competition/competition_type.dart';
 import 'package:sj_manager/models/db/event_series/competition/rules/competition_rules/competition_rules.dart';
+import 'package:sj_manager/models/db/event_series/standings/score/score.dart';
 import 'package:sj_manager/models/db/hill/hill.dart';
 import 'package:sj_manager/models/db/jumper/jumper.dart';
 import 'package:sj_manager/models/db/team/team.dart';
@@ -38,7 +39,7 @@ class _Converter {
         hill: record.hill,
         date: record.date,
         rules: rules,
-        type: CompetitionType.trialRound,
+        labels: const {CompetitionType.trialRound},
       );
     }
 
@@ -49,10 +50,11 @@ class _Converter {
           final daysSubtraction =
               trainingsDateBaseSubtraction + Duration(days: trainingIndex ~/ 3);
           return _competitionWithPreservedType(
-              hill: record.hill,
-              date: record.date.subtract(daysSubtraction),
-              rules: rules,
-              type: CompetitionType.training);
+            hill: record.hill,
+            date: record.date.subtract(daysSubtraction),
+            rules: rules,
+            labels: const {CompetitionType.training},
+          );
         })
         .toList()
         .reversed;
@@ -63,7 +65,7 @@ class _Converter {
         hill: record.hill,
         date: record.date.subtract(qualificationsDateSubtraction),
         rules: record.setup.qualificationsRules!,
-        type: CompetitionType.qualifications,
+        labels: const {CompetitionType.qualifications},
       );
     }
 
@@ -71,7 +73,7 @@ class _Converter {
       hill: record.hill,
       date: record.date,
       rules: record.setup.mainCompRules,
-      type: CompetitionType.competition,
+      labels: const {CompetitionType.competition},
     );
 
     final comps = [
@@ -84,24 +86,25 @@ class _Converter {
     return comps;
   }
 
-  Competition<T> _competitionWithPreservedType<T>(
-      {required Hill hill,
-      required DateTime date,
-      required CompetitionRules<T> rules,
-      required CompetitionType type}) {
+  Competition<T> _competitionWithPreservedType<T>({
+    required Hill hill,
+    required DateTime date,
+    required CompetitionRules<T> rules,
+    Set<Object> labels = const {},
+  }) {
     if (rules is CompetitionRules<Jumper>) {
       return Competition<Jumper>(
         hill: hill,
         date: date,
         rules: rules as CompetitionRules<Jumper>,
-        type: type,
+        labels: labels,
       ) as Competition<T>;
     } else if (rules is CompetitionRules<Team>) {
       return Competition<Team>(
         hill: hill,
         date: date,
         rules: rules as CompetitionRules<Team>,
-        type: type,
+        labels: labels,
       ) as Competition<T>;
     } else {
       throw TypeError();

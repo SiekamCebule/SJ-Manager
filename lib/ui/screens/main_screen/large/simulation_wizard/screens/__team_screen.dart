@@ -95,7 +95,9 @@ class _TeamScreenState extends State<_TeamScreen> {
                   children: [
                     Expanded(
                       child: _CountryTeamsGrid(
-                        teams: _selectedSex == Sex.male ? _maleTeams : _femaleTeams,
+                        teams: _selectedSex == Sex.male
+                            ? _maleTeams
+                            : _femaleTeams,
                         onTap: (tappedTeam) {
                           final oldTeam = _selectedTeam;
                           setState(() {

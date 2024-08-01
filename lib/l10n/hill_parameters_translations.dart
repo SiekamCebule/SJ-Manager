@@ -6,7 +6,8 @@ import 'package:sj_manager/models/db/hill/hill_profile_type.dart';
 import 'package:sj_manager/models/db/hill/jumps_variability.dart';
 import 'package:sj_manager/models/db/hill/landing_ease.dart';
 
-String translatedLandingEaseDescription(BuildContext context, LandingEase ease) {
+String translatedLandingEaseDescription(
+    BuildContext context, LandingEase ease) {
   return switch (ease) {
     LandingEase.veryHigh => translate(context).veryEasyForLanding,
     LandingEase.high => translate(context).easyForLanding,
@@ -23,9 +24,11 @@ String translatedHillProfileDescription(
   return switch (profileType) {
     HillProfileType.highlyFavorsInFlight =>
       translate(context).highlyFavorsInFlightForProfile,
-    HillProfileType.favorsInFlight => translate(context).favorsInFlightForProfile,
+    HillProfileType.favorsInFlight =>
+      translate(context).favorsInFlightForProfile,
     HillProfileType.balanced => translate(context).averageForProfile,
-    HillProfileType.favorsInTakeoff => translate(context).favorsInTakeoffForProfile,
+    HillProfileType.favorsInTakeoff =>
+      translate(context).favorsInTakeoffForProfile,
     HillProfileType.highlyFavorsInTakeoff =>
       translate(context).highlyFavorsInTakeoffForProfile,
   };

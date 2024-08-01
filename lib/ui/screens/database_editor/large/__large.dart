@@ -170,10 +170,12 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                             return;
                           }
                           String? action = await _showSaveChangesDialog();
-                          bool shouldClose = await _shouldCloseAfterDialog(action);
+                          bool shouldClose =
+                              await _shouldCloseAfterDialog(action);
                           if (action == 'yes') {
                             if (!context.mounted) return;
-                            await _copiedDbCubit.saveChangesToOriginalRepos(context);
+                            await _copiedDbCubit
+                                .saveChangesToOriginalRepos(context);
                           }
                           if (shouldClose) {
                             _closed = true;
@@ -187,13 +189,17 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                               _selectedIndexesRepo.selectedIndexes,
                             ]),
                             builder: (context, snapshot) {
-                              final selectedIndexes = _selectedIndexesRepo.state;
-                              final shouldShowFabs = !_filtersRepo.hasValidFilter;
-                              final shouldShowAddFab = selectedIndexes.length <= 1;
-                              final shouldShowRemoveFab = selectedIndexes.isNotEmpty;
+                              final selectedIndexes =
+                                  _selectedIndexesRepo.state;
+                              final shouldShowFabs =
+                                  !_filtersRepo.hasValidFilter;
+                              final shouldShowAddFab =
+                                  selectedIndexes.length <= 1;
+                              final shouldShowRemoveFab =
+                                  selectedIndexes.isNotEmpty;
 
-                              const fabsGap =
-                                  Gap(UiDatabaseEditorConstants.verticalSpaceBetweenFabs);
+                              const fabsGap = Gap(UiDatabaseEditorConstants
+                                  .verticalSpaceBetweenFabs);
 
                               return Scaffold(
                                 appBar: const _AppBar(),
@@ -207,7 +213,8 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                                       visible: shouldShowFabs,
                                       child: Column(
                                         mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
                                           fabsGap,
                                           AnimatedVisibility(
@@ -226,7 +233,8 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                                         ],
                                       ),
                                     ),
-                                    const Gap(UiDatabaseEditorConstants.gapBetweenFabs),
+                                    const Gap(UiDatabaseEditorConstants
+                                        .gapBetweenFabs),
                                     DefaultTabController(
                                       length: 3,
                                       child: Expanded(
@@ -238,16 +246,20 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                                                   Tab(
                                                     text: translate(context)
                                                         .maleCompetitiors,
-                                                    icon: const Icon(Symbols.male),
+                                                    icon: const Icon(
+                                                        Symbols.male),
                                                   ),
                                                   Tab(
                                                     text: translate(context)
                                                         .femaleCompetitors,
-                                                    icon: const Icon(Symbols.female),
+                                                    icon: const Icon(
+                                                        Symbols.female),
                                                   ),
                                                   Tab(
-                                                    text: translate(context).hills,
-                                                    icon: const ImageIcon(hillIcon),
+                                                    text: translate(context)
+                                                        .hills,
+                                                    icon: const ImageIcon(
+                                                        hillIcon),
                                                   ),
                                                 ],
                                                 onTap: _onChangeTab,
@@ -255,8 +267,10 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                                               Expanded(
                                                 child: Builder(
                                                   builder: (context) {
-                                                    final opacity = CurvedAnimation(
-                                                      parent: _bodyAnimationController,
+                                                    final opacity =
+                                                        CurvedAnimation(
+                                                      parent:
+                                                          _bodyAnimationController,
                                                       curve: Curves.easeIn,
                                                     );
                                                     return FadeTransition(

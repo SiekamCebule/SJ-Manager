@@ -15,7 +15,8 @@ class _DynamicContent extends StatelessWidget {
         switchInCurve: Curves.easeIn,
         switchOutCurve: Curves.easeOut,
         transitionBuilder: (child, animation) {
-          final slide = CurvedAnimation(parent: animation, curve: Curves.easeInOut).drive(
+          final slide =
+              CurvedAnimation(parent: animation, curve: Curves.easeInOut).drive(
             Tween(begin: const Offset(-1, 0), end: Offset.zero),
           );
           return SlideTransition(

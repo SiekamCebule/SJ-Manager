@@ -32,7 +32,8 @@ class CountryTeam extends Team {
   @override
   List<Object?> get props => [facts, sex, country];
 
-  factory CountryTeam.fromJson(Json json, {required JsonCountryLoader countryLoader}) {
+  factory CountryTeam.fromJson(Json json,
+      {required JsonCountryLoader countryLoader}) {
     return CountryTeam(
       facts: TeamFacts.fromJson(json['facts'] as Map<String, dynamic>),
       sex: $enumDecode(_sexEnumMap, json['sex']),
