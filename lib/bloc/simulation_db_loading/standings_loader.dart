@@ -12,10 +12,14 @@ class StandingsLoader<E, S extends Score>
   const StandingsLoader({
     required this.idsRepo,
     required this.idGenerator,
+    required this.scoreLoader,
+    required this.positionsCreatorLoader,
   });
 
   final IdsRepo idsRepo;
   final IdGenerator idGenerator;
+  final SimulationDbPartLoader<Score> scoreLoader;
+  final StandingsPositionsCreatorLoader positionsCreatorLoader;
 
   @override
   StandingsRepo load(Json json) {
@@ -26,8 +30,7 @@ class StandingsLoader<E, S extends Score>
       return score;
     }).toList();
     final positionsCreatorJson = json['positionsCreator'] as String;
-    final positionsCreator =
-        StandingsPositionsCreatorLoader(idsRepo: idsRepo).load(positionsCreatorJson);
+    final positionsCreator = positionsCreatorLoader.load(positionsCreatorJson);
 
     return StandingsRepo(
       positionsCreator: positionsCreator,

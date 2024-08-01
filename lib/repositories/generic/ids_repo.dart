@@ -1,7 +1,7 @@
 class IdsRepo<ID extends Object> {
   final Map<ID, dynamic> _items = {};
 
-  T get<T>(String id) {
+  T get<T>(ID id) {
     if (!_items.containsKey(id)) {
       throw StateError(
         'Ids repo does not contain any object of type $T with that id ($id)',
@@ -12,6 +12,12 @@ class IdsRepo<ID extends Object> {
       throw StateError('The item ($item) doesn\'t have a requested type of $T');
     }
     return _items[id]!;
+  }
+
+  ID idOf(dynamic item) {
+    return _items.keys.singleWhere((id) {
+      return _items[id] == item;
+    });
   }
 
   void register(dynamic item,

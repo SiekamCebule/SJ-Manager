@@ -1,17 +1,18 @@
-import 'package:sj_manager/models/db/event_series/standings/score/score.dart';
 import 'package:sj_manager/models/db/event_series/standings/standings_positions_map_creator/standings_positions_creator.dart';
 import 'package:sj_manager/models/db/event_series/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/models/db/event_series/standings/standings_positions_map_creator/standings_positions_with_no_ex_aequo_creator.dart';
 import 'package:sj_manager/models/db/event_series/standings/standings_positions_map_creator/standings_positions_with_shuffle_on_equal_positions_creator.dart';
 
-class StandingsPositionsCreatorLoader {
-  StandingsPositionsCreator<Score> load(String type) {
-    return switch (type) {
-      'with_ex_aequos' => StandingsPositionsWithExAequosCreator(),
-      'with_no_ex_aequo' => StandingsPositionsWithNoExAequoCreator(),
-      'with_shuffle_on_equal_positions' =>
-        StandingsPositionsWithShuffleOnEqualPositionsCreator(),
-      _ => throw ArgumentError('Invalid StandingsPositionCreator type: $type'),
-    };
+class StandingsPositionsCreatorSerializer {
+  String serialize(StandingsPositionsCreator creator) {
+    if (creator is StandingsPositionsWithExAequosCreator) {
+      return 'with_ex_aequos';
+    } else if (creator is StandingsPositionsWithNoExAequoCreator) {
+      return 'with_no_ex_aequo';
+    } else if (creator is StandingsPositionsWithShuffleOnEqualPositionsCreator) {
+      return 'with_shuffle_on_equal_positions';
+    } else {
+      throw ArgumentError('Invalid StandingsPositionsCreator');
+    }
   }
 }

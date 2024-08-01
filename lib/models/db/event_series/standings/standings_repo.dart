@@ -111,6 +111,8 @@ class StandingsRepo<E> implements ValueRepo<Map<int, List<Score<E>>>> {
   @override
   Map<int, List<Score<E>>> get last => items.value;
 
+  List<Score<E>> get scores => _scores;
+
   @override
   void dispose() {
     _subject.close();

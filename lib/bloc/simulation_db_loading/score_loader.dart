@@ -1,5 +1,6 @@
 import 'package:sj_manager/bloc/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
+import 'package:sj_manager/models/db/event_series/standings/score/concrete/classification_score.dart';
 import 'package:sj_manager/models/db/event_series/standings/score/concrete/simple_points_score.dart';
 import 'package:sj_manager/models/db/event_series/standings/score/concrete/competition_scores.dart';
 import 'package:sj_manager/models/db/event_series/standings/score/score.dart';
@@ -15,13 +16,18 @@ class ScoreLoader implements SimulationDbPartLoader<Score> {
 
   @override
   Score load(Json json) {
+    return _loadAppropriate(json);
+  }
+
+  Score _loadAppropriate(Json json) {
     final type = json['type'] as String;
     return switch (type) {
-      'single_jump' => _loadSingleJumpScore(json),
-      'jumper_score' => _loadJumperScore(json),
-      'team_score' => _loadTeamScore(json),
+      'single_jump_score' => _loadSingleJumpScore(json),
+      'jumper_competition_score' => _loadCompetitionJumperScore(json),
+      'team_competition_score' => _loadCompetitionTeamScore(json),
       'simple_points_score' => _loadSimplePointsScore(json),
-      _ => throw ArgumentError('Invalid score type: $type'),
+      'classification_score' => _loadClassificationScore(json),
+      _ => throw UnsupportedError('Unsupported score type: $type'),
     };
   }
 
@@ -36,7 +42,7 @@ class ScoreLoader implements SimulationDbPartLoader<Score> {
     );
   }
 
-  CompetitionJumperScore _loadJumperScore(Json json) {
+  CompetitionJumperScore _loadCompetitionJumperScore(Json json) {
     final entity = idsRepo.get(json['entityId']);
     final jumpScoresJson = json['jumpScores'] as List<Json>;
     final jumpScores = jumpScoresJson.map((json) {
@@ -49,16 +55,16 @@ class ScoreLoader implements SimulationDbPartLoader<Score> {
     );
   }
 
-  CompetitionTeamScore _loadTeamScore(Json json) {
+  CompetitionTeamScore _loadCompetitionTeamScore(Json json) {
     final entity = idsRepo.get(json['entityId']);
-    final jumperScoresJson = json['jumperScores'] as List<Json>;
+    final jumperScoresJson = json['entityScores'] as List<Json>;
     final jumperScores = jumperScoresJson.map((json) {
-      return _loadJumperScore(json);
+      return _loadCompetitionJumperScore(json);
     }).toList();
     return CompetitionTeamScore(
       entity: entity,
       points: json['points'],
-      jumperScores: jumperScores,
+      entityScores: jumperScores,
     );
   }
 
@@ -67,6 +73,18 @@ class ScoreLoader implements SimulationDbPartLoader<Score> {
     return SimplePointsScore(
       json['points'],
       entity: entity,
+    );
+  }
+
+  ClassificationScore _loadClassificationScore(Json json) {
+    final competitionScoresJson = json['competitionScores'] as List<Json>;
+    final competitionScores = competitionScoresJson.map((json) {
+      return _loadAppropriate(json);
+    }).toList();
+    return ClassificationScore(
+      entity: idsRepo.get(json['entityId']),
+      points: json['points'],
+      competitionScores: competitionScores.cast<CompetitionScore>(),
     );
   }
 }
