@@ -4,9 +4,9 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:sj_manager/models/db/event_series/competition/rules/competition_round_rules/competition_round_rules.dart'
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/competition_round_rules.dart'
     as _i3;
-import 'package:sj_manager/models/db/event_series/competition/rules/competition_rules/competition_rules.dart'
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart'
     as _i2;
 
 // ignore_for_file: type=lint
@@ -25,8 +25,7 @@ import 'package:sj_manager/models/db/event_series/competition/rules/competition_
 /// A class which mocks [CompetitionRules].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCompetitionRules<T> extends _i1.Mock
-    implements _i2.CompetitionRules<T> {
+class MockCompetitionRules<T> extends _i1.Mock implements _i2.CompetitionRules<T> {
   MockCompetitionRules() {
     _i1.throwOnMissingStub(this);
   }

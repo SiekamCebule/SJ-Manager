@@ -6,10 +6,10 @@ import 'package:sj_manager/bloc/database_editing/local_db_filtered_items_cubit.d
 import 'package:sj_manager/filters/hills/hill_matching_algorithms.dart';
 import 'package:sj_manager/filters/hills/hills_filter.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
-import 'package:sj_manager/models/db/country/country.dart';
-import 'package:sj_manager/models/db/hill/hill.dart';
-import 'package:sj_manager/models/db/jumper/jumper.dart';
-import 'package:sj_manager/models/db/local_db_repo.dart';
+import 'package:sj_manager/models/user_db/country/country.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/local_db_repo.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
@@ -71,8 +71,7 @@ void main() {
         return hillsSubject;
       });
 
-      cubit = LocalDbFilteredItemsCubit(
-          filtersRepo: filtersRepo, itemsRepo: itemsRepo);
+      cubit = LocalDbFilteredItemsCubit(filtersRepo: filtersRepo, itemsRepo: itemsRepo);
 
       filtersRepo.setFemaleJumpersFilters(const [
         JumpersFilterByCountry(countries: {poland})
@@ -91,16 +90,11 @@ void main() {
 
       filtersRepo.setHillsFilters(const [
         HillsFilterBySearch(
-            searchAlgorithm:
-                DefaultHillMatchingByTextAlgorithm(text: 'Lillehammer')),
+            searchAlgorithm: DefaultHillMatchingByTextAlgorithm(text: 'Lillehammer')),
       ]);
       await Future.delayed(Duration.zero);
 
-      expect(
-          cubit.state.hills
-              .where((hill) => hill.locality == 'Lillehammer')
-              .length,
-          1);
+      expect(cubit.state.hills.where((hill) => hill.locality == 'Lillehammer').length, 1);
 
       malesSubject.close();
       femalesSubject.close();

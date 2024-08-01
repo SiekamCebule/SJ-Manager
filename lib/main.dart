@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/json/manual_json/json_team.dart';
-import 'package:sj_manager/models/db/country/country.dart';
-import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
-import 'package:sj_manager/models/db/hill/hill.dart';
-import 'package:sj_manager/models/db/local_db_repo.dart';
-import 'package:sj_manager/models/db/team/team.dart';
+import 'package:sj_manager/models/user_db/country/country.dart';
+import 'package:sj_manager/models/user_db/db_file_system_entity_names.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/user_db/local_db_repo.dart';
+import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_flags/country_flags_repo.dart';
 import 'package:sj_manager/repositories/countries/country_flags/local_storage_country_flags_repo.dart';
@@ -68,8 +68,8 @@ void main() async {
         providers: [
           RepositoryProvider<CountryFlagsRepo>(
             create: (context) {
-              final storageDirectory = userDataDirectory(
-                  pathsCache, 'database/countries/country_flags');
+              final storageDirectory =
+                  userDataDirectory(pathsCache, 'database/countries/country_flags');
               return LocalStorageCountryFlagsRepo(
                 imagesDirectory: storageDirectory,
                 imagesExtension: 'png',
@@ -107,8 +107,7 @@ void main() async {
           providers: [
             Provider(create: (context) {
               return JumperImageGeneratingSetup(
-                imagesDirectory:
-                    userDataDirectory(pathsCache, 'database/jumper_images'),
+                imagesDirectory: userDataDirectory(pathsCache, 'database/jumper_images'),
                 toFileName: (jumper) {
                   return '${jumper.country.code.toLowerCase()}_${jumper.name.toLowerCase()}_${jumper.surname.toLowerCase()}'
                       .replaceAll(' ', '_');
@@ -117,8 +116,7 @@ void main() async {
             }),
             Provider(create: (context) {
               return HillImageGeneratingSetup(
-                  imagesDirectory:
-                      userDataDirectory(pathsCache, 'database/hill_images'),
+                  imagesDirectory: userDataDirectory(pathsCache, 'database/hill_images'),
                   toFileName: (hill) {
                     return '${hill.locality.toLowerCase()}_${hill.hs.truncate().toString()}'
                         .replaceAll(' ', '_');
@@ -170,12 +168,12 @@ void main() async {
             Provider(create: (context) {
               return DbItemsJsonConfiguration<Team>(
                 fromJson: (json) => JsonTeamParser(
-                        countryLoader: JsonCountryLoaderByCode(
-                            repo: countriesRepo(context)))
+                        countryLoader:
+                            JsonCountryLoaderByCode(repo: countriesRepo(context)))
                     .parseTeam(json),
-                toJson: (team) => JsonTeamSerializer(
-                        countrySaver: const JsonCountryCodeSaver())
-                    .serializeTeam(team),
+                toJson: (team) =>
+                    JsonTeamSerializer(countrySaver: const JsonCountryCodeSaver())
+                        .serializeTeam(team),
               );
             }),
             Provider.value(

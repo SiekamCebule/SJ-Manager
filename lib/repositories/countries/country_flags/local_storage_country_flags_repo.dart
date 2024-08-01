@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/db/country/country.dart';
+import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/repositories/countries/country_flags/country_flags_repo.dart';
 
 class LocalStorageCountryFlagsRepo implements CountryFlagsRepo {

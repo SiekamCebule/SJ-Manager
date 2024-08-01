@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/jumper_image/jumper_image_generating_setup.dart';
 
 class JumperImage extends StatelessWidget {

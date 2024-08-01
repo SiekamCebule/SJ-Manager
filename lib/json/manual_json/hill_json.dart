@@ -1,4 +1,4 @@
-part of '../../models/db/hill/hill.dart';
+part of '../../models/user_db/hill/hill.dart';
 
 Hill _hillFromJson(Map<String, dynamic> json,
         {required JsonCountryLoader countryLoader}) =>
@@ -10,8 +10,7 @@ Hill _hillFromJson(Map<String, dynamic> json,
       hs: (json['hs'] as num).toDouble(),
       landingEase: $enumDecode(_$LandingEaseEnumMap, json['landingEase']),
       profileType: $enumDecode(_$HillProfileTypeEnumMap, json['profileType']),
-      jumpsVariability:
-          $enumDecode(_$JumpsVariabilityEnumMap, json['jumpsVariability']),
+      jumpsVariability: $enumDecode(_$JumpsVariabilityEnumMap, json['jumpsVariability']),
       typicalWindDirection: $enumDecodeNullable(
           _$TypicalWindDirectionEnumMap, json['typicalWindDirection']),
       typicalWindStrength: (json['typicalWindStrength'] as num?)?.toDouble(),

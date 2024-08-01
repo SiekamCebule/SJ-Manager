@@ -1,13 +1,11 @@
 import 'package:sj_manager/json/json_object_loader.dart';
 import 'package:sj_manager/json/json_object_saver.dart';
-import 'package:sj_manager/models/db/country/country.dart';
+import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 
-abstract interface class JsonCountryLoader<I>
-    implements JsonObjectLoader<I, Country> {}
+abstract interface class JsonCountryLoader<I> implements JsonObjectLoader<I, Country> {}
 
-abstract interface class JsonCountrySaver<R>
-    implements JsonObjectSaver<Country, R> {}
+abstract interface class JsonCountrySaver<R> implements JsonObjectSaver<Country, R> {}
 
 class CountryByCodeNotFoundError {
   CountryByCodeNotFoundError({
@@ -30,8 +28,8 @@ class JsonCountryLoaderByCode implements JsonCountryLoader<String> {
   @override
   Country load(String code) {
     try {
-      return repo.last.singleWhere(
-          (country) => country.code.toLowerCase() == code.toLowerCase());
+      return repo.last
+          .singleWhere((country) => country.code.toLowerCase() == code.toLowerCase());
     } on StateError {
       throw CountryByCodeNotFoundError(countryCode: code);
     }

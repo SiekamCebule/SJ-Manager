@@ -1,6 +1,6 @@
 import 'package:sj_manager/enums/db_editable_item_type.dart';
-import 'package:sj_manager/models/db/hill/hill.dart';
-import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
 class DefaultItemsRepo {
   DefaultItemsRepo({

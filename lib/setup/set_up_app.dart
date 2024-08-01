@@ -5,12 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
 import 'package:sj_manager/main.dart';
-import 'package:sj_manager/models/db/country/country.dart';
-import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
-import 'package:sj_manager/models/db/hill/hill.dart';
-import 'package:sj_manager/models/db/jumper/jumper.dart';
-import 'package:sj_manager/models/db/local_db_repo.dart';
-import 'package:sj_manager/models/db/team/team.dart';
+import 'package:sj_manager/models/user_db/country/country.dart';
+import 'package:sj_manager/models/user_db/db_file_system_entity_names.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/local_db_repo.dart';
+import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/ui/dialogs/loading_items_failed_dialog.dart';
 import 'package:sj_manager/ui/navigation/routes.dart';
@@ -50,12 +50,12 @@ class AppConfigurator {
   }
 
   Future<void> setUpUserData() async {
-    final countriesFile = databaseFile(
-        _context.read(), _context.read<DbFileSystemEntityNames>().countries);
+    final countriesFile =
+        databaseFile(_context.read(), _context.read<DbFileSystemEntityNames>().countries);
     if (!await countriesFile.exists()) {
       await countriesFile.create(recursive: true);
-      countriesFile.writeAsString(
-          await rootBundle.loadString('assets/defaults/countries.json'));
+      countriesFile
+          .writeAsString(await rootBundle.loadString('assets/defaults/countries.json'));
     }
     if (!_context.mounted) return;
 
@@ -69,8 +69,7 @@ class AppConfigurator {
     if (forMaleJumpers.$2 == false) await forMaleJumpers.$1.writeAsString('[]');
 
     final forFemaleJumpers = await _createFileIfNotExists<FemaleJumper>();
-    if (forFemaleJumpers.$2 == false)
-      await forFemaleJumpers.$1.writeAsString('[]');
+    if (forFemaleJumpers.$2 == false) await forFemaleJumpers.$1.writeAsString('[]');
 
     final forHills = await _createFileIfNotExists<Hill>();
     if (forHills.$2 == false) await forHills.$1.writeAsString('[]');
@@ -80,8 +79,8 @@ class AppConfigurator {
   }
 
   Future<(File, bool)> _createFileIfNotExists<T>() async {
-    final file = databaseFile(_context.read(),
-        _context.read<DbFileSystemEntityNames>().byGenericType<T>());
+    final file = databaseFile(
+        _context.read(), _context.read<DbFileSystemEntityNames>().byGenericType<T>());
     if (!await file.exists()) {
       return (await file.create(recursive: true), false);
     }
@@ -90,8 +89,8 @@ class AppConfigurator {
 
   Future<void> loadDatabase() async {
     if (!_context.mounted) return;
-    final countriesFile = databaseFile(
-        _context.read(), _context.read<DbFileSystemEntityNames>().countries);
+    final countriesFile =
+        databaseFile(_context.read(), _context.read<DbFileSystemEntityNames>().countries);
     try {
       await _loadCountries();
     } catch (e) {
@@ -106,18 +105,16 @@ class AppConfigurator {
       );
     }
 
-    await _tryLoadItems<MaleJumper>(
-        dialogTitleText: 'Błąd wczytywania skoczków');
-    await _tryLoadItems<FemaleJumper>(
-        dialogTitleText: 'Błąd wczytywania skoczkiń');
+    await _tryLoadItems<MaleJumper>(dialogTitleText: 'Błąd wczytywania skoczków');
+    await _tryLoadItems<FemaleJumper>(dialogTitleText: 'Błąd wczytywania skoczkiń');
     await _tryLoadItems<Hill>(dialogTitleText: 'Błąd wczytywania skoczni');
     await _tryLoadItems<Team>(dialogTitleText: 'Błąd wczytywania zespołów');
   }
 
   Future<void> _tryLoadItems<T>({required String dialogTitleText}) async {
     if (!_context.mounted) return;
-    final file = databaseFile(_context.read(),
-        _context.read<DbFileSystemEntityNames>().byGenericType<T>());
+    final file = databaseFile(
+        _context.read(), _context.read<DbFileSystemEntityNames>().byGenericType<T>());
     try {
       await _loadItems<T>();
     } on PathNotFoundException {
@@ -153,8 +150,8 @@ class AppConfigurator {
   Future<void> _loadItems<T>() async {
     final parameters = _context.read<DbItemsJsonConfiguration<T>>();
     final loaded = await loadItemsListFromJsonFile(
-      file: databaseFile(_context.read(),
-          _context.read<DbFileSystemEntityNames>().byGenericType<T>()),
+      file: databaseFile(
+          _context.read(), _context.read<DbFileSystemEntityNames>().byGenericType<T>()),
       fromJson: parameters.fromJson,
     );
     if (!_context.mounted) return;

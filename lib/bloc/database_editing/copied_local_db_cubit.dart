@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
-import 'package:sj_manager/models/db/db_file_system_entity_names.dart';
-import 'package:sj_manager/models/db/hill/hill.dart';
-import 'package:sj_manager/models/db/jumper/jumper.dart';
-import 'package:sj_manager/models/db/local_db_repo.dart';
+import 'package:sj_manager/models/user_db/db_file_system_entity_names.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/local_db_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
@@ -44,11 +44,9 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
   }
 
   Future<void> _saveChangesByType<T>(BuildContext context) async {
-    originalDb
-        .editableByGenericType<T>()
-        .set(state!.editableByGenericType<T>().last);
-    final file = databaseFile(context.read(),
-        context.read<DbFileSystemEntityNames>().byGenericType<T>());
+    originalDb.editableByGenericType<T>().set(state!.editableByGenericType<T>().last);
+    final file = databaseFile(
+        context.read(), context.read<DbFileSystemEntityNames>().byGenericType<T>());
     await _saveItemsToJsonByType<T>(
       context: context,
       file: file,

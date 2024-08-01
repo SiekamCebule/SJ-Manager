@@ -1,8 +1,7 @@
 import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
-import 'package:sj_manager/models/db/hill/hill.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
 
-class DefaultHillMatchingByTextAlgorithm
-    extends DbItemMatchingByTextAlgorithm<Hill> {
+class DefaultHillMatchingByTextAlgorithm extends DbItemMatchingByTextAlgorithm<Hill> {
   const DefaultHillMatchingByTextAlgorithm({required super.text});
 
   @override
@@ -19,8 +18,7 @@ class DefaultHillMatchingByTextAlgorithm
       }
 
       for (var letter in targetLetterCount.keys) {
-        if (targetLetterCount[letter]! >
-            RegExp(letter).allMatches(source).length) {
+        if (targetLetterCount[letter]! > RegExp(letter).allMatches(source).length) {
           return false;
         }
       }

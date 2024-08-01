@@ -1,7 +1,7 @@
 import 'package:sj_manager/filters/filter.dart';
 import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
-import 'package:sj_manager/models/db/country/country.dart';
-import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/country/country.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
 abstract class JumpersFilter extends Filter<Jumper> {
   const JumpersFilter();
@@ -27,9 +27,7 @@ final class JumpersFilterByCountry extends JumpersFilter {
   @override
   List<Jumper> call(List<Jumper> source) {
     if (!isValid) return source;
-    return source
-        .where((jumper) => countries.contains(jumper.country))
-        .toList();
+    return source.where((jumper) => countries.contains(jumper.country)).toList();
   }
 
   @override

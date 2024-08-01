@@ -1,9 +1,9 @@
 import 'package:sj_manager/bloc/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/db/event_series/competition/competition.dart';
-import 'package:sj_manager/models/db/event_series/competition/competition_type.dart';
-import 'package:sj_manager/models/db/event_series/competition/rules/competition_rules/competition_rules.dart';
-import 'package:sj_manager/models/db/event_series/standings/standings_repo.dart';
+import 'package:sj_manager/models/simulation_db/competition/competition.dart';
+import 'package:sj_manager/models/simulation_db/competition/competition_type.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings_repo.dart';
 import 'package:sj_manager/repositories/generic/ids_repo.dart';
 
 class CompetitionSerializer implements SimulationDbPartSerializer<Competition> {

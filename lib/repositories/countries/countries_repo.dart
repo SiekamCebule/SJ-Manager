@@ -1,4 +1,4 @@
-import 'package:sj_manager/models/db/country/country.dart';
+import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
 
 class CountriesRepo extends ItemsRepo<Country> {
