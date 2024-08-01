@@ -6,8 +6,8 @@ import 'package:sj_manager/models/db/event_series/event_series_calendar.dart';
 import 'package:sj_manager/repositories/generic/ids_repo.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
-class CalendarLoader implements SimulationDbPartLoader<EventSeriesCalendar> {
-  const CalendarLoader({
+class EventSeriesCalendarLoader implements SimulationDbPartLoader<EventSeriesCalendar> {
+  const EventSeriesCalendarLoader({
     required this.idsRepo,
     required this.idGenerator,
     required this.eventSeriesId,

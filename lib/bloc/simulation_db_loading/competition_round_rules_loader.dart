@@ -37,8 +37,13 @@ class CompetitionRoundRulesLoader
   }
 
   CompetitionRoundRules<Jumper> _loadIndividual(Json json) {
+    final entitiesLimitJson = json['entitiesLimit'];
+    EntitiesLimit? entitiesLimit;
+    if (entitiesLimitJson != null) {
+      entitiesLimit = entitiesLimitLoader.load(entitiesLimitJson);
+    }
     return IndividualCompetitionRoundRules(
-      limit: entitiesLimitLoader.load(json['entitiesLimit']),
+      limit: entitiesLimit,
       bibsAreReassigned: json['bibsAreReassigned'],
       gateCanChange: json['gateCanChange'],
       windAverager: idsRepo.get(json['windAveragerId']),

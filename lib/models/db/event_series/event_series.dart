@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:sj_manager/models/db/event_series/event_series_calendar.dart';
 import 'package:sj_manager/models/db/event_series/event_series_facts.dart';
+import 'package:sj_manager/utils/multilingual_string.dart';
 
 @JsonSerializable()
 class EventSeries {
@@ -12,7 +13,7 @@ class EventSeries {
   });
 
   final String id;
-  final String name;
+  final MultilingualString name;
   final EventSeriesCalendar calendar;
   final EventSeriesFacts facts;
 
