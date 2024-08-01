@@ -16,12 +16,15 @@ class _TeamPreview extends StatelessWidget {
     final none = translate(context).none;
 
     final stars = previewCreator.stars(team) ?? -1;
-    final bestJumperText = previewCreator.bestJumper(team)?.nameAndSurname() ?? none;
+    final bestJumperText =
+        previewCreator.bestJumper(team)?.nameAndSurname() ?? none;
     final recordText = record != null
         ? '${record.distance.toStringAsFixed(1)}m (${record.jumperNameAndSurname})'
         : 'Brak';
-    final risingStarText = previewCreator.risingStar(team)?.nameAndSurname() ?? 'Brak';
-    final largestHillText = previewCreator.largestHill(team)?.toString() ?? 'Brak';
+    final risingStarText =
+        previewCreator.risingStar(team)?.nameAndSurname() ?? 'Brak';
+    final largestHillText =
+        previewCreator.largestHill(team)?.toString() ?? 'Brak';
 
     return Container(
       decoration: BoxDecoration(
@@ -32,7 +35,8 @@ class _TeamPreview extends StatelessWidget {
       child: Column(
         children: [
           const Gap(15),
-          if (team is CountryTeam) CountryTitle(country: (team as CountryTeam).country),
+          if (team is CountryTeam)
+            CountryTitle(country: (team as CountryTeam).country),
           const Gap(15),
           PreviewStatTexts(
             description: 'Poziom: ',

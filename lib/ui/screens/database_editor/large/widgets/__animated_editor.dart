@@ -13,7 +13,8 @@ class _AnimatedEditor extends StatelessWidget {
 
     final copiedLocalDbCubit = context.read<CopiedLocalDbCubit>();
     final copiedLocalDbRepos = copiedLocalDbCubit.state!;
-    final editableItemsRepoByType = copiedLocalDbRepos.editableByType(itemsType);
+    final editableItemsRepoByType =
+        copiedLocalDbRepos.editableByType(itemsType);
 
     final filtersRepo = context.read<DbFiltersRepo>();
     final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
@@ -36,15 +37,17 @@ class _AnimatedEditor extends StatelessWidget {
             key: editorKey,
             itemType: itemsType,
             onChange: (changedItem) async {
-              if (selectedIndexesRepo.state.length == 1 && changedItem != null) {
+              if (selectedIndexesRepo.state.length == 1 &&
+                  changedItem != null) {
                 if (!filtersRepo.hasValidFilter) {
                   final index = selectedIndexesRepo.state.single;
-                  editableItemsRepoByType.replace(oldIndex: index, newItem: changedItem);
+                  editableItemsRepoByType.replace(
+                      oldIndex: index, newItem: changedItem);
                   dbIsChangedCubit.markAsChanged();
                 } else {
                   final indexInFiltered = selectedIndexesRepo.state.single;
-                  final indexInOriginal =
-                      filteredItemsCubit.findOriginalIndex(indexInFiltered, itemsType);
+                  final indexInOriginal = filteredItemsCubit.findOriginalIndex(
+                      indexInFiltered, itemsType);
                   editableItemsRepoByType.replace(
                       oldIndex: indexInOriginal, newItem: changedItem);
                   dbIsChangedCubit.markAsChanged();

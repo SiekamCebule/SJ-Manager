@@ -29,8 +29,9 @@ class _ModeScreenState extends State<_ModeScreen> {
             isSelected: _selected == SimulationMode.coach,
             onTap: () {
               setState(() {
-                _selected =
-                    _selected != SimulationMode.coach ? SimulationMode.coach : null;
+                _selected = _selected != SimulationMode.coach
+                    ? SimulationMode.coach
+                    : null;
               });
               widget.onChange(_selected);
             },
@@ -50,8 +51,9 @@ class _ModeScreenState extends State<_ModeScreen> {
             isSelected: _selected == SimulationMode.observer,
             onTap: () {
               setState(() {
-                _selected =
-                    _selected != SimulationMode.observer ? SimulationMode.observer : null;
+                _selected = _selected != SimulationMode.observer
+                    ? SimulationMode.observer
+                    : null;
               });
               widget.onChange(_selected);
             },

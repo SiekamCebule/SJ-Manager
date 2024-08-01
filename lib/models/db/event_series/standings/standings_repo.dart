@@ -1,58 +1,59 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/models/db/event_series/standings/score/score.dart';
 import 'package:sj_manager/models/db/event_series/standings/standings_positions_map_creator/standings_positions_creator.dart';
-import 'package:sj_manager/models/db/event_series/standings/standings_record.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
 
-class StandingsRepo<E, S extends Score, R extends StandingsRecord<E, S>>
-    implements ValueRepo<Map<int, List<R>>> {
-  StandingsRepo({required this.positionsCreator, List<R>? initialRecords}) {
-    if (initialRecords != null) {
-      _records = List.of(initialRecords);
-      _updateStandings();
+class StandingsRepo<E> implements ValueRepo<Map<int, List<Score<E>>>> {
+  StandingsRepo({required this.positionsCreator, List<Score<E>>? initialScores}) {
+    if (initialScores != null) {
+      _scores = List.of(initialScores);
+      update();
       set(_standings);
     }
   }
 
-  var _records = <R>[];
-  var _standings = <int, List<R>>{};
-  final _subject = BehaviorSubject<Map<int, List<R>>>.seeded({});
+  var _scores = <Score<E>>[];
+  var _standings = <int, List<Score<E>>>{};
+  final _subject = BehaviorSubject<Map<int, List<Score<E>>>>.seeded({});
 
-  final StandingsPositionsCreator<R> positionsCreator;
+  StandingsPositionsCreator<Score<E>> positionsCreator;
 
-  void update({required R newRecord}) {
-    R? recordToChange;
-    for (var record in _records) {
-      if (record.entity == newRecord.entity) {
-        recordToChange = record;
+  void addScore({required Score<E> newScore, bool overwrite = false}) {
+    Score<E>? scoreToChange;
+    for (var score in _scores) {
+      if (score.entity == newScore.entity) {
+        scoreToChange = score;
       }
     }
 
-    if (recordToChange == null) {
-      _records.add(newRecord);
+    if (scoreToChange == null) {
+      _scores.add(newScore);
+    } else if (overwrite) {
+      _scores[_scores.indexOf(scoreToChange)] = newScore;
     } else {
-      _records[_records.indexOf(recordToChange)] = newRecord;
+      throw StateError(
+          'The score $newScore is already contained in the standings, but the overwrite flag is set to false. Thus, the score cannot be added');
     }
 
-    _updateStandings();
+    update();
     set(_standings);
   }
 
-  void remove({required R record}) {
-    _records.remove(record);
-    _updateStandings();
+  void remove({required Score<E> score}) {
+    _scores.remove(score);
+    update();
     set(_standings);
   }
 
-  void _updateStandings() {
-    _standings = positionsCreator.create(_records);
+  void update() {
+    _standings = positionsCreator.create(_scores);
   }
 
-  List<R> get leaders {
+  List<Score<E>> get leaders {
     return atPosition(1);
   }
 
-  List<R> atPosition(int position) {
+  List<Score<E>> atPosition(int position) {
     if (!_standings.containsKey(position)) {
       throw StateError('Standings does not have any entity at $position position');
     }
@@ -61,19 +62,19 @@ class StandingsRepo<E, S extends Score, R extends StandingsRecord<E, S>>
 
   int positionOf(E entity) {
     for (var entry in _standings.entries) {
-      bool hasRecordWithEntity =
-          entry.value.where((record) => record.entity == entity).length == 1;
-      if (hasRecordWithEntity) {
+      bool hasScoreWithEntity =
+          entry.value.where((score) => score.entity == entity).length == 1;
+      if (hasScoreWithEntity) {
         return entry.key;
       }
     }
     throw _notContainEntityError(entity);
   }
 
-  S scoreOf(E entity) {
-    for (var record in _records) {
-      if (record.entity == entity) {
-        return record.score;
+  Score<E> scoreOf(E entity) {
+    for (var score in _scores) {
+      if (score.entity == entity) {
+        return score;
       }
     }
     throw _notContainEntityError(entity);
@@ -83,7 +84,7 @@ class StandingsRepo<E, S extends Score, R extends StandingsRecord<E, S>>
     return StateError('The entity ($entity) is not contained by standings');
   }
 
-  int get length => _records.length;
+  int get length => _scores.length;
 
   int get lastPosition {
     return _standings.keys.reduce((first, second) {
@@ -96,19 +97,19 @@ class StandingsRepo<E, S extends Score, R extends StandingsRecord<E, S>>
   }
 
   bool containsEntity(E entity) {
-    return _records.where((record) => record.entity == entity).isNotEmpty;
+    return _scores.where((score) => score.entity == entity).isNotEmpty;
   }
 
   @override
-  void set(Map<int, List<R>> value) {
+  void set(Map<int, List<Score<E>>> value) {
     _subject.add(Map.of(value));
   }
 
   @override
-  ValueStream<Map<int, List<R>>> get items => _subject.stream;
+  ValueStream<Map<int, List<Score<E>>>> get items => _subject.stream;
 
   @override
-  Map<int, List<R>> get last => items.value;
+  Map<int, List<Score<E>>> get last => items.value;
 
   @override
   void dispose() {

@@ -12,7 +12,8 @@ class JumperInfoListTile extends StatelessWidget {
     required this.jumper,
     required this.onTap,
     required this.selected,
-  }) : assert(reorderable == false || (reorderable == true && indexInList != null));
+  }) : assert(reorderable == false ||
+            (reorderable == true && indexInList != null));
 
   final bool reorderable;
   final int? indexInList;

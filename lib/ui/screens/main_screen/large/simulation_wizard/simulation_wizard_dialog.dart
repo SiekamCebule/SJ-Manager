@@ -54,7 +54,8 @@ class _SimulationWizardDialogState extends State<SimulationWizardDialog>
   @override
   void initState() {
     _navPermissions = LinearNavigationPermissionsRepo();
-    _navCubit = SimulationWizardNavigationCubit(navPermissions: _navPermissions);
+    _navCubit =
+        SimulationWizardNavigationCubit(navPermissions: _navPermissions);
     _navStateSubscription = _navCubit.stream.listen((state) {
       if (state is InitializedSimulationWizardNavigationState) {
         _navPermissions.canGoForward = state.indexAllowsGoingForward;

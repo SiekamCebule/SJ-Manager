@@ -13,7 +13,8 @@ class UninitializedSimulationWizardNavigationState
   List<Object?> get props => [];
 }
 
-class InitializedSimulationWizardNavigationState extends SimulationWizardNavigationState {
+class InitializedSimulationWizardNavigationState
+    extends SimulationWizardNavigationState {
   const InitializedSimulationWizardNavigationState({
     required this.screens,
     required this.currentScreenIndex,

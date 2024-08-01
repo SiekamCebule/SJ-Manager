@@ -9,7 +9,8 @@ class CalendarMainCompetitionRecordSetup with EquatableMixin {
     this.qualificationsRules,
     this.moveQualificationsBeforeTeamCompetition = false,
   }) : assert(
-          !(moveQualificationsBeforeTeamCompetition == true && trialRoundRules == null),
+          !(moveQualificationsBeforeTeamCompetition == true &&
+              trialRoundRules == null),
         );
 
   final CompetitionRules mainCompRules;

@@ -1,5 +1,5 @@
-import 'package:sj_manager/models/db/event_series/standings/standings_record.dart';
+import 'package:sj_manager/models/db/event_series/standings/score/score.dart';
 
-abstract interface class StandingsPositionsCreator<T extends StandingsRecord> {
-  Map<int, List<T>> create(List<T> records);
+abstract interface class StandingsPositionsCreator<S extends Score> {
+  Map<int, List<S>> create(List<S> records);
 }

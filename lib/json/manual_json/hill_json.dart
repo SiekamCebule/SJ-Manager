@@ -10,7 +10,8 @@ Hill _hillFromJson(Map<String, dynamic> json,
       hs: (json['hs'] as num).toDouble(),
       landingEase: $enumDecode(_$LandingEaseEnumMap, json['landingEase']),
       profileType: $enumDecode(_$HillProfileTypeEnumMap, json['profileType']),
-      jumpsVariability: $enumDecode(_$JumpsVariabilityEnumMap, json['jumpsVariability']),
+      jumpsVariability:
+          $enumDecode(_$JumpsVariabilityEnumMap, json['jumpsVariability']),
       typicalWindDirection: $enumDecodeNullable(
           _$TypicalWindDirectionEnumMap, json['typicalWindDirection']),
       typicalWindStrength: (json['typicalWindStrength'] as num?)?.toDouble(),

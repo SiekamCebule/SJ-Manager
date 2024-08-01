@@ -48,7 +48,8 @@ class JumperSkills with EquatableMixin {
     JumpsConsistency? jumpsConsistency,
   }) {
     return JumperSkills(
-      qualityOnSmallerHills: qualityOnSmallerHills ?? this.qualityOnSmallerHills,
+      qualityOnSmallerHills:
+          qualityOnSmallerHills ?? this.qualityOnSmallerHills,
       qualityOnLargerHills: qualityOnLargerHills ?? this.qualityOnLargerHills,
       landingStyle: landingStyle ?? this.landingStyle,
       jumpsConsistency: jumpsConsistency ?? this.jumpsConsistency,

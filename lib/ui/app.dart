@@ -16,7 +16,8 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = AppThemeDataCreator().create(context.watch<ThemeCubit>().state);
+    final theme =
+        AppThemeDataCreator().create(context.watch<ThemeCubit>().state);
     return MaterialApp(
       theme: theme,
       locale: context.watch<LocaleCubit>().state,

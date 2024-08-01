@@ -13,7 +13,8 @@ class HillInfoListTile extends StatelessWidget {
     required this.hill,
     required this.onTap,
     required this.selected,
-  }) : assert(reorderable == false || (reorderable == true && indexInList != null));
+  }) : assert(reorderable == false ||
+            (reorderable == true && indexInList != null));
 
   final bool reorderable;
   final int? indexInList;

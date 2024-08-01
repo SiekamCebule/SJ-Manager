@@ -29,7 +29,8 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
     _maleJumperChangesSubscription = maleStream.listen((event) {
       final jumpers = event.$1.toList();
       final filters = event.$2;
-      emit(state.copyWith(maleJumpers: Filter.filterAll(jumpers, filters).cast()));
+      emit(state.copyWith(
+          maleJumpers: Filter.filterAll(jumpers, filters).cast()));
     });
 
     final femaleStream = Rx.combineLatest2(itemsRepo.femaleJumpers.items,
@@ -37,11 +38,12 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
     _femaleJumperChangesSubscription = femaleStream.listen((event) {
       final jumpers = event.$1.toList();
       final filters = event.$2;
-      emit(state.copyWith(femaleJumpers: Filter.filterAll(jumpers, filters).cast()));
+      emit(state.copyWith(
+          femaleJumpers: Filter.filterAll(jumpers, filters).cast()));
     });
 
-    final hillsStream = Rx.combineLatest2(itemsRepo.hills.items, filtersRepo.hillsFilters,
-        (items, filters) => (items, filters));
+    final hillsStream = Rx.combineLatest2(itemsRepo.hills.items,
+        filtersRepo.hillsFilters, (items, filters) => (items, filters));
     _hillChangesSubscription = hillsStream.listen((event) {
       final hills = event.$1.toList();
       final filters = event.$2;

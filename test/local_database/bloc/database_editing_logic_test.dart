@@ -71,7 +71,8 @@ void main() {
         return hillsSubject;
       });
 
-      cubit = LocalDbFilteredItemsCubit(filtersRepo: filtersRepo, itemsRepo: itemsRepo);
+      cubit = LocalDbFilteredItemsCubit(
+          filtersRepo: filtersRepo, itemsRepo: itemsRepo);
 
       filtersRepo.setFemaleJumpersFilters(const [
         JumpersFilterByCountry(countries: {poland})
@@ -90,11 +91,16 @@ void main() {
 
       filtersRepo.setHillsFilters(const [
         HillsFilterBySearch(
-            searchAlgorithm: DefaultHillMatchingByTextAlgorithm(text: 'Lillehammer')),
+            searchAlgorithm:
+                DefaultHillMatchingByTextAlgorithm(text: 'Lillehammer')),
       ]);
       await Future.delayed(Duration.zero);
 
-      expect(cubit.state.hills.where((hill) => hill.locality == 'Lillehammer').length, 1);
+      expect(
+          cubit.state.hills
+              .where((hill) => hill.locality == 'Lillehammer')
+              .length,
+          1);
 
       malesSubject.close();
       femalesSubject.close();

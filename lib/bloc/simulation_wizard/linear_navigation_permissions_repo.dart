@@ -1,7 +1,8 @@
 import 'package:rxdart/rxdart.dart';
 
 class LinearNavigationPermissionsRepo {
-  LinearNavigationPermissionsRepo({bool initialForward = true, bool initialBack = true})
+  LinearNavigationPermissionsRepo(
+      {bool initialForward = true, bool initialBack = true})
       : _canGoForward = initialForward,
         _canGoBack = initialBack {
     _forwardNavSubject.add(_canGoForward);

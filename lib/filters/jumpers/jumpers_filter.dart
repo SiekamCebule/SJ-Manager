@@ -27,7 +27,9 @@ final class JumpersFilterByCountry extends JumpersFilter {
   @override
   List<Jumper> call(List<Jumper> source) {
     if (!isValid) return source;
-    return source.where((jumper) => countries.contains(jumper.country)).toList();
+    return source
+        .where((jumper) => countries.contains(jumper.country))
+        .toList();
   }
 
   @override

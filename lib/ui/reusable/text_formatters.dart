@@ -111,7 +111,8 @@ class NDecimalPlacesEnforcer extends TextInputFormatter {
       return oldValue;
     }
     final decimalIndex = newValue.text.indexOf('.');
-    if (decimalIndex == -1 || newValue.text.length - decimalIndex - 1 <= decimalPlaces) {
+    if (decimalIndex == -1 ||
+        newValue.text.length - decimalIndex - 1 <= decimalPlaces) {
       return newValue;
     }
     return oldValue;

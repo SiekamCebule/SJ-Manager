@@ -4,7 +4,8 @@ import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/theme/app_schemes.dart';
 
 class AppColorSchemeRepo {
-  final _subject = BehaviorSubject.seeded(UiGlobalConstants.defaultAppColorScheme);
+  final _subject =
+      BehaviorSubject.seeded(UiGlobalConstants.defaultAppColorScheme);
 
   void update(AppColorScheme scheme) {
     _subject.add(scheme);

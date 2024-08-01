@@ -38,7 +38,8 @@ File databaseFile(PlarformSpecificPathsCache pathsCache, String fileName) {
   return userDataFile(pathsCache, 'database/$fileName');
 }
 
-Directory userDataDirectory(PlarformSpecificPathsCache pathsCache, String directoryName) {
+Directory userDataDirectory(
+    PlarformSpecificPathsCache pathsCache, String directoryName) {
   final documentsDir = pathsCache.applicationDocumentsDirectory;
   final databaseDir = Directory('${documentsDir.path}/sj_manager/user_data');
   if (!databaseDir.existsSync()) {
@@ -53,7 +54,8 @@ Directory userDataDirectory(PlarformSpecificPathsCache pathsCache, String direct
   return dir;
 }
 
-Directory databaseDirectory(PlarformSpecificPathsCache pathsCache, String fileName) {
+Directory databaseDirectory(
+    PlarformSpecificPathsCache pathsCache, String fileName) {
   if (fileName.isEmpty) return userDataDirectory(pathsCache, 'database');
   return userDataDirectory(pathsCache, 'database/$fileName');
 }
@@ -75,17 +77,20 @@ File fileInDirectory(Directory directory, String name) {
 
 bool directoryIsValidForDatabase(BuildContext context, Directory directory) {
   final correctFolderStructure = {
+    fileInDirectory(directory,
+            path.basename(context.read<DbFileSystemEntityNames>().maleJumpers))
+        .path,
     fileInDirectory(
-            directory, path.basename(context.read<DbFileSystemEntityNames>().maleJumpers))
+            directory,
+            path.basename(
+                context.read<DbFileSystemEntityNames>().femaleJumpers))
         .path,
     fileInDirectory(directory,
-            path.basename(context.read<DbFileSystemEntityNames>().femaleJumpers))
-        .path,
-    fileInDirectory(
-            directory, path.basename(context.read<DbFileSystemEntityNames>().hills))
+            path.basename(context.read<DbFileSystemEntityNames>().hills))
         .path,
   };
-  final currentFolderStructure = directory.listSync().map((file) => file.path).toSet();
+  final currentFolderStructure =
+      directory.listSync().map((file) => file.path).toSet();
 
   return currentFolderStructure.containsAll(correctFolderStructure);
 }
@@ -119,7 +124,8 @@ Future<void> copyAssetsDir(String assetsDirPath, Directory destination) async {
   for (String assetPath in assetPaths) {
     // Load the asset file as bytes
     ByteData data = await rootBundle.load(assetPath);
-    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    List<int> bytes =
+        data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
     // Get the file name
     String fileName = assetPath.split('/').last;

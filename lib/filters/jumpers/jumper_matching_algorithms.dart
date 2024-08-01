@@ -20,7 +20,8 @@ final class DefaultJumperMatchingByTextAlgorithm
 
       // Check if source contains all letters from target with required frequency
       for (var letter in targetLetterCount.keys) {
-        if (targetLetterCount[letter]! > RegExp(letter).allMatches(source).length) {
+        if (targetLetterCount[letter]! >
+            RegExp(letter).allMatches(source).length) {
           return false;
         }
       }

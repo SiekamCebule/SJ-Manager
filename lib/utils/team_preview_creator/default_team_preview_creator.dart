@@ -18,7 +18,8 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
 
   @override
   Hill? largestHill(CountryTeam team) {
-    final fromCountry = database.hills.last.fromCountryByCode(team.country.code);
+    final fromCountry =
+        database.hills.last.fromCountryByCode(team.country.code);
     if (fromCountry.isEmpty) return null;
     return fromCountry.reduce((previous, current) {
       return previous.hs > current.hs ? previous : current;
@@ -57,7 +58,8 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
         jumper: _calculateRatingForRisingStar(jumper),
     };
     final best = bestJumper(team);
-    final bestForRisingStar = _atPositionFromRatings(jumperRatings, position: 1);
+    final bestForRisingStar =
+        _atPositionFromRatings(jumperRatings, position: 1);
     if (jumperRatings.values.every((rating) => rating == 0) ||
         (best == bestForRisingStar && jumperRatings.length == 1)) {
       return null;
@@ -69,7 +71,9 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
   }
 
   List<Jumper> _jumpersBySex(Sex sex) {
-    return sex == Sex.male ? database.maleJumpers.last : database.femaleJumpers.last;
+    return sex == Sex.male
+        ? database.maleJumpers.last
+        : database.femaleJumpers.last;
   }
 
   double _calculateRatingForRisingStar(Jumper jumper) {
@@ -131,7 +135,8 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
     if (position < 1 || position > jumperRatings.length) {
       throw ArgumentError('Position out of range');
     }
-    List<MapEntry<Jumper, double>> sortedEntries = jumperRatings.entries.toList()
+    List<MapEntry<Jumper, double>> sortedEntries = jumperRatings.entries
+        .toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
     return sortedEntries[position - 1].key;

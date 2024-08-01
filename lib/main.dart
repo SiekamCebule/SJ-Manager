@@ -68,8 +68,8 @@ void main() async {
         providers: [
           RepositoryProvider<CountryFlagsRepo>(
             create: (context) {
-              final storageDirectory =
-                  userDataDirectory(pathsCache, 'database/countries/country_flags');
+              final storageDirectory = userDataDirectory(
+                  pathsCache, 'database/countries/country_flags');
               return LocalStorageCountryFlagsRepo(
                 imagesDirectory: storageDirectory,
                 imagesExtension: 'png',
@@ -107,7 +107,8 @@ void main() async {
           providers: [
             Provider(create: (context) {
               return JumperImageGeneratingSetup(
-                imagesDirectory: userDataDirectory(pathsCache, 'database/jumper_images'),
+                imagesDirectory:
+                    userDataDirectory(pathsCache, 'database/jumper_images'),
                 toFileName: (jumper) {
                   return '${jumper.country.code.toLowerCase()}_${jumper.name.toLowerCase()}_${jumper.surname.toLowerCase()}'
                       .replaceAll(' ', '_');
@@ -116,7 +117,8 @@ void main() async {
             }),
             Provider(create: (context) {
               return HillImageGeneratingSetup(
-                  imagesDirectory: userDataDirectory(pathsCache, 'database/hill_images'),
+                  imagesDirectory:
+                      userDataDirectory(pathsCache, 'database/hill_images'),
                   toFileName: (hill) {
                     return '${hill.locality.toLowerCase()}_${hill.hs.truncate().toString()}'
                         .replaceAll(' ', '_');
@@ -168,12 +170,12 @@ void main() async {
             Provider(create: (context) {
               return DbItemsJsonConfiguration<Team>(
                 fromJson: (json) => JsonTeamParser(
-                        countryLoader:
-                            JsonCountryLoaderByCode(repo: countriesRepo(context)))
+                        countryLoader: JsonCountryLoaderByCode(
+                            repo: countriesRepo(context)))
                     .parseTeam(json),
-                toJson: (team) =>
-                    JsonTeamSerializer(countrySaver: const JsonCountryCodeSaver())
-                        .serializeTeam(team),
+                toJson: (team) => JsonTeamSerializer(
+                        countrySaver: const JsonCountryCodeSaver())
+                    .serializeTeam(team),
               );
             }),
             Provider.value(

@@ -69,8 +69,10 @@ class MyNumeralTextField extends StatelessWidget {
                       decremented = preparedNumber(decremented.toDouble());
                     }
                     controller.text = _numberInRangeEnforcer
-                        .formatEditUpdate(controller.value,
-                            controller.value.copyWith(text: decremented.toString()))
+                        .formatEditUpdate(
+                            controller.value,
+                            controller.value
+                                .copyWith(text: decremented.toString()))
                         .text;
                     onChange();
                   }
@@ -87,8 +89,10 @@ class MyNumeralTextField extends StatelessWidget {
                       incremented = preparedNumber(incremented.toDouble());
                     }
                     controller.text = _numberInRangeEnforcer
-                        .formatEditUpdate(controller.value,
-                            controller.value.copyWith(text: incremented.toString()))
+                        .formatEditUpdate(
+                            controller.value,
+                            controller.value
+                                .copyWith(text: incremented.toString()))
                         .text;
                     onChange();
                   }
@@ -101,8 +105,8 @@ class MyNumeralTextField extends StatelessWidget {
   }
 
   double preparedNumber(double number) {
-    return double.parse(
-        minimizeDecimalPlaces(roundToNDecimalPlaces(number, maxDecimalPlaces!)));
+    return double.parse(minimizeDecimalPlaces(
+        roundToNDecimalPlaces(number, maxDecimalPlaces!)));
   }
 
   NumberInRangeEnforcer get _numberInRangeEnforcer {

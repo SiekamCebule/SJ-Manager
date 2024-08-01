@@ -3,7 +3,8 @@ import 'package:sj_manager/bloc/simulation_wizard/linear_navigation_permissions_
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_screen.dart';
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_navigation_state.dart';
 
-class SimulationWizardNavigationCubit extends Cubit<SimulationWizardNavigationState> {
+class SimulationWizardNavigationCubit
+    extends Cubit<SimulationWizardNavigationState> {
   SimulationWizardNavigationCubit({required this.navPermissions})
       : super(const UninitializedSimulationWizardNavigationState());
 
@@ -66,10 +67,12 @@ class SimulationWizardNavigationCubit extends Cubit<SimulationWizardNavigationSt
   }
 
   void _throwCannotGoBackError() {
-    throw StateError('SimulationWizardCubit cannot go back in the actual state ($state)');
+    throw StateError(
+        'SimulationWizardCubit cannot go back in the actual state ($state)');
   }
 
   void _throwUninitializedWhenNavigatingError() {
-    throw StateError('SimulationWizardCubit must be initialized before navigating');
+    throw StateError(
+        'SimulationWizardCubit must be initialized before navigating');
   }
 }

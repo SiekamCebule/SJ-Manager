@@ -25,10 +25,12 @@ class AppColorSchemeDropdownListTile extends StatelessWidget {
         DropdownMenu(
           initialSelection: context.watch<AppColorSchemeRepo>().state,
           dropdownMenuEntries: [
-            DropdownMenuEntry(value: AppColorScheme.blue, label: translate(context).blue),
+            DropdownMenuEntry(
+                value: AppColorScheme.blue, label: translate(context).blue),
             DropdownMenuEntry(
                 value: AppColorScheme.yellow, label: translate(context).yellow),
-            DropdownMenuEntry(value: AppColorScheme.red, label: translate(context).red),
+            DropdownMenuEntry(
+                value: AppColorScheme.red, label: translate(context).red),
           ],
           onSelected: (selected) {
             context.read<AppColorSchemeRepo>().update(selected!);

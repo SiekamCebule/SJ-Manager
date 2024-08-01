@@ -115,8 +115,8 @@ class HillEditorState extends State<HillEditor> {
   Widget build(BuildContext context) {
     const gap = Gap(UiItemEditorsConstants.verticalSpaceBetweenFields);
     return LayoutBuilder(builder: (context, constraints) {
-      final shouldShowImage =
-          _cachedHill != null && context.maybeRead<HillImageGeneratingSetup>() != null;
+      final shouldShowImage = _cachedHill != null &&
+          context.maybeRead<HillImageGeneratingSetup>() != null;
       final shouldShowArrowIcon = _cachedHill?.typicalWindDirection != null;
 
       return Scrollbar(
@@ -188,8 +188,10 @@ class HillEditorState extends State<HillEditor> {
                         setup: context.read(),
                         height: UiItemEditorsConstants.hillImageHeight,
                         fit: BoxFit.fill,
-                        errorBuilder: (_, __, ___) => const ItemImageNotFoundPlaceholder(
-                          width: UiItemEditorsConstants.hillImagePlaceholderWidth,
+                        errorBuilder: (_, __, ___) =>
+                            const ItemImageNotFoundPlaceholder(
+                          width:
+                              UiItemEditorsConstants.hillImagePlaceholderWidth,
                           height: UiItemEditorsConstants.hillImageHeight,
                         ),
                       ),
@@ -270,7 +272,8 @@ class HillEditorState extends State<HillEditor> {
                 entries: JumpsVariability.values.map((variability) {
                   return DropdownMenuEntry(
                       value: variability,
-                      label: translatedJumpsVariabilityDescription(context, variability));
+                      label: translatedJumpsVariabilityDescription(
+                          context, variability));
                 }).toList(),
                 width: constraints.maxWidth,
                 initial: _jumpsVariability,
@@ -294,15 +297,16 @@ class HillEditorState extends State<HillEditor> {
                         direction,
                       ),
                       trailingIcon: SizedBox.square(
-                          dimension: 25, child: arrowIcon(context, direction.degrees)),
+                          dimension: 25,
+                          child: arrowIcon(context, direction.degrees)),
                     );
                   })
                 ],
                 trailingIcon: shouldShowArrowIcon
                     ? SizedBox.square(
                         dimension: 25,
-                        child: arrowIcon(
-                            context, _cachedHill!.typicalWindDirection!.degrees),
+                        child: arrowIcon(context,
+                            _cachedHill!.typicalWindDirection!.degrees),
                       )
                     : null,
                 width: constraints.maxWidth,
@@ -321,7 +325,9 @@ class HillEditorState extends State<HillEditor> {
                 suffixText: 'm/s',
                 step: 0.5,
                 min: 0.0,
-                max: context.read<DbEditingDefaultsRepo>().maxHillTypicalWindStrength,
+                max: context
+                    .read<DbEditingDefaultsRepo>()
+                    .maxHillTypicalWindStrength,
                 maxDecimalPlaces: 2,
               ),
               gap,
@@ -368,15 +374,18 @@ class HillEditorState extends State<HillEditor> {
                         TextButton(
                           onPressed: () {
                             if (_cachedHill != null) {
-                              var autoTailwind = _cachedHill!.pointsForHeadwind *
-                                  context
-                                      .read<DbEditingDefaultsRepo>()
-                                      .autoPointsForTailwindMultiplier;
-                              autoTailwind = roundToNDecimalPlaces(autoTailwind, 2);
-                              _pointsForTailwindController.text = autoTailwind.toString();
+                              var autoTailwind =
+                                  _cachedHill!.pointsForHeadwind *
+                                      context
+                                          .read<DbEditingDefaultsRepo>()
+                                          .autoPointsForTailwindMultiplier;
+                              autoTailwind =
+                                  roundToNDecimalPlaces(autoTailwind, 2);
+                              _pointsForTailwindController.text =
+                                  autoTailwind.toString();
 
-                              widget.onChange(
-                                  _cachedHill!.copyWith(pointsForTailwind: autoTailwind));
+                              widget.onChange(_cachedHill!
+                                  .copyWith(pointsForTailwind: autoTailwind));
                             }
                           },
                           child: Text(translate(context).automatically),
@@ -412,8 +421,10 @@ class HillEditorState extends State<HillEditor> {
       profileType: _profile,
       jumpsVariability: _jumpsVariability,
       pointsForGate: double.tryParse(_pointsForGateController.text) ?? 0,
-      pointsForHeadwind: double.tryParse(_pointsForHeadwindController.text) ?? 0,
-      pointsForTailwind: double.tryParse(_pointsForTailwindController.text) ?? 0,
+      pointsForHeadwind:
+          double.tryParse(_pointsForHeadwindController.text) ?? 0,
+      pointsForTailwind:
+          double.tryParse(_pointsForTailwindController.text) ?? 0,
       typicalWindStrength: double.tryParse(_typicalWindStrengthController.text),
       typicalWindDirection: _typicalWindDirection,
     );
@@ -437,13 +448,16 @@ class HillEditorState extends State<HillEditor> {
     _pointsForGateController.text = hill.pointsForGate.toString();
     _pointsForHeadwindController.text = hill.pointsForHeadwind.toString();
     _pointsForTailwindController.text = hill.pointsForTailwind.toString();
-    _typicalWindStrengthController.text = hill.typicalWindStrength?.toString() ?? '';
+    _typicalWindStrengthController.text =
+        hill.typicalWindStrength?.toString() ?? '';
 
     _landingEase = hill.landingEase;
-    _landingEaseController.text = translatedLandingEaseDescription(context, _landingEase);
+    _landingEaseController.text =
+        translatedLandingEaseDescription(context, _landingEase);
 
     _profile = hill.profileType;
-    _profileController.text = translatedHillProfileDescription(context, _profile);
+    _profileController.text =
+        translatedHillProfileDescription(context, _profile);
 
     _jumpsVariability = hill.jumpsVariability;
     _jumpsVariabilityController.text =
@@ -451,7 +465,8 @@ class HillEditorState extends State<HillEditor> {
 
     _typicalWindDirection = hill.typicalWindDirection;
     _typicalWindDirectionController.text = _typicalWindDirection != null
-        ? translatedTypicalWindDirectionBriefDescription(context, _typicalWindDirection!)
+        ? translatedTypicalWindDirectionBriefDescription(
+            context, _typicalWindDirection!)
         : translate(context).none;
 
     _country = hill.country;
