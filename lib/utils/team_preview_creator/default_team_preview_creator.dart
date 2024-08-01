@@ -1,11 +1,11 @@
-import 'package:sj_manager/models/db/hill/hill.dart';
-import 'package:sj_manager/models/db/jumper/jumper.dart';
-import 'package:sj_manager/models/db/jumper/jumps_consistency.dart';
-import 'package:sj_manager/models/db/jumper/landing_style.dart';
-import 'package:sj_manager/models/db/jumps/simple_jump.dart';
-import 'package:sj_manager/models/db/local_db_repo.dart';
-import 'package:sj_manager/models/db/sex.dart';
-import 'package:sj_manager/models/db/team/country_team.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/jumper/jumps_consistency.dart';
+import 'package:sj_manager/models/user_db/jumper/landing_style.dart';
+import 'package:sj_manager/models/user_db/jumps/simple_jump.dart';
+import 'package:sj_manager/models/user_db/local_db_repo.dart';
+import 'package:sj_manager/models/user_db/sex.dart';
+import 'package:sj_manager/models/user_db/team/country_team.dart';
 import 'package:sj_manager/utils/db_items.dart';
 import 'package:sj_manager/utils/team_preview_creator/team_preview_creator.dart';
 
@@ -18,8 +18,7 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
 
   @override
   Hill? largestHill(CountryTeam team) {
-    final fromCountry =
-        database.hills.last.fromCountryByCode(team.country.code);
+    final fromCountry = database.hills.last.fromCountryByCode(team.country.code);
     if (fromCountry.isEmpty) return null;
     return fromCountry.reduce((previous, current) {
       return previous.hs > current.hs ? previous : current;
@@ -58,8 +57,7 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
         jumper: _calculateRatingForRisingStar(jumper),
     };
     final best = bestJumper(team);
-    final bestForRisingStar =
-        _atPositionFromRatings(jumperRatings, position: 1);
+    final bestForRisingStar = _atPositionFromRatings(jumperRatings, position: 1);
     if (jumperRatings.values.every((rating) => rating == 0) ||
         (best == bestForRisingStar && jumperRatings.length == 1)) {
       return null;
@@ -71,9 +69,7 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
   }
 
   List<Jumper> _jumpersBySex(Sex sex) {
-    return sex == Sex.male
-        ? database.maleJumpers.last
-        : database.femaleJumpers.last;
+    return sex == Sex.male ? database.maleJumpers.last : database.femaleJumpers.last;
   }
 
   double _calculateRatingForRisingStar(Jumper jumper) {
@@ -135,8 +131,7 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
     if (position < 1 || position > jumperRatings.length) {
       throw ArgumentError('Position out of range');
     }
-    List<MapEntry<Jumper, double>> sortedEntries = jumperRatings.entries
-        .toList()
+    List<MapEntry<Jumper, double>> sortedEntries = jumperRatings.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
     return sortedEntries[position - 1].key;

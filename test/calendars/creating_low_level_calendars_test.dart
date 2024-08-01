@@ -1,16 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
-import 'package:sj_manager/models/db/country/country.dart';
-import 'package:sj_manager/models/db/event_series/competition/calendar_records/calendar_main_competition_record.dart';
-import 'package:sj_manager/models/db/event_series/competition/calendar_records/calendar_main_competition_record_setup.dart';
-import 'package:sj_manager/models/db/event_series/competition/calendar_records/calendar_main_competition_records_to_calendar.dart';
-import 'package:sj_manager/models/db/event_series/competition/competition.dart';
-import 'package:sj_manager/models/db/event_series/competition/competition_type.dart';
-import 'package:sj_manager/models/db/event_series/competition/high_level_calendar.dart';
-import 'package:sj_manager/models/db/event_series/competition/rules/competition_rules/competition_rules.dart';
-import 'package:sj_manager/models/db/hill/hill.dart';
-import 'package:sj_manager/models/db/jumper/jumper.dart';
-import 'package:sj_manager/models/db/team/team.dart';
+import 'package:sj_manager/models/user_db/country/country.dart';
+import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
+import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record_setup.dart';
+import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_records_to_calendar.dart';
+import 'package:sj_manager/models/simulation_db/competition/competition.dart';
+import 'package:sj_manager/models/simulation_db/competition/competition_type.dart';
+import 'package:sj_manager/models/simulation_db/competition/high_level_calendar.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/team/team.dart';
 
 import 'creating_low_level_calendars_test.mocks.dart';
 

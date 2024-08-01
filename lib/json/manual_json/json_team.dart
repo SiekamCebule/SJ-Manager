@@ -1,7 +1,7 @@
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/db/team/country_team.dart';
-import 'package:sj_manager/models/db/team/team.dart';
+import 'package:sj_manager/models/user_db/team/country_team.dart';
+import 'package:sj_manager/models/user_db/team/team.dart';
 
 class JsonTeamParser {
   JsonTeamParser({required this.countryLoader});

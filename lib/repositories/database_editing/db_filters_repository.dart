@@ -1,15 +1,14 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/enums/db_editable_item_type.dart';
 import 'package:sj_manager/filters/filter.dart';
-import 'package:sj_manager/models/db/hill/hill.dart';
-import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
 class DbFiltersRepo {
   DbFiltersRepo();
 
   final _maleJumpersFilters = BehaviorSubject<List<Filter<Jumper>>>.seeded([]);
-  final _femaleJumpersFilters =
-      BehaviorSubject<List<Filter<Jumper>>>.seeded([]);
+  final _femaleJumpersFilters = BehaviorSubject<List<Filter<Jumper>>>.seeded([]);
   final _hillsFilters = BehaviorSubject<List<Filter<Hill>>>.seeded([]);
 
   void setMaleAndFemaleJumpersFilters(List<Filter<Jumper>> filters) {
@@ -41,8 +40,7 @@ class DbFiltersRepo {
     _hillsFilters.close();
   }
 
-  ValueStream<List<Filter<Jumper>>> get maleJumpersFilters =>
-      _maleJumpersFilters.stream;
+  ValueStream<List<Filter<Jumper>>> get maleJumpersFilters => _maleJumpersFilters.stream;
   ValueStream<List<Filter<Jumper>>> get femaleJumpersFilters =>
       _femaleJumpersFilters.stream;
   ValueStream<List<Filter<Hill>>> get hillsFilters => _hillsFilters.stream;
@@ -50,11 +48,9 @@ class DbFiltersRepo {
   bool get hasValidFilter {
     final onMaleJumpers =
         _maleJumpersFilters.value.where((filter) => filter.isValid).isNotEmpty;
-    final onFemaleJumpers = _femaleJumpersFilters.value
-        .where((filter) => filter.isValid)
-        .isNotEmpty;
-    final onHills =
-        _hillsFilters.value.where((filter) => filter.isValid).isNotEmpty;
+    final onFemaleJumpers =
+        _femaleJumpersFilters.value.where((filter) => filter.isValid).isNotEmpty;
+    final onHills = _hillsFilters.value.where((filter) => filter.isValid).isNotEmpty;
     return onMaleJumpers || onFemaleJumpers || onHills;
   }
 

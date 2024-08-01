@@ -6,13 +6,11 @@
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i5;
 import 'package:rxdart/rxdart.dart' as _i2;
-import 'package:sj_manager/models/db/country/country.dart' as _i4;
-import 'package:sj_manager/models/db/team/team.dart' as _i7;
+import 'package:sj_manager/models/user_db/country/country.dart' as _i4;
+import 'package:sj_manager/models/user_db/team/team.dart' as _i7;
 import 'package:sj_manager/repositories/countries/countries_repo.dart' as _i6;
-import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart'
-    as _i8;
-import 'package:sj_manager/repositories/generic/editable_items_repo.dart'
-    as _i3;
+import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart' as _i8;
+import 'package:sj_manager/repositories/generic/editable_items_repo.dart' as _i3;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -27,8 +25,7 @@ import 'package:sj_manager/repositories/generic/editable_items_repo.dart'
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeValueStream_0<T1> extends _i1.SmartFake
-    implements _i2.ValueStream<T1> {
+class _FakeValueStream_0<T1> extends _i1.SmartFake implements _i2.ValueStream<T1> {
   _FakeValueStream_0(
     Object parent,
     Invocation parentInvocation,
@@ -62,8 +59,7 @@ class _FakeCountry_2 extends _i1.SmartFake implements _i4.Country {
 /// A class which mocks [EditableItemsRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockEditableItemsRepo<T> extends _i1.Mock
-    implements _i3.EditableItemsRepo<T> {
+class MockEditableItemsRepo<T> extends _i1.Mock implements _i3.EditableItemsRepo<T> {
   MockEditableItemsRepo() {
     _i1.throwOnMissingStub(this);
   }
@@ -281,8 +277,7 @@ class MockCountriesRepo extends _i1.Mock implements _i6.CountriesRepo {
 /// A class which mocks [TeamsRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTeamsRepo<T extends _i7.Team> extends _i1.Mock
-    implements _i8.TeamsRepo<T> {
+class MockTeamsRepo<T extends _i7.Team> extends _i1.Mock implements _i8.TeamsRepo<T> {
   MockTeamsRepo() {
     _i1.throwOnMissingStub(this);
   }

@@ -1,8 +1,8 @@
 import 'package:sj_manager/bloc/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/db/event_series/classification/classification.dart';
-import 'package:sj_manager/models/db/event_series/competition/rules/user_algorithms/concrete/classification_score_creator.dart';
-import 'package:sj_manager/models/db/event_series/standings/standings_repo.dart';
+import 'package:sj_manager/models/simulation_db/classification/classification.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/concrete/classification_score_creator.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings_repo.dart';
 import 'package:sj_manager/repositories/generic/ids_repo.dart';
 import 'package:sj_manager/utils/multilingual_string.dart';
 

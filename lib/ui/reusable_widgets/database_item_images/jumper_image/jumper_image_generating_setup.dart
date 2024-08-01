@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
 class JumperImageGeneratingSetup {

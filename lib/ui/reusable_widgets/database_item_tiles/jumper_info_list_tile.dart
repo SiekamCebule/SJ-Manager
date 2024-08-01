@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 
@@ -12,8 +12,7 @@ class JumperInfoListTile extends StatelessWidget {
     required this.jumper,
     required this.onTap,
     required this.selected,
-  }) : assert(reorderable == false ||
-            (reorderable == true && indexInList != null));
+  }) : assert(reorderable == false || (reorderable == true && indexInList != null));
 
   final bool reorderable;
   final int? indexInList;

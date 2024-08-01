@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/db/country/country.dart';
+import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/repositories/countries/country_flags/country_flags_repo.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/utils/context_maybe_read.dart';
@@ -10,10 +10,8 @@ class CountryFlag extends StatelessWidget {
     required this.country,
     this.width,
     this.height,
-    this.circularBorderRadius =
-        UiGlobalConstants.defaultCountryFlagBorderRadius,
-  }) : assert((width != null || height != null) &&
-            !(width != null && height != null));
+    this.circularBorderRadius = UiGlobalConstants.defaultCountryFlagBorderRadius,
+  }) : assert((width != null || height != null) && !(width != null && height != null));
 
   final Country country;
   final double? width;

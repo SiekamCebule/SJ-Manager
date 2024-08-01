@@ -1,4 +1,4 @@
-part of '../../models/db/jumper/jumper.dart';
+part of '../../models/user_db/jumper/jumper.dart';
 
 Jumper _jumperFromJson(Json json, {required JsonCountryLoader countryLoader}) {
   final country = countryLoader.load(json['country']);

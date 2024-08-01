@@ -11,13 +11,13 @@ import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_screen.dart'
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_navigation_cubit.dart';
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_navigation_state.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/models/db/country/country.dart';
-import 'package:sj_manager/models/db/local_db_repo.dart';
-import 'package:sj_manager/models/db/sex.dart';
-import 'package:sj_manager/models/db/team/country_team.dart';
-import 'package:sj_manager/models/simulations/enums.dart';
-import 'package:sj_manager/models/simulations/simulation_wizard_options_repo.dart';
-import 'package:sj_manager/models/db/team/team.dart';
+import 'package:sj_manager/models/user_db/country/country.dart';
+import 'package:sj_manager/models/user_db/local_db_repo.dart';
+import 'package:sj_manager/models/user_db/sex.dart';
+import 'package:sj_manager/models/user_db/team/country_team.dart';
+import 'package:sj_manager/models/simulation_db/enums.dart';
+import 'package:sj_manager/models/simulation_db/simulation_wizard_options_repo.dart';
+import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/country_screen/country_title.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/country_screen/preview_stat_texts.dart';
@@ -54,8 +54,7 @@ class _SimulationWizardDialogState extends State<SimulationWizardDialog>
   @override
   void initState() {
     _navPermissions = LinearNavigationPermissionsRepo();
-    _navCubit =
-        SimulationWizardNavigationCubit(navPermissions: _navPermissions);
+    _navCubit = SimulationWizardNavigationCubit(navPermissions: _navPermissions);
     _navStateSubscription = _navCubit.stream.listen((state) {
       if (state is InitializedSimulationWizardNavigationState) {
         _navPermissions.canGoForward = state.indexAllowsGoingForward;
