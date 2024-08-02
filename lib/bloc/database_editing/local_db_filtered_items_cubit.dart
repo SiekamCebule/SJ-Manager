@@ -22,6 +22,9 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
   late final StreamSubscription _maleJumperChangesSubscription;
   late final StreamSubscription _femaleJumperChangesSubscription;
   late final StreamSubscription _hillChangesSubscription;
+  late final StreamSubscription _eventSeriesSetupsSubscription;
+  late final StreamSubscription _eventSeriesCalendarPresetsSubscription;
+  late final StreamSubscription _competitionRulesPresetsSubscription;
 
   void _setUp() {
     final maleStream = Rx.combineLatest2(itemsRepo.maleJumpers.items,
@@ -47,6 +50,21 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
       final filters = event.$2;
       emit(state.copyWith(hills: Filter.filterAll(hills, filters)));
     });
+
+    _eventSeriesSetupsSubscription = itemsRepo.eventSeriesSetups.items.listen((items) {
+      print('event series setups change');
+      emit(state.copyWith(eventSeriesSetups: items));
+    });
+
+    _eventSeriesCalendarPresetsSubscription =
+        itemsRepo.eventSeriesCalendars.items.listen((items) {
+      emit(state.copyWith(eventSeriesCalendars: items));
+    });
+
+    _competitionRulesPresetsSubscription =
+        itemsRepo.competitionRulesPresets.items.listen((items) {
+      emit(state.copyWith(competitionRulesPresets: items));
+    });
   }
 
   int findOriginalIndex(int indexFromFilteredList, DbEditableItemType type) {
@@ -60,8 +78,17 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
     _maleJumperChangesSubscription.cancel();
     _femaleJumperChangesSubscription.cancel();
     _hillChangesSubscription.cancel();
+    _eventSeriesSetupsSubscription.cancel();
+    _eventSeriesCalendarPresetsSubscription.cancel();
+    _competitionRulesPresetsSubscription.cancel();
   }
 
-  static const LocalDbFilteredItemsState _initial =
-      LocalDbFilteredItemsState(maleJumpers: [], femaleJumpers: [], hills: []);
+  static const LocalDbFilteredItemsState _initial = LocalDbFilteredItemsState(
+    maleJumpers: [],
+    femaleJumpers: [],
+    hills: [],
+    eventSeriesSetups: [],
+    eventSeriesCalendars: [],
+    competitionRulesPresets: [],
+  );
 }

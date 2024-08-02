@@ -1,14 +1,15 @@
 enum DbEditableItemType {
   maleJumper,
   femaleJumper,
-  hill;
+  hill,
+  eventSeriesSetup,
+  eventSeriesCalendarPreset,
+  competitionRulesPreset;
 
   static DbEditableItemType fromIndex(int index) {
-    return switch (index) {
-      0 => DbEditableItemType.maleJumper,
-      1 => DbEditableItemType.femaleJumper,
-      2 => DbEditableItemType.hill,
-      _ => throw StateError('Invalid index'),
-    };
+    if (index < 0 || index >= DbEditableItemType.values.length) {
+      throw StateError('Invalid index');
+    }
+    return DbEditableItemType.values[index];
   }
 }

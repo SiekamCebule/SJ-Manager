@@ -32,6 +32,9 @@ void main() {
         maleJumpers: MockEditableItemsRepo(),
         femaleJumpers: MockEditableItemsRepo(),
         hills: MockEditableItemsRepo(),
+        eventSeriesSetups: MockEditableItemsRepo(),
+        eventSeriesCalendars: MockEditableItemsRepo(),
+        competitionRulesPresets: MockEditableItemsRepo(),
         countries: MockCountriesRepo(),
         teams: MockTeamsRepo(),
       );

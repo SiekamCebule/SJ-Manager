@@ -20,15 +20,14 @@ class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
   LocalDbRepo originalDb;
 
   Future<void> setUp() async {
-    final editableMaleJumpers = originalDb.maleJumpers.clone();
-    final editableFemaleJumpers = originalDb.femaleJumpers.clone();
-    final editableHills = originalDb.hills.clone();
-
     emit(
       LocalDbRepo(
-        maleJumpers: editableMaleJumpers,
-        femaleJumpers: editableFemaleJumpers,
-        hills: editableHills,
+        maleJumpers: originalDb.maleJumpers.clone(),
+        femaleJumpers: originalDb.femaleJumpers.clone(),
+        hills: originalDb.hills.clone(),
+        eventSeriesSetups: originalDb.eventSeriesSetups.clone(),
+        eventSeriesCalendars: originalDb.eventSeriesCalendars.clone(),
+        competitionRulesPresets: originalDb.competitionRulesPresets.clone(),
         countries: originalDb.countries,
         teams: originalDb.teams,
       ),

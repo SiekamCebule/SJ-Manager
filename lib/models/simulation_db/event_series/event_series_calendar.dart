@@ -8,6 +8,13 @@ class EventSeriesCalendar {
     required this.qualifications,
   });
 
+  const EventSeriesCalendar.empty()
+      : this(
+          competitions: const [],
+          classifications: const [],
+          qualifications: const {},
+        );
+
   final List<Competition> competitions;
   final List<Classification> classifications;
   final Map<Competition, Competition> qualifications;

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/enums/db_editable_item_type.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/competition_rules_preset_info_list_tile.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/event_series_calendar_info_list_tile.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/event_series_preset_info_list_tile.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/hill_info_list_tile.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/jumper_info_list_tile.dart';
 
@@ -37,6 +40,25 @@ class AppropriateDbItemListTile extends StatelessWidget {
           reorderable: reorderable,
           indexInList: indexInList,
           hill: item,
+          onTap: onItemTap,
+          selected: selected,
+        ),
+      DbEditableItemType.eventSeriesSetup => EventSeriesPresetInfoListTile(
+          reorderable: reorderable,
+          indexInList: indexInList,
+          eventSeriesSetup: item,
+          onTap: onItemTap,
+          selected: selected,
+        ),
+      DbEditableItemType.eventSeriesCalendarPreset => EventSeriesCalendarInfoListTile(
+          reorderable: reorderable,
+          eventSeriesCalendarPreset: item,
+          onTap: onItemTap,
+          selected: selected,
+        ),
+      DbEditableItemType.competitionRulesPreset => CompetitionRulesPresetInfoListTile(
+          reorderable: reorderable,
+          competitionRulesPreset: item,
           onTap: onItemTap,
           selected: selected,
         ),

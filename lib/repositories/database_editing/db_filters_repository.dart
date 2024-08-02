@@ -59,6 +59,13 @@ class DbFiltersRepo {
       DbEditableItemType.maleJumper => maleJumpersFilters,
       DbEditableItemType.femaleJumper => femaleJumpersFilters,
       DbEditableItemType.hill => hillsFilters,
+      DbEditableItemType.eventSeriesSetup => _neverStream(),
+      DbEditableItemType.eventSeriesCalendarPreset => _neverStream(),
+      DbEditableItemType.competitionRulesPreset => _neverStream(),
     };
   }
+
+  ValueStream<T> _neverStream<T>() => BehaviorSubject<T>()
+    ..close()
+    ..stream;
 }

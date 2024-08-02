@@ -25,7 +25,8 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ru
 /// A class which mocks [CompetitionRules].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCompetitionRules<T> extends _i1.Mock implements _i2.CompetitionRules<T> {
+class MockCompetitionRules<T> extends _i1.Mock
+    implements _i2.CompetitionRules<T> {
   MockCompetitionRules() {
     _i1.throwOnMissingStub(this);
   }

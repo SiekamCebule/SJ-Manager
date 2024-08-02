@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/ui/reusable_widgets/database_item_images/jumper_image/jumper_image_generating_setup.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
 
-class JumperImage extends StatelessWidget {
-  const JumperImage({
+class HillImage extends StatelessWidget {
+  const HillImage({
     super.key,
-    required this.jumper,
+    required this.hill,
     required this.setup,
     this.width,
     this.height,
@@ -15,8 +15,8 @@ class JumperImage extends StatelessWidget {
     this.errorBuilder,
   });
 
-  final Jumper jumper;
-  final JumperImageGeneratingSetup setup;
+  final Hill hill;
+  final DbItemImageGeneratingSetup<Hill> setup;
   final double? width;
   final double? height;
   final BoxFit? fit;
@@ -24,7 +24,7 @@ class JumperImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filePath = jumperImagePath(setup, jumper);
+    final filePath = dbItemImagePath(setup, hill);
     return Image.file(
       File(filePath ?? ''),
       width: width,
