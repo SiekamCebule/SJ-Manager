@@ -10,14 +10,12 @@ class EventSeriesCalendarLoader implements SimulationDbPartLoader<EventSeriesCal
   const EventSeriesCalendarLoader({
     required this.idsRepo,
     required this.idGenerator,
-    required this.eventSeriesId,
     required this.competitionLoader,
     required this.classificationLoader,
   });
 
   final IdsRepo idsRepo;
   final IdGenerator idGenerator;
-  final String eventSeriesId;
   final SimulationDbPartLoader<Competition> competitionLoader;
   final SimulationDbPartLoader<Classification> classificationLoader;
 

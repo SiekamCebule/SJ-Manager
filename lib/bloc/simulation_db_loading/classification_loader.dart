@@ -9,12 +9,10 @@ import 'package:sj_manager/utils/multilingual_string.dart';
 class ClassificationLoader implements SimulationDbPartLoader<Classification> {
   const ClassificationLoader({
     required this.idsRepo,
-    required this.scoringDelegateLoader,
     required this.standingsLoader,
   });
 
   final IdsRepo idsRepo;
-  final SimulationDbPartLoader<ClassificationScoreCreator> scoringDelegateLoader;
   final SimulationDbPartLoader<StandingsRepo> standingsLoader;
 
   @override

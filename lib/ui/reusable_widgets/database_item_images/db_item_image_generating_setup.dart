@@ -1,22 +1,21 @@
 import 'dart:io';
 
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
-class JumperImageGeneratingSetup {
-  const JumperImageGeneratingSetup({
+class DbItemImageGeneratingSetup<T> {
+  const DbItemImageGeneratingSetup({
     required this.imagesDirectory,
     required this.toFileName,
     this.extension,
   });
 
   final Directory imagesDirectory;
-  final String Function(Jumper jumper) toFileName;
+  final String Function(T item) toFileName;
   final String? extension;
 }
 
-String? jumperImagePath(JumperImageGeneratingSetup setup, Jumper jumper) {
-  final fileName = setup.toFileName(jumper);
+String? dbItemImagePath<T>(DbItemImageGeneratingSetup<T> setup, T item) {
+  final fileName = setup.toFileName(item);
 
   if (setup.extension != null) {
     return '${setup.imagesDirectory.path}/$fileName.${setup.extension}';

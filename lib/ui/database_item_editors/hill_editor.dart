@@ -18,8 +18,8 @@ import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/arrow_icon.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
-import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/hill_image.dart';
-import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/hill_image_generating_setup.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
 import 'package:sj_manager/ui/reusable_widgets/menu_entries/predefined_reusable_entries.dart';
 import 'package:sj_manager/utils/context_maybe_read.dart';
@@ -115,8 +115,8 @@ class HillEditorState extends State<HillEditor> {
   Widget build(BuildContext context) {
     const gap = Gap(UiItemEditorsConstants.verticalSpaceBetweenFields);
     return LayoutBuilder(builder: (context, constraints) {
-      final shouldShowImage =
-          _cachedHill != null && context.maybeRead<HillImageGeneratingSetup>() != null;
+      final shouldShowImage = _cachedHill != null &&
+          context.maybeRead<DbItemImageGeneratingSetup<Hill>>() != null;
       final shouldShowArrowIcon = _cachedHill?.typicalWindDirection != null;
 
       return Scrollbar(

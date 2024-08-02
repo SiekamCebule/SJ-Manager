@@ -6,6 +6,7 @@ class DbEditingDefaultsRepo {
     required this.maxHillPoints,
     required this.maxHillTypicalWindStrength,
     required this.maxKAndHs,
+    required this.maxEventSeriesPriority,
   });
 
   factory DbEditingDefaultsRepo.appDefault() {
@@ -16,6 +17,7 @@ class DbEditingDefaultsRepo {
       maxHillPoints: 1000,
       maxHillTypicalWindStrength: 25,
       autoPointsForTailwindMultiplier: 1.5,
+      maxEventSeriesPriority: 10,
     );
   }
 
@@ -26,4 +28,6 @@ class DbEditingDefaultsRepo {
   final double maxHillPoints;
   final double maxHillTypicalWindStrength;
   final double maxKAndHs;
+
+  final double maxEventSeriesPriority;
 }

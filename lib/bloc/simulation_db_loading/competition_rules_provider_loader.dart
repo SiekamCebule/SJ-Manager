@@ -2,10 +2,13 @@ import 'package:sj_manager/bloc/simulation_db_loading/simulation_db_part_loader.
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_provider.dart';
 import 'package:sj_manager/repositories/generic/ids_repo.dart';
 
-class CompetitionRulesLoader implements SimulationDbPartLoader<CompetitionRules> {
-  const CompetitionRulesLoader({
+class CompetitionRulesProviderLoader
+    implements SimulationDbPartLoader<CompetitionRulesProvider> {
+  const CompetitionRulesProviderLoader({
     required this.idsRepo,
     required this.roundRulesLoader,
   });
@@ -14,7 +17,7 @@ class CompetitionRulesLoader implements SimulationDbPartLoader<CompetitionRules>
   final SimulationDbPartLoader<CompetitionRoundRules> roundRulesLoader;
 
   @override
-  CompetitionRules load(Json json) {
+  CompetitionRulesProvider load(Json json) {
     final type = json['type'] as String;
     if (type == 'raw') {
       return _loadRaw(json);
@@ -35,9 +38,8 @@ class CompetitionRulesLoader implements SimulationDbPartLoader<CompetitionRules>
     return CompetitionRules(rounds: rounds);
   }
 
-  CompetitionRules _loadFromPreset(Json json) {
+  CompetitionRulesPreset _loadFromPreset(Json json) {
     final presetId = json['presetId'] as String;
-    final preset = idsRepo.get<CompetitionRules>(presetId); // TODO: Competition preset
-    return preset;
+    return idsRepo.get<CompetitionRulesPreset>(presetId);
   }
 }

@@ -13,6 +13,9 @@ class _BottomAppBar extends StatelessWidget {
             DbEditableItemType.maleJumper => const _ForJumpers(),
             DbEditableItemType.femaleJumper => const _ForJumpers(),
             DbEditableItemType.hill => const _ForHills(),
+            DbEditableItemType.eventSeriesSetup => const SizedBox(),
+            DbEditableItemType.eventSeriesCalendarPreset => const SizedBox(),
+            DbEditableItemType.competitionRulesPreset => const SizedBox(),
           };
         },
       ),

@@ -4,9 +4,13 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:sj_manager/enums/db_editable_item_type.dart';
 import 'package:sj_manager/json/db_items_json.dart';
-
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/db_file_system_entity_names.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
@@ -15,14 +19,17 @@ import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
-import 'package:sj_manager/repositories/generic/items_repo.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
+import 'package:sj_manager/repositories/generic/items_repo.dart';
 
 class LocalDbRepo with EquatableMixin {
   const LocalDbRepo({
     required this.maleJumpers,
     required this.femaleJumpers,
     required this.hills,
+    required this.eventSeriesSetups,
+    required this.eventSeriesCalendars,
+    required this.competitionRulesPresets,
     required this.countries,
     required this.teams,
   });
@@ -30,6 +37,9 @@ class LocalDbRepo with EquatableMixin {
   final EditableItemsRepo<MaleJumper> maleJumpers;
   final EditableItemsRepo<FemaleJumper> femaleJumpers;
   final EditableItemsRepo<Hill> hills;
+  final EditableItemsRepo<EventSeriesSetup> eventSeriesSetups;
+  final EditableItemsRepo<EventSeriesCalendarPreset> eventSeriesCalendars;
+  final EditableItemsRepo<CompetitionRulesPreset> competitionRulesPresets;
   final CountriesRepo countries;
   final TeamsRepo<Team> teams;
 
@@ -38,6 +48,9 @@ class LocalDbRepo with EquatableMixin {
       DbEditableItemType.maleJumper => maleJumpers,
       DbEditableItemType.femaleJumper => femaleJumpers,
       DbEditableItemType.hill => hills,
+      DbEditableItemType.eventSeriesSetup => eventSeriesSetups,
+      DbEditableItemType.eventSeriesCalendarPreset => eventSeriesCalendars,
+      DbEditableItemType.competitionRulesPreset => competitionRulesPresets,
     };
   }
 
@@ -45,7 +58,14 @@ class LocalDbRepo with EquatableMixin {
     if (T == MaleJumper) return maleJumpers as EditableItemsRepo<T>;
     if (T == FemaleJumper) return femaleJumpers as EditableItemsRepo<T>;
     if (T == Hill) return hills as EditableItemsRepo<T>;
-    throw ArgumentError('Invalid type (Type: $T)');
+    if (T == EventSeriesSetup) return eventSeriesSetups as EditableItemsRepo<T>;
+    if (T == EventSeriesCalendarPreset) {
+      return eventSeriesCalendars as EditableItemsRepo<T>;
+    }
+    if (T == CompetitionRulesPreset) {
+      return competitionRulesPresets as EditableItemsRepo<T>;
+    }
+    return throw ArgumentError('Invalid type of LocalDbRepo\'s item: $T');
   }
 
   ItemsRepo<T> byType<T>() {
@@ -54,7 +74,10 @@ class LocalDbRepo with EquatableMixin {
     if (T == Hill) return hills as ItemsRepo<T>;
     if (T == Country) return countries as ItemsRepo<T>;
     if (T == Team) return teams as ItemsRepo<T>;
-    throw ArgumentError('Invalid type');
+    if (T == EventSeriesSetup) return eventSeriesSetups as ItemsRepo<T>;
+    if (T == EventSeriesCalendarPreset) return eventSeriesCalendars as ItemsRepo<T>;
+    if (T == CompetitionRulesPreset) return competitionRulesPresets as ItemsRepo<T>;
+    throw ArgumentError('Invalid type of LocalDbRepo\'s item: $T');
   }
 
   static Future<LocalDbRepo> fromDirectory(Directory dir,
@@ -80,6 +103,28 @@ class LocalDbRepo with EquatableMixin {
       fromJson: context.read<DbItemsJsonConfiguration<Hill>>().fromJson,
     ));
     if (!context.mounted) throw StateError('The context is unmounted');
+    final eventSeriesSetups = EditableItemsRepo(
+        initial: await loadItemsListFromJsonFile(
+      file: getFile(dbFsEntityNames.eventSeriesSetups),
+      fromJson: context.read<DbItemsJsonConfiguration<EventSeriesSetup>>().fromJson,
+    ));
+    if (!context.mounted) throw StateError('The context is unmounted');
+    final eventSeriesCalendars = EditableItemsRepo(
+      initial: await loadItemsListFromJsonFile(
+        file: getFile(dbFsEntityNames.eventSeriesCalendars),
+        fromJson:
+            context.read<DbItemsJsonConfiguration<EventSeriesCalendarPreset>>().fromJson,
+      ),
+    );
+    if (!context.mounted) throw StateError('The context is unmounted');
+    final competitionRulesPresets = EditableItemsRepo(
+      initial: await loadItemsListFromJsonFile(
+        file: getFile(dbFsEntityNames.competitionRulesPresets),
+        fromJson:
+            context.read<DbItemsJsonConfiguration<CompetitionRulesPreset>>().fromJson,
+      ),
+    );
+    if (!context.mounted) throw StateError('The context is unmounted');
     final countries = CountriesRepo(
         initial: await loadItemsListFromJsonFile(
       file: getFile(dbFsEntityNames.countries),
@@ -95,24 +140,11 @@ class LocalDbRepo with EquatableMixin {
       maleJumpers: maleJumpers,
       femaleJumpers: femaleJumpers,
       hills: hills,
+      eventSeriesSetups: eventSeriesSetups,
+      eventSeriesCalendars: eventSeriesCalendars,
+      competitionRulesPresets: competitionRulesPresets,
       countries: countries,
       teams: TeamsRepo<Team>(initial: teams.last.cast()),
-    );
-  }
-
-  LocalDbRepo copyWith({
-    EditableItemsRepo<MaleJumper>? maleJumpers,
-    EditableItemsRepo<FemaleJumper>? femaleJumpers,
-    EditableItemsRepo<Hill>? hills,
-    CountriesRepo? countries,
-    TeamsRepo<Team>? teams,
-  }) {
-    return LocalDbRepo(
-      maleJumpers: maleJumpers ?? this.maleJumpers,
-      femaleJumpers: femaleJumpers ?? this.femaleJumpers,
-      hills: hills ?? this.hills,
-      countries: countries ?? this.countries,
-      teams: teams ?? this.teams,
     );
   }
 
@@ -123,6 +155,28 @@ class LocalDbRepo with EquatableMixin {
         hills,
         countries,
       ];
+
+  LocalDbRepo copyWith({
+    EditableItemsRepo<MaleJumper>? maleJumpers,
+    EditableItemsRepo<FemaleJumper>? femaleJumpers,
+    EditableItemsRepo<Hill>? hills,
+    EditableItemsRepo<EventSeriesSetup>? eventSeriesSetups,
+    EditableItemsRepo<EventSeriesCalendarPreset>? eventSeriesCalendars,
+    EditableItemsRepo<CompetitionRulesPreset>? competitionRulesPresets,
+    CountriesRepo? countries,
+    TeamsRepo<Team>? teams,
+  }) {
+    return LocalDbRepo(
+      maleJumpers: maleJumpers ?? this.maleJumpers,
+      femaleJumpers: femaleJumpers ?? this.femaleJumpers,
+      hills: hills ?? this.hills,
+      eventSeriesSetups: eventSeriesSetups ?? this.eventSeriesSetups,
+      eventSeriesCalendars: eventSeriesCalendars ?? this.eventSeriesCalendars,
+      competitionRulesPresets: competitionRulesPresets ?? this.competitionRulesPresets,
+      countries: countries ?? this.countries,
+      teams: teams ?? this.teams,
+    );
+  }
 
   void dispose() {
     print('LocalDbRepo dispose()');

@@ -67,6 +67,7 @@ dependencies:
   collection: ^1.18.0
   quiver: ^3.2.1
   uuid: ^4.4.2
+  nanoid: ^1.0.0
 
 dev_dependencies:
   flutter_test:

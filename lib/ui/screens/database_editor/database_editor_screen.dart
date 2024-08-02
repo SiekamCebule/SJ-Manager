@@ -32,6 +32,7 @@ import 'package:sj_manager/repositories/database_editing/default_items_repositor
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
 import 'package:sj_manager/ui/assets/icons.dart';
+import 'package:sj_manager/ui/database_item_editors/event_series_setup_editor.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
 import 'package:sj_manager/ui/database_item_editors/jumper_editor.dart';

@@ -129,3 +129,8 @@ Future<void> copyAssetsDir(String assetsDirPath, Directory destination) async {
     await file.writeAsBytes(bytes);
   }
 }
+
+List<String> filePathsInDirectory(Directory directory) {
+  final fsEntities = directory.listSync();
+  return fsEntities.whereType<File>().map((file) => file.path).toList();
+}

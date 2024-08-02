@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
 import 'package:sj_manager/main.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/db_file_system_entity_names.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
@@ -88,27 +89,13 @@ class AppConfigurator {
   }
 
   Future<void> loadDatabase() async {
-    if (!_context.mounted) return;
-    final countriesFile =
-        databaseFile(_context.read(), _context.read<DbFileSystemEntityNames>().countries);
-    try {
-      await _loadCountries();
-    } catch (e) {
-      if (!_context.mounted) return;
-      await showDialog(
-        context: _context,
-        builder: (context) => LoadingItemsFailedDialog(
-          titleText: 'Błąd wczytywania krajów',
-          filePath: countriesFile.path,
-          error: e,
-        ),
-      );
-    }
-
+    await _tryLoadCountries();
     await _tryLoadItems<MaleJumper>(dialogTitleText: 'Błąd wczytywania skoczków');
     await _tryLoadItems<FemaleJumper>(dialogTitleText: 'Błąd wczytywania skoczkiń');
     await _tryLoadItems<Hill>(dialogTitleText: 'Błąd wczytywania skoczni');
     await _tryLoadItems<Team>(dialogTitleText: 'Błąd wczytywania zespołów');
+    await _tryLoadItems<EventSeriesSetup>(
+        dialogTitleText: 'Błąd wczytywania danych o cyklach zawodów');
   }
 
   Future<void> _tryLoadItems<T>({required String dialogTitleText}) async {
@@ -134,6 +121,37 @@ class AppConfigurator {
     }
   }
 
+  Future<void> _loadItems<T>() async {
+    final parameters = _context.read<DbItemsJsonConfiguration<T>>();
+    final loaded = await loadItemsListFromJsonFile(
+      file: databaseFile(
+          _context.read(), _context.read<DbFileSystemEntityNames>().byGenericType<T>()),
+      fromJson: parameters.fromJson,
+    );
+    if (!_context.mounted) return;
+    print('($T) items: $loaded');
+    _context.read<LocalDbRepo>().byType<T>().set(loaded);
+  }
+
+  Future<void> _tryLoadCountries() async {
+    if (!_context.mounted) return;
+    final countriesFile =
+        databaseFile(_context.read(), _context.read<DbFileSystemEntityNames>().countries);
+    try {
+      await _loadCountries();
+    } catch (e) {
+      if (!_context.mounted) return;
+      await showDialog(
+        context: _context,
+        builder: (context) => LoadingItemsFailedDialog(
+          titleText: 'Błąd wczytywania krajów',
+          filePath: countriesFile.path,
+          error: e,
+        ),
+      );
+    }
+  }
+
   Future<void> _loadCountries() async {
     final parameters = _context.read<DbItemsJsonConfiguration<Country>>();
     final countries = await loadItemsListFromJsonFile<Country>(
@@ -145,16 +163,5 @@ class AppConfigurator {
     final countriesWithLowerCaseCodes =
         countries.map((c) => c.copyWith(code: c.code.toLowerCase())).toList();
     _context.read<LocalDbRepo>().countries.set(countriesWithLowerCaseCodes);
-  }
-
-  Future<void> _loadItems<T>() async {
-    final parameters = _context.read<DbItemsJsonConfiguration<T>>();
-    final loaded = await loadItemsListFromJsonFile(
-      file: databaseFile(
-          _context.read(), _context.read<DbFileSystemEntityNames>().byGenericType<T>()),
-      fromJson: parameters.fromJson,
-    );
-    if (!_context.mounted) return;
-    _context.read<LocalDbRepo>().byType<T>().set(loaded);
   }
 }

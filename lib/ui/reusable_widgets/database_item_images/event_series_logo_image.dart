@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image/hill_image_generating_setup.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_image_asset.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
 
-class HillImage extends StatelessWidget {
-  const HillImage({
+class EventSeriesLogoImage extends StatelessWidget {
+  const EventSeriesLogoImage({
     super.key,
-    required this.hill,
+    required this.logoImage,
     required this.setup,
     this.width,
     this.height,
@@ -15,8 +15,8 @@ class HillImage extends StatelessWidget {
     this.errorBuilder,
   });
 
-  final Hill hill;
-  final HillImageGeneratingSetup setup;
+  final EventSeriesLogoImageWrapper logoImage;
+  final DbItemImageGeneratingSetup<EventSeriesLogoImageWrapper> setup;
   final double? width;
   final double? height;
   final BoxFit? fit;
@@ -24,7 +24,7 @@ class HillImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filePath = hillImagePath(setup, hill);
+    final filePath = dbItemImagePath(setup, logoImage);
     return Image.file(
       File(filePath ?? ''),
       width: width,

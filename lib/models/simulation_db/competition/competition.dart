@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_provider.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_repo.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 
@@ -15,7 +16,7 @@ class Competition<E> with EquatableMixin {
 
   final Hill hill;
   final DateTime date;
-  final CompetitionRules<E> rules;
+  final CompetitionRulesProvider<E> rules;
   final StandingsRepo<E>? standings;
   final Set<Object> labels;
 

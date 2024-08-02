@@ -5,6 +5,11 @@ import 'package:mockito/annotations.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/bloc/database_editing/database_items_type_cubit.dart';
 import 'package:sj_manager/enums/db_editable_item_type.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/hill/hill_profile_type.dart';
@@ -135,6 +140,11 @@ void main() {
                 maleJumpers: EditableItemsRepo<MaleJumper>(initial: maleJumpers),
                 femaleJumpers: EditableItemsRepo<FemaleJumper>(initial: femaleJumpers),
                 hills: EditableItemsRepo<Hill>(initial: hills),
+                eventSeriesSetups: EditableItemsRepo<EventSeriesSetup>(initial: []),
+                eventSeriesCalendars:
+                    EditableItemsRepo<EventSeriesCalendarPreset>(initial: []),
+                competitionRulesPresets:
+                    EditableItemsRepo<CompetitionRulesPreset>(initial: []),
                 countries: CountriesRepo(initial: countries),
                 teams: MockTeamsRepo(),
               ),
@@ -145,6 +155,9 @@ void main() {
                 defaultFemaleJumper: FemaleJumper.empty(country: noneCountry),
                 defaultMaleJumper: MaleJumper.empty(country: noneCountry),
                 defaultHill: Hill.empty(country: noneCountry),
+                defaultEventSeriesSetup: const EventSeriesSetup.empty(),
+                defaultEventSeriesCalendar: const EventSeriesCalendarPreset.empty(),
+                defaultCompetitionRules: const CompetitionRules.empty(),
               );
             }),
             RepositoryProvider(create: (context) {
