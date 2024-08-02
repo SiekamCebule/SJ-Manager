@@ -3,16 +3,18 @@ import 'package:sj_manager/ui/theme/app_theme.dart';
 
 class AppThemeDataCreator {
   late AppTheme _themeConfig;
+  late ThemeData _themeData;
 
   ThemeData create(AppTheme appTheme) {
     _themeConfig = appTheme;
-    var themeData = ThemeData.from(
+    _themeData = ThemeData.from(
       colorScheme: _themeConfig.colorScheme.scheme(_themeConfig.brightness),
     );
-    final base = themeData.textTheme;
-    final textTheme = _constructTextTheme(base);
-    themeData = themeData.copyWith(textTheme: textTheme);
-    return themeData;
+    _themeData =
+        _themeData.copyWith(textTheme: _constructTextTheme(_themeData.textTheme));
+    _themeData =
+        _themeData.copyWith(dialogTheme: _constructDialogTheme(_themeData.dialogTheme));
+    return _themeData;
   }
 
   TextTheme _constructTextTheme(TextTheme base) {
@@ -77,6 +79,13 @@ class AppThemeDataCreator {
         fontFamily: 'Raleway',
         fontWeight: FontWeight.w400,
       ),
+    );
+  }
+
+  DialogTheme _constructDialogTheme(DialogTheme base) {
+    return base.copyWith(
+      contentTextStyle:
+          _themeData.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w300),
     );
   }
 }

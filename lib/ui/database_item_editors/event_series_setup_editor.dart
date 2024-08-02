@@ -9,13 +9,16 @@ import 'package:sj_manager/models/user_db/local_db_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image.dart';
+import 'package:sj_manager/ui/screens/database_editor/large/dialogs/event_series_setup_id_help_dialog.dart';
+import 'package:sj_manager/ui/screens/database_editor/large/dialogs/event_series_setup_priority_help_dialog.dart';
 import 'package:sj_manager/ui/providers/locale_notifier.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
-import 'package:sj_manager/ui/reusable_widgets/database_item_images/event_series_logo_image.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
 import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
+import 'package:sj_manager/ui/screens/database_editor/large/dialogs/item_image_help_dialog.dart';
 import 'package:sj_manager/utils/context_maybe_read.dart';
 import 'package:sj_manager/utils/platform.dart';
 
@@ -63,6 +66,7 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
 
   @override
   Widget build(BuildContext context) {
+    print('build');
     final eventSeriesCalendarPresets =
         context.read<LocalDbRepo>().eventSeriesCalendars.last;
 
@@ -98,13 +102,31 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                           labelText: translate(context).name,
                         ),
                         gap,
-                        MyTextField(
-                          key: const Key('id'),
-                          controller: _idController,
-                          onChange: () {
-                            widget.onChange(_constructAndCache());
-                          },
-                          labelText: 'Identyfikator',
+                        Row(
+                          children: [
+                            Expanded(
+                              child: MyTextField(
+                                key: const Key('id'),
+                                controller: _idController,
+                                onChange: () {
+                                  widget.onChange(_constructAndCache());
+                                },
+                                labelText: 'Identyfikator',
+                              ),
+                            ),
+                            const Gap(10),
+                            HelpIconButton(onPressed: () async {
+                              await showDialog(
+                                context: context,
+                                builder: (context) => Center(
+                                  child: ConstrainedBox(
+                                    constraints: const BoxConstraints(maxWidth: 700),
+                                    child: const EventSeriesSetupIdHelpDialog(),
+                                  ),
+                                ),
+                              );
+                            }),
+                          ],
                         ),
                         gap,
                         Row(
@@ -115,7 +137,6 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                                 onChange: () {
                                   widget.onChange(_constructAndCache());
                                 },
-                                buttons: [],
                                 formatters: doubleTextInputFormatters,
                                 labelText: 'Priorytet',
                                 min: 1,
@@ -124,8 +145,16 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                               ),
                             ),
                             const Gap(10),
-                            HelpIconButton(onPressed: () {
-                              print('show priority dialog');
+                            HelpIconButton(onPressed: () async {
+                              await showDialog(
+                                context: context,
+                                builder: (context) => Center(
+                                  child: ConstrainedBox(
+                                    constraints: const BoxConstraints(maxWidth: 700),
+                                    child: const EventSeriesSetupPriorityHelpDialog(),
+                                  ),
+                                ),
+                              );
                             }),
                           ],
                         ),
@@ -136,16 +165,19 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                   if (shouldShowLogo)
                     Flexible(
                       flex: 4,
-                      child: EventSeriesLogoImage(
+                      child: DbItemImage<EventSeriesLogoImageWrapper>(
                         key: const Key('image'),
-                        logoImage:
+                        item:
                             EventSeriesLogoImageWrapper(eventSeriesSetup: _cachedSetup!),
                         setup: context.read(),
                         height: UiItemEditorsConstants.hillImageHeight,
                         fit: BoxFit.fill,
-                        errorBuilder: (_, __, ___) => const ItemImageNotFoundPlaceholder(
+                        errorBuilder: (_, __, ___) => ItemImageNotFoundPlaceholder(
                           width: UiItemEditorsConstants.hillImagePlaceholderWidth,
                           height: UiItemEditorsConstants.hillImageHeight,
+                          helpDialog: ItemImageHelpDialog(
+                            content: translate(context).eventSeriesLogoHelpContent,
+                          ),
                         ),
                       ),
                     ),
@@ -191,9 +223,9 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
   void setUp(EventSeriesSetup setup) {
     setState(() {
       _cachedSetup = setup;
+      _fillFields(setup);
+      FocusScope.of(context).unfocus();
     });
-    _fillFields(setup);
-    FocusScope.of(context).unfocus();
   }
 
   void _fillFields(EventSeriesSetup setup) {
