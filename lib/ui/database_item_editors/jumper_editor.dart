@@ -18,9 +18,10 @@ import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
-import 'package:sj_manager/ui/reusable_widgets/database_item_images/jumper_image.dart';
+import 'package:sj_manager/ui/screens/database_editor/large/dialogs/item_image_help_dialog.dart';
 import 'package:sj_manager/utils/context_maybe_read.dart';
 import 'package:sj_manager/utils/platform.dart';
 
@@ -159,15 +160,17 @@ class JumperEditorState extends State<JumperEditor> {
                     if (shouldShowImage)
                       Expanded(
                         flex: 4,
-                        child: JumperImage(
-                          jumper: _cachedJumper!,
+                        child: DbItemImage<Jumper>(
+                          item: _cachedJumper!,
                           setup: context.read(),
                           height: UiItemEditorsConstants.jumperImageHeight,
                           fit: BoxFit.fitHeight,
-                          errorBuilder: (_, __, ___) =>
-                              const ItemImageNotFoundPlaceholder(
+                          errorBuilder: (_, __, ___) => ItemImageNotFoundPlaceholder(
                             width: UiItemEditorsConstants.jumperImagePlaceholderWidth,
                             height: UiItemEditorsConstants.jumperImageHeight,
+                            helpDialog: ItemImageHelpDialog(
+                              content: translate(context).jumperImageHelpContent,
+                            ),
                           ),
                         ),
                       ),

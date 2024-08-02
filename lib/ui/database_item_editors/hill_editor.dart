@@ -18,10 +18,11 @@ import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/arrow_icon.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
-import 'package:sj_manager/ui/reusable_widgets/database_item_images/hill_image.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
 import 'package:sj_manager/ui/reusable_widgets/menu_entries/predefined_reusable_entries.dart';
+import 'package:sj_manager/ui/screens/database_editor/large/dialogs/item_image_help_dialog.dart';
 import 'package:sj_manager/utils/context_maybe_read.dart';
 import 'package:sj_manager/utils/math.dart';
 import 'package:sj_manager/utils/platform.dart';
@@ -182,15 +183,18 @@ class HillEditorState extends State<HillEditor> {
                   if (shouldShowImage)
                     Flexible(
                       flex: 4,
-                      child: HillImage(
+                      child: DbItemImage<Hill>(
                         key: const Key('image'),
-                        hill: _cachedHill!,
+                        item: _cachedHill!,
                         setup: context.read(),
                         height: UiItemEditorsConstants.hillImageHeight,
                         fit: BoxFit.fill,
-                        errorBuilder: (_, __, ___) => const ItemImageNotFoundPlaceholder(
+                        errorBuilder: (_, __, ___) => ItemImageNotFoundPlaceholder(
                           width: UiItemEditorsConstants.hillImagePlaceholderWidth,
                           height: UiItemEditorsConstants.hillImageHeight,
+                          helpDialog: ItemImageHelpDialog(
+                            content: translate(context).hillImageHelpContent,
+                          ),
                         ),
                       ),
                     ),

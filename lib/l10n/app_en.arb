@@ -81,7 +81,7 @@
     "yes": "Yes",
     "no": "No",
     "images": "Images",
-    "ok": "OK",
+    "ok": "Ok",
     "loadingError": "Loading Error",
     "invalidDatabaseFolderWarning": "The selected folder does not contain a valid database",
     "load": "Load",
