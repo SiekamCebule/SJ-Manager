@@ -22,6 +22,17 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ru
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeCompetitionRules_0<T1> extends _i1.SmartFake
+    implements _i2.CompetitionRules<T1> {
+  _FakeCompetitionRules_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [CompetitionRules].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -42,6 +53,15 @@ class MockCompetitionRules<T> extends _i1.Mock
         Invocation.getter(#roundsCount),
         returnValue: 0,
       ) as int);
+
+  @override
+  _i2.CompetitionRules<T> get competitionRules => (super.noSuchMethod(
+        Invocation.getter(#competitionRules),
+        returnValue: _FakeCompetitionRules_0<T>(
+          this,
+          Invocation.getter(#competitionRules),
+        ),
+      ) as _i2.CompetitionRules<T>);
 
   @override
   List<Object?> get props => (super.noSuchMethod(

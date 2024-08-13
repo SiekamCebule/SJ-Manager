@@ -39,11 +39,15 @@ class _TeamScreenState extends State<_TeamScreen> {
   void _setUpMaleAndFemaleTeams() {
     final db = context.read<SimulationWizardOptionsRepo>().database.last;
     setState(() {
-      _maleTeams = db.teams.last
+      _maleTeams = db
+          .get<Team>()
+          .last
           .cast<CountryTeam>()
           .where((team) => team.sex == Sex.male)
           .toList();
-      _femaleTeams = db.teams.last
+      _femaleTeams = db
+          .get<Team>()
+          .last
           .cast<CountryTeam>()
           .where((team) => team.sex == Sex.female)
           .toList();
@@ -95,9 +99,7 @@ class _TeamScreenState extends State<_TeamScreen> {
                   children: [
                     Expanded(
                       child: _CountryTeamsGrid(
-                        teams: _selectedSex == Sex.male
-                            ? _maleTeams
-                            : _femaleTeams,
+                        teams: _selectedSex == Sex.male ? _maleTeams : _femaleTeams,
                         onTap: (tappedTeam) {
                           final oldTeam = _selectedTeam;
                           setState(() {
@@ -136,7 +138,7 @@ class _TeamScreenState extends State<_TeamScreen> {
       context
           .read<SimulationWizardOptionsRepo>()
           .database
-          .set(context.read<LocalDbRepo>());
+          .set(context.read<ItemsReposRegistry>());
       context.read<SimulationWizardOptionsRepo>().databaseIsExternal.set(false);
     });
   }

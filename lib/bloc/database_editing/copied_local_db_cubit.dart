@@ -1,95 +1,104 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
-import 'package:sj_manager/models/user_db/db_file_system_entity_names.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
+import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/local_db_repo.dart';
+import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
 import 'package:path/path.dart' as path;
 
-class CopiedLocalDbCubit extends Cubit<LocalDbRepo?> {
+class CopiedLocalDbCubit extends Cubit<ItemsReposRegistry?> {
   CopiedLocalDbCubit({
     required this.originalDb,
   }) : super(null);
 
-  LocalDbRepo originalDb;
+  ItemsReposRegistry originalDb;
 
   Future<void> setUp() async {
     emit(
-      LocalDbRepo(
-        maleJumpers: originalDb.maleJumpers.clone(),
-        femaleJumpers: originalDb.femaleJumpers.clone(),
-        hills: originalDb.hills.clone(),
-        eventSeriesSetups: originalDb.eventSeriesSetups.clone(),
-        eventSeriesCalendars: originalDb.eventSeriesCalendars.clone(),
-        competitionRulesPresets: originalDb.competitionRulesPresets.clone(),
-        countries: originalDb.countries,
-        teams: originalDb.teams,
-      ),
+      originalDb.clone(),
     );
   }
 
   Future<void> saveChangesToOriginalRepos(BuildContext context) async {
-    await _saveChangesByType<MaleJumper>(context);
-    if (!context.mounted) return;
-    await _saveChangesByType<FemaleJumper>(context);
-    if (!context.mounted) return;
-    await _saveChangesByType<Hill>(context);
+    for (var repo in state!.last) {
+      originalDb.byTypeArgument(repo.runtimeType).set(repo.last);
+      if (!context.mounted) return;
+      final file = databaseFile(context.read(),
+          context.read<DbItemsFilePathsRegistry>().byTypeArgument(repo.runtimeType));
+      await _saveItemsToJsonByTypeArgument(repo.runtimeType,
+          context: context, file: file);
+    }
   }
 
-  Future<void> _saveChangesByType<T>(BuildContext context) async {
-    originalDb.editableByGenericType<T>().set(state!.editableByGenericType<T>().last);
-    final file = databaseFile(
-        context.read(), context.read<DbFileSystemEntityNames>().byGenericType<T>());
-    await _saveItemsToJsonByType<T>(
-      context: context,
+  Future<void> _saveItemsToJsonByTypeArgument(Type type,
+      {required BuildContext context, required File file}) async {
+    if (type == MaleJumper) {
+      await _saveItemsToJsonByType<MaleJumper>(
+        file: file,
+        context: context,
+      );
+    } else if (type == FemaleJumper) {
+      await _saveItemsToJsonByType<FemaleJumper>(
+        file: file,
+        context: context,
+      );
+    } else if (type == Hill) {
+      await _saveItemsToJsonByType<Hill>(
+        file: file,
+        context: context,
+      );
+    } else if (type == EventSeriesSetup) {
+      await _saveItemsToJsonByType<EventSeriesSetup>(
+        file: file,
+        context: context,
+      );
+    } else if (type == EventSeriesCalendarPreset) {
+      await _saveItemsToJsonByType<EventSeriesCalendarPreset>(
+        file: file,
+        context: context,
+      );
+    } else if (type == CompetitionRulesPreset) {
+      await _saveItemsToJsonByType<CompetitionRulesPreset>(
+        file: file,
+        context: context,
+      );
+    }
+  }
+
+  Future<void> _saveItemsToJsonByType<T>({
+    required BuildContext context,
+    required File file,
+  }) async {
+    await saveItemsListToJsonFile<T>(
       file: file,
+      items: originalDb.get<T>().last.toList(),
+      toJson: context.read<DbItemsJsonConfiguration<T>>().toJson,
     );
   }
 
   Future<void> saveAs(BuildContext context, Directory directory) async {
-    await _saveItemsToJsonByType<MaleJumper>(
-      context: context,
-      file: fileInDirectory(
-        directory,
-        path.basename(context.read<DbFileSystemEntityNames>().maleJumpers),
-      ),
-    );
-    if (!context.mounted) return;
-    await _saveItemsToJsonByType<FemaleJumper>(
-      context: context,
-      file: fileInDirectory(
-        directory,
-        path.basename(context.read<DbFileSystemEntityNames>().femaleJumpers),
-      ),
-    );
-    if (!context.mounted) return;
-    await _saveItemsToJsonByType<Hill>(
-      context: context,
-      file: fileInDirectory(
-        directory,
-        path.basename(context.read<DbFileSystemEntityNames>().hills),
-      ),
-    );
-  }
-
-  Future<void> _saveItemsToJsonByType<T>(
-      {required BuildContext context, required File file}) async {
-    final parameters = context.read<DbItemsJsonConfiguration<T>>();
-    await saveItemsListToJsonFile(
-      file: file,
-      items: originalDb.editableByGenericType<T>().last,
-      toJson: parameters.toJson,
-    );
+    for (var repo in state!.last) {
+      if (!context.mounted) return;
+      final fileName = path.basename(
+          context.read<DbItemsFilePathsRegistry>().byTypeArgument(repo.runtimeType));
+      final file = fileInDirectory(directory, fileName);
+      await _saveItemsToJsonByTypeArgument(repo.runtimeType,
+          context: context, file: file);
+    }
   }
 
   Future<void> loadExternal(BuildContext context, Directory directory) async {
-    emit(await LocalDbRepo.fromDirectory(
+    emit(await ItemsReposRegistry.fromDirectory(
       directory,
       context: context,
     ));

@@ -3,7 +3,7 @@ import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/jumper/jumps_consistency.dart';
 import 'package:sj_manager/models/user_db/jumper/landing_style.dart';
 import 'package:sj_manager/models/user_db/jumps/simple_jump.dart';
-import 'package:sj_manager/models/user_db/local_db_repo.dart';
+import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/models/user_db/team/country_team.dart';
 import 'package:sj_manager/utils/db_items.dart';
@@ -14,11 +14,11 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
     required this.database,
   });
 
-  final LocalDbRepo database;
+  final ItemsReposRegistry database;
 
   @override
   Hill? largestHill(CountryTeam team) {
-    final fromCountry = database.hills.last.fromCountryByCode(team.country.code);
+    final fromCountry = database.get<Hill>().last.fromCountryByCode(team.country.code);
     if (fromCountry.isEmpty) return null;
     return fromCountry.reduce((previous, current) {
       return previous.hs > current.hs ? previous : current;
@@ -68,8 +68,10 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
     }
   }
 
-  List<Jumper> _jumpersBySex(Sex sex) {
-    return sex == Sex.male ? database.maleJumpers.last : database.femaleJumpers.last;
+  Iterable<Jumper> _jumpersBySex(Sex sex) {
+    return sex == Sex.male
+        ? database.get<MaleJumper>().last
+        : database.get<FemaleJumper>().last;
   }
 
   double _calculateRatingForRisingStar(Jumper jumper) {

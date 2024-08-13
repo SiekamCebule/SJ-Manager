@@ -1,35 +1,49 @@
-import 'package:sj_manager/enums/db_editable_item_type.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-
 class DefaultItemsRepo {
-  DefaultItemsRepo({
-    required this.defaultFemaleJumper,
-    required this.defaultMaleJumper,
-    required this.defaultHill,
-    required this.defaultEventSeriesSetup,
-    required this.defaultEventSeriesCalendar,
-    required this.defaultCompetitionRules,
-  });
+  DefaultItemsRepo({Set<dynamic> initial = const {}}) : _items = Set.of(initial) {
+    _throwIfHasDuplicates();
+  }
 
-  final MaleJumper defaultMaleJumper;
-  final FemaleJumper defaultFemaleJumper;
-  final Hill defaultHill;
-  final EventSeriesSetup defaultEventSeriesSetup;
-  final EventSeriesCalendarPreset defaultEventSeriesCalendar;
-  final CompetitionRules defaultCompetitionRules;
+  final Set<dynamic> _items;
 
-  dynamic byDatabaseItemType(DbEditableItemType type) {
-    return switch (type) {
-      DbEditableItemType.maleJumper => defaultMaleJumper,
-      DbEditableItemType.femaleJumper => defaultFemaleJumper,
-      DbEditableItemType.hill => defaultHill,
-      DbEditableItemType.eventSeriesSetup => defaultEventSeriesSetup,
-      DbEditableItemType.eventSeriesCalendarPreset => defaultEventSeriesCalendar,
-      DbEditableItemType.competitionRulesPreset => defaultCompetitionRules,
-    };
+  void register<T>(T item, {bool overwrite = false}) {
+    if (exist<T>()) {
+      throw StateError(
+          'An item of type $T already exist in DefaultItemsRepo, but overwrite flag is set to false');
+    }
+    _items.add(item);
+  }
+
+  T get<T>() {
+    return getByTypeArgument(T);
+  }
+
+  dynamic getByTypeArgument(Type type) {
+    return _items.singleWhere((item) => item.runtimeType == type);
+  }
+
+  bool exist<T>() {
+    return _items.whereType<T>().length == 1;
+  }
+
+  void _throwIfHasDuplicates() {
+    final byType = <Type, List>{};
+    for (var item in _items) {
+      if (!byType.containsKey(item.runtimeType)) {
+        byType[item.runtimeType] = [item];
+      } else {
+        byType[item.runtimeType]!.add(item);
+      }
+    }
+    int? excessiveLength;
+    if (byType.values.any((items) {
+      if (items.length > 1) {
+        excessiveLength = items.length;
+        return true;
+      }
+      return false;
+    })) {
+      throw StateError(
+          'DefaultItemsRepo has $excessiveLength items of some type, when it can only have zero or one item');
+    }
   }
 }

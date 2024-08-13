@@ -26,8 +26,36 @@ Future<List<T>> loadItemsListFromJsonFile<T>({
 }) async {
   final fileContent = await file.readAsString();
   final itemsInJson = jsonDecode(fileContent) as List<dynamic>;
-  final items = itemsInJson.map((json) => fromJson(json));
-  return items.toList();
+  final items = itemsInJson.map((json) => fromJson(json)).toList();
+
+  final list = items.toList();
+  return list;
+}
+
+Future<T> loadSingleItemFromJsonFile<T>({
+  required File file,
+  required FromJson<T> fromJson,
+}) async {
+  final fileContent = await file.readAsString();
+  final json = jsonDecode(fileContent);
+  final item = fromJson(json);
+  return item;
+}
+
+Future<List<T>> loadItemsFromDirectoryWithJsons<T>({
+  required Directory directory,
+  required bool Function(File file) match,
+  required FromJson<T> fromJson,
+}) async {
+  final items = <T>[];
+  final files = directory.listSync().whereType<File>();
+  final matchingFiles = files.where(match);
+  for (var file in matchingFiles) {
+    final json = jsonDecode(await file.readAsString());
+    final item = fromJson(json);
+    items.add(item);
+  }
+  return items;
 }
 
 Future<void> saveItemsListToJsonFile<T>({

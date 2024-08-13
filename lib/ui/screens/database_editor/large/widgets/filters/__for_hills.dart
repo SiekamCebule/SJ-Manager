@@ -26,8 +26,7 @@ class _ForHillsState extends State<_ForHills> {
               _clearSelection();
               await Future.delayed(Duration.zero);
               _bySearchText = HillsFilterBySearch(
-                  searchAlgorithm:
-                      DefaultHillMatchingByTextAlgorithm(text: changed));
+                  searchAlgorithm: DefaultHillMatchingByTextAlgorithm(text: changed));
               _setFilters();
             },
           ),
@@ -63,8 +62,8 @@ class _ForHillsState extends State<_ForHills> {
             if (selected != noneCountry || selected != null) {
               countries = {selected!};
             }
-            _byCountry = HillsFilterByCountry(
-                countries: countries, noneCountry: noneCountry);
+            _byCountry =
+                HillsFilterByCountry(countries: countries, noneCountry: noneCountry);
             _setFilters();
           },
         ),
@@ -72,11 +71,12 @@ class _ForHillsState extends State<_ForHills> {
     );
   }
 
-  CountriesRepo get countriesRepo => context.read<LocalDbRepo>().countries;
+  CountriesRepo get countriesRepo =>
+      context.read<ItemsReposRegistry>().get<Country>() as CountriesRepo;
   Country get noneCountry => countriesRepo.none;
 
   void _setFilters() {
-    context.read<DbFiltersRepo>().setHillsFilters([
+    context.read<DbFiltersRepo>().set<Hill>([
       _byCountry,
       _byTypeBySize,
       _bySearchText,

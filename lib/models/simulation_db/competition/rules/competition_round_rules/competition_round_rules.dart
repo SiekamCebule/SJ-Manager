@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/concrete/competition_score_creator.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/concrete/jump_score_creator.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/concrete/significant_judges_chooser.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/concrete/wind_averager.dart';
+import 'package:sj_manager/models/user_algorithms/concrete/competition_score_creator.dart';
+import 'package:sj_manager/models/user_algorithms/concrete/jump_score_creator.dart';
+import 'package:sj_manager/models/user_algorithms/concrete/significant_judges_chooser.dart';
+import 'package:sj_manager/models/user_algorithms/concrete/wind_averager.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart';
 
 abstract class CompetitionRoundRules<T> with EquatableMixin {

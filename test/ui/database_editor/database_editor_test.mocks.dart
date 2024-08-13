@@ -43,19 +43,19 @@ class MockTeamsRepo<T extends _i3.Team> extends _i1.Mock
   }
 
   @override
-  _i2.ValueStream<List<T>> get items => (super.noSuchMethod(
+  _i2.ValueStream<Iterable<T>> get items => (super.noSuchMethod(
         Invocation.getter(#items),
-        returnValue: _FakeValueStream_0<List<T>>(
+        returnValue: _FakeValueStream_0<Iterable<T>>(
           this,
           Invocation.getter(#items),
         ),
-      ) as _i2.ValueStream<List<T>>);
+      ) as _i2.ValueStream<Iterable<T>>);
 
   @override
-  List<T> get last => (super.noSuchMethod(
+  Iterable<T> get last => (super.noSuchMethod(
         Invocation.getter(#last),
         returnValue: <T>[],
-      ) as List<T>);
+      ) as Iterable<T>);
 
   @override
   int get lastLength => (super.noSuchMethod(
@@ -64,7 +64,7 @@ class MockTeamsRepo<T extends _i3.Team> extends _i1.Mock
       ) as int);
 
   @override
-  void set(List<T>? value) => super.noSuchMethod(
+  void set(Iterable<T>? value) => super.noSuchMethod(
         Invocation.method(
           #set,
           [value],

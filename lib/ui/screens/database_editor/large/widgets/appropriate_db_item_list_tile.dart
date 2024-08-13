@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/enums/db_editable_item_type.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/competition_rules_preset_info_list_tile.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/event_series_calendar_preset_info_list_tile.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/event_series_setup_info_list_tile.dart';
@@ -17,7 +21,7 @@ class AppropriateDbItemListTile extends StatelessWidget {
     required this.reorderable,
   });
 
-  final DbEditableItemType itemType;
+  final Type itemType;
   final int indexInList;
   final dynamic item;
   final Function() onItemTap;
@@ -26,43 +30,68 @@ class AppropriateDbItemListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return switch (itemType) {
-      DbEditableItemType.maleJumper ||
-      DbEditableItemType.femaleJumper =>
-        JumperInfoListTile(
-          reorderable: reorderable,
-          indexInList: indexInList,
-          jumper: item,
-          onTap: onItemTap,
-          selected: selected,
-        ),
-      DbEditableItemType.hill => HillInfoListTile(
-          reorderable: reorderable,
-          indexInList: indexInList,
-          hill: item,
-          onTap: onItemTap,
-          selected: selected,
-        ),
-      DbEditableItemType.eventSeriesSetup => EventSeriesSetupInfoListTile(
-          reorderable: reorderable,
-          indexInList: indexInList,
-          eventSeriesSetup: item,
-          onTap: onItemTap,
-          selected: selected,
-        ),
-      DbEditableItemType.eventSeriesCalendarPreset =>
-        EventSeriesCalendarPresetInfoListTile(
-          reorderable: reorderable,
-          eventSeriesCalendarPreset: item,
-          onTap: onItemTap,
-          selected: selected,
-        ),
-      DbEditableItemType.competitionRulesPreset => CompetitionRulesPresetInfoListTile(
-          reorderable: reorderable,
-          competitionRulesPreset: item,
-          onTap: onItemTap,
-          selected: selected,
-        ),
-    };
+    return DbItemInfoTileFactory.create(
+      itemType: itemType,
+      item: item,
+      indexInList: indexInList,
+      onItemTap: onItemTap,
+      selected: selected,
+      reorderable: reorderable,
+    );
+  }
+}
+
+abstract class DbItemInfoTileFactory {
+  static Widget create({
+    required Type itemType,
+    required dynamic item,
+    required int indexInList,
+    required Function() onItemTap,
+    required bool selected,
+    required bool reorderable,
+  }) {
+    if (itemType == MaleJumper || itemType == FemaleJumper) {
+      return JumperInfoListTile(
+        reorderable: reorderable,
+        indexInList: indexInList,
+        jumper: item,
+        onTap: onItemTap,
+        selected: selected,
+      );
+    } else if (itemType == Hill) {
+      return HillInfoListTile(
+        reorderable: reorderable,
+        indexInList: indexInList,
+        hill: item,
+        onTap: onItemTap,
+        selected: selected,
+      );
+    } else if (itemType == EventSeriesSetup) {
+      return EventSeriesSetupInfoListTile(
+        reorderable: reorderable,
+        indexInList: indexInList,
+        eventSeriesSetup: item,
+        onTap: onItemTap,
+        selected: selected,
+      );
+    } else if (itemType == EventSeriesCalendar) {
+      return EventSeriesCalendarPresetInfoListTile(
+        reorderable: reorderable,
+        indexInList: indexInList,
+        eventSeriesCalendarPreset: item,
+        onTap: onItemTap,
+        selected: selected,
+      );
+    } else if (itemType == CompetitionRulesPreset) {
+      return CompetitionRulesPresetInfoListTile(
+        reorderable: reorderable,
+        indexInList: indexInList,
+        competitionRulesPreset: item,
+        onTap: onItemTap,
+        selected: selected,
+      );
+    } else {
+      throw TypeError();
+    }
   }
 }

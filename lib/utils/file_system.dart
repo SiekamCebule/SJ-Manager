@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sj_manager/models/user_db/db_file_system_entity_names.dart';
 
 import 'package:path/path.dart' as path;
+import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
 class PlarformSpecificPathsCache {
   PlarformSpecificPathsCache();
@@ -53,9 +55,9 @@ Directory userDataDirectory(PlarformSpecificPathsCache pathsCache, String direct
   return dir;
 }
 
-Directory databaseDirectory(PlarformSpecificPathsCache pathsCache, String fileName) {
-  if (fileName.isEmpty) return userDataDirectory(pathsCache, 'database');
-  return userDataDirectory(pathsCache, 'database/$fileName');
+Directory databaseDirectory(PlarformSpecificPathsCache pathsCache, String directoryPath) {
+  if (directoryPath.isEmpty) return userDataDirectory(pathsCache, 'database');
+  return userDataDirectory(pathsCache, 'database/$directoryPath');
 }
 
 File fileByNameWithoutExtension(Directory directory, String name) {
@@ -75,14 +77,14 @@ File fileInDirectory(Directory directory, String name) {
 
 bool directoryIsValidForDatabase(BuildContext context, Directory directory) {
   final correctFolderStructure = {
-    fileInDirectory(
-            directory, path.basename(context.read<DbFileSystemEntityNames>().maleJumpers))
+    fileInDirectory(directory,
+            path.basename(context.read<DbItemsFilePathsRegistry>().get<MaleJumper>()))
         .path,
     fileInDirectory(directory,
-            path.basename(context.read<DbFileSystemEntityNames>().femaleJumpers))
+            path.basename(context.read<DbItemsFilePathsRegistry>().get<FemaleJumper>()))
         .path,
-    fileInDirectory(
-            directory, path.basename(context.read<DbFileSystemEntityNames>().hills))
+    fileInDirectory(directory,
+            path.basename(context.read<DbItemsFilePathsRegistry>().get<Hill>()))
         .path,
   };
   final currentFolderStructure = directory.listSync().map((file) => file.path).toSet();
@@ -133,4 +135,10 @@ Future<void> copyAssetsDir(String assetsDirPath, Directory destination) async {
 List<String> filePathsInDirectory(Directory directory) {
   final fsEntities = directory.listSync();
   return fsEntities.whereType<File>().map((file) => file.path).toList();
+}
+
+void createFileWithEmptyJsonList(String filePath) {
+  final file = File(filePath);
+  file.createSync();
+  file.writeAsStringSync('[]');
 }

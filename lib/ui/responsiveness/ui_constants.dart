@@ -13,7 +13,7 @@ abstract class UiGlobalConstants {
 
 abstract class UiMainMenuConstants {
   static const double spaceBetweenButtons = 5;
-  static const buttonsBorderRadius = Radius.circular(0);
+  static const buttonsBorderRadius = Radius.circular(5); // TODO
   static const double smallerButtonIconSize = 40;
   static const double horizontalSpaceBetweenButtonItems = 20;
   static const double verticalSpaceBetweenButtonItems = 10;

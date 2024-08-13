@@ -12,7 +12,7 @@ import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_navigation_c
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_navigation_state.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/local_db_repo.dart';
+import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/models/user_db/team/country_team.dart';
 import 'package:sj_manager/models/simulation_db/enums.dart';

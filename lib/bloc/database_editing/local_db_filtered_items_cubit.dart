@@ -3,92 +3,95 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/bloc/database_editing/local_db_filtered_items_state.dart';
-import 'package:sj_manager/enums/db_editable_item_type.dart';
 import 'package:sj_manager/filters/filter.dart';
-import 'package:sj_manager/models/user_db/local_db_repo.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/user_db/items_repos_registry.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
 
 class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
   LocalDbFilteredItemsCubit({
     required this.filtersRepo,
-    required this.itemsRepo,
+    required this.itemsRepos,
   }) : super(_initial) {
     _setUp();
   }
 
   final DbFiltersRepo filtersRepo;
-  final LocalDbRepo itemsRepo;
+  final ItemsReposRegistry itemsRepos;
 
-  late final StreamSubscription _maleJumperChangesSubscription;
-  late final StreamSubscription _femaleJumperChangesSubscription;
-  late final StreamSubscription _hillChangesSubscription;
-  late final StreamSubscription _eventSeriesSetupsSubscription;
-  late final StreamSubscription _eventSeriesCalendarPresetsSubscription;
-  late final StreamSubscription _competitionRulesPresetsSubscription;
+  final Set<StreamSubscription> _subscriptions = {};
 
   void _setUp() {
-    final maleStream = Rx.combineLatest2(itemsRepo.maleJumpers.items,
-        filtersRepo.maleJumpersFilters, (items, filters) => (items, filters));
-    _maleJumperChangesSubscription = maleStream.listen((event) {
-      final jumpers = event.$1.toList();
-      final filters = event.$2;
-      emit(state.copyWith(maleJumpers: Filter.filterAll(jumpers, filters).cast()));
-    });
+    for (final repo in itemsRepos.last) {
+      final Type itemType = repo.itemsType;
+      if (!filtersRepo.containsType(itemType)) continue;
+      final filtersStream = filtersRepo.streamByTypeArgument(itemType);
+      final combinedStream =
+          Rx.combineLatest2<dynamic, dynamic, (List<dynamic>, List<Filter<dynamic>>)>(
+              repo.items, filtersStream, (items, filters) => (items, filters));
 
-    final femaleStream = Rx.combineLatest2(itemsRepo.femaleJumpers.items,
-        filtersRepo.femaleJumpersFilters, (items, filters) => (items, filters));
-    _femaleJumperChangesSubscription = femaleStream.listen((event) {
-      final jumpers = event.$1.toList();
-      final filters = event.$2;
-      emit(state.copyWith(femaleJumpers: Filter.filterAll(jumpers, filters).cast()));
-    });
+      final subscription = combinedStream.listen((data) {
+        final items = data.$1;
+        final filters = data.$2;
 
-    final hillsStream = Rx.combineLatest2(itemsRepo.hills.items, filtersRepo.hillsFilters,
-        (items, filters) => (items, filters));
-    _hillChangesSubscription = hillsStream.listen((event) {
-      final hills = event.$1.toList();
-      final filters = event.$2;
-      emit(state.copyWith(hills: Filter.filterAll(hills, filters)));
-    });
+        late List filtered;
+        if (itemType == MaleJumper) {
+          filtered = Filter.filterAll<MaleJumper>(
+              items.cast<MaleJumper>(), filters.cast<Filter<MaleJumper>>());
+        } else if (itemType == FemaleJumper) {
+          filtered = Filter.filterAll<FemaleJumper>(
+              items.cast<FemaleJumper>(), filters.cast<Filter<FemaleJumper>>());
+        } else if (itemType == Hill) {
+          filtered =
+              Filter.filterAll<Hill>(items.cast<Hill>(), filters.cast<Filter<Hill>>());
+        } else if (itemType == EventSeriesSetup) {
+          filtered = Filter.filterAll<EventSeriesSetup>(
+              items.cast<EventSeriesSetup>(), filters.cast<Filter<EventSeriesSetup>>());
+        } else if (itemType == EventSeriesSetup) {
+          filtered = Filter.filterAll<EventSeriesCalendarPreset>(
+              items.cast<EventSeriesCalendarPreset>(),
+              filters.cast<Filter<EventSeriesCalendarPreset>>());
+        } else if (itemType == CompetitionRulesPreset) {
+          filtered = Filter.filterAll<CompetitionRulesPreset>(
+              items.cast<CompetitionRulesPreset>(),
+              filters.cast<Filter<CompetitionRulesPreset>>());
+        } else {
+          throw UnsupportedError('Unsupported item type: $itemType');
+        }
 
-    _eventSeriesSetupsSubscription = itemsRepo.eventSeriesSetups.items.listen((items) {
-      print('event series setups change');
-      emit(state.copyWith(eventSeriesSetups: items));
-    });
+        emit(state.copyWith(type: repo.itemsType, items: filtered));
+      });
 
-    _eventSeriesCalendarPresetsSubscription =
-        itemsRepo.eventSeriesCalendars.items.listen((items) {
-      emit(state.copyWith(eventSeriesCalendars: items));
-    });
-
-    _competitionRulesPresetsSubscription =
-        itemsRepo.competitionRulesPresets.items.listen((items) {
-      emit(state.copyWith(competitionRulesPresets: items));
-    });
-  }
-
-  int findOriginalIndex(int indexFromFilteredList, DbEditableItemType type) {
-    final filteredList = state.byType(type);
-    final originalList = itemsRepo.editableByType(type).last;
-    final filteredItem = filteredList[indexFromFilteredList];
-    return originalList.indexOf(filteredItem);
+      _subscriptions.add(subscription);
+    }
   }
 
   void dispose() {
-    _maleJumperChangesSubscription.cancel();
-    _femaleJumperChangesSubscription.cancel();
-    _hillChangesSubscription.cancel();
-    _eventSeriesSetupsSubscription.cancel();
-    _eventSeriesCalendarPresetsSubscription.cancel();
-    _competitionRulesPresetsSubscription.cancel();
+    for (final subscription in _subscriptions) {
+      subscription.cancel();
+    }
+    filtersRepo.close();
+    itemsRepos.dispose();
   }
 
   static const LocalDbFilteredItemsState _initial = LocalDbFilteredItemsState(
-    maleJumpers: [],
-    femaleJumpers: [],
-    hills: [],
-    eventSeriesSetups: [],
-    eventSeriesCalendars: [],
-    competitionRulesPresets: [],
+    filteredItemsByType: {
+      MaleJumper: [],
+      FemaleJumper: [],
+      Hill: [],
+      EventSeriesSetup: [],
+      EventSeriesCalendarPreset: [],
+      CompetitionRulesPreset: [],
+    },
   );
+}
+
+extension Test<T> on List<T> {
+  List<TT> castByOther<TT>(List<TT> other) {
+    return cast<TT>();
+  }
 }
