@@ -1,9 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/hill/hill_type_by_size.dart';
 import 'package:sj_manager/filters/hills/hills_filter.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
 
 void main() {
@@ -18,15 +20,19 @@ void main() {
         JumpersFilterBySearch(
             searchAlgorithm: DefaultJumperMatchingByTextAlgorithm(text: 'Kamil Sto')),
       ];
+      final forMales = jumpersFilters.map((filter) {
+        return ConcreteJumpersFilterWrapper<MaleJumper, JumpersFilter>(filter: filter);
+      }).toList();
       const hillsFilters = [
         HillsFilterByTypeBySie(type: HillTypeBySize.large),
         HillsFilterByCountry(countries: {Country(code: 'at', name: 'Austria')}),
       ];
-      repo.setMaleAndFemaleJumpersFilters(jumpersFilters);
-      repo.setHillsFilters(hillsFilters);
 
-      expect(repo.maleJumpersFilters.value, jumpersFilters);
-      expect(repo.hillsFilters.value, hillsFilters);
+      repo.set<MaleJumper>(forMales);
+      repo.set<Hill>(hillsFilters);
+
+      expect(repo.stream<MaleJumper>().value, forMales);
+      expect(repo.stream<Hill>().value, hillsFilters);
     });
 
     tearDown(() {

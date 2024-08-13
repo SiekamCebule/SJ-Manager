@@ -5,7 +5,7 @@ import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_image_asset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
-import 'package:sj_manager/models/user_db/local_db_repo.dart';
+import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
@@ -68,7 +68,7 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
   Widget build(BuildContext context) {
     print('build');
     final eventSeriesCalendarPresets =
-        context.read<LocalDbRepo>().eventSeriesCalendars.last;
+        context.read<ItemsReposRegistry>().get<EventSeriesCalendarPreset>().last;
 
     return LayoutBuilder(builder: (context, constraints) {
       const gap = Gap(UiItemEditorsConstants.verticalSpaceBetweenFields);

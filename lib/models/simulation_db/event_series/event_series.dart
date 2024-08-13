@@ -1,9 +1,7 @@
-import 'package:json_annotation/json_annotation.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/utils/multilingual_string.dart';
 
-@JsonSerializable()
 class EventSeries {
   const EventSeries({
     required this.calendar,

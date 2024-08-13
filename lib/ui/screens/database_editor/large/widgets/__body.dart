@@ -18,7 +18,6 @@ class _BodyState extends State<_Body> {
   }
 
   void _setUpEditorFillingAfterSelectionChanges() {
-    final filtersRepo = context.read<DbFiltersRepo>();
     final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
     _selectionChangesSubscription =
         selectedIndexesRepo.selectedIndexes.distinct((prev, curr) {
@@ -27,19 +26,10 @@ class _BodyState extends State<_Body> {
       if (selectedIndexesRepo.state.length == 1) {
         final index = selectedIndexesRepo.state.single;
         final itemsType = context.read<DatabaseItemsTypeCubit>().state;
-        final originalByType =
-            context.read<LocalDbRepo>().editableByType(itemsType);
         final filteredByType =
-            context.read<LocalDbFilteredItemsCubit>().state.byType(itemsType);
-        if (!filtersRepo.hasValidFilter) {
-          final singleSelectedItem = filteredByType.elementAt(index);
-          _fillEditorBySingleSelected(singleSelectedItem);
-        } else {
-          final singleSelectedItem = originalByType.last.elementAt(context
-              .read<LocalDbFilteredItemsCubit>()
-              .findOriginalIndex(index, itemsType));
-          _fillEditorBySingleSelected(singleSelectedItem);
-        }
+            context.read<LocalDbFilteredItemsCubit>().state.byTypeArgument(itemsType);
+        final singleSelectedItem = filteredByType.elementAt(index);
+        _fillEditorBySingleSelected(singleSelectedItem);
       }
     });
   }
@@ -58,8 +48,7 @@ class _BodyState extends State<_Body> {
           flex: 9,
           child: _ItemsList(),
         ),
-        const Gap(
-            UiDatabaseEditorConstants.horizontalSpaceBetweenListAndEditor),
+        const Gap(UiDatabaseEditorConstants.horizontalSpaceBetweenListAndEditor),
         Expanded(
           flex: 7,
           child: Align(

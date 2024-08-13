@@ -3,7 +3,6 @@ import 'package:sj_manager/models/simulation_db/competition/calendar_records/cal
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition_type.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';

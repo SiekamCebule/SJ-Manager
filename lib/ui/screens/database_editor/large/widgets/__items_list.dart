@@ -14,12 +14,12 @@ class _ItemsListState extends State<_ItemsList> {
     final copiedLocalDbCubit = context.watch<CopiedLocalDbCubit>();
     final copiedLocalDbRepos = copiedLocalDbCubit.state!;
 
-    final editableItemsRepoByType = copiedLocalDbRepos.editableByType(itemsType);
+    final editableItemsRepoByType = copiedLocalDbRepos.getEditable(itemsType);
     final filtersRepo = context.watch<DbFiltersRepo>();
     final selectedIndexesRepo = context.watch<SelectedIndexesRepo>();
 
     final filteredItemsByType =
-        context.watch<LocalDbFilteredItemsCubit>().state.byType(itemsType);
+        context.watch<LocalDbFilteredItemsCubit>().state.byTypeArgument(itemsType);
     final dbIsChangedCubit = context.watch<ChangeStatusCubit>();
 
     print('filtered: $filteredItemsByType');
@@ -27,9 +27,9 @@ class _ItemsListState extends State<_ItemsList> {
     return StreamBuilder(
         stream: StreamGroup.merge([
           selectedIndexesRepo.selectedIndexes,
-          copiedLocalDbRepos.femaleJumpers.items,
-          copiedLocalDbRepos.maleJumpers.items,
-          copiedLocalDbRepos.hills.items,
+          copiedLocalDbRepos.get<MaleJumper>().items,
+          copiedLocalDbRepos.get<FemaleJumper>().items,
+          copiedLocalDbRepos.get<Hill>().items,
         ]),
         builder: (context, snapshot) {
           final listShouldBeReorderable = !filtersRepo.hasValidFilter;

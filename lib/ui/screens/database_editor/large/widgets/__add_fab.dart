@@ -11,8 +11,7 @@ class _AddFab extends StatelessWidget {
     final dbChangeStatusCubit = context.watch<ChangeStatusCubit>();
     final copiedDbCubit = context.watch<CopiedLocalDbCubit>();
 
-    final editableItemsForCurrentType =
-        copiedDbCubit.state!.editableByType(itemsType);
+    final editableItemsForCurrentType = copiedDbCubit.state!.getEditable(itemsType);
     final defaultItems = context.watch<DefaultItemsRepo>();
 
     return StreamBuilder<Object>(
@@ -27,7 +26,7 @@ class _AddFab extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             onPressed: () async {
               bool selectedExists = selectedIndexesRepo.state.length == 1;
-              final lastIndex = filteredItems.byType(itemsType).length;
+              final lastIndex = filteredItems.byTypeArgument(itemsType).length;
               late int addIndex;
               if (selectedExists) {
                 addIndex = selectedIndexesRepo.state.single + 1;
@@ -35,7 +34,7 @@ class _AddFab extends StatelessWidget {
                 addIndex = lastIndex;
               }
               editableItemsForCurrentType.add(
-                defaultItems.byDatabaseItemType(itemsType),
+                defaultItems.getByTypeArgument(itemsType),
                 addIndex,
               );
 

@@ -4,10 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/bloc/database_editing/database_items_type_cubit.dart';
-import 'package:sj_manager/enums/db_editable_item_type.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
@@ -18,14 +16,14 @@ import 'package:sj_manager/models/user_db/hill/landing_ease.dart';
 import 'package:sj_manager/models/user_db/hill/typical_wind_direction.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
-import 'package:sj_manager/models/user_db/local_db_repo.dart';
+import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
-import 'package:sj_manager/setup/set_up_app.dart';
+import 'package:sj_manager/setup/app_configurator.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
@@ -136,28 +134,33 @@ void main() {
         child: MultiRepositoryProvider(
           providers: [
             RepositoryProvider(
-              create: (context) => LocalDbRepo(
-                maleJumpers: EditableItemsRepo<MaleJumper>(initial: maleJumpers),
-                femaleJumpers: EditableItemsRepo<FemaleJumper>(initial: femaleJumpers),
-                hills: EditableItemsRepo<Hill>(initial: hills),
-                eventSeriesSetups: EditableItemsRepo<EventSeriesSetup>(initial: []),
-                eventSeriesCalendars:
-                    EditableItemsRepo<EventSeriesCalendarPreset>(initial: []),
-                competitionRulesPresets:
-                    EditableItemsRepo<CompetitionRulesPreset>(initial: []),
-                countries: CountriesRepo(initial: countries),
-                teams: MockTeamsRepo(),
+              create: (context) => ItemsReposRegistry(
+                initial: {
+                  EditableItemsRepo<MaleJumper>(initial: maleJumpers),
+                  EditableItemsRepo<MaleJumper>(initial: maleJumpers),
+                  EditableItemsRepo<FemaleJumper>(initial: femaleJumpers),
+                  EditableItemsRepo<Hill>(initial: hills),
+                  EditableItemsRepo<EventSeriesSetup>(initial: []),
+                  EditableItemsRepo<EventSeriesCalendarPreset>(initial: []),
+                  EditableItemsRepo<CompetitionRulesPreset>(initial: []),
+                  CountriesRepo(initial: countries),
+                  MockTeamsRepo(),
+                },
               ),
             ),
             RepositoryProvider(create: (context) {
-              final noneCountry = context.read<LocalDbRepo>().countries.none;
+              final noneCountry =
+                  (context.read<ItemsReposRegistry>().get<Country>() as CountriesRepo)
+                      .none;
               return DefaultItemsRepo(
-                defaultFemaleJumper: FemaleJumper.empty(country: noneCountry),
-                defaultMaleJumper: MaleJumper.empty(country: noneCountry),
-                defaultHill: Hill.empty(country: noneCountry),
-                defaultEventSeriesSetup: const EventSeriesSetup.empty(),
-                defaultEventSeriesCalendar: const EventSeriesCalendarPreset.empty(),
-                defaultCompetitionRules: const CompetitionRules.empty(),
+                initial: {
+                  FemaleJumper.empty(country: noneCountry),
+                  MaleJumper.empty(country: noneCountry),
+                  Hill.empty(country: noneCountry),
+                  const EventSeriesSetup.empty(),
+                  const EventSeriesCalendarPreset.empty(),
+                  const CompetitionRules.empty()
+                },
               );
             }),
             RepositoryProvider(create: (context) {
@@ -177,6 +180,7 @@ void main() {
                   shouldSetUpRouting: true,
                   shouldSetUpUserData: false,
                   shouldLoadDatabase: false,
+                  loaders: [],
                 ),
               ),
             ],
@@ -204,7 +208,7 @@ void main() {
 
       final itemsTypeCubit = context.read<DatabaseItemsTypeCubit>();
       final itemsList = find.byType(DatabaseItemsList);
-      expect(itemsTypeCubit.state, DbEditableItemType.maleJumper);
+      expect(itemsTypeCubit.state, MaleJumper);
       expect(tester.widget<DatabaseItemsList>(itemsList).length, maleJumpers.length);
 
       expect(find.byType(FloatingActionButton), findsNWidgets(2));
@@ -225,7 +229,7 @@ void main() {
       final femaleJumpersTab = tester.widget<TabBar>(tabBar).tabs[1];
       await tester.tap(find.byWidget(femaleJumpersTab));
       await tester.pumpAndSettle();
-      expect(itemsTypeCubit.state, DbEditableItemType.femaleJumper);
+      expect(itemsTypeCubit.state, FemaleJumper);
       expect(tester.widget<DatabaseItemsList>(itemsList).length, femaleJumpers.length);
 
       final secondTile = find.descendant(
@@ -257,8 +261,8 @@ void main() {
       final addFab = find.byKey(const Key('addFab'));
       final removeFab = find.byKey(const Key('removeFab'));
 
-      Future<void> selectTab(DbEditableItemType itemsType) async {
-        final tab = tester.widget<TabBar>(tabBar).tabs[itemsType.index];
+      Future<void> selectTab(int index) async {
+        final tab = tester.widget<TabBar>(tabBar).tabs[index];
         await tester.tap(find.byWidget(tab));
         await tester.pumpAndSettle();
       }
@@ -275,9 +279,9 @@ void main() {
         await tester.pumpAndSettle();
       }
 
-      expect(itemsTypeCubit.state, DbEditableItemType.maleJumper);
-      await selectTab(DbEditableItemType.hill);
-      expect(itemsTypeCubit.state, DbEditableItemType.hill);
+      expect(itemsTypeCubit.state, MaleJumper);
+      await selectTab(2);
+      expect(itemsTypeCubit.state, Hill);
       expect(tester.widget<DatabaseItemsList>(itemsList).length, hills.length);
       await tapItem(1);
       await tap(addFab); // index: 2

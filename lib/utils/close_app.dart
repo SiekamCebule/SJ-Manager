@@ -13,7 +13,7 @@ Future<void> closeApp() async {
   } else if (platformIsDesktop) {
     await FlutterWindowClose.closeWindow();
   } else if (kIsWeb) {
-    debugPrint('Cannot close app on web');
+    throw StateError('Cannot close app on web');
   } else {
     throw StateError('Unknown platform');
   }

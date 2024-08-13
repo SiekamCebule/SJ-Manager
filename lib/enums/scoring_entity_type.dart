@@ -1,4 +1,0 @@
-enum ScoringEntityType {
-  jumper,
-  team,
-}

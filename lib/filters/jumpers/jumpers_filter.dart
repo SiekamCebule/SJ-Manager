@@ -3,6 +3,25 @@ import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
+class ConcreteJumpersFilterWrapper<T extends Jumper, F extends JumpersFilter>
+    extends Filter<T> {
+  const ConcreteJumpersFilterWrapper({required this.filter});
+
+  final F filter;
+
+  @override
+  List<T> call(List<T> source) {
+    final filtered = filter.call(source);
+    return filtered.cast();
+  }
+
+  @override
+  List<Object?> get props => [filter.props];
+
+  @override
+  bool get isValid => filter.isValid;
+}
+
 abstract class JumpersFilter extends Filter<Jumper> {
   const JumpersFilter();
 

@@ -1,14 +1,16 @@
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
 
-class ItemsRepo<T> extends ValueRepo<List<T>> {
+class ItemsRepo<T> extends ValueRepo<Iterable<T>> {
   ItemsRepo({super.initial});
 
   @override
-  ValueStream<List<T>> get items;
+  ValueStream<Iterable<T>> get items;
+
+  Type get itemsType => T;
 
   @override
-  List<T> get last => items.value;
+  Iterable<T> get last => items.value;
 
   int get lastLength => last.length;
 }

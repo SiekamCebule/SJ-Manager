@@ -6,10 +6,13 @@ import 'package:sj_manager/bloc/database_editing/local_db_filtered_items_cubit.d
 import 'package:sj_manager/filters/hills/hill_matching_algorithms.dart';
 import 'package:sj_manager/filters/hills/hills_filter.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/local_db_repo.dart';
+import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
@@ -21,22 +24,24 @@ import 'database_editing_logic_test.mocks.dart';
 void main() {
   group(LocalDbFilteredItemsCubit, () {
     late DbFiltersRepo filtersRepo;
-    late LocalDbRepo itemsRepo;
+    late ItemsReposRegistry itemsRepo;
 
     // To initialize in test()
     late LocalDbFilteredItemsCubit cubit;
 
     setUp(() {
       filtersRepo = DbFiltersRepo();
-      itemsRepo = LocalDbRepo(
-        maleJumpers: MockEditableItemsRepo(),
-        femaleJumpers: MockEditableItemsRepo(),
-        hills: MockEditableItemsRepo(),
-        eventSeriesSetups: MockEditableItemsRepo(),
-        eventSeriesCalendars: MockEditableItemsRepo(),
-        competitionRulesPresets: MockEditableItemsRepo(),
-        countries: MockCountriesRepo(),
-        teams: MockTeamsRepo(),
+      itemsRepo = ItemsReposRegistry(
+        initial: {
+          MockEditableItemsRepo<MaleJumper>(),
+          MockEditableItemsRepo<FemaleJumper>(),
+          MockEditableItemsRepo<Hill>(),
+          MockEditableItemsRepo<EventSeriesSetup>(),
+          MockEditableItemsRepo<EventSeriesCalendar>(),
+          MockEditableItemsRepo<CompetitionRulesPreset>(),
+          MockCountriesRepo(),
+          MockTeamsRepo(),
+        },
       );
     });
     test('filtering', () async {
@@ -61,43 +66,45 @@ void main() {
       final femalesSubject = BehaviorSubject<List<FemaleJumper>>.seeded([]);
       final hillsSubject = BehaviorSubject<List<Hill>>.seeded([]);
 
-      when(itemsRepo.maleJumpers.items).thenAnswer((_) {
+      when(itemsRepo.get<MaleJumper>().items).thenAnswer((_) {
         malesSubject.add(males);
         return malesSubject;
       });
-      when(itemsRepo.femaleJumpers.items).thenAnswer((_) {
+      when(itemsRepo.get<FemaleJumper>().items).thenAnswer((_) {
         femalesSubject.add(females);
         return femalesSubject;
       });
-      when(itemsRepo.hills.items).thenAnswer((_) {
+      when(itemsRepo.get<Hill>().items).thenAnswer((_) {
         hillsSubject.add(hills);
         return hillsSubject;
       });
 
-      cubit = LocalDbFilteredItemsCubit(filtersRepo: filtersRepo, itemsRepo: itemsRepo);
+      cubit = LocalDbFilteredItemsCubit(filtersRepo: filtersRepo, itemsRepos: itemsRepo);
 
-      filtersRepo.setFemaleJumpersFilters(const [
-        JumpersFilterByCountry(countries: {poland})
+      filtersRepo.set<FemaleJumper>(const [
+        ConcreteJumpersFilterWrapper(filter: JumpersFilterByCountry(countries: {poland})),
       ]);
-      filtersRepo.setHillsFilters(const [
+      filtersRepo.set<Hill>(const [
         HillsFilterByCountry(countries: {norway}),
       ]);
 
       await Future.delayed(Duration.zero);
 
-      expect(cubit.state.maleJumpers, males);
-      expect(cubit.state.femaleJumpers, [
+      expect(cubit.state.get<MaleJumper>(), males);
+      expect(cubit.state.get<FemaleJumper>(), [
         FemaleJumper.empty(country: poland),
       ]);
-      expect(cubit.state.hills.length, 2);
+      expect(cubit.state.get<Hill>().length, 2);
 
-      filtersRepo.setHillsFilters(const [
+      filtersRepo.set<Hill>(const [
         HillsFilterBySearch(
             searchAlgorithm: DefaultHillMatchingByTextAlgorithm(text: 'Lillehammer')),
       ]);
       await Future.delayed(Duration.zero);
 
-      expect(cubit.state.hills.where((hill) => hill.locality == 'Lillehammer').length, 1);
+      expect(
+          cubit.state.get<Hill>().where((hill) => hill.locality == 'Lillehammer').length,
+          1);
 
       malesSubject.close();
       femalesSubject.close();

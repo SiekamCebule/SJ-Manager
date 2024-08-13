@@ -1,71 +1,78 @@
+import 'package:equatable/equatable.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:sj_manager/enums/db_editable_item_type.dart';
 import 'package:sj_manager/filters/filter.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
-class DbFiltersRepo {
-  DbFiltersRepo();
-
-  final _maleJumpersFilters = BehaviorSubject<List<Filter<Jumper>>>.seeded([]);
-  final _femaleJumpersFilters = BehaviorSubject<List<Filter<Jumper>>>.seeded([]);
-  final _hillsFilters = BehaviorSubject<List<Filter<Hill>>>.seeded([]);
-
-  void setMaleAndFemaleJumpersFilters(List<Filter<Jumper>> filters) {
-    setMaleJumpersFilters(filters);
-    setFemaleJumpersFilters(filters);
+class DbFiltersRepo with EquatableMixin {
+  DbFiltersRepo({Map<Type, BehaviorSubject<List<Filter>>> initial = const {}})
+      : _filtersByType = Map.of(initial) {
+    print('at behinning: $_filtersByType');
   }
 
-  void setMaleJumpersFilters(List<Filter<Jumper>> filters) {
-    _maleJumpersFilters.add(filters);
+  final Map<Type, BehaviorSubject<List<Filter>>> _filtersByType;
+
+  void set<T>(List<Filter<T>> filters) {
+    if (_filtersByType.containsKey(T)) {
+      _filtersByType[T]!.add(filters);
+    } else {
+      _filtersByType[T] = BehaviorSubject<List<Filter<T>>>.seeded(filters);
+    }
   }
 
-  void setFemaleJumpersFilters(List<Filter<Jumper>> filters) {
-    _femaleJumpersFilters.add(filters);
-  }
-
-  void setHillsFilters(List<Filter<Hill>> filters) {
-    _hillsFilters.add(filters);
+  void setByGenericAndArgumentType<T>(
+      {required Type type, required List<Filter<T>> filters}) {
+    if (_filtersByType.containsKey(type)) {
+      _filtersByType[type]!.add(filters);
+    } else {
+      _filtersByType[type] = BehaviorSubject<List<Filter<T>>>.seeded(filters);
+    }
   }
 
   void clear() {
-    setMaleJumpersFilters([]);
-    setFemaleJumpersFilters([]);
-    setHillsFilters([]);
+    _filtersByType.forEach((type, filters) {
+      filters.add([]);
+    });
+    _filtersByType.clear();
   }
 
   void close() {
-    _maleJumpersFilters.close();
-    _femaleJumpersFilters.close();
-    _hillsFilters.close();
+    _filtersByType.forEach((type, filters) {
+      filters.close();
+    });
   }
 
-  ValueStream<List<Filter<Jumper>>> get maleJumpersFilters => _maleJumpersFilters.stream;
-  ValueStream<List<Filter<Jumper>>> get femaleJumpersFilters =>
-      _femaleJumpersFilters.stream;
-  ValueStream<List<Filter<Hill>>> get hillsFilters => _hillsFilters.stream;
+  ValueStream<List<Filter<T>>> stream<T>() {
+    /*if (!containsType(T)) {
+      throw _doesNotHaveTypeInMap(T);
+    }*/
+    print('contains type $T (T): ${containsType(T)}. filters by type: $_filtersByType');
+    return (_filtersByType[T]?.stream as ValueStream<List<Filter<T>>>?) ?? _neverStream();
+  }
+
+  ValueStream<List<Filter>> streamByTypeArgument(Type type) {
+    /*if (!containsType(type)) {
+      throw _doesNotHaveTypeInMap(T);
+    }*/
+    print('contains type $type: ${containsType(type)}. filters by type: $_filtersByType');
+    return _filtersByType[type]?.stream ?? _neverStream();
+  }
+
+  static _doesNotHaveTypeInMap(Type type) =>
+      StateError('The DbFiltersRepo does not have a filters list subject for type $type');
+
+  bool containsType(Type type) => _filtersByType.containsKey(type);
 
   bool get hasValidFilter {
-    final onMaleJumpers =
-        _maleJumpersFilters.value.where((filter) => filter.isValid).isNotEmpty;
-    final onFemaleJumpers =
-        _femaleJumpersFilters.value.where((filter) => filter.isValid).isNotEmpty;
-    final onHills = _hillsFilters.value.where((filter) => filter.isValid).isNotEmpty;
-    return onMaleJumpers || onFemaleJumpers || onHills;
-  }
-
-  ValueStream<List<Filter<dynamic>>> byType(DbEditableItemType type) {
-    return switch (type) {
-      DbEditableItemType.maleJumper => maleJumpersFilters,
-      DbEditableItemType.femaleJumper => femaleJumpersFilters,
-      DbEditableItemType.hill => hillsFilters,
-      DbEditableItemType.eventSeriesSetup => _neverStream(),
-      DbEditableItemType.eventSeriesCalendarPreset => _neverStream(),
-      DbEditableItemType.competitionRulesPreset => _neverStream(),
-    };
+    return _filtersByType.values.any((filtersSubject) {
+      return filtersSubject.value.any((filter) => filter.isValid);
+    });
   }
 
   ValueStream<T> _neverStream<T>() => BehaviorSubject<T>()
     ..close()
     ..stream;
+
+  @override
+  List<Object?> get props => [
+        _filtersByType,
+      ];
 }

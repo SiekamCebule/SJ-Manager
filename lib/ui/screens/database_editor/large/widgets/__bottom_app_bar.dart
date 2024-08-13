@@ -7,16 +7,15 @@ class _BottomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomAppBar(
       color: Theme.of(context).colorScheme.surfaceContainer,
-      child: BlocBuilder<DatabaseItemsTypeCubit, DbEditableItemType>(
+      child: BlocBuilder<DatabaseItemsTypeCubit, Type>(
         builder: (context, itemsType) {
-          return switch (itemsType) {
-            DbEditableItemType.maleJumper => const _ForJumpers(),
-            DbEditableItemType.femaleJumper => const _ForJumpers(),
-            DbEditableItemType.hill => const _ForHills(),
-            DbEditableItemType.eventSeriesSetup => const SizedBox(),
-            DbEditableItemType.eventSeriesCalendarPreset => const SizedBox(),
-            DbEditableItemType.competitionRulesPreset => const SizedBox(),
-          };
+          if (itemsType == MaleJumper || itemsType == FemaleJumper) {
+            return const _ForJumpers();
+          } else if (itemsType == Hill) {
+            return const _ForHills();
+          } else {
+            return const SizedBox();
+          }
         },
       ),
     );

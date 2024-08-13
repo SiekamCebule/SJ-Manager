@@ -45,12 +45,16 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       _countriesForMales = CountriesRepo(
           initial: countriesHavingTeam(
         countryTeamsBySex(
-            teamsByStars(_copiedDbCubit.state!.teams.last.cast()), Sex.male),
+          teamsByStars(_copiedDbCubit.state!.get<Team>().last.toList().cast()),
+          Sex.male,
+        ),
       ));
       _countriesForFemales = CountriesRepo(
           initial: countriesHavingTeam(
         countryTeamsBySex(
-            teamsByStars(_copiedDbCubit.state!.teams.last.cast()), Sex.female),
+          teamsByStars(_copiedDbCubit.state!.get<Team>().last.toList().cast()),
+          Sex.female,
+        ),
       ));
       _countriesForBothSexes = CountriesRepo(
           initial: {
@@ -80,7 +84,11 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   }
 
   void _initializeRepos() {
-    _filtersRepo = DbFiltersRepo();
+    _filtersRepo = DbFiltersRepo(initial: {
+      MaleJumper: BehaviorSubject.seeded([]),
+      FemaleJumper: BehaviorSubject.seeded([]),
+      Hill: BehaviorSubject.seeded([]),
+    });
     _selectedIndexesRepo = SelectedIndexesRepo();
   }
 
@@ -89,9 +97,10 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     _itemsTypeCubit = DatabaseItemsTypeCubit();
     _copiedDbCubit = CopiedLocalDbCubit(originalDb: context.read());
     await _copiedDbCubit.setUp();
+    print('filters repo: $_filtersRepo');
     _filteredItemsCubit = LocalDbFilteredItemsCubit(
       filtersRepo: _filtersRepo,
-      itemsRepo: _copiedDbCubit.state!,
+      itemsRepos: _copiedDbCubit.state!,
     );
   }
 
@@ -183,7 +192,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                         },
                         child: StreamBuilder<Object>(
                             stream: StreamGroup.merge([
-                              _filtersRepo.byType(_itemsTypeCubit.state),
+                              _filtersRepo.streamByTypeArgument(_itemsTypeCubit.state),
                               _selectedIndexesRepo.selectedIndexes,
                             ]),
                             builder: (context, snapshot) {
@@ -307,8 +316,8 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   Future<void> _onChangeTab(int index) async {
     if (_currentTabIndex.index != index) {
       _selectedIndexesRepo.clearSelection();
-      _filtersRepo.clear();
-      _itemsTypeCubit.select(DbEditableItemType.fromIndex(index));
+      _filtersRepo.setByGenericAndArgumentType(type: _itemsTypeCubit.state, filters: []);
+      _itemsTypeCubit.select(index);
       _currentTabIndex = _SelectedTabIndex(index);
       _updateCountries();
       await _animateBodyFromZero();
