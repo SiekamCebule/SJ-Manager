@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:sj_manager/exceptions/user_algorithm_list_loading_exception.dart';
 import 'package:sj_manager/models/user_algorithms/user_algorithm.dart';
 import 'package:sj_manager/setup/db_items_list_loader.dart';
-import 'package:sj_manager/setup/loading_user_algorithms/user_algorithm_loader_from_file.dart';
+import 'package:sj_manager/dart_eval/user_algorithms/user_algorithm_loader_from_file.dart';
 
 class UserAlgorithmsListLoader<T extends UserAlgorithm> extends DbItemsListLoader {
   const UserAlgorithmsListLoader({
@@ -33,6 +33,7 @@ class UserAlgorithmsListLoader<T extends UserAlgorithm> extends DbItemsListLoade
           error: lowLevelError,
           failureFile: file,
         );
+        throw exception;
         onError(exception, stackTrace);
       }
     }

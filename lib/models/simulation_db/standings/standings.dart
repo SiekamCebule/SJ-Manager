@@ -3,8 +3,8 @@ import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
 
-class StandingsRepo<E> implements ValueRepo<Map<int, List<Score<E>>>> {
-  StandingsRepo({required this.positionsCreator, List<Score<E>>? initialScores}) {
+class Standings<E> implements ValueRepo<Map<int, List<Score<E>>>> {
+  Standings({required this.positionsCreator, List<Score<E>>? initialScores}) {
     if (initialScores != null) {
       _scores = List.of(initialScores);
       update();

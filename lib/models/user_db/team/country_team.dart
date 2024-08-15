@@ -14,7 +14,6 @@ class CountryTeam extends Team {
   });
 
   final Sex sex;
-
   final Country country;
 
   CountryTeam copyWith({

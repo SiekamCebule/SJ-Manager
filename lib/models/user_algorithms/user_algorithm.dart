@@ -1,10 +1,15 @@
 import 'package:sj_manager/models/user_algorithms/unary_algorithm.dart';
 
-abstract class UserAlgorithm<T extends UnaryAlgorithm> {
-  const UserAlgorithm();
+class UserAlgorithm<T extends UnaryAlgorithm> {
+  const UserAlgorithm({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.algorithm,
+  });
 
-  String get id;
-  String get name;
-  String get description;
-  T get algorithm;
+  final String id;
+  final String name;
+  final String description;
+  final T algorithm;
 }

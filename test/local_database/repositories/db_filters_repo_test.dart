@@ -15,17 +15,17 @@ void main() {
       repo = DbFiltersRepo();
     });
     test('integration test', () async {
-      const jumpersFilters = [
-        JumpersFilterByCountry(countries: {Country(code: 'pl', name: 'Polska')}),
-        JumpersFilterBySearch(
+      final jumpersFilters = [
+        JumpersFilterByCountry(countries: {const Country(code: 'pl', name: 'Polska')}),
+        const JumpersFilterBySearch(
             searchAlgorithm: DefaultJumperMatchingByTextAlgorithm(text: 'Kamil Sto')),
       ];
       final forMales = jumpersFilters.map((filter) {
         return ConcreteJumpersFilterWrapper<MaleJumper, JumpersFilter>(filter: filter);
       }).toList();
-      const hillsFilters = [
-        HillsFilterByTypeBySie(type: HillTypeBySize.large),
-        HillsFilterByCountry(countries: {Country(code: 'at', name: 'Austria')}),
+      final hillsFilters = [
+        const HillsFilterByTypeBySie(type: HillTypeBySize.large),
+        HillsFilterByCountry(countries: {const Country(code: 'at', name: 'Austria')}),
       ];
 
       repo.set<MaleJumper>(forMales);

@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_provider.dart';
-import 'package:sj_manager/models/simulation_db/standings/standings_repo.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 
 class Competition<E> with EquatableMixin {
@@ -11,21 +11,21 @@ class Competition<E> with EquatableMixin {
     required this.date,
     required this.rules,
     this.standings,
-    this.labels = const {},
+    this.labels = const [],
   });
 
   final Hill hill;
   final DateTime date;
   final CompetitionRulesProvider<E> rules;
-  final StandingsRepo<E>? standings;
-  final Set<Object> labels;
+  final Standings<E>? standings;
+  final List<Object> labels;
 
   Competition<E> copyWith({
     Hill? hill,
     DateTime? date,
     CompetitionRules<E>? rules,
-    StandingsRepo<E>? standings,
-    Set<Object>? labels,
+    Standings<E>? standings,
+    List<Object>? labels,
   }) {
     return Competition<E>(
       hill: hill ?? this.hill,

@@ -6,6 +6,7 @@ class MainMenuNewSimulationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainMenuCard(
+      borderRadius: const BorderRadius.all(UiMainMenuConstants.buttonsBorderRadius),
       onTap: () async {
         // TODO: Add dialog dimensions to UI constants
         final shouldCreateSimulation = await showGeneralDialog<bool>(
@@ -26,9 +27,9 @@ class MainMenuNewSimulationButton extends StatelessWidget {
           transitionBuilder: (context, animation, secondaryAnimation, child) {
             final fadeIn =
                 CurvedAnimation(parent: animation, curve: Curves.easeInOutCirc);
-            final fadeOut = CurvedAnimation(
-                    parent: secondaryAnimation, curve: Curves.easeOutCirc)
-                .drive(Tween(begin: 1.0, end: 0.0));
+            final fadeOut =
+                CurvedAnimation(parent: secondaryAnimation, curve: Curves.easeOutCirc)
+                    .drive(Tween(begin: 1.0, end: 0.0));
             return FadeTransition(
               opacity: fadeIn,
               child: FadeTransition(

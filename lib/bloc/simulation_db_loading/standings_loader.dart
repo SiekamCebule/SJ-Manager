@@ -3,12 +3,11 @@ import 'package:sj_manager/bloc/simulation_db_loading/simulation_db_part_loader.
 import 'package:sj_manager/bloc/simulation_db_loading/standings_positions_creator_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
-import 'package:sj_manager/models/simulation_db/standings/standings_repo.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/repositories/generic/ids_repo.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
-class StandingsLoader<E, S extends Score>
-    implements SimulationDbPartLoader<StandingsRepo> {
+class StandingsLoader<E, S extends Score> implements SimulationDbPartLoader<Standings> {
   const StandingsLoader({
     required this.idsRepo,
     required this.idGenerator,
@@ -22,7 +21,7 @@ class StandingsLoader<E, S extends Score>
   final StandingsPositionsCreatorLoader positionsCreatorLoader;
 
   @override
-  StandingsRepo load(Json json) {
+  Standings load(Json json) {
     final scoresJson = json['scores'] as List<Json>;
     final scores = scoresJson.map((json) {
       final score = ScoreLoader(idsRepo: idsRepo).load(json);
@@ -32,7 +31,7 @@ class StandingsLoader<E, S extends Score>
     final positionsCreatorJson = json['positionsCreator'] as String;
     final positionsCreator = positionsCreatorLoader.load(positionsCreatorJson);
 
-    return StandingsRepo(
+    return Standings(
       positionsCreator: positionsCreator,
       initialScores: scores,
     );
