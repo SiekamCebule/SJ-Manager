@@ -11,6 +11,6 @@ class UserAlgorithmListLoadingException {
 
   @override
   String toString() {
-    return 'A failure happened in when loading a user algorithm from ${failureFile.absolute.path} file.\nLow level error: $error';
+    return 'A failure happened in when loading an user algorithm from ${failureFile.absolute.path} file.\nLow level error: $error';
   }
 }

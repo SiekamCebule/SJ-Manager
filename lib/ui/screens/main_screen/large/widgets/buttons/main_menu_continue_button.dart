@@ -6,6 +6,7 @@ class MainMenuContinueButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainMenuCard(
+      borderRadius: const BorderRadius.all(UiMainMenuConstants.buttonsBorderRadius),
       child: Padding(
         padding: const EdgeInsets.only(
             left: UiMainMenuConstants.horizontalSpaceBetweenButtonItems,
@@ -28,8 +29,7 @@ class MainMenuContinueButton extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                 ),
-                const Gap(
-                    UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
+                const Gap(UiMainMenuConstants.horizontalSpaceBetweenButtonItems),
               ],
             ),
             const Spacer(),
@@ -43,12 +43,10 @@ class MainMenuContinueButton extends StatelessWidget {
                         code: 'bg',
                         name: 'Bułgaria',
                       ),
-                      height: UiMainMenuConstants
-                          .continueButtonSimulationInfoIconSize,
+                      height: UiMainMenuConstants.continueButtonSimulationInfoIconSize,
                     ),
                     const Gap(
-                      UiMainMenuConstants
-                          .continueButtonSimulationInfoVerticalGap,
+                      UiMainMenuConstants.continueButtonSimulationInfoVerticalGap,
                     ),
                     Text(
                       'Bułgaria',
@@ -63,13 +61,11 @@ class MainMenuContinueButton extends StatelessWidget {
                   children: [
                     Icon(
                       Symbols.calendar_month,
-                      size: UiMainMenuConstants
-                          .continueButtonSimulationInfoIconSize,
+                      size: UiMainMenuConstants.continueButtonSimulationInfoIconSize,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     const Gap(
-                      UiMainMenuConstants
-                          .continueButtonSimulationInfoVerticalGap,
+                      UiMainMenuConstants.continueButtonSimulationInfoVerticalGap,
                     ),
                     Text(
                       'Kwiecień \'26',
@@ -84,13 +80,11 @@ class MainMenuContinueButton extends StatelessWidget {
                   children: [
                     Icon(
                       Symbols.person,
-                      size: UiMainMenuConstants
-                          .continueButtonSimulationInfoIconSize,
+                      size: UiMainMenuConstants.continueButtonSimulationInfoIconSize,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     const Gap(
-                      UiMainMenuConstants
-                          .continueButtonSimulationInfoVerticalGap,
+                      UiMainMenuConstants.continueButtonSimulationInfoVerticalGap,
                     ),
                     Text(
                       '5',

@@ -18,6 +18,7 @@ class MainMenuOnlyTitleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainMenuCard(
+      borderRadius: const BorderRadius.all(UiMainMenuConstants.buttonsBorderRadius),
       onTap: onTap,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,

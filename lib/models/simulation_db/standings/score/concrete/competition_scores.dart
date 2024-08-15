@@ -2,6 +2,7 @@ import 'package:sj_manager/models/simulation_db/standings/score/mixins/has_point
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/team/team.dart';
 
 mixin CompetitionScore<E> on HasPointsMixin<E>, Score<E> {
   List<SingleJumpScore> get jumpScores;
@@ -33,7 +34,7 @@ class CompetitionJumperScore<E extends Jumper> extends Score<E>
       ];
 }
 
-class CompetitionTeamScore<E> extends Score<E>
+class CompetitionTeamScore<E extends Team> extends Score<E>
     with HasPointsMixin<E>, CompetitionScore<E> {
   const CompetitionTeamScore({
     required super.entity,

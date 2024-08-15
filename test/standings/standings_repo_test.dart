@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/simple_points_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
-import 'package:sj_manager/models/simulation_db/standings/standings_repo.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 
 void main() {
-  group(StandingsRepo, () {
-    late StandingsRepo<String> repo;
+  group(Standings, () {
+    late Standings<String> repo;
 
     test('Adding, editing and removing; updating standings', () {
       const stoch = SimplePointsScore(315.5, entity: 'Kamil Stoch');
@@ -14,7 +14,7 @@ void main() {
       const geiger = SimplePointsScore(330.0, entity: 'Karl Geiger');
       const eisenbichler = SimplePointsScore(350.1, entity: 'Markus Eisenbichler');
 
-      repo = StandingsRepo(
+      repo = Standings(
         positionsCreator: StandingsPositionsWithExAequosCreator(),
         initialScores: const [stoch, kubacki, zyla],
       );
@@ -47,7 +47,7 @@ void main() {
       const peier = SimplePointsScore(110.8, entity: 'Killian Peier');
 
       setUpAll(() {
-        repo = StandingsRepo(
+        repo = Standings(
           positionsCreator: StandingsPositionsWithExAequosCreator(),
           initialScores: const [
             kot,

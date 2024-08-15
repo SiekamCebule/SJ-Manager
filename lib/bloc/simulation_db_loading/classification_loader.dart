@@ -2,7 +2,7 @@ import 'package:sj_manager/bloc/simulation_db_loading/simulation_db_part_loader.
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
 import 'package:sj_manager/models/user_algorithms/concrete/classification_score_creator.dart';
-import 'package:sj_manager/models/simulation_db/standings/standings_repo.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/repositories/generic/ids_repo.dart';
 import 'package:sj_manager/utils/multilingual_string.dart';
 
@@ -13,7 +13,7 @@ class ClassificationLoader implements SimulationDbPartLoader<Classification> {
   });
 
   final IdsRepo idsRepo;
-  final SimulationDbPartLoader<StandingsRepo> standingsLoader;
+  final SimulationDbPartLoader<Standings> standingsLoader;
 
   @override
   Classification load(Json json) {

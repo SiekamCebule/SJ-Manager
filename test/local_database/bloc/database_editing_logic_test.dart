@@ -81,10 +81,10 @@ void main() {
 
       cubit = LocalDbFilteredItemsCubit(filtersRepo: filtersRepo, itemsRepos: itemsRepo);
 
-      filtersRepo.set<FemaleJumper>(const [
+      filtersRepo.set<FemaleJumper>([
         ConcreteJumpersFilterWrapper(filter: JumpersFilterByCountry(countries: {poland})),
       ]);
-      filtersRepo.set<Hill>(const [
+      filtersRepo.set<Hill>([
         HillsFilterByCountry(countries: {norway}),
       ]);
 

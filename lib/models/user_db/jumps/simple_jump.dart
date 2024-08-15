@@ -11,7 +11,6 @@ class SimpleJump {
   });
 
   final String jumperNameAndSurname;
-
   final double distance;
 
   static SimpleJump fromJson(Json json) => _$SimpleJumpFromJson(json);

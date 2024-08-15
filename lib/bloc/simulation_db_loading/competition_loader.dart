@@ -3,7 +3,7 @@ import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition_type.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
-import 'package:sj_manager/models/simulation_db/standings/standings_repo.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/repositories/generic/ids_repo.dart';
 
@@ -16,14 +16,14 @@ class CompetitionLoader implements SimulationDbPartLoader<Competition> {
 
   final IdsRepo idsRepo;
   final SimulationDbPartLoader<CompetitionRules> rulesLoader;
-  final SimulationDbPartLoader<StandingsRepo> standingsLoader;
+  final SimulationDbPartLoader<Standings> standingsLoader;
 
   @override
   Competition load(Json json) {
     final labelsJson = json['labels'] as List<String>?;
-    Set<Object>? labels;
+    List<Object>? labels;
     if (labelsJson != null) {
-      labels = labelsJson.map((json) => _label(json)).toSet();
+      labels = labelsJson.map((json) => _label(json)).toList();
     }
     final standings = standingsLoader.load(json);
 
@@ -32,7 +32,7 @@ class CompetitionLoader implements SimulationDbPartLoader<Competition> {
       hill: idsRepo.get<Hill>(json['hillId']),
       date: DateTime.parse(json['date']),
       rules: rulesLoader.load(json['rules']),
-      labels: labels ?? const {},
+      labels: labels ?? const [],
       standings: standings,
     );
   }

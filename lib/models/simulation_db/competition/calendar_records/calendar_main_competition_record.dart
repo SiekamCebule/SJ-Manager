@@ -38,7 +38,7 @@ class _Converter {
         hill: record.hill,
         date: record.date,
         rules: rules,
-        labels: const {CompetitionType.trialRound},
+        labels: const [CompetitionType.trialRound],
       );
     }
 
@@ -52,7 +52,7 @@ class _Converter {
             hill: record.hill,
             date: record.date.subtract(daysSubtraction),
             rules: rules,
-            labels: const {CompetitionType.training},
+            labels: const [CompetitionType.training],
           );
         })
         .toList()
@@ -64,7 +64,7 @@ class _Converter {
         hill: record.hill,
         date: record.date.subtract(qualificationsDateSubtraction),
         rules: record.setup.qualificationsRules!,
-        labels: const {CompetitionType.qualifications},
+        labels: const [CompetitionType.qualifications],
       );
     }
 
@@ -72,7 +72,7 @@ class _Converter {
       hill: record.hill,
       date: record.date,
       rules: record.setup.mainCompRules,
-      labels: const {CompetitionType.competition},
+      labels: const [CompetitionType.competition],
     );
 
     final comps = [
@@ -89,7 +89,7 @@ class _Converter {
     required Hill hill,
     required DateTime date,
     required CompetitionRules<T> rules,
-    Set<Object> labels = const {},
+    List<Object> labels = const [],
   }) {
     if (rules is CompetitionRules<Jumper>) {
       return Competition<Jumper>(

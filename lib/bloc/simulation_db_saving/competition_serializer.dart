@@ -3,7 +3,7 @@ import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition_type.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_provider.dart';
-import 'package:sj_manager/models/simulation_db/standings/standings_repo.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/repositories/generic/ids_repo.dart';
 
 class CompetitionSerializer implements SimulationDbPartSerializer<Competition> {
@@ -15,7 +15,7 @@ class CompetitionSerializer implements SimulationDbPartSerializer<Competition> {
 
   final IdsRepo idsRepo;
   final SimulationDbPartSerializer<CompetitionRulesProvider> competitionRulesSerializer;
-  final SimulationDbPartSerializer<StandingsRepo> standingsSerializer;
+  final SimulationDbPartSerializer<Standings> standingsSerializer;
 
   @override
   Json serialize(Competition competition) {

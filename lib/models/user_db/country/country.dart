@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:sj_manager/json/json_types.dart';
@@ -6,7 +7,7 @@ import 'package:sj_manager/json/json_types.dart';
 part 'country.g.dart';
 
 @JsonSerializable()
-class Country {
+class Country with EquatableMixin {
   const Country({
     required this.code,
     required this.name,
@@ -42,6 +43,9 @@ class Country {
       name: name ?? this.name,
     );
   }
+
+  @override
+  List<Object?> get props => [code, name];
 }
 
 String stringFromMultilingualJson(Json json,
