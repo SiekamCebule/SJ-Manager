@@ -13,18 +13,18 @@ class CompetitionJumperScore<E extends Jumper> extends Score<E>
   const CompetitionJumperScore({
     required super.entity,
     required double points,
-    required List<SingleJumpScore> jumpScores,
+    required List<SingleJumpScore<E>> jumpScores,
   })  : _points = points,
         _jumpScores = jumpScores;
 
   final double _points;
-  final List<SingleJumpScore> _jumpScores;
+  final List<SingleJumpScore<E>> _jumpScores;
 
   @override
   List<double> get components => [_points];
 
   @override
-  List<SingleJumpScore> get jumpScores => _jumpScores;
+  List<SingleJumpScore<E>> get jumpScores => _jumpScores;
 
   @override
   List<Object?> get props => [
@@ -49,7 +49,7 @@ class CompetitionTeamScore<E extends Team> extends Score<E>
   List<double> get components => [_points];
 
   @override
-  List<SingleJumpScore> get jumpScores {
+  List<SingleJumpScore<Jumper>> get jumpScores {
     return entityScores.expand((score) => score.jumpScores).toList();
   }
 

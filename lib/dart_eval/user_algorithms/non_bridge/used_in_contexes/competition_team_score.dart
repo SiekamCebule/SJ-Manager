@@ -129,7 +129,7 @@ class $CompetitionTeamScore<E extends Team>
   }
 
   @override
-  List<SingleJumpScore> get jumpScores => $value.jumpScores;
+  List<SingleJumpScore<Jumper>> get jumpScores => $value.jumpScores;
 
   @override
   List<CompetitionJumperScore<Jumper>> get entityScores => $value.entityScores;

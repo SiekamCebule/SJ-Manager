@@ -1,5 +1,3 @@
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 class MyDropdownField<T> extends StatelessWidget {

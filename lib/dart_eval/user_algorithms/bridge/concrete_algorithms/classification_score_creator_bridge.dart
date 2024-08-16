@@ -1,10 +1,12 @@
 import 'package:dart_eval/dart_eval_bridge.dart';
+import 'package:sj_manager/dart_eval/user_algorithms/bridge/unary_algorithm_bridge.dart';
 import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/contexes/classification_score_creating_context.dart';
+import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/classification_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/classification_score.dart';
 import 'package:sj_manager/models/user_algorithms/concrete/classification_score_creator.dart';
 import 'package:dart_eval/dart_eval_extensions.dart';
 
-class $ClassificationScoreCreator$bridge
+class $ClassificationScoreCreator$bridge<S extends ClassificationScore>
     with $Bridge<ClassificationScoreCreator>
     implements ClassificationScoreCreator {
   static final $type = const BridgeTypeSpec(
@@ -15,6 +17,10 @@ class $ClassificationScoreCreator$bridge
   static final $declaration = BridgeClassDef(
     BridgeClassType(
       $type,
+      generics: {
+        'S': BridgeGenericParam($extends: $ClassificationScore.$type),
+      },
+      $implements: [$UnaryAlgorithm$bridge.$type],
     ),
     constructors: {
       '': BridgeFunctionDef(
@@ -22,8 +28,8 @@ class $ClassificationScoreCreator$bridge
       ).asConstructor
     },
     methods: {
-      'evaluate': BridgeFunctionDef(
-        returns: $ClassificationScoreCreatingContext.$type.annotate,
+      'compute': BridgeFunctionDef(
+        returns: const BridgeTypeRef.ref('S').annotate,
         params: [
           BridgeParameter(
             '',
@@ -56,10 +62,10 @@ class $ClassificationScoreCreator$bridge
   }
 
   @override
-  ClassificationScore compute(ClassificationScoreCreatingContext input) {
+  S compute(ClassificationScoreCreatingContext input) {
     final result = $_invoke('compute', [
       $ClassificationScoreCreatingContext.wrap(input),
     ]);
-    return result;
+    return result as S;
   }
 }

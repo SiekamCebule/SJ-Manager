@@ -22,7 +22,6 @@ class _AppropriateItemEditorState extends State<_AppropriateItemEditor> {
     final filtersRepo = context.watch<DbFiltersRepo>();
     final type = context.watch<DatabaseItemsTypeCubit>().state;
     context.watch<ValueRepo<_SelectedTabIndex>>();
-    print('rebuild item editor');
 
     return DbItemEditorFactory.create(
       key: _key,

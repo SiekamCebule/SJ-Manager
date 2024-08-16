@@ -22,8 +22,6 @@ class _ItemsListState extends State<_ItemsList> {
         context.watch<LocalDbFilteredItemsCubit>().state.byTypeArgument(itemsType);
     final dbIsChangedCubit = context.watch<ChangeStatusCubit>();
 
-    print('filtered: $filteredItemsByType');
-
     return StreamBuilder(
         stream: StreamGroup.merge([
           selectedIndexesRepo.selectedIndexes,

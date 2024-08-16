@@ -1,4 +1,4 @@
-import 'package:dart_eval/dart_eval_bridge.dart';
+/*import 'package:dart_eval/dart_eval_bridge.dart';
 import 'package:dart_eval/dart_eval_extensions.dart';
 import 'package:dart_eval/stdlib/core.dart';
 import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/has_points_mixin.dart';
@@ -6,7 +6,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ro
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/individual_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
 
-/*class $IndividualCompetitionRoundRules<E>
+class $IndividualCompetitionRoundRules<E>
     implements IndividualCompetitionRoundRules<E>, $Instance {
   $IndividualCompetitionRoundRules.wrap(this.$value) : _superclass = $Object($value);
 

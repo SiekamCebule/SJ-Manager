@@ -47,9 +47,9 @@ class DbItemsListLoaderFromDirectoryHighLevelWrapper<T extends Object> {
             ),
           );
         } else {
-          showDialog(
+          showSjmDialog(
             context: context,
-            builder: (context) => LoadingItemsFailedDialog(
+            child: LoadingItemsFailedDialog(
               titleText: loadingFailedDialogTitle,
               filePath: path,
               error: error,

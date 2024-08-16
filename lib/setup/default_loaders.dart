@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
-import 'package:sj_manager/models/user_algorithms/concrete/classification_score_creator.dart';
-import 'package:sj_manager/models/user_algorithms/concrete/competition_score_creator.dart';
-import 'package:sj_manager/models/user_algorithms/concrete/jump_score_creator.dart';
-import 'package:sj_manager/models/user_algorithms/concrete/significant_judges_chooser.dart';
-import 'package:sj_manager/models/user_algorithms/concrete/wind_averager.dart';
-import 'package:sj_manager/models/user_algorithms/user_algorithm.dart';
+import 'package:sj_manager/models/user_algorithms/concrete_wrappers/concrete_wrappers.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
@@ -54,13 +49,14 @@ List<DbItemsListLoader> defaultDbItemsListLoaders(BuildContext context) => [
         fileNotFoundDialogTitle: 'Nie znaleziono pliku z presetami konkursów',
         loadingFailedDialogTitle: 'Nie udało się wczytać cyklów presetów konkursów',
       ).toLowLevel(context),
-      const UserAlgorithmsListLoaderHighLevelWrapper<
-          UserAlgorithm<ClassificationScoreCreator>>(
+      UserAlgorithmsListLoaderHighLevelWrapper<ClassificationScoreCreatorWrapper>(
         directoryNotFoundDialogTitle:
             'Nie znaleziono folderu z kreatorami wyników klasyfikacji',
         loadingFailedDialogTitle: 'Nie udało się wczytać kreatora wyników klasyfikacji',
+        wrap: (algorithm) => ClassificationScoreCreatorWrapper.wrap(algorithm),
       ).toLowLevel(context),
-      const UserAlgorithmsListLoaderHighLevelWrapper<
+      // TODO: :smirk:
+      /*const UserAlgorithmsListLoaderHighLevelWrapper<
           UserAlgorithm<CompetitionScoreCreator>>(
         directoryNotFoundDialogTitle:
             'Nie znaleziono folderu z kreatorami wyników konkursowych',
@@ -80,5 +76,5 @@ List<DbItemsListLoader> defaultDbItemsListLoaders(BuildContext context) => [
       const UserAlgorithmsListLoaderHighLevelWrapper<UserAlgorithm<WindAverager>>(
         directoryNotFoundDialogTitle: 'Nie znaleziono folderu z uśredniaczami wiatru',
         loadingFailedDialogTitle: 'Nie udało się wczytać uśredniacza wiatru',
-      ).toLowLevel(context),
+      ).toLowLevel(context),*/
     ];

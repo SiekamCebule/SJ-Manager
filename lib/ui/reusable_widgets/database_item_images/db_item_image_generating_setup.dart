@@ -16,9 +16,6 @@ class DbItemImageGeneratingSetup<T> {
 
 String? dbItemImagePath<T>(DbItemImageGeneratingSetup<T> setup, T item) {
   final fileName = setup.toFileName(item);
-  print('dir: ${setup.imagesDirectory}');
-  print('file name: $fileName');
-
   if (setup.extension != null) {
     return '${setup.imagesDirectory.path}/$fileName.${setup.extension}';
   } else {

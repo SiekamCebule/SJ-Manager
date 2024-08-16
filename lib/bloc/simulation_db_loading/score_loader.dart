@@ -51,7 +51,7 @@ class ScoreLoader implements SimulationDbPartLoader<Score> {
     return CompetitionJumperScore(
       entity: entity,
       points: json['points'],
-      jumpScores: jumpScores,
+      jumpScores: jumpScores.cast(),
     );
   }
 
