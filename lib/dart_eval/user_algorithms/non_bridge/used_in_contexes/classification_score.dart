@@ -1,6 +1,7 @@
 import 'package:dart_eval/dart_eval_bridge.dart';
 import 'package:dart_eval/dart_eval_extensions.dart';
 import 'package:dart_eval/stdlib/core.dart';
+import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/competition_score.dart';
 import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/has_points_mixin.dart';
 import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/classification_score.dart';
@@ -29,7 +30,9 @@ class $ClassificationScore<E> implements ClassificationScore<E>, $Instance {
         namedParams: [
           'entity'.param(const BridgeTypeRef.ref('E').annotate),
           'points'.param($double.$declaration.type.type.annotate),
-          'competitionScores'.param($List.$declaration.type.type.annotate),
+          'competitionScores'.param(BridgeTypeRef(CoreTypes.list, [
+            BridgeTypeRef($CompetitionScore.$type.spec, [const BridgeTypeRef.ref('E')])
+          ]).annotate),
         ],
       ).asConstructor
     },
@@ -39,8 +42,12 @@ class $ClassificationScore<E> implements ClassificationScore<E>, $Instance {
           BridgeFunctionDef(returns: $bool.$declaration.type.type.annotate).asMethod,
       'points':
           BridgeFunctionDef(returns: $double.$declaration.type.type.annotate).asMethod,
-      'components':
-          BridgeFunctionDef(returns: $List.$declaration.type.type.annotate).asMethod,
+      'components': BridgeFunctionDef(
+              returns: BridgeTypeRef(
+        CoreTypes.list,
+        [BridgeTypeRef($double.$declaration.type.type.spec)],
+      ).annotate)
+          .asMethod,
     },
     methods: {
       'operator>':
@@ -57,16 +64,18 @@ class $ClassificationScore<E> implements ClassificationScore<E>, $Instance {
     fields: {
       'entity': BridgeFieldDef(const BridgeTypeRef.ref('E').annotate),
       'points': BridgeFieldDef($double.$declaration.type.type.annotate),
-      'competitionScores': BridgeFieldDef($List.$declaration.type.type.annotate),
+      'competitionScores': BridgeFieldDef(BridgeTypeRef(CoreTypes.list, [
+        BridgeTypeRef($CompetitionScore.$type.spec, [const BridgeTypeRef.ref('E')])
+      ]).annotate),
     },
     wrap: true,
   );
 
   @override
-  final ClassificationScore $value;
+  final ClassificationScore<E> $value;
 
   @override
-  ClassificationScore get $reified => $value;
+  ClassificationScore<E> get $reified => $value;
 
   final $Instance _superclass;
 
@@ -75,7 +84,7 @@ class $ClassificationScore<E> implements ClassificationScore<E>, $Instance {
       ClassificationScore(
         entity: args[0]!.$value,
         points: args[1]!.$value,
-        competitionScores: args[2]!.$value,
+        competitionScores: (args[2]!.$value as List).cast(),
       ),
     );
   }
@@ -84,7 +93,7 @@ class $ClassificationScore<E> implements ClassificationScore<E>, $Instance {
   $Value? $getProperty(Runtime runtime, String identifier) {
     switch (identifier) {
       case 'entity':
-        return $Object($value.entity);
+        return $Object($value.entity as dynamic);
       case 'points':
         return $double($value.points);
       case 'competitionScores':
@@ -139,5 +148,10 @@ class $ClassificationScore<E> implements ClassificationScore<E>, $Instance {
   }
 
   @override
-  List<CompetitionScore> get competitionScores => $value.competitionScores;
+  List<CompetitionScore<E>> get competitionScores => $value.competitionScores;
+
+  @override
+  ClassificationScore<R> cast<R>() {
+    throw UnimplementedError();
+  }
 }

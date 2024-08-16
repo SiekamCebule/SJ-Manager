@@ -15,7 +15,7 @@ class $LandingEase implements $Instance {
     values: [
       'veryHigh',
       'high',
-      'failrlyHigh',
+      'fairlyHigh',
       'average',
       'fairlyLow',
       'low',

@@ -20,8 +20,8 @@ class ItemsReposRegistry extends ItemsRepo<ItemsRepo> with EquatableMixin {
   late Set<ItemsRepo> _repos;
 
   @override
-  void set(Iterable<ItemsRepo> repos) {
-    _repos = repos.toSet();
+  void set(Iterable<ItemsRepo> value) {
+    _repos = value.toSet();
     super.set(_repos);
   }
 

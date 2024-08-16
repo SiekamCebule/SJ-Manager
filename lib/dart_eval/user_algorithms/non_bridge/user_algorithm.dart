@@ -2,10 +2,11 @@ import 'package:dart_eval/dart_eval_bridge.dart';
 import 'package:dart_eval/dart_eval_extensions.dart';
 import 'package:dart_eval/stdlib/core.dart';
 import 'package:sj_manager/dart_eval/user_algorithms/bridge/unary_algorithm_bridge.dart';
+import 'package:sj_manager/models/user_algorithms/concrete_wrappers/concrete_wrappers.dart';
 import 'package:sj_manager/models/user_algorithms/unary_algorithm.dart';
 import 'package:sj_manager/models/user_algorithms/user_algorithm.dart';
 
-class $UserAlgorithm implements UserAlgorithm, $Instance {
+class $UserAlgorithm<T extends UnaryAlgorithm> implements UserAlgorithm<T>, $Instance {
   $UserAlgorithm.wrap(this.$value) : _superclass = $Object($value);
 
   static final $type = const BridgeTypeSpec(
@@ -14,7 +15,12 @@ class $UserAlgorithm implements UserAlgorithm, $Instance {
   ).ref;
 
   static final $declaration = BridgeClassDef(
-    BridgeClassType($type),
+    BridgeClassType(
+      $type,
+      generics: {
+        'T': BridgeGenericParam($extends: $UnaryAlgorithm$bridge.$type),
+      },
+    ),
     constructors: {
       '': BridgeFunctionDef(
         returns: $type.annotate,
@@ -22,7 +28,7 @@ class $UserAlgorithm implements UserAlgorithm, $Instance {
           'id'.param(CoreTypes.string.ref.annotate),
           'name'.param(CoreTypes.string.ref.annotate),
           'description'.param(CoreTypes.string.ref.annotate),
-          'algorithm'.param($UnaryAlgorithm$bridge.$type.annotate),
+          'algorithm'.param(const BridgeTypeRef.ref('T').annotate),
         ],
       ).asConstructor
     },
@@ -30,27 +36,36 @@ class $UserAlgorithm implements UserAlgorithm, $Instance {
       'id': BridgeFieldDef(CoreTypes.string.ref.annotate),
       'name': BridgeFieldDef(CoreTypes.string.ref.annotate),
       'description': BridgeFieldDef(CoreTypes.string.ref.annotate),
-      'algorithm': BridgeFieldDef($UnaryAlgorithm$bridge.$type.annotate),
+      'algorithm': BridgeFieldDef(const BridgeTypeRef.ref('T').annotate),
     },
     wrap: true,
   );
 
-  static $Value? $new(Runtime runtime, $Value? target, List<$Value?> args) {
+  static $Value? $new<T extends UnaryAlgorithm>(
+      Runtime runtime, $Value? target, List<$Value?> args) {
     return $UserAlgorithm.wrap(
-      UserAlgorithm(
+      UserAlgorithm<T>(
         id: args[0]!.$value,
         name: args[1]!.$value,
         description: args[2]!.$value,
-        algorithm: args[3]!.$value,
+        algorithm: args[3]!.$value as T,
       ),
     );
   }
 
-  @override
-  final UserAlgorithm $value;
+  UserAlgorithm<ClassificationScoreCreatorWrapper>
+      get classificationScoreCreatorAlgorithm {
+    final copied = $value
+        .cast<ClassificationScoreCreatorWrapper>()
+        .copyWith(algorithm: ClassificationScoreCreatorWrapper.wrap(algorithm));
+    return copied;
+  }
 
   @override
-  UserAlgorithm get $reified => $value;
+  final UserAlgorithm<T> $value;
+
+  @override
+  UserAlgorithm<T> get $reified => $value;
 
   final $Instance _superclass;
 
@@ -64,7 +79,7 @@ class $UserAlgorithm implements UserAlgorithm, $Instance {
       case 'description':
         return $String($value.description);
       case 'algorithm':
-        return $UnaryAlgorithm$bridge.$new(runtime, $String(''), []);
+        return $Object($value);
       default:
         return _superclass.$getProperty(runtime, identifier);
     }
@@ -88,5 +103,21 @@ class $UserAlgorithm implements UserAlgorithm, $Instance {
   String get description => $value.description;
 
   @override
-  UnaryAlgorithm get algorithm => $value.algorithm;
+  T get algorithm => $value.algorithm;
+
+  @override
+  UserAlgorithm<T> copyWith(
+      {String? id, String? name, String? description, T? algorithm}) {
+    return $value.copyWith(
+      id: id,
+      name: name,
+      description: description,
+      algorithm: algorithm,
+    );
+  }
+
+  @override
+  UserAlgorithm<R> cast<R extends UnaryAlgorithm>() {
+    return $value.cast<R>();
+  }
 }

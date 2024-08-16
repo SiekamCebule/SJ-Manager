@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart';
 import 'package:sj_manager/exceptions/user_algorithm_list_loading_exception.dart';
+import 'package:sj_manager/models/user_algorithms/unary_algorithm.dart';
 import 'package:sj_manager/models/user_algorithms/user_algorithm.dart';
 import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
@@ -13,28 +14,31 @@ import 'package:sj_manager/ui/dialogs/loading_items/loading_items_failed_dialog.
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/show_dialog.dart';
 
-class UserAlgorithmsListLoaderHighLevelWrapper<T extends UserAlgorithm> {
+/// [W] is a wrapper
+class UserAlgorithmsListLoaderHighLevelWrapper<T extends UnaryAlgorithm> {
   const UserAlgorithmsListLoaderHighLevelWrapper({
     required this.directoryNotFoundDialogTitle,
     required this.loadingFailedDialogTitle,
     this.processItems,
     this.customOnFinish,
+    required this.wrap,
   });
 
   final String directoryNotFoundDialogTitle;
   final String loadingFailedDialogTitle;
-  final List<T> Function(List<T> source)? processItems;
-  final void Function(List<T> source)? customOnFinish;
+  final List<UserAlgorithm> Function(List<UserAlgorithm> source)? processItems;
+  final void Function(List<UserAlgorithm<T>> source)? customOnFinish;
+  final T Function(UnaryAlgorithm algorithm) wrap;
 
-  UserAlgorithmsListLoader<T> toLowLevel(BuildContext context) {
-    return UserAlgorithmsListLoader<T>(
+  UserAlgorithmsListLoader toLowLevel(BuildContext context) {
+    return UserAlgorithmsListLoader(
       directoryPath: databaseDirectory(
         context.read(),
-        context.read<DbItemsDirectoryPathsRegistry>().get<T>(),
+        context.read<DbItemsDirectoryPathsRegistry>().get<UserAlgorithm<T>>(),
       ).path,
       onError: (error, stackTrace) {
-        final directory = databaseDirectory(
-            context.read(), context.read<DbItemsDirectoryPathsRegistry>().get<T>());
+        final directory = databaseDirectory(context.read(),
+            context.read<DbItemsDirectoryPathsRegistry>().get<UserAlgorithm<T>>());
         if (error is PathNotFoundException) {
           directory.createSync();
           showSjmDialog(
@@ -46,9 +50,9 @@ class UserAlgorithmsListLoaderHighLevelWrapper<T extends UserAlgorithm> {
             ),
           );
         } else if (error is UserAlgorithmListLoadingException) {
-          showDialog(
+          showSjmDialog(
             context: context,
-            builder: (context) => LoadingItemsFailedDialog(
+            child: LoadingItemsFailedDialog(
               titleText: loadingFailedDialogTitle,
               filePath: error.failureFile.path,
               error: error,
@@ -59,14 +63,25 @@ class UserAlgorithmsListLoaderHighLevelWrapper<T extends UserAlgorithm> {
         }
       },
       onFinish: (loaded) {
-        var items = List.of(loaded);
+        var rawUserAlgorithms = List.of(loaded);
         if (processItems != null) {
-          items = processItems!(items);
+          rawUserAlgorithms = processItems!(rawUserAlgorithms);
         }
+        final wrappedUserAlgorithms = rawUserAlgorithms.map((userAlgorithm) {
+          return UserAlgorithm<T>(
+            id: userAlgorithm.id,
+            name: userAlgorithm.name,
+            description: userAlgorithm.description,
+            algorithm: wrap(userAlgorithm.algorithm),
+          );
+        }).toList();
         if (customOnFinish != null) {
-          customOnFinish!(items);
+          customOnFinish!(wrappedUserAlgorithms);
         } else {
-          context.read<ItemsReposRegistry>().get<T>().set(items);
+          context
+              .read<ItemsReposRegistry>()
+              .get<UserAlgorithm<T>>()
+              .set(wrappedUserAlgorithms);
         }
       },
     );

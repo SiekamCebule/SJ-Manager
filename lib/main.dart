@@ -32,11 +32,11 @@ import 'package:sj_manager/json/manual_json/json_team.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_provider.dart';
-import 'package:sj_manager/models/user_algorithms/concrete/classification_score_creator.dart';
 import 'package:sj_manager/models/user_algorithms/concrete/competition_score_creator.dart';
 import 'package:sj_manager/models/user_algorithms/concrete/jump_score_creator.dart';
 import 'package:sj_manager/models/user_algorithms/concrete/significant_judges_chooser.dart';
 import 'package:sj_manager/models/user_algorithms/concrete/wind_averager.dart';
+import 'package:sj_manager/models/user_algorithms/concrete_wrappers/concrete_wrappers.dart';
 import 'package:sj_manager/models/user_algorithms/user_algorithm.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_image_asset.dart';
@@ -126,7 +126,7 @@ void main() async {
               EditableItemsRepo<EventSeriesSetup>(),
               EditableItemsRepo<EventSeriesCalendarPreset>(),
               EditableItemsRepo<CompetitionRulesPreset>(),
-              ItemsRepo<UserAlgorithm<ClassificationScoreCreator>>(),
+              ItemsRepo<UserAlgorithm<ClassificationScoreCreatorWrapper>>(),
               ItemsRepo<UserAlgorithm<CompetitionScoreCreator>>(),
               ItemsRepo<UserAlgorithm<JumpScoreCreator>>(),
               ItemsRepo<UserAlgorithm<SignificantJudgesChooser>>(),
@@ -204,7 +204,7 @@ void main() async {
               create: (context) => DbItemsDirectoryPathsRegistry(
                 initial: {
                   CountryFlag: 'countries/country_flags',
-                  UserAlgorithm<ClassificationScoreCreator>:
+                  UserAlgorithm<ClassificationScoreCreatorWrapper>:
                       'user_algorithms/classification_score_creators',
                   UserAlgorithm<CompetitionScoreCreator>:
                       'user_algorithms/competition_score_creators',

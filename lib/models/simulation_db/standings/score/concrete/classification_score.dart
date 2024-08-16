@@ -10,7 +10,15 @@ class ClassificationScore<E> extends Score<E> with HasPointsMixin<E> {
   }) : _points = points;
 
   final double _points;
-  final List<CompetitionScore> competitionScores;
+  final List<CompetitionScore<E>> competitionScores;
+
+  ClassificationScore<R> cast<R>() {
+    return ClassificationScore<R>(
+      entity: entity as dynamic,
+      points: points,
+      competitionScores: competitionScores.cast(),
+    );
+  }
 
   @override
   List<Object?> get props => [

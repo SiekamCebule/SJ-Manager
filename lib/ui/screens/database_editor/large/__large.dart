@@ -97,7 +97,6 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     _itemsTypeCubit = DatabaseItemsTypeCubit();
     _copiedDbCubit = CopiedLocalDbCubit(originalDb: context.read());
     await _copiedDbCubit.setUp();
-    print('filters repo: $_filtersRepo');
     _filteredItemsCubit = LocalDbFilteredItemsCubit(
       filtersRepo: _filtersRepo,
       itemsRepos: _copiedDbCubit.state!,

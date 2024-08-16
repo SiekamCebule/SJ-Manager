@@ -1,71 +1,67 @@
 import 'package:dart_eval/dart_eval_bridge.dart';
 import 'package:dart_eval/dart_eval_extensions.dart';
 import 'package:dart_eval/stdlib/core.dart';
-import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/jumper.dart';
-import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/score.dart';
+import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/single_jump_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
-class $CompetitionJumperScore<E extends Jumper>
-    implements CompetitionJumperScore<E>, $Instance {
-  $CompetitionJumperScore.wrap(this.$value) : _superclass = $Object($value);
+class $CompetitionScore<E extends Jumper> implements CompetitionScore<E>, $Instance {
+  $CompetitionScore.wrap(this.$value) : _superclass = $Object($value);
 
   static final $type = const BridgeTypeSpec(
     'package:sj_manager/bridge.dart',
-    'CompetitionJumperScore',
+    'CompetitionScore',
   ).ref;
 
   static final $declaration = BridgeClassDef(
     BridgeClassType(
       $type,
-      $extends: $Score.$type,
-      generics: {
-        'E': BridgeGenericParam($extends: $Jumper.$declaration.type.type.annotate.type),
-      },
+      isAbstract: true,
     ),
     constructors: {
       '': BridgeFunctionDef(
         returns: $type.annotate,
-        namedParams: [
-          'entity'.param(const BridgeTypeRef.ref('E').annotate),
-          'points'.param($double.$declaration.type.type.annotate),
-          'jumpScores'.param($List.$declaration.type.type.annotate),
-        ],
       ).asConstructor
     },
     getters: {
       'props': BridgeFunctionDef(returns: $List.$declaration.type.type.annotate).asMethod,
       'stringify':
           BridgeFunctionDef(returns: $bool.$declaration.type.type.annotate).asMethod,
-      'jumpScores':
-          BridgeFunctionDef(returns: $List.$declaration.type.type.annotate).asMethod,
-      'components':
-          BridgeFunctionDef(returns: $List.$declaration.type.type.annotate).asMethod,
+      'jumpScores': BridgeFunctionDef(
+              returns: BridgeTypeRef(
+        CoreTypes.list,
+        [
+          BridgeTypeRef(
+            $SingleJumpScore.$declaration.type.type.spec,
+            [const BridgeTypeRef.ref('E')],
+          ),
+        ],
+      ).annotate)
+          .asMethod,
+      'components': BridgeFunctionDef(
+              returns: const BridgeTypeRef(CoreTypes.list, [
+        BridgeTypeRef(
+          CoreTypes.double,
+        )
+      ]).annotate)
+          .asMethod,
       'points':
           BridgeFunctionDef(returns: $double.$declaration.type.type.annotate).asMethod,
     },
-    fields: {},
+    fields: {
+      'entity': BridgeFieldDef(const BridgeTypeRef.ref('T').annotate),
+    },
     wrap: true,
   );
 
   @override
-  final CompetitionJumperScore<E> $value;
+  final CompetitionScore<E> $value;
 
   @override
-  CompetitionJumperScore<E> get $reified => $value;
+  CompetitionScore<E> get $reified => $value;
 
   final $Instance _superclass;
-
-  static $Value? $new(Runtime runtime, $Value? target, List<$Value?> args) {
-    return $CompetitionJumperScore.wrap(
-      CompetitionJumperScore(
-        entity: args[0]!.$value as Jumper,
-        points: args[1]!.$value,
-        jumpScores: args[2]!.$value,
-      ),
-    );
-  }
 
   @override
   $Value? $getProperty(Runtime runtime, String identifier) {
@@ -126,5 +122,5 @@ class $CompetitionJumperScore<E extends Jumper>
   }
 
   @override
-  List<SingleJumpScore<E>> get jumpScores => $value.jumpScores;
+  List<SingleJumpScore<E>> get jumpScores => $value.jumpScores.cast();
 }

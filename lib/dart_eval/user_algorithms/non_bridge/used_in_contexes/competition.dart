@@ -55,10 +55,10 @@ class $Competition<E> implements Competition<E>, $Instance {
   );
 
   @override
-  final Competition $value;
+  final Competition<E> $value;
 
   @override
-  Competition get $reified => $value;
+  Competition<E> get $reified => $value;
 
   final $Instance _superclass;
 
@@ -129,7 +129,7 @@ class $Competition<E> implements Competition<E>, $Instance {
   Hill get hill => $Hill.wrap($value.hill);
 
   @override
-  List<Object> get labels => $List.wrap($value.labels);
+  List<Object> get labels => $value.labels;
 
   @override
   CompetitionRulesProvider<E> get rules => $CompetitionRulesProvider.wrap($value.rules);

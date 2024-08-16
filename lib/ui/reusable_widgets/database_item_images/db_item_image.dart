@@ -40,7 +40,6 @@ class _DbItemImageState<T> extends State<DbItemImage<T>> {
       height: widget.height,
       fit: widget.fit,
       errorBuilder: (context, error, stackTrace) {
-        print('error builder');
         if (filePath?.lastNChars(4) == '.svg') {
           if (!_svgDialogIsOpened) {
             scheduleMicrotask(() async {

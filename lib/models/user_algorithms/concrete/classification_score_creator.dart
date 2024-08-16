@@ -1,7 +1,6 @@
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/user_algorithms/entity_related_algorithm_context.dart';
 import 'package:sj_manager/models/user_algorithms/unary_algorithm.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/classification_score.dart';
 
 class ClassificationScoreCreatingContext<E> extends EntityRelatedAlgorithmContext<E> {
@@ -17,5 +16,5 @@ class ClassificationScoreCreatingContext<E> extends EntityRelatedAlgorithmContex
   final ClassificationScore classificationScore;
 }
 
-abstract class ClassificationScoreCreator
-    implements UnaryAlgorithm<ClassificationScoreCreatingContext, ClassificationScore> {}
+abstract class ClassificationScoreCreator<S extends ClassificationScore>
+    implements UnaryAlgorithm<ClassificationScoreCreatingContext, S> {}
