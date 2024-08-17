@@ -22,7 +22,7 @@ class EventSeriesCalendarPresetInfoListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    final tile = ListTile(
       leading: const Icon(Symbols
           .calendar_month), // TODO: Logo of assigned event series, or calendar icon
       title: Text(eventSeriesCalendarPreset.name),
@@ -31,5 +31,11 @@ class EventSeriesCalendarPresetInfoListTile extends StatelessWidget {
       selectedTileColor: Theme.of(context).colorScheme.surfaceContainer,
       splashColor: Theme.of(context).colorScheme.surfaceContainerHighest,
     );
+    return reorderable
+        ? ReorderableDragStartListener(
+            index: indexInList!,
+            child: tile,
+          )
+        : tile;
   }
 }

@@ -17,7 +17,7 @@ class CountryTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          country.name,
+          country.name(context),
           style: Theme.of(context).textTheme.titleLarge,
         ),
         const Gap(10),

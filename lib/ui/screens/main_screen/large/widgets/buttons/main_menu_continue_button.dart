@@ -38,9 +38,10 @@ class MainMenuContinueButton extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    const CountryFlag(
-                      country: Country(
+                    CountryFlag(
+                      country: Country.monolingual(
                         code: 'bg',
+                        language: 'pl',
                         name: 'Bułgaria',
                       ),
                       height: UiMainMenuConstants.continueButtonSimulationInfoIconSize,

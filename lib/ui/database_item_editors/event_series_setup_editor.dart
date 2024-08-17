@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:sj_manager/errors/translation_not_found.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_image_asset.dart';
@@ -9,6 +10,7 @@ import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
+import 'package:sj_manager/ui/database_item_editors/fields/my_text_form_field.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/event_series_setup_id_help_dialog.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/event_series_setup_priority_help_dialog.dart';
@@ -43,6 +45,17 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
   EventSeriesCalendarPreset? _calendarPreset;
   EventSeriesSetup? _cachedSetup;
   late final ScrollController _scrollController;
+
+  final _priorityFieldKey = GlobalKey<MyNumeralTextFieldState>();
+  final _idFormFieldKey = GlobalKey<FormFieldState>();
+
+  void _validateAndSubmit() {
+    final idIsOk = _idFormFieldKey.currentState!.validate();
+    print('id is ok: $idIsOk');
+    if (idIsOk) {
+      widget.onChange(_constructAndCache());
+    }
+  }
 
   @override
   void initState() {
@@ -97,7 +110,7 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                           key: const Key('name'),
                           controller: _nameController,
                           onChange: () {
-                            widget.onChange(_constructAndCache());
+                            _validateAndSubmit();
                           },
                           labelText: translate(context).name,
                         ),
@@ -105,13 +118,23 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                         Row(
                           children: [
                             Expanded(
-                              child: MyTextField(
+                              child: MyTextFormField(
                                 key: const Key('id'),
+                                textFormFieldKey: _idFormFieldKey,
                                 controller: _idController,
                                 onChange: () {
-                                  widget.onChange(_constructAndCache());
+                                  _validateAndSubmit();
                                 },
-                                labelText: 'Identyfikator',
+                                errorMaxLines: 3,
+                                labelText: translate(context).identifier,
+                                validator: (text) {
+                                  if (text == null || text.isEmpty) {
+                                    return translate(context)
+                                        .chooseUniqueIdForEventSeries;
+                                  }
+                                  return null;
+                                },
+                                //onSaved: (value) => widget.onChange(_constructAndCache()),
                               ),
                             ),
                             const Gap(10),
@@ -133,9 +156,10 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                           children: [
                             Expanded(
                               child: MyNumeralTextField(
+                                key: _priorityFieldKey,
                                 controller: _priorityController,
                                 onChange: () {
-                                  widget.onChange(_constructAndCache());
+                                  _validateAndSubmit();
                                 },
                                 formatters: doubleTextInputFormatters,
                                 labelText: 'Priorytet',
@@ -193,6 +217,7 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                   setState(() {
                     _calendarPreset = preset;
                   });
+                  _validateAndSubmit();
                 },
                 entries: [
                   ...eventSeriesCalendarPresets.map((preset) {
@@ -209,11 +234,15 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
 
   EventSeriesSetup _constructAndCache() {
     final languageCode = context.read<LocaleCubit>().languageCode;
-    final name = _cachedSetup!.name
-        .copyWith(languageCode: languageCode, name: _nameController.text);
+    var changedTranslatedName = _nameController.text;
+    if (changedTranslatedName.isEmpty) {
+      changedTranslatedName = translate(context).unnamed;
+    }
+    var name = _cachedSetup!.multilingualName
+        .copyWith(languageCode: languageCode, name: changedTranslatedName);
     final setup = EventSeriesSetup(
       id: _idController.text,
-      name: name,
+      multilingualName: name,
       priority: int.tryParse(_priorityController.text) ?? 1,
       calendarPreset: _calendarPreset,
     );
@@ -229,9 +258,13 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
   }
 
   void _fillFields(EventSeriesSetup setup) {
-    final languageCode = context.read<LocaleCubit>().languageCode;
-    _nameController.text = setup.name.translate(languageCode);
+    try {
+      _nameController.text = setup.name(context);
+    } on TranslationNotFoundError {
+      _nameController.text = translate(context).unnamed;
+    }
     _priorityController.text = setup.priority.toString();
     _idController.text = setup.id;
+    _idFormFieldKey.currentState!.validate();
   }
 }

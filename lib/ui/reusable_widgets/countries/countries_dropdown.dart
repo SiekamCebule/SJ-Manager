@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
+import 'package:sj_manager/ui/providers/locale_notifier.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 
@@ -74,7 +76,7 @@ class CountriesDropdownState extends State<CountriesDropdown> {
         ...countries.map((country) {
           return DropdownMenuEntry(
             value: country,
-            label: country.name,
+            label: country.name(context),
             trailingIcon: CountryFlag(
               country: country,
               width: UiGlobalConstants.smallCountryFlagWidth,
@@ -89,6 +91,6 @@ class CountriesDropdownState extends State<CountriesDropdown> {
     setState(() {
       _selected = selected;
     });
-    controller.text = selected?.name ?? '';
+    controller.text = selected?.multilingualName.translate(context) ?? '';
   }
 }

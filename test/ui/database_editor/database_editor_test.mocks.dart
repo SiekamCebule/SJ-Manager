@@ -33,6 +33,16 @@ class _FakeValueStream_0<T1> extends _i1.SmartFake
         );
 }
 
+class _FakeType_1 extends _i1.SmartFake implements Type {
+  _FakeType_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [TeamsRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -50,6 +60,15 @@ class MockTeamsRepo<T extends _i3.Team> extends _i1.Mock
           Invocation.getter(#items),
         ),
       ) as _i2.ValueStream<Iterable<T>>);
+
+  @override
+  Type get itemsType => (super.noSuchMethod(
+        Invocation.getter(#itemsType),
+        returnValue: _FakeType_1(
+          this,
+          Invocation.getter(#itemsType),
+        ),
+      ) as Type);
 
   @override
   Iterable<T> get last => (super.noSuchMethod(

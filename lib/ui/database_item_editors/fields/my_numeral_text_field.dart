@@ -5,7 +5,7 @@ import 'package:sj_manager/ui/reusable/text_formatters.dart';
 import 'package:sj_manager/utils/doubles.dart';
 import 'package:sj_manager/utils/math.dart';
 
-class MyNumeralTextField extends StatelessWidget {
+class MyNumeralTextField extends StatefulWidget {
   const MyNumeralTextField({
     super.key,
     this.enabled = true,
@@ -16,11 +16,12 @@ class MyNumeralTextField extends StatelessWidget {
     required this.labelText,
     this.suffixText,
     required this.step,
-    this.min,
-    this.max,
+    required this.min,
+    required this.max,
+    this.initial,
     this.focusNode,
     this.maxDecimalPlaces,
-  });
+  }) : assert(initial == null || (initial >= min && initial <= max));
 
   final bool enabled;
   final VoidCallback onChange;
@@ -30,10 +31,26 @@ class MyNumeralTextField extends StatelessWidget {
   final String labelText;
   final String? suffixText;
   final num step;
-  final num? min;
-  final num? max;
+  final num min;
+  final num max;
+  final num? initial;
   final FocusNode? focusNode;
   final int? maxDecimalPlaces;
+
+  @override
+  State<MyNumeralTextField> createState() => MyNumeralTextFieldState();
+}
+
+class MyNumeralTextFieldState extends State<MyNumeralTextField> {
+  @override
+  void initState() {
+    if (widget.initial != null) {
+      widget.controller.text = widget.initial.toString();
+    } else {
+      widget.controller.text = widget.min.toString();
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,39 +59,39 @@ class MyNumeralTextField extends StatelessWidget {
         children: [
           Expanded(
             child: TextField(
-              enabled: enabled,
-              controller: controller,
+              enabled: widget.enabled,
+              controller: widget.controller,
               decoration: InputDecoration(
-                label: Text(labelText),
+                label: Text(widget.labelText),
                 border: const OutlineInputBorder(),
-                suffixText: suffixText,
+                suffixText: widget.suffixText,
               ),
               inputFormatters: [
-                ...formatters,
+                ...widget.formatters,
                 _numberInRangeEnforcer,
-                if (maxDecimalPlaces != null)
-                  NDecimalPlacesEnforcer(decimalPlaces: maxDecimalPlaces!)
+                if (widget.maxDecimalPlaces != null)
+                  NDecimalPlacesEnforcer(decimalPlaces: widget.maxDecimalPlaces!)
               ],
-              onSubmitted: (value) => onChange(),
-              onTapOutside: (event) => onChange(),
-              focusNode: focusNode,
+              onSubmitted: (value) => widget.onChange(),
+              onTapOutside: (event) => widget.onChange(),
+              focusNode: widget.focusNode,
             ),
           ),
-          ...buttons ?? [],
+          ...widget.buttons ?? [],
           IconButton(
-            onPressed: enabled
+            onPressed: widget.enabled
                 ? () {
-                    var decremented = _numberFromController - step;
-                    if (maxDecimalPlaces != null) {
+                    var decremented = _numberFromController - widget.step;
+                    if (widget.maxDecimalPlaces != null) {
                       decremented = preparedNumber(decremented.toDouble());
                     }
-                    controller.text = _numberInRangeEnforcer
+                    widget.controller.text = _numberInRangeEnforcer
                         .formatEditUpdate(
-                            controller.value,
-                            controller.value
+                            widget.controller.value,
+                            widget.controller.value
                                 .copyWith(text: decremented.toString()))
                         .text;
-                    onChange();
+                    widget.onChange();
                   }
                 : null,
             icon: const Icon(
@@ -82,19 +99,19 @@ class MyNumeralTextField extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: enabled
+            onPressed: widget.enabled
                 ? () {
-                    var incremented = _numberFromController + step;
-                    if (maxDecimalPlaces != null) {
+                    var incremented = _numberFromController + widget.step;
+                    if (widget.maxDecimalPlaces != null) {
                       incremented = preparedNumber(incremented.toDouble());
                     }
-                    controller.text = _numberInRangeEnforcer
+                    widget.controller.text = _numberInRangeEnforcer
                         .formatEditUpdate(
-                            controller.value,
-                            controller.value
+                            widget.controller.value,
+                            widget.controller.value
                                 .copyWith(text: incremented.toString()))
                         .text;
-                    onChange();
+                    widget.onChange();
                   }
                 : null,
             icon: const Icon(Symbols.add),
@@ -105,15 +122,15 @@ class MyNumeralTextField extends StatelessWidget {
   }
 
   double preparedNumber(double number) {
-    return double.parse(minimizeDecimalPlaces(
-        roundToNDecimalPlaces(number, maxDecimalPlaces!)));
+    return double.parse(
+        minimizeDecimalPlaces(roundToNDecimalPlaces(number, widget.maxDecimalPlaces!)));
   }
 
   NumberInRangeEnforcer get _numberInRangeEnforcer {
-    return NumberInRangeEnforcer(min: min, max: max);
+    return NumberInRangeEnforcer(min: widget.min, max: widget.max);
   }
 
   num get _numberFromController {
-    return num.parse(controller.text);
+    return num.parse(widget.controller.text);
   }
 }

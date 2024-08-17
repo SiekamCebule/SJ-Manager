@@ -60,7 +60,8 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
               items.cast<CompetitionRulesPreset>(),
               filters.cast<Filter<CompetitionRulesPreset>>());
         } else {
-          throw UnsupportedError('Unsupported item type: $itemType');
+          throw UnsupportedError(
+              '(LocalDbFilteredItemsCubit) Unsupported item type: $itemType');
         }
 
         emit(state.copyWith(type: repo.itemsType, items: filtered));
@@ -88,10 +89,4 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
       CompetitionRulesPreset: [],
     },
   );
-}
-
-extension Test<T> on List<T> {
-  List<TT> castByOther<TT>(List<TT> other) {
-    return cast<TT>();
-  }
 }

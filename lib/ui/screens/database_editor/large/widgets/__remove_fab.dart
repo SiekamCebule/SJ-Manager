@@ -18,7 +18,10 @@ class _RemoveFab extends StatelessWidget {
           return FloatingActionButton(
             key: const ValueKey('removeFab'),
             heroTag: 'removeFab',
-            backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
+            backgroundColor: Theme.of(context)
+                .colorScheme
+                .tertiaryContainer
+                .blendWithBg(Theme.of(context).brightness, 0.2), // TODO: Dopasować
             onPressed: () async {
               var subtraction = 0;
               for (var removeIndex in selectedIndexesRepo.state) {

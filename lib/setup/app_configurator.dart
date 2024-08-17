@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sj_manager/exceptions/loading_database_failed_exception.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
@@ -89,7 +90,11 @@ class AppConfigurator {
 
   Future<void> loadDatabase() async {
     for (final loader in loaders) {
-      await loader.load();
+      try {
+        await loader.load();
+      } on LoadingDatabaseFailedException {
+        break;
+      }
     }
   }
 }

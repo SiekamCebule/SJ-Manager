@@ -1,13 +1,29 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sj_manager/errors/translation_not_found.dart';
+import 'package:sj_manager/json/json_types.dart';
+import 'package:sj_manager/ui/providers/locale_notifier.dart';
+
 class MultilingualString {
   const MultilingualString({
     required this.namesByLanguage,
   });
 
+  const MultilingualString.empty() : namesByLanguage = const {};
+
   final Map<String, String> namesByLanguage;
 
-  String translate(String languageCode) {
+  String translate(BuildContext context) {
+    final code = context.read<LocaleCubit>().languageCode;
+    return byCode(code);
+  }
+
+  String byCode(String languageCode) {
     if (!namesByLanguage.containsKey(languageCode)) {
-      throw StateError('The string does not appear in the \'$languageCode\' language');
+      throw TranslationNotFoundError(
+        multilingualString: this,
+        languageCode: languageCode,
+      );
     }
     return namesByLanguage[languageCode]!;
   }
@@ -16,10 +32,6 @@ class MultilingualString {
     required String languageCode,
     required String name,
   }) {
-    if (!namesByLanguage.containsKey(languageCode)) {
-      throw StateError(
-          'Cannot replace name in $languageCode language, because it is not even contained in the multilingual string');
-    }
     final newNames = Map.of(namesByLanguage);
     newNames[languageCode] = name;
     return MultilingualString(namesByLanguage: newNames);
@@ -29,4 +41,10 @@ class MultilingualString {
   String toString() {
     return namesByLanguage.toString();
   }
+
+  Json toJson() => namesByLanguage;
+
+  static MultilingualString fromJson(Json json) => MultilingualString(
+        namesByLanguage: json.cast(),
+      );
 }

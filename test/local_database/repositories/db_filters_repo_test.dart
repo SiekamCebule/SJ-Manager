@@ -16,7 +16,8 @@ void main() {
     });
     test('integration test', () async {
       final jumpersFilters = [
-        JumpersFilterByCountry(countries: {const Country(code: 'pl', name: 'Polska')}),
+        JumpersFilterByCountry(
+            countries: {Country.monolingual(code: 'pl', language: 'pl', name: 'Polska')}),
         const JumpersFilterBySearch(
             searchAlgorithm: DefaultJumperMatchingByTextAlgorithm(text: 'Kamil Sto')),
       ];
@@ -25,7 +26,9 @@ void main() {
       }).toList();
       final hillsFilters = [
         const HillsFilterByTypeBySie(type: HillTypeBySize.large),
-        HillsFilterByCountry(countries: {const Country(code: 'at', name: 'Austria')}),
+        HillsFilterByCountry(countries: {
+          Country.monolingual(code: 'at', language: 'pl', name: 'Austria')
+        }),
       ];
 
       repo.set<MaleJumper>(forMales);

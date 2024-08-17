@@ -45,8 +45,8 @@ void main() {
       );
     });
     test('filtering', () async {
-      const poland = Country(code: 'pl', name: 'Polska');
-      const norway = Country(code: 'no', name: 'Norwegia');
+      final poland = Country.monolingual(code: 'pl', language: 'pl', name: 'Polska');
+      final norway = Country.monolingual(code: 'no', language: 'pl', name: 'Norwegia');
       final males = [
         MaleJumper.empty(country: poland),
         MaleJumper.empty(country: poland),
@@ -58,8 +58,8 @@ void main() {
         FemaleJumper.empty(country: norway)
       ];
       final hills = [
-        const Hill.empty(country: norway).copyWith(locality: 'Lillehammer'),
-        const Hill.empty(country: norway).copyWith(locality: 'Oslo')
+        Hill.empty(country: norway).copyWith(locality: 'Lillehammer'),
+        Hill.empty(country: norway).copyWith(locality: 'Oslo')
       ];
 
       final malesSubject = BehaviorSubject<List<MaleJumper>>.seeded([]);

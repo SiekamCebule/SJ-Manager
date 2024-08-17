@@ -12,6 +12,7 @@ import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
+import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
 import 'package:path/path.dart' as path;
@@ -30,13 +31,14 @@ class CopiedLocalDbCubit extends Cubit<ItemsReposRegistry?> {
   }
 
   Future<void> saveChangesToOriginalRepos(BuildContext context) async {
-    for (var repo in state!.last) {
-      originalDb.byTypeArgument(repo.runtimeType).set(repo.last);
+    final reposMayChange = state!.last.where((repo) => repo is EditableItemsRepo);
+    for (var repo in reposMayChange) {
+      final itemsType = repo.itemsType;
+      originalDb.byTypeArgument(itemsType).set(repo.last);
       if (!context.mounted) return;
       final file = databaseFile(context.read(),
-          context.read<DbItemsFilePathsRegistry>().byTypeArgument(repo.runtimeType));
-      await _saveItemsToJsonByTypeArgument(repo.runtimeType,
-          context: context, file: file);
+          context.read<DbItemsFilePathsRegistry>().byTypeArgument(itemsType));
+      await _saveItemsToJsonByTypeArgument(itemsType, context: context, file: file);
     }
   }
 
