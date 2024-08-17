@@ -9,7 +9,7 @@ class SvgIsNotSupportedDialog extends StatelessWidget {
     return AlertDialog(
       title: const Text('Ach ten SVG...'),
       content: const Text(
-        'Niestety, format zdjęcia SVG nie jest wspierany dla zdjęć w tym miejscu.\n Nie wiesz o co chodzi? Prawdopodobnie jedno z twoich zdjęć ma rozszerzenie .svg!',
+        'Format zdjęcia SVG nie jest tu jeszcze wspierany. Pracujemy nad tym!',
       ),
       actions: [
         TextButton(

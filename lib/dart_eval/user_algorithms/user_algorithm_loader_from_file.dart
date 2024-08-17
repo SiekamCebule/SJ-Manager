@@ -29,6 +29,7 @@ import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes
 import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/hill.dart';
 import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/jumper.dart';
 import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/jumper_skills.dart';
+import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/multilingual_string.dart';
 import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/score.dart';
 import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/simple_jump.dart';
 import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/single_jump_score.dart';
@@ -106,7 +107,10 @@ class UserAlgorithmLoaderFromFile<T extends UserAlgorithm> {
       ..registerBridgeFunc(
           'package:sj_manager/bridge.dart', 'ValueRepo.', $ValueRepo.$new)
       ..registerBridgeFunc('package:sj_manager/bridge.dart', 'CompetitionRulesPreset.',
+          $CompetitionRulesPreset.$new)
+      ..registerBridgeFunc('package:sj_manager/bridge.dart', 'MultilingualString.',
           $CompetitionRulesPreset.$new);
+    ;
 
     runtime.registerBridgeEnumValues(
         'package:sj_manager/bridge.dart', 'CompetitionType', $CompetitionType.$values);
@@ -187,6 +191,7 @@ final userAlgorithmBridgeClasses = <BridgeClassDef>[
   $Hill.$declaration,
   $JumperSkills.$declaration,
   $Jumper.$declaration,
+  $MultilingualString.$declaration,
   $Score.$declaration,
   $SimpleJump.$declaration,
   $SingleJumpScore.$declaration,

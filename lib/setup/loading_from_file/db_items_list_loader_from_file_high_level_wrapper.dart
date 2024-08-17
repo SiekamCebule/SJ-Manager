@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart';
+import 'package:sj_manager/exceptions/loading_database_failed_exception.dart';
 import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
@@ -54,6 +55,7 @@ class DbItemsListLoaderFromFileHighLevelWrapper<T extends Object> {
               error: error,
             ),
           );
+          throw LoadingDatabaseFailedException(lowLevelError: error);
         }
       },
       onFinish: (loaded) {

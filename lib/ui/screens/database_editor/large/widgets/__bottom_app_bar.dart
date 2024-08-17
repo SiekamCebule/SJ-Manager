@@ -13,9 +13,10 @@ class _BottomAppBar extends StatelessWidget {
             return const _ForJumpers();
           } else if (itemsType == Hill) {
             return const _ForHills();
-          } else {
-            return const SizedBox();
           }
+          throw StateError(
+            'A db editor bottom app bar for items of type $itemsType does not exist',
+          );
         },
       ),
     );

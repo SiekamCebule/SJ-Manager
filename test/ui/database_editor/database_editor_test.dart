@@ -43,11 +43,12 @@ import '../../local_database/bloc/database_editing_logic_test.mocks.dart';
 void main() {
   const MethodChannel flutterWindowCloseChannel = MethodChannel('flutter_window_close');
 
-  const slovenia = Country(code: 'si', name: 'Slovenia');
-  const switzerland = Country(code: 'ch', name: 'Switzerland');
-  const germany = Country(code: 'de', name: 'Germany');
-  const noneCountry = Country(code: 'none', name: 'None');
-  const countries = [noneCountry, slovenia, switzerland, germany];
+  final slovenia = Country.monolingual(code: 'si', language: 'pl', name: 'Slovenia');
+  final switzerland =
+      Country.monolingual(code: 'ch', language: 'pl', name: 'Switzerland');
+  final germany = Country.monolingual(code: 'de', language: 'pl', name: 'Germany');
+  final noneCountry = Country.monolingual(code: 'none', language: 'pl', name: 'None');
+  final countries = [noneCountry, slovenia, switzerland, germany];
 
   final maleJumpers = [
     MaleJumper(
@@ -58,14 +59,14 @@ void main() {
       skills: JumperSkills.empty
           .copyWith(qualityOnLargerHills: 67, qualityOnSmallerHills: 44),
     ),
-    const MaleJumper(
+    MaleJumper(
       name: 'Maciej',
       surname: 'Bąk',
       country: switzerland,
       age: 34,
       skills: JumperSkills.empty,
     ),
-    const MaleJumper(
+    MaleJumper(
       name: 'Caroll',
       surname: 'King',
       country: switzerland,
@@ -79,7 +80,7 @@ void main() {
     FemaleJumper.empty(country: switzerland).copyWith(name: 'Lisa'),
     FemaleJumper.empty(country: slovenia).copyWith(name: 'Nika'),
   ];
-  const hills = [
+  final hills = [
     Hill(
       name: 'Letalnica',
       locality: 'Planica',

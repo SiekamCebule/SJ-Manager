@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:sj_manager/errors/translation_not_found.dart';
+import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_image_asset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/ui/providers/locale_notifier.dart';
@@ -26,8 +28,13 @@ class EventSeriesSetupInfoListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final languageCode = context.watch<LocaleCubit>().languageCode;
-    return ListTile(
+    late final String translatedName;
+    try {
+      translatedName = eventSeriesSetup.name(context);
+    } on TranslationNotFoundError {
+      translatedName = translate(context).unnamed;
+    }
+    final tile = ListTile(
       leading: DbItemImage<EventSeriesTrophyImageWrapper>(
         width: 40,
         height: 40,
@@ -38,11 +45,18 @@ class EventSeriesSetupInfoListTile extends StatelessWidget {
           size: 40,
         ),
       ),
-      title: Text(eventSeriesSetup.name.translate(languageCode)),
+      title: Text(translatedName),
       onTap: onTap,
       selected: selected,
       selectedTileColor: Theme.of(context).colorScheme.surfaceContainer,
       splashColor: Theme.of(context).colorScheme.surfaceContainerHighest,
     );
+
+    return reorderable
+        ? ReorderableDragStartListener(
+            index: indexInList!,
+            child: tile,
+          )
+        : tile;
   }
 }

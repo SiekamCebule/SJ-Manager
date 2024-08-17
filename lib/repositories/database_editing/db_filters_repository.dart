@@ -4,9 +4,7 @@ import 'package:sj_manager/filters/filter.dart';
 
 class DbFiltersRepo with EquatableMixin {
   DbFiltersRepo({Map<Type, BehaviorSubject<List<Filter>>> initial = const {}})
-      : _filtersByType = Map.of(initial) {
-    print('at behinning: $_filtersByType');
-  }
+      : _filtersByType = Map.of(initial);
 
   final Map<Type, BehaviorSubject<List<Filter>>> _filtersByType;
 
@@ -44,15 +42,13 @@ class DbFiltersRepo with EquatableMixin {
     /*if (!containsType(T)) {
       throw _doesNotHaveTypeInMap(T);
     }*/
-    print('contains type $T (T): ${containsType(T)}. filters by type: $_filtersByType');
     return (_filtersByType[T]?.stream as ValueStream<List<Filter<T>>>?) ?? _neverStream();
   }
 
   ValueStream<List<Filter>> streamByTypeArgument(Type type) {
     /*if (!containsType(type)) {
-      throw _doesNotHaveTypeInMap(T);
+      throw _doesNotHaveTypeInMap(type);
     }*/
-    print('contains type $type: ${containsType(type)}. filters by type: $_filtersByType');
     return _filtersByType[type]?.stream ?? _neverStream();
   }
 

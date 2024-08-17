@@ -19,7 +19,7 @@ class SelectedCountryCaption extends StatelessWidget {
     return Row(
       children: [
         Text(
-          country.name,
+          country.name(context),
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const Gap(10),

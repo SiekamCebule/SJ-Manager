@@ -13,7 +13,7 @@ class HelpIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton.filledTonal(
+    return IconButton(
       onPressed: onPressed,
       icon: Icon(
         Symbols.help,

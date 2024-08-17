@@ -102,5 +102,8 @@
     "blue": "Niebieski",
     "yellow": "Żółty",
     "red": "Czerwony",
-    "czech": "Czeski"
+    "czech": "Czeski",
+    "unnamed": "Bez nazwy",
+    "chooseUniqueIdForEventSeries": "Potrzebujemy unikalnego ID dla tych rozgrywek",
+    "identifier": "Identyfikator"
 }

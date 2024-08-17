@@ -75,8 +75,10 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
         if (!_closed && shouldClose) {
           _closed = shouldClose;
         }
+        _cleanResources();
         return shouldClose;
       } else {
+        _cleanResources();
         return true;
       }
     });
@@ -88,6 +90,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       MaleJumper: BehaviorSubject.seeded([]),
       FemaleJumper: BehaviorSubject.seeded([]),
       Hill: BehaviorSubject.seeded([]),
+      EventSeriesSetup: BehaviorSubject.seeded([]),
     });
     _selectedIndexesRepo = SelectedIndexesRepo();
   }
@@ -105,7 +108,14 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    _bodyAnimationController.dispose();
+    Future(() {
+      _bodyAnimationController.dispose();
+      FlutterWindowClose.setWindowShouldCloseHandler(null);
+    });
+    super.dispose();
+  }
+
+  void _cleanResources() {
     _copiedDbCubit.close();
     _copiedDbCubit.dispose();
     _dbChangeStatusCubit.close();
@@ -115,8 +125,6 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     _countriesForMales.dispose();
     _countriesForFemales.dispose();
     _countriesForBothSexes.dispose();
-    FlutterWindowClose.setWindowShouldCloseHandler(null);
-    super.dispose();
   }
 
   Future<String?> _showSaveChangesDialog() async {
@@ -174,6 +182,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                           if (didPop || _closed) {
                             return;
                           } else if (!_dbChangeStatusCubit.state) {
+                            _cleanResources();
                             Navigator.pop(context);
                             return;
                           }
@@ -188,6 +197,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                             if (!context.mounted) return;
                             router.pop(context);
                           }
+                          _cleanResources();
                         },
                         child: StreamBuilder<Object>(
                             stream: StreamGroup.merge([
@@ -199,13 +209,18 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                               final shouldShowFabs = !_filtersRepo.hasValidFilter;
                               final shouldShowAddFab = selectedIndexes.length <= 1;
                               final shouldShowRemoveFab = selectedIndexes.isNotEmpty;
+                              final shouldShowBottomAppBar =
+                                  _itemsTypeCubit.state == MaleJumper ||
+                                      _itemsTypeCubit.state == FemaleJumper ||
+                                      _itemsTypeCubit.state == Hill;
 
                               const fabsGap =
                                   Gap(UiDatabaseEditorConstants.verticalSpaceBetweenFabs);
 
                               return Scaffold(
                                 appBar: const _AppBar(),
-                                bottomNavigationBar: const _BottomAppBar(),
+                                bottomNavigationBar:
+                                    shouldShowBottomAppBar ? const _BottomAppBar() : null,
                                 body: Row(
                                   children: [
                                     fabsGap,

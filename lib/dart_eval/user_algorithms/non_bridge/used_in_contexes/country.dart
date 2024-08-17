@@ -1,9 +1,12 @@
 import 'package:dart_eval/dart_eval_bridge.dart';
 import 'package:dart_eval/dart_eval_extensions.dart';
 import 'package:dart_eval/stdlib/core.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/equatable_mixin.dart';
+import 'package:sj_manager/dart_eval/user_algorithms/non_bridge/used_in_contexes/multilingual_string.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
+import 'package:sj_manager/utils/multilingual_string.dart';
 
 class $Country implements Country, $Instance {
   $Country.wrap(this.$value) : _superclass = $Object($value);
@@ -28,13 +31,13 @@ class $Country implements Country, $Instance {
         returns: $type.annotate,
         namedParams: [
           'code'.param($String.$declaration.type.type.annotate),
-          'name'.param($String.$declaration.type.type.annotate),
+          'name'.param($MultilingualString.$declaration.type.type.annotate),
         ],
       ).asConstructor
     },
     fields: {
       'code': BridgeFieldDef($String.$declaration.type.type.annotate),
-      'name': BridgeFieldDef($String.$declaration.type.type.annotate),
+      'name': BridgeFieldDef($MultilingualString.$declaration.type.type.annotate),
     },
     wrap: true,
   );
@@ -43,7 +46,7 @@ class $Country implements Country, $Instance {
     return $Country.wrap(
       Country(
         code: args[0]!.$value,
-        name: args[1]!.$value,
+        multilingualName: args[1]!.$value,
       ),
     );
   }
@@ -62,7 +65,7 @@ class $Country implements Country, $Instance {
       case 'code':
         return $String($value.code);
       case 'name':
-        return $String($value.name);
+        return $MultilingualString.wrap($value.multilingualName);
       case 'props':
         return $List.wrap($value.props);
       case 'stringify':
@@ -90,10 +93,15 @@ class $Country implements Country, $Instance {
   String get code => $value.code;
 
   @override
-  String get name => $value.name;
+  MultilingualString get multilingualName => $value.multilingualName;
 
   @override
-  Country copyWith({String? code, String? name}) {
+  String name(BuildContext context) {
+    return $value.name(context);
+  }
+
+  @override
+  Country copyWith({String? code, MultilingualString? multilingualName}) {
     throw UnimplementedError();
   }
 

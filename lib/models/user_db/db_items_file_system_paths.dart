@@ -1,4 +1,4 @@
-class DbItemsFileSystemPaths {
+abstract class DbItemsFileSystemPaths {
   DbItemsFileSystemPaths({
     Map<Type, String> initial = const {},
   }) : _registry = Map.of(initial);

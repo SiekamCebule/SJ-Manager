@@ -13,7 +13,7 @@ class EventSeries {
           calendar: const EventSeriesCalendar.empty(),
           setup: const EventSeriesSetup(
             id: '',
-            name: MultilingualString(namesByLanguage: {}),
+            multilingualName: MultilingualString(namesByLanguage: {}),
             priority: 0,
           ),
         );

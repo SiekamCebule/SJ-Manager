@@ -77,6 +77,9 @@ class NumberInRangeEnforcer extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.text.isEmpty) {
+      return oldValue;
+    }
     final number = num.parse(newValue.text);
     if (min != null && number < min!) {
       return newValue.copyWith(text: min.toString());
@@ -111,8 +114,7 @@ class NDecimalPlacesEnforcer extends TextInputFormatter {
       return oldValue;
     }
     final decimalIndex = newValue.text.indexOf('.');
-    if (decimalIndex == -1 ||
-        newValue.text.length - decimalIndex - 1 <= decimalPlaces) {
+    if (decimalIndex == -1 || newValue.text.length - decimalIndex - 1 <= decimalPlaces) {
       return newValue;
     }
     return oldValue;

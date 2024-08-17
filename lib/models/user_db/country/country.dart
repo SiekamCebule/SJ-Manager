@@ -1,8 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:sj_manager/json/json_types.dart';
+import 'package:sj_manager/utils/multilingual_string.dart';
 
 part 'country.g.dart';
 
@@ -10,42 +11,55 @@ part 'country.g.dart';
 class Country with EquatableMixin {
   const Country({
     required this.code,
-    required this.name,
+    required this.multilingualName,
   });
+
+  Country.monolingual(
+      {required String code, required String language, required String name})
+      : this(
+          code: code,
+          multilingualName: MultilingualString(
+            namesByLanguage: {language: name},
+          ),
+        );
+
   final String code;
-  final String name;
+
+  @JsonKey(fromJson: MultilingualString.fromJson, toJson: _multilingualStringToJson)
+  final MultilingualString multilingualName;
+  static Json _multilingualStringToJson(MultilingualString string) {
+    return string.toJson();
+  }
+
+  String name(BuildContext context) {
+    return multilingualName.translate(context);
+  }
 
   const Country.emptyNone()
       : code = 'none',
-        name = '';
+        multilingualName = const MultilingualString.empty();
 
   static Country fromJson(Json json) => _$CountryFromJson(json);
-
-  static Country fromMultilingualJson(Json json, String languageCode) {
-    final name = stringFromMultilingualJson(json,
-        languageCode: languageCode, parameterName: 'name');
-    return Country(code: json['code'] as String, name: name);
-  }
 
   Json toJson() => _$CountryToJson(this);
 
   @override
   String toString() {
-    return '$name ($code)';
+    return '$multilingualName ($code)';
   }
 
   Country copyWith({
     String? code,
-    String? name,
+    MultilingualString? multilingualName,
   }) {
     return Country(
       code: code ?? this.code,
-      name: name ?? this.name,
+      multilingualName: multilingualName ?? this.multilingualName,
     );
   }
 
   @override
-  List<Object?> get props => [code, name];
+  List<Object?> get props => [code, multilingualName];
 }
 
 String stringFromMultilingualJson(Json json,

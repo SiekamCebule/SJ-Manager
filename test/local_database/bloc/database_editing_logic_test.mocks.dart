@@ -38,9 +38,8 @@ class _FakeValueStream_0<T1> extends _i1.SmartFake
         );
 }
 
-class _FakeEditableItemsRepo_1<T1> extends _i1.SmartFake
-    implements _i3.EditableItemsRepo<T1> {
-  _FakeEditableItemsRepo_1(
+class _FakeType_1 extends _i1.SmartFake implements Type {
+  _FakeType_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -49,8 +48,19 @@ class _FakeEditableItemsRepo_1<T1> extends _i1.SmartFake
         );
 }
 
-class _FakeCountry_2 extends _i1.SmartFake implements _i4.Country {
-  _FakeCountry_2(
+class _FakeEditableItemsRepo_2<T1> extends _i1.SmartFake
+    implements _i3.EditableItemsRepo<T1> {
+  _FakeEditableItemsRepo_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeCountry_3 extends _i1.SmartFake implements _i4.Country {
+  _FakeCountry_3(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -84,6 +94,15 @@ class MockEditableItemsRepo<T> extends _i1.Mock
       ) as _i2.ValueStream<List<T>>);
 
   @override
+  Type get itemsType => (super.noSuchMethod(
+        Invocation.getter(#itemsType),
+        returnValue: _FakeType_1(
+          this,
+          Invocation.getter(#itemsType),
+        ),
+      ) as Type);
+
+  @override
   int get lastLength => (super.noSuchMethod(
         Invocation.getter(#lastLength),
         returnValue: 0,
@@ -95,7 +114,7 @@ class MockEditableItemsRepo<T> extends _i1.Mock
           #clone,
           [],
         ),
-        returnValue: _FakeEditableItemsRepo_1<T>(
+        returnValue: _FakeEditableItemsRepo_2<T>(
           this,
           Invocation.method(
             #clone,
@@ -217,7 +236,7 @@ class MockCountriesRepo extends _i1.Mock implements _i6.CountriesRepo {
   @override
   _i4.Country get none => (super.noSuchMethod(
         Invocation.getter(#none),
-        returnValue: _FakeCountry_2(
+        returnValue: _FakeCountry_3(
           this,
           Invocation.getter(#none),
         ),
@@ -231,6 +250,15 @@ class MockCountriesRepo extends _i1.Mock implements _i6.CountriesRepo {
           Invocation.getter(#items),
         ),
       ) as _i2.ValueStream<Iterable<_i4.Country>>);
+
+  @override
+  Type get itemsType => (super.noSuchMethod(
+        Invocation.getter(#itemsType),
+        returnValue: _FakeType_1(
+          this,
+          Invocation.getter(#itemsType),
+        ),
+      ) as Type);
 
   @override
   Iterable<_i4.Country> get last => (super.noSuchMethod(
@@ -250,7 +278,7 @@ class MockCountriesRepo extends _i1.Mock implements _i6.CountriesRepo {
           #byCode,
           [code],
         ),
-        returnValue: _FakeCountry_2(
+        returnValue: _FakeCountry_3(
           this,
           Invocation.method(
             #byCode,
@@ -295,6 +323,15 @@ class MockTeamsRepo<T extends _i7.Team> extends _i1.Mock
           Invocation.getter(#items),
         ),
       ) as _i2.ValueStream<Iterable<T>>);
+
+  @override
+  Type get itemsType => (super.noSuchMethod(
+        Invocation.getter(#itemsType),
+        returnValue: _FakeType_1(
+          this,
+          Invocation.getter(#itemsType),
+        ),
+      ) as Type);
 
   @override
   Iterable<T> get last => (super.noSuchMethod(
