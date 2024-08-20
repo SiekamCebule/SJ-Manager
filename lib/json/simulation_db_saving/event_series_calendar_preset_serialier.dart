@@ -2,7 +2,7 @@ import 'package:sj_manager/json/simulation_db_saving/simulation_db_part_serializ
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
-import 'package:sj_manager/repositories/generic/ids_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class EventSeriesCalendarPresetSerializer
     implements SimulationDbPartSerializer<EventSeriesCalendarPreset> {
@@ -11,7 +11,7 @@ class EventSeriesCalendarPresetSerializer
     required this.calendarSerializer,
   });
 
-  final IdsRepo idsRepo;
+  final ItemsIdsRepo idsRepo;
   final SimulationDbPartSerializer<EventSeriesCalendar> calendarSerializer;
 
   @override
@@ -19,8 +19,6 @@ class EventSeriesCalendarPresetSerializer
     return {
       'name': preset.name,
       'calendar': calendarSerializer.serialize(preset.calendar),
-      if (preset.eventSeries != null) 'eventSeriesId': idsRepo.idOf(preset.eventSeries),
-      if (preset.eventSeries == null) 'eventSeriesId': null,
     };
   }
 }

@@ -4,7 +4,7 @@ import 'package:sj_manager/json/simulation_db_loading/standings_positions_creato
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
-import 'package:sj_manager/repositories/generic/ids_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
 class StandingsLoader<E, S extends Score> implements SimulationDbPartLoader<Standings> {
@@ -15,7 +15,7 @@ class StandingsLoader<E, S extends Score> implements SimulationDbPartLoader<Stan
     required this.positionsCreatorLoader,
   });
 
-  final IdsRepo idsRepo;
+  final ItemsIdsRepo idsRepo;
   final IdGenerator idGenerator;
   final SimulationDbPartLoader<Score> scoreLoader;
   final StandingsPositionsCreatorLoader positionsCreatorLoader;

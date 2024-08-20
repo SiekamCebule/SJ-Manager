@@ -2,7 +2,7 @@ import 'package:sj_manager/models/simulation_db/competition/calendar_records/hig
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record_setup.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition_type.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
@@ -88,21 +88,21 @@ class _Converter {
   Competition<T> _competitionWithPreservedType<T>({
     required Hill hill,
     required DateTime date,
-    required CompetitionRules<T> rules,
+    required DefaultCompetitionRules<T> rules,
     List<Object> labels = const [],
   }) {
-    if (rules is CompetitionRules<Jumper>) {
+    if (rules is DefaultCompetitionRules<Jumper>) {
       return Competition<Jumper>(
         hill: hill,
         date: date,
-        rules: rules as CompetitionRules<Jumper>,
+        rules: rules as DefaultCompetitionRules<Jumper>,
         labels: labels,
       ) as Competition<T>;
-    } else if (rules is CompetitionRules<Team>) {
+    } else if (rules is DefaultCompetitionRules<Team>) {
       return Competition<Team>(
         hill: hill,
         date: date,
-        rules: rules as CompetitionRules<Team>,
+        rules: rules as DefaultCompetitionRules<Team>,
         labels: labels,
       ) as Competition<T>;
     } else {

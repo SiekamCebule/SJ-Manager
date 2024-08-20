@@ -91,6 +91,8 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       FemaleJumper: BehaviorSubject.seeded([]),
       Hill: BehaviorSubject.seeded([]),
       EventSeriesSetup: BehaviorSubject.seeded([]),
+      EventSeriesCalendarPreset: BehaviorSubject.seeded([]),
+      DefaultCompetitionRulesPreset: BehaviorSubject.seeded([]),
     });
     _selectedIndexesRepo = SelectedIndexesRepo();
   }

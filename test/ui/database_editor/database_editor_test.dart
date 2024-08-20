@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/bloc/database_editing/database_items_type_cubit.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
@@ -143,7 +143,7 @@ void main() {
                   EditableItemsRepo<Hill>(initial: hills),
                   EditableItemsRepo<EventSeriesSetup>(initial: []),
                   EditableItemsRepo<EventSeriesCalendarPreset>(initial: []),
-                  EditableItemsRepo<CompetitionRulesPreset>(initial: []),
+                  EditableItemsRepo<DefaultCompetitionRulesPreset>(initial: []),
                   CountriesRepo(initial: countries),
                   MockTeamsRepo(),
                 },

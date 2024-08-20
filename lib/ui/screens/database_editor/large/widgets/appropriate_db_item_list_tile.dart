@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -74,7 +75,7 @@ abstract class DbItemInfoTileFactory {
         onTap: onItemTap,
         selected: selected,
       );
-    } else if (itemType == EventSeriesCalendar) {
+    } else if (itemType == EventSeriesCalendarPreset) {
       return EventSeriesCalendarPresetInfoListTile(
         reorderable: reorderable,
         indexInList: indexInList,
@@ -82,7 +83,7 @@ abstract class DbItemInfoTileFactory {
         onTap: onItemTap,
         selected: selected,
       );
-    } else if (itemType == CompetitionRulesPreset) {
+    } else if (itemType == DefaultCompetitionRulesPreset) {
       return CompetitionRulesPresetInfoListTile(
         reorderable: reorderable,
         indexInList: indexInList,

@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/json/db_items_json.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
@@ -69,8 +69,8 @@ class CopiedLocalDbCubit extends Cubit<ItemsReposRegistry?> {
         file: file,
         context: context,
       );
-    } else if (type == CompetitionRulesPreset) {
-      await _saveItemsToJsonByType<CompetitionRulesPreset>(
+    } else if (type == DefaultCompetitionRulesPreset) {
+      await _saveItemsToJsonByType<DefaultCompetitionRulesPreset>(
         file: file,
         context: context,
       );

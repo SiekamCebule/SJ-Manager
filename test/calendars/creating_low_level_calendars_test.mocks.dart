@@ -4,9 +4,9 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/competition_round_rules.dart'
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_competition_round_rules.dart'
     as _i3;
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart'
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart'
     as _i2;
 
 // ignore_for_file: type=lint
@@ -23,7 +23,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ru
 // ignore_for_file: subtype_of_sealed_class
 
 class _FakeCompetitionRules_0<T1> extends _i1.SmartFake
-    implements _i2.CompetitionRules<T1> {
+    implements _i2.DefaultCompetitionRules<T1> {
   _FakeCompetitionRules_0(
     Object parent,
     Invocation parentInvocation,
@@ -36,17 +36,16 @@ class _FakeCompetitionRules_0<T1> extends _i1.SmartFake
 /// A class which mocks [CompetitionRules].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCompetitionRules<T> extends _i1.Mock
-    implements _i2.CompetitionRules<T> {
+class MockCompetitionRules<T> extends _i1.Mock implements _i2.DefaultCompetitionRules<T> {
   MockCompetitionRules() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  List<_i3.CompetitionRoundRules<T>> get rounds => (super.noSuchMethod(
+  List<_i3.DefaultCompetitionRoundRules<T>> get rounds => (super.noSuchMethod(
         Invocation.getter(#rounds),
-        returnValue: <_i3.CompetitionRoundRules<T>>[],
-      ) as List<_i3.CompetitionRoundRules<T>>);
+        returnValue: <_i3.DefaultCompetitionRoundRules<T>>[],
+      ) as List<_i3.DefaultCompetitionRoundRules<T>>);
 
   @override
   int get roundsCount => (super.noSuchMethod(
@@ -55,13 +54,13 @@ class MockCompetitionRules<T> extends _i1.Mock
       ) as int);
 
   @override
-  _i2.CompetitionRules<T> get competitionRules => (super.noSuchMethod(
+  _i2.DefaultCompetitionRules<T> get competitionRules => (super.noSuchMethod(
         Invocation.getter(#competitionRules),
         returnValue: _FakeCompetitionRules_0<T>(
           this,
           Invocation.getter(#competitionRules),
         ),
-      ) as _i2.CompetitionRules<T>);
+      ) as _i2.DefaultCompetitionRules<T>);
 
   @override
   List<Object?> get props => (super.noSuchMethod(

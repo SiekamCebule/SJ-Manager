@@ -1,26 +1,25 @@
 import 'package:sj_manager/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/competition_round_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_provider.dart';
-import 'package:sj_manager/repositories/generic/ids_repo.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_provider.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class CompetitionRulesProviderSerializer
-    implements SimulationDbPartSerializer<CompetitionRulesProvider> {
+    implements SimulationDbPartSerializer<DefaultCompetitionRulesProvider> {
   const CompetitionRulesProviderSerializer({
     required this.idsRepo,
-    required this.roundRulesSerializer,
+    required this.rulesSerializer,
   });
 
-  final IdsRepo idsRepo;
-  final SimulationDbPartSerializer<CompetitionRoundRules> roundRulesSerializer;
+  final ItemsIdsRepo idsRepo;
+  final SimulationDbPartSerializer<DefaultCompetitionRules> rulesSerializer;
 
   @override
-  Json serialize(CompetitionRulesProvider rulesProvider) {
-    if (rulesProvider is CompetitionRules) {
-      return _serializeRaw(rulesProvider);
-    } else if (rulesProvider is CompetitionRulesPreset) {
+  Json serialize(DefaultCompetitionRulesProvider rulesProvider) {
+    if (rulesProvider is DefaultCompetitionRules) {
+      return rulesSerializer.serialize(rulesProvider);
+    } else if (rulesProvider is DefaultCompetitionRulesPreset) {
       return _serializePreset(rulesProvider);
     } else {
       throw UnsupportedError(
@@ -28,17 +27,7 @@ class CompetitionRulesProviderSerializer
     }
   }
 
-  Json _serializeRaw(CompetitionRules rules) {
-    final roundsJson = rules.rounds.map((json) {
-      return roundRulesSerializer.serialize(json);
-    });
-    return {
-      'type': 'raw',
-      'rounds': roundsJson,
-    };
-  }
-
-  Json _serializePreset(CompetitionRulesPreset rulesPreset) {
+  Json _serializePreset(DefaultCompetitionRulesPreset rulesPreset) {
     return {
       'type': 'fromPreset',
       'presetId': idsRepo.idOf(rulesPreset.competitionRules),

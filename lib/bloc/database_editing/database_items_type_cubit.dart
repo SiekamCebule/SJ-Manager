@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -15,8 +15,8 @@ class DatabaseItemsTypeCubit extends Cubit<Type> {
         1 => FemaleJumper,
         2 => Hill,
         3 => EventSeriesSetup,
-        4 => EventSeriesCalendar,
-        5 => CompetitionRulesPreset,
+        4 => EventSeriesCalendarPreset,
+        5 => DefaultCompetitionRulesPreset,
         _ => throw TypeError(),
       },
     );

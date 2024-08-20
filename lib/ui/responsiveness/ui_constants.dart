@@ -52,4 +52,6 @@ abstract class UiItemEditorsConstants {
 
   static const double hillImageHeight = 175;
   static const double hillImagePlaceholderWidth = 175;
+
+  static const double wideMainActionButtonHeight = 50;
 }

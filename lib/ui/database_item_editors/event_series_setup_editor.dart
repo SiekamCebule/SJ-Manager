@@ -49,14 +49,6 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
   final _priorityFieldKey = GlobalKey<MyNumeralTextFieldState>();
   final _idFormFieldKey = GlobalKey<FormFieldState>();
 
-  void _validateAndSubmit() {
-    final idIsOk = _idFormFieldKey.currentState!.validate();
-    print('id is ok: $idIsOk');
-    if (idIsOk) {
-      widget.onChange(_constructAndCache());
-    }
-  }
-
   @override
   void initState() {
     _scrollController = ScrollController();
@@ -230,6 +222,13 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
         ),
       );
     });
+  }
+
+  void _validateAndSubmit() {
+    final idIsOk = _idFormFieldKey.currentState!.validate();
+    if (idIsOk) {
+      widget.onChange(_constructAndCache());
+    }
   }
 
   EventSeriesSetup _constructAndCache() {

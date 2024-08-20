@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
 
 class CalendarMainCompetitionRecordSetup with EquatableMixin {
   const CalendarMainCompetitionRecordSetup({
@@ -12,10 +12,10 @@ class CalendarMainCompetitionRecordSetup with EquatableMixin {
           !(moveQualificationsBeforeTeamCompetition == true && trialRoundRules == null),
         );
 
-  final CompetitionRules mainCompRules;
-  final List<CompetitionRules>? trainingsRules;
-  final CompetitionRules? trialRoundRules;
-  final CompetitionRules? qualificationsRules;
+  final DefaultCompetitionRules mainCompRules;
+  final List<DefaultCompetitionRules>? trainingsRules;
+  final DefaultCompetitionRules? trialRoundRules;
+  final DefaultCompetitionRules? qualificationsRules;
   final bool moveQualificationsBeforeTeamCompetition;
 
   @override

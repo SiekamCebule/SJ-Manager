@@ -1,17 +1,17 @@
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/standings_positions_creator_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/competition_round_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/individual_competition_round_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/team_competition_round_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
-import 'package:sj_manager/repositories/generic/ids_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class CompetitionRoundRulesLoader
-    implements SimulationDbPartLoader<CompetitionRoundRules> {
+    implements SimulationDbPartLoader<DefaultCompetitionRoundRules> {
   const CompetitionRoundRulesLoader({
     required this.idsRepo,
     required this.entitiesLimitLoader,
@@ -19,13 +19,13 @@ class CompetitionRoundRulesLoader
     required this.teamCompetitionGroupRulesLoader,
   });
 
-  final IdsRepo idsRepo;
+  final ItemsIdsRepo idsRepo;
   final SimulationDbPartLoader<EntitiesLimit> entitiesLimitLoader;
   final StandingsPositionsCreatorLoader positionsCreatorLoader;
   final SimulationDbPartLoader<TeamCompetitionGroupRules> teamCompetitionGroupRulesLoader;
 
   @override
-  CompetitionRoundRules load(Json json) {
+  DefaultCompetitionRoundRules load(Json json) {
     final type = json['type'] as String;
     return switch (type) {
       'individual' => _loadIndividual(json),
@@ -36,13 +36,13 @@ class CompetitionRoundRulesLoader
     };
   }
 
-  CompetitionRoundRules<Jumper> _loadIndividual(Json json) {
+  DefaultCompetitionRoundRules<Jumper> _loadIndividual(Json json) {
     final entitiesLimitJson = json['entitiesLimit'];
     EntitiesLimit? entitiesLimit;
     if (entitiesLimitJson != null) {
       entitiesLimit = entitiesLimitLoader.load(entitiesLimitJson);
     }
-    return IndividualCompetitionRoundRules(
+    return DefaultIndividualCompetitionRoundRules(
       limit: entitiesLimit,
       bibsAreReassigned: json['bibsAreReassigned'],
       gateCanChange: json['gateCanChange'],
@@ -59,7 +59,7 @@ class CompetitionRoundRulesLoader
     );
   }
 
-  CompetitionRoundRules<Team> _loadTeam(Json json) {
+  DefaultCompetitionRoundRules<Team> _loadTeam(Json json) {
     final groupsJson = json['groups'] as List<Json>;
     final groups = groupsJson
         .map(
@@ -67,7 +67,7 @@ class CompetitionRoundRulesLoader
         )
         .toList();
 
-    return TeamCompetitionRoundRules(
+    return DefaultTeamCompetitionRoundRules(
       limit: entitiesLimitLoader.load(json['entitiesLimit']),
       bibsAreReassigned: json['bibsAreReassigned'],
       gateCanChange: json['gateCanChange'],

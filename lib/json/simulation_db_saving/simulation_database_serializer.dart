@@ -4,7 +4,7 @@ import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/json/manual_json/json_team.dart';
 import 'package:sj_manager/models/simulation_db/simulation_database.dart';
 import 'package:sj_manager/models/simulation_db/simulation_season.dart';
-import 'package:sj_manager/repositories/generic/ids_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class SimulationDatabaseSerializer
     implements SimulationDbPartSerializer<SimulationDatabase> {
@@ -14,7 +14,7 @@ class SimulationDatabaseSerializer
     required this.seasonSerializer,
   });
 
-  final IdsRepo idsRepo;
+  final ItemsIdsRepo idsRepo;
   final JsonCountrySaver countrySaver;
   final SimulationDbPartSerializer<SimulationSeason> seasonSerializer;
 

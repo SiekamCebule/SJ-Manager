@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/bloc/database_editing/local_db_filtered_items_state.dart';
 import 'package:sj_manager/filters/filter.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
@@ -51,14 +51,14 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
         } else if (itemType == EventSeriesSetup) {
           filtered = Filter.filterAll<EventSeriesSetup>(
               items.cast<EventSeriesSetup>(), filters.cast<Filter<EventSeriesSetup>>());
-        } else if (itemType == EventSeriesSetup) {
+        } else if (itemType == EventSeriesCalendarPreset) {
           filtered = Filter.filterAll<EventSeriesCalendarPreset>(
               items.cast<EventSeriesCalendarPreset>(),
               filters.cast<Filter<EventSeriesCalendarPreset>>());
-        } else if (itemType == CompetitionRulesPreset) {
-          filtered = Filter.filterAll<CompetitionRulesPreset>(
-              items.cast<CompetitionRulesPreset>(),
-              filters.cast<Filter<CompetitionRulesPreset>>());
+        } else if (itemType == DefaultCompetitionRulesPreset) {
+          filtered = Filter.filterAll<DefaultCompetitionRulesPreset>(
+              items.cast<DefaultCompetitionRulesPreset>(),
+              filters.cast<Filter<DefaultCompetitionRulesPreset>>());
         } else {
           throw UnsupportedError(
               '(LocalDbFilteredItemsCubit) Unsupported item type: $itemType');
@@ -86,7 +86,7 @@ class LocalDbFilteredItemsCubit extends Cubit<LocalDbFilteredItemsState> {
       Hill: [],
       EventSeriesSetup: [],
       EventSeriesCalendarPreset: [],
-      CompetitionRulesPreset: [],
+      DefaultCompetitionRulesPreset: [],
     },
   );
 }
