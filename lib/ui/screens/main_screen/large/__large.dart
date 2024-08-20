@@ -5,6 +5,7 @@ class _Large extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('items repos: ${context.read<ItemsReposRegistry>()}');
     return const Scaffold(
       body: Stack(
         children: [

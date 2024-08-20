@@ -12,7 +12,7 @@ class MyNumeralTextField extends StatefulWidget {
     required this.controller,
     this.buttons,
     required this.onChange,
-    required this.formatters,
+    this.formatters = const [],
     required this.labelText,
     this.suffixText,
     required this.step,

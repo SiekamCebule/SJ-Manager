@@ -1,14 +1,14 @@
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
-import 'package:sj_manager/repositories/generic/ids_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class EntitiesLimitLoader implements SimulationDbPartLoader<EntitiesLimit> {
   const EntitiesLimitLoader({
     required this.idsRepo,
   });
 
-  final IdsRepo idsRepo;
+  final ItemsIdsRepo idsRepo;
 
   @override
   EntitiesLimit load(Json json) {

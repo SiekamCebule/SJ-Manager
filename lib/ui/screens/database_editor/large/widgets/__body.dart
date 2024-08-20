@@ -45,10 +45,12 @@ class _BodyState extends State<_Body> {
     return Row(
       children: [
         const Expanded(
-          flex: 9,
+          flex: 7,
           child: _ItemsList(),
         ),
-        const Gap(UiDatabaseEditorConstants.horizontalSpaceBetweenListAndEditor),
+        const Gap(UiDatabaseEditorConstants.horizontalSpaceBetweenListAndEditor / 2),
+        const VerticalDivider(),
+        const Gap(UiDatabaseEditorConstants.horizontalSpaceBetweenListAndEditor / 2),
         Expanded(
           flex: 7,
           child: Align(

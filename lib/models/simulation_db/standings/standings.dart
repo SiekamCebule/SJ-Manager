@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
 
-class Standings<E> implements ValueRepo<Map<int, List<Score<E>>>> {
+class Standings<E> with EquatableMixin implements ValueRepo<Map<int, List<Score<E>>>> {
   Standings({required this.positionsCreator, List<Score<E>>? initialScores}) {
     if (initialScores != null) {
       _scores = List.of(initialScores);
@@ -71,13 +72,13 @@ class Standings<E> implements ValueRepo<Map<int, List<Score<E>>>> {
     throw _notContainEntityError(entity);
   }
 
-  Score<E> scoreOf(E entity) {
+  Score<E>? scoreOf(E entity) {
     for (var score in _scores) {
       if (score.entity == entity) {
         return score;
       }
     }
-    throw _notContainEntityError(entity);
+    return null;
   }
 
   Error _notContainEntityError(E entity) {
@@ -117,4 +118,7 @@ class Standings<E> implements ValueRepo<Map<int, List<Score<E>>>> {
   void dispose() {
     _subject.close();
   }
+
+  @override
+  List<Object?> get props => [scores];
 }

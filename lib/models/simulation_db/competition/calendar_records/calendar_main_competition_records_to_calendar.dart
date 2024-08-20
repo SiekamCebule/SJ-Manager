@@ -3,7 +3,7 @@ import 'package:sj_manager/models/simulation_db/competition/calendar_records/con
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition_type.dart';
 import 'package:sj_manager/models/simulation_db/competition/high_level_calendar.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -54,7 +54,7 @@ class CalendarMainCompetitionRecordsToCalendarConverter
   void _maybeMarkCompetitionItShouldMoveBehindTeamComp(
       {required CalendarMainCompetitionRecord highLevelComp,
       required List<Competition> rawComps}) {
-    if (highLevelComp.setup.mainCompRules is CompetitionRules<Jumper>) {
+    if (highLevelComp.setup.mainCompRules is DefaultCompetitionRules<Jumper>) {
       final trainings = highLevelComp.setup.trainingsRules != null
           ? rawComps.sublist(0, highLevelComp.setup.trainingsRules!.length)
           : null;
@@ -108,7 +108,7 @@ class CalendarMainCompetitionRecordsToCalendarConverter
 
   bool _isTeamCompWithSameHill(Competition? comp, {required Hill requiredHill}) {
     return comp != null &&
-        comp.rules is CompetitionRules<Team> &&
+        comp.rules is DefaultCompetitionRules<Team> &&
         comp.hill == requiredHill;
   }
 

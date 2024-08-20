@@ -1,7 +1,7 @@
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
-import 'package:sj_manager/repositories/generic/ids_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/utils/multilingual_string.dart';
 
 class EventSeriesSetupLoader implements SimulationDbPartLoader<EventSeriesSetup> {
@@ -9,7 +9,7 @@ class EventSeriesSetupLoader implements SimulationDbPartLoader<EventSeriesSetup>
     required this.idsRepo,
   });
 
-  final IdsRepo idsRepo;
+  final ItemsIdsRepo idsRepo;
 
   @override
   EventSeriesSetup load(Json json) {

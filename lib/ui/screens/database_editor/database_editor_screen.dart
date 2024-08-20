@@ -19,7 +19,7 @@ import 'package:sj_manager/filters/hills/hill_matching_algorithms.dart';
 import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/main.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
@@ -38,6 +38,8 @@ import 'package:sj_manager/repositories/database_editing/default_items_repositor
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
 import 'package:sj_manager/ui/assets/icons.dart';
+import 'package:sj_manager/ui/database_item_editors/default_competition_rules_preset_editor/default_competition_rules_preset_editor.dart';
+import 'package:sj_manager/ui/database_item_editors/event_series_calendar_preset_thumbnail.dart';
 import 'package:sj_manager/ui/database_item_editors/event_series_setup_editor.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
@@ -77,11 +79,30 @@ class DatabaseEditorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ResponsiveBuilder(
-      phone: _Large(),
-      tablet: _Large(),
-      desktop: _Large(),
-      largeDesktop: _Large(),
+    final translator = translate(context);
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(create: (context) {
+          final noneCountry =
+              (context.read<ItemsReposRegistry>().get<Country>() as CountriesRepo).none;
+          return DefaultItemsRepo(
+            initial: {
+              FemaleJumper.empty(country: noneCountry),
+              MaleJumper.empty(country: noneCountry),
+              Hill.empty(country: noneCountry),
+              const EventSeriesSetup.empty(),
+              const EventSeriesCalendarPreset.empty().copyWith(name: translator.unnamed),
+              const DefaultCompetitionRulesPreset.empty()
+            },
+          );
+        }),
+      ],
+      child: const ResponsiveBuilder(
+        phone: _Large(),
+        tablet: _Large(),
+        desktop: _Large(),
+        largeDesktop: _Large(),
+      ),
     );
   }
 }

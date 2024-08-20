@@ -5,14 +5,14 @@ import 'package:sj_manager/models/simulation_db/standings/score/concrete/competi
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/simple_points_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
-import 'package:sj_manager/repositories/generic/ids_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class ScoreSerializer implements SimulationDbPartSerializer<Score> {
   const ScoreSerializer({
     required this.idsRepo,
   });
 
-  final IdsRepo idsRepo;
+  final ItemsIdsRepo idsRepo;
 
   @override
   Json serialize(Score score) {

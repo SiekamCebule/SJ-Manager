@@ -42,7 +42,7 @@ class JumperEditor extends StatefulWidget {
   final bool enableEditingName;
   final CountriesRepo countriesRepo;
 
-  final Function(Jumper? current) onChange;
+  final Function(Jumper current) onChange;
 
   @override
   State<JumperEditor> createState() => JumperEditorState();
@@ -259,7 +259,7 @@ class JumperEditorState extends State<JumperEditor> {
     widget.onChange(_constructAndCacheJumper());
   }
 
-  Jumper? _constructAndCacheJumper() {
+  Jumper _constructAndCacheJumper() {
     final name = _nameController.text;
     final surname = _surnameController.text;
     final country = _country!;

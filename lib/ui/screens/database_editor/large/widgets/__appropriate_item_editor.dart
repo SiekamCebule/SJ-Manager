@@ -108,9 +108,18 @@ abstract class DbItemEditorFactory {
         onChange: onChange,
       );
     } else if (type == EventSeriesCalendarPreset) {
-      throw UnimplementedError();
-    } else if (type == CompetitionRulesPreset) {
-      throw UnimplementedError();
+      return EventSeriesCalendarPresetThumbnail(
+        key: key,
+        onChange: onChange,
+      );
+    } else if (type == DefaultCompetitionRulesPreset) {
+      return DefaultCompetitionRulesPresetEditor(
+        key: key,
+        onChange: onChange,
+        onAdvancedEditorChosen: () {
+          throw UnimplementedError();
+        },
+      );
     } else {
       throw TypeError();
     }

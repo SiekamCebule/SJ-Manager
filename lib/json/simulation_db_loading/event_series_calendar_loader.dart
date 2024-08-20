@@ -3,7 +3,7 @@ import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
-import 'package:sj_manager/repositories/generic/ids_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
 class EventSeriesCalendarLoader implements SimulationDbPartLoader<EventSeriesCalendar> {
@@ -14,7 +14,7 @@ class EventSeriesCalendarLoader implements SimulationDbPartLoader<EventSeriesCal
     required this.classificationLoader,
   });
 
-  final IdsRepo idsRepo;
+  final ItemsIdsRepo idsRepo;
   final IdGenerator idGenerator;
   final SimulationDbPartLoader<Competition> competitionLoader;
   final SimulationDbPartLoader<Classification> classificationLoader;

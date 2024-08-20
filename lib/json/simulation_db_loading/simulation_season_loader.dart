@@ -2,7 +2,7 @@ import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation_db/simulation_season.dart';
-import 'package:sj_manager/repositories/generic/ids_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class SimulationSeasonLoader implements SimulationDbPartLoader<SimulationSeason> {
   const SimulationSeasonLoader({
@@ -10,7 +10,7 @@ class SimulationSeasonLoader implements SimulationDbPartLoader<SimulationSeason>
     required this.eventSeriesLoader,
   });
 
-  final IdsRepo idsRepo;
+  final ItemsIdsRepo idsRepo;
   final SimulationDbPartLoader<EventSeries> eventSeriesLoader;
 
   @override

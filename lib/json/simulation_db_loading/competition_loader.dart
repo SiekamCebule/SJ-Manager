@@ -2,10 +2,10 @@ import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition_type.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/repositories/generic/ids_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class CompetitionLoader implements SimulationDbPartLoader<Competition> {
   const CompetitionLoader({
@@ -14,8 +14,8 @@ class CompetitionLoader implements SimulationDbPartLoader<Competition> {
     required this.standingsLoader,
   });
 
-  final IdsRepo idsRepo;
-  final SimulationDbPartLoader<CompetitionRules> rulesLoader;
+  final ItemsIdsRepo idsRepo;
+  final SimulationDbPartLoader<DefaultCompetitionRules> rulesLoader;
   final SimulationDbPartLoader<Standings> standingsLoader;
 
   @override

@@ -6,7 +6,7 @@ import 'package:sj_manager/bloc/database_editing/local_db_filtered_items_cubit.d
 import 'package:sj_manager/filters/hills/hill_matching_algorithms.dart';
 import 'package:sj_manager/filters/hills/hills_filter.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
@@ -38,7 +38,7 @@ void main() {
           MockEditableItemsRepo<Hill>(),
           MockEditableItemsRepo<EventSeriesSetup>(),
           MockEditableItemsRepo<EventSeriesCalendar>(),
-          MockEditableItemsRepo<CompetitionRulesPreset>(),
+          MockEditableItemsRepo<DefaultCompetitionRulesPreset>(),
           MockCountriesRepo(),
           MockTeamsRepo(),
         },

@@ -10,7 +10,7 @@ import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
-import 'package:sj_manager/repositories/generic/ids_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
@@ -23,7 +23,7 @@ class SimulationDatabaseLoader<E, S extends Score>
     required this.seasonLoader,
   });
 
-  final IdsRepo idsRepo;
+  final ItemsIdsRepo idsRepo;
   final IdGenerator idGenerator;
   final JsonCountryLoader countryLoader;
   final SimulationDbPartLoader<SimulationSeason> seasonLoader;

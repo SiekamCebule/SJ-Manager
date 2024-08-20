@@ -3,7 +3,7 @@ import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
-import 'package:sj_manager/repositories/generic/ids_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
 
 class SimulationDatabase {
@@ -21,5 +21,5 @@ class SimulationDatabase {
   final CountriesRepo countries;
   final TeamsRepo teams;
   final ItemsRepo<SimulationSeason> seasons;
-  final IdsRepo idsRepo;
+  final ItemsIdsRepo idsRepo;
 }
