@@ -1,28 +1,22 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:osje_sim/osje_sim.dart';
-import 'package:sj_manager/models/running/competition_scores_creator.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 
-class CompetitionResultsCubit<E> extends Cubit<CompetitionResultsState<E>> {
+class CompetitionResultsCubit<E, SJS extends SingleJumpScore>
+    extends Cubit<CompetitionResultsState<E>> {
   CompetitionResultsCubit({
     required this.standings,
-    required this.scoresCreator,
   }) : super(CompetitionResultsState(standings: standings));
 
   final Standings<E> standings;
-  final CompetitionScoresCreator<E> scoresCreator;
 
-  void registerJump({
+  void registerResult({
     required E entity,
-    required JumpSimulationRecord jumpSimulationRecord,
+    required CompetitionScore<E, SJS> score,
   }) {
-    final jumpScore = scoresCreator.createJumpScore(jumpSimulationRecord);
-    final entityCurrentScore = standings.scoreOf(entity) as CompetitionScore<E>?;
-    final competitionScore = scoresCreator.createCompetitionScore(
-        previous: entityCurrentScore, jumpScore: jumpScore);
-    standings.addScore(newScore: competitionScore, overwrite: true);
+    standings.addScore(newScore: score, overwrite: true);
   }
 }
 

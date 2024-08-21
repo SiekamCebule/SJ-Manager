@@ -11,12 +11,12 @@ class DefaultIndividualCompetitionRoundRules
     required super.inrunLightsEnabled,
     required super.dsqEnabled,
     required super.positionsCreator,
-    required super.canBeCancelledByWind,
     required super.ruleOf95HsFallEnabled,
     required super.judgesCount,
+    required super.significantJudgesCount,
     required super.competitionScoreCreator,
     required super.jumpScoreCreator,
-    required super.significantJudgesChooser,
+    required super.koRules,
   });
 
   @override

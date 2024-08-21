@@ -78,6 +78,9 @@ class NumberInRangeEnforcer extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text.isEmpty) {
+      return newValue;
+    }
+    if (num.tryParse(newValue.text) == null) {
       return oldValue;
     }
     final number = num.parse(newValue.text);

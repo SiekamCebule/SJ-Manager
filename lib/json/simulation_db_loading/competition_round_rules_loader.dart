@@ -6,6 +6,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ro
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_round_rules.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
@@ -17,12 +18,14 @@ class CompetitionRoundRulesLoader
     required this.entitiesLimitLoader,
     required this.positionsCreatorLoader,
     required this.teamCompetitionGroupRulesLoader,
+    required this.koRoundRulesLoader,
   });
 
   final ItemsIdsRepo idsRepo;
   final SimulationDbPartLoader<EntitiesLimit> entitiesLimitLoader;
   final StandingsPositionsCreatorLoader positionsCreatorLoader;
   final SimulationDbPartLoader<TeamCompetitionGroupRules> teamCompetitionGroupRulesLoader;
+  final SimulationDbPartLoader<KoRoundRules> koRoundRulesLoader;
 
   @override
   DefaultCompetitionRoundRules load(Json json) {
@@ -50,12 +53,12 @@ class CompetitionRoundRulesLoader
       inrunLightsEnabled: json['inrunLightsEnabled'],
       dsqEnabled: json['dsqEnabled'],
       positionsCreator: positionsCreatorLoader.load(json['positionsCreator']),
-      canBeCancelledByWind: json['dsqEnabled'],
       ruleOf95HsFallEnabled: json['dsqEnabled'],
       judgesCount: json['judgesCount'],
+      significantJudgesCount: json['significantJudgesCount'],
       competitionScoreCreator: idsRepo.get(json['competitionScoreCreatorId']),
       jumpScoreCreator: idsRepo.get(json['jumpScoreCreatorId']),
-      significantJudgesChooser: idsRepo.get(json['significantJudgesChooserId']),
+      koRules: koRoundRulesLoader.load(json['koRoundRules']),
     );
   }
 
@@ -75,14 +78,14 @@ class CompetitionRoundRulesLoader
       inrunLightsEnabled: json['inrunLightsEnabled'],
       dsqEnabled: json['dsqEnabled'],
       positionsCreator: positionsCreatorLoader.load(json['positionsCreator']),
-      canBeCancelledByWind: json['dsqEnabled'],
       ruleOf95HsFallEnabled: json['dsqEnabled'],
       judgesCount: json['judgesCount'],
+      significantJudgesCount: json['significantJudgesCount'],
       competitionScoreCreator: idsRepo.get(json['competitionScoreCreatorId']),
       jumpScoreCreator: idsRepo.get(json['jumpScoreCreatorId']),
-      significantJudgesChooser: idsRepo.get(json['significantJudgesChooserId']),
       groups: groups,
       teamSize: json['teamSize'],
+      koRules: koRoundRulesLoader.load(json['koRoundRules']),
     );
   }
 }

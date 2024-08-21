@@ -39,6 +39,7 @@ class ScoreLoader implements SimulationDbPartLoader<Score> {
       judgesPoints: json['judgesPoints'],
       gatePoints: json['gatePoints'],
       windPoints: json['windPoints'],
+      jumpRecord: idsRepo.get(json['jumpRecordId']),
     );
   }
 
@@ -64,7 +65,7 @@ class ScoreLoader implements SimulationDbPartLoader<Score> {
     return CompetitionTeamScore(
       entity: entity,
       points: json['points'],
-      entityScores: jumperScores,
+      jumperScores: jumperScores,
     );
   }
 

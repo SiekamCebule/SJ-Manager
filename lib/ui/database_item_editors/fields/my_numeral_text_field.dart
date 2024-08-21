@@ -10,10 +10,11 @@ class MyNumeralTextField extends StatefulWidget {
     super.key,
     this.enabled = true,
     required this.controller,
-    this.buttons,
+    this.additionalButtons,
     required this.onChange,
     this.formatters = const [],
     required this.labelText,
+    this.skipPlusMinusButtons = false,
     this.suffixText,
     required this.step,
     required this.min,
@@ -27,7 +28,8 @@ class MyNumeralTextField extends StatefulWidget {
   final VoidCallback onChange;
   final TextEditingController controller;
   final List<TextInputFormatter> formatters;
-  final List<Widget>? buttons;
+  final List<Widget>? additionalButtons;
+  final bool skipPlusMinusButtons;
   final String labelText;
   final String? suffixText;
   final num step;
@@ -72,53 +74,66 @@ class MyNumeralTextFieldState extends State<MyNumeralTextField> {
                 if (widget.maxDecimalPlaces != null)
                   NDecimalPlacesEnforcer(decimalPlaces: widget.maxDecimalPlaces!)
               ],
-              onSubmitted: (value) => widget.onChange(),
-              onTapOutside: (event) => widget.onChange(),
+              onSubmitted: (value) => _onTextFieldChange(),
+              onTapOutside: (event) => _onTextFieldChange(),
               focusNode: widget.focusNode,
             ),
           ),
-          ...widget.buttons ?? [],
-          IconButton(
-            onPressed: widget.enabled
-                ? () {
-                    var decremented = _numberFromController - widget.step;
-                    if (widget.maxDecimalPlaces != null) {
-                      decremented = preparedNumber(decremented.toDouble());
+          ...widget.additionalButtons ?? [],
+          if (!widget.skipPlusMinusButtons) ...[
+            IconButton(
+              onPressed: widget.enabled
+                  ? () {
+                      var decremented = _numberFromController - widget.step;
+                      if (widget.maxDecimalPlaces != null) {
+                        decremented = preparedNumber(decremented.toDouble());
+                      }
+                      widget.controller.text = _numberInRangeEnforcer
+                          .formatEditUpdate(
+                              widget.controller.value,
+                              widget.controller.value
+                                  .copyWith(text: decremented.toString()))
+                          .text;
+                      widget.onChange();
                     }
-                    widget.controller.text = _numberInRangeEnforcer
-                        .formatEditUpdate(
-                            widget.controller.value,
-                            widget.controller.value
-                                .copyWith(text: decremented.toString()))
-                        .text;
-                    widget.onChange();
-                  }
-                : null,
-            icon: const Icon(
-              Symbols.remove,
+                  : null,
+              icon: const Icon(
+                Symbols.remove,
+              ),
             ),
-          ),
-          IconButton(
-            onPressed: widget.enabled
-                ? () {
-                    var incremented = _numberFromController + widget.step;
-                    if (widget.maxDecimalPlaces != null) {
-                      incremented = preparedNumber(incremented.toDouble());
+            IconButton(
+              onPressed: widget.enabled
+                  ? () {
+                      var incremented = _numberFromController + widget.step;
+                      if (widget.maxDecimalPlaces != null) {
+                        incremented = preparedNumber(incremented.toDouble());
+                      }
+                      widget.controller.text = _numberInRangeEnforcer
+                          .formatEditUpdate(
+                              widget.controller.value,
+                              widget.controller.value
+                                  .copyWith(text: incremented.toString()))
+                          .text;
+                      widget.onChange();
                     }
-                    widget.controller.text = _numberInRangeEnforcer
-                        .formatEditUpdate(
-                            widget.controller.value,
-                            widget.controller.value
-                                .copyWith(text: incremented.toString()))
-                        .text;
-                    widget.onChange();
-                  }
-                : null,
-            icon: const Icon(Symbols.add),
-          ),
+                  : null,
+              icon: const Icon(Symbols.add),
+            ),
+          ]
         ],
       ),
     );
+  }
+
+  void _onTextFieldChange() {
+    _setToMinIfEmpty();
+    widget.onChange();
+  }
+
+  void _setToMinIfEmpty() {
+    if (widget.controller.text.isEmpty) {
+      widget.controller.text = widget.min.toString();
+    }
   }
 
   double preparedNumber(double number) {

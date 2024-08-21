@@ -43,6 +43,7 @@ class ScoreSerializer implements SimulationDbPartSerializer<Score> {
       'judgesPoints': score.judgesPoints,
       'gatePoints': score.gatePoints,
       'windPoints': score.windPoints,
+      'jumpRecordId': idsRepo.idOf(score.jumpRecord),
     };
   }
 
