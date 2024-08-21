@@ -6,6 +6,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ro
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_round_rules.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class CompetitionRoundRulesSerializer
@@ -15,12 +16,14 @@ class CompetitionRoundRulesSerializer
     required this.teamCompetitionGroupRulesSerializer,
     required this.entitiesLimitSerializer,
     required this.positionsCreatorSerializer,
+    required this.koRoundRulesSerializer,
   });
 
   final ItemsIdsRepo idsRepo;
   final SimulationDbPartSerializer<EntitiesLimit> entitiesLimitSerializer;
   final SimulationDbPartSerializer<TeamCompetitionGroupRules>
       teamCompetitionGroupRulesSerializer;
+  final SimulationDbPartSerializer<KoRoundRules> koRoundRulesSerializer;
   final StandingsPositionsCreatorSerializer positionsCreatorSerializer;
 
   @override
@@ -43,19 +46,20 @@ class CompetitionRoundRulesSerializer
     return {
       'type': 'individual',
       'bibsAreReassigned': rules.bibsAreReassigned,
-      if (rules.limit != null) 'limit': entitiesLimitSerializer.serialize(rules.limit!),
-      if (rules.limit == null) 'limit': null,
+      'limit':
+          rules.limit != null ? entitiesLimitSerializer.serialize(rules.limit!) : null,
       'gateCanChange': rules.gateCanChange,
       'windAveragerId': idsRepo.idOf(rules.windAverager),
       'inrunLightsEnabled': rules.inrunLightsEnabled,
       'dsqEnabled': rules.dsqEnabled,
       'positionsCreator': positionsCreatorSerializer.serialize(rules.positionsCreator),
-      'canBeCancelledByWind': rules.canBeCancelledByWind,
       'ruleOf95HsFallEnabled': rules.ruleOf95HsFallEnabled,
       'judgesCount': rules.judgesCount,
+      'significantJudgesCount': rules.significantJudgesCount,
       'competitionScoreCreatorId': idsRepo.idOf(rules.competitionScoreCreator),
       'jumpScoreCreatorId': idsRepo.idOf(rules.jumpScoreCreator),
-      'significantJudgesChooserId': idsRepo.idOf(rules.significantJudgesChooser),
+      'koRoundRules':
+          rules.koRules != null ? koRoundRulesSerializer.serialize(rules.koRules!) : null,
     };
   }
 
@@ -66,21 +70,22 @@ class CompetitionRoundRulesSerializer
     return {
       'type': 'team',
       'bibsAreReassigned': rules.bibsAreReassigned,
-      if (rules.limit != null) 'limit': entitiesLimitSerializer.serialize(rules.limit!),
-      if (rules.limit == null) 'limit': null,
+      'limit':
+          rules.limit != null ? entitiesLimitSerializer.serialize(rules.limit!) : null,
       'gateCanChange': rules.gateCanChange,
       'windAveragerId': idsRepo.idOf(rules.windAverager),
       'inrunLightsEnabled': rules.inrunLightsEnabled,
       'dsqEnabled': rules.dsqEnabled,
       'positionsCreator': positionsCreatorSerializer.serialize(rules.positionsCreator),
-      'canBeCancelledByWind': rules.canBeCancelledByWind,
       'ruleOf95HsFallEnabled': rules.ruleOf95HsFallEnabled,
       'judgesCount': rules.judgesCount,
+      'significantJudgesCount': rules.significantJudgesCount,
       'competitionScoreCreatorId': idsRepo.idOf(rules.competitionScoreCreator),
       'jumpScoreCreatorId': idsRepo.idOf(rules.jumpScoreCreator),
-      'significantJudgesChooserId': idsRepo.idOf(rules.significantJudgesChooser),
       'groups': groupsJson,
       'teamSize': rules.teamSize,
+      'koRoundRules':
+          rules.koRules != null ? koRoundRulesSerializer.serialize(rules.koRules!) : null,
     };
   }
 }

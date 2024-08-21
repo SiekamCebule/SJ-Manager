@@ -160,7 +160,7 @@ void main() {
                   Hill.empty(country: noneCountry),
                   const EventSeriesSetup.empty(),
                   const EventSeriesCalendarPreset.empty(),
-                  const CompetitionRules.empty()
+                  const DefaultCompetitionRules.empty()
                 },
               );
             }),

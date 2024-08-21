@@ -11,8 +11,7 @@ class EntitiesLimit with EquatableMixin {
     required this.count,
   });
 
-  const EntitiesLimit.soft(int count)
-      : this(type: EntitiesLimitType.soft, count: count);
+  const EntitiesLimit.soft(int count) : this(type: EntitiesLimitType.soft, count: count);
   const EntitiesLimit.exact(int count)
       : this(type: EntitiesLimitType.exact, count: count);
 

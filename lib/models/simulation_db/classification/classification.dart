@@ -1,4 +1,4 @@
-import 'package:sj_manager/models/user_algorithms/concrete/classification_score_creator.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/concrete/classification_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/utils/multilingual_string.dart';
 

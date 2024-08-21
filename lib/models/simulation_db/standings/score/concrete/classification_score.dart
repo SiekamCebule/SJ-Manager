@@ -10,7 +10,7 @@ class ClassificationScore<E> extends Score<E> with HasPointsMixin<E> {
   }) : _points = points;
 
   final double _points;
-  final List<CompetitionScore<E>> competitionScores;
+  final List<CompetitionScore<E, dynamic>> competitionScores;
 
   ClassificationScore<R> cast<R>() {
     return ClassificationScore<R>(

@@ -368,7 +368,7 @@ class HillEditorState extends State<HillEditor> {
                       onChange: () {
                         widget.onChange(_constructAndCacheHill());
                       },
-                      buttons: [
+                      additionalButtons: [
                         TextButton(
                           onPressed: () {
                             if (_cachedHill != null) {

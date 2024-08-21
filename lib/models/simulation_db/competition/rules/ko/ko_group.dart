@@ -1,7 +1,7 @@
-class KoGroup<T> {
+class KoGroup<E> {
   const KoGroup({required this.entities});
 
-  final List<T> entities;
+  final List<E> entities;
 
   int get size => entities.length;
 }
