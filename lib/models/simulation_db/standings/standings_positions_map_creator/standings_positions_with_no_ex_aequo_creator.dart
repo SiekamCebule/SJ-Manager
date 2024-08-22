@@ -1,12 +1,11 @@
 import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart';
 
-class StandingsPositionsWithNoExAequoCreator<S extends Score>
-    implements StandingsPositionsCreator<S> {
-  late List<S> _scores;
+class StandingsPositionsWithNoExAequoCreator implements StandingsPositionsCreator {
+  late List<Score> _scores;
 
   @override
-  Map<int, List<S>> create(List<S> scores) {
+  Map<int, List<Score>> create(List<Score> scores) {
     _scores = List.of(scores);
     _sortScores();
     return _generatePositionsMap();
@@ -20,11 +19,11 @@ class StandingsPositionsWithNoExAequoCreator<S extends Score>
     });
   }
 
-  Map<int, List<S>> _generatePositionsMap() {
-    Map<int, List<S>> positionsMap = {};
+  Map<int, List<Score>> _generatePositionsMap() {
+    Map<int, List<Score>> positionsMap = {};
     int currentPosition = 1;
 
-    for (S score in _scores) {
+    for (final score in _scores) {
       positionsMap[currentPosition] = [score];
       currentPosition++;
     }

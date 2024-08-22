@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_group.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/unary_algorithm.dart';
@@ -11,7 +12,6 @@ abstract class KoGroupsCreatingContext<T> {
     required this.competition,
     required this.currentRound,
     required this.hill,
-    required this.entities,
   });
 
   // TODO: final SimulationData simulationData;
@@ -20,7 +20,8 @@ abstract class KoGroupsCreatingContext<T> {
   final Competition<T> competition;
   final int currentRound;
   final Hill hill;
-  final List<T> entities;
+
+  int get entitiesCount;
 }
 
 abstract class KoGroupsCustomizableCreatingContext<T> extends KoGroupsCreatingContext<T> {
@@ -29,7 +30,6 @@ abstract class KoGroupsCustomizableCreatingContext<T> extends KoGroupsCreatingCo
     required super.competition,
     required super.currentRound,
     required super.hill,
-    required super.entities,
     required this.entitiesInGroup,
     required this.remainingEntitiesAction,
   });
@@ -44,10 +44,15 @@ class RandomKoGroupsCreatingContext<T> extends KoGroupsCustomizableCreatingConte
     required super.competition,
     required super.currentRound,
     required super.hill,
-    required super.entities,
     required super.entitiesInGroup,
     required super.remainingEntitiesAction,
+    required this.entities,
   });
+
+  final List<T> entities;
+
+  @override
+  int get entitiesCount => entities.length;
 }
 
 class ClassicKoGroupsCreatingContext<T> extends KoGroupsCreatingContext<T> {
@@ -56,8 +61,13 @@ class ClassicKoGroupsCreatingContext<T> extends KoGroupsCreatingContext<T> {
     required super.competition,
     required super.currentRound,
     required super.hill,
-    required super.entities,
+    required this.entities,
   });
+
+  final List<T> entities;
+
+  @override
+  int get entitiesCount => entities.length;
 }
 
 class KoGroupsPotsCreatingContext<T> extends KoGroupsCustomizableCreatingContext<T> {
@@ -66,11 +76,24 @@ class KoGroupsPotsCreatingContext<T> extends KoGroupsCustomizableCreatingContext
     required super.competition,
     required super.currentRound,
     required super.hill,
-    required super.entities,
     required super.entitiesInGroup,
     required super.remainingEntitiesAction,
+    required this.pots,
+    required this.remainingEntities,
   });
+
+  final List<List<T>> pots;
+  final List<T> remainingEntities;
+
+  @override
+  int get entitiesCount {
+    final inPots = pots.fold<int>(0, (sum, pot) => sum + pot.length);
+    return inPots + remainingEntities.length;
+  }
 }
 
 abstract class KoGroupsCreator<E, C extends KoGroupsCreatingContext<E>>
-    implements UnaryAlgorithm<C, List<KoGroup<E>>> {}
+    with EquatableMixin
+    implements UnaryAlgorithm<C, List<KoGroup<E>>> {
+  const KoGroupsCreator();
+}

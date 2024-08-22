@@ -5,7 +5,7 @@ import 'package:sj_manager/models/simulation_db/standings/standings_positions_ma
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_no_ex_aequo_creator.dart';
 
 void main() {
-  late StandingsPositionsCreator<SimplePointsScore<String>> creator;
+  late StandingsPositionsCreator creator;
   const recordsWithoutExAequo = [
     SimplePointsScore(140.5, entity: 'Maciej Kot'),
     SimplePointsScore(137.2, entity: 'Dawid Kubacki'),

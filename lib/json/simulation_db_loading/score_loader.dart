@@ -7,8 +7,8 @@ import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
-class ScoreLoader implements SimulationDbPartLoader<Score> {
-  const ScoreLoader({
+class ScoreParser implements SimulationDbPartParser<Score> {
+  const ScoreParser({
     required this.idsRepo,
   });
 

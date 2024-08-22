@@ -55,6 +55,7 @@ class CompetitionRoundRulesSerializer
       'positionsCreator': positionsCreatorSerializer.serialize(rules.positionsCreator),
       'ruleOf95HsFallEnabled': rules.ruleOf95HsFallEnabled,
       'judgesCount': rules.judgesCount,
+      'judgesCreatorId': idsRepo.idOf(rules.judgesCreator),
       'significantJudgesCount': rules.significantJudgesCount,
       'competitionScoreCreatorId': idsRepo.idOf(rules.competitionScoreCreator),
       'jumpScoreCreatorId': idsRepo.idOf(rules.jumpScoreCreator),

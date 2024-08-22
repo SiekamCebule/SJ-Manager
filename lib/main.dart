@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/json/simulation_db_loading/classification_loader.dart';
+import 'package:sj_manager/json/simulation_db_loading/classification_score_creator_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/competition_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/competition_round_rules_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/competition_rules_preset_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/competition_rules_provider_loader.dart';
+import 'package:sj_manager/json/simulation_db_loading/default_classification_rules_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/default_competition_rules_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/entities_limit_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/event_series_calendar_loader.dart';
@@ -18,11 +20,13 @@ import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.
 import 'package:sj_manager/json/simulation_db_loading/standings_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/standings_positions_creator_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/team_competition_group_rules_loader.dart';
+import 'package:sj_manager/json/simulation_db_saving/classification_score_creator_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/classification_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/competition_round_rules_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/competition_rules_preset_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/competition_rules_provider_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/competition_serializer.dart';
+import 'package:sj_manager/json/simulation_db_saving/default_classification_rules_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/default_competition_rules_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/entities_limit_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/event_series_calendar_preset_serialier.dart';
@@ -240,19 +244,19 @@ void main() async {
             Provider(create: (context) {
               return DbItemsJsonConfiguration<EventSeriesSetup>(
                 fromJson: (json) =>
-                    EventSeriesSetupLoader(idsRepo: context.read()).load(json),
+                    EventSeriesSetupParser(idsRepo: context.read()).load(json),
                 toJson: (series) =>
                     EventSeriesSetupSerializer(idsRepo: context.read()).serialize(series),
               );
             }),
-            Provider<SimulationDbPartLoader<DefaultCompetitionRoundRules>>(
-                create: (context) => CompetitionRoundRulesLoader(
+            Provider<SimulationDbPartParser<DefaultCompetitionRoundRules>>(
+                create: (context) => CompetitionRoundRulesParser(
                     idsRepo: context.read(),
-                    entitiesLimitLoader: EntitiesLimitLoader(idsRepo: context.read()),
-                    positionsCreatorLoader: StandingsPositionsCreatorLoader(),
-                    teamCompetitionGroupRulesLoader:
-                        TeamCompetitionGroupRulesLoader(idsRepo: context.read()),
-                    koRoundRulesLoader: KoRoundRulesLoader(
+                    entitiesLimitParser: EntitiesLimitParser(idsRepo: context.read()),
+                    positionsCreatorParser: StandingsPositionsCreatorParser(),
+                    teamCompetitionGroupRulesParser:
+                        TeamCompetitionGroupRulesParser(idsRepo: context.read()),
+                    koRoundRulesParser: KoRoundRulesParser(
                       idsRepo: context.read(),
                     ))),
             Provider<SimulationDbPartSerializer<DefaultCompetitionRoundRules>>(
@@ -265,17 +269,17 @@ void main() async {
                 koRoundRulesSerializer: KoRoundRulesSerializer(idsRepo: context.read()),
               ),
             ),
-            Provider<SimulationDbPartLoader<DefaultCompetitionRules>>(
-                create: (context) => DefaultCompetitionRulesLoader(
-                    idsRepo: context.read(), roundRulesLoader: context.read())),
+            Provider<SimulationDbPartParser<DefaultCompetitionRules>>(
+                create: (context) => DefaultCompetitionRulesParser(
+                    idsRepo: context.read(), roundRulesParser: context.read())),
             Provider<SimulationDbPartSerializer<DefaultCompetitionRules>>(
                 create: (context) => DefaultCompetitionRulesSerializer(
                     idsRepo: context.read(), roundRulesSerializer: context.read())),
             Provider(create: (context) {
               return DbItemsJsonConfiguration<DefaultCompetitionRulesProvider>(
-                fromJson: (json) => CompetitionRulesProviderLoader(
+                fromJson: (json) => CompetitionRulesProviderParser(
                   idsRepo: context.read(),
-                  rulesLoader: context.read(),
+                  rulesParser: context.read(),
                 ).load(json),
                 toJson: (provider) => CompetitionRulesProviderSerializer(
                   idsRepo: context.read(),
@@ -284,13 +288,13 @@ void main() async {
               );
             }),
             Provider(create: (context) {
-              return StandingsLoader(
+              return StandingsParser(
                 idsRepo: context.read(),
                 idGenerator: context.read(),
-                scoreLoader: ScoreLoader(
+                scoreParser: ScoreParser(
                   idsRepo: context.read(),
                 ),
-                positionsCreatorLoader: StandingsPositionsCreatorLoader(),
+                positionsCreatorParser: StandingsPositionsCreatorParser(),
               );
             }),
             Provider<SimulationDbPartSerializer<Standings>>(create: (context) {
@@ -304,19 +308,24 @@ void main() async {
             }),
             Provider(create: (context) {
               return DbItemsJsonConfiguration<EventSeriesCalendarPreset>(
-                fromJson: (json) => EventSeriesCalendarPresetLoader(
+                fromJson: (json) => EventSeriesCalendarPresetParser(
                   idsRepo: context.read(),
-                  calendarLoader: EventSeriesCalendarLoader(
+                  calendarParser: EventSeriesCalendarParser(
                     idsRepo: context.read(),
                     idGenerator: context.read(),
-                    competitionLoader: CompetitionLoader(
+                    competitionParser: CompetitionParser(
                       idsRepo: context.read(),
-                      rulesLoader: context.read(),
-                      standingsLoader: context.read(),
+                      rulesParser: context.read(),
+                      standingsParser: context.read(),
                     ),
-                    classificationLoader: ClassificationLoader(
+                    classificationParser: ClassificationParser(
                       idsRepo: context.read(),
-                      standingsLoader: context.read(),
+                      standingsParser: context.read(),
+                      defaultClassificationRulesParser: DefaultClassificationRulesParser(
+                        idsRepo: context.read(),
+                        classificationScoreCreatorParser:
+                            ClassificationScoreCreatorParser(idsRepo: context.read()),
+                      ),
                     ),
                   ),
                 ).load(json),
@@ -331,6 +340,12 @@ void main() async {
                     classificationSerializer: ClassificationSerializer(
                       idsRepo: context.read(),
                       standingsSerializer: context.read(),
+                      defaultClassificationRulesSerializer:
+                          DefaultClassificationRulesSerializer(
+                        idsRepo: context.read(),
+                        classificationScoreCreatorSerializer:
+                            ClassificationScoreCreatorSerializer(idsRepo: context.read()),
+                      ),
                     ),
                   ),
                 ).serialize(preset),
@@ -338,9 +353,9 @@ void main() async {
             }),
             Provider(create: (context) {
               return DbItemsJsonConfiguration<DefaultCompetitionRulesPreset>(
-                fromJson: (json) => CompetitionRulesPresetLoader(
+                fromJson: (json) => CompetitionRulesPresetParser(
                   idsRepo: context.read(),
-                  rulesLoader: context.read(),
+                  rulesParser: context.read(),
                 ).load(json),
                 toJson: (preset) => CompetitionRulesPresetSerializer(
                   idsRepo: context.read(),

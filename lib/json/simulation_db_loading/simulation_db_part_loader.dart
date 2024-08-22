@@ -1,7 +1,7 @@
 import 'package:sj_manager/json/json_types.dart';
 
-abstract class SimulationDbPartLoader<T extends Object> {
-  const SimulationDbPartLoader();
+abstract class SimulationDbPartParser<T extends Object> {
+  const SimulationDbPartParser();
 
   T load(Json json);
 }

@@ -6,24 +6,11 @@ class DefaultPotsKoGroupsCreator<E>
     extends DefaultSizedKoGroupsCreator<E, KoGroupsPotsCreatingContext<E>> {
   @override
   void constructGroupsAndRemainingEntities() {
-    final pots = entitiesInGroup;
-    final entitiesInPot = context.entities.length ~/ pots;
-    final entityPots = <List<E>>[];
-    for (var potIndex = 0; potIndex < pots; potIndex++) {
-      entityPots.add(
-        context.entities.sublist(
-          potIndex * entitiesInPot,
-          (potIndex + 1) * entitiesInPot,
-        ),
-      );
-    }
+    final potsCount = entitiesInGroup;
+    remainingEntities = context.remainingEntities;
 
-    if (context.entities.length > pots * entitiesInPot) {
-      remainingEntities = context.entities.sublist(pots * entitiesInPot);
-    }
-
-    for (var potIndex = 0; potIndex < pots; potIndex++) {
-      for (var entity in entityPots[potIndex]) {
+    for (var potIndex = 0; potIndex < potsCount; potIndex++) {
+      for (var entity in context.pots[potIndex]) {
         final randomGroup = groupsWithSize(potIndex).randomElement();
         randomGroup.entities.add(entity);
       }

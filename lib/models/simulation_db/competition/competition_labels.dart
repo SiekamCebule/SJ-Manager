@@ -4,3 +4,9 @@ enum CompetitionType {
   trialRound,
   training;
 }
+
+enum CompetitionPlayedStatus {
+  played,
+  nonPlayed,
+  duringPlaying,
+}

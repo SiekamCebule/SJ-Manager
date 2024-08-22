@@ -4,21 +4,21 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ru
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
-class CompetitionRulesPresetLoader
-    implements SimulationDbPartLoader<DefaultCompetitionRulesPreset> {
-  const CompetitionRulesPresetLoader({
+class CompetitionRulesPresetParser
+    implements SimulationDbPartParser<DefaultCompetitionRulesPreset> {
+  const CompetitionRulesPresetParser({
     required this.idsRepo,
-    required this.rulesLoader,
+    required this.rulesParser,
   });
 
   final ItemsIdsRepo idsRepo;
-  final SimulationDbPartLoader<DefaultCompetitionRules> rulesLoader;
+  final SimulationDbPartParser<DefaultCompetitionRules> rulesParser;
 
   @override
   DefaultCompetitionRulesPreset load(Json json) {
     return DefaultCompetitionRulesPreset(
       name: json['name'],
-      rules: rulesLoader.load(json['rules']),
+      rules: rulesParser.load(json['rules']),
     );
   }
 }

@@ -45,6 +45,10 @@ class CompetitionTeamScore<E extends Team> extends Score<E>
   final double _points;
   final List<CompetitionJumperScore> jumperScores;
 
+  CompetitionJumperScore jumperScore(Jumper jumper) {
+    return jumperScores.singleWhere((score) => score.entity == jumper);
+  }
+
   @override
   List<double> get components => [_points];
 

@@ -5,7 +5,6 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_sco
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
 
 class DefaultClassicJumpScoreCreator extends JumpScoreCreator {
-  // TODO: JudgesCreator judgesCreator;
   late JumpScoreCreatingContext _context;
 
   @override

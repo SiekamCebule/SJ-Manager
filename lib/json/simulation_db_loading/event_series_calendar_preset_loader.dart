@@ -4,21 +4,21 @@ import 'package:sj_manager/models/simulation_db/event_series/event_series_calend
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
-class EventSeriesCalendarPresetLoader
-    implements SimulationDbPartLoader<EventSeriesCalendarPreset> {
-  const EventSeriesCalendarPresetLoader({
+class EventSeriesCalendarPresetParser
+    implements SimulationDbPartParser<EventSeriesCalendarPreset> {
+  const EventSeriesCalendarPresetParser({
     required this.idsRepo,
-    required this.calendarLoader,
+    required this.calendarParser,
   });
 
   final ItemsIdsRepo idsRepo;
-  final SimulationDbPartLoader<EventSeriesCalendar> calendarLoader;
+  final SimulationDbPartParser<EventSeriesCalendar> calendarParser;
 
   @override
   EventSeriesCalendarPreset load(Json json) {
     return EventSeriesCalendarPreset(
       name: json['name'],
-      calendar: calendarLoader.load(json['calendar']),
+      calendar: calendarParser.load(json['calendar']),
     );
   }
 }

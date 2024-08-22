@@ -37,5 +37,11 @@ class Competition<E> with EquatableMixin {
   }
 
   @override
-  List<Object?> get props => [hill, date, rules];
+  List<Object?> get props => [
+        hill,
+        date,
+        rules,
+        standings,
+        labels,
+      ];
 }

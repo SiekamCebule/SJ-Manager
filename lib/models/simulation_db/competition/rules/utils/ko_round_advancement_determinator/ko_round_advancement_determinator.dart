@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/unary_algorithm.dart';
@@ -42,4 +43,12 @@ class KoRoundNBestAdvancementDeterminingContext<T>
 
 abstract class KoRoundAdvancementDeterminator<E,
         C extends KoRoundAdvancementDeterminingContext<E>>
-    implements UnaryAlgorithm<KoRoundAdvancementDeterminingContext<E>, List<E>> {}
+    with EquatableMixin
+    implements UnaryAlgorithm<KoRoundAdvancementDeterminingContext<E>, List<E>> {
+  const KoRoundAdvancementDeterminator();
+
+  @override
+  List<Object?> get props => [
+        runtimeType,
+      ];
+}

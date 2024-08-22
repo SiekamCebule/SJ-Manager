@@ -3,8 +3,8 @@ import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
-class EntitiesLimitLoader implements SimulationDbPartLoader<EntitiesLimit> {
-  const EntitiesLimitLoader({
+class EntitiesLimitParser implements SimulationDbPartParser<EntitiesLimit> {
+  const EntitiesLimitParser({
     required this.idsRepo,
   });
 

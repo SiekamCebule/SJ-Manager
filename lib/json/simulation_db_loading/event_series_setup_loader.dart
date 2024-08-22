@@ -4,8 +4,8 @@ import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/utils/multilingual_string.dart';
 
-class EventSeriesSetupLoader implements SimulationDbPartLoader<EventSeriesSetup> {
-  const EventSeriesSetupLoader({
+class EventSeriesSetupParser implements SimulationDbPartParser<EventSeriesSetup> {
+  const EventSeriesSetupParser({
     required this.idsRepo,
   });
 

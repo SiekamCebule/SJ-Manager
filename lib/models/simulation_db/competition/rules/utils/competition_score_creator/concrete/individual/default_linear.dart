@@ -6,7 +6,7 @@ class DefaultLinearIndividualCompetitionScoreCreator
   @override
   CompetitionJumperScore compute(
       covariant IndividualCompetitionScoreCreatingContext context) {
-    if (context.currentCompetitionScore == null) {
+    if (context.currentScore == null) {
       return CompetitionJumperScore(
         entity: context.entity,
         points: context.lastJumpScore.points,
@@ -15,9 +15,9 @@ class DefaultLinearIndividualCompetitionScoreCreator
     } else {
       return CompetitionJumperScore(
         entity: context.entity,
-        points: context.currentCompetitionScore!.points,
+        points: context.currentScore!.points,
         jumpScores: [
-          ...context.currentCompetitionScore!.jumpScores,
+          ...context.currentScore!.jumpScores,
           context.lastJumpScore,
         ],
       );

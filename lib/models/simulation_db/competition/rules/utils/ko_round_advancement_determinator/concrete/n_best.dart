@@ -3,6 +3,8 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_round
 
 class NBestKoRoundAdvancementDeterminator<E> extends KoRoundAdvancementDeterminator<E,
     KoRoundNBestAdvancementDeterminingContext<E>> {
+  const NBestKoRoundAdvancementDeterminator();
+
   @override
   List<E> compute(covariant KoRoundNBestAdvancementDeterminingContext<E> context) {
     final orderedEntities = context.koStandings.scores
@@ -11,7 +13,7 @@ class NBestKoRoundAdvancementDeterminator<E> extends KoRoundAdvancementDetermina
         .toList();
     final areInLimit = orderedEntities
         .where(
-          (entity) => context.koStandings.positionOf(entity) <= context.limit.count,
+          (entity) => context.koStandings.positionOf(entity)! <= context.limit.count,
         )
         .toList();
     if (context.limit.type == EntitiesLimitType.soft) {
