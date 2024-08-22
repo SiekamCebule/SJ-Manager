@@ -27,6 +27,8 @@ import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/concrete/individual/default_linear.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/concrete/team/default_linear.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/concrete/default.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/judges_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/concrete/default_classic.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/concrete/default_classic.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/concrete/default_random.dart';
@@ -51,6 +53,7 @@ import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
+import 'package:sj_manager/models/user_db/team/competition_team.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_avaiable_objects_repo.dart';
@@ -103,13 +106,13 @@ class DatabaseEditorScreen extends StatelessWidget {
     final translator = translate(context);
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider<DbEditingAvaiableObjectsRepo<JumpScoreCreator>>(
-          create: (context) => DbEditingAvaiableObjectsRepo(initial: {
+        RepositoryProvider<DbEditingAvailableObjectsRepo<JumpScoreCreator>>(
+          create: (context) => DbEditingAvailableObjectsRepo(initial: {
             'classic': DefaultClassicJumpScoreCreator(),
           }),
         ),
-        RepositoryProvider<DbEditingAvaiableObjectsRepo<WindAverager>>(
-          create: (context) => DbEditingAvaiableObjectsRepo(initial: {
+        RepositoryProvider<DbEditingAvailableObjectsRepo<WindAverager>>(
+          create: (context) => DbEditingAvailableObjectsRepo(initial: {
             'linear_classic': DefaultLinearWindAverager(
               skipNonAchievedSensors: true,
               computePreciselyPartialMeasurement: false,
@@ -136,27 +139,34 @@ class DatabaseEditorScreen extends StatelessWidget {
             ),
           }),
         ),
-        RepositoryProvider<DbEditingAvaiableObjectsRepo<CompetitionScoreCreator>>(
-          create: (context) => DbEditingAvaiableObjectsRepo(
+        RepositoryProvider<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>(
+          create: (context) => DbEditingAvailableObjectsRepo(
             initial: {
               'classic_individual': DefaultLinearIndividualCompetitionScoreCreator(),
               'classic_team': DefaultLinearTeamCompetitionScoreCreator(),
             },
           ),
         ),
-        RepositoryProvider<DbEditingAvaiableObjectsRepo<KoRoundAdvancementDeterminator>>(
+        RepositoryProvider<DbEditingAvailableObjectsRepo<KoRoundAdvancementDeterminator>>(
           create: (contet) {
-            return DbEditingAvaiableObjectsRepo(initial: {
+            return const DbEditingAvailableObjectsRepo(initial: {
               'n_best': NBestKoRoundAdvancementDeterminator(),
             });
           },
         ),
-        RepositoryProvider<DbEditingAvaiableObjectsRepo<KoGroupsCreator>>(
+        RepositoryProvider<DbEditingAvailableObjectsRepo<KoGroupsCreator>>(
           create: (context) {
-            return DbEditingAvaiableObjectsRepo(initial: {
+            return DbEditingAvailableObjectsRepo(initial: {
               'classic': DefaultClassicKoGroupsCreator(),
               'random': DefaultRandomKoGroupsCreator(),
               'pots': DefaultPotsKoGroupsCreator()
+            });
+          },
+        ),
+        RepositoryProvider<DbEditingAvailableObjectsRepo<JudgesCreator>>(
+          create: (context) {
+            return DbEditingAvailableObjectsRepo(initial: {
+              'default': DefaultJudgesCreator(),
             });
           },
         ),
@@ -176,20 +186,23 @@ class DatabaseEditorScreen extends StatelessWidget {
                 bibsAreReassigned: false,
                 gateCanChange: true,
                 windAverager: context
-                    .read<DbEditingAvaiableObjectsRepo<WindAverager>>()
+                    .read<DbEditingAvailableObjectsRepo<WindAverager>>()
                     .get('weighted_classic'),
                 inrunLightsEnabled: true,
                 dsqEnabled: true,
                 positionsCreator: StandingsPositionsWithExAequosCreator(),
                 ruleOf95HsFallEnabled: true,
                 judgesCount: 5,
+                judgesCreator: context
+                    .read<DbEditingAvailableObjectsRepo<JudgesCreator>>()
+                    .get('default'),
                 significantJudgesCount: 3,
                 competitionScoreCreator: context
-                        .read<DbEditingAvaiableObjectsRepo<CompetitionScoreCreator>>()
+                        .read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>()
                         .get('classic_individual')
                     as CompetitionScoreCreator<CompetitionJumperScore>,
                 jumpScoreCreator: context
-                    .read<DbEditingAvaiableObjectsRepo<JumpScoreCreator>>()
+                    .read<DbEditingAvailableObjectsRepo<JumpScoreCreator>>()
                     .get('classic'),
                 koRules: null,
               ),
@@ -198,20 +211,24 @@ class DatabaseEditorScreen extends StatelessWidget {
                 bibsAreReassigned: false,
                 gateCanChange: true,
                 windAverager: context
-                    .read<DbEditingAvaiableObjectsRepo<WindAverager>>()
+                    .read<DbEditingAvailableObjectsRepo<WindAverager>>()
                     .get('weighted_classic'),
                 inrunLightsEnabled: true,
                 dsqEnabled: true,
                 positionsCreator: StandingsPositionsWithExAequosCreator(),
                 ruleOf95HsFallEnabled: true,
                 judgesCount: 5,
-                competitionScoreCreator: context
-                    .read<DbEditingAvaiableObjectsRepo<CompetitionScoreCreator>>()
-                    .get('classic_team') as CompetitionScoreCreator<CompetitionTeamScore>,
-                jumpScoreCreator: context
-                    .read<DbEditingAvaiableObjectsRepo<JumpScoreCreator>>()
-                    .get('classic'),
+                judgesCreator: context
+                    .read<DbEditingAvailableObjectsRepo<JudgesCreator>>()
+                    .get('default'),
                 significantJudgesCount: 3,
+                competitionScoreCreator: context
+                        .read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>()
+                        .get('classic_team')
+                    as CompetitionScoreCreator<CompetitionTeamScore<CompetitionTeam>>,
+                jumpScoreCreator: context
+                    .read<DbEditingAvailableObjectsRepo<JumpScoreCreator>>()
+                    .get('classic'),
                 koRules: null,
                 groups: const [
                   TeamCompetitionGroupRules(sortStartList: false),

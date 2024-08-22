@@ -1,17 +1,16 @@
-import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/concrete/classification_score_creator.dart';
+import 'package:sj_manager/models/simulation_db/classification/default_classification_rules.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
-import 'package:sj_manager/utils/multilingual_string.dart';
 
-class Classification<E> {
+abstract class Classification<E, R extends ClassificationRules<E>> {
   const Classification({
     required this.name,
     required this.standings,
-    required this.scoreCreator,
+    required this.rules,
   });
 
-  final MultilingualString name;
+  final String name;
   final Standings<E>? standings;
-  final ClassificationScoreCreator scoreCreator;
+  final R rules;
 
   void updateStandings() {
     if (standings == null) {
@@ -19,4 +18,14 @@ class Classification<E> {
     }
     standings!.update();
   }
+}
+
+// TODO: Custom classification
+
+class DefaultClassification<E> extends Classification<E, DefaultClassificationRules<E>> {
+  const DefaultClassification({
+    required super.name,
+    required super.standings,
+    required super.rules,
+  });
 }

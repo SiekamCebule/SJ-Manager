@@ -14,19 +14,19 @@ import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
-class SimulationDatabaseLoader<E, S extends Score>
-    implements SimulationDbPartLoader<SimulationDatabase> {
-  SimulationDatabaseLoader({
+class SimulationDatabaseParser<E, S extends Score>
+    implements SimulationDbPartParser<SimulationDatabase> {
+  SimulationDatabaseParser({
     required this.idsRepo,
     required this.idGenerator,
     required this.countryLoader,
-    required this.seasonLoader,
+    required this.seasonParser,
   });
 
   final ItemsIdsRepo idsRepo;
   final IdGenerator idGenerator;
   final JsonCountryLoader countryLoader;
-  final SimulationDbPartLoader<SimulationSeason> seasonLoader;
+  final SimulationDbPartParser<SimulationSeason> seasonParser;
 
   late Json _json;
   late ItemsRepo<Jumper> _jumpers;
@@ -87,7 +87,7 @@ class SimulationDatabaseLoader<E, S extends Score>
   void _loadSeasons() {
     final seasonsJson = _json['seasons'] as List<Json>;
     final seasons = seasonsJson.map(
-      (json) => seasonLoader.load(json),
+      (json) => seasonParser.load(json),
     );
     _seasons = ItemsRepo(initial: seasons.toList());
   }

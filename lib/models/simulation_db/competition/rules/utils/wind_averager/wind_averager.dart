@@ -1,7 +1,7 @@
 import 'package:osje_sim/osje_sim.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/entity_related_algorithm_context.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/general/entity_related_algorithm_context.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/unary_algorithm.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 
@@ -34,4 +34,6 @@ class WindAveragingContext extends EntityRelatedAlgorithmContext {
   final JumpSimulationRecord jumpRecord;
 }
 
-abstract class WindAverager implements UnaryAlgorithm<WindAveragingContext, Wind> {}
+abstract class WindAverager implements UnaryAlgorithm<WindAveragingContext, Wind> {
+  const WindAverager();
+}

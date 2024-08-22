@@ -3,7 +3,7 @@ import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/user_db/team/competition_team.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class DefaultCompetitionRulesSerializer
@@ -23,7 +23,7 @@ class DefaultCompetitionRulesSerializer
         'type': 'individual',
         'rounds': _serializeRounds(rules.rounds),
       };
-    } else if (rules is DefaultCompetitionRules<Team>) {
+    } else if (rules is DefaultCompetitionRules<CompetitionTeam>) {
       return {
         'type': 'team',
         'round': _serializeRounds(rules.rounds),

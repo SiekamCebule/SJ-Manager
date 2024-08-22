@@ -5,7 +5,7 @@ class DefaultLinearTeamCompetitionScoreCreator
     extends CompetitionScoreCreator<CompetitionTeamScore> {
   @override
   CompetitionTeamScore compute(covariant TeamCompetitionScoreCreatingContext context) {
-    if (context.currentCompetitionScore == null) {
+    if (context.currentScore == null) {
       return CompetitionTeamScore(
         entity: context.entity,
         points: context.lastJumpScore.points,
@@ -18,7 +18,7 @@ class DefaultLinearTeamCompetitionScoreCreator
         ],
       );
     } else {
-      final currentScore = context.currentCompetitionScore! as CompetitionTeamScore;
+      final currentScore = context.currentScore! as CompetitionTeamScore;
       final currentJumperScores = currentScore.jumperScores;
       final updatedJumperScores = currentJumperScores.map((jumperScore) {
         if (jumperScore.entity == context.lastJumpScore.entity) {
@@ -36,7 +36,7 @@ class DefaultLinearTeamCompetitionScoreCreator
       }).toList();
       return CompetitionTeamScore(
         entity: context.entity,
-        points: context.currentCompetitionScore!.points + context.lastJumpScore.points,
+        points: context.currentScore!.points + context.lastJumpScore.points,
         jumperScores: updatedJumperScores,
       );
     }

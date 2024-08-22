@@ -17,7 +17,7 @@ class Standings<E> with EquatableMixin implements ValueRepo<Map<int, List<Score<
   var _standings = <int, List<Score<E>>>{};
   final _subject = BehaviorSubject<Map<int, List<Score<E>>>>.seeded({});
 
-  StandingsPositionsCreator<Score<E>> positionsCreator;
+  StandingsPositionsCreator positionsCreator;
 
   void addScore({required Score<E> newScore, bool overwrite = false}) {
     Score<E>? scoreToChange;
@@ -47,7 +47,7 @@ class Standings<E> with EquatableMixin implements ValueRepo<Map<int, List<Score<
   }
 
   void update() {
-    _standings = positionsCreator.create(_scores);
+    _standings = positionsCreator.create(_scores).cast();
   }
 
   List<Score<E>> get leaders {
@@ -61,7 +61,7 @@ class Standings<E> with EquatableMixin implements ValueRepo<Map<int, List<Score<
     return _standings[position]!;
   }
 
-  int positionOf(E entity) {
+  int? positionOf(E entity) {
     for (var entry in _standings.entries) {
       bool hasScoreWithEntity =
           entry.value.where((score) => score.entity == entity).length == 1;
@@ -69,7 +69,7 @@ class Standings<E> with EquatableMixin implements ValueRepo<Map<int, List<Score<
         return entry.key;
       }
     }
-    throw _notContainEntityError(entity);
+    return null;
   }
 
   Score<E>? scoreOf(E entity) {
@@ -79,10 +79,6 @@ class Standings<E> with EquatableMixin implements ValueRepo<Map<int, List<Score<
       }
     }
     return null;
-  }
-
-  Error _notContainEntityError(E entity) {
-    return StateError('The entity ($entity) is not contained by standings');
   }
 
   int get length => _scores.length;

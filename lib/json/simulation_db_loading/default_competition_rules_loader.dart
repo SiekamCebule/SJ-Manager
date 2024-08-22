@@ -5,18 +5,19 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ro
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/team/competition_team.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
-class DefaultCompetitionRulesLoader
-    implements SimulationDbPartLoader<DefaultCompetitionRules> {
-  const DefaultCompetitionRulesLoader({
+class DefaultCompetitionRulesParser
+    implements SimulationDbPartParser<DefaultCompetitionRules> {
+  const DefaultCompetitionRulesParser({
     required this.idsRepo,
-    required this.roundRulesLoader,
+    required this.roundRulesParser,
   });
 
   final ItemsIdsRepo idsRepo;
-  final SimulationDbPartLoader<DefaultCompetitionRoundRules> roundRulesLoader;
+  final SimulationDbPartParser<DefaultCompetitionRoundRules> roundRulesParser;
 
   @override
   DefaultCompetitionRules load(Json json) {
@@ -38,9 +39,9 @@ class DefaultCompetitionRulesLoader
     );
   }
 
-  DefaultCompetitionRules<Team> _loadTeam(Json json) {
+  DefaultCompetitionRules<CompetitionTeam> _loadTeam(Json json) {
     final rounds = _loadRoundsDynamic(json).cast<DefaultTeamCompetitionRoundRules>();
-    return DefaultCompetitionRules(
+    return DefaultCompetitionRules<CompetitionTeam>(
       rounds: rounds,
     );
   }
@@ -48,7 +49,7 @@ class DefaultCompetitionRulesLoader
   List<DefaultCompetitionRoundRules> _loadRoundsDynamic(Json json) {
     final roundsJson = json['rounds'] as List<dynamic>;
     final rounds =
-        roundsJson.map((roundJson) => roundRulesLoader.load(roundJson)).toList();
+        roundsJson.map((roundJson) => roundRulesParser.load(roundJson)).toList();
     return rounds;
   }
 }

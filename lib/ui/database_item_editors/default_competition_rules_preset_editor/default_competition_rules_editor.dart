@@ -8,7 +8,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ro
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/user_db/team/competition_team.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
@@ -260,7 +260,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
         ? DefaultCompetitionRules<Jumper>(
             rounds: rounds.cast(),
           )
-        : DefaultCompetitionRules<Team>(
+        : DefaultCompetitionRules<CompetitionTeam>(
             rounds: rounds.cast(),
           );
     _cachedRules = rules;

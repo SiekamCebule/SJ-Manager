@@ -11,21 +11,21 @@ import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
-class CompetitionRoundRulesLoader
-    implements SimulationDbPartLoader<DefaultCompetitionRoundRules> {
-  const CompetitionRoundRulesLoader({
+class CompetitionRoundRulesParser
+    implements SimulationDbPartParser<DefaultCompetitionRoundRules> {
+  const CompetitionRoundRulesParser({
     required this.idsRepo,
-    required this.entitiesLimitLoader,
-    required this.positionsCreatorLoader,
-    required this.teamCompetitionGroupRulesLoader,
-    required this.koRoundRulesLoader,
+    required this.entitiesLimitParser,
+    required this.positionsCreatorParser,
+    required this.teamCompetitionGroupRulesParser,
+    required this.koRoundRulesParser,
   });
 
   final ItemsIdsRepo idsRepo;
-  final SimulationDbPartLoader<EntitiesLimit> entitiesLimitLoader;
-  final StandingsPositionsCreatorLoader positionsCreatorLoader;
-  final SimulationDbPartLoader<TeamCompetitionGroupRules> teamCompetitionGroupRulesLoader;
-  final SimulationDbPartLoader<KoRoundRules> koRoundRulesLoader;
+  final SimulationDbPartParser<EntitiesLimit> entitiesLimitParser;
+  final StandingsPositionsCreatorParser positionsCreatorParser;
+  final SimulationDbPartParser<TeamCompetitionGroupRules> teamCompetitionGroupRulesParser;
+  final SimulationDbPartParser<KoRoundRules> koRoundRulesParser;
 
   @override
   DefaultCompetitionRoundRules load(Json json) {
@@ -43,7 +43,7 @@ class CompetitionRoundRulesLoader
     final entitiesLimitJson = json['entitiesLimit'];
     EntitiesLimit? entitiesLimit;
     if (entitiesLimitJson != null) {
-      entitiesLimit = entitiesLimitLoader.load(entitiesLimitJson);
+      entitiesLimit = entitiesLimitParser.load(entitiesLimitJson);
     }
     return DefaultIndividualCompetitionRoundRules(
       limit: entitiesLimit,
@@ -52,13 +52,14 @@ class CompetitionRoundRulesLoader
       windAverager: idsRepo.get(json['windAveragerId']),
       inrunLightsEnabled: json['inrunLightsEnabled'],
       dsqEnabled: json['dsqEnabled'],
-      positionsCreator: positionsCreatorLoader.load(json['positionsCreator']),
+      positionsCreator: positionsCreatorParser.load(json['positionsCreator']),
       ruleOf95HsFallEnabled: json['dsqEnabled'],
       judgesCount: json['judgesCount'],
+      judgesCreator: idsRepo.get(json['judgesCreatorId']),
       significantJudgesCount: json['significantJudgesCount'],
       competitionScoreCreator: idsRepo.get(json['competitionScoreCreatorId']),
       jumpScoreCreator: idsRepo.get(json['jumpScoreCreatorId']),
-      koRules: koRoundRulesLoader.load(json['koRoundRules']),
+      koRules: koRoundRulesParser.load(json['koRoundRules']),
     );
   }
 
@@ -66,26 +67,27 @@ class CompetitionRoundRulesLoader
     final groupsJson = json['groups'] as List<Json>;
     final groups = groupsJson
         .map(
-          (json) => teamCompetitionGroupRulesLoader.load(json),
+          (json) => teamCompetitionGroupRulesParser.load(json),
         )
         .toList();
 
     return DefaultTeamCompetitionRoundRules(
-      limit: entitiesLimitLoader.load(json['entitiesLimit']),
+      limit: entitiesLimitParser.load(json['entitiesLimit']),
       bibsAreReassigned: json['bibsAreReassigned'],
       gateCanChange: json['gateCanChange'],
       windAverager: idsRepo.get(json['windAveragerId']),
       inrunLightsEnabled: json['inrunLightsEnabled'],
       dsqEnabled: json['dsqEnabled'],
-      positionsCreator: positionsCreatorLoader.load(json['positionsCreator']),
+      positionsCreator: positionsCreatorParser.load(json['positionsCreator']),
       ruleOf95HsFallEnabled: json['dsqEnabled'],
       judgesCount: json['judgesCount'],
+      judgesCreator: idsRepo.get(json['judgesCreatorId']),
       significantJudgesCount: json['significantJudgesCount'],
       competitionScoreCreator: idsRepo.get(json['competitionScoreCreatorId']),
       jumpScoreCreator: idsRepo.get(json['jumpScoreCreatorId']),
       groups: groups,
       teamSize: json['teamSize'],
-      koRules: koRoundRulesLoader.load(json['koRoundRules']),
+      koRules: koRoundRulesParser.load(json['koRoundRules']),
     );
   }
 }

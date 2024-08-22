@@ -5,26 +5,26 @@ import 'package:sj_manager/models/simulation_db/event_series/event_series_calend
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
-class EventSeriesLoader implements SimulationDbPartLoader<EventSeries> {
-  const EventSeriesLoader({
+class EventSeriesParser implements SimulationDbPartParser<EventSeries> {
+  const EventSeriesParser({
     required this.idsRepo,
     required this.languageCode,
-    required this.calendarLoader,
-    required this.factsLoader,
+    required this.calendarParser,
+    required this.factsParser,
   });
 
   final ItemsIdsRepo idsRepo;
   final String languageCode;
-  final SimulationDbPartLoader<EventSeriesCalendar> calendarLoader;
-  final SimulationDbPartLoader<EventSeriesSetup> factsLoader;
+  final SimulationDbPartParser<EventSeriesCalendar> calendarParser;
+  final SimulationDbPartParser<EventSeriesSetup> factsParser;
 
   @override
   EventSeries load(Json json) {
-    final calendar = calendarLoader.load(json);
+    final calendar = calendarParser.load(json);
 
     return EventSeries(
       calendar: calendar,
-      setup: factsLoader.load(json['facts']),
+      setup: factsParser.load(json['facts']),
     );
   }
 }

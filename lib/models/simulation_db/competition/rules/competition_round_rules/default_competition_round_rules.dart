@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/judges_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
@@ -18,6 +19,7 @@ abstract class DefaultCompetitionRoundRules<T> with EquatableMixin {
     required this.positionsCreator,
     required this.ruleOf95HsFallEnabled,
     required this.judgesCount,
+    required this.judgesCreator,
     required this.significantJudgesCount,
     required this.jumpScoreCreator,
     required this.competitionScoreCreator,
@@ -33,6 +35,7 @@ abstract class DefaultCompetitionRoundRules<T> with EquatableMixin {
   final StandingsPositionsCreator positionsCreator;
   final bool ruleOf95HsFallEnabled;
   final int judgesCount;
+  final JudgesCreator judgesCreator;
   final int significantJudgesCount;
   final JumpScoreCreator jumpScoreCreator;
   final CompetitionScoreCreator<CompetitionScore<T, dynamic>> competitionScoreCreator;

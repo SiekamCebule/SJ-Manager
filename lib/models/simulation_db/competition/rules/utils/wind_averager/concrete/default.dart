@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:osje_sim/osje_sim.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/wind_averager.dart';
 
-abstract class DefaultWindAverager extends WindAverager {
+abstract class DefaultWindAverager extends WindAverager with EquatableMixin {
   DefaultWindAverager({
     required this.skipNonAchievedSensors,
     required this.computePreciselyPartialMeasurement,
@@ -42,4 +43,10 @@ abstract class DefaultWindAverager extends WindAverager {
     fillCompletnessData();
     return computeAverage();
   }
+
+  @override
+  List<Object?> get props => [
+        skipNonAchievedSensors,
+        computePreciselyPartialMeasurement,
+      ];
 }

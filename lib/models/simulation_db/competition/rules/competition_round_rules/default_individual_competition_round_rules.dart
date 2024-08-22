@@ -13,6 +13,7 @@ class DefaultIndividualCompetitionRoundRules
     required super.positionsCreator,
     required super.ruleOf95HsFallEnabled,
     required super.judgesCount,
+    required super.judgesCreator,
     required super.significantJudgesCount,
     required super.competitionScoreCreator,
     required super.jumpScoreCreator,

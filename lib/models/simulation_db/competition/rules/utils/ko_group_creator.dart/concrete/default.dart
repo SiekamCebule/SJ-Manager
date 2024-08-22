@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_group.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/ko_groups_creator.dart';
 import 'package:sj_manager/utils/iterable.dart';
@@ -12,7 +13,7 @@ enum KoGroupsCreatorRemainingEntitiesAction {
 }
 
 abstract class DefaultSizedKoGroupsCreator<E, C extends KoGroupsCreatingContext<E>>
-    extends KoGroupsCreator<E, C> {
+    extends KoGroupsCreator<E, C> with EquatableMixin {
   late C context;
   List<KoGroup<E>> koGroups = [];
   List<E> remainingEntities = [];
@@ -36,19 +37,19 @@ abstract class DefaultSizedKoGroupsCreator<E, C extends KoGroupsCreatingContext<
 
   void validateData() {
     final entitiesLengthIsDividableByPassedSize =
-        context.entities.length % entitiesInGroup == 0;
+        context.entitiesCount % entitiesInGroup == 0;
     final shouldThrow = !entitiesLengthIsDividableByPassedSize &&
         remainingEntitiesAction == KoGroupsCreatorRemainingEntitiesAction.throwError;
     if (shouldThrow) {
       throw StateError(
-        'Passed entities list length (${context.entities.length}) is not dividable by passed entitiesInGroup ($entitiesInGroup), and remainingEntitiesAction is set to $remainingEntitiesAction',
+        'Passed entities list length (${context.entitiesCount}) is not dividable by passed entitiesInGroup ($entitiesInGroup), and remainingEntitiesAction is set to $remainingEntitiesAction',
       );
     }
   }
 
   void setUpGroups() {
     koGroups = List.generate(
-      context.entities.length ~/ entitiesInGroup,
+      context.entitiesCount ~/ entitiesInGroup,
       (_) => const KoGroup(
         entities: [],
       ),
@@ -89,4 +90,11 @@ abstract class DefaultSizedKoGroupsCreator<E, C extends KoGroupsCreatingContext<
       }
     }
   }
+
+  @override
+  List<Object?> get props => [
+        runtimeType,
+        entitiesInGroup,
+        remainingEntitiesAction,
+      ];
 }

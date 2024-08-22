@@ -1,5 +1,6 @@
+import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/entity_related_algorithm_context.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/general/entity_related_algorithm_context.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/unary_algorithm.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
@@ -16,7 +17,7 @@ abstract class CompetitionScoreCreatingContext<T>
     required this.competition,
     required this.currentRound,
     required this.hill,
-    required this.currentCompetitionScore,
+    required this.currentScore,
   });
 
   // TODO: final SimulationData simulationData;
@@ -25,7 +26,7 @@ abstract class CompetitionScoreCreatingContext<T>
   final Competition<T> competition;
   final int currentRound;
   final Hill hill;
-  final CompetitionScore<T, dynamic>? currentCompetitionScore;
+  final CompetitionScore<T, dynamic>? currentScore;
 }
 
 class IndividualCompetitionScoreCreatingContext
@@ -36,7 +37,7 @@ class IndividualCompetitionScoreCreatingContext
     required super.competition,
     required super.currentRound,
     required super.hill,
-    required super.currentCompetitionScore,
+    required super.currentScore,
     required this.lastJumpScore,
   });
 
@@ -50,7 +51,7 @@ class TeamCompetitionScoreCreatingContext extends CompetitionScoreCreatingContex
     required super.competition,
     required super.currentRound,
     required super.hill,
-    required super.currentCompetitionScore,
+    required super.currentScore,
     required this.currentGroup,
     required this.lastJumpScore,
   });
@@ -60,4 +61,10 @@ class TeamCompetitionScoreCreatingContext extends CompetitionScoreCreatingContex
 }
 
 abstract class CompetitionScoreCreator<S extends CompetitionScore>
-    implements UnaryAlgorithm<CompetitionScoreCreatingContext, S> {}
+    with EquatableMixin
+    implements UnaryAlgorithm<CompetitionScoreCreatingContext, S> {
+  @override
+  List<Object?> get props => [
+        runtimeType,
+      ];
+}

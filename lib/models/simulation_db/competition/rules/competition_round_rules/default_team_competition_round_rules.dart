@@ -1,8 +1,9 @@
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/user_db/team/competition_team.dart';
 
-class DefaultTeamCompetitionRoundRules extends DefaultCompetitionRoundRules<Team> {
+class DefaultTeamCompetitionRoundRules
+    extends DefaultCompetitionRoundRules<CompetitionTeam> {
   const DefaultTeamCompetitionRoundRules({
     required super.limit,
     required super.bibsAreReassigned,
@@ -13,9 +14,10 @@ class DefaultTeamCompetitionRoundRules extends DefaultCompetitionRoundRules<Team
     required super.positionsCreator,
     required super.ruleOf95HsFallEnabled,
     required super.judgesCount,
+    required super.judgesCreator,
+    required super.significantJudgesCount,
     required super.competitionScoreCreator,
     required super.jumpScoreCreator,
-    required super.significantJudgesCount,
     required super.koRules,
     required this.groups,
     required this.teamSize,
