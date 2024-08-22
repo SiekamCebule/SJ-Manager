@@ -22,11 +22,11 @@ import 'package:sj_manager/json/simulation_db_loading/standings_positions_creato
 import 'package:sj_manager/json/simulation_db_loading/team_competition_group_rules_loader.dart';
 import 'package:sj_manager/json/simulation_db_saving/classification_score_creator_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/classification_serializer.dart';
-import 'package:sj_manager/json/simulation_db_saving/competition_round_rules_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/competition_rules_preset_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/competition_rules_provider_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/competition_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/default_classification_rules_serializer.dart';
+import 'package:sj_manager/json/simulation_db_saving/default_competition_round_rules_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/default_competition_rules_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/entities_limit_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/event_series_calendar_preset_serialier.dart';
@@ -260,7 +260,7 @@ void main() async {
                       idsRepo: context.read(),
                     ))),
             Provider<SimulationDbPartSerializer<DefaultCompetitionRoundRules>>(
-              create: (context) => CompetitionRoundRulesSerializer(
+              create: (context) => DefaultCompetitionRoundRulesSerializer(
                 idsRepo: context.read(),
                 teamCompetitionGroupRulesSerializer:
                     TeamCompetitionGroupRulesSerializer(idsRepo: context.read()),

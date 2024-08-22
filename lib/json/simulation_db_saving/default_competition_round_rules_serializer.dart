@@ -9,9 +9,9 @@ import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit
 import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_round_rules.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
-class CompetitionRoundRulesSerializer
+class DefaultCompetitionRoundRulesSerializer
     implements SimulationDbPartSerializer<DefaultCompetitionRoundRules> {
-  const CompetitionRoundRulesSerializer({
+  const DefaultCompetitionRoundRulesSerializer({
     required this.idsRepo,
     required this.teamCompetitionGroupRulesSerializer,
     required this.entitiesLimitSerializer,
