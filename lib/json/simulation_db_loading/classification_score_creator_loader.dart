@@ -14,7 +14,7 @@ class ClassificationScoreCreatorParser
   final ItemsIdsRepo idsRepo;
 
   @override
-  ClassificationScoreCreator load(Json json) {
+  ClassificationScoreCreator parse(Json json) {
     final type = json['type'] as String;
     return switch (type) {
       'default_individual' => DefaultIndividualClassificationScoreCreator(),

@@ -14,7 +14,7 @@ class KoGroupsCreatorLoader implements SimulationDbPartParser<KoGroupsCreator> {
   final ItemsIdsRepo idsRepo;
 
   @override
-  KoGroupsCreator load(Json json) {
+  KoGroupsCreator parse(Json json) {
     final type = json['type'] as String;
     return switch (type) {
       'default_classic' => DefaultClassicKoGroupsCreator(),

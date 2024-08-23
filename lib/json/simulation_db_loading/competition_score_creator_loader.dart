@@ -14,7 +14,7 @@ class CompetitionScoreCreatorLoader
   final ItemsIdsRepo idsRepo;
 
   @override
-  CompetitionScoreCreator load(Json json) {
+  CompetitionScoreCreator parse(Json json) {
     final type = json['type'] as String;
     return switch (type) {
       'default_linear_individual' => DefaultLinearIndividualCompetitionScoreCreator(),

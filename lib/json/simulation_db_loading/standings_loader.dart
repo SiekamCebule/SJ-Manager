@@ -21,15 +21,15 @@ class StandingsParser<E, S extends Score> implements SimulationDbPartParser<Stan
   final StandingsPositionsCreatorParser positionsCreatorParser;
 
   @override
-  Standings load(Json json) {
+  Standings parse(Json json) {
     final scoresJson = json['scores'] as List<Json>;
     final scores = scoresJson.map((json) {
-      final score = ScoreParser(idsRepo: idsRepo).load(json);
+      final score = ScoreParser(idsRepo: idsRepo).parse(json);
       idsRepo.register(score, id: idGenerator.generate());
       return score;
     }).toList();
     final positionsCreatorJson = json['positionsCreator'] as String;
-    final positionsCreator = positionsCreatorParser.load(positionsCreatorJson);
+    final positionsCreator = positionsCreatorParser.parse(positionsCreatorJson);
 
     return Standings(
       positionsCreator: positionsCreator,

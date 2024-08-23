@@ -3,5 +3,5 @@ import 'package:sj_manager/json/json_types.dart';
 abstract class SimulationDbPartParser<T extends Object> {
   const SimulationDbPartParser();
 
-  T load(Json json);
+  T parse(Json json);
 }

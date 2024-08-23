@@ -14,10 +14,10 @@ class SimulationSeasonParser implements SimulationDbPartParser<SimulationSeason>
   final SimulationDbPartParser<EventSeries> eventSeriesParser;
 
   @override
-  SimulationSeason load(Json json) {
+  SimulationSeason parse(Json json) {
     final eventSeriesJson = json['eventSeries'] as List<Json>;
     final eventSeries = eventSeriesJson.map((json) {
-      return eventSeriesParser.load(json);
+      return eventSeriesParser.parse(json);
     });
     return SimulationSeason(
       eventSeries: eventSeries.toList(),

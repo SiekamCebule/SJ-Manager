@@ -15,10 +15,10 @@ class EventSeriesCalendarPresetParser
   final SimulationDbPartParser<EventSeriesCalendar> calendarParser;
 
   @override
-  EventSeriesCalendarPreset load(Json json) {
+  EventSeriesCalendarPreset parse(Json json) {
     return EventSeriesCalendarPreset(
       name: json['name'],
-      calendar: calendarParser.load(json['calendar']),
+      calendar: calendarParser.parse(json['calendar']),
     );
   }
 }

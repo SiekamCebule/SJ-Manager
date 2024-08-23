@@ -15,10 +15,10 @@ class CompetitionRulesPresetParser
   final SimulationDbPartParser<DefaultCompetitionRules> rulesParser;
 
   @override
-  DefaultCompetitionRulesPreset load(Json json) {
+  DefaultCompetitionRulesPreset parse(Json json) {
     return DefaultCompetitionRulesPreset(
       name: json['name'],
-      rules: rulesParser.load(json['rules']),
+      rules: rulesParser.parse(json['rules']),
     );
   }
 }

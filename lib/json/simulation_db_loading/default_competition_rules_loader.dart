@@ -6,7 +6,6 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ro
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class DefaultCompetitionRulesParser
@@ -20,7 +19,7 @@ class DefaultCompetitionRulesParser
   final SimulationDbPartParser<DefaultCompetitionRoundRules> roundRulesParser;
 
   @override
-  DefaultCompetitionRules load(Json json) {
+  DefaultCompetitionRules parse(Json json) {
     final type = json['type'] as String;
     return switch (type) {
       'individual' => _loadIndividual(json),
@@ -49,7 +48,7 @@ class DefaultCompetitionRulesParser
   List<DefaultCompetitionRoundRules> _loadRoundsDynamic(Json json) {
     final roundsJson = json['rounds'] as List<dynamic>;
     final rounds =
-        roundsJson.map((roundJson) => roundRulesParser.load(roundJson)).toList();
+        roundsJson.map((roundJson) => roundRulesParser.parse(roundJson)).toList();
     return rounds;
   }
 }

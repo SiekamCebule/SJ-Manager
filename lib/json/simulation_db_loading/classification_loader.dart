@@ -18,7 +18,7 @@ class ClassificationParser implements SimulationDbPartParser<Classification> {
       defaultClassificationRulesParser;
 
   @override
-  Classification load(Json json) {
+  Classification parse(Json json) {
     final type = json['type'] as String;
 
     return switch (type) {
@@ -29,8 +29,8 @@ class ClassificationParser implements SimulationDbPartParser<Classification> {
   }
 
   DefaultClassification _loadDefaultClassification(Json json) {
-    final standings = standingsParser.load(json['standings']);
-    final rules = defaultClassificationRulesParser.load(json['rules']);
+    final standings = standingsParser.parse(json['standings']);
+    final rules = defaultClassificationRulesParser.parse(json['rules']);
     return DefaultClassification(
       name: json['name'],
       standings: standings,

@@ -16,10 +16,10 @@ class CompetitionRulesProviderParser
   final SimulationDbPartParser<DefaultCompetitionRules> rulesParser;
 
   @override
-  DefaultCompetitionRulesProvider load(Json json) {
+  DefaultCompetitionRulesProvider parse(Json json) {
     final type = json['type'] as String;
     if (type == 'raw') {
-      return rulesParser.load(json);
+      return rulesParser.parse(json);
     } else if (type == 'fromPreset') {
       return _loadFromPreset(json);
     } else {

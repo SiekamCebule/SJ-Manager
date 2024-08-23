@@ -12,7 +12,7 @@ class JudgesCreatorLoader implements SimulationDbPartParser<JudgesCreator> {
   final ItemsIdsRepo idsRepo;
 
   @override
-  JudgesCreator load(Json json) {
+  JudgesCreator parse(Json json) {
     final type = json['type'] as String;
     return switch (type) {
       'default' => DefaultJudgesCreator(),

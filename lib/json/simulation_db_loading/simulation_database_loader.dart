@@ -36,7 +36,7 @@ class SimulationDatabaseParser<E, S extends Score>
   late ItemsRepo<SimulationSeason> _seasons;
 
   @override
-  SimulationDatabase load(Json json) {
+  SimulationDatabase parse(Json json) {
     _json = json;
     _loadCountries();
     _loadJumpers();
@@ -87,7 +87,7 @@ class SimulationDatabaseParser<E, S extends Score>
   void _loadSeasons() {
     final seasonsJson = _json['seasons'] as List<Json>;
     final seasons = seasonsJson.map(
-      (json) => seasonParser.load(json),
+      (json) => seasonParser.parse(json),
     );
     _seasons = ItemsRepo(initial: seasons.toList());
   }

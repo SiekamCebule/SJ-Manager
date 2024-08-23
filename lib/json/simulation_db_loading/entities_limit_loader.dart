@@ -11,7 +11,7 @@ class EntitiesLimitParser implements SimulationDbPartParser<EntitiesLimit> {
   final ItemsIdsRepo idsRepo;
 
   @override
-  EntitiesLimit load(Json json) {
+  EntitiesLimit parse(Json json) {
     final type = json['type'] as String;
     final count = json['count'] as int;
     return switch (type) {

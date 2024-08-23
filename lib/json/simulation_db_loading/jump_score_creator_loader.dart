@@ -12,7 +12,7 @@ class JumpScoreCreatorLoader implements SimulationDbPartParser<JumpScoreCreator>
   final ItemsIdsRepo idsRepo;
 
   @override
-  JumpScoreCreator load(Json json) {
+  JumpScoreCreator parse(Json json) {
     final type = json['type'] as String;
     return switch (type) {
       'default_classic' => DefaultClassicJumpScoreCreator(),
