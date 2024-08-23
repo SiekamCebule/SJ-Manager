@@ -1,16 +1,29 @@
 class DbEditingAvailableObjectsRepo<T> {
-  const DbEditingAvailableObjectsRepo({Map<String, T> initial = const {}})
+  const DbEditingAvailableObjectsRepo(
+      {List<DbEditingAvaiableObjectConfig<T>> initial = const []})
       : _objects = initial;
 
-  final Map<String, T> _objects;
+  final List<DbEditingAvaiableObjectConfig<T>> _objects;
 
-  // If I add add() method or sth, I should remove the const from assignement to [initial]
+  List<DbEditingAvaiableObjectConfig<T>> get objects => _objects;
 
-  T get(String key) {
-    if (!_objects.containsKey(key)) {
+  T getObject(String key) {
+    return _getConfig(key).object;
+  }
+
+  String getDisplayName(String key) {
+    return _getConfig(key).displayName;
+  }
+
+  DbEditingAvaiableObjectConfig<T> _getConfig(String key) {
+    if (!containsKey(key)) {
       throw _objectWithKeyNotContainedError(key);
     }
-    return _objects[key]!;
+    return _objects.singleWhere((config) => config.key == key);
+  }
+
+  bool containsKey(String key) {
+    return _objects.any((config) => config.key == key);
   }
 
   Error _objectWithKeyNotContainedError(String key) {
@@ -18,4 +31,16 @@ class DbEditingAvailableObjectsRepo<T> {
       'An object with that key ($key) is not contained in that DbEditingAvailableObjectsRepo<$T>',
     );
   }
+}
+
+class DbEditingAvaiableObjectConfig<T> {
+  const DbEditingAvaiableObjectConfig({
+    required this.key,
+    required this.displayName,
+    required this.object,
+  });
+
+  final String key;
+  final String displayName;
+  final T object;
 }

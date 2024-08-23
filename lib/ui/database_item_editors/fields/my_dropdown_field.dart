@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 
 class MyDropdownField<T> extends StatelessWidget {
   const MyDropdownField({
@@ -28,6 +29,13 @@ class MyDropdownField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final border = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(UiFieldWidgetsConstants.borderRadius),
+      borderSide: BorderSide(
+        width: UiFieldWidgetsConstants.borderSideWidth,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
+    );
     return DropdownMenu<T>(
         enabled: enabled ?? true,
         enableSearch: enableSearch ?? true,
@@ -41,6 +49,10 @@ class MyDropdownField<T> extends StatelessWidget {
         label: label,
         enableFilter: true,
         onSelected: onChange,
+        inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
+              enabledBorder: border,
+              border: border,
+            ),
         menuStyle: MenuStyle(
           visualDensity: VisualDensity.standard,
           shape: WidgetStatePropertyAll(

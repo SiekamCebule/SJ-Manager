@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
 import 'package:sj_manager/utils/doubles.dart';
 import 'package:sj_manager/utils/math.dart';
@@ -56,6 +57,13 @@ class MyNumeralTextFieldState extends State<MyNumeralTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final border = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(UiFieldWidgetsConstants.borderRadius),
+      borderSide: BorderSide(
+        width: UiFieldWidgetsConstants.borderSideWidth,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
+    );
     return IntrinsicHeight(
       child: Row(
         children: [
@@ -65,7 +73,8 @@ class MyNumeralTextFieldState extends State<MyNumeralTextField> {
               controller: widget.controller,
               decoration: InputDecoration(
                 label: Text(widget.labelText),
-                border: const OutlineInputBorder(),
+                border: border,
+                enabledBorder: border,
                 suffixText: widget.suffixText,
               ),
               inputFormatters: [

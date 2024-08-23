@@ -11,6 +11,12 @@ abstract class UiGlobalConstants {
   static const double defaultCountryFlagBorderRadius = 3;
 }
 
+abstract class UiFieldWidgetsConstants {
+  static const borderRadius = Radius.circular(5);
+  static const borderSideWidth = 0.5;
+  static const gapBetweenFieldAndHelpButton = 3.0;
+}
+
 abstract class UiMainMenuConstants {
   static const double spaceBetweenButtons = 5;
   static const buttonsBorderRadius = Radius.circular(10);

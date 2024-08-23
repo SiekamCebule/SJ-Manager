@@ -68,6 +68,8 @@ class CompetitionRoundRulesParser
         '(Parsing) The loaded competition score creator type is not a valid one for individual competition rules (${competitionScoreCreator.runtimeType})',
       );
     }
+    final koRulesJson = json['koRoundRules'];
+
     return DefaultIndividualCompetitionRoundRules(
       limit: entitiesLimit,
       bibsAreReassigned: json['bibsAreReassigned'],
@@ -83,7 +85,7 @@ class CompetitionRoundRulesParser
       competitionScoreCreator: competitionScoreCreator
           as CompetitionScoreCreator<CompetitionScore<Jumper, dynamic>>,
       jumpScoreCreator: jumpScoreCreatorParser.parse(json['jumpScoreCreator']),
-      koRules: koRoundRulesParser.parse(json['koRoundRules']),
+      koRules: koRulesJson != null ? koRoundRulesParser.parse(koRulesJson) : null,
     );
   }
 
@@ -110,6 +112,7 @@ class CompetitionRoundRulesParser
         '(Parsing) The loaded competition score creator type is not a valid one for team competition rules (${competitionScoreCreator.runtimeType})',
       );
     }
+    final koRulesJson = json['koRoundRules'];
 
     return DefaultTeamCompetitionRoundRules(
       limit: entitiesLimit,
@@ -128,7 +131,7 @@ class CompetitionRoundRulesParser
       jumpScoreCreator: jumpScoreCreatorParser.parse(json['jumpScoreCreator']),
       groups: groups,
       teamSize: json['teamSize'],
-      koRules: koRoundRulesParser.parse(json['koRoundRules']),
+      koRules: koRulesJson != null ? koRoundRulesParser.parse(koRulesJson) : null,
     );
   }
 }

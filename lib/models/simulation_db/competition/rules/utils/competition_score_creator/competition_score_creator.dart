@@ -7,6 +7,7 @@ import 'package:sj_manager/models/simulation_db/standings/score/concrete/competi
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/team/competition_team.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 
 abstract class CompetitionScoreCreatingContext<T>
@@ -44,7 +45,8 @@ class IndividualCompetitionScoreCreatingContext
   final SingleJumpScore<Jumper> lastJumpScore;
 }
 
-class TeamCompetitionScoreCreatingContext extends CompetitionScoreCreatingContext<Team> {
+class TeamCompetitionScoreCreatingContext
+    extends CompetitionScoreCreatingContext<CompetitionTeam> {
   const TeamCompetitionScoreCreatingContext({
     required super.entity,
     required super.eventSeries,

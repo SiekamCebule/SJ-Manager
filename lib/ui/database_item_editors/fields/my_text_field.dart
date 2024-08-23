@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 
 class MyTextField extends StatelessWidget {
   const MyTextField({
@@ -21,12 +22,20 @@ class MyTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final border = OutlineInputBorder(
+      borderRadius: const BorderRadius.all(UiFieldWidgetsConstants.borderRadius),
+      borderSide: BorderSide(
+        width: UiFieldWidgetsConstants.borderSideWidth,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
+    );
     return TextField(
       enabled: enabled,
       controller: controller,
       decoration: InputDecoration(
         label: Text(labelText),
-        border: const OutlineInputBorder(),
+        enabledBorder: border,
+        border: border,
       ),
       inputFormatters: formatters,
       onSubmitted: (value) => onChange(),
