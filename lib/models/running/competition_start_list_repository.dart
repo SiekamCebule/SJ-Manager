@@ -27,7 +27,7 @@ class CompetitionStartlistRepo<E> with EquatableMixin {
   Error _alreadyCompletedError(E entity) => StateError(
       'Cannot complete the jump again, because the $E\'s jump has been already completed');
 
-  bool of(E entity) {
+  bool hasCompleted(E entity) {
     if (!_contains(entity)) {
       throw _entityIsNotContainedWhenCheckingError(entity);
     }
@@ -37,13 +37,27 @@ class CompetitionStartlistRepo<E> with EquatableMixin {
   Error _entityIsNotContainedWhenCheckingError(E entity) =>
       StateError('The entity ($entity) is not contained in the repository');
 
-  E get firstIncompleted {
-    if (everyHasCompleted) {
-      throw _everyEntityHasCompletedError();
+  int indexOf(E entity) {
+    return _startlistOrder.indexOf(entity);
+  }
+
+  E? get firstIncompleted {
+    return atNFromIncompleted(1);
+  }
+
+  E? atNFromIncompleted(int n) {
+    var currentN = 1;
+    E? wantedEntity;
+    for (var entity in _startlistOrder) {
+      if (hasCompleted(entity)) {
+        if (currentN == n) {
+          wantedEntity = entity;
+        } else {
+          currentN++;
+        }
+      }
     }
-    return _startlistOrder.firstWhere(
-      (entity) => of(entity) == true,
-    );
+    return wantedEntity;
   }
 
   bool get everyHasCompleted {

@@ -1,12 +1,14 @@
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
+import 'package:sj_manager/models/user_db/team/competition_team.dart';
 
 class DefaultLinearTeamCompetitionScoreCreator
-    extends CompetitionScoreCreator<CompetitionTeamScore> {
+    extends CompetitionScoreCreator<CompetitionTeamScore<CompetitionTeam>> {
   @override
-  CompetitionTeamScore compute(covariant TeamCompetitionScoreCreatingContext context) {
+  CompetitionTeamScore<CompetitionTeam> compute(
+      covariant TeamCompetitionScoreCreatingContext context) {
     if (context.currentScore == null) {
-      return CompetitionTeamScore(
+      return CompetitionTeamScore<CompetitionTeam>(
         entity: context.entity,
         points: context.lastJumpScore.points,
         jumperScores: [

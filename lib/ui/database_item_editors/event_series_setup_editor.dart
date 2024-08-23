@@ -129,7 +129,8 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                                 //onSaved: (value) => widget.onChange(_constructAndCache()),
                               ),
                             ),
-                            const Gap(10),
+                            const Gap(
+                                UiFieldWidgetsConstants.gapBetweenFieldAndHelpButton),
                             HelpIconButton(onPressed: () async {
                               await showDialog(
                                 context: context,
@@ -160,7 +161,8 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                                 step: 1,
                               ),
                             ),
-                            const Gap(10),
+                            const Gap(
+                                UiFieldWidgetsConstants.gapBetweenFieldAndHelpButton),
                             HelpIconButton(onPressed: () async {
                               await showDialog(
                                 context: context,
