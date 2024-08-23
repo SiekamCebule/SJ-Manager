@@ -7,6 +7,10 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ro
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_round_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/judges_creator.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class DefaultCompetitionRoundRulesSerializer
@@ -17,6 +21,10 @@ class DefaultCompetitionRoundRulesSerializer
     required this.entitiesLimitSerializer,
     required this.positionsCreatorSerializer,
     required this.koRoundRulesSerializer,
+    required this.windAveragerSerializer,
+    required this.judgesCreatorSerializer,
+    required this.jumpScoreCreatorSerializer,
+    required this.competitionScoreCreatorSerializer,
   });
 
   final ItemsIdsRepo idsRepo;
@@ -25,6 +33,12 @@ class DefaultCompetitionRoundRulesSerializer
       teamCompetitionGroupRulesSerializer;
   final SimulationDbPartSerializer<KoRoundRules> koRoundRulesSerializer;
   final StandingsPositionsCreatorSerializer positionsCreatorSerializer;
+
+  final SimulationDbPartSerializer<WindAverager> windAveragerSerializer;
+  final SimulationDbPartSerializer<JudgesCreator> judgesCreatorSerializer;
+  final SimulationDbPartSerializer<JumpScoreCreator> jumpScoreCreatorSerializer;
+  final SimulationDbPartSerializer<CompetitionScoreCreator>
+      competitionScoreCreatorSerializer;
 
   @override
   Json serialize(DefaultCompetitionRoundRules rules) {
@@ -49,16 +63,20 @@ class DefaultCompetitionRoundRulesSerializer
       'limit':
           rules.limit != null ? entitiesLimitSerializer.serialize(rules.limit!) : null,
       'gateCanChange': rules.gateCanChange,
-      'windAveragerId': idsRepo.idOf(rules.windAverager),
+      'windAverager': rules.windAverager != null
+          ? windAveragerSerializer.serialize(rules.windAverager!)
+          : null,
       'inrunLightsEnabled': rules.inrunLightsEnabled,
       'dsqEnabled': rules.dsqEnabled,
       'positionsCreator': positionsCreatorSerializer.serialize(rules.positionsCreator),
       'ruleOf95HsFallEnabled': rules.ruleOf95HsFallEnabled,
       'judgesCount': rules.judgesCount,
-      'judgesCreatorId': idsRepo.idOf(rules.judgesCreator),
+      'judgesCreator': judgesCreatorSerializer.serialize(rules.judgesCreator),
       'significantJudgesCount': rules.significantJudgesCount,
-      'competitionScoreCreatorId': idsRepo.idOf(rules.competitionScoreCreator),
-      'jumpScoreCreatorId': idsRepo.idOf(rules.jumpScoreCreator),
+      'competitionScoreCreator': competitionScoreCreatorSerializer.serialize(
+        rules.competitionScoreCreator as CompetitionScoreCreator,
+      ),
+      'jumpScoreCreator': jumpScoreCreatorSerializer.serialize(rules.jumpScoreCreator),
       'koRoundRules':
           rules.koRules != null ? koRoundRulesSerializer.serialize(rules.koRules!) : null,
     };
@@ -74,15 +92,20 @@ class DefaultCompetitionRoundRulesSerializer
       'limit':
           rules.limit != null ? entitiesLimitSerializer.serialize(rules.limit!) : null,
       'gateCanChange': rules.gateCanChange,
-      'windAveragerId': idsRepo.idOf(rules.windAverager),
+      'windAverager': rules.windAverager != null
+          ? windAveragerSerializer.serialize(rules.windAverager!)
+          : null,
       'inrunLightsEnabled': rules.inrunLightsEnabled,
       'dsqEnabled': rules.dsqEnabled,
       'positionsCreator': positionsCreatorSerializer.serialize(rules.positionsCreator),
       'ruleOf95HsFallEnabled': rules.ruleOf95HsFallEnabled,
       'judgesCount': rules.judgesCount,
+      'judgesCreator': judgesCreatorSerializer.serialize(rules.judgesCreator),
       'significantJudgesCount': rules.significantJudgesCount,
-      'competitionScoreCreatorId': idsRepo.idOf(rules.competitionScoreCreator),
-      'jumpScoreCreatorId': idsRepo.idOf(rules.jumpScoreCreator),
+      'competitionScoreCreator': competitionScoreCreatorSerializer.serialize(
+        rules.competitionScoreCreator as CompetitionScoreCreator,
+      ),
+      'jumpScoreCreator': jumpScoreCreatorSerializer.serialize(rules.jumpScoreCreator),
       'groups': groupsJson,
       'teamSize': rules.teamSize,
       'koRoundRules':

@@ -20,16 +20,16 @@ class EventSeriesCalendarParser implements SimulationDbPartParser<EventSeriesCal
   final SimulationDbPartParser<Classification> classificationParser;
 
   @override
-  EventSeriesCalendar load(Json json) {
+  EventSeriesCalendar parse(Json json) {
     final competitionsJson = json['competitions'] as List<Json>;
     final competitions = competitionsJson.map((json) {
-      final competition = competitionParser.load(json);
+      final competition = competitionParser.parse(json);
       idsRepo.register(competition, id: idGenerator.generate());
       return competition;
     });
     final classificationsJson = json['classifications'] as List<Json>;
     final classifications = classificationsJson.map((json) {
-      final classification = classificationParser.load(json);
+      final classification = classificationParser.parse(json);
       idsRepo.register(classification, id: idGenerator.generate());
       return classification;
     });

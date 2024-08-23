@@ -19,19 +19,19 @@ class CompetitionParser implements SimulationDbPartParser<Competition> {
   final SimulationDbPartParser<Standings> standingsParser;
 
   @override
-  Competition load(Json json) {
+  Competition parse(Json json) {
     final labelsJson = json['labels'] as List<String>?;
     List<Object>? labels;
     if (labelsJson != null) {
       labels = labelsJson.map((json) => _label(json)).toList();
     }
-    final standings = standingsParser.load(json);
+    final standings = standingsParser.parse(json);
 
     return Competition(
       // TODO: Maybe preserve the type?
       hill: idsRepo.get<Hill>(json['hillId']),
       date: DateTime.parse(json['date']),
-      rules: rulesParser.load(json['rules']),
+      rules: rulesParser.parse(json['rules']),
       labels: labels ?? const [],
       standings: standings,
     );

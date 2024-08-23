@@ -15,7 +15,7 @@ class ScoreParser implements SimulationDbPartParser<Score> {
   final ItemsIdsRepo idsRepo;
 
   @override
-  Score load(Json json) {
+  Score parse(Json json) {
     return _loadAppropriate(json);
   }
 

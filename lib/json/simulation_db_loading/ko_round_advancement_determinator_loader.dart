@@ -13,7 +13,7 @@ class KoRoundAdvancementDeterminatorLoader
   final ItemsIdsRepo idsRepo;
 
   @override
-  KoRoundAdvancementDeterminator load(Json json) {
+  KoRoundAdvancementDeterminator parse(Json json) {
     final type = json['type'] as String;
     return switch (type) {
       'n_best' => const NBestKoRoundAdvancementDeterminator(),

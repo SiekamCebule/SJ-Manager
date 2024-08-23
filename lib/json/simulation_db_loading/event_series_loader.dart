@@ -19,12 +19,12 @@ class EventSeriesParser implements SimulationDbPartParser<EventSeries> {
   final SimulationDbPartParser<EventSeriesSetup> factsParser;
 
   @override
-  EventSeries load(Json json) {
-    final calendar = calendarParser.load(json);
+  EventSeries parse(Json json) {
+    final calendar = calendarParser.parse(json);
 
     return EventSeries(
       calendar: calendar,
-      setup: factsParser.load(json['facts']),
+      setup: factsParser.parse(json['facts']),
     );
   }
 }

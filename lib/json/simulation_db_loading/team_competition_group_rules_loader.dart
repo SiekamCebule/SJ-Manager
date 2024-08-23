@@ -12,7 +12,7 @@ class TeamCompetitionGroupRulesParser
   final ItemsIdsRepo idsRepo;
 
   @override
-  TeamCompetitionGroupRules load(Json json) {
+  TeamCompetitionGroupRules parse(Json json) {
     return TeamCompetitionGroupRules(
       sortStartList: json['sortStartList'],
     );

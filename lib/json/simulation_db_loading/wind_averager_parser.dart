@@ -5,15 +5,15 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_ave
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
-class WindAveragerLoader implements SimulationDbPartParser<WindAverager> {
-  const WindAveragerLoader({
+class WindAveragerParser implements SimulationDbPartParser<WindAverager> {
+  const WindAveragerParser({
     required this.idsRepo,
   });
 
   final ItemsIdsRepo idsRepo;
 
   @override
-  WindAverager load(Json json) {
+  WindAverager parse(Json json) {
     final type = json['type'] as String;
     return switch (type) {
       'default_linear' => _loadDefaultLinear(json),

@@ -19,7 +19,7 @@ class DefaultClassificationRulesParser
       classificationScoreCreatorParser;
 
   @override
-  DefaultClassificationRules load(Json json) {
+  DefaultClassificationRules parse(Json json) {
     final type = json['type'] as String;
     return switch (type) {
       'individual' || 'team ' => _loadAccordingly(json: json, typeString: type),
@@ -32,7 +32,7 @@ class DefaultClassificationRulesParser
   DefaultClassificationRules _loadAccordingly(
       {required Json json, required String typeString}) {
     final classificationScoreCreator =
-        classificationScoreCreatorParser.load(json['classificationScoreCreator']);
+        classificationScoreCreatorParser.parse(json['classificationScoreCreator']);
     final scoringType = _loadType(json['scoringType']);
     final competitionsJson = json['competitionIds'] as List;
     final competitions = competitionsJson.map(
