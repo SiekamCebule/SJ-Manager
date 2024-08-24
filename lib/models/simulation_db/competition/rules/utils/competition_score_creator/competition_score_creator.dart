@@ -8,7 +8,6 @@ import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
 
 abstract class CompetitionScoreCreatingContext<T>
     extends EntityRelatedAlgorithmContext<T> {

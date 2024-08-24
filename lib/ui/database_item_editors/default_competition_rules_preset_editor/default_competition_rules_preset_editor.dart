@@ -11,10 +11,12 @@ import 'package:sj_manager/utils/platform.dart';
 class DefaultCompetitionRulesPresetEditor extends StatefulWidget {
   const DefaultCompetitionRulesPresetEditor({
     super.key,
+    required this.initial,
     required this.onChange,
     required this.onAdvancedEditorChosen,
   });
 
+  final DefaultCompetitionRulesPreset initial;
   final Function(DefaultCompetitionRulesPreset current) onChange;
   final VoidCallback onAdvancedEditorChosen;
 
@@ -37,6 +39,13 @@ class _DefaultCompetitionRulesPresetEditorState
   void initState() {
     _scrollController = ScrollController();
     _nameController = TextEditingController();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _fillFields(widget.initial);
+      });
+      _rules = _rulesEditorKey.currentState!.currentCached!;
+    });
     super.initState();
   }
 
@@ -74,6 +83,7 @@ class _DefaultCompetitionRulesPresetEditorState
                     addGapsOnFarSides: false,
                     scrollable: false,
                     onChange: (currentRules) {
+                      print('new rules! :)');
                       _rules = currentRules;
                       _onChange();
                     },
@@ -97,6 +107,7 @@ class _DefaultCompetitionRulesPresetEditorState
   }
 
   DefaultCompetitionRulesPreset _constructAndCache() {
+    print('cac');
     final preset = DefaultCompetitionRulesPreset(
       name: _nameController.text,
       rules: _rules!,

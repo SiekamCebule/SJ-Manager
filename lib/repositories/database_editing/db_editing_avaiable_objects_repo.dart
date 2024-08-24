@@ -15,6 +15,10 @@ class DbEditingAvailableObjectsRepo<T> {
     return _getConfig(key).displayName;
   }
 
+  String getKeyByObject(T searched) {
+    return _objects.singleWhere((object) => object.object == searched).key;
+  }
+
   DbEditingAvaiableObjectConfig<T> _getConfig(String key) {
     if (!containsKey(key)) {
       throw _objectWithKeyNotContainedError(key);
