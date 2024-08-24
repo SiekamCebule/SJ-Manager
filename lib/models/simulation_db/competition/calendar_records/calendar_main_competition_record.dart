@@ -6,7 +6,6 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ru
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
 
 class CalendarMainCompetitionRecord implements HighLevelCompetitionRecord {
   const CalendarMainCompetitionRecord({

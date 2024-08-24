@@ -4,7 +4,7 @@ import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart';
 
 class StandingsPositionsWithShuffleOnEqualPositionsCreator
-    implements StandingsPositionsCreator {
+    extends StandingsPositionsCreator {
   final Random _random = Random();
   late List<Score> _scores;
 

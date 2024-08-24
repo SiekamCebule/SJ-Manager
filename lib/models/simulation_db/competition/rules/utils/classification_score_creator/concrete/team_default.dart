@@ -2,7 +2,6 @@ import 'package:sj_manager/models/simulation_db/classification/default_classific
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/concrete/default.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/classification_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/utils/standings_utils.dart';

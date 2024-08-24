@@ -22,9 +22,11 @@ class _AppropriateItemEditorState extends State<_AppropriateItemEditor> {
     final filtersRepo = context.watch<DbFiltersRepo>();
     final type = context.watch<DatabaseItemsTypeCubit>().state;
     context.watch<ValueRepo<_SelectedTabIndex>>();
+    final initialItem = context.watch<DefaultItemsRepo>().getByTypeArgument(type);
 
     return DbItemEditorFactory.create(
       key: _key,
+      initial: initialItem,
       context: context,
       type: type,
       onChange: widget.onChange,
@@ -40,6 +42,7 @@ class _AppropriateItemEditorState extends State<_AppropriateItemEditor> {
 abstract class DbItemEditorFactory {
   static Widget create({
     required Key key,
+    required dynamic initial,
     required BuildContext context,
     required Type type,
     required dynamic Function(dynamic value) onChange,
@@ -115,6 +118,7 @@ abstract class DbItemEditorFactory {
     } else if (type == DefaultCompetitionRulesPreset) {
       return DefaultCompetitionRulesPresetEditor(
         key: key,
+        initial: initial,
         onChange: onChange,
         onAdvancedEditorChosen: () {
           throw UnimplementedError();

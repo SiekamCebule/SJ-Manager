@@ -105,5 +105,8 @@
     "czech": "Czeski",
     "unnamed": "Bez nazwy",
     "chooseUniqueIdForEventSeries": "Potrzebujemy unikalnego ID dla tych rozgrywek",
-    "identifier": "Identyfikator"
+    "identifier": "Identyfikator",
+    "withoutLimit": "Bez limitu",
+    "soft": "Miękki",
+    "exact": "Dosłowny"
 }

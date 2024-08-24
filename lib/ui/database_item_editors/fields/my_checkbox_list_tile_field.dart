@@ -20,6 +20,7 @@ class MyCheckboxListTileField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 12),
       title: title,
       value: value,
       tristate: tristate,
