@@ -29,10 +29,6 @@ File userDataFile(PlarformSpecificPathsCache pathsCache, String fileName) {
     databaseDir.createSync(recursive: true);
   }
   final file = File('${databaseDir.path}/$fileName');
-
-  if (!file.existsSync()) {
-    file.create(recursive: true);
-  }
   return file;
 }
 

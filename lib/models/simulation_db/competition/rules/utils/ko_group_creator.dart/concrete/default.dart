@@ -94,7 +94,5 @@ abstract class DefaultSizedKoGroupsCreator<E, C extends KoGroupsCreatingContext<
   @override
   List<Object?> get props => [
         runtimeType,
-        entitiesInGroup,
-        remainingEntitiesAction,
       ];
 }

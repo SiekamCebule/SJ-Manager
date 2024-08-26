@@ -18,17 +18,7 @@ class DbFileNotFoundWarning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Row(
-        children: [
-          Flexible(child: Text(title)),
-          const Gap(15),
-          Icon(
-            Symbols.warning,
-            color: Theme.of(context).colorScheme.onErrorContainer,
-            size: 32,
-          ),
-        ],
-      ),
+      title: Text(title),
       content: RichText(
         text: TextSpan(children: [
           TextSpan(

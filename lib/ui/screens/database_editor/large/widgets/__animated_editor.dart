@@ -35,6 +35,10 @@ class _AnimatedEditor extends StatelessWidget {
             key: editorKey,
             itemType: itemsType,
             onChange: (changedItem) async {
+              if (changedItem is DefaultCompetitionRulesPreset) {
+                print(
+                    '_AnimatedEditor: changedItem as rules preset, ko rules: ${changedItem.competitionRules.rounds.first.koRules}');
+              }
               if (selectedIndexesRepo.state.length == 1 && changedItem != null) {
                 final index = selectedIndexesRepo.state.single;
                 editableItemsRepoByType.replace(oldIndex: index, newItem: changedItem);

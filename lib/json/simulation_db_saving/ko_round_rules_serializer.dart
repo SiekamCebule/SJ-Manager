@@ -23,7 +23,9 @@ class KoRoundRulesSerializer implements SimulationDbPartSerializer<KoRoundRules>
     return {
       'advancementDeterminator':
           advancementDeterminatorSerializer.serialize(rules.advancementDeterminator),
+      'advancementCount': rules.advancementCount,
       'koGroupsCreator': koGroupsCreatorSerializer.serialize(rules.koGroupsCreator),
+      'groupSize': rules.groupSize,
     };
   }
 }

@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/unary_algorithm.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
@@ -24,21 +23,6 @@ abstract class KoRoundAdvancementDeterminingContext<T> {
   final int currentRound;
   final Hill hill;
   final List<T> entities;
-}
-
-class KoRoundNBestAdvancementDeterminingContext<T>
-    extends KoRoundAdvancementDeterminingContext<T> {
-  const KoRoundNBestAdvancementDeterminingContext({
-    required super.eventSeries,
-    required super.competition,
-    required super.currentRound,
-    required super.hill,
-    required super.entities,
-    required super.koStandings,
-    required this.limit,
-  });
-
-  final EntitiesLimit limit;
 }
 
 abstract class KoRoundAdvancementDeterminator<E,

@@ -10,4 +10,7 @@ abstract class DefaultCustomizableKoGroupsCreator<E,
 
   @override
   int get entitiesInGroup => context.entitiesInGroup;
+
+  @override
+  List<Object?> get props => [runtimeType];
 }

@@ -23,6 +23,9 @@ class DefaultPotsKoGroupsCreator<E>
   @override
   KoGroupsCreatorRemainingEntitiesAction get remainingEntitiesAction =>
       context.remainingEntitiesAction;
+
+  @override
+  List<Object?> get props => [runtimeType];
 }
 
 // Jak ustalić remainingEntities?

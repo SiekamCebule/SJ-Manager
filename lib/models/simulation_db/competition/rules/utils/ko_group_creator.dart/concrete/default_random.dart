@@ -15,4 +15,7 @@ class DefaultRandomKoGroupsCreator<E>
       }
     }
   }
+
+  @override
+  List<Object?> get props => [runtimeType];
 }

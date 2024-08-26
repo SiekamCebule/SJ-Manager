@@ -80,6 +80,9 @@ class NumberInRangeEnforcer extends TextInputFormatter {
     if (newValue.text.isEmpty) {
       return newValue;
     }
+    if (newValue.text == '-') {
+      return newValue;
+    }
     if (num.tryParse(newValue.text) == null) {
       return oldValue;
     }
@@ -97,7 +100,7 @@ class NumberInRangeEnforcer extends TextInputFormatter {
 class NDecimalPlacesEnforcer extends TextInputFormatter {
   const NDecimalPlacesEnforcer({
     required this.decimalPlaces,
-  }) : assert(decimalPlaces > 0);
+  });
 
   final int decimalPlaces;
 
@@ -107,6 +110,9 @@ class NDecimalPlacesEnforcer extends TextInputFormatter {
     TextEditingValue newValue,
   ) {
     if (newValue.text.isEmpty) {
+      return newValue;
+    }
+    if (newValue.text == '-') {
       return newValue;
     }
     if (newValue.text == '.') {

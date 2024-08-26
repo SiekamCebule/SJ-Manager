@@ -35,4 +35,7 @@ class DefaultClassicKoGroupsCreator<E>
 
   @override
   int get entitiesInGroup => 2;
+
+  @override
+  List<Object?> get props => [runtimeType];
 }

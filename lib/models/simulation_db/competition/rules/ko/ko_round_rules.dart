@@ -5,13 +5,22 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_round
 class KoRoundRules<E> with EquatableMixin {
   const KoRoundRules({
     required this.advancementDeterminator,
+    required this.advancementCount,
     required this.koGroupsCreator,
+    required this.groupSize,
   });
 
   final KoRoundAdvancementDeterminator<E, KoRoundAdvancementDeterminingContext<E>>
       advancementDeterminator;
+  final int advancementCount;
   final KoGroupsCreator<E, KoGroupsCreatingContext<E>> koGroupsCreator;
+  final int groupSize;
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [
+        advancementDeterminator,
+        advancementCount,
+        koGroupsCreator,
+        groupSize,
+      ];
 }

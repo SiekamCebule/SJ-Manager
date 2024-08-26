@@ -7,20 +7,44 @@ class NBestKoRoundAdvancementDeterminator<E> extends KoRoundAdvancementDetermina
 
   @override
   List<E> compute(covariant KoRoundNBestAdvancementDeterminingContext<E> context) {
+    final limit = context.limit;
+    if (limit == null) {
+      throw StateError('The EntitiesLimit is set to null, but it must be initialized');
+    }
     final orderedEntities = context.koStandings.scores
         .map((score) => score.entity)
         .where((entity) => context.entities.contains(entity))
         .toList();
     final areInLimit = orderedEntities
         .where(
-          (entity) => context.koStandings.positionOf(entity)! <= context.limit.count,
+          (entity) => context.koStandings.positionOf(entity)! <= limit.count,
         )
         .toList();
-    if (context.limit.type == EntitiesLimitType.soft) {
+    if (limit.type == EntitiesLimitType.soft) {
       return areInLimit;
     } else {
-      areInLimit.length = context.limit.count;
+      areInLimit.length = limit.count;
       return areInLimit;
     }
   }
+
+  @override
+  List<Object?> get props => [
+        super.props,
+      ];
+}
+
+class KoRoundNBestAdvancementDeterminingContext<T>
+    extends KoRoundAdvancementDeterminingContext<T> {
+  const KoRoundNBestAdvancementDeterminingContext({
+    required super.eventSeries,
+    required super.competition,
+    required super.currentRound,
+    required super.hill,
+    required super.entities,
+    required super.koStandings,
+    required this.limit,
+  });
+
+  final EntitiesLimit? limit;
 }
