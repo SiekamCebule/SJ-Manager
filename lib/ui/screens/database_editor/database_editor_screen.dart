@@ -193,12 +193,13 @@ class DatabaseEditorScreen extends StatelessWidget {
         ),
         RepositoryProvider<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>(
           create: (context) => DbEditingAvailableObjectsRepo(initial: [
-            DbEditingAvaiableObjectConfig(
+            DbEditingAvaiableObjectConfig<
+                CompetitionScoreCreator<CompetitionJumperScore>>(
               key: 'classic_individual',
               displayName: 'Indywidualnie (Klasycznie)',
               object: DefaultLinearIndividualCompetitionScoreCreator(),
             ),
-            DbEditingAvaiableObjectConfig(
+            DbEditingAvaiableObjectConfig<CompetitionScoreCreator<CompetitionTeamScore>>(
               key: 'classic_team',
               displayName: 'Drużynowo (Klasycznie)',
               object: DefaultLinearTeamCompetitionScoreCreator(),
@@ -245,10 +246,23 @@ class DatabaseEditorScreen extends StatelessWidget {
         RepositoryProvider(create: (context) {
           final noneCountry =
               (context.read<ItemsReposRegistry>().get<Country>() as CountriesRepo).none;
+          final koRoundRules = KoRoundRules(
+            advancementDeterminator: context
+                .read<DbEditingAvailableObjectsRepo<KoRoundAdvancementDeterminator>>()
+                .getObject('n_best'),
+            advancementCount: 1,
+            koGroupsCreator: context
+                .read<DbEditingAvailableObjectsRepo<KoGroupsCreator>>()
+                .getObject('classic'),
+            groupSize: 2,
+          );
           final defaultIndividualRoundRules = DefaultIndividualCompetitionRoundRules(
             limit: const EntitiesLimit.soft(50),
             bibsAreReassigned: false,
+            startlistIsSorted: false,
             gateCanChange: true,
+            gateCompensationsEnabled: true,
+            windCompensationsEnabled: true,
             windAverager: context
                 .read<DbEditingAvailableObjectsRepo<WindAverager>>()
                 .getObject('weighted_classic'),
@@ -275,8 +289,11 @@ class DatabaseEditorScreen extends StatelessWidget {
           const defaultGroupRules = TeamCompetitionGroupRules(sortStartList: false);
           final defaultTeamRoundRules = DefaultTeamCompetitionRoundRules(
             limit: const EntitiesLimit.soft(50),
-            bibsAreReassigned: false,
+            bibsAreReassigned: true,
+            startlistIsSorted: false,
             gateCanChange: true,
+            gateCompensationsEnabled: true,
+            windCompensationsEnabled: true,
             windAverager: context
                 .read<DbEditingAvailableObjectsRepo<WindAverager>>()
                 .getObject('weighted_classic'),
@@ -305,16 +322,8 @@ class DatabaseEditorScreen extends StatelessWidget {
               TeamCompetitionGroupRules(sortStartList: false),
               TeamCompetitionGroupRules(sortStartList: false),
             ],
-            teamSize: 4,
           );
-          final koRoundRules = KoRoundRules(
-            advancementDeterminator: context
-                .read<DbEditingAvailableObjectsRepo<KoRoundAdvancementDeterminator>>()
-                .getObject('n_best'),
-            koGroupsCreator: context
-                .read<DbEditingAvailableObjectsRepo<KoGroupsCreator>>()
-                .getObject('classic'),
-          );
+
           final defaultCompetitionRules =
               DefaultCompetitionRules(rounds: [defaultIndividualRoundRules]);
           return DefaultItemsRepo(

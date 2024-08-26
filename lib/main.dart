@@ -271,7 +271,11 @@ void main() async {
                       koRoundRulesParser: KoRoundRulesParser(
                         idsRepo: context.read(),
                         advancementDeterminatorParser:
-                            KoRoundAdvancementDeterminatorLoader(idsRepo: context.read()),
+                            KoRoundAdvancementDeterminatorLoader(
+                                idsRepo: context.read(),
+                                entitiesLimitParser: EntitiesLimitParser(
+                                  idsRepo: context.read(),
+                                )),
                         koGroupsCreatorParser:
                             KoGroupsCreatorLoader(idsRepo: context.read()),
                       ),
@@ -292,7 +296,12 @@ void main() async {
                 koRoundRulesSerializer: KoRoundRulesSerializer(
                   idsRepo: context.read(),
                   advancementDeterminatorSerializer:
-                      KoRoundAdvancementDeterminatorSerializer(idsRepo: context.read()),
+                      KoRoundAdvancementDeterminatorSerializer(
+                    idsRepo: context.read(),
+                    entitiesLimitSerializer: EntitiesLimitSerializer(
+                      idsRepo: context.read(),
+                    ),
+                  ),
                   koGroupsCreatorSerializer:
                       KoGroupsCreatorSerializer(idsRepo: context.read()),
                 ),

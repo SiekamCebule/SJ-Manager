@@ -22,7 +22,9 @@ class KoRoundRulesParser implements SimulationDbPartParser<KoRoundRules> {
     return KoRoundRules(
       advancementDeterminator:
           advancementDeterminatorParser.parse(json['advancementDeterminator']),
-      koGroupsCreator: koGroupsCreatorParser.parse(json['koGroupsCreatorParser']),
+      advancementCount: json['advancementCount'],
+      koGroupsCreator: koGroupsCreatorParser.parse(json['koGroupsCreator']),
+      groupSize: json['groupSize'],
     );
   }
 }

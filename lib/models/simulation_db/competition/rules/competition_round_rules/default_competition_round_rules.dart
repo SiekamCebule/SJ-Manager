@@ -12,7 +12,10 @@ abstract class DefaultCompetitionRoundRules<T> with EquatableMixin {
   const DefaultCompetitionRoundRules({
     required this.limit,
     required this.bibsAreReassigned,
+    required this.startlistIsSorted,
     required this.gateCanChange,
+    required this.gateCompensationsEnabled,
+    required this.windCompensationsEnabled,
     required this.windAverager,
     required this.inrunLightsEnabled,
     required this.dsqEnabled,
@@ -28,7 +31,10 @@ abstract class DefaultCompetitionRoundRules<T> with EquatableMixin {
 
   final EntitiesLimit? limit;
   final bool bibsAreReassigned;
+  final bool startlistIsSorted;
   final bool gateCanChange;
+  final bool gateCompensationsEnabled;
+  final bool windCompensationsEnabled;
   final WindAverager? windAverager;
   final bool inrunLightsEnabled;
   final bool dsqEnabled;
@@ -41,18 +47,26 @@ abstract class DefaultCompetitionRoundRules<T> with EquatableMixin {
   final CompetitionScoreCreator<CompetitionScore<T, dynamic>> competitionScoreCreator;
   final KoRoundRules? koRules;
 
+  bool get judgesEnabled => judgesCount > 0;
+
   @override
   List<Object?> get props => [
         limit,
         bibsAreReassigned,
+        startlistIsSorted,
         gateCanChange,
+        gateCompensationsEnabled,
+        windCompensationsEnabled,
         windAverager,
         inrunLightsEnabled,
         dsqEnabled,
         positionsCreator,
         ruleOf95HsFallEnabled,
-        judgesCount.bitLength,
+        judgesCount,
+        judgesCreator,
+        significantJudgesCount,
         jumpScoreCreator,
         competitionScoreCreator,
+        koRules,
       ];
 }

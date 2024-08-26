@@ -53,6 +53,7 @@ class DbItemsListLoaderFromDirectoryHighLevelWrapper<T extends Object> {
               titleText: loadingFailedDialogTitle,
               filePath: path,
               error: error,
+              stackTrace: stackTrace,
             ),
           );
         }

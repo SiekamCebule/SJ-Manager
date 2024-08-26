@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
+import 'package:sj_manager/utils/colors.dart';
 
 class MyDropdownField<T> extends StatelessWidget {
   const MyDropdownField({
@@ -13,7 +14,7 @@ class MyDropdownField<T> extends StatelessWidget {
     this.trailingIcon,
     this.label,
     this.enableSearch,
-    this.enabled,
+    this.enabled = true,
     this.menuHeight,
     this.requestFocusOnTap,
     this.focusNode,
@@ -28,7 +29,7 @@ class MyDropdownField<T> extends StatelessWidget {
   final Widget? leadingIcon;
   final Widget? trailingIcon;
   final bool? enableSearch;
-  final bool? enabled;
+  final bool enabled;
   final double? menuHeight;
   final bool? requestFocusOnTap;
   final FocusNode? focusNode;
@@ -43,7 +44,7 @@ class MyDropdownField<T> extends StatelessWidget {
       ),
     );
     return DropdownMenu<T>(
-        enabled: enabled ?? true,
+        enabled: enabled,
         enableSearch: enableSearch ?? true,
         requestFocusOnTap: false,
         width: width,
@@ -52,6 +53,14 @@ class MyDropdownField<T> extends StatelessWidget {
         leadingIcon: leadingIcon,
         trailingIcon: trailingIcon,
         dropdownMenuEntries: entries,
+        textStyle: enabled
+            ? null
+            : Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurfaceVariant
+                      .blendWithBg(Theme.of(context).brightness, 0.2),
+                ),
         label: label,
         enableFilter: true,
         onSelected: onChange,

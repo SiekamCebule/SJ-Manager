@@ -45,6 +45,6 @@ List<DbItemsListLoader> defaultDbItemsListLoaders(BuildContext context) => [
       ).toLowLevel(context),
       const DbItemsListLoaderFromFileHighLevelWrapper<DefaultCompetitionRulesPreset>(
         fileNotFoundDialogTitle: 'Nie znaleziono pliku z presetami konkursów',
-        loadingFailedDialogTitle: 'Nie udało się wczytać cyklów presetów konkursów',
+        loadingFailedDialogTitle: 'Nie udało się wczytać presetów konkursów',
       ).toLowLevel(context),
     ];

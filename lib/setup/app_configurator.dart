@@ -7,9 +7,6 @@ import 'package:sj_manager/exceptions/loading_database_failed_exception.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/setup/db_items_list_loader.dart';
 import 'package:sj_manager/ui/navigation/routes.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
@@ -66,7 +63,7 @@ class AppConfigurator {
       await copyAssetsDir('defaults/country_flags', flagsDir);
     }
 
-    final forMaleJumpers = await _createFileIfNotExists<MaleJumper>();
+    /* final forMaleJumpers = await _createFileIfNotExists<MaleJumper>();
     if (forMaleJumpers.$2 == false) await forMaleJumpers.$1.writeAsString('[]');
 
     final forFemaleJumpers = await _createFileIfNotExists<FemaleJumper>();
@@ -76,7 +73,7 @@ class AppConfigurator {
     if (forHills.$2 == false) await forHills.$1.writeAsString('[]');
 
     final forTeams = await _createFileIfNotExists<Team>();
-    if (forTeams.$2 == false) await forTeams.$1.writeAsString('[]');
+    if (forTeams.$2 == false) await forTeams.$1.writeAsString('[]');*/
   }
 
   Future<(File, bool)> _createFileIfNotExists<T>() async {

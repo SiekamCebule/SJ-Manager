@@ -6,7 +6,6 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ru
 import 'package:sj_manager/ui/database_item_editors/default_competition_rules_preset_editor/default_competition_rules_editor.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
-import 'package:sj_manager/utils/platform.dart';
 
 class DefaultCompetitionRulesPresetEditor extends StatefulWidget {
   const DefaultCompetitionRulesPresetEditor({
@@ -30,14 +29,10 @@ class _DefaultCompetitionRulesPresetEditorState
   final _rulesEditorKey = GlobalKey<DefaultCompetitionRulesEditorState>();
   late final TextEditingController _nameController;
 
-  DefaultCompetitionRulesPreset? _cachedPreset;
   DefaultCompetitionRules? _rules;
-
-  late final ScrollController _scrollController;
 
   @override
   void initState() {
-    _scrollController = ScrollController();
     _nameController = TextEditingController();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -51,7 +46,6 @@ class _DefaultCompetitionRulesPresetEditorState
 
   @override
   void dispose() {
-    _scrollController.dispose();
     _nameController.dispose();
     super.dispose();
   }
@@ -60,43 +54,38 @@ class _DefaultCompetitionRulesPresetEditorState
   Widget build(BuildContext context) {
     const gap = Gap(UiItemEditorsConstants.verticalSpaceBetweenFields);
     return LayoutBuilder(
-      builder: (context, constraints) => Scrollbar(
-        thumbVisibility: platformIsDesktop,
-        controller: _scrollController,
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: SizedBox(
-            height: constraints.maxHeight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                gap,
-                MyTextField(
-                  controller: _nameController,
-                  onChange: _onChange,
-                  labelText: translate(context).name,
-                ),
-                gap,
-                Expanded(
-                  child: DefaultCompetitionRulesEditor(
-                    key: _rulesEditorKey,
-                    addGapsOnFarSides: false,
-                    scrollable: false,
-                    onChange: (currentRules) {
-                      print('new rules! :)');
-                      _rules = currentRules;
-                      _onChange();
-                    },
-                    onAdvancedEditorChosen: () {
-                      // TODO: Implement this
-                      throw UnimplementedError();
-                    },
-                  ),
-                ),
-                gap,
-              ],
+      builder: (context, constraints) => SizedBox(
+        height: constraints.maxHeight,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            gap,
+            MyTextField(
+              controller: _nameController,
+              onChange: _onChange,
+              labelText: translate(context).name,
             ),
-          ),
+            gap,
+            Expanded(
+              child: DefaultCompetitionRulesEditor(
+                key: _rulesEditorKey,
+                initial: widget.initial.rules,
+                addGapsOnFarSides: false,
+                scrollable: false,
+                onChange: (currentRules) {
+                  _rules = currentRules;
+                  print(
+                      'Preset editor has got new rules object. Invoking _onChange() in a moment...');
+                  _onChange();
+                },
+                onAdvancedEditorChosen: () {
+                  // TODO: Implement this
+                  throw UnimplementedError();
+                },
+              ),
+            ),
+            gap,
+          ],
         ),
       ),
     );
@@ -107,7 +96,9 @@ class _DefaultCompetitionRulesPresetEditorState
   }
 
   DefaultCompetitionRulesPreset _constructAndCache() {
-    print('cac');
+    print('Preset editor: _constructAndCache()');
+    print(
+        'Preset editor: _constructAndCache(): koRules of rules object: ${_rules!.rounds.first.koRules}');
     final preset = DefaultCompetitionRulesPreset(
       name: _nameController.text,
       rules: _rules!,
@@ -117,7 +108,6 @@ class _DefaultCompetitionRulesPresetEditorState
 
   void setUp(DefaultCompetitionRulesPreset preset) {
     setState(() {
-      _cachedPreset = preset;
       _fillFields(preset);
       FocusScope.of(context).unfocus();
     });
@@ -125,6 +115,8 @@ class _DefaultCompetitionRulesPresetEditorState
 
   void _fillFields(DefaultCompetitionRulesPreset preset) {
     _nameController.text = preset.name;
+    print(preset.rules.rounds.first.koRules);
+    print('Preset editor: before _fillFields\'s setUp on rules editor');
     _rulesEditorKey.currentState!.setUp(preset.rules);
   }
 }

@@ -9,7 +9,6 @@ class MainMenuDatabaseEditorButton extends StatelessWidget {
       titleText: translate(context).databaseEditor,
       iconData: Symbols.database,
       onTap: () {
-        print('items repos22: ${context.read<ItemsReposRegistry>()}');
         router.navigateTo(context, '/databaseEditor');
       },
     );

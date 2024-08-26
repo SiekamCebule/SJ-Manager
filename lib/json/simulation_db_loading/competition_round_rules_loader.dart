@@ -54,7 +54,7 @@ class CompetitionRoundRulesParser
   }
 
   DefaultCompetitionRoundRules<Jumper> _loadIndividual(Json json) {
-    final entitiesLimitJson = json['entitiesLimit'];
+    final entitiesLimitJson = json['limit'];
     EntitiesLimit? entitiesLimit;
     if (entitiesLimitJson != null) {
       entitiesLimit = entitiesLimitParser.parse(entitiesLimitJson);
@@ -73,7 +73,10 @@ class CompetitionRoundRulesParser
     return DefaultIndividualCompetitionRoundRules(
       limit: entitiesLimit,
       bibsAreReassigned: json['bibsAreReassigned'],
+      startlistIsSorted: json['startlistIsSorted'],
       gateCanChange: json['gateCanChange'],
+      gateCompensationsEnabled: json['gateCompensationsEnabled'],
+      windCompensationsEnabled: json['windCompensationsEnabled'],
       windAverager: windAveragerParser.parse(json['windAverager']),
       inrunLightsEnabled: json['inrunLightsEnabled'],
       dsqEnabled: json['dsqEnabled'],
@@ -90,7 +93,7 @@ class CompetitionRoundRulesParser
   }
 
   DefaultCompetitionRoundRules<Team> _loadTeam(Json json) {
-    final entitiesLimitJson = json['entitiesLimit'];
+    final entitiesLimitJson = json['limit'];
     EntitiesLimit? entitiesLimit;
     if (entitiesLimitJson != null) {
       entitiesLimit = entitiesLimitParser.parse(entitiesLimitJson);
@@ -117,7 +120,10 @@ class CompetitionRoundRulesParser
     return DefaultTeamCompetitionRoundRules(
       limit: entitiesLimit,
       bibsAreReassigned: json['bibsAreReassigned'],
+      startlistIsSorted: json['startlistIsSorted'],
       gateCanChange: json['gateCanChange'],
+      gateCompensationsEnabled: json['gateCompensationsEnabled'],
+      windCompensationsEnabled: json['windCompensationsEnabled'],
       windAverager: windAveragerParser.parse(json['windAverager']),
       inrunLightsEnabled: json['inrunLightsEnabled'],
       dsqEnabled: json['dsqEnabled'],
@@ -130,7 +136,6 @@ class CompetitionRoundRulesParser
           as CompetitionScoreCreator<CompetitionScore<CompetitionTeam, dynamic>>,
       jumpScoreCreator: jumpScoreCreatorParser.parse(json['jumpScoreCreator']),
       groups: groups,
-      teamSize: json['teamSize'],
       koRules: koRulesJson != null ? koRoundRulesParser.parse(koRulesJson) : null,
     );
   }

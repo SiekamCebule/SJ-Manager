@@ -6,6 +6,7 @@ class MyCheckboxListTileField extends StatelessWidget {
     super.key,
     required this.title,
     required this.value,
+    this.enabled = true,
     this.tristate = false,
     required this.onChange,
     this.customShape,
@@ -13,6 +14,7 @@ class MyCheckboxListTileField extends StatelessWidget {
 
   final Widget title;
   final bool? value;
+  final bool enabled;
   final bool tristate;
   final Function(bool? value) onChange;
   final ShapeBorder? customShape;
@@ -23,6 +25,7 @@ class MyCheckboxListTileField extends StatelessWidget {
       contentPadding: EdgeInsets.symmetric(horizontal: 12),
       title: title,
       value: value,
+      enabled: enabled,
       tristate: tristate,
       onChanged: onChange,
       shape: customShape ??

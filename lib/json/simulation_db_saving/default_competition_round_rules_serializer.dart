@@ -60,9 +60,12 @@ class DefaultCompetitionRoundRulesSerializer
     return {
       'type': 'individual',
       'bibsAreReassigned': rules.bibsAreReassigned,
+      'startlistIsSorted': rules.startlistIsSorted,
       'limit':
           rules.limit != null ? entitiesLimitSerializer.serialize(rules.limit!) : null,
       'gateCanChange': rules.gateCanChange,
+      'gateCompensationsEnabled': rules.gateCompensationsEnabled,
+      'windCompensationsEnabled': rules.windCompensationsEnabled,
       'windAverager': rules.windAverager != null
           ? windAveragerSerializer.serialize(rules.windAverager!)
           : null,
@@ -89,9 +92,12 @@ class DefaultCompetitionRoundRulesSerializer
     return {
       'type': 'team',
       'bibsAreReassigned': rules.bibsAreReassigned,
+      'startlistIsSorted': rules.startlistIsSorted,
       'limit':
           rules.limit != null ? entitiesLimitSerializer.serialize(rules.limit!) : null,
       'gateCanChange': rules.gateCanChange,
+      'gateCompensationsEnabled': rules.gateCompensationsEnabled,
+      'windCompensationsEnabled': rules.windCompensationsEnabled,
       'windAverager': rules.windAverager != null
           ? windAveragerSerializer.serialize(rules.windAverager!)
           : null,
@@ -107,7 +113,6 @@ class DefaultCompetitionRoundRulesSerializer
       ),
       'jumpScoreCreator': jumpScoreCreatorSerializer.serialize(rules.jumpScoreCreator),
       'groups': groupsJson,
-      'teamSize': rules.teamSize,
       'koRoundRules':
           rules.koRules != null ? koRoundRulesSerializer.serialize(rules.koRules!) : null,
     };

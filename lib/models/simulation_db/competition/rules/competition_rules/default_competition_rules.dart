@@ -16,11 +16,21 @@ class DefaultCompetitionRules<T>
 
   final List<DefaultCompetitionRoundRules<T>> rounds;
 
+  DefaultCompetitionRules<T> copyWith({
+    List<DefaultCompetitionRoundRules<T>>? rounds,
+  }) {
+    return DefaultCompetitionRules<T>(
+      rounds: rounds ?? this.rounds,
+    );
+  }
+
   int get roundsCount => rounds.length;
 
   @override
   DefaultCompetitionRules<T> get competitionRules => this;
 
   @override
-  List<Object?> get props => [rounds];
+  List<Object?> get props => [
+        rounds,
+      ];
 }

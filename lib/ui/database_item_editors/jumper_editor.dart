@@ -181,12 +181,10 @@ class JumperEditorState extends State<JumperEditor> {
                 MyNumeralTextField(
                   controller: _ageController,
                   onChange: _onChange,
-                  formatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
+                  maxDecimalPlaces: 0,
                   labelText: translate(context).age,
                   step: 1,
-                  min: 0,
+                  min: -50,
                   max: context.read<DbEditingDefaultsRepo>().maxJumperAge,
                 ),
                 gap,
