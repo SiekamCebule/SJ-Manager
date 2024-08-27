@@ -24,52 +24,62 @@ class PlarformSpecificPathsCache {
 
 File userDataFile(PlarformSpecificPathsCache pathsCache, String fileName) {
   final documentsDir = pathsCache.applicationDocumentsDirectory;
-  final databaseDir = Directory('${documentsDir.path}/sj_manager/user_data');
+  final databaseDir = Directory(path.join(documentsDir.path, 'sj_manager', 'user_data'));
+  
   if (!databaseDir.existsSync()) {
     databaseDir.createSync(recursive: true);
   }
-  final file = File('${databaseDir.path}/$fileName');
+  
+  final file = File(path.join(databaseDir.path, fileName));
   return file;
 }
 
 File databaseFile(PlarformSpecificPathsCache pathsCache, String fileName) {
-  return userDataFile(pathsCache, 'database/$fileName');
+  return userDataFile(pathsCache, path.join('database', fileName));
 }
 
 Directory userDataDirectory(PlarformSpecificPathsCache pathsCache, String directoryName) {
   final documentsDir = pathsCache.applicationDocumentsDirectory;
-  final databaseDir = Directory('${documentsDir.path}/sj_manager/user_data');
+  final databaseDir = Directory(path.join(documentsDir.path, 'sj_manager', 'user_data'));
+  
   if (!databaseDir.existsSync()) {
     databaseDir.createSync(recursive: true);
   }
+  
   if (directoryName.isEmpty) return Directory(databaseDir.path);
-  final dir = Directory('${databaseDir.path}/$directoryName');
-
+  
+  final dir = Directory(path.join(databaseDir.path, directoryName));
+  
   if (!dir.existsSync()) {
-    dir.create(recursive: true);
+    dir.createSync(recursive: true);
   }
+  
   return dir;
 }
 
 Directory databaseDirectory(PlarformSpecificPathsCache pathsCache, String directoryPath) {
   if (directoryPath.isEmpty) return userDataDirectory(pathsCache, 'database');
-  return userDataDirectory(pathsCache, 'database/$directoryPath');
+  return userDataDirectory(pathsCache, path.join('database', directoryPath));
+}
+
+File fileInDirectory(Directory directory, String name) {
+  return File(path.join(directory.path, name));
 }
 
 File fileByNameWithoutExtension(Directory directory, String name) {
   final files = directory.listSync();
   for (var file in files) {
-    if (file is File &&
-        file.path.contains(RegExp(r'/' + RegExp.escape(name) + r'\.\w+$'))) {
-      return file;
+    if (file is File) {
+      final fileNameWithoutExtension = path.basenameWithoutExtension(file.path);
+      if (fileNameWithoutExtension == name) {
+        return file;
+      }
     }
   }
   throw FileSystemException('No file found with the base name $name');
 }
 
-File fileInDirectory(Directory directory, String name) {
-  return File('${directory.path}/$name');
-}
+
 
 bool directoryIsValidForDatabase(BuildContext context, Directory directory) {
   final correctFolderStructure = {
@@ -107,26 +117,41 @@ void copyDirectorySync(Directory source, Directory destination) {
 }
 
 Future<void> copyAssetsDir(String assetsDirPath, Directory destination) async {
-  final manifestContent = await rootBundle.loadString('AssetManifest.json');
-  Map<String, dynamic> manifestMap = jsonDecode(manifestContent);
+  try {
+    // Load the asset manifest file
+    final manifestContent = await rootBundle.loadString('AssetManifest.json');
+    Map<String, dynamic> manifestMap = jsonDecode(manifestContent);
 
-  final assetPaths = manifestMap.keys
-      .where((String key) => key.startsWith('assets/$assetsDirPath/'))
-      .toList();
+    // Filter asset paths based on the specified directory
+    final assetPaths = manifestMap.keys
+        .where((String key) => key.startsWith('assets/$assetsDirPath/'))
+        .toList();
 
-  for (String assetPath in assetPaths) {
-    // Load the asset file as bytes
-    ByteData data = await rootBundle.load(assetPath);
-    List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    for (String assetPath in assetPaths) {
+      // Load the asset file as bytes
+      ByteData data = await rootBundle.load(assetPath);
+      List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
 
-    // Get the file name
-    String fileName = assetPath.split('/').last;
+      // Get the file name using path utilities
+      String fileName = path.basename(assetPath);
 
-    // Write the file to the target directory
-    File file = File('${destination.path}/$fileName');
-    await file.writeAsBytes(bytes);
+      // Create the file in the destination directory
+      File file = File(path.join(destination.path, fileName));
+
+      // Ensure the destination directory exists
+      if (!destination.existsSync()) {
+        destination.createSync(recursive: true);
+      }
+
+      // Write the file to the target directory
+      await file.writeAsBytes(bytes);
+    }
+  } catch (e) {
+    // Handle exceptions, such as file not found or write errors
+    print('Error copying assets directory: $e');
   }
 }
+
 
 List<String> filePathsInDirectory(Directory directory) {
   final fsEntities = directory.listSync();
@@ -135,6 +160,6 @@ List<String> filePathsInDirectory(Directory directory) {
 
 void createFileWithEmptyJsonList(String filePath) {
   final file = File(filePath);
-  file.createSync();
+  file.createSync(recursive: true);
   file.writeAsStringSync('[]');
 }

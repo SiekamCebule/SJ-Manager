@@ -10,7 +10,7 @@ class ItemsRepo<T> extends ValueRepo<Iterable<T>> {
   Type get itemsType => T;
 
   @override
-  Iterable<T> get last => items.value;
+  Iterable<T> get last => items.valueOrNull ?? [];
 
   int get lastLength => last.length;
 }

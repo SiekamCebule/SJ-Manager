@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/repositories/countries/country_flags/country_flags_repo.dart';
+import 'package:path/path.dart' as path;
 
 class LocalStorageCountryFlagsRepo implements CountryFlagsRepo {
   LocalStorageCountryFlagsRepo({
@@ -15,19 +16,20 @@ class LocalStorageCountryFlagsRepo implements CountryFlagsRepo {
 
   final _cache = <Country, ImageProvider>{};
 
-  @override
-  ImageProvider<Object> imageData(Country country) {
-    if (_cache.containsKey(country)) {
-      return _cache[country]!;
-    } else {
-      final path = '${imagesDirectory.path}/${country.code}.$imagesExtension';
-      var file = File(path);
-      if (!file.existsSync()) {
-        file = File('${imagesDirectory.path}/none.$imagesExtension');
-      }
-      final imageData = FileImage(file);
-      _cache[country] = imageData;
-      return imageData;
+@override
+ImageProvider<Object> imageData(Country country) {
+  if (_cache.containsKey(country)) {
+    return _cache[country]!;
+  } else {
+    final filePath = path.join(imagesDirectory.path, '${country.code}.$imagesExtension');
+    var file = File(filePath);
+    if (!file.existsSync()) {
+      file = File(path.join(imagesDirectory.path, 'none.$imagesExtension'));
     }
+    final imageData = FileImage(file);
+    _cache[country] = imageData;
+    return imageData;
   }
+}
+
 }

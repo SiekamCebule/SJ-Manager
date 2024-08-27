@@ -87,6 +87,7 @@ import 'package:sj_manager/ui/theme/app_color_scheme_repo.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/id_generator.dart';
+import 'package:path/path.dart' as path;
 
 final router = FluroRouter();
 bool routerIsInitialized = false;
@@ -127,7 +128,7 @@ void main() async {
           RepositoryProvider<CountryFlagsRepo>(
             create: (context) {
               final storageDirectory =
-                  userDataDirectory(pathsCache, 'database/countries/country_flags');
+                  userDataDirectory(pathsCache, path.join('database', 'countries', 'country_flags'));
               return LocalStorageCountryFlagsRepo(
                 imagesDirectory: storageDirectory,
                 imagesExtension: 'png',
@@ -160,7 +161,7 @@ void main() async {
           providers: [
             Provider(create: (context) {
               return DbItemImageGeneratingSetup<Jumper>(
-                imagesDirectory: databaseDirectory(pathsCache, 'jumper_images'),
+                imagesDirectory: databaseDirectory(pathsCache, path.join('jumper_images')),
                 toFileName: (jumper) {
                   return '${jumper.country.code.toLowerCase()}_${jumper.name.toLowerCase()}_${jumper.surname.toLowerCase()}'
                       .replaceAll(' ', '_');
@@ -169,7 +170,7 @@ void main() async {
             }),
             Provider(create: (context) {
               return DbItemImageGeneratingSetup<Hill>(
-                  imagesDirectory: databaseDirectory(pathsCache, 'hill_images'),
+                  imagesDirectory: databaseDirectory(pathsCache, path.join('hill_images')),
                   toFileName: (hill) {
                     return '${hill.locality.toLowerCase()}_${hill.hs.truncate().toString()}'
                         .replaceAll(' ', '_');
@@ -177,12 +178,12 @@ void main() async {
             }),
             Provider(create: (context) {
               return DbItemImageGeneratingSetup<EventSeriesLogoImageWrapper>(
-                  imagesDirectory: databaseDirectory(pathsCache, 'assets/logos'),
+                  imagesDirectory: databaseDirectory(pathsCache, path.join('assets', 'logos')),
                   toFileName: (logoImage) => logoImage.eventSeriesSetup.id);
             }),
             Provider(create: (context) {
               return DbItemImageGeneratingSetup<EventSeriesTrophyImageWrapper>(
-                  imagesDirectory: databaseDirectory(pathsCache, 'assets/trophies'),
+                  imagesDirectory: databaseDirectory(pathsCache, path.join('assets', 'trophies')),
                   toFileName: (logoImage) => logoImage.eventSeriesSetup.id);
             }),
             Provider(
@@ -193,14 +194,14 @@ void main() async {
                 EventSeriesSetup: 'event_series_setups.json',
                 EventSeriesCalendarPreset: 'event_series_calendar_presets.json',
                 DefaultCompetitionRulesPreset: 'default_competition_rules_presets.json',
-                Country: 'countries/countries.json',
-                Team: 'teams/teams.json',
+                Country: path.join('countries', 'countries.json'),
+                Team: path.join('teams', 'teams.json'),
               }),
             ),
             Provider(
               create: (context) => DbItemsDirectoryPathsRegistry(
                 initial: {
-                  CountryFlag: 'countries/country_flags',
+                  CountryFlag: path.join('countries', 'country_flags'),
                 },
               ),
             ),
