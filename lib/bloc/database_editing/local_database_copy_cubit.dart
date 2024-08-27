@@ -17,8 +17,8 @@ import 'package:sj_manager/utils/file_system.dart';
 
 import 'package:path/path.dart' as path;
 
-class CopiedLocalDbCubit extends Cubit<ItemsReposRegistry?> {
-  CopiedLocalDbCubit({
+class LocalDatabaseCopyCubit extends Cubit<ItemsReposRegistry?> {
+  LocalDatabaseCopyCubit({
     required this.originalDb,
   }) : super(null);
 
@@ -31,7 +31,7 @@ class CopiedLocalDbCubit extends Cubit<ItemsReposRegistry?> {
   }
 
   Future<void> saveChangesToOriginalRepos(BuildContext context) async {
-    final reposMayChange = state!.last.where((repo) => repo is EditableItemsRepo);
+    final reposMayChange = state!.last.whereType<EditableItemsRepo>();
     for (var repo in reposMayChange) {
       final itemsType = repo.itemsType;
       originalDb.byTypeArgument(itemsType).set(repo.last);

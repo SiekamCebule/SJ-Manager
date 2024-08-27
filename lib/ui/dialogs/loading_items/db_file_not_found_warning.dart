@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/utils/fonts.dart';
 
 class DbFileNotFoundWarning extends StatelessWidget {

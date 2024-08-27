@@ -86,7 +86,7 @@ class CountriesDropdownState extends State<CountriesDropdown> {
     );
   }
 
-  void setupManually(Country? selected) {
+  void setManually(Country? selected) {
     setState(() {
       _selected = selected;
     });

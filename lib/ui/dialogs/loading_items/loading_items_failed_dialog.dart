@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sj_manager/exceptions/json_exceptions.dart';
+import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/utils/close_app.dart';
 import 'package:sj_manager/utils/fonts.dart';
 
@@ -18,6 +20,11 @@ class LoadingItemsFailedDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final errorText = switch (error) {
+      JsonIsEmptyException() => translate(context).jsonIsEmptyExceptionContent,
+      FormatException() => translate(context).invalidJsonFormatExceptionContent,
+      _ => '${translate(context).unknownError}\n${error.toString()}',
+    };
     return AlertDialog(
       title: Text(titleText),
       content: SingleChildScrollView(
@@ -31,7 +38,7 @@ class LoadingItemsFailedDialog extends StatelessWidget {
                   text: ', sprawdź jego poprawność.\n\n',
                   style: dialogLightFont(context)),
               TextSpan(
-                text: '${error.toString()}\n${stackTrace.toString()}',
+                text: '$errorText\n${stackTrace.toString()}',
                 style: dialogLightItalicFont(context),
               ),
             ],

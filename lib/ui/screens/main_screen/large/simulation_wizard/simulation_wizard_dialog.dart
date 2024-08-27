@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:sj_manager/bloc/simulation_wizard/linear_navigation_permissions_repo.dart';
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_screen.dart';
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_navigation_cubit.dart';
-import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_navigation_state.dart';
+import 'package:sj_manager/bloc/simulation_wizard/state/simulation_wizard_navigation_state.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';

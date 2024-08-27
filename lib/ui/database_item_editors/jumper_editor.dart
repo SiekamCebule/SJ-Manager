@@ -94,6 +94,7 @@ class JumperEditorState extends State<JumperEditor> {
 
   @override
   Widget build(BuildContext context) {
+    print('jumper editor countries repo: ${widget.countriesRepo.last}');
     const gap = Gap(UiItemEditorsConstants.verticalSpaceBetweenFields);
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -303,6 +304,6 @@ class JumperEditorState extends State<JumperEditor> {
         translatedLandingStyleDescription(context, _landingStyle);
 
     _country = jumper.country;
-    _countriesDropdownKey.currentState?.setupManually(jumper.country);
+    _countriesDropdownKey.currentState?.setManually(jumper.country);
   }
 }

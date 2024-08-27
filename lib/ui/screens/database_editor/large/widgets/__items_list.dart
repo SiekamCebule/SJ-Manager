@@ -10,57 +10,29 @@ class _ItemsList extends StatefulWidget {
 class _ItemsListState extends State<_ItemsList> {
   @override
   Widget build(BuildContext context) {
-    final itemsType = context.watch<DatabaseItemsTypeCubit>().state;
-    final copiedLocalDbCubit = context.watch<CopiedLocalDbCubit>();
-    final copiedLocalDbRepos = copiedLocalDbCubit.state!;
+    final itemsState = context.watch<DatabaseItemsCubit>().state;
+    final shouldShowList = itemsState is DatabaseItemsNonEmpty;
+    if (itemsState is DatabaseItemsNonEmpty) {
+      print('filtered items: ${itemsState.filteredItems}');
+      print('filters (valid): ${itemsState.validFilters}');
+    }
 
-    final editableItemsRepoByType = copiedLocalDbRepos.getEditable(itemsType);
-    final filtersRepo = context.watch<DbFiltersRepo>();
-    final selectedIndexesRepo = context.watch<SelectedIndexesRepo>();
-
-    final filteredItemsByType =
-        context.watch<LocalDbFilteredItemsCubit>().state.byTypeArgument(itemsType);
-    final dbIsChangedCubit = context.watch<ChangeStatusCubit>();
-
-    return StreamBuilder(
-        stream: StreamGroup.merge([
-          selectedIndexesRepo.selectedIndexes,
-          copiedLocalDbRepos.get<MaleJumper>().items,
-          copiedLocalDbRepos.get<FemaleJumper>().items,
-          copiedLocalDbRepos.get<Hill>().items,
-        ]),
-        builder: (context, snapshot) {
-          final listShouldBeReorderable = !filtersRepo.hasValidFilter;
-          return DatabaseItemsList(
-            reorderable: listShouldBeReorderable,
-            onReorder: (oldIndex, newIndex) async {
-              if (newIndex > oldIndex) {
-                newIndex -= 1;
-              }
-              editableItemsRepoByType.move(from: oldIndex, to: newIndex);
-              selectedIndexesRepo.moveSelection(from: oldIndex, to: newIndex);
-              dbIsChangedCubit.markAsChanged();
-            },
-            length: filteredItemsByType.length,
-            itemBuilder: (context, index) {
-              return AppropriateDbItemListTile(
-                key: ValueKey(index),
-                reorderable: listShouldBeReorderable,
-                itemType: itemsType,
-                item: filteredItemsByType.elementAt(index),
-                indexInList: index,
-                onItemTap: () async {
-                  bool ctrlIsPressed = HardwareKeyboard.instance.isControlPressed;
-                  if (ctrlIsPressed) {
-                    selectedIndexesRepo.toggleSelection(index);
-                  } else {
-                    selectedIndexesRepo.toggleSelectionAtOnly(index);
-                  }
-                },
-                selected: selectedIndexesRepo.state.contains(index),
-              );
-            },
-          );
-        });
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        AnimatedVisibility(
+          duration: Durations.medium1,
+          curve: Curves.easeIn,
+          visible: shouldShowList,
+          child: const _ItemsListNonEmptyStateBody(),
+        ),
+        AnimatedVisibility(
+          duration: Durations.medium1,
+          curve: Curves.easeIn,
+          visible: !shouldShowList,
+          child: const _ItemsListEmptyStateBody(),
+        ),
+      ],
+    );
   }
 }
