@@ -70,6 +70,7 @@ dependencies:
   nanoid: ^1.0.0
   dart_eval: ^0.7.9
   animated_custom_dropdown: ^3.1.1
+  petitparser: ^6.0.2
 
 dev_dependencies:
   flutter_test:

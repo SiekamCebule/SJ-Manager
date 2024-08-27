@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/bloc/database_editing/database_items_type_cubit.dart';
+import 'package:sj_manager/bloc/database_editing/database_items_cubit.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
@@ -207,9 +207,9 @@ void main() {
 
       final context = tester.element(find.byType(DatabaseItemsList)) as BuildContext;
 
-      final itemsTypeCubit = context.read<DatabaseItemsTypeCubit>();
+      final itemsCubit = context.read<DatabaseItemsCubit>();
       final itemsList = find.byType(DatabaseItemsList);
-      expect(itemsTypeCubit.state, MaleJumper);
+      expect(itemsCubit.state, MaleJumper);
       expect(tester.widget<DatabaseItemsList>(itemsList).length, maleJumpers.length);
 
       expect(find.byType(FloatingActionButton), findsNWidgets(2));
@@ -230,7 +230,7 @@ void main() {
       final femaleJumpersTab = tester.widget<TabBar>(tabBar).tabs[1];
       await tester.tap(find.byWidget(femaleJumpersTab));
       await tester.pumpAndSettle();
-      expect(itemsTypeCubit.state, FemaleJumper);
+      expect(itemsCubit.state, FemaleJumper);
       expect(tester.widget<DatabaseItemsList>(itemsList).length, femaleJumpers.length);
 
       final secondTile = find.descendant(
@@ -256,7 +256,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final context = tester.element(find.byType(DatabaseItemsList)) as BuildContext;
-      final itemsTypeCubit = context.read<DatabaseItemsTypeCubit>();
+      final itemsCubit = context.read<DatabaseItemsCubit>();
       final itemsList = find.byType(DatabaseItemsList);
       final tabBar = find.byType(TabBar);
       final addFab = find.byKey(const Key('addFab'));
@@ -280,9 +280,9 @@ void main() {
         await tester.pumpAndSettle();
       }
 
-      expect(itemsTypeCubit.state, MaleJumper);
+      expect(itemsCubit.state, MaleJumper);
       await selectTab(2);
-      expect(itemsTypeCubit.state, Hill);
+      expect(itemsCubit.state, Hill);
       expect(tester.widget<DatabaseItemsList>(itemsList).length, hills.length);
       await tapItem(1);
       await tap(addFab); // index: 2

@@ -23,7 +23,7 @@ class DbItemsListLoaderFromDirectory<T extends Object> extends DbItemsListLoader
   Future<void> load() async {
     try {
       final directory = Directory(directoryPath);
-      final loaded = await loadItemsFromDirectoryWithJsons(
+      final loaded = await loadItemsFromDirectory(
           directory: directory, match: fileMatches, fromJson: fromJson);
       onFinish(loaded);
     } catch (error, stackTrace) {

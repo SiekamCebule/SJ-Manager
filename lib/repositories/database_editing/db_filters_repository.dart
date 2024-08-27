@@ -29,7 +29,6 @@ class DbFiltersRepo with EquatableMixin {
     _filtersByType.forEach((type, filters) {
       filters.add([]);
     });
-    _filtersByType.clear();
   }
 
   void close() {

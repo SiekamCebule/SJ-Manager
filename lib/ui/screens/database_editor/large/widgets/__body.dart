@@ -25,10 +25,11 @@ class _BodyState extends State<_Body> {
     }).listen((state) {
       if (selectedIndexesRepo.state.length == 1) {
         final index = selectedIndexesRepo.state.single;
-        final itemsType = context.read<DatabaseItemsTypeCubit>().state;
-        final filteredByType =
-            context.read<LocalDbFilteredItemsCubit>().state.byTypeArgument(itemsType);
-        final singleSelectedItem = filteredByType.elementAt(index);
+        if (!mounted) return;
+        final filtered =
+            (context.read<DatabaseItemsCubit>().state as DatabaseItemsNonEmpty)
+                .filteredItems;
+        final singleSelectedItem = filtered.elementAt(index);
         _fillEditorBySingleSelected(singleSelectedItem);
       }
     });

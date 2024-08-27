@@ -44,34 +44,35 @@ class MyDropdownField<T> extends StatelessWidget {
       ),
     );
     return DropdownMenu<T>(
-        enabled: enabled,
-        enableSearch: enableSearch ?? true,
-        requestFocusOnTap: false,
-        width: width,
-        controller: controller,
-        initialSelection: initial,
-        leadingIcon: leadingIcon,
-        trailingIcon: trailingIcon,
-        dropdownMenuEntries: entries,
-        textStyle: enabled
-            ? null
-            : Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurfaceVariant
-                      .blendWithBg(Theme.of(context).brightness, 0.2),
-                ),
-        label: label,
-        enableFilter: true,
-        onSelected: onChange,
-        inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
-              enabledBorder: border,
-              border: border,
-            ),
-        menuStyle: MenuStyle(
-          visualDensity: VisualDensity.standard,
-          shape: WidgetStatePropertyAll(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-        ));
+      enabled: enabled,
+      enableSearch: enableSearch ?? true,
+      requestFocusOnTap: false,
+      width: width,
+      controller: controller,
+      initialSelection: initial,
+      leadingIcon: leadingIcon,
+      trailingIcon: trailingIcon,
+      dropdownMenuEntries: entries,
+      textStyle: enabled
+          ? null
+          : Theme.of(context).textTheme.bodyLarge!.copyWith(
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurfaceVariant
+                    .blendWithBg(Theme.of(context).brightness, 0.2),
+              ),
+      label: label,
+      enableFilter: true,
+      onSelected: onChange,
+      inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(
+            enabledBorder: border,
+            border: border,
+          ),
+      menuStyle: MenuStyle(
+        visualDensity: VisualDensity.standard,
+        shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+      ),
+    );
   }
 }

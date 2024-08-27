@@ -1,5 +1,6 @@
 import 'package:sj_manager/filters/filter.dart';
 import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
+import 'package:sj_manager/filters/mixins.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
@@ -53,7 +54,7 @@ final class JumpersFilterByCountry extends JumpersFilter {
   List<Object?> get props => [countries];
 }
 
-final class JumpersFilterBySearch extends JumpersFilter {
+final class JumpersFilterBySearch extends JumpersFilter with SearchFilter {
   const JumpersFilterBySearch({
     required this.searchAlgorithm,
   });

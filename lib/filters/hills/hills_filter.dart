@@ -1,4 +1,5 @@
 import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
+import 'package:sj_manager/filters/mixins.dart';
 import 'package:sj_manager/models/user_db/hill/hill_type_by_size.dart';
 import 'package:sj_manager/filters/filter.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
@@ -35,7 +36,7 @@ final class HillsFilterByCountry extends HillsFilter {
   List<Object?> get props => [countries];
 }
 
-final class HillsFilterBySearch extends HillsFilter {
+final class HillsFilterBySearch extends HillsFilter with SearchFilter {
   const HillsFilterBySearch({
     required this.searchAlgorithm,
   });

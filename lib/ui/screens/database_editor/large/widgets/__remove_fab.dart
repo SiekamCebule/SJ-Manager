@@ -5,10 +5,10 @@ class _RemoveFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemsType = context.watch<DatabaseItemsTypeCubit>().state;
+    final itemsType = context.watch<DatabaseItemsCubit>().state.itemsType;
     final selectedIndexesRepo = context.watch<SelectedIndexesRepo>();
     final dbChangeStatusCubit = context.watch<ChangeStatusCubit>();
-    final copiedDbCubit = context.watch<CopiedLocalDbCubit>();
+    final copiedDbCubit = context.watch<LocalDatabaseCopyCubit>();
 
     final editableItemsForCurrentType = copiedDbCubit.state!.getEditable(itemsType);
 
@@ -21,7 +21,7 @@ class _RemoveFab extends StatelessWidget {
             backgroundColor: Theme.of(context)
                 .colorScheme
                 .tertiaryContainer
-                .blendWithBg(Theme.of(context).brightness, 0.2), // TODO: Dopasować
+                .blendWithBg(Theme.of(context).brightness, 0.2),
             onPressed: () async {
               var subtraction = 0;
               for (var removeIndex in selectedIndexesRepo.state) {

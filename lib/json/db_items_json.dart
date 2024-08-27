@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:sj_manager/exceptions/json_exceptions.dart';
 import 'package:sj_manager/json/json_types.dart';
 
-Future<Map<K, V>> loadItemsMapFromJsonFile<K, V>({
+// TODO: It is probably useless
+/*Future<Map<K, V>> loadItemsMapFromJsonFile<K, V>({
   required File file,
   required FromJson<V> fromJson,
 }) async {
@@ -18,21 +20,32 @@ Future<Map<K, V>> loadItemsMapFromJsonFile<K, V>({
   });
 
   return itemsMap;
-}
+}*/
 
 Future<List<T>> loadItemsListFromJsonFile<T>({
   required File file,
   required FromJson<T> fromJson,
 }) async {
   final fileContent = await file.readAsString();
-  final itemsInJson = jsonDecode(fileContent) as List<dynamic>;
+  final itemsInJson = safeJsonDecode(fileContent) as List<dynamic>;
   final items = itemsInJson.map((json) => fromJson(json)).toList();
 
   final list = items.toList();
   return list;
 }
 
-Future<T> loadSingleItemFromJsonFile<T>({
+dynamic safeJsonDecode(String source, {Object? Function(Object?, Object?)? reviver}) {
+  try {
+    return jsonDecode(source);
+  } on FormatException {
+    if (source == '') {
+      throw const JsonIsEmptyException();
+    }
+  }
+}
+
+// TODO: It is probably useless
+/* Future<T> loadSingleItemFromJsonFile<T>({
   required File file,
   required FromJson<T> fromJson,
 }) async {
@@ -40,9 +53,9 @@ Future<T> loadSingleItemFromJsonFile<T>({
   final json = jsonDecode(fileContent);
   final item = fromJson(json);
   return item;
-}
+}*/
 
-Future<List<T>> loadItemsFromDirectoryWithJsons<T>({
+Future<List<T>> loadItemsFromDirectory<T>({
   required Directory directory,
   required bool Function(File file) match,
   required FromJson<T> fromJson,
@@ -51,7 +64,7 @@ Future<List<T>> loadItemsFromDirectoryWithJsons<T>({
   final files = directory.listSync().whereType<File>();
   final matchingFiles = files.where(match);
   for (var file in matchingFiles) {
-    final json = jsonDecode(await file.readAsString());
+    final json = safeJsonDecode(await file.readAsString());
     final item = fromJson(json);
     items.add(item);
   }

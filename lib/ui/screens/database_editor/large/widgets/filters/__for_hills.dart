@@ -8,10 +8,45 @@ class _ForHills extends StatefulWidget {
 }
 
 class _ForHillsState extends State<_ForHills> {
+  late final TextEditingController _searchingController;
+  late final TextEditingController _hillTypeController;
+  final _countriesDropdownKey = GlobalKey<CountriesDropdownState>();
   var _byCountry = const HillsFilterByCountry(countries: {});
   var _byTypeBySize = const HillsFilterByTypeBySie(type: null);
   var _bySearchText = const HillsFilterBySearch(
       searchAlgorithm: DefaultHillMatchingByTextAlgorithm(text: ''));
+  late final StreamSubscription _filtersSubscription;
+
+  @override
+  void initState() {
+    _searchingController = TextEditingController();
+    _hillTypeController = TextEditingController();
+
+    scheduleMicrotask(() {
+      final filtersRepo = context.read<DbFiltersRepo>();
+      _filtersSubscription = filtersRepo.streamByTypeArgument(Hill).listen((filters) {
+        final bySearch = filters.singleWhereTypeOrNull<HillsFilterBySearch>();
+        _searchingController.text = bySearch?.searchAlgorithm.text ?? '';
+        final country =
+            filters.singleWhereTypeOrNull<HillsFilterByCountry>()?.countries.singleOrNull;
+        _countriesDropdownKey.currentState!.setManually(country ?? countriesRepo.none);
+        final hillTypeBySize =
+            filters.singleWhereTypeOrNull<HillsFilterByTypeBySie>()?.type;
+
+        _hillTypeController.text = hillTypeBySize != null
+            ? translatedHillTypeBySizeBriefDescription(context, hillTypeBySize)
+            : translate(context).none;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _filtersSubscription.cancel();
+    _searchingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +57,7 @@ class _ForHillsState extends State<_ForHills> {
         SizedBox(
           width: 400,
           child: SearchTextField(
+            controller: _searchingController,
             onChanged: (changed) async {
               _clearSelection();
               await Future.delayed(Duration.zero);
@@ -33,6 +69,7 @@ class _ForHillsState extends State<_ForHills> {
         ),
         const Spacer(),
         MyDropdownField(
+          controller: _hillTypeController,
           onChange: (selected) async {
             _clearSelection();
             await Future.delayed(Duration.zero);
@@ -51,6 +88,7 @@ class _ForHillsState extends State<_ForHills> {
         ),
         gap,
         CountriesDropdown(
+          key: _countriesDropdownKey,
           width: 220,
           label: Text(translate(context).filterByCountry),
           countriesRepo: countriesRepo,
@@ -71,8 +109,12 @@ class _ForHillsState extends State<_ForHills> {
     );
   }
 
-  CountriesRepo get countriesRepo =>
-      context.read<ItemsReposRegistry>().get<Country>() as CountriesRepo;
+  CountriesRepo get countriesRepo {
+    return (context.read<DatabaseEditorCountriesCubit>().state
+            as DatabaseEditorCountriesReady)
+        .universalCountries;
+  }
+
   Country get noneCountry => countriesRepo.none;
 
   void _setFilters() {

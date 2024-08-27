@@ -459,6 +459,6 @@ class HillEditorState extends State<HillEditor> {
         : translate(context).none;
 
     _country = hill.country;
-    _countriesDropdownKey.currentState?.setupManually(_country);
+    _countriesDropdownKey.currentState?.setManually(_country);
   }
 }

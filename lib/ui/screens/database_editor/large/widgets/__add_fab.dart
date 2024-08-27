@@ -5,11 +5,14 @@ class _AddFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemsType = context.watch<DatabaseItemsTypeCubit>().state;
+    final itemsType = context.watch<DatabaseItemsCubit>().state.itemsType;
     final selectedIndexesRepo = context.watch<SelectedIndexesRepo>();
-    final filteredItems = context.watch<LocalDbFilteredItemsCubit>().state;
+    final itemsCubit = context.watch<DatabaseItemsCubit>();
+    final itemsState = itemsCubit.state;
+    final itemsLength =
+        itemsState is DatabaseItemsNonEmpty ? itemsState.filteredItems.length : 0;
     final dbChangeStatusCubit = context.watch<ChangeStatusCubit>();
-    final copiedDbCubit = context.watch<CopiedLocalDbCubit>();
+    final copiedDbCubit = context.watch<LocalDatabaseCopyCubit>();
 
     final editableItemsForCurrentType = copiedDbCubit.state!.getEditable(itemsType);
     final defaultItems = context.watch<DefaultItemsRepo>();
@@ -26,7 +29,8 @@ class _AddFab extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             onPressed: () async {
               bool selectedExists = selectedIndexesRepo.state.length == 1;
-              final lastIndex = filteredItems.byTypeArgument(itemsType).length;
+
+              final lastIndex = itemsLength;
               late int addIndex;
               if (selectedExists) {
                 addIndex = selectedIndexesRepo.state.single + 1;

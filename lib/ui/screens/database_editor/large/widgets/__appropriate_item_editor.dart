@@ -20,11 +20,11 @@ class _AppropriateItemEditorState extends State<_AppropriateItemEditor> {
   @override
   Widget build(BuildContext context) {
     final filtersRepo = context.watch<DbFiltersRepo>();
-    final type = context.watch<DatabaseItemsTypeCubit>().state;
+    final type = context.watch<DatabaseItemsCubit>().state.itemsType;
     context.watch<ValueRepo<_SelectedTabIndex>>();
     final initialItem = context.watch<DefaultItemsRepo>().getByTypeArgument(type);
 
-    return DbItemEditorFactory.create(
+    return _DbItemEditorFactory.create(
       key: _key,
       initial: initialItem,
       context: context,
@@ -39,7 +39,7 @@ class _AppropriateItemEditorState extends State<_AppropriateItemEditor> {
   }
 }
 
-abstract class DbItemEditorFactory {
+abstract class _DbItemEditorFactory {
   static Widget create({
     required Key key,
     required dynamic initial,
@@ -51,51 +51,60 @@ abstract class DbItemEditorFactory {
     if (type == MaleJumper) {
       final filters = dynamicFilters.cast<Filter<MaleJumper>>();
       final searchActive = filters
-              .maybeSingleWhereType<
+              .singleWhereTypeOrNull<
                   ConcreteJumpersFilterWrapper<MaleJumper, JumpersFilterBySearch>>()
               ?.isValid ??
           false;
       final countryFilterActive = filters
-              .maybeSingleWhereType<
+              .singleWhereTypeOrNull<
                   ConcreteJumpersFilterWrapper<MaleJumper, JumpersFilterByCountry>>()
               ?.isValid ??
           false;
+      final countriesRepo = (context.read<DatabaseEditorCountriesCubit>().state
+              as DatabaseEditorCountriesReady)
+          .maleJumpersCountries;
       return JumperEditor(
         key: key,
         onChange: onChange,
         enableEditingName: !searchActive,
         enableEditingSurname: !searchActive,
         enableEditingCountry: !countryFilterActive,
-        countriesRepo: context.read(),
+        countriesRepo: countriesRepo,
       );
     } else if (type == FemaleJumper) {
       final filters = dynamicFilters.cast<Filter<FemaleJumper>>();
       final searchActive = filters
-              .maybeSingleWhereType<
+              .singleWhereTypeOrNull<
                   ConcreteJumpersFilterWrapper<FemaleJumper, JumpersFilterBySearch>>()
               ?.isValid ??
           false;
       final countryFilterActive = filters
-              .maybeSingleWhereType<
+              .singleWhereTypeOrNull<
                   ConcreteJumpersFilterWrapper<FemaleJumper, JumpersFilterByCountry>>()
               ?.isValid ??
           false;
+      final countriesRepo = (context.read<DatabaseEditorCountriesCubit>().state
+              as DatabaseEditorCountriesReady)
+          .femaleJumpersCountries;
       return JumperEditor(
         key: key,
         onChange: onChange,
         enableEditingName: !searchActive,
         enableEditingSurname: !searchActive,
         enableEditingCountry: !countryFilterActive,
-        countriesRepo: context.read(),
+        countriesRepo: countriesRepo,
       );
     } else if (type == Hill) {
       final filters = dynamicFilters.cast<Filter<Hill>>();
       final searchActive =
-          filters.maybeSingleWhereType<HillsFilterBySearch>()?.isValid ?? false;
+          filters.singleWhereTypeOrNull<HillsFilterBySearch>()?.isValid ?? false;
       final sizeFilterActive =
-          filters.maybeSingleWhereType<HillsFilterByTypeBySie>()?.isValid ?? false;
+          filters.singleWhereTypeOrNull<HillsFilterByTypeBySie>()?.isValid ?? false;
       final countryFilterActive =
-          filters.maybeSingleWhereType<HillsFilterByCountry>()?.isValid ?? false;
+          filters.singleWhereTypeOrNull<HillsFilterByCountry>()?.isValid ?? false;
+      final countriesRepo = (context.read<DatabaseEditorCountriesCubit>().state
+              as DatabaseEditorCountriesReady)
+          .universalCountries;
       return HillEditor(
         key: key,
         onChange: onChange,
@@ -103,7 +112,7 @@ abstract class DbItemEditorFactory {
         enableEditingLocality: !searchActive,
         enableEditingDimensions: !sizeFilterActive,
         enableEditingCountry: !countryFilterActive,
-        countriesRepo: context.read(),
+        countriesRepo: countriesRepo,
       );
     } else if (type == EventSeriesSetup) {
       return EventSeriesSetupEditor(
