@@ -1,7 +1,7 @@
 [
     {
         "code": "none",
-        "name": {
+        "multilingualName": {
             "pl": "Brak",
             "en": "None",
             "cs": "Žádný"
@@ -9,7 +9,7 @@
     },
     {
         "code": "AF",
-        "name": {
+        "multilingualName": {
             "pl": "Afganistan",
             "en": "Afghanistan",
             "cs": "Afghánistán"
@@ -17,7 +17,7 @@
     },
     {
         "code": "AL",
-        "name": {
+        "multilingualName": {
             "pl": "Albania",
             "en": "Albania",
             "cs": "Albánie"
@@ -25,7 +25,7 @@
     },
     {
         "code": "DZ",
-        "name": {
+        "multilingualName": {
             "pl": "Algieria",
             "en": "Algeria",
             "cs": "Alžírsko"
@@ -33,7 +33,7 @@
     },
     {
         "code": "AS",
-        "name": {
+        "multilingualName": {
             "pl": "Samoa Amerykańskie",
             "en": "American Samoa",
             "cs": "Americká Samoa"
@@ -41,7 +41,7 @@
     },
     {
         "code": "AD",
-        "name": {
+        "multilingualName": {
             "pl": "Andora",
             "en": "Andorra",
             "cs": "Andorra"
@@ -49,7 +49,7 @@
     },
     {
         "code": "AO",
-        "name": {
+        "multilingualName": {
             "pl": "Angola",
             "en": "Angola",
             "cs": "Angola"
@@ -57,7 +57,7 @@
     },
     {
         "code": "AI",
-        "name": {
+        "multilingualName": {
             "pl": "Anguilla",
             "en": "Anguilla",
             "cs": "Anguilla"
@@ -65,7 +65,7 @@
     },
     {
         "code": "AQ",
-        "name": {
+        "multilingualName": {
             "pl": "Antarktyda",
             "en": "Antarctica",
             "cs": "Antarktida"
@@ -73,7 +73,7 @@
     },
     {
         "code": "AG",
-        "name": {
+        "multilingualName": {
             "pl": "Antigua i Barbuda",
             "en": "Antigua and Barbuda",
             "cs": "Antigua a Barbuda"
@@ -81,7 +81,7 @@
     },
     {
         "code": "AR",
-        "name": {
+        "multilingualName": {
             "pl": "Argentyna",
             "en": "Argentina",
             "cs": "Argentina"
@@ -89,7 +89,7 @@
     },
     {
         "code": "AM",
-        "name": {
+        "multilingualName": {
             "pl": "Armenia",
             "en": "Armenia",
             "cs": "Arménie"
@@ -97,7 +97,7 @@
     },
     {
         "code": "AW",
-        "name": {
+        "multilingualName": {
             "pl": "Aruba",
             "en": "Aruba",
             "cs": "Aruba"
@@ -105,7 +105,7 @@
     },
     {
         "code": "AU",
-        "name": {
+        "multilingualName": {
             "pl": "Australia",
             "en": "Australia",
             "cs": "Austrálie"
@@ -113,7 +113,7 @@
     },
     {
         "code": "AT",
-        "name": {
+        "multilingualName": {
             "pl": "Austria",
             "en": "Austria",
             "cs": "Rakousko"
@@ -121,7 +121,7 @@
     },
     {
         "code": "AZ",
-        "name": {
+        "multilingualName": {
             "pl": "Azerbejdżan",
             "en": "Azerbaijan",
             "cs": "Ázerbájdžán"
@@ -129,7 +129,7 @@
     },
     {
         "code": "BS",
-        "name": {
+        "multilingualName": {
             "pl": "Bahamy",
             "en": "Bahamas",
             "cs": "Bahamy"
@@ -137,7 +137,7 @@
     },
     {
         "code": "BH",
-        "name": {
+        "multilingualName": {
             "pl": "Bahrajn",
             "en": "Bahrain",
             "cs": "Bahrajn"
@@ -145,7 +145,7 @@
     },
     {
         "code": "BD",
-        "name": {
+        "multilingualName": {
             "pl": "Bangladesz",
             "en": "Bangladesh",
             "cs": "Bangladéš"
@@ -153,7 +153,7 @@
     },
     {
         "code": "BB",
-        "name": {
+        "multilingualName": {
             "pl": "Barbados",
             "en": "Barbados",
             "cs": "Barbados"
@@ -161,7 +161,7 @@
     },
     {
         "code": "BY",
-        "name": {
+        "multilingualName": {
             "pl": "Białoruś",
             "en": "Belarus",
             "cs": "Bělorusko"
@@ -169,7 +169,7 @@
     },
     {
         "code": "BE",
-        "name": {
+        "multilingualName": {
             "pl": "Belgia",
             "en": "Belgium",
             "cs": "Belgie"
@@ -177,7 +177,7 @@
     },
     {
         "code": "BZ",
-        "name": {
+        "multilingualName": {
             "pl": "Belize",
             "en": "Belize",
             "cs": "Belize"
@@ -185,7 +185,7 @@
     },
     {
         "code": "BJ",
-        "name": {
+        "multilingualName": {
             "pl": "Benin",
             "en": "Benin",
             "cs": "Benin"
@@ -193,7 +193,7 @@
     },
     {
         "code": "BM",
-        "name": {
+        "multilingualName": {
             "pl": "Bermudy",
             "en": "Bermuda",
             "cs": "Bermudy"
@@ -201,7 +201,7 @@
     },
     {
         "code": "BT",
-        "name": {
+        "multilingualName": {
             "pl": "Bhutan",
             "en": "Bhutan",
             "cs": "Bhútán"
@@ -209,7 +209,7 @@
     },
     {
         "code": "BO",
-        "name": {
+        "multilingualName": {
             "pl": "Boliwia",
             "en": "Bolivia",
             "cs": "Bolívie"
@@ -217,7 +217,7 @@
     },
     {
         "code": "BQ",
-        "name": {
+        "multilingualName": {
             "pl": "Bonaire, Sint Eustatius i Saba",
             "en": "Bonaire, Sint Eustatius and Saba",
             "cs": "Bonaire, Svatý Eustach a Saba"
@@ -225,7 +225,7 @@
     },
     {
         "code": "BA",
-        "name": {
+        "multilingualName": {
             "pl": "Bośnia i Hercegowina",
             "en": "Bosnia and Herzegovina",
             "cs": "Bosna a Hercegovina"
@@ -233,7 +233,7 @@
     },
     {
         "code": "BW",
-        "name": {
+        "multilingualName": {
             "pl": "Botswana",
             "en": "Botswana",
             "cs": "Botswana"
@@ -241,7 +241,7 @@
     },
     {
         "code": "BV",
-        "name": {
+        "multilingualName": {
             "pl": "Wyspa Bouveta",
             "en": "Bouvet Island",
             "cs": "Bouvetův ostrov"
@@ -249,7 +249,7 @@
     },
     {
         "code": "BR",
-        "name": {
+        "multilingualName": {
             "pl": "Brazylia",
             "en": "Brazil",
             "cs": "Brazílie"
@@ -257,7 +257,7 @@
     },
     {
         "code": "IO",
-        "name": {
+        "multilingualName": {
             "pl": "Brytyjskie Terytorium Oceanu Indyjskiego",
             "en": "British Indian Ocean Territory",
             "cs": "Britské indickooceánské území"
@@ -265,7 +265,7 @@
     },
     {
         "code": "BN",
-        "name": {
+        "multilingualName": {
             "pl": "Brunei",
             "en": "Brunei Darussalam",
             "cs": "Brunej"
@@ -273,7 +273,7 @@
     },
     {
         "code": "BG",
-        "name": {
+        "multilingualName": {
             "pl": "Bułgaria",
             "en": "Bulgaria",
             "cs": "Bulharsko"
@@ -281,7 +281,7 @@
     },
     {
         "code": "BF",
-        "name": {
+        "multilingualName": {
             "pl": "Burkina Faso",
             "en": "Burkina Faso",
             "cs": "Burkina Faso"
@@ -289,7 +289,7 @@
     },
     {
         "code": "BI",
-        "name": {
+        "multilingualName": {
             "pl": "Burundi",
             "en": "Burundi",
             "cs": "Burundi"
@@ -297,7 +297,7 @@
     },
     {
         "code": "CV",
-        "name": {
+        "multilingualName": {
             "pl": "Republika Zielonego Przylądka",
             "en": "Cabo Verde",
             "cs": "Kapverdy"
@@ -305,7 +305,7 @@
     },
     {
         "code": "KH",
-        "name": {
+        "multilingualName": {
             "pl": "Kambodża",
             "en": "Cambodia",
             "cs": "Kambodža"
@@ -313,7 +313,7 @@
     },
     {
         "code": "CM",
-        "name": {
+        "multilingualName": {
             "pl": "Kamerun",
             "en": "Cameroon",
             "cs": "Kamerun"
@@ -321,7 +321,7 @@
     },
     {
         "code": "CA",
-        "name": {
+        "multilingualName": {
             "pl": "Kanada",
             "en": "Canada",
             "cs": "Kanada"
@@ -329,7 +329,7 @@
     },
     {
         "code": "KY",
-        "name": {
+        "multilingualName": {
             "pl": "Kajmany",
             "en": "Cayman Islands",
             "cs": "Kajmanské ostrovy"
@@ -337,7 +337,7 @@
     },
     {
         "code": "CF",
-        "name": {
+        "multilingualName": {
             "pl": "Republika Środkowoafrykańska",
             "en": "Central African Republic",
             "cs": "Středoafrická republika"
@@ -345,7 +345,7 @@
     },
     {
         "code": "TD",
-        "name": {
+        "multilingualName": {
             "pl": "Czad",
             "en": "Chad",
             "cs": "Čad"
@@ -353,7 +353,7 @@
     },
     {
         "code": "CL",
-        "name": {
+        "multilingualName": {
             "pl": "Chile",
             "en": "Chile",
             "cs": "Chile"
@@ -361,7 +361,7 @@
     },
     {
         "code": "CN",
-        "name": {
+        "multilingualName": {
             "pl": "Chiny",
             "en": "China",
             "cs": "Čína"
@@ -369,7 +369,7 @@
     },
     {
         "code": "CX",
-        "name": {
+        "multilingualName": {
             "pl": "Wyspa Bożego Narodzenia",
             "en": "Christmas Island",
             "cs": "Vánoční ostrov"
@@ -377,7 +377,7 @@
     },
     {
         "code": "CC",
-        "name": {
+        "multilingualName": {
             "pl": "Wyspy Kokosowe",
             "en": "Cocos (Keeling) Islands",
             "cs": "Kokosové (Keelingovy) ostrovy"
@@ -385,7 +385,7 @@
     },
     {
         "code": "CO",
-        "name": {
+        "multilingualName": {
             "pl": "Kolumbia",
             "en": "Colombia",
             "cs": "Kolumbie"
@@ -393,7 +393,7 @@
     },
     {
         "code": "KM",
-        "name": {
+        "multilingualName": {
             "pl": "Komory",
             "en": "Comoros",
             "cs": "Komory"
@@ -401,7 +401,7 @@
     },
     {
         "code": "CG",
-        "name": {
+        "multilingualName": {
             "pl": "Kongo",
             "en": "Congo",
             "cs": "Kongo"
@@ -409,7 +409,7 @@
     },
     {
         "code": "CD",
-        "name": {
+        "multilingualName": {
             "pl": "Demokratyczna Republika Konga",
             "en": "Congo, Democratic Republic of the",
             "cs": "Demokratická republika Kongo"
@@ -417,7 +417,7 @@
     },
     {
         "code": "CK",
-        "name": {
+        "multilingualName": {
             "pl": "Wyspy Cooka",
             "en": "Cook Islands",
             "cs": "Cookovy ostrovy"
@@ -425,7 +425,7 @@
     },
     {
         "code": "CR",
-        "name": {
+        "multilingualName": {
             "pl": "Kostaryka",
             "en": "Costa Rica",
             "cs": "Kostarika"
@@ -433,7 +433,7 @@
     },
     {
         "code": "HR",
-        "name": {
+        "multilingualName": {
             "pl": "Chorwacja",
             "en": "Croatia",
             "cs": "Chorvatsko"
@@ -441,7 +441,7 @@
     },
     {
         "code": "CU",
-        "name": {
+        "multilingualName": {
             "pl": "Kuba",
             "en": "Cuba",
             "cs": "Kuba"
@@ -449,7 +449,7 @@
     },
     {
         "code": "CW",
-        "name": {
+        "multilingualName": {
             "pl": "Curaçao",
             "en": "Curaçao",
             "cs": "Curaçao"
@@ -457,7 +457,7 @@
     },
     {
         "code": "CY",
-        "name": {
+        "multilingualName": {
             "pl": "Cypr",
             "en": "Cyprus",
             "cs": "Kypr"
@@ -465,7 +465,7 @@
     },
     {
         "code": "CZ",
-        "name": {
+        "multilingualName": {
             "pl": "Czechy",
             "en": "Czechia",
             "cs": "Česko"
@@ -473,7 +473,7 @@
     },
     {
         "code": "DK",
-        "name": {
+        "multilingualName": {
             "pl": "Dania",
             "en": "Denmark",
             "cs": "Dánsko"
@@ -481,7 +481,7 @@
     },
     {
         "code": "DJ",
-        "name": {
+        "multilingualName": {
             "pl": "Dżibuti",
             "en": "Djibouti",
             "cs": "Džibutsko"
@@ -489,7 +489,7 @@
     },
     {
         "code": "DM",
-        "name": {
+        "multilingualName": {
             "pl": "Dominika",
             "en": "Dominica",
             "cs": "Dominika"
@@ -497,7 +497,7 @@
     },
     {
         "code": "DO",
-        "name": {
+        "multilingualName": {
             "pl": "Dominikana",
             "en": "Dominican Republic",
             "cs": "Dominikánská republika"
@@ -505,7 +505,7 @@
     },
     {
         "code": "EC",
-        "name": {
+        "multilingualName": {
             "pl": "Ekwador",
             "en": "Ecuador",
             "cs": "Ekvádor"
@@ -513,7 +513,7 @@
     },
     {
         "code": "EG",
-        "name": {
+        "multilingualName": {
             "pl": "Egipt",
             "en": "Egypt",
             "cs": "Egypt"
@@ -521,7 +521,7 @@
     },
     {
         "code": "SV",
-        "name": {
+        "multilingualName": {
             "pl": "Salwador",
             "en": "El Salvador",
             "cs": "Salvador"
@@ -529,7 +529,7 @@
     },
     {
         "code": "GQ",
-        "name": {
+        "multilingualName": {
             "pl": "Gwinea Równikowa",
             "en": "Equatorial Guinea",
             "cs": "Rovníková Guinea"
@@ -537,7 +537,7 @@
     },
     {
         "code": "ER",
-        "name": {
+        "multilingualName": {
             "pl": "Erytrea",
             "en": "Eritrea",
             "cs": "Eritrea"
@@ -545,7 +545,7 @@
     },
     {
         "code": "EE",
-        "name": {
+        "multilingualName": {
             "pl": "Estonia",
             "en": "Estonia",
             "cs": "Estonsko"
@@ -553,7 +553,7 @@
     },
     {
         "code": "SZ",
-        "name": {
+        "multilingualName": {
             "pl": "Eswatini",
             "en": "Eswatini",
             "cs": "Eswatini"
@@ -561,7 +561,7 @@
     },
     {
         "code": "ET",
-        "name": {
+        "multilingualName": {
             "pl": "Etiopia",
             "en": "Ethiopia",
             "cs": "Etiopie"
@@ -569,7 +569,7 @@
     },
     {
         "code": "FK",
-        "name": {
+        "multilingualName": {
             "pl": "Falklandy (Malwiny)",
             "en": "Falkland Islands (Malvinas)",
             "cs": "Falklandy (Malvíny)"
@@ -577,7 +577,7 @@
     },
     {
         "code": "FO",
-        "name": {
+        "multilingualName": {
             "pl": "Wyspy Owcze",
             "en": "Faroe Islands",
             "cs": "Faerské ostrovy"
@@ -585,7 +585,7 @@
     },
     {
         "code": "FJ",
-        "name": {
+        "multilingualName": {
             "pl": "Fidżi",
             "en": "Fiji",
             "cs": "Fidži"
@@ -593,7 +593,7 @@
     },
     {
         "code": "FI",
-        "name": {
+        "multilingualName": {
             "pl": "Finlandia",
             "en": "Finland",
             "cs": "Finsko"
@@ -601,7 +601,7 @@
     },
     {
         "code": "FR",
-        "name": {
+        "multilingualName": {
             "pl": "Francja",
             "en": "France",
             "cs": "Francie"
@@ -609,7 +609,7 @@
     },
     {
         "code": "GF",
-        "name": {
+        "multilingualName": {
             "pl": "Gujana Francuska",
             "en": "French Guiana",
             "cs": "Francouzská Guyana"
@@ -617,7 +617,7 @@
     },
     {
         "code": "PF",
-        "name": {
+        "multilingualName": {
             "pl": "Polinezja Francuska",
             "en": "French Polynesia",
             "cs": "Francouzská Polynésie"
@@ -625,7 +625,7 @@
     },
     {
         "code": "TF",
-        "name": {
+        "multilingualName": {
             "pl": "Francuskie Terytoria Południowe",
             "en": "French Southern Territories",
             "cs": "Francouzská jižní a antarktická území"
@@ -633,7 +633,7 @@
     },
     {
         "code": "GA",
-        "name": {
+        "multilingualName": {
             "pl": "Gabon",
             "en": "Gabon",
             "cs": "Gabon"
@@ -641,7 +641,7 @@
     },
     {
         "code": "GM",
-        "name": {
+        "multilingualName": {
             "pl": "Gambia",
             "en": "Gambia",
             "cs": "Gambie"
@@ -649,7 +649,7 @@
     },
     {
         "code": "GE",
-        "name": {
+        "multilingualName": {
             "pl": "Gruzja",
             "en": "Georgia",
             "cs": "Gruzie"
@@ -657,7 +657,7 @@
     },
     {
         "code": "DE",
-        "name": {
+        "multilingualName": {
             "pl": "Niemcy",
             "en": "Germany",
             "cs": "Německo"
@@ -665,7 +665,7 @@
     },
     {
         "code": "GH",
-        "name": {
+        "multilingualName": {
             "pl": "Ghana",
             "en": "Ghana",
             "cs": "Ghana"
@@ -673,7 +673,7 @@
     },
     {
         "code": "GI",
-        "name": {
+        "multilingualName": {
             "pl": "Gibraltar",
             "en": "Gibraltar",
             "cs": "Gibraltar"
@@ -681,7 +681,7 @@
     },
     {
         "code": "GR",
-        "name": {
+        "multilingualName": {
             "pl": "Grecja",
             "en": "Greece",
             "cs": "Řecko"
@@ -689,7 +689,7 @@
     },
     {
         "code": "GL",
-        "name": {
+        "multilingualName": {
             "pl": "Grenlandia",
             "en": "Greenland",
             "cs": "Grónsko"
@@ -697,7 +697,7 @@
     },
     {
         "code": "GD",
-        "name": {
+        "multilingualName": {
             "pl": "Grenada",
             "en": "Grenada",
             "cs": "Grenada"
@@ -705,7 +705,7 @@
     },
     {
         "code": "GP",
-        "name": {
+        "multilingualName": {
             "pl": "Gwadelupa",
             "en": "Guadeloupe",
             "cs": "Guadeloupe"
@@ -713,7 +713,7 @@
     },
     {
         "code": "GU",
-        "name": {
+        "multilingualName": {
             "pl": "Guam",
             "en": "Guam",
             "cs": "Guam"
@@ -721,7 +721,7 @@
     },
     {
         "code": "GT",
-        "name": {
+        "multilingualName": {
             "pl": "Gwatemala",
             "en": "Guatemala",
             "cs": "Guatemala"
@@ -729,7 +729,7 @@
     },
     {
         "code": "GG",
-        "name": {
+        "multilingualName": {
             "pl": "Guernsey",
             "en": "Guernsey",
             "cs": "Guernsey"
@@ -737,7 +737,7 @@
     },
     {
         "code": "GN",
-        "name": {
+        "multilingualName": {
             "pl": "Gwinea",
             "en": "Guinea",
             "cs": "Guinea"
@@ -745,7 +745,7 @@
     },
     {
         "code": "GW",
-        "name": {
+        "multilingualName": {
             "pl": "Gwinea Bissau",
             "en": "Guinea-Bissau",
             "cs": "Guinea-Bissau"
@@ -753,7 +753,7 @@
     },
     {
         "code": "GY",
-        "name": {
+        "multilingualName": {
             "pl": "Gujana",
             "en": "Guyana",
             "cs": "Guyana"
@@ -761,7 +761,7 @@
     },
     {
         "code": "HT",
-        "name": {
+        "multilingualName": {
             "pl": "Haiti",
             "en": "Haiti",
             "cs": "Haiti"
@@ -769,7 +769,7 @@
     },
     {
         "code": "HM",
-        "name": {
+        "multilingualName": {
             "pl": "Wyspy Heard i McDonalda",
             "en": "Heard Island and McDonald Islands",
             "cs": "Heardův ostrov a McDonaldovy ostrovy"
@@ -777,7 +777,7 @@
     },
     {
         "code": "VA",
-        "name": {
+        "multilingualName": {
             "pl": "Watykan",
             "en": "Holy See",
             "cs": "Svatý stolec"
@@ -785,7 +785,7 @@
     },
     {
         "code": "HN",
-        "name": {
+        "multilingualName": {
             "pl": "Honduras",
             "en": "Honduras",
             "cs": "Honduras"
@@ -793,7 +793,7 @@
     },
     {
         "code": "HK",
-        "name": {
+        "multilingualName": {
             "pl": "Hongkong",
             "en": "Hong Kong",
             "cs": "Hongkong"
@@ -801,7 +801,7 @@
     },
     {
         "code": "HU",
-        "name": {
+        "multilingualName": {
             "pl": "Węgry",
             "en": "Hungary",
             "cs": "Maďarsko"
@@ -809,7 +809,7 @@
     },
     {
         "code": "IS",
-        "name": {
+        "multilingualName": {
             "pl": "Islandia",
             "en": "Iceland",
             "cs": "Island"
@@ -817,7 +817,7 @@
     },
     {
         "code": "IN",
-        "name": {
+        "multilingualName": {
             "pl": "Indie",
             "en": "India",
             "cs": "Indie"
@@ -825,7 +825,7 @@
     },
     {
         "code": "ID",
-        "name": {
+        "multilingualName": {
             "pl": "Indonezja",
             "en": "Indonesia",
             "cs": "Indonésie"
@@ -833,7 +833,7 @@
     },
     {
         "code": "IR",
-        "name": {
+        "multilingualName": {
             "pl": "Iran",
             "en": "Iran (Islamic Republic of)",
             "cs": "Írán"
@@ -841,7 +841,7 @@
     },
     {
         "code": "IQ",
-        "name": {
+        "multilingualName": {
             "pl": "Irak",
             "en": "Iraq",
             "cs": "Irák"
@@ -849,7 +849,7 @@
     },
     {
         "code": "IE",
-        "name": {
+        "multilingualName": {
             "pl": "Irlandia",
             "en": "Ireland",
             "cs": "Irsko"
@@ -857,7 +857,7 @@
     },
     {
         "code": "IM",
-        "name": {
+        "multilingualName": {
             "pl": "Wyspa Man",
             "en": "Isle of Man",
             "cs": "Ostrov Man"
@@ -865,7 +865,7 @@
     },
     {
         "code": "IL",
-        "name": {
+        "multilingualName": {
             "pl": "Izrael",
             "en": "Israel",
             "cs": "Izrael"
@@ -873,7 +873,7 @@
     },
     {
         "code": "IT",
-        "name": {
+        "multilingualName": {
             "pl": "Włochy",
             "en": "Italy",
             "cs": "Itálie"
@@ -881,7 +881,7 @@
     },
     {
         "code": "JM",
-        "name": {
+        "multilingualName": {
             "pl": "Jamajka",
             "en": "Jamaica",
             "cs": "Jamajka"
@@ -889,7 +889,7 @@
     },
     {
         "code": "JP",
-        "name": {
+        "multilingualName": {
             "pl": "Japonia",
             "en": "Japan",
             "cs": "Japonsko"
@@ -897,7 +897,7 @@
     },
     {
         "code": "JE",
-        "name": {
+        "multilingualName": {
             "pl": "Jersey",
             "en": "Jersey",
             "cs": "Jersey"
@@ -905,7 +905,7 @@
     },
     {
         "code": "JO",
-        "name": {
+        "multilingualName": {
             "pl": "Jordania",
             "en": "Jordan",
             "cs": "Jordánsko"
@@ -913,7 +913,7 @@
     },
     {
         "code": "KZ",
-        "name": {
+        "multilingualName": {
             "pl": "Kazachstan",
             "en": "Kazakhstan",
             "cs": "Kazachstán"
@@ -921,7 +921,7 @@
     },
     {
         "code": "KE",
-        "name": {
+        "multilingualName": {
             "pl": "Kenia",
             "en": "Kenya",
             "cs": "Keňa"
@@ -929,7 +929,7 @@
     },
     {
         "code": "KI",
-        "name": {
+        "multilingualName": {
             "pl": "Kiribati",
             "en": "Kiribati",
             "cs": "Kiribati"
@@ -937,7 +937,7 @@
     },
     {
         "code": "KP",
-        "name": {
+        "multilingualName": {
             "pl": "Korea Północna",
             "en": "Korea (Democratic People's Republic of)",
             "cs": "Severní Korea"
@@ -945,7 +945,7 @@
     },
     {
         "code": "KR",
-        "name": {
+        "multilingualName": {
             "pl": "Korea Południowa",
             "en": "Korea (Republic of)",
             "cs": "Jižní Korea"
@@ -953,7 +953,7 @@
     },
     {
         "code": "KW",
-        "name": {
+        "multilingualName": {
             "pl": "Kuwejt",
             "en": "Kuwait",
             "cs": "Kuvajt"
@@ -961,7 +961,7 @@
     },
     {
         "code": "KG",
-        "name": {
+        "multilingualName": {
             "pl": "Kirgistan",
             "en": "Kyrgyzstan",
             "cs": "Kyrgyzstán"
@@ -969,7 +969,7 @@
     },
     {
         "code": "LA",
-        "name": {
+        "multilingualName": {
             "pl": "Laos",
             "en": "Lao People's Democratic Republic",
             "cs": "Laos"
@@ -977,7 +977,7 @@
     },
     {
         "code": "LV",
-        "name": {
+        "multilingualName": {
             "pl": "Łotwa",
             "en": "Latvia",
             "cs": "Lotyšsko"
@@ -985,7 +985,7 @@
     },
     {
         "code": "LB",
-        "name": {
+        "multilingualName": {
             "pl": "Liban",
             "en": "Lebanon",
             "cs": "Libanon"
@@ -993,7 +993,7 @@
     },
     {
         "code": "LS",
-        "name": {
+        "multilingualName": {
             "pl": "Lesotho",
             "en": "Lesotho",
             "cs": "Lesotho"
@@ -1001,7 +1001,7 @@
     },
     {
         "code": "LR",
-        "name": {
+        "multilingualName": {
             "pl": "Liberia",
             "en": "Liberia",
             "cs": "Libérie"
@@ -1009,7 +1009,7 @@
     },
     {
         "code": "LY",
-        "name": {
+        "multilingualName": {
             "pl": "Libia",
             "en": "Libya",
             "cs": "Libye"
@@ -1017,7 +1017,7 @@
     },
     {
         "code": "LI",
-        "name": {
+        "multilingualName": {
             "pl": "Liechtenstein",
             "en": "Liechtenstein",
             "cs": "Lichtenštejnsko"
@@ -1025,7 +1025,7 @@
     },
     {
         "code": "LT",
-        "name": {
+        "multilingualName": {
             "pl": "Litwa",
             "en": "Lithuania",
             "cs": "Litva"
@@ -1033,7 +1033,7 @@
     },
     {
         "code": "LU",
-        "name": {
+        "multilingualName": {
             "pl": "Luksemburg",
             "en": "Luxembourg",
             "cs": "Lucembursko"
@@ -1041,7 +1041,7 @@
     },
     {
         "code": "MO",
-        "name": {
+        "multilingualName": {
             "pl": "Makau",
             "en": "Macao",
             "cs": "Macao"
@@ -1049,7 +1049,7 @@
     },
     {
         "code": "MG",
-        "name": {
+        "multilingualName": {
             "pl": "Madagaskar",
             "en": "Madagascar",
             "cs": "Madagaskar"
@@ -1057,7 +1057,7 @@
     },
     {
         "code": "MW",
-        "name": {
+        "multilingualName": {
             "pl": "Malawi",
             "en": "Malawi",
             "cs": "Malawi"
@@ -1065,7 +1065,7 @@
     },
     {
         "code": "MY",
-        "name": {
+        "multilingualName": {
             "pl": "Malezja",
             "en": "Malaysia",
             "cs": "Malajsie"
@@ -1073,7 +1073,7 @@
     },
     {
         "code": "MV",
-        "name": {
+        "multilingualName": {
             "pl": "Malediwy",
             "en": "Maldives",
             "cs": "Maledivy"
@@ -1081,7 +1081,7 @@
     },
     {
         "code": "ML",
-        "name": {
+        "multilingualName": {
             "pl": "Mali",
             "en": "Mali",
             "cs": "Mali"
@@ -1089,7 +1089,7 @@
     },
     {
         "code": "MT",
-        "name": {
+        "multilingualName": {
             "pl": "Malta",
             "en": "Malta",
             "cs": "Malta"
@@ -1097,7 +1097,7 @@
     },
     {
         "code": "MH",
-        "name": {
+        "multilingualName": {
             "pl": "Wyspy Marshalla",
             "en": "Marshall Islands",
             "cs": "Marshallovy ostrovy"
@@ -1105,7 +1105,7 @@
     },
     {
         "code": "MQ",
-        "name": {
+        "multilingualName": {
             "pl": "Martynika",
             "en": "Martinique",
             "cs": "Martinik"
@@ -1113,7 +1113,7 @@
     },
     {
         "code": "MR",
-        "name": {
+        "multilingualName": {
             "pl": "Mauretania",
             "en": "Mauritania",
             "cs": "Mauritánie"
@@ -1121,7 +1121,7 @@
     },
     {
         "code": "MU",
-        "name": {
+        "multilingualName": {
             "pl": "Mauritius",
             "en": "Mauritius",
             "cs": "Mauricius"
@@ -1129,7 +1129,7 @@
     },
     {
         "code": "YT",
-        "name": {
+        "multilingualName": {
             "pl": "Majotta",
             "en": "Mayotte",
             "cs": "Mayotte"
@@ -1137,7 +1137,7 @@
     },
     {
         "code": "MX",
-        "name": {
+        "multilingualName": {
             "pl": "Meksyk",
             "en": "Mexico",
             "cs": "Mexiko"
@@ -1145,7 +1145,7 @@
     },
     {
         "code": "FM",
-        "name": {
+        "multilingualName": {
             "pl": "Mikronezja",
             "en": "Micronesia (Federated States of)",
             "cs": "Mikronésie"
@@ -1153,7 +1153,7 @@
     },
     {
         "code": "MD",
-        "name": {
+        "multilingualName": {
             "pl": "Mołdawia",
             "en": "Moldova (Republic of)",
             "cs": "Moldavsko"
@@ -1161,7 +1161,7 @@
     },
     {
         "code": "MC",
-        "name": {
+        "multilingualName": {
             "pl": "Monako",
             "en": "Monaco",
             "cs": "Monako"
@@ -1169,7 +1169,7 @@
     },
     {
         "code": "MN",
-        "name": {
+        "multilingualName": {
             "pl": "Mongolia",
             "en": "Mongolia",
             "cs": "Mongolsko"
@@ -1177,7 +1177,7 @@
     },
     {
         "code": "ME",
-        "name": {
+        "multilingualName": {
             "pl": "Czarnogóra",
             "en": "Montenegro",
             "cs": "Černá Hora"
@@ -1185,7 +1185,7 @@
     },
     {
         "code": "MS",
-        "name": {
+        "multilingualName": {
             "pl": "Montserrat",
             "en": "Montserrat",
             "cs": "Montserrat"
@@ -1193,7 +1193,7 @@
     },
     {
         "code": "MA",
-        "name": {
+        "multilingualName": {
             "pl": "Maroko",
             "en": "Morocco",
             "cs": "Maroko"
@@ -1201,7 +1201,7 @@
     },
     {
         "code": "MZ",
-        "name": {
+        "multilingualName": {
             "pl": "Mozambik",
             "en": "Mozambique",
             "cs": "Mosambik"
@@ -1209,7 +1209,7 @@
     },
     {
         "code": "MM",
-        "name": {
+        "multilingualName": {
             "pl": "Mjanma",
             "en": "Myanmar",
             "cs": "Myanmar"
@@ -1217,7 +1217,7 @@
     },
     {
         "code": "NA",
-        "name": {
+        "multilingualName": {
             "pl": "Namibia",
             "en": "Namibia",
             "cs": "Namibie"
@@ -1225,7 +1225,7 @@
     },
     {
         "code": "NR",
-        "name": {
+        "multilingualName": {
             "pl": "Nauru",
             "en": "Nauru",
             "cs": "Nauru"
@@ -1233,7 +1233,7 @@
     },
     {
         "code": "NP",
-        "name": {
+        "multilingualName": {
             "pl": "Nepal",
             "en": "Nepal",
             "cs": "Nepál"
@@ -1241,7 +1241,7 @@
     },
     {
         "code": "NL",
-        "name": {
+        "multilingualName": {
             "pl": "Holandia",
             "en": "Netherlands",
             "cs": "Nizozemsko"
@@ -1249,7 +1249,7 @@
     },
     {
         "code": "NC",
-        "name": {
+        "multilingualName": {
             "pl": "Nowa Kaledonia",
             "en": "New Caledonia",
             "cs": "Nová Kaledonie"
@@ -1257,7 +1257,7 @@
     },
     {
         "code": "NZ",
-        "name": {
+        "multilingualName": {
             "pl": "Nowa Zelandia",
             "en": "New Zealand",
             "cs": "Nový Zéland"
@@ -1265,7 +1265,7 @@
     },
     {
         "code": "NI",
-        "name": {
+        "multilingualName": {
             "pl": "Nikaragua",
             "en": "Nicaragua",
             "cs": "Nikaragua"
@@ -1273,7 +1273,7 @@
     },
     {
         "code": "NE",
-        "name": {
+        "multilingualName": {
             "pl": "Niger",
             "en": "Niger",
             "cs": "Niger"
@@ -1281,7 +1281,7 @@
     },
     {
         "code": "NG",
-        "name": {
+        "multilingualName": {
             "pl": "Nigeria",
             "en": "Nigeria",
             "cs": "Nigérie"
@@ -1289,7 +1289,7 @@
     },
     {
         "code": "NU",
-        "name": {
+        "multilingualName": {
             "pl": "Niue",
             "en": "Niue",
             "cs": "Niue"
@@ -1297,7 +1297,7 @@
     },
     {
         "code": "NF",
-        "name": {
+        "multilingualName": {
             "pl": "Norfolk",
             "en": "Norfolk Island",
             "cs": "Norfolk"
@@ -1305,7 +1305,7 @@
     },
     {
         "code": "MK",
-        "name": {
+        "multilingualName": {
             "pl": "Macedonia Północna",
             "en": "North Macedonia",
             "cs": "Severní Makedonie"
@@ -1313,7 +1313,7 @@
     },
     {
         "code": "MP",
-        "name": {
+        "multilingualName": {
             "pl": "Mariany Północne",
             "en": "Northern Mariana Islands",
             "cs": "Severní Mariany"
@@ -1321,7 +1321,7 @@
     },
     {
         "code": "NO",
-        "name": {
+        "multilingualName": {
             "pl": "Norwegia",
             "en": "Norway",
             "cs": "Norsko"
@@ -1329,7 +1329,7 @@
     },
     {
         "code": "OM",
-        "name": {
+        "multilingualName": {
             "pl": "Oman",
             "en": "Oman",
             "cs": "Omán"
@@ -1337,7 +1337,7 @@
     },
     {
         "code": "PK",
-        "name": {
+        "multilingualName": {
             "pl": "Pakistan",
             "en": "Pakistan",
             "cs": "Pákistán"
@@ -1345,7 +1345,7 @@
     },
     {
         "code": "PW",
-        "name": {
+        "multilingualName": {
             "pl": "Palau",
             "en": "Palau",
             "cs": "Palau"
@@ -1353,7 +1353,7 @@
     },
     {
         "code": "PS",
-        "name": {
+        "multilingualName": {
             "pl": "Palestyna",
             "en": "Palestine, State of",
             "cs": "Palestina"
@@ -1361,7 +1361,7 @@
     },
     {
         "code": "PA",
-        "name": {
+        "multilingualName": {
             "pl": "Panama",
             "en": "Panama",
             "cs": "Panama"
@@ -1369,7 +1369,7 @@
     },
     {
         "code": "PG",
-        "name": {
+        "multilingualName": {
             "pl": "Papua-Nowa Gwinea",
             "en": "Papua New Guinea",
             "cs": "Papua-Nová Guinea"
@@ -1377,7 +1377,7 @@
     },
     {
         "code": "PY",
-        "name": {
+        "multilingualName": {
             "pl": "Paragwaj",
             "en": "Paraguay",
             "cs": "Paraguay"
@@ -1385,7 +1385,7 @@
     },
     {
         "code": "PE",
-        "name": {
+        "multilingualName": {
             "pl": "Peru",
             "en": "Peru",
             "cs": "Peru"
@@ -1393,7 +1393,7 @@
     },
     {
         "code": "PH",
-        "name": {
+        "multilingualName": {
             "pl": "Filipiny",
             "en": "Philippines",
             "cs": "Filipíny"
@@ -1401,7 +1401,7 @@
     },
     {
         "code": "PN",
-        "name": {
+        "multilingualName": {
             "pl": "Pitcairn",
             "en": "Pitcairn",
             "cs": "Pitcairnovy ostrovy"
@@ -1409,7 +1409,7 @@
     },
     {
         "code": "PL",
-        "name": {
+        "multilingualName": {
             "pl": "Polska",
             "en": "Poland",
             "cs": "Polsko"
@@ -1417,7 +1417,7 @@
     },
     {
         "code": "PT",
-        "name": {
+        "multilingualName": {
             "pl": "Portugalia",
             "en": "Portugal",
             "cs": "Portugalsko"
@@ -1425,7 +1425,7 @@
     },
     {
         "code": "PR",
-        "name": {
+        "multilingualName": {
             "pl": "Portoryko",
             "en": "Puerto Rico",
             "cs": "Portoriko"
@@ -1433,7 +1433,7 @@
     },
     {
         "code": "QA",
-        "name": {
+        "multilingualName": {
             "pl": "Katar",
             "en": "Qatar",
             "cs": "Katar"
@@ -1441,7 +1441,7 @@
     },
     {
         "code": "RE",
-        "name": {
+        "multilingualName": {
             "pl": "Reunion",
             "en": "Réunion",
             "cs": "Réunion"
@@ -1449,7 +1449,7 @@
     },
     {
         "code": "RO",
-        "name": {
+        "multilingualName": {
             "pl": "Rumunia",
             "en": "Romania",
             "cs": "Rumunsko"
@@ -1457,7 +1457,7 @@
     },
     {
         "code": "RU",
-        "name": {
+        "multilingualName": {
             "pl": "Rosja",
             "en": "Russian Federation",
             "cs": "Rusko"
@@ -1465,7 +1465,7 @@
     },
     {
         "code": "RW",
-        "name": {
+        "multilingualName": {
             "pl": "Rwanda",
             "en": "Rwanda",
             "cs": "Rwanda"
@@ -1473,7 +1473,7 @@
     },
     {
         "code": "BL",
-        "name": {
+        "multilingualName": {
             "pl": "Saint-Barthélemy",
             "en": "Saint Barthélemy",
             "cs": "Svatý Bartoloměj"
@@ -1481,7 +1481,7 @@
     },
     {
         "code": "SH",
-        "name": {
+        "multilingualName": {
             "pl": "Wyspa Świętej Heleny, Wniebowstąpienia i Tristan da Cunha",
             "en": "Saint Helena, Ascension and Tristan da Cunha",
             "cs": "Svatá Helena, Ascension a Tristan da Cunha"
@@ -1489,7 +1489,7 @@
     },
     {
         "code": "KN",
-        "name": {
+        "multilingualName": {
             "pl": "Saint Kitts i Nevis",
             "en": "Saint Kitts and Nevis",
             "cs": "Svatý Kryštof a Nevis"
@@ -1497,7 +1497,7 @@
     },
     {
         "code": "LC",
-        "name": {
+        "multilingualName": {
             "pl": "Saint Lucia",
             "en": "Saint Lucia",
             "cs": "Svatá Lucie"
@@ -1505,7 +1505,7 @@
     },
     {
         "code": "MF",
-        "name": {
+        "multilingualName": {
             "pl": "Saint-Martin",
             "en": "Saint Martin (French part)",
             "cs": "Svatý Martin (francouzská část)"
@@ -1513,7 +1513,7 @@
     },
     {
         "code": "PM",
-        "name": {
+        "multilingualName": {
             "pl": "Saint-Pierre i Miquelon",
             "en": "Saint Pierre and Miquelon",
             "cs": "Saint-Pierre a Miquelon"
@@ -1521,7 +1521,7 @@
     },
     {
         "code": "VC",
-        "name": {
+        "multilingualName": {
             "pl": "Saint Vincent i Grenadyny",
             "en": "Saint Vincent and the Grenadines",
             "cs": "Svatý Vincenc a Grenadiny"
@@ -1529,7 +1529,7 @@
     },
     {
         "code": "WS",
-        "name": {
+        "multilingualName": {
             "pl": "Samoa",
             "en": "Samoa",
             "cs": "Samoa"
@@ -1537,7 +1537,7 @@
     },
     {
         "code": "SM",
-        "name": {
+        "multilingualName": {
             "pl": "San Marino",
             "en": "San Marino",
             "cs": "San Marino"
@@ -1545,7 +1545,7 @@
     },
     {
         "code": "ST",
-        "name": {
+        "multilingualName": {
             "pl": "Wyspy Świętego Tomasza i Książęca",
             "en": "Sao Tome and Principe",
             "cs": "Svatý Tomáš a Princův ostrov"
@@ -1553,7 +1553,7 @@
     },
     {
         "code": "SA",
-        "name": {
+        "multilingualName": {
             "pl": "Arabia Saudyjska",
             "en": "Saudi Arabia",
             "cs": "Saúdská Arábie"
@@ -1561,7 +1561,7 @@
     },
     {
         "code": "SN",
-        "name": {
+        "multilingualName": {
             "pl": "Senegal",
             "en": "Senegal",
             "cs": "Senegal"
@@ -1569,7 +1569,7 @@
     },
     {
         "code": "RS",
-        "name": {
+        "multilingualName": {
             "pl": "Serbia",
             "en": "Serbia",
             "cs": "Srbsko"
@@ -1577,7 +1577,7 @@
     },
     {
         "code": "SC",
-        "name": {
+        "multilingualName": {
             "pl": "Seszele",
             "en": "Seychelles",
             "cs": "Seychely"
@@ -1585,7 +1585,7 @@
     },
     {
         "code": "SL",
-        "name": {
+        "multilingualName": {
             "pl": "Sierra Leone",
             "en": "Sierra Leone",
             "cs": "Sierra Leone"
@@ -1593,7 +1593,7 @@
     },
     {
         "code": "SG",
-        "name": {
+        "multilingualName": {
             "pl": "Singapur",
             "en": "Singapore",
             "cs": "Singapur"
@@ -1601,7 +1601,7 @@
     },
     {
         "code": "SX",
-        "name": {
+        "multilingualName": {
             "pl": "Sint Maarten (część holenderska)",
             "en": "Sint Maarten (Dutch part)",
             "cs": "Svatý Martin (nizozemská část)"
@@ -1609,7 +1609,7 @@
     },
     {
         "code": "SK",
-        "name": {
+        "multilingualName": {
             "pl": "Słowacja",
             "en": "Slovakia",
             "cs": "Slovensko"
@@ -1617,7 +1617,7 @@
     },
     {
         "code": "SI",
-        "name": {
+        "multilingualName": {
             "pl": "Słowenia",
             "en": "Slovenia",
             "cs": "Slovinsko"
@@ -1625,7 +1625,7 @@
     },
     {
         "code": "SB",
-        "name": {
+        "multilingualName": {
             "pl": "Wyspy Salomona",
             "en": "Solomon Islands",
             "cs": "Šalomounovy ostrovy"
@@ -1633,7 +1633,7 @@
     },
     {
         "code": "SO",
-        "name": {
+        "multilingualName": {
             "pl": "Somalia",
             "en": "Somalia",
             "cs": "Somálsko"
@@ -1641,7 +1641,7 @@
     },
     {
         "code": "ZA",
-        "name": {
+        "multilingualName": {
             "pl": "Południowa Afryka",
             "en": "South Africa",
             "cs": "Jihoafrická republika"
@@ -1649,7 +1649,7 @@
     },
     {
         "code": "GS",
-        "name": {
+        "multilingualName": {
             "pl": "Georgia Południowa i Sandwich Południowy",
             "en": "South Georgia and the South Sandwich Islands",
             "cs": "Jižní Georgie a Jižní Sandwichovy ostrovy"
@@ -1657,7 +1657,7 @@
     },
     {
         "code": "SS",
-        "name": {
+        "multilingualName": {
             "pl": "Sudan Południowy",
             "en": "South Sudan",
             "cs": "Jižní Súdán"
@@ -1665,7 +1665,7 @@
     },
     {
         "code": "ES",
-        "name": {
+        "multilingualName": {
             "pl": "Hiszpania",
             "en": "Spain",
             "cs": "Španělsko"
@@ -1673,7 +1673,7 @@
     },
     {
         "code": "LK",
-        "name": {
+        "multilingualName": {
             "pl": "Sri Lanka",
             "en": "Sri Lanka",
             "cs": "Srí Lanka"
@@ -1681,7 +1681,7 @@
     },
     {
         "code": "SD",
-        "name": {
+        "multilingualName": {
             "pl": "Sudan",
             "en": "Sudan",
             "cs": "Súdán"
@@ -1689,7 +1689,7 @@
     },
     {
         "code": "SR",
-        "name": {
+        "multilingualName": {
             "pl": "Surinam",
             "en": "Suriname",
             "cs": "Surinam"
@@ -1697,7 +1697,7 @@
     },
     {
         "code": "SJ",
-        "name": {
+        "multilingualName": {
             "pl": "Svalbard i Jan Mayen",
             "en": "Svalbard and Jan Mayen",
             "cs": "Špicberky a Jan Mayen"
@@ -1705,7 +1705,7 @@
     },
     {
         "code": "SE",
-        "name": {
+        "multilingualName": {
             "pl": "Szwecja",
             "en": "Sweden",
             "cs": "Švédsko"
@@ -1713,7 +1713,7 @@
     },
     {
         "code": "CH",
-        "name": {
+        "multilingualName": {
             "pl": "Szwajcaria",
             "en": "Switzerland",
             "cs": "Švýcarsko"
@@ -1721,7 +1721,7 @@
     },
     {
         "code": "SY",
-        "name": {
+        "multilingualName": {
             "pl": "Syria",
             "en": "Syrian Arab Republic",
             "cs": "Sýrie"
@@ -1729,7 +1729,7 @@
     },
     {
         "code": "TW",
-        "name": {
+        "multilingualName": {
             "pl": "Tajwan",
             "en": "Taiwan (Province of China)",
             "cs": "Tchaj-wan"
@@ -1737,7 +1737,7 @@
     },
     {
         "code": "TJ",
-        "name": {
+        "multilingualName": {
             "pl": "Tadżykistan",
             "en": "Tajikistan",
             "cs": "Tádžikistán"
@@ -1745,7 +1745,7 @@
     },
     {
         "code": "TZ",
-        "name": {
+        "multilingualName": {
             "pl": "Tanzania",
             "en": "Tanzania, United Republic of",
             "cs": "Tanzanie"
@@ -1753,7 +1753,7 @@
     },
     {
         "code": "TH",
-        "name": {
+        "multilingualName": {
             "pl": "Tajlandia",
             "en": "Thailand",
             "cs": "Thajsko"
@@ -1761,7 +1761,7 @@
     },
     {
         "code": "TL",
-        "name": {
+        "multilingualName": {
             "pl": "Timor Wschodni",
             "en": "Timor-Leste",
             "cs": "Východní Timor"
@@ -1769,7 +1769,7 @@
     },
     {
         "code": "TG",
-        "name": {
+        "multilingualName": {
             "pl": "Togo",
             "en": "Togo",
             "cs": "Togo"
@@ -1777,7 +1777,7 @@
     },
     {
         "code": "TK",
-        "name": {
+        "multilingualName": {
             "pl": "Tokelau",
             "en": "Tokelau",
             "cs": "Tokelau"
@@ -1785,7 +1785,7 @@
     },
     {
         "code": "TO",
-        "name": {
+        "multilingualName": {
             "pl": "Tonga",
             "en": "Tonga",
             "cs": "Tonga"
@@ -1793,7 +1793,7 @@
     },
     {
         "code": "TT",
-        "name": {
+        "multilingualName": {
             "pl": "Trynidad i Tobago",
             "en": "Trinidad and Tobago",
             "cs": "Trinidad a Tobago"
@@ -1801,7 +1801,7 @@
     },
     {
         "code": "TN",
-        "name": {
+        "multilingualName": {
             "pl": "Tunezja",
             "en": "Tunisia",
             "cs": "Tunisko"
@@ -1809,7 +1809,7 @@
     },
     {
         "code": "TR",
-        "name": {
+        "multilingualName": {
             "pl": "Turcja",
             "en": "Turkey",
             "cs": "Turecko"
@@ -1817,7 +1817,7 @@
     },
     {
         "code": "TM",
-        "name": {
+        "multilingualName": {
             "pl": "Turkmenistan",
             "en": "Turkmenistan",
             "cs": "Turkmenistán"
@@ -1825,7 +1825,7 @@
     },
     {
         "code": "TC",
-        "name": {
+        "multilingualName": {
             "pl": "Wyspy Turks i Caicos",
             "en": "Turks and Caicos Islands",
             "cs": "Turks a Caicos"
@@ -1833,7 +1833,7 @@
     },
     {
         "code": "TV",
-        "name": {
+        "multilingualName": {
             "pl": "Tuvalu",
             "en": "Tuvalu",
             "cs": "Tuvalu"
@@ -1841,7 +1841,7 @@
     },
     {
         "code": "UG",
-        "name": {
+        "multilingualName": {
             "pl": "Uganda",
             "en": "Uganda",
             "cs": "Uganda"
@@ -1849,7 +1849,7 @@
     },
     {
         "code": "UA",
-        "name": {
+        "multilingualName": {
             "pl": "Ukraina",
             "en": "Ukraine",
             "cs": "Ukrajina"
@@ -1857,7 +1857,7 @@
     },
     {
         "code": "AE",
-        "name": {
+        "multilingualName": {
             "pl": "Zjednoczone Emiraty Arabskie",
             "en": "United Arab Emirates",
             "cs": "Spojené arabské emiráty"
@@ -1865,7 +1865,7 @@
     },
     {
         "code": "GB",
-        "name": {
+        "multilingualName": {
             "pl": "Wielka Brytania",
             "en": "United Kingdom of Great Britain and Northern Ireland",
             "cs": "Spojené království"
@@ -1873,7 +1873,7 @@
     },
     {
         "code": "US",
-        "name": {
+        "multilingualName": {
             "pl": "Stany Zjednoczone",
             "en": "United States of America",
             "cs": "Spojené státy"
@@ -1881,7 +1881,7 @@
     },
     {
         "code": "UM",
-        "name": {
+        "multilingualName": {
             "pl": "Dalekie Wyspy Mniejsze Stanów Zjednoczonych",
             "en": "United States Minor Outlying Islands",
             "cs": "Menší odlehlé ostrovy USA"
@@ -1889,7 +1889,7 @@
     },
     {
         "code": "UY",
-        "name": {
+        "multilingualName": {
             "pl": "Urugwaj",
             "en": "Uruguay",
             "cs": "Uruguay"
@@ -1897,7 +1897,7 @@
     },
     {
         "code": "UZ",
-        "name": {
+        "multilingualName": {
             "pl": "Uzbekistan",
             "en": "Uzbekistan",
             "cs": "Uzbekistán"
@@ -1905,7 +1905,7 @@
     },
     {
         "code": "VU",
-        "name": {
+        "multilingualName": {
             "pl": "Vanuatu",
             "en": "Vanuatu",
             "cs": "Vanuatu"
@@ -1913,7 +1913,7 @@
     },
     {
         "code": "VE",
-        "name": {
+        "multilingualName": {
             "pl": "Wenezuela",
             "en": "Venezuela (Bolivarian Republic of)",
             "cs": "Venezuela"
@@ -1921,7 +1921,7 @@
     },
     {
         "code": "VN",
-        "name": {
+        "multilingualName": {
             "pl": "Wietnam",
             "en": "Viet Nam",
             "cs": "Vietnam"
@@ -1929,7 +1929,7 @@
     },
     {
         "code": "VG",
-        "name": {
+        "multilingualName": {
             "pl": "Brytyjskie Wyspy Dziewicze",
             "en": "Virgin Islands (British)",
             "cs": "Britské Panenské ostrovy"
@@ -1937,7 +1937,7 @@
     },
     {
         "code": "VI",
-        "name": {
+        "multilingualName": {
             "pl": "Wyspy Dziewicze Stanów Zjednoczonych",
             "en": "Virgin Islands (U.S.)",
             "cs": "Americké Panenské ostrovy"
@@ -1945,7 +1945,7 @@
     },
     {
         "code": "WF",
-        "name": {
+        "multilingualName": {
             "pl": "Wallis i Futuna",
             "en": "Wallis and Futuna",
             "cs": "Wallis a Futuna"
@@ -1953,7 +1953,7 @@
     },
     {
         "code": "EH",
-        "name": {
+        "multilingualName": {
             "pl": "Sahara Zachodnia",
             "en": "Western Sahara",
             "cs": "Západní Sahara"
@@ -1961,7 +1961,7 @@
     },
     {
         "code": "YE",
-        "name": {
+        "multilingualName": {
             "pl": "Jemen",
             "en": "Yemen",
             "cs": "Jemen"
@@ -1969,7 +1969,7 @@
     },
     {
         "code": "ZM",
-        "name": {
+        "multilingualName": {
             "pl": "Zambia",
             "en": "Zambia",
             "cs": "Zambie"
@@ -1977,7 +1977,7 @@
     },
     {
         "code": "ZW",
-        "name": {
+        "multilingualName": {
             "pl": "Zimbabwe",
             "en": "Zimbabwe",
             "cs": "Zimbabwe"
