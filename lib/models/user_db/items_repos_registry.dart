@@ -48,12 +48,13 @@ class ItemsReposRegistry extends ItemsRepo<ItemsRepo> with EquatableMixin {
   }
 
   ItemsRepo byTypeArgument(Type type) {
-    try {
-      return _repos.singleWhere((repo) {
-        return repo.itemsType == type;
-      });
-    } catch (e) {
+    final singleOrNull = _repos.where((repo) {
+      return repo.itemsType == type;
+    }).singleOrNull;
+    if (singleOrNull == null) {
       throw _repoWithTypeDoesNotExist(type);
+    } else {
+      return singleOrNull;
     }
   }
 

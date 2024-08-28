@@ -12,13 +12,14 @@ class _Large extends StatefulWidget {
 class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   late final AnimationController _bodyAnimationController;
 
-  late final DbFiltersRepo _filtersRepo;
-  late final SelectedIndexesRepo _selectedIndexesRepo;
+  late final DbFiltersRepo _filters;
+  late final SelectedIndexesRepo _selectedIndexes;
+  late final EventSeriesSetupIdsRepo _eventSeriesSetupIds;
 
-  late final LocalDatabaseCopyCubit _copiedDbCubit;
-  late final ChangeStatusCubit _dbChangeStatusCubit;
-  late final DatabaseItemsCubit _itemsCubit;
-  late final DatabaseEditorCountriesCubit _countriesCubit;
+  late final LocalDatabaseCopyCubit _localDbCopy;
+  late final ChangeStatusCubit _dbChangeStatus;
+  late final DatabaseItemsCubit _items;
+  late final DatabaseEditorCountriesCubit _countries;
 
   final _initialized = ValueNotifier<bool>(false);
   var _closed = false;
@@ -39,17 +40,19 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     });
 
     FlutterWindowClose.setWindowShouldCloseHandler(() async {
-      if (!_closed && _dbChangeStatusCubit.state) {
+      if (!_closed && _dbChangeStatus.state) {
         String? action = await _showSaveChangesDialog();
         final shouldClose = await _shouldCloseAfterDialog(action);
         if (action == 'yes') {
           if (!mounted) return true;
-          await _copiedDbCubit.saveChangesToOriginalRepos(context);
+          await _localDbCopy.saveChangesToOriginalRepos(context);
         }
         if (!_closed && shouldClose) {
           _closed = shouldClose;
         }
-        _cleanResources();
+        if (shouldClose) {
+          _cleanResources();
+        }
         return shouldClose;
       } else {
         _cleanResources();
@@ -60,7 +63,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   }
 
   void _initializeRepos() {
-    _filtersRepo = DbFiltersRepo(initial: {
+    _filters = DbFiltersRepo(initial: {
       MaleJumper: BehaviorSubject.seeded([]),
       FemaleJumper: BehaviorSubject.seeded([]),
       Hill: BehaviorSubject.seeded([]),
@@ -68,43 +71,44 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       EventSeriesCalendarPreset: BehaviorSubject.seeded([]),
       DefaultCompetitionRulesPreset: BehaviorSubject.seeded([]),
     });
-    _selectedIndexesRepo = SelectedIndexesRepo();
+    _selectedIndexes = SelectedIndexesRepo();
+    _eventSeriesSetupIds = EventSeriesSetupIdsRepo();
   }
 
   Future<void> _initializeCubits() async {
-    _dbChangeStatusCubit = ChangeStatusCubit();
-    _copiedDbCubit = LocalDatabaseCopyCubit(originalDb: context.read());
-    await _copiedDbCubit.setUp();
-    _itemsCubit = DatabaseItemsCubit(
-      filtersRepo: _filtersRepo,
-      itemsRepos: _copiedDbCubit.state!,
+    _dbChangeStatus = ChangeStatusCubit();
+    _localDbCopy = LocalDatabaseCopyCubit(originalDb: context.read());
+    await _localDbCopy.setUp();
+    _items = DatabaseItemsCubit(
+      filtersRepo: _filters,
+      itemsRepos: _localDbCopy.state!,
     );
-    final teamsRepo = TeamsRepo<CountryTeam>(
-        initial: _copiedDbCubit.originalDb.get<Team>().last.cast());
-    _countriesCubit = DatabaseEditorCountriesCubit(
-      countriesRepo: _copiedDbCubit.originalDb.get<Country>() as CountriesRepo,
+    final teamsRepo =
+        TeamsRepo<CountryTeam>(initial: _localDbCopy.originalDb.get<Team>().last.cast());
+    _countries = DatabaseEditorCountriesCubit(
+      countriesRepo: _localDbCopy.originalDb.get<Country>() as CountriesRepo,
       teamsRepo: teamsRepo,
     );
-    _countriesCubit.setUp();
+    _countries.setUp();
   }
 
   @override
   void dispose() {
-    Future(() {
-      _bodyAnimationController.dispose();
-      FlutterWindowClose.setWindowShouldCloseHandler(null);
-    });
+    _cleanResources();
+    _bodyAnimationController.dispose();
+    FlutterWindowClose.setWindowShouldCloseHandler(null);
     super.dispose();
   }
 
   void _cleanResources() {
-    _copiedDbCubit.close();
-    _copiedDbCubit.dispose();
-    _dbChangeStatusCubit.close();
-    _countriesCubit.dispose();
-    _countriesCubit.close();
-    _selectedIndexesRepo.close();
-    _filtersRepo.close();
+    print('clean resources');
+    _localDbCopy.close();
+    _localDbCopy.dispose();
+    _dbChangeStatus.close();
+    _countries.dispose();
+    _countries.close();
+    _selectedIndexes.close();
+    _filters.close();
   }
 
   Future<String?> _showSaveChangesDialog() async {
@@ -136,18 +140,19 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
         final child = prepared
             ? MultiRepositoryProvider(
                 providers: [
-                  RepositoryProvider.value(value: _filtersRepo),
-                  RepositoryProvider.value(value: _selectedIndexesRepo),
+                  RepositoryProvider.value(value: _filters),
+                  RepositoryProvider.value(value: _selectedIndexes),
                   RepositoryProvider(
                     create: (context) => ValueRepo(initial: _currentTabIndex),
-                  )
+                  ),
+                  RepositoryProvider.value(value: _eventSeriesSetupIds),
                 ],
                 child: MultiBlocProvider(
                   providers: [
-                    BlocProvider.value(value: _copiedDbCubit),
-                    BlocProvider.value(value: _dbChangeStatusCubit),
-                    BlocProvider.value(value: _itemsCubit),
-                    BlocProvider.value(value: _countriesCubit),
+                    BlocProvider.value(value: _localDbCopy),
+                    BlocProvider.value(value: _dbChangeStatus),
+                    BlocProvider.value(value: _items),
+                    BlocProvider.value(value: _countries),
                   ],
                   child: Builder(builder: (context) {
                     context.watch<LocalDatabaseCopyCubit>();
@@ -155,10 +160,10 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                     context.watch<DatabaseItemsCubit>();
                     return PopScope(
                       canPop: false,
-                      onPopInvoked: (didPop) async {
+                      onPopInvokedWithResult: (didPop, value) async {
                         if (didPop || _closed) {
                           return;
-                        } else if (!_dbChangeStatusCubit.state) {
+                        } else if (!_dbChangeStatus.state) {
                           _cleanResources();
                           Navigator.pop(context);
                           return;
@@ -167,25 +172,25 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                         bool shouldClose = await _shouldCloseAfterDialog(action);
                         if (action == 'yes') {
                           if (!context.mounted) return;
-                          await _copiedDbCubit.saveChangesToOriginalRepos(context);
+                          await _localDbCopy.saveChangesToOriginalRepos(context);
                         }
                         if (shouldClose) {
+                          _cleanResources();
                           _closed = true;
                           if (!context.mounted) return;
                           router.pop(context);
                         }
-                        _cleanResources();
                       },
                       child: StreamBuilder<Object>(
                           stream: StreamGroup.merge([
-                            _selectedIndexesRepo.selectedIndexes,
+                            _selectedIndexes.selectedIndexes,
                           ]),
                           builder: (context, snapshot) {
-                            final selectedIndexes = _selectedIndexesRepo.state;
-                            final shouldShowFabs = !_filtersRepo.hasValidFilter;
+                            final selectedIndexes = _selectedIndexes.state;
+                            final shouldShowFabs = !_filters.hasValidFilter;
                             final shouldShowAddFab = selectedIndexes.length <= 1;
                             final shouldShowRemoveFab = selectedIndexes.isNotEmpty;
-                            final itemsType = _itemsCubit.state.itemsType;
+                            final itemsType = _items.state.itemsType;
                             final shouldShowBottomAppBar = itemsType == MaleJumper ||
                                 itemsType == FemaleJumper ||
                                 itemsType == Hill;
@@ -304,9 +309,9 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
 
   Future<void> _onChangeTab(int index) async {
     if (_currentTabIndex.index != index) {
-      _selectedIndexesRepo.clearSelection();
-      _filtersRepo.clear();
-      _itemsCubit.selectByIndex(index);
+      _selectedIndexes.clearSelection();
+      _filters.clear();
+      _items.selectByIndex(index);
       _currentTabIndex = _SelectedTabIndex(index);
       await _animateBodyFromZero();
     }

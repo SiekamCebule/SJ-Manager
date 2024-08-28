@@ -2,13 +2,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/bloc/database_editing/database_items_cubit.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
+import 'package:sj_manager/bloc/database_editing/state/database_items_state.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
+import 'package:sj_manager/models/user_db/country/team_facts.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/hill/hill_profile_type.dart';
 import 'package:sj_manager/models/user_db/hill/jumps_variability.dart';
@@ -17,14 +19,19 @@ import 'package:sj_manager/models/user_db/hill/typical_wind_direction.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
+import 'package:sj_manager/models/user_db/sex.dart';
+import 'package:sj_manager/models/user_db/team/country_team.dart';
+import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
-import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/setup/app_configurator.dart';
 import 'package:sj_manager/ui/app.dart';
+import 'package:sj_manager/ui/database_item_editors/event_series_setup_editor.dart';
+import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
 import 'package:sj_manager/ui/providers/locale_notifier.dart';
@@ -36,6 +43,7 @@ import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_ite
 import 'package:sj_manager/ui/theme/app_color_scheme_repo.dart';
 import 'package:sj_manager/ui/theme/app_theme_brightness_repo.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
+import 'package:sj_manager/utils/id_generator.dart';
 
 import '../../local_database/bloc/database_editing_logic_test.mocks.dart';
 
@@ -128,54 +136,40 @@ void main() {
     late Widget appWidget;
 
     setUpAll(() {
-      appWidget = BlocProvider(
-        create: (context) => LocaleCubit(
-          initial: const Locale('en'),
-        ),
-        child: MultiRepositoryProvider(
-          providers: [
-            RepositoryProvider(
-              create: (context) => ItemsReposRegistry(
-                initial: {
-                  EditableItemsRepo<MaleJumper>(initial: maleJumpers),
-                  EditableItemsRepo<MaleJumper>(initial: maleJumpers),
-                  EditableItemsRepo<FemaleJumper>(initial: femaleJumpers),
-                  EditableItemsRepo<Hill>(initial: hills),
-                  EditableItemsRepo<EventSeriesSetup>(initial: []),
-                  EditableItemsRepo<EventSeriesCalendarPreset>(initial: []),
-                  EditableItemsRepo<DefaultCompetitionRulesPreset>(initial: []),
-                  CountriesRepo(initial: countries),
-                  MockTeamsRepo(),
-                },
-              ),
-            ),
-            RepositoryProvider(create: (context) {
-              final noneCountry =
-                  (context.read<ItemsReposRegistry>().get<Country>() as CountriesRepo)
-                      .none;
-              return DefaultItemsRepo(
-                initial: {
-                  FemaleJumper.empty(country: noneCountry),
-                  MaleJumper.empty(country: noneCountry),
-                  Hill.empty(country: noneCountry),
-                  const EventSeriesSetup.empty(),
-                  const EventSeriesCalendarPreset.empty(),
-                  const DefaultCompetitionRules.empty()
-                },
-              );
-            }),
-            RepositoryProvider(create: (context) {
-              return DbEditingDefaultsRepo.appDefault();
-            }),
-            RepositoryProvider(
-              create: (context) => AppThemeBrightnessRepo(),
-            ),
-            RepositoryProvider(
-              create: (context) => AppColorSchemeRepo(),
-            ),
-          ],
-          child: MultiProvider(
+      final teamsRepo = MockTeamsRepo();
+      when(teamsRepo.itemsType).thenReturn(Team);
+      when(teamsRepo.last).thenReturn([
+        CountryTeam(
+            facts: const TeamFacts(stars: 5, record: null),
+            sex: Sex.male,
+            country: germany),
+        CountryTeam(
+            facts: const TeamFacts(stars: 3, record: null),
+            sex: Sex.female,
+            country: switzerland),
+        CountryTeam(
+            facts: const TeamFacts(stars: 4, record: null),
+            sex: Sex.male,
+            country: switzerland),
+        CountryTeam(
+            facts: const TeamFacts(stars: 5, record: null),
+            sex: Sex.female,
+            country: slovenia),
+        CountryTeam(
+            facts: const TeamFacts(stars: 5, record: null),
+            sex: Sex.male,
+            country: slovenia),
+      ]);
+      appWidget = MultiProvider(
+        providers: [
+          MultiProvider(
             providers: [
+              RepositoryProvider(
+                create: (context) => AppThemeBrightnessRepo(),
+              ),
+              RepositoryProvider(
+                create: (context) => AppColorSchemeRepo(),
+              ),
               Provider(
                 create: (context) => AppConfigurator(
                   shouldSetUpRouting: true,
@@ -184,64 +178,120 @@ void main() {
                   loaders: [],
                 ),
               ),
+              BlocProvider(create: (context) {
+                return ThemeCubit(
+                  colorSchemeRepo: context.read(),
+                  brightnessRepo: context.read(),
+                );
+              }),
+              BlocProvider(
+                create: (context) => LocaleCubit(
+                  initial: const Locale('pl'),
+                ),
+              ),
             ],
-            child: MultiBlocProvider(
+          ),
+        ],
+        child: App(
+          home: Builder(builder: (context) {
+            return MultiRepositoryProvider(
               providers: [
-                BlocProvider(create: (context) {
-                  return ThemeCubit(
-                    colorSchemeRepo: context.read(),
-                    brightnessRepo: context.read(),
-                  );
+                RepositoryProvider(
+                  create: (context) => ItemsReposRegistry(
+                    initial: {
+                      EditableItemsRepo<MaleJumper>(initial: maleJumpers),
+                      EditableItemsRepo<FemaleJumper>(initial: femaleJumpers),
+                      EditableItemsRepo<Hill>(initial: hills),
+                      EditableItemsRepo<EventSeriesSetup>(initial: []),
+                      EditableItemsRepo<EventSeriesCalendarPreset>(initial: []),
+                      EditableItemsRepo<DefaultCompetitionRulesPreset>(initial: []),
+                      CountriesRepo(initial: countries),
+                      teamsRepo,
+                    },
+                  ),
+                ),
+                RepositoryProvider(create: (context) {
+                  return DbEditingDefaultsRepo.appDefault();
+                }),
+                Provider(create: (context) {
+                  return ItemsIdsRepo();
+                }),
+                Provider<IdGenerator>(create: (context) {
+                  return const NanoIdGenerator(size: 10);
                 }),
               ],
-              child: const App(home: DatabaseEditorScreen()),
-            ),
-          ),
+              child: const DatabaseEditorScreen(),
+            );
+          }),
         ),
       );
     });
 
     testWidgets('Appropriate displaying', (tester) async {
-      await tester.pumpWidget(appWidget);
-      await tester.pumpAndSettle();
+      await tester.runAsync(() async {
+        tester.binding.defaultBinaryMessenger
+            .setMockMethodCallHandler(flutterWindowCloseChannel, (call) async {
+          if (call.method == 'init') {
+            return 'mocked response';
+          }
+          throw MissingPluginException();
+        });
+        tester.view.devicePixelRatio = 1.0;
+        tester.view.physicalSize = const Size(1200, 1000);
+        WidgetsFlutterBinding.ensureInitialized();
+        await tester.pumpWidget(appWidget);
+        await tester.pumpAndSettle();
 
-      final context = tester.element(find.byType(DatabaseItemsList)) as BuildContext;
+        final context = tester.element(find.byType(DatabaseItemsList)) as BuildContext;
 
-      final itemsCubit = context.read<DatabaseItemsCubit>();
-      final itemsList = find.byType(DatabaseItemsList);
-      expect(itemsCubit.state, MaleJumper);
-      expect(tester.widget<DatabaseItemsList>(itemsList).length, maleJumpers.length);
+        final itemsCubit = context.read<DatabaseItemsCubit>();
 
-      expect(find.byType(FloatingActionButton), findsNWidgets(2));
-      final addFabVisibility = find
-          .ancestor(
-              of: find.byKey(const Key('addFab')),
-              matching: find.byType(AnimatedVisibility))
-          .first;
-      expect(tester.widget<AnimatedVisibility>(addFabVisibility).visible, true);
-      final removeFabVisibility = find
-          .ancestor(
-              of: find.byKey(const Key('removeFab')),
-              matching: find.byType(AnimatedVisibility))
-          .first;
-      expect(tester.widget<AnimatedVisibility>(removeFabVisibility).visible, false);
+        itemsCubit.stream.listen((state) {
+          print('ItemsCubit changed: $state');
+        });
 
-      final tabBar = find.byType(TabBar);
-      final femaleJumpersTab = tester.widget<TabBar>(tabBar).tabs[1];
-      await tester.tap(find.byWidget(femaleJumpersTab));
-      await tester.pumpAndSettle();
-      expect(itemsCubit.state, FemaleJumper);
-      expect(tester.widget<DatabaseItemsList>(itemsList).length, femaleJumpers.length);
+        final itemsList = find.byType(DatabaseItemsList);
+        expect(itemsCubit.state.itemsType, MaleJumper);
+        expect(tester.widget<DatabaseItemsList>(itemsList).length, maleJumpers.length);
+        expect(find.byType(FloatingActionButton), findsNWidgets(2));
+        final addFabVisibility = find
+            .ancestor(
+                of: find.byKey(const Key('addFab')),
+                matching: find.byType(AnimatedVisibility))
+            .first;
+        expect(tester.widget<AnimatedVisibility>(addFabVisibility).visible, true);
 
-      final secondTile = find.descendant(
-          of: find.byType(DatabaseItemsList), matching: find.byKey(const ValueKey(1)));
-      expect(tester.widget<AppropriateDbItemListTile>(secondTile).selected, false);
-      await tester.tap(secondTile);
-      await tester.pumpAndSettle();
-      expect(tester.widget<AppropriateDbItemListTile>(secondTile).selected, true);
+        final tile = find.descendant(
+            of: find.byType(DatabaseItemsList), matching: find.byKey(const ValueKey(0)));
+        await tester.tap(tile);
+        await tester.pumpAndSettle();
+        final removeFabVisibility = find
+            .ancestor(
+                of: find.byKey(const Key('removeFab')),
+                matching: find.byType(AnimatedVisibility))
+            .first;
+        expect(tester.widget<AnimatedVisibility>(removeFabVisibility).visible, true);
+
+        final tabBar = find.byType(TabBar);
+        final femaleJumpersTab = tester.widget<TabBar>(tabBar).tabs[1];
+        await tester.tap(find.byWidget(femaleJumpersTab));
+        await tester.pumpAndSettle();
+        expect(itemsCubit.state.itemsType, FemaleJumper);
+        expect(tester.widget<DatabaseItemsList>(itemsList).length, femaleJumpers.length);
+
+        final secondTile = find.descendant(
+            of: find.byType(DatabaseItemsList), matching: find.byKey(const ValueKey(1)));
+        expect(tester.widget<AppropriateDbItemListTile>(secondTile).selected, false);
+        await tester.tap(secondTile);
+        await tester.pumpAndSettle();
+        expect(tester.widget<AppropriateDbItemListTile>(secondTile).selected, true);
+        await tester.pumpWidget(Container());
+        await tester.pump();
+      });
     });
 
-    testWidgets('Editing hills and changing between them', (tester) async {
+    testWidgets('Simple adding, editing removing and changing between items',
+        (tester) async {
       tester.binding.defaultBinaryMessenger
           .setMockMethodCallHandler(flutterWindowCloseChannel, (call) async {
         if (call.method == 'init') {
@@ -252,71 +302,111 @@ void main() {
       tester.view.devicePixelRatio = 1.0;
       tester.view.physicalSize = const Size(1200, 1000);
       WidgetsFlutterBinding.ensureInitialized();
-      await tester.pumpWidget(appWidget);
-      await tester.pumpAndSettle();
-
-      final context = tester.element(find.byType(DatabaseItemsList)) as BuildContext;
-      final itemsCubit = context.read<DatabaseItemsCubit>();
-      final itemsList = find.byType(DatabaseItemsList);
-      final tabBar = find.byType(TabBar);
-      final addFab = find.byKey(const Key('addFab'));
-      final removeFab = find.byKey(const Key('removeFab'));
-
-      Future<void> selectTab(int index) async {
-        final tab = tester.widget<TabBar>(tabBar).tabs[index];
-        await tester.tap(find.byWidget(tab));
+      await tester.runAsync(() async {
+        await tester.pumpWidget(appWidget);
         await tester.pumpAndSettle();
-      }
 
-      Future<void> tapItem(int index) async {
-        final itemTile = find.descendant(
-            of: find.byType(DatabaseItemsList), matching: find.byKey(ValueKey(index)));
-        await tester.tap(itemTile);
+        var context = tester.element(find.byType(DatabaseItemsList)) as BuildContext;
+        final itemsCubit = context.read<DatabaseItemsCubit>();
+        final itemsList = find.byType(DatabaseItemsList);
+        final tabBar = find.byType(TabBar);
+        final addFab = find.byKey(const Key('addFab'));
+        final removeFab = find.byKey(const Key('removeFab'));
+
+        Future<void> selectTab(int index) async {
+          final tab = tester.widget<TabBar>(tabBar).tabs[index];
+          await tester.tap(find.byWidget(tab));
+          await tester.pumpAndSettle();
+        }
+
+        Future<void> tapItem(int index) async {
+          final itemTile = find.descendant(
+              of: find.byType(DatabaseItemsList), matching: find.byKey(ValueKey(index)));
+          await tester.ensureVisible(itemTile);
+          await tester.tap(itemTile);
+          await tester.pumpAndSettle();
+        }
+
+        Future<void> tap(Finder finder) async {
+          await tester.tap(finder);
+          await tester.pumpAndSettle();
+        }
+
+        expect(itemsCubit.state.itemsType, MaleJumper);
+        await selectTab(2);
+        expect(itemsCubit.state.itemsType, Hill);
+        expect(tester.widget<DatabaseItemsList>(itemsList).length, 3);
+        await tapItem(1);
+        await tap(addFab); // index: 2
+        await tap(addFab); // index: 3
+        expect(tester.widget<DatabaseItemsList>(itemsList).length, 5);
+        await tester.enterText(
+            find.byKey(const Key('locality')), 'Zakopane'); // We're editing index 3
+        await tester.enterText(find.byKey(const Key('name')), 'Wielka Krokiew');
+        await tester.enterText(find.byKey(const Key('hs')), '140');
         await tester.pumpAndSettle();
-      }
-
-      Future<void> tap(Finder finder) async {
-        await tester.tap(finder);
+        await tapItem(2);
+        await tester.enterText(
+            find.byKey(const Key('locality')), 'Sapporo'); // We're editing index 2
+        await tester.enterText(find.byKey(const Key('name')), 'Ōkurayama');
+        await tester.enterText(find.byKey(const Key('k')), '123');
+        await tester.enterText(find.byKey(const Key('hs')), '137');
         await tester.pumpAndSettle();
-      }
+        await tapItem(2); // Hide HillEditor
+        await tester.pumpAndSettle();
 
-      expect(itemsCubit.state, MaleJumper);
-      await selectTab(2);
-      expect(itemsCubit.state, Hill);
-      expect(tester.widget<DatabaseItemsList>(itemsList).length, hills.length);
-      await tapItem(1);
-      await tap(addFab); // index: 2
-      await tap(addFab); // index: 3
-      expect(tester.widget<DatabaseItemsList>(itemsList).length, hills.length + 2);
-      await tester.enterText(
-          find.byKey(const Key('locality')), 'Zakopane'); // We're editing index 3
-      await tester.enterText(find.byKey(const Key('name')), 'Wielka Krokiew');
-      await tester.enterText(find.byKey(const Key('hs')), '140');
-      await tester.pumpAndSettle();
-      await tapItem(2);
-      await tester.enterText(
-          find.byKey(const Key('locality')), 'Sapporo'); // We're editing index 2
-      await tester.enterText(find.byKey(const Key('name')), 'Ōkurayama');
-      await tester.enterText(find.byKey(const Key('k')), '123');
-      await tester.enterText(find.byKey(const Key('hs')), '137');
-      await tester.pumpAndSettle();
-      await tapItem(2); // Hide HillEditor
-      await tester.pumpAndSettle();
+        await tapItem(2);
+        await tap(removeFab); //
+        await tapItem(3); // 4, if 2 hadn't been removed
+        await tap(removeFab);
+        await tapItem(1); // Schattenbergschanze
+        expect(find.byType(HillEditor), findsOneWidget);
+        expect(tester.widget<MyTextField>(find.byKey(const Key('name'))).controller.text,
+            'Schattenbergschanze');
+        final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
+        expect(selectedIndexesRepo.state.single, 1);
+        await tapItem(2);
+        expect(
+            tester.widget<MyTextField>(find.byKey(const Key('locality'))).controller.text,
+            'Zakopane');
 
-      await tapItem(2);
-      await tap(removeFab); //
-      await tapItem(3); // 4, if 2 hadn't been removed
-      await tap(removeFab);
-      await tapItem(1); // Schattenbergschanze
-      expect(find.byType(HillEditor), findsOneWidget);
-      expect(tester.widget<MyTextField>(find.byKey(const Key('name'))).controller.text,
-          'Schattenbergschanze');
-      final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
-      expect(selectedIndexesRepo.state.single, 1);
-      await tapItem(2);
-      expect(
-          tester.widget<MyTextField>(find.byKey(const Key('locality'))).controller.text,
-          'Zakopane');
+        await selectTab(3);
+        expect(itemsCubit.state.itemsType, EventSeriesSetup);
+        expect(() => tapItem(0), throwsA(isA<Error>()));
+        await tap(addFab);
+        await tester.enterText(
+          find.byKey(const Key('name')),
+          'Puchar Świata',
+        );
+        await tap(find.byKey(const Key('priorityHelpButton')));
+        await tap(find.byKey(const Key('close')));
+        await tester.enterText(
+            find.descendant(
+                of: find.byKey(const Key('priority_expanded')),
+                matching: find.byType(MyNumeralTextField)),
+            '1');
+        await tester.pumpAndSettle();
+        expect((itemsCubit.state as DatabaseItemsNonEmpty).filteredItems.length, 1);
+        await tester.tapAt(Offset.zero);
+        await tester.pump();
+        await tapItem(0);
+        expect(
+          tester
+              .widget<AnimatedVisibility>(find.byKey(const Key('animatedEditorNonEmpty')))
+              .visible,
+          false,
+        );
+        await selectTab(2);
+        await tapItem(0);
+        await tap(removeFab);
+        context = tester.element(find.byType(DatabaseItemsList)) as BuildContext;
+        expect((itemsCubit.state as DatabaseItemsNonEmpty).filteredItems.length, 2);
+        await selectTab(3);
+        expect((itemsCubit.state as DatabaseItemsNonEmpty).filteredItems.length, 1);
+
+        await tester.pumpWidget(Container());
+        await tester.pump();
+      });
     });
   });
 }

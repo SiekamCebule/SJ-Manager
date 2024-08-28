@@ -12,10 +12,6 @@ class _ItemsListState extends State<_ItemsList> {
   Widget build(BuildContext context) {
     final itemsState = context.watch<DatabaseItemsCubit>().state;
     final shouldShowList = itemsState is DatabaseItemsNonEmpty;
-    if (itemsState is DatabaseItemsNonEmpty) {
-      print('filtered items: ${itemsState.filteredItems}');
-      print('filters (valid): ${itemsState.validFilters}');
-    }
 
     return Stack(
       fit: StackFit.expand,

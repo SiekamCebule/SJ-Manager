@@ -8,11 +8,11 @@ part 'team_facts.g.dart';
 class TeamFacts {
   const TeamFacts({
     required this.stars,
-    required this.record,
+    this.record,
   });
 
   final int stars;
-  final SimpleJump record;
+  final SimpleJump? record;
 
   static TeamFacts fromJson(Json json) => _$TeamFactsFromJson(json);
 

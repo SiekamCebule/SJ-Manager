@@ -94,7 +94,6 @@ class JumperEditorState extends State<JumperEditor> {
 
   @override
   Widget build(BuildContext context) {
-    print('jumper editor countries repo: ${widget.countriesRepo.last}');
     const gap = Gap(UiItemEditorsConstants.verticalSpaceBetweenFields);
     return LayoutBuilder(
       builder: (context, constraints) {

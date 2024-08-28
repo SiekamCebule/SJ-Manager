@@ -19,6 +19,7 @@ class _AnimatedEditor extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             AnimatedVisibility(
+              key: const Key('animatedEditorNonEmpty'),
               duration: Durations.medium1,
               curve: Curves.easeIn,
               visible: editorShouldBeVisible,

@@ -127,8 +127,8 @@ void main() async {
         providers: [
           RepositoryProvider<CountryFlagsRepo>(
             create: (context) {
-              final storageDirectory =
-                  userDataDirectory(pathsCache, path.join('database', 'countries', 'country_flags'));
+              final storageDirectory = userDataDirectory(
+                  pathsCache, path.join('database', 'countries', 'country_flags'));
               return LocalStorageCountryFlagsRepo(
                 imagesDirectory: storageDirectory,
                 imagesExtension: 'png',
@@ -161,7 +161,8 @@ void main() async {
           providers: [
             Provider(create: (context) {
               return DbItemImageGeneratingSetup<Jumper>(
-                imagesDirectory: databaseDirectory(pathsCache, path.join('jumper_images')),
+                imagesDirectory:
+                    databaseDirectory(pathsCache, path.join('jumper_images')),
                 toFileName: (jumper) {
                   return '${jumper.country.code.toLowerCase()}_${jumper.name.toLowerCase()}_${jumper.surname.toLowerCase()}'
                       .replaceAll(' ', '_');
@@ -170,7 +171,8 @@ void main() async {
             }),
             Provider(create: (context) {
               return DbItemImageGeneratingSetup<Hill>(
-                  imagesDirectory: databaseDirectory(pathsCache, path.join('hill_images')),
+                  imagesDirectory:
+                      databaseDirectory(pathsCache, path.join('hill_images')),
                   toFileName: (hill) {
                     return '${hill.locality.toLowerCase()}_${hill.hs.truncate().toString()}'
                         .replaceAll(' ', '_');
@@ -178,12 +180,14 @@ void main() async {
             }),
             Provider(create: (context) {
               return DbItemImageGeneratingSetup<EventSeriesLogoImageWrapper>(
-                  imagesDirectory: databaseDirectory(pathsCache, path.join('assets', 'logos')),
+                  imagesDirectory:
+                      databaseDirectory(pathsCache, path.join('assets', 'logos')),
                   toFileName: (logoImage) => logoImage.eventSeriesSetup.id);
             }),
             Provider(create: (context) {
               return DbItemImageGeneratingSetup<EventSeriesTrophyImageWrapper>(
-                  imagesDirectory: databaseDirectory(pathsCache, path.join('assets', 'trophies')),
+                  imagesDirectory:
+                      databaseDirectory(pathsCache, path.join('assets', 'trophies')),
                   toFileName: (logoImage) => logoImage.eventSeriesSetup.id);
             }),
             Provider(
@@ -208,7 +212,7 @@ void main() async {
             Provider(create: (context) {
               return ItemsIdsRepo();
             }),
-            Provider(create: (context) {
+            Provider<IdGenerator>(create: (context) {
               return const NanoIdGenerator(size: 10);
             }),
             Provider(create: (context) {

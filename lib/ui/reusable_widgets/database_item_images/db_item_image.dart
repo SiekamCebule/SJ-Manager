@@ -18,7 +18,7 @@ class DbItemImage<T> extends StatefulWidget {
   });
 
   final T item;
-  final DbItemImageGeneratingSetup<T> setup;
+  final DbItemImageGeneratingSetup<T>? setup;
   final double? width;
   final double? height;
   final BoxFit? fit;
@@ -33,7 +33,10 @@ class _DbItemImageState<T> extends State<DbItemImage<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final filePath = dbItemImagePath(widget.setup, widget.item);
+    if (widget.setup == null) {
+      return widget.errorBuilder(context, Object(), null);
+    }
+    final filePath = dbItemImagePath(widget.setup!, widget.item);
     return Image.file(
       File(filePath ?? ''),
       width: widget.width,

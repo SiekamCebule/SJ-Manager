@@ -67,6 +67,7 @@ import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart'
 import 'package:sj_manager/repositories/database_editing/db_editing_avaiable_objects_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
+import 'package:sj_manager/repositories/database_editing/event_series_setup_ids_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
 import 'package:sj_manager/ui/assets/icons.dart';
@@ -88,7 +89,6 @@ import 'package:sj_manager/ui/screens/database_editor/large/dialogs/selected_db_
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropriate_db_item_list_tile.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
 import 'package:sj_manager/utils/colors.dart';
-import 'package:sj_manager/utils/db_items.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/single_where_type.dart';
 
@@ -110,248 +110,251 @@ part 'large/widgets/__items_list_non_empty_state_body.dart';
 part 'large/widgets/__item_editor_empty_state_body.dart';
 part 'large/widgets/__item_editor_non_empty_state_body.dart';
 
+List<RepositoryProvider> defaultDbEditorProviders(BuildContext context) {
+  final translator = translate(context);
+  return [
+    RepositoryProvider<DbEditingAvailableObjectsRepo<StandingsPositionsCreator>>(
+      create: (context) => DbEditingAvailableObjectsRepo(initial: [
+        DbEditingAvaiableObjectConfig(
+          key: 'with_ex_aequos',
+          displayName: 'Z Miejscami Ex Aequo',
+          object: StandingsPositionsWithExAequosCreator(),
+        ),
+        DbEditingAvaiableObjectConfig(
+          key: 'without_ex_aequos',
+          displayName: 'Bez Miejsc Ex Aequo',
+          object: StandingsPositionsWithNoExAequoCreator(),
+        ),
+        DbEditingAvaiableObjectConfig(
+          key: 'with_shuffle_on_equal_positions',
+          displayName: 'Losowa Kolejność Przy Ex Aequo',
+          object: StandingsPositionsWithShuffleOnEqualPositionsCreator(),
+        ),
+      ]),
+    ),
+    RepositoryProvider<DbEditingAvailableObjectsRepo<JumpScoreCreator>>(
+      create: (context) => DbEditingAvailableObjectsRepo(initial: [
+        DbEditingAvaiableObjectConfig(
+          key: 'classic',
+          displayName: 'Klasycznie',
+          object: DefaultClassicJumpScoreCreator(),
+        ),
+      ]),
+    ),
+    RepositoryProvider<DbEditingAvailableObjectsRepo<WindAverager>>(
+      create: (context) => DbEditingAvailableObjectsRepo(initial: [
+        DbEditingAvaiableObjectConfig(
+          key: 'linear_classic',
+          displayName: 'Liniowo (Klasyczne)',
+          object: DefaultLinearWindAverager(
+            skipNonAchievedSensors: true,
+            computePreciselyPartialMeasurement: false,
+          ),
+        ),
+        DbEditingAvaiableObjectConfig(
+          key: 'linear_advanced',
+          displayName: 'Liniowo (Zaawansowane)',
+          object: DefaultLinearWindAverager(
+            skipNonAchievedSensors: true,
+            computePreciselyPartialMeasurement: true,
+          ),
+        ),
+        DbEditingAvaiableObjectConfig(
+          key: 'linear_simple',
+          displayName: 'Liniowo (Proste)',
+          object: DefaultLinearWindAverager(
+            skipNonAchievedSensors: false,
+            computePreciselyPartialMeasurement: false,
+          ),
+        ),
+        DbEditingAvaiableObjectConfig(
+          key: 'weighted_classic',
+          displayName: 'Wagowo (Klasyczne)',
+          object: DefaultWeightedWindAverager(
+            skipNonAchievedSensors: true,
+            computePreciselyPartialMeasurement: false,
+          ),
+        ),
+        DbEditingAvaiableObjectConfig(
+          key: 'weighted_advanced',
+          displayName: 'Wagowo (Zaawansowane)',
+          object: DefaultWeightedWindAverager(
+            skipNonAchievedSensors: true,
+            computePreciselyPartialMeasurement: true,
+          ),
+        ),
+        DbEditingAvaiableObjectConfig(
+          key: 'weighted_simple',
+          displayName: 'Wagowo (Proste)',
+          object: DefaultWeightedWindAverager(
+            skipNonAchievedSensors: false,
+            computePreciselyPartialMeasurement: false,
+          ),
+        ),
+      ]),
+    ),
+    RepositoryProvider<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>(
+      create: (context) => DbEditingAvailableObjectsRepo(initial: [
+        DbEditingAvaiableObjectConfig<CompetitionScoreCreator<CompetitionJumperScore>>(
+          key: 'classic_individual',
+          displayName: 'Indywidualnie (Klasycznie)',
+          object: DefaultLinearIndividualCompetitionScoreCreator(),
+        ),
+        DbEditingAvaiableObjectConfig<CompetitionScoreCreator<CompetitionTeamScore>>(
+          key: 'classic_team',
+          displayName: 'Drużynowo (Klasycznie)',
+          object: DefaultLinearTeamCompetitionScoreCreator(),
+        ),
+      ]),
+    ),
+    RepositoryProvider<DbEditingAvailableObjectsRepo<KoRoundAdvancementDeterminator>>(
+      create: (context) => const DbEditingAvailableObjectsRepo(initial: [
+        DbEditingAvaiableObjectConfig(
+          key: 'n_best',
+          displayName: 'Awansuje N najlepszych',
+          object: NBestKoRoundAdvancementDeterminator(),
+        ),
+      ]),
+    ),
+    RepositoryProvider<DbEditingAvailableObjectsRepo<KoGroupsCreator>>(
+      create: (context) => DbEditingAvailableObjectsRepo(initial: [
+        DbEditingAvaiableObjectConfig(
+          key: 'classic',
+          displayName: 'Klasyczne pary',
+          object: DefaultClassicKoGroupsCreator(),
+        ),
+        DbEditingAvaiableObjectConfig(
+          key: 'random',
+          displayName: 'Losowe grupy',
+          object: DefaultRandomKoGroupsCreator(),
+        ),
+        DbEditingAvaiableObjectConfig(
+          key: 'pots',
+          displayName: 'Losowanie z koszyków',
+          object: DefaultPotsKoGroupsCreator(),
+        ),
+      ]),
+    ),
+    RepositoryProvider<DbEditingAvailableObjectsRepo<JudgesCreator>>(
+      create: (context) => DbEditingAvailableObjectsRepo(initial: [
+        DbEditingAvaiableObjectConfig(
+          key: 'default',
+          displayName: 'Domyślnie',
+          object: DefaultJudgesCreator(),
+        ),
+      ]),
+    ),
+    RepositoryProvider<DefaultItemsRepo>(create: (context) {
+      final noneCountry =
+          (context.read<ItemsReposRegistry>().get<Country>() as CountriesRepo).none;
+      final koRoundRules = KoRoundRules(
+        advancementDeterminator: context
+            .read<DbEditingAvailableObjectsRepo<KoRoundAdvancementDeterminator>>()
+            .getObject('n_best'),
+        advancementCount: 1,
+        koGroupsCreator: context
+            .read<DbEditingAvailableObjectsRepo<KoGroupsCreator>>()
+            .getObject('classic'),
+        groupSize: 2,
+      );
+      final defaultIndividualRoundRules = DefaultIndividualCompetitionRoundRules(
+        limit: const EntitiesLimit.soft(50),
+        bibsAreReassigned: false,
+        startlistIsSorted: false,
+        gateCanChange: true,
+        gateCompensationsEnabled: true,
+        windCompensationsEnabled: true,
+        windAverager: context
+            .read<DbEditingAvailableObjectsRepo<WindAverager>>()
+            .getObject('weighted_classic'),
+        inrunLightsEnabled: true,
+        dsqEnabled: true,
+        positionsCreator: context
+            .read<DbEditingAvailableObjectsRepo<StandingsPositionsCreator>>()
+            .getObject('with_ex_aequos'),
+        ruleOf95HsFallEnabled: true,
+        judgesCount: 5,
+        judgesCreator: context
+            .read<DbEditingAvailableObjectsRepo<JudgesCreator>>()
+            .getObject('default'),
+        significantJudgesCount: 3,
+        competitionScoreCreator: context
+                .read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>()
+                .getObject('classic_individual')
+            as CompetitionScoreCreator<CompetitionJumperScore>,
+        jumpScoreCreator: context
+            .read<DbEditingAvailableObjectsRepo<JumpScoreCreator>>()
+            .getObject('classic'),
+        koRules: null,
+      );
+      const defaultGroupRules = TeamCompetitionGroupRules(sortStartList: false);
+      final defaultTeamRoundRules = DefaultTeamCompetitionRoundRules(
+        limit: const EntitiesLimit.soft(50),
+        bibsAreReassigned: true,
+        startlistIsSorted: false,
+        gateCanChange: true,
+        gateCompensationsEnabled: true,
+        windCompensationsEnabled: true,
+        windAverager: context
+            .read<DbEditingAvailableObjectsRepo<WindAverager>>()
+            .getObject('weighted_classic'),
+        inrunLightsEnabled: true,
+        dsqEnabled: true,
+        positionsCreator: context
+            .read<DbEditingAvailableObjectsRepo<StandingsPositionsCreator>>()
+            .getObject('with_ex_aequos'),
+        ruleOf95HsFallEnabled: true,
+        judgesCount: 5,
+        judgesCreator: context
+            .read<DbEditingAvailableObjectsRepo<JudgesCreator>>()
+            .getObject('default'),
+        significantJudgesCount: 3,
+        competitionScoreCreator: context
+                .read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>()
+                .getObject('classic_team')
+            as CompetitionScoreCreator<CompetitionTeamScore<CompetitionTeam>>,
+        jumpScoreCreator: context
+            .read<DbEditingAvailableObjectsRepo<JumpScoreCreator>>()
+            .getObject('classic'),
+        koRules: null,
+        groups: const [
+          TeamCompetitionGroupRules(sortStartList: false),
+          TeamCompetitionGroupRules(sortStartList: false),
+          TeamCompetitionGroupRules(sortStartList: false),
+          TeamCompetitionGroupRules(sortStartList: false),
+        ],
+      );
+
+      final defaultCompetitionRules =
+          DefaultCompetitionRules(rounds: [defaultIndividualRoundRules]);
+      return DefaultItemsRepo(
+        initial: {
+          FemaleJumper.empty(country: noneCountry),
+          MaleJumper.empty(country: noneCountry),
+          Hill.empty(country: noneCountry),
+          const EventSeriesSetup.empty(),
+          const EventSeriesCalendarPreset.empty().copyWith(name: translator.unnamed),
+          DefaultCompetitionRulesPreset<dynamic>(
+            name: translator.unnamed,
+            rules: defaultCompetitionRules,
+          ),
+          defaultIndividualRoundRules,
+          defaultGroupRules,
+          defaultTeamRoundRules,
+          koRoundRules
+        },
+      );
+    }),
+  ];
+}
+
 class DatabaseEditorScreen extends StatelessWidget {
   const DatabaseEditorScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final translator = translate(context);
     return MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider<DbEditingAvailableObjectsRepo<StandingsPositionsCreator>>(
-          create: (context) => DbEditingAvailableObjectsRepo(initial: [
-            DbEditingAvaiableObjectConfig(
-              key: 'with_ex_aequos',
-              displayName: 'Z Miejscami Ex Aequo',
-              object: StandingsPositionsWithExAequosCreator(),
-            ),
-            DbEditingAvaiableObjectConfig(
-              key: 'without_ex_aequos',
-              displayName: 'Bez Miejsc Ex Aequo',
-              object: StandingsPositionsWithNoExAequoCreator(),
-            ),
-            DbEditingAvaiableObjectConfig(
-              key: 'with_shuffle_on_equal_positions',
-              displayName: 'Losowa Kolejność Przy Ex Aequo',
-              object: StandingsPositionsWithShuffleOnEqualPositionsCreator(),
-            ),
-          ]),
-        ),
-        RepositoryProvider<DbEditingAvailableObjectsRepo<JumpScoreCreator>>(
-          create: (context) => DbEditingAvailableObjectsRepo(initial: [
-            DbEditingAvaiableObjectConfig(
-              key: 'classic',
-              displayName: 'Klasycznie',
-              object: DefaultClassicJumpScoreCreator(),
-            ),
-          ]),
-        ),
-        RepositoryProvider<DbEditingAvailableObjectsRepo<WindAverager>>(
-          create: (context) => DbEditingAvailableObjectsRepo(initial: [
-            DbEditingAvaiableObjectConfig(
-              key: 'linear_classic',
-              displayName: 'Liniowo (Klasyczne)',
-              object: DefaultLinearWindAverager(
-                skipNonAchievedSensors: true,
-                computePreciselyPartialMeasurement: false,
-              ),
-            ),
-            DbEditingAvaiableObjectConfig(
-              key: 'linear_advanced',
-              displayName: 'Liniowo (Zaawansowane)',
-              object: DefaultLinearWindAverager(
-                skipNonAchievedSensors: true,
-                computePreciselyPartialMeasurement: true,
-              ),
-            ),
-            DbEditingAvaiableObjectConfig(
-              key: 'linear_simple',
-              displayName: 'Liniowo (Proste)',
-              object: DefaultLinearWindAverager(
-                skipNonAchievedSensors: false,
-                computePreciselyPartialMeasurement: false,
-              ),
-            ),
-            DbEditingAvaiableObjectConfig(
-              key: 'weighted_classic',
-              displayName: 'Wagowo (Klasyczne)',
-              object: DefaultWeightedWindAverager(
-                skipNonAchievedSensors: true,
-                computePreciselyPartialMeasurement: false,
-              ),
-            ),
-            DbEditingAvaiableObjectConfig(
-              key: 'weighted_advanced',
-              displayName: 'Wagowo (Zaawansowane)',
-              object: DefaultWeightedWindAverager(
-                skipNonAchievedSensors: true,
-                computePreciselyPartialMeasurement: true,
-              ),
-            ),
-            DbEditingAvaiableObjectConfig(
-              key: 'weighted_simple',
-              displayName: 'Wagowo (Proste)',
-              object: DefaultWeightedWindAverager(
-                skipNonAchievedSensors: false,
-                computePreciselyPartialMeasurement: false,
-              ),
-            ),
-          ]),
-        ),
-        RepositoryProvider<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>(
-          create: (context) => DbEditingAvailableObjectsRepo(initial: [
-            DbEditingAvaiableObjectConfig<
-                CompetitionScoreCreator<CompetitionJumperScore>>(
-              key: 'classic_individual',
-              displayName: 'Indywidualnie (Klasycznie)',
-              object: DefaultLinearIndividualCompetitionScoreCreator(),
-            ),
-            DbEditingAvaiableObjectConfig<CompetitionScoreCreator<CompetitionTeamScore>>(
-              key: 'classic_team',
-              displayName: 'Drużynowo (Klasycznie)',
-              object: DefaultLinearTeamCompetitionScoreCreator(),
-            ),
-          ]),
-        ),
-        RepositoryProvider<DbEditingAvailableObjectsRepo<KoRoundAdvancementDeterminator>>(
-          create: (context) => const DbEditingAvailableObjectsRepo(initial: [
-            DbEditingAvaiableObjectConfig(
-              key: 'n_best',
-              displayName: 'Awansuje N najlepszych',
-              object: NBestKoRoundAdvancementDeterminator(),
-            ),
-          ]),
-        ),
-        RepositoryProvider<DbEditingAvailableObjectsRepo<KoGroupsCreator>>(
-          create: (context) => DbEditingAvailableObjectsRepo(initial: [
-            DbEditingAvaiableObjectConfig(
-              key: 'classic',
-              displayName: 'Klasyczne pary',
-              object: DefaultClassicKoGroupsCreator(),
-            ),
-            DbEditingAvaiableObjectConfig(
-              key: 'random',
-              displayName: 'Losowe grupy',
-              object: DefaultRandomKoGroupsCreator(),
-            ),
-            DbEditingAvaiableObjectConfig(
-              key: 'pots',
-              displayName: 'Losowanie z koszyków',
-              object: DefaultPotsKoGroupsCreator(),
-            ),
-          ]),
-        ),
-        RepositoryProvider<DbEditingAvailableObjectsRepo<JudgesCreator>>(
-          create: (context) => DbEditingAvailableObjectsRepo(initial: [
-            DbEditingAvaiableObjectConfig(
-              key: 'default',
-              displayName: 'Domyślnie',
-              object: DefaultJudgesCreator(),
-            ),
-          ]),
-        ),
-        RepositoryProvider(create: (context) {
-          final noneCountry =
-              (context.read<ItemsReposRegistry>().get<Country>() as CountriesRepo).none;
-          final koRoundRules = KoRoundRules(
-            advancementDeterminator: context
-                .read<DbEditingAvailableObjectsRepo<KoRoundAdvancementDeterminator>>()
-                .getObject('n_best'),
-            advancementCount: 1,
-            koGroupsCreator: context
-                .read<DbEditingAvailableObjectsRepo<KoGroupsCreator>>()
-                .getObject('classic'),
-            groupSize: 2,
-          );
-          final defaultIndividualRoundRules = DefaultIndividualCompetitionRoundRules(
-            limit: const EntitiesLimit.soft(50),
-            bibsAreReassigned: false,
-            startlistIsSorted: false,
-            gateCanChange: true,
-            gateCompensationsEnabled: true,
-            windCompensationsEnabled: true,
-            windAverager: context
-                .read<DbEditingAvailableObjectsRepo<WindAverager>>()
-                .getObject('weighted_classic'),
-            inrunLightsEnabled: true,
-            dsqEnabled: true,
-            positionsCreator: context
-                .read<DbEditingAvailableObjectsRepo<StandingsPositionsCreator>>()
-                .getObject('with_ex_aequos'),
-            ruleOf95HsFallEnabled: true,
-            judgesCount: 5,
-            judgesCreator: context
-                .read<DbEditingAvailableObjectsRepo<JudgesCreator>>()
-                .getObject('default'),
-            significantJudgesCount: 3,
-            competitionScoreCreator: context
-                    .read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>()
-                    .getObject('classic_individual')
-                as CompetitionScoreCreator<CompetitionJumperScore>,
-            jumpScoreCreator: context
-                .read<DbEditingAvailableObjectsRepo<JumpScoreCreator>>()
-                .getObject('classic'),
-            koRules: null,
-          );
-          const defaultGroupRules = TeamCompetitionGroupRules(sortStartList: false);
-          final defaultTeamRoundRules = DefaultTeamCompetitionRoundRules(
-            limit: const EntitiesLimit.soft(50),
-            bibsAreReassigned: true,
-            startlistIsSorted: false,
-            gateCanChange: true,
-            gateCompensationsEnabled: true,
-            windCompensationsEnabled: true,
-            windAverager: context
-                .read<DbEditingAvailableObjectsRepo<WindAverager>>()
-                .getObject('weighted_classic'),
-            inrunLightsEnabled: true,
-            dsqEnabled: true,
-            positionsCreator: context
-                .read<DbEditingAvailableObjectsRepo<StandingsPositionsCreator>>()
-                .getObject('with_ex_aequos'),
-            ruleOf95HsFallEnabled: true,
-            judgesCount: 5,
-            judgesCreator: context
-                .read<DbEditingAvailableObjectsRepo<JudgesCreator>>()
-                .getObject('default'),
-            significantJudgesCount: 3,
-            competitionScoreCreator: context
-                    .read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>()
-                    .getObject('classic_team')
-                as CompetitionScoreCreator<CompetitionTeamScore<CompetitionTeam>>,
-            jumpScoreCreator: context
-                .read<DbEditingAvailableObjectsRepo<JumpScoreCreator>>()
-                .getObject('classic'),
-            koRules: null,
-            groups: const [
-              TeamCompetitionGroupRules(sortStartList: false),
-              TeamCompetitionGroupRules(sortStartList: false),
-              TeamCompetitionGroupRules(sortStartList: false),
-              TeamCompetitionGroupRules(sortStartList: false),
-            ],
-          );
-
-          final defaultCompetitionRules =
-              DefaultCompetitionRules(rounds: [defaultIndividualRoundRules]);
-          return DefaultItemsRepo(
-            initial: {
-              FemaleJumper.empty(country: noneCountry),
-              MaleJumper.empty(country: noneCountry),
-              Hill.empty(country: noneCountry),
-              const EventSeriesSetup.empty(),
-              const EventSeriesCalendarPreset.empty().copyWith(name: translator.unnamed),
-              DefaultCompetitionRulesPreset<dynamic>(
-                name: translator.unnamed,
-                rules: defaultCompetitionRules,
-              ),
-              defaultIndividualRoundRules,
-              defaultGroupRules,
-              defaultTeamRoundRules,
-              koRoundRules
-            },
-          );
-        }),
-      ],
+      providers: defaultDbEditorProviders(context),
       child: const ResponsiveBuilder(
         phone: _Large(),
         tablet: _Large(),
