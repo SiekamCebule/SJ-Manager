@@ -13,7 +13,7 @@ class _RemoveFab extends StatelessWidget {
     final editableItemsForCurrentType = copiedDbCubit.state!.getEditable(itemsType);
 
     return StreamBuilder(
-        stream: MergeStream([selectedIndexesRepo.selectedIndexes]),
+        stream: MergeStream([selectedIndexesRepo.stream]),
         builder: (context, snapshot) {
           return FloatingActionButton(
             key: const ValueKey('removeFab'),
@@ -24,17 +24,17 @@ class _RemoveFab extends StatelessWidget {
                 .blendWithBg(Theme.of(context).brightness, 0.2),
             onPressed: () async {
               var subtraction = 0;
-              for (var removeIndex in selectedIndexesRepo.state) {
+              for (var removeIndex in selectedIndexesRepo.last) {
                 removeIndex -= subtraction;
                 editableItemsForCurrentType.removeAt(removeIndex);
                 subtraction += 1;
               }
-              if (selectedIndexesRepo.state.length > 1 ||
+              if (selectedIndexesRepo.last.length > 1 ||
                   editableItemsForCurrentType.items.value.isEmpty) {
                 selectedIndexesRepo.clearSelection();
-              } else if (selectedIndexesRepo.state.length == 1 &&
-                  selectedIndexesRepo.state.single != 0) {
-                selectedIndexesRepo.selectOnlyAt(selectedIndexesRepo.state.single - 1);
+              } else if (selectedIndexesRepo.last.length == 1 &&
+                  selectedIndexesRepo.last.single != 0) {
+                selectedIndexesRepo.selectOnlyAt(selectedIndexesRepo.last.single - 1);
               }
               dbChangeStatusCubit.markAsChanged();
             },

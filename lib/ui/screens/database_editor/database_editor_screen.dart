@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_window_close/flutter_window_close.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/bloc/database_editing/database_editor_countries_cubit.dart';
 import 'package:sj_manager/bloc/database_editing/state/database_editor_countries_state.dart';
@@ -91,9 +92,10 @@ import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_ite
 import 'package:sj_manager/utils/colors.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/single_where_type.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 part 'large/__large.dart';
-part 'large/widgets/__body.dart';
+part 'large/widgets/__items_and_editor_row.dart';
 part 'large/widgets/__appropriate_item_editor.dart';
 part 'large/widgets/__app_bar.dart';
 part 'large/widgets/__bottom_app_bar.dart';
@@ -109,6 +111,8 @@ part 'large/widgets/__items_list_empty_state_body.dart';
 part 'large/widgets/__items_list_non_empty_state_body.dart';
 part 'large/widgets/__item_editor_empty_state_body.dart';
 part 'large/widgets/__item_editor_non_empty_state_body.dart';
+part 'large/widgets/__main_body.dart';
+part 'large/tutorial/__tutorial_runner.dart';
 
 List<RepositoryProvider> defaultDbEditorProviders(BuildContext context) {
   final translator = translate(context);

@@ -10,11 +10,10 @@ class _Large extends StatefulWidget {
 }
 
 class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
-  late final AnimationController _bodyAnimationController;
-
   late final DbFiltersRepo _filters;
   late final SelectedIndexesRepo _selectedIndexes;
   late final EventSeriesSetupIdsRepo _eventSeriesSetupIds;
+  late final _TutorialRunner _tutorialRunner;
 
   late final LocalDatabaseCopyCubit _localDbCopy;
   late final ChangeStatusCubit _dbChangeStatus;
@@ -23,20 +22,19 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
 
   final _initialized = ValueNotifier<bool>(false);
   var _closed = false;
-  var _currentTabIndex = _SelectedTabIndex(0);
 
   @override
   void initState() {
-    _bodyAnimationController = AnimationController(
-      vsync: this,
-      duration: Durations.short3,
-      value: 1.0,
-    );
-
     scheduleMicrotask(() async {
+      _tutorialRunner = _TutorialRunner();
       _initializeRepos();
       await _initializeCubits();
       _initialized.value = true;
+      await Future.delayed(
+        const Duration(seconds: 1),
+        () => _tutorialRunner.runTutorial(context),
+      );
+      ;
     });
 
     FlutterWindowClose.setWindowShouldCloseHandler(() async {
@@ -97,7 +95,6 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     if (!_closed) {
       _cleanResources();
     }
-    _bodyAnimationController.dispose();
     FlutterWindowClose.setWindowShouldCloseHandler(null);
     super.dispose();
   }
@@ -140,162 +137,52 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
           ),
         );
         final child = prepared
-            ? MultiRepositoryProvider(
-                providers: [
-                  RepositoryProvider.value(value: _filters),
-                  RepositoryProvider.value(value: _selectedIndexes),
-                  RepositoryProvider(
-                    create: (context) => ValueRepo(initial: _currentTabIndex),
-                  ),
-                  RepositoryProvider.value(value: _eventSeriesSetupIds),
-                ],
-                child: MultiBlocProvider(
+            ? Provider.value(
+                value: _tutorialRunner,
+                child: MultiRepositoryProvider(
                   providers: [
-                    BlocProvider.value(value: _localDbCopy),
-                    BlocProvider.value(value: _dbChangeStatus),
-                    BlocProvider.value(value: _items),
-                    BlocProvider.value(value: _countries),
+                    RepositoryProvider.value(value: _filters),
+                    RepositoryProvider.value(value: _selectedIndexes),
+                    RepositoryProvider.value(value: _eventSeriesSetupIds),
                   ],
-                  child: Builder(builder: (context) {
-                    context.watch<LocalDatabaseCopyCubit>();
-                    context.watch<ChangeStatusCubit>();
-                    context.watch<DatabaseItemsCubit>();
-                    return PopScope(
-                      canPop: false,
-                      onPopInvokedWithResult: (didPop, value) async {
-                        if (didPop || _closed) {
-                          return;
-                        } else if (!_dbChangeStatus.state) {
-                          _cleanResources();
-                          Navigator.pop(context);
-                          return;
-                        }
-                        String? action = await _showSaveChangesDialog();
-                        bool shouldClose = await _shouldCloseAfterDialog(action);
-                        if (action == 'yes') {
-                          if (!context.mounted) return;
-                          await _localDbCopy.saveChangesToOriginalRepos(context);
-                        }
-                        if (shouldClose) {
-                          _cleanResources();
-                          _closed = true;
-                          if (!context.mounted) return;
-                          router.pop(context);
-                        }
-                      },
-                      child: StreamBuilder<Object>(
-                          stream: StreamGroup.merge([
-                            _selectedIndexes.selectedIndexes,
-                          ]),
-                          builder: (context, snapshot) {
-                            final selectedIndexes = _selectedIndexes.state;
-                            final shouldShowFabs = !_filters.hasValidFilter;
-                            final shouldShowAddFab = selectedIndexes.length <= 1;
-                            final shouldShowRemoveFab = selectedIndexes.isNotEmpty;
-                            final itemsType = _items.state.itemsType;
-                            final shouldShowBottomAppBar = itemsType == MaleJumper ||
-                                itemsType == FemaleJumper ||
-                                itemsType == Hill;
-
-                            const fabsGap =
-                                Gap(UiDatabaseEditorConstants.verticalSpaceBetweenFabs);
-
-                            return Scaffold(
-                              appBar: const _AppBar(),
-                              bottomNavigationBar:
-                                  shouldShowBottomAppBar ? const _BottomAppBar() : null,
-                              body: Row(
-                                children: [
-                                  fabsGap,
-                                  AnimatedVisibility(
-                                    duration: Durations.short3,
-                                    curve: Curves.easeIn,
-                                    visible: shouldShowFabs,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        fabsGap,
-                                        AnimatedVisibility(
-                                          duration: Durations.short3,
-                                          curve: Curves.easeIn,
-                                          visible: shouldShowAddFab,
-                                          child: const _AddFab(),
-                                        ),
-                                        fabsGap,
-                                        AnimatedVisibility(
-                                          duration: Durations.short3,
-                                          curve: Curves.easeIn,
-                                          visible: shouldShowRemoveFab,
-                                          child: const _RemoveFab(),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Gap(UiDatabaseEditorConstants.gapBetweenFabs),
-                                  DefaultTabController(
-                                    length: 6,
-                                    child: Expanded(
-                                      child: Center(
-                                        child: Column(
-                                          children: [
-                                            TabBar(
-                                              tabs: [
-                                                Tab(
-                                                  text:
-                                                      translate(context).maleCompetitiors,
-                                                  icon: const Icon(Symbols.male),
-                                                ),
-                                                Tab(
-                                                  text: translate(context)
-                                                      .femaleCompetitors,
-                                                  icon: const Icon(Symbols.female),
-                                                ),
-                                                Tab(
-                                                  text: translate(context).hills,
-                                                  icon: const ImageIcon(hillIcon),
-                                                ),
-                                                Tab(
-                                                  text: 'Cykle zawodów',
-                                                  icon: const Icon(Symbols.trophy),
-                                                ),
-                                                Tab(
-                                                  text: 'Kalendarze',
-                                                  icon:
-                                                      const Icon(Symbols.calendar_month),
-                                                ),
-                                                Tab(
-                                                  text: 'Konkursy',
-                                                  icon: const Icon(Symbols.contract),
-                                                ),
-                                              ],
-                                              onTap: _onChangeTab,
-                                            ),
-                                            Expanded(
-                                              child: Builder(
-                                                builder: (context) {
-                                                  final opacity = CurvedAnimation(
-                                                    parent: _bodyAnimationController,
-                                                    curve: Curves.easeIn,
-                                                  );
-                                                  return FadeTransition(
-                                                    opacity: opacity,
-                                                    child: const _Body(),
-                                                  );
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
-                    );
-                  }),
+                  child: MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(value: _localDbCopy),
+                      BlocProvider.value(value: _dbChangeStatus),
+                      BlocProvider.value(value: _items),
+                      BlocProvider.value(value: _countries),
+                    ],
+                    child: Builder(builder: (context) {
+                      context.watch<LocalDatabaseCopyCubit>();
+                      context.watch<ChangeStatusCubit>();
+                      context.watch<DatabaseItemsCubit>();
+                      return PopScope(
+                        canPop: false,
+                        onPopInvokedWithResult: (didPop, value) async {
+                          if (didPop || _closed) {
+                            return;
+                          } else if (!_dbChangeStatus.state) {
+                            _cleanResources();
+                            Navigator.pop(context);
+                            return;
+                          }
+                          String? action = await _showSaveChangesDialog();
+                          bool shouldClose = await _shouldCloseAfterDialog(action);
+                          if (action == 'yes') {
+                            if (!context.mounted) return;
+                            await _localDbCopy.saveChangesToOriginalRepos(context);
+                          }
+                          if (shouldClose) {
+                            _cleanResources();
+                            _closed = true;
+                            if (!context.mounted) return;
+                            router.pop(context);
+                          }
+                        },
+                        child: const _MainBody(),
+                      );
+                    }),
+                  ),
                 ),
               )
             : progressIndicator;
@@ -307,19 +194,5 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
         );
       },
     );
-  }
-
-  Future<void> _onChangeTab(int index) async {
-    if (_currentTabIndex.index != index) {
-      _selectedIndexes.clearSelection();
-      _filters.clear();
-      _items.selectByIndex(index);
-      _currentTabIndex = _SelectedTabIndex(index);
-      await _animateBodyFromZero();
-    }
-  }
-
-  Future<void> _animateBodyFromZero() async {
-    await _bodyAnimationController.forward(from: 0.0);
   }
 }

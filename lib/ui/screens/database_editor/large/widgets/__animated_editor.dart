@@ -1,6 +1,6 @@
 part of '../../database_editor_screen.dart';
 
-class _AnimatedEditor extends StatelessWidget {
+class _AnimatedEditor extends StatefulWidget {
   const _AnimatedEditor({
     required this.editorKey,
   });
@@ -8,13 +8,31 @@ class _AnimatedEditor extends StatelessWidget {
   final GlobalKey<_AppropriateItemEditorState> editorKey;
 
   @override
+  State<_AnimatedEditor> createState() => _AnimatedEditorState();
+}
+
+class _AnimatedEditorState extends State<_AnimatedEditor> {
+  final _editorStreamBuilderKey = GlobalKey();
+
+  @override
+  void initState() {
+    scheduleMicrotask(() async {
+      context
+          .read<_TutorialRunner>()
+          .addWidgetKey(step: _TutorialStep.editor, key: _editorStreamBuilderKey);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
 
     return StreamBuilder(
-      stream: selectedIndexesRepo.selectedIndexes,
+      key: _editorStreamBuilderKey,
+      stream: selectedIndexesRepo.stream,
       builder: (context, snapshot) {
-        final editorShouldBeVisible = selectedIndexesRepo.state.length == 1;
+        final editorShouldBeVisible = selectedIndexesRepo.last.length == 1;
         return Stack(
           fit: StackFit.expand,
           children: [
@@ -23,7 +41,7 @@ class _AnimatedEditor extends StatelessWidget {
               duration: Durations.medium1,
               curve: Curves.easeIn,
               visible: editorShouldBeVisible,
-              child: _ItemEditorNonEmptyStateBody(editorKey: editorKey),
+              child: _ItemEditorNonEmptyStateBody(editorKey: widget.editorKey),
             ),
             AnimatedVisibility(
               duration: Durations.medium1,

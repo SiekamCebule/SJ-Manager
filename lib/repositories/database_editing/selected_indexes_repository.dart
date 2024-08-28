@@ -7,7 +7,7 @@ class SelectedIndexesRepo {
   final _subject = BehaviorSubject<Set<int>>.seeded({});
 
   void setSelection(int index, bool selection) {
-    final newSelectedIndexes = Set.of(state);
+    final newSelectedIndexes = Set.of(last);
     if (selection == true) {
       newSelectedIndexes.add(index);
     } else {
@@ -21,23 +21,24 @@ class SelectedIndexesRepo {
   }
 
   void toggleSelection(int index) {
-    final newSelectedIndexes = Set.of(state);
+    final newSelectedIndexes = Set.of(last);
     newSelectedIndexes.toggle(index);
     _subject.add(newSelectedIndexes);
   }
 
   void toggleSelectionAtOnly(int index) {
     var newSelectedIndexes = <int>{};
-    if (state.contains(index)) {
+    if (last.contains(index)) {
       newSelectedIndexes = {};
     } else {
       newSelectedIndexes = {index};
     }
+    print('new selected: $newSelectedIndexes');
     _subject.add(newSelectedIndexes);
   }
 
   void moveSelection({required int from, required int to}) {
-    final newSelectedIndexes = Set.of(state);
+    final newSelectedIndexes = Set.of(last);
     if (newSelectedIndexes.contains(from)) {
       if (!newSelectedIndexes.contains(to)) {
         newSelectedIndexes.remove(from);
@@ -55,6 +56,6 @@ class SelectedIndexesRepo {
     _subject.close();
   }
 
-  Set<int> get state => _subject.stream.value;
-  ValueStream<Set<int>> get selectedIndexes => _subject.stream;
+  Set<int> get last => _subject.stream.value;
+  ValueStream<Set<int>> get stream => _subject.stream;
 }

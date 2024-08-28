@@ -1,13 +1,13 @@
 part of '../../database_editor_screen.dart';
 
-class _Body extends StatefulWidget {
-  const _Body();
+class _ItemsAndEditorRow extends StatefulWidget {
+  const _ItemsAndEditorRow();
 
   @override
-  State<_Body> createState() => _BodyState();
+  State<_ItemsAndEditorRow> createState() => _ItemsAndEditorRowState();
 }
 
-class _BodyState extends State<_Body> {
+class _ItemsAndEditorRowState extends State<_ItemsAndEditorRow> {
   final _editorKey = GlobalKey<_AppropriateItemEditorState>();
   late final StreamSubscription _selectionChangesSubscription;
 
@@ -19,12 +19,11 @@ class _BodyState extends State<_Body> {
 
   void _setUpEditorFillingAfterSelectionChanges() {
     final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
-    _selectionChangesSubscription =
-        selectedIndexesRepo.selectedIndexes.distinct((prev, curr) {
+    _selectionChangesSubscription = selectedIndexesRepo.stream.distinct((prev, curr) {
       return prev == curr;
     }).listen((state) {
-      if (selectedIndexesRepo.state.length == 1) {
-        final index = selectedIndexesRepo.state.single;
+      if (selectedIndexesRepo.last.length == 1) {
+        final index = selectedIndexesRepo.last.single;
         if (!mounted) return;
         final filtered =
             (context.read<DatabaseItemsCubit>().state as DatabaseItemsNonEmpty)
