@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/models/user_db/hill/typical_wind_direction.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/l10n/hill_parameters_translations.dart';
@@ -320,6 +321,16 @@ class HillEditorState extends State<HillEditor> {
                 onChange: () {
                   widget.onChange(_constructAndCacheHill());
                 },
+                additionalButtons: [
+                  IconButton(
+                    onPressed: () {
+                      _typicalWindStrengthController.text = '';
+                    },
+                    icon: const Icon(
+                      Symbols.clear,
+                    ),
+                  ),
+                ],
                 formatters: doubleTextInputFormatters,
                 labelText: translate(context).typicalWindStrength,
                 suffixText: 'm/s',
