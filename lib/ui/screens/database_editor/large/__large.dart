@@ -94,14 +94,16 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    _cleanResources();
+    if (!_closed) {
+      _cleanResources();
+    }
     _bodyAnimationController.dispose();
     FlutterWindowClose.setWindowShouldCloseHandler(null);
     super.dispose();
   }
 
   void _cleanResources() {
-    print('clean resources');
+    debugPrint('_Large(): _cleanResources()');
     _localDbCopy.close();
     _localDbCopy.dispose();
     _dbChangeStatus.close();
