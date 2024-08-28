@@ -6,6 +6,9 @@ import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/bloc/database_editing/database_items_cubit.dart';
 import 'package:sj_manager/bloc/database_editing/state/database_items_state.dart';
+import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
+import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
+import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
@@ -30,12 +33,14 @@ import 'package:sj_manager/repositories/database_editing/selected_indexes_reposi
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/setup/app_configurator.dart';
 import 'package:sj_manager/ui/app.dart';
-import 'package:sj_manager/ui/database_item_editors/event_series_setup_editor.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
 import 'package:sj_manager/ui/providers/locale_notifier.dart';
 import 'package:sj_manager/ui/reusable_widgets/animations/animated_visibility.dart';
+import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/jumper_info_list_tile.dart';
+import 'package:sj_manager/ui/reusable_widgets/filtering/search_text_field.dart';
 import 'package:sj_manager/ui/screens/database_editor/database_editor_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropriate_db_item_list_tile.dart';
@@ -51,11 +56,11 @@ import '../../local_database/bloc/database_editing_logic_test.mocks.dart';
 void main() {
   const MethodChannel flutterWindowCloseChannel = MethodChannel('flutter_window_close');
 
-  final slovenia = Country.monolingual(code: 'si', language: 'pl', name: 'Slovenia');
+  final slovenia = Country.monolingual(code: 'si', language: 'en', name: 'Slovenia');
   final switzerland =
-      Country.monolingual(code: 'ch', language: 'pl', name: 'Switzerland');
-  final germany = Country.monolingual(code: 'de', language: 'pl', name: 'Germany');
-  final noneCountry = Country.monolingual(code: 'none', language: 'pl', name: 'None');
+      Country.monolingual(code: 'ch', language: 'en', name: 'Switzerland');
+  final germany = Country.monolingual(code: 'de', language: 'en', name: 'Germany');
+  final noneCountry = Country.monolingual(code: 'none', language: 'en', name: 'None');
   final countries = [noneCountry, slovenia, switzerland, germany];
 
   final maleJumpers = [
@@ -186,7 +191,7 @@ void main() {
               }),
               BlocProvider(
                 create: (context) => LocaleCubit(
-                  initial: const Locale('pl'),
+                  initial: const Locale('en'),
                 ),
               ),
             ],
@@ -227,7 +232,7 @@ void main() {
       );
     });
 
-    testWidgets('Appropriate displaying', (tester) async {
+    testWidgets('Basic test', (tester) async {
       await tester.runAsync(() async {
         tester.binding.defaultBinaryMessenger
             .setMockMethodCallHandler(flutterWindowCloseChannel, (call) async {
@@ -245,11 +250,6 @@ void main() {
         final context = tester.element(find.byType(DatabaseItemsList)) as BuildContext;
 
         final itemsCubit = context.read<DatabaseItemsCubit>();
-
-        itemsCubit.stream.listen((state) {
-          print('ItemsCubit changed: $state');
-        });
-
         final itemsList = find.byType(DatabaseItemsList);
         expect(itemsCubit.state.itemsType, MaleJumper);
         expect(tester.widget<DatabaseItemsList>(itemsList).length, maleJumpers.length);
@@ -407,6 +407,114 @@ void main() {
         await tester.pumpWidget(Container());
         await tester.pump();
       });
+    });
+
+    testWidgets('Utilizing filters', (tester) async {
+      tester.binding.defaultBinaryMessenger
+          .setMockMethodCallHandler(flutterWindowCloseChannel, (call) async {
+        if (call.method == 'init') {
+          return 'mocked response';
+        }
+        throw MissingPluginException();
+      });
+      tester.view.devicePixelRatio = 1.0;
+      tester.view.physicalSize = const Size(1200, 1000);
+      WidgetsFlutterBinding.ensureInitialized();
+      await tester.pumpWidget(appWidget);
+      await tester.pumpAndSettle();
+
+      final tabBar = find.byType(TabBar);
+      Future<void> selectTab(int index) async {
+        final tab = tester.widget<TabBar>(tabBar).tabs[index];
+        await tester.tap(find.byWidget(tab));
+        await tester.pumpAndSettle();
+      }
+
+      Future<void> tapItem(int index) async {
+        final itemTile = find.descendant(
+            of: find.byType(DatabaseItemsList), matching: find.byKey(ValueKey(index)));
+        await tester.ensureVisible(itemTile);
+        await tester.tap(itemTile);
+        await tester.pumpAndSettle();
+      }
+
+      Future<void> tap(Finder finder) async {
+        await tester.tap(finder);
+        await tester.pumpAndSettle();
+      }
+
+      final context = tester.element(find.byType(DatabaseItemsList)) as BuildContext;
+      final itemsCubit = context.read<DatabaseItemsCubit>();
+      itemsCubit.selectByIndex(1);
+      await tester.pumpAndSettle();
+      itemsCubit.itemsRepos.get<FemaleJumper>().set([
+        ...femaleJumpers,
+        FemaleJumper.empty(country: switzerland)
+            .copyWith(name: 'Daniela', surname: 'Iraschko-Stolz'),
+        FemaleJumper.empty(country: slovenia)
+            .copyWith(name: 'Kamila', surname: 'Karpiel'),
+      ]);
+
+      await tester.pumpAndSettle();
+      expect(tester.widget<DatabaseItemsList>(find.byType(DatabaseItemsList)).length, 6);
+      expect(itemsCubit.state.itemsType, FemaleJumper);
+      final searchField = find.byType(SearchTextField);
+      await tester.enterText(searchField, 'kk');
+      await tester.pumpAndSettle();
+      expect(tester.widget<DatabaseItemsList>(find.byType(DatabaseItemsList)).length, 1);
+      final singleTile = find.descendant(
+        of: find.byType(DatabaseItemsList),
+        matching: find.byType(JumperInfoListTile),
+      );
+      expect(
+        tester.widget<JumperInfoListTile>(singleTile).jumper.nameAndSurname(),
+        'Kamila Karpiel',
+      );
+      await selectTab(0);
+      await selectTab(1);
+      expect(
+        tester.widget<SearchTextField>(find.byType(SearchTextField)).controller.text,
+        '',
+      );
+      final countriesDropdown = find.descendant(
+        of: find.byKey(const Key('femaleJumpersFilters')),
+        matching: find.byType(CountriesDropdown),
+      );
+
+      // I couldn't do a tap on countries dropdown...
+      itemsCubit.filtersRepo.setByGenericAndArgumentType(type: FemaleJumper, filters: [
+        const ConcreteJumpersFilterWrapper<FemaleJumper, JumpersFilterBySearch>(
+          filter: JumpersFilterBySearch(
+            searchAlgorithm: DefaultJumperMatchingByTextAlgorithm(text: ''),
+          ),
+        ),
+        ConcreteJumpersFilterWrapper<FemaleJumper, JumpersFilterByCountry>(
+          filter: JumpersFilterByCountry(
+            countries: {switzerland},
+          ),
+        ),
+      ]);
+      await tester.pumpAndSettle();
+
+      expect(tester.widget<DatabaseItemsList>(find.byType(DatabaseItemsList)).length, 2);
+      final secondJumperTile = find.descendant(
+        of: find.descendant(
+            of: find.byType(DatabaseItemsList), matching: find.byKey(const ValueKey(1))),
+        matching: find.byType(
+          JumperInfoListTile,
+        ),
+      );
+
+      expect(
+        tester.widget<JumperInfoListTile>(secondJumperTile).jumper.nameAndSurname(),
+        'Daniela Iraschko-Stolz',
+      );
+      await selectTab(0);
+      await selectTab(1);
+      expect(
+        tester.state<CountriesDropdownState>(countriesDropdown).controller.text,
+        'None',
+      );
     });
   });
 }

@@ -10,7 +10,9 @@ class _BottomAppBar extends StatelessWidget {
     if (itemsType == MaleJumper) {
       body = const _ForJumpersTyped<MaleJumper>();
     } else if (itemsType == FemaleJumper) {
-      body = const _ForJumpersTyped<FemaleJumper>();
+      body = const _ForJumpersTyped<FemaleJumper>(
+        key: Key('femaleJumpersFilters'),
+      );
     } else if (itemsType == Hill) {
       body = const _ForHills();
     } else {
