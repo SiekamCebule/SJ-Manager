@@ -6,6 +6,8 @@ import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_image_asset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
+import 'package:sj_manager/utils/context_maybe_read.dart';
 
 class EventSeriesSetupInfoListTile extends StatelessWidget {
   const EventSeriesSetupInfoListTile({
@@ -33,12 +35,14 @@ class EventSeriesSetupInfoListTile extends StatelessWidget {
     } on TranslationNotFoundError {
       translatedName = translate(context).unnamed;
     }
+    final imageGeneratingSetup =
+        context.maybeRead<DbItemImageGeneratingSetup<EventSeriesTrophyImageWrapper>>();
     final tile = ListTile(
       leading: DbItemImage<EventSeriesTrophyImageWrapper>(
         width: 40,
         height: 40,
         item: EventSeriesTrophyImageWrapper(eventSeriesSetup: eventSeriesSetup),
-        setup: context.read(),
+        setup: imageGeneratingSetup,
         errorBuilder: (ctx, error, stackTrace) => const Icon(
           Symbols.trophy,
           size: 40,

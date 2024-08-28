@@ -11,6 +11,7 @@ class EventSeriesSetupPriorityHelpDialog extends StatelessWidget {
           'Im niższa cyfra, tym zawody są ważniejsze. Najważniejszy cykl w symulacji powinien mieć numer 1, tak jak imprezy mistrzowskie. Zaplecze jako 2, zaplecze zaplecza 3, i tak dalej...'),
       actions: [
         TextButton(
+          key: const Key('close'),
           onPressed: () {
             Navigator.of(context).pop();
           },

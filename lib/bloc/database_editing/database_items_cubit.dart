@@ -71,14 +71,12 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
         final validFilters = filters.where(
           (filter) => filter.isValid,
         );
-        print('emit DatabaseItemsNonEmpty');
         emit(DatabaseItemsNonEmpty(
           itemsType: type,
           filteredItems: filtered,
           validFilters: validFilters.toList(),
         ));
       } else {
-        print('filters: $filters');
         final preparedFilters = filters.map(
             (filter) => filter is ConcreteJumpersFilterWrapper ? filter.filter : filter);
         final nonSearchingFiltersActive = preparedFilters.any(
@@ -86,9 +84,6 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
         );
         final searchingActive =
             preparedFilters.any((filter) => filter is SearchFilter && filter.isValid);
-        print('emit DatabaseItemsEmpty');
-        print('searching active: $searchingActive');
-        print('non searching filters active: $nonSearchingFiltersActive');
         emit(
           DatabaseItemsEmpty(
             itemsType: type,

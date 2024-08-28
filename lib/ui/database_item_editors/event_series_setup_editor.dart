@@ -71,7 +71,6 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
     final eventSeriesCalendarPresets =
         context.read<ItemsReposRegistry>().get<EventSeriesCalendarPreset>().last;
 
@@ -148,6 +147,7 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                         Row(
                           children: [
                             Expanded(
+                              key: const Key('priority_expanded'),
                               child: MyNumeralTextField(
                                 key: _priorityFieldKey,
                                 controller: _priorityController,
@@ -163,17 +163,19 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                             ),
                             const Gap(
                                 UiFieldWidgetsConstants.gapBetweenFieldAndHelpButton),
-                            HelpIconButton(onPressed: () async {
-                              await showDialog(
-                                context: context,
-                                builder: (context) => Center(
-                                  child: ConstrainedBox(
-                                    constraints: const BoxConstraints(maxWidth: 700),
-                                    child: const EventSeriesSetupPriorityHelpDialog(),
-                                  ),
-                                ),
-                              );
-                            }),
+                            HelpIconButton(
+                                key: const Key('priorityHelpButton'),
+                                onPressed: () async {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (context) => Center(
+                                      child: ConstrainedBox(
+                                        constraints: const BoxConstraints(maxWidth: 700),
+                                        child: const EventSeriesSetupPriorityHelpDialog(),
+                                      ),
+                                    ),
+                                  );
+                                }),
                           ],
                         ),
                       ],
