@@ -17,35 +17,39 @@ class _ItemsListNonEmptyStateBody extends StatelessWidget {
 
     final listShouldBeReorderable = !itemsStateNonEmpty.hasValidFilters;
 
-    return DatabaseItemsList(
-      reorderable: listShouldBeReorderable,
-      onReorder: (oldIndex, newIndex) async {
-        if (newIndex > oldIndex) {
-          newIndex -= 1;
-        }
-        itemsRepo.move(from: oldIndex, to: newIndex);
-        selectedIndexesRepo.moveSelection(from: oldIndex, to: newIndex);
-        dbIsChangedCubit.markAsChanged();
-      },
-      length: itemsStateNonEmpty.filteredItems.length,
-      itemBuilder: (context, index) {
-        return AppropriateDbItemListTile(
-          key: ValueKey(index),
-          reorderable: listShouldBeReorderable,
-          itemType: itemsType,
-          item: itemsStateNonEmpty.filteredItems.elementAt(index),
-          indexInList: index,
-          onItemTap: () async {
-            bool ctrlIsPressed = HardwareKeyboard.instance.isControlPressed;
-            if (ctrlIsPressed) {
-              selectedIndexesRepo.toggleSelection(index);
-            } else {
-              selectedIndexesRepo.toggleSelectionAtOnly(index);
-            }
-          },
-          selected: selectedIndexesRepo.state.contains(index),
-        );
-      },
-    );
+    return StreamBuilder(
+        stream: selectedIndexesRepo.stream,
+        builder: (context, snapshot) {
+          return DatabaseItemsList(
+            reorderable: listShouldBeReorderable,
+            onReorder: (oldIndex, newIndex) async {
+              if (newIndex > oldIndex) {
+                newIndex -= 1;
+              }
+              itemsRepo.move(from: oldIndex, to: newIndex);
+              selectedIndexesRepo.moveSelection(from: oldIndex, to: newIndex);
+              dbIsChangedCubit.markAsChanged();
+            },
+            length: itemsStateNonEmpty.filteredItems.length,
+            itemBuilder: (context, index) {
+              return AppropriateDbItemListTile(
+                key: ValueKey(index),
+                reorderable: listShouldBeReorderable,
+                itemType: itemsType,
+                item: itemsStateNonEmpty.filteredItems.elementAt(index),
+                indexInList: index,
+                onItemTap: () async {
+                  bool ctrlIsPressed = HardwareKeyboard.instance.isControlPressed;
+                  if (ctrlIsPressed) {
+                    selectedIndexesRepo.toggleSelection(index);
+                  } else {
+                    selectedIndexesRepo.toggleSelectionAtOnly(index);
+                  }
+                },
+                selected: selectedIndexesRepo.last.contains(index),
+              );
+            },
+          );
+        });
   }
 }

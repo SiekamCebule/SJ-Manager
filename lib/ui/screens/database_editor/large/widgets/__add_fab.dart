@@ -19,7 +19,7 @@ class _AddFab extends StatelessWidget {
 
     return StreamBuilder<Object>(
         stream: MergeStream([
-          selectedIndexesRepo.selectedIndexes,
+          selectedIndexesRepo.stream,
           editableItemsForCurrentType.items,
         ]),
         builder: (context, snapshot) {
@@ -28,12 +28,12 @@ class _AddFab extends StatelessWidget {
             heroTag: 'addFab',
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             onPressed: () async {
-              bool selectedExists = selectedIndexesRepo.state.length == 1;
+              bool selectedExists = selectedIndexesRepo.last.length == 1;
 
               final lastIndex = itemsLength;
               late int addIndex;
               if (selectedExists) {
-                addIndex = selectedIndexesRepo.state.single + 1;
+                addIndex = selectedIndexesRepo.last.single + 1;
               } else {
                 addIndex = lastIndex;
               }

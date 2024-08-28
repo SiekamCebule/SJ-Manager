@@ -19,8 +19,8 @@ class _ItemEditorNonEmptyStateBody extends StatelessWidget {
       key: editorKey,
       itemType: itemsType,
       onChange: (changedItem) async {
-        if (selectedIndexesRepo.state.length == 1 && changedItem != null) {
-          final index = selectedIndexesRepo.state.single;
+        if (selectedIndexesRepo.last.length == 1 && changedItem != null) {
+          final index = selectedIndexesRepo.last.single;
           editableItemsRepo.replace(oldIndex: index, newItem: changedItem);
           dbIsChangedCubit.markAsChanged();
         }

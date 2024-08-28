@@ -364,7 +364,7 @@ void main() {
         expect(tester.widget<MyTextField>(find.byKey(const Key('name'))).controller.text,
             'Schattenbergschanze');
         final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
-        expect(selectedIndexesRepo.state.single, 1);
+        expect(selectedIndexesRepo.last.single, 1);
         await tapItem(2);
         expect(
             tester.widget<MyTextField>(find.byKey(const Key('locality'))).controller.text,

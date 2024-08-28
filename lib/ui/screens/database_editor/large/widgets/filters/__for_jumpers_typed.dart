@@ -44,7 +44,6 @@ class _ForJumpersTypedState<T extends Jumper> extends State<_ForJumpersTyped<T>>
 
   @override
   Widget build(BuildContext context) {
-    print('countries dropdown countries repo: ${countriesRepo.last}');
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [

@@ -71,6 +71,7 @@ dependencies:
   dart_eval: ^0.7.9
   animated_custom_dropdown: ^3.1.1
   petitparser: ^6.0.2
+  tutorial_coach_mark: ^1.2.11
 
 dev_dependencies:
   flutter_test:
