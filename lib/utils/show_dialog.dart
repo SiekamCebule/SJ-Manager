@@ -11,7 +11,7 @@ Future<T?> showSjmDialog<T>({
       return Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(
-            maxWidth: 1200,
+            maxWidth: 1000,
           ),
           child: child,
         ),

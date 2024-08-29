@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
+import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
 
 class MyTextField extends StatelessWidget {
   const MyTextField({
@@ -11,6 +12,7 @@ class MyTextField extends StatelessWidget {
     required this.labelText,
     this.focusNode,
     this.enabled = true,
+    this.onHelpButtonTap,
   });
 
   final bool enabled;
@@ -19,6 +21,7 @@ class MyTextField extends StatelessWidget {
   final List<TextInputFormatter>? formatters;
   final String labelText;
   final FocusNode? focusNode;
+  final VoidCallback? onHelpButtonTap;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,9 @@ class MyTextField extends StatelessWidget {
         color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
-    return TextField(
+    final showHelpButton = onHelpButtonTap != null;
+
+    final textField = TextField(
       enabled: enabled,
       controller: controller,
       decoration: InputDecoration(
@@ -42,5 +47,14 @@ class MyTextField extends StatelessWidget {
       onTapOutside: (event) => onChange(),
       focusNode: focusNode,
     );
+
+    return showHelpButton
+        ? Row(
+            children: [
+              Expanded(child: textField),
+              HelpIconButton(onPressed: onHelpButtonTap!),
+            ],
+          )
+        : textField;
   }
 }

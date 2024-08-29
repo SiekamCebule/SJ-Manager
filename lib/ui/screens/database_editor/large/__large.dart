@@ -64,7 +64,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       await Future.delayed(const Duration(milliseconds: 1000), () {
         if (!mounted) return;
         _tutorialRunner.runTutorial(context);
-        //context.read<UserSettingsRepo>().setDatabaseEditorTutorialShown(true);
+        context.read<UserSettingsRepo>().setDatabaseEditorTutorialShown(true);
       });
     }
   }

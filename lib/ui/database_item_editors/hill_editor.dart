@@ -15,6 +15,7 @@ import 'package:sj_manager/repositories/database_editing/db_editing_defaults_rep
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
+import 'package:sj_manager/ui/dialogs/simple_help_dialog.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/arrow_icon.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
@@ -215,6 +216,13 @@ class HillEditorState extends State<HillEditor> {
                 step: 1.0,
                 min: 0.0,
                 max: context.read<DbEditingDefaultsRepo>().maxKAndHs,
+                onHelpButtonTap: () {
+                  showSimpleHelpDialog(
+                      context: context,
+                      title: 'Punkt K',
+                      content:
+                          'Im większy punkt K, tym większa skocznia i dalsze odległości');
+                },
               ),
               gap,
               MyNumeralTextField(
@@ -229,6 +237,12 @@ class HillEditorState extends State<HillEditor> {
                 step: 1.0,
                 min: 0.0,
                 max: context.read<DbEditingDefaultsRepo>().maxKAndHs,
+                onHelpButtonTap: () {
+                  showSimpleHelpDialog(
+                      context: context,
+                      title: 'Punkt HS',
+                      content: 'Za nim skoki zaczynają robić się niebezpieczne...');
+                },
               ),
               gap,
               MyDropdownField(
@@ -246,6 +260,13 @@ class HillEditorState extends State<HillEditor> {
                 width: constraints.maxWidth,
                 initial: _landingEase,
                 label: Text(translate(context).landing),
+                onHelpButtonTap: () {
+                  showSimpleHelpDialog(
+                      context: context,
+                      title: 'Łatwosć lądowania',
+                      content:
+                          'Czy da się łatwo wylądować w okolicach punktu HS. Przykładowo na starej skoczni w Vikersund dało się bezpiecznie latać jeszcze 20 metrów za nim.');
+                },
               ),
               gap,
               MyDropdownField(
@@ -263,6 +284,13 @@ class HillEditorState extends State<HillEditor> {
                 width: constraints.maxWidth,
                 initial: _profile,
                 label: Text(translate(context).profile),
+                onHelpButtonTap: () {
+                  showSimpleHelpDialog(
+                      context: context,
+                      title: 'Profil skoczni',
+                      content:
+                          'Mało lotny profil faworyzuje zawodników z "mocnym wybiciem", profil lotny faworyzuje "lotników".');
+                },
               ),
               gap,
               MyDropdownField(
@@ -280,6 +308,13 @@ class HillEditorState extends State<HillEditor> {
                 width: constraints.maxWidth,
                 initial: _jumpsVariability,
                 label: Text(translate(context).jumps),
+                onHelpButtonTap: () {
+                  showSimpleHelpDialog(
+                      context: context,
+                      title: 'Zmienność skoków',
+                      content:
+                          'Jak bardzo odległości na skoczni różnią się względem siebie.');
+                },
               ),
               gap,
               MyDropdownField(
@@ -313,6 +348,13 @@ class HillEditorState extends State<HillEditor> {
                 width: constraints.maxWidth,
                 initial: _typicalWindDirection,
                 label: Text(translate(context).typicalWindDirection),
+                onHelpButtonTap: () {
+                  showSimpleHelpDialog(
+                      context: context,
+                      title: 'Typowy kierunek wiatru',
+                      content:
+                          'Pole niewymagane. Jakimś cudem na skoczni w Engelbergu wiatr zawsze wieje w plecy ;)');
+                },
               ),
               gap,
               MyNumeralTextField(
@@ -338,6 +380,13 @@ class HillEditorState extends State<HillEditor> {
                 min: 0.0,
                 max: context.read<DbEditingDefaultsRepo>().maxHillTypicalWindStrength,
                 maxDecimalPlaces: 2,
+                onHelpButtonTap: () {
+                  showSimpleHelpDialog(
+                      context: context,
+                      title: 'Typowy kierunek wiatru',
+                      content:
+                          'Pole niewymagane. Na niektórych skoczniach wiatr jest wyjątkowo silny, a na niektórych bardzo łagodny');
+                },
               ),
               gap,
               MyNumeralTextField(
@@ -353,6 +402,13 @@ class HillEditorState extends State<HillEditor> {
                 min: 0.0,
                 max: context.read<DbEditingDefaultsRepo>().maxHillPoints,
                 maxDecimalPlaces: 2,
+                onHelpButtonTap: () {
+                  showSimpleHelpDialog(
+                      context: context,
+                      title: 'Typowy kierunek wiatru',
+                      content:
+                          'Informacje o punktach za belkę i punktach za wiatr znajdziemy na stronie FIS (Międzynarodowej Federacji Narciarskiej)');
+                },
               ),
               gap,
               MyNumeralTextField(
@@ -368,6 +424,13 @@ class HillEditorState extends State<HillEditor> {
                 min: 0.0,
                 max: context.read<DbEditingDefaultsRepo>().maxHillPoints,
                 maxDecimalPlaces: 2,
+                onHelpButtonTap: () {
+                  showSimpleHelpDialog(
+                      context: context,
+                      title: 'Typowy kierunek wiatru',
+                      content:
+                          'Informacje o punktach za belkę i punktach za wiatr znajdziemy na stronie FIS (Międzynarodowej Federacji Narciarskiej)');
+                },
               ),
               gap,
               Row(
@@ -404,6 +467,13 @@ class HillEditorState extends State<HillEditor> {
                       min: 0.0,
                       max: context.read<DbEditingDefaultsRepo>().maxHillPoints,
                       maxDecimalPlaces: 2,
+                      onHelpButtonTap: () {
+                        showSimpleHelpDialog(
+                            context: context,
+                            title: 'Typowy kierunek wiatru',
+                            content:
+                                'Informacje o punktach za belkę i punktach za wiatr znajdziemy na stronie FIS (Międzynarodowej Federacji Narciarskiej). Użyj opcji "automatycznie", aby ustawić rekompensatę za wiatr tylny jako 150% punktów za wiatr przedni');
+                      },
                     ),
                   ),
                 ],
