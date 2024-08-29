@@ -71,6 +71,7 @@ import 'package:sj_manager/repositories/database_editing/default_items_repositor
 import 'package:sj_manager/repositories/database_editing/event_series_setup_ids_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
+import 'package:sj_manager/repositories/settings/user_settings_repo.dart';
 import 'package:sj_manager/ui/assets/icons.dart';
 import 'package:sj_manager/ui/database_item_editors/default_competition_rules_preset_editor/default_competition_rules_preset_editor.dart';
 import 'package:sj_manager/ui/database_item_editors/event_series_calendar_preset_thumbnail.dart';

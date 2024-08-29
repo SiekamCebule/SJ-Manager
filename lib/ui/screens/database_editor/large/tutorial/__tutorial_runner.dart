@@ -38,6 +38,7 @@ class _TutorialRunner {
       textStyleSkip: Theme.of(context).textTheme.headlineSmall!,
       opacityShadow: 0.935,
       pulseEnable: false,
+      alignSkip: const Alignment(0.98, 0.88),
       targets: [
         TargetFocus(
           shape: ShapeLightFocus.RRect,
@@ -71,19 +72,24 @@ class _TutorialRunner {
           keyTarget: _widgetKeys[_TutorialStep.items]!,
           contents: [
             TargetContent(
-                align: ContentAlign.right,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 25.0),
-                      child: Text(
-                        'W tym miejscu widzisz listę wszystkich danych. Po kliknięciu na jakiś kafelek, wyświetli się edytor',
-                        style: Theme.of(context).textTheme.bodyLarge,
+                padding: EdgeInsets.zero,
+                align: ContentAlign.custom,
+                customPosition: CustomTargetContentPosition(top: 200, left: 200),
+                child: FractionallySizedBox(
+                  widthFactor: 0.35,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 25.0),
+                        child: Text(
+                          'W tym miejscu widzisz listę elementów. Po kliknięciu na jeden z nich wyświetli się edytor',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
                       ),
-                    ),
-                    const Gap(15),
-                    goNextButton,
-                  ],
+                      const Gap(15),
+                      goNextButton,
+                    ],
+                  ),
                 )),
           ],
         ),
@@ -94,10 +100,21 @@ class _TutorialRunner {
           keyTarget: _widgetKeys[_TutorialStep.fabs]!,
           contents: [
             TargetContent(
-              align: ContentAlign.bottom,
-              child: Text(
-                'Dodawaj i usuwaj dane używajac tych przycisków',
-                style: Theme.of(context).textTheme.bodyLarge,
+              padding: EdgeInsets.zero,
+              align: ContentAlign.custom,
+              customPosition: CustomTargetContentPosition(top: 200, right: 100),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      'Dodawaj i usuwaj dane używajac tych przycisków',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                  const Gap(15),
+                  goNextButton,
+                ],
               ),
             ),
           ],
@@ -109,10 +126,21 @@ class _TutorialRunner {
           keyTarget: _widgetKeys[_TutorialStep.editor]!,
           contents: [
             TargetContent(
-              align: ContentAlign.left,
-              child: Text(
-                'Kiedy wybierzesz jakiś przedmiot, pojawi się tu zaawansowany edytor',
-                style: Theme.of(context).textTheme.bodyLarge,
+              padding: EdgeInsets.zero,
+              align: ContentAlign.custom,
+              customPosition: CustomTargetContentPosition(top: 200, right: 450),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      'Kiedy wybierzesz jakiś przedmiot, pojawi się tu zaawansowany edytor',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                  const Gap(15),
+                  goNextButton,
+                ],
               ),
             ),
           ],
@@ -125,9 +153,18 @@ class _TutorialRunner {
           contents: [
             TargetContent(
               align: ContentAlign.top,
-              child: Text(
-                'Pokaż tylko te przedmioty, które cię interesują. Pomogą ci w tym filtry',
-                style: Theme.of(context).textTheme.bodyLarge,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      'Pokaż tylko te przedmioty, które cię interesują. Pomogą ci w tym filtry',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                  const Gap(15),
+                  goNextButton,
+                ],
               ),
             ),
           ],
@@ -140,9 +177,18 @@ class _TutorialRunner {
           contents: [
             TargetContent(
               align: ContentAlign.bottom,
-              child: Text(
-                'Możesz wczytać bazę danych z dysku, lub stworzyć kopię w wybranym pliku',
-                style: Theme.of(context).textTheme.bodyLarge,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25.0),
+                    child: Text(
+                      'Możesz wczytać bazę danych z dysku, lub stworzyć kopię w wybranym folderze',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                  const Gap(15),
+                  goNextButton,
+                ],
               ),
             ),
           ],
