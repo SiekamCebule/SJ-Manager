@@ -38,6 +38,7 @@ import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dar
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_form_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_form_field.dart';
+import 'package:sj_manager/ui/dialogs/simple_help_dialog.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
 import 'package:sj_manager/utils/colors.dart';
@@ -338,49 +339,44 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                               ),
                               gap,
                               Flexible(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: LayoutBuilder(
-                                        builder: (context, constraints) =>
-                                            MyDropdownField(
-                                          controller: _entitiesLimitTypeController,
-                                          label: const Text('Rodzaj limitu'),
-                                          width: constraints.maxWidth,
-                                          entries: [
-                                            DropdownMenuEntry(
-                                              value: null,
-                                              label: 'Brak limitu',
-                                            ),
-                                            DropdownMenuEntry(
-                                              value: EntitiesLimitType.soft,
-                                              label: 'Miękki',
-                                            ),
-                                            DropdownMenuEntry(
-                                              value: EntitiesLimitType.exact,
-                                              label: 'Dosłowny',
-                                            ),
-                                          ],
-                                          onChange: (value) {
-                                            setState(() {
-                                              _entitiesLimitType = value;
-                                              _onChange();
-                                            });
-                                          },
-                                          enabled: !_koEnabled ||
-                                              (_koEnabled &&
-                                                  _koGroupsCreator
-                                                          is DefaultClassicKoGroupsCreator ==
-                                                      false),
-                                        ),
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) => MyDropdownField(
+                                    controller: _entitiesLimitTypeController,
+                                    label: const Text('Rodzaj limitu'),
+                                    width: constraints.maxWidth,
+                                    entries: [
+                                      DropdownMenuEntry(
+                                        value: null,
+                                        label: 'Brak limitu',
                                       ),
-                                    ),
-                                    const Gap(UiFieldWidgetsConstants
-                                        .gapBetweenFieldAndHelpButton),
-                                    HelpIconButton(
-                                      onPressed: () {},
-                                    ),
-                                  ],
+                                      DropdownMenuEntry(
+                                        value: EntitiesLimitType.soft,
+                                        label: 'Miękki',
+                                      ),
+                                      DropdownMenuEntry(
+                                        value: EntitiesLimitType.exact,
+                                        label: 'Dosłowny',
+                                      ),
+                                    ],
+                                    onChange: (value) {
+                                      setState(() {
+                                        _entitiesLimitType = value;
+                                        _onChange();
+                                      });
+                                    },
+                                    enabled: !_koEnabled ||
+                                        (_koEnabled &&
+                                            _koGroupsCreator
+                                                    is DefaultClassicKoGroupsCreator ==
+                                                false),
+                                    onHelpButtonTap: () {
+                                      showSimpleHelpDialog(
+                                          context: context,
+                                          title: 'Rodzaj limitu',
+                                          content:
+                                              'Limit miękki pozwala na przejście większej ilości zawodników w przypadku ex aequo. Nie pozwala na to limit ścisły');
+                                    },
+                                  ),
                                 ),
                               ),
                             ],
@@ -402,7 +398,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                               gap,
                               Flexible(
                                 child: MyCheckboxListTileField(
-                                    title: const Text('Zmiana belki'),
+                                    title: const Text('Możliwość zmiany belki'),
                                     value: _gateCanChange,
                                     onChange: (value) {
                                       setState(() {
@@ -475,64 +471,54 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                           Row(
                             children: [
                               Flexible(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: MyCheckboxListTileField(
-                                          title: const Text('Zasada 95% HS'),
-                                          value: _ruleOf95HsEnabled,
-                                          onChange: (value) {
-                                            setState(() {
-                                              _ruleOf95HsEnabled = value!;
-                                              _onChange();
-                                            });
-                                          }),
-                                    ),
-                                    const Gap(UiFieldWidgetsConstants
-                                        .gapBetweenFieldAndHelpButton),
-                                    HelpIconButton(onPressed: () {
-                                      throw UnimplementedError();
-                                    }),
-                                  ],
+                                child: MyCheckboxListTileField(
+                                  title: const Text('Zasada 95% HS'),
+                                  value: _ruleOf95HsEnabled,
+                                  onChange: (value) {
+                                    setState(() {
+                                      _ruleOf95HsEnabled = value!;
+                                      _onChange();
+                                    });
+                                  },
+                                  onHelpButtonTap: () {
+                                    showSimpleHelpDialog(
+                                        context: context,
+                                        title: 'Zasada 95%',
+                                        content:
+                                            'Jeśli zawodnik upadnie osiągając 95% punktu HS, ma zapewniony awans do kolejnej serii');
+                                  },
                                 ),
                               ),
                               gap,
                               Flexible(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: LayoutBuilder(
-                                        builder: (context, constraints) {
-                                          final entries =
-                                              _constructEntries<WindAverager>();
-                                          return MyDropdownField(
-                                            controller: _windAveragerController,
-                                            label: const Text('Uśrednianie wiatru'),
-                                            onChange: (key) {
-                                              setState(() {
-                                                _windAverager = context
-                                                    .read<
-                                                        DbEditingAvailableObjectsRepo<
-                                                            WindAverager>>()
-                                                    .getObject(key!);
-                                                _onChange();
-                                              });
-                                            },
-                                            entries: entries,
-                                            initial: entries.first.value,
-                                            width: constraints.maxWidth,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    const Gap(UiFieldWidgetsConstants
-                                        .gapBetweenFieldAndHelpButton),
-                                    HelpIconButton(
-                                      onPressed: () {
-                                        throw UnimplementedError();
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    final entries = _constructEntries<WindAverager>();
+                                    return MyDropdownField(
+                                      controller: _windAveragerController,
+                                      label: const Text('Uśrednianie wiatru'),
+                                      onChange: (key) {
+                                        setState(() {
+                                          _windAverager = context
+                                              .read<
+                                                  DbEditingAvailableObjectsRepo<
+                                                      WindAverager>>()
+                                              .getObject(key!);
+                                          _onChange();
+                                        });
                                       },
-                                    )
-                                  ],
+                                      entries: entries,
+                                      initial: entries.first.value,
+                                      width: constraints.maxWidth,
+                                      onHelpButtonTap: () {
+                                        showSimpleHelpDialog(
+                                            context: context,
+                                            title: 'Uśrednianie wiatru',
+                                            content:
+                                                'Wagowe uśredniacze przypisują różną wagę czujnikom wiatru, podczas gdy liniowe traktują wszystkie tak samo. Im bardziej zaawansowany uśredniacz, tym bardziej sprawiedliwe pomiary. Zaawansowany uśredniacz nie bierze pod uwagę wiatru, do którego nie doskoczył zawodnik.');
+                                      },
+                                    );
+                                  },
                                 ),
                               ),
                             ],
@@ -594,6 +580,13 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                       initial: entries.first.value,
                                       width: constraints.maxWidth,
                                       enabled: judgesEnabled,
+                                      onHelpButtonTap: () {
+                                        showSimpleHelpDialog(
+                                            context: context,
+                                            title: 'Tworzenie not sędziowskich',
+                                            content:
+                                                'Pracujemy nad dodaniem kolejnych opcji :)');
+                                      },
                                     );
                                   },
                                 ),
@@ -620,6 +613,13 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                       entries: entries,
                                       initial: entries.first.value,
                                       width: constraints.maxWidth,
+                                      onHelpButtonTap: () {
+                                        showSimpleHelpDialog(
+                                            context: context,
+                                            title: 'Pozycje w rankingu',
+                                            content:
+                                                'Czy w konkursie ma występować ex aequo? Ex aequo to sytuacja, w której dwóch skoczków/dwie skoczkinie są na tym samym miejscu');
+                                      },
                                     );
                                   },
                                 ),
@@ -649,6 +649,13 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                       entries: entries,
                                       initial: entries.first.value,
                                       width: constraints.maxWidth,
+                                      onHelpButtonTap: () {
+                                        showSimpleHelpDialog(
+                                            context: context,
+                                            title: 'Tworzenie wyniku w konkursie',
+                                            content:
+                                                'Pracujemy nad dodaniem kolejnych opcji :)');
+                                      },
                                     );
                                   },
                                 ),
@@ -656,14 +663,22 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                               gap,
                               Flexible(
                                 child: MyCheckboxListTileField(
-                                    title: const Text('Sortowanie listy startowej'),
-                                    value: _startlistIsSorted,
-                                    onChange: (value) {
-                                      setState(() {
-                                        _startlistIsSorted = value!;
-                                        _onChange();
-                                      });
-                                    }),
+                                  title: const Text('Sortowanie listy startowej'),
+                                  value: _startlistIsSorted,
+                                  onChange: (value) {
+                                    setState(() {
+                                      _startlistIsSorted = value!;
+                                      _onChange();
+                                    });
+                                  },
+                                  onHelpButtonTap: () {
+                                    showSimpleHelpDialog(
+                                        context: context,
+                                        title: 'Tworzenie wyniku w konkursie',
+                                        content:
+                                            'Czy sortować listę startową, od najniższej do najwyższej pozycji, przed rozpoczęciem rundy');
+                                  },
+                                ),
                               ),
                             ],
                           ),
@@ -673,139 +688,110 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                           Row(
                             children: [
                               Flexible(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: MyCheckboxListTileField(
-                                          title: const Text('Runda KO'),
-                                          value: _koEnabled,
-                                          onChange: (value) {
-                                            setState(() {
-                                              _koEnabled = value!;
-                                              _onChange();
-                                            });
-                                          }),
-                                    ),
-                                    const Gap(UiFieldWidgetsConstants
-                                        .gapBetweenFieldAndHelpButton),
-                                    HelpIconButton(onPressed: () {
-                                      throw UnimplementedError();
-                                    }),
-                                  ],
+                                child: MyCheckboxListTileField(
+                                  title: const Text('Runda KO'),
+                                  value: _koEnabled,
+                                  onChange: (value) {
+                                    setState(() {
+                                      _koEnabled = value!;
+                                      _onChange();
+                                    });
+                                  },
+                                  onHelpButtonTap: () {
+                                    showSimpleHelpDialog(
+                                        context: context,
+                                        title: 'Runda KO',
+                                        content:
+                                            'W rundzie KO osoby rywalizujące są dobierane w grupy, z których awansuje tylko część');
+                                  },
                                 ),
                               ),
                               gap,
                               Flexible(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: LayoutBuilder(
-                                        builder: (context, constraints) {
-                                          final entries =
-                                              _constructEntries<KoGroupsCreator>();
-                                          return MyDropdownFormField(
-                                            formKey: _koGroupsCreatorFormFieldKey,
-                                            controller: _koGroupsCreatorController,
-                                            label: const Text('Dobieranie Grup KO'),
-                                            onChange: (key) {
-                                              setState(() {
-                                                _koGroupsCreator = context
-                                                    .read<
-                                                        DbEditingAvailableObjectsRepo<
-                                                            KoGroupsCreator>>()
-                                                    .getObject(key!);
-                                                if (_koGroupsCreator
-                                                    is DefaultClassicKoGroupsCreator) {
-                                                  _groupSizeController.text =
-                                                      2.toString();
-                                                  _koAdvancementDeterminator =
-                                                      const NBestKoRoundAdvancementDeterminator();
-                                                  final determinatorsRepo = context.read<
-                                                      DbEditingAvailableObjectsRepo<
-                                                          KoRoundAdvancementDeterminator>>();
-                                                  _koAdvancementDeterminatorController
-                                                          .text =
-                                                      determinatorsRepo.getDisplayName(
-                                                          determinatorsRepo.getKeyByObject(
-                                                              const NBestKoRoundAdvancementDeterminator()));
-                                                  _groupAdvancementCountController.text =
-                                                      1.toString();
-                                                  _entitiesLimitType =
-                                                      EntitiesLimitType.exact;
-                                                  _entitiesLimitTypeController.text =
-                                                      translatedEntitiesLimitType(
-                                                          context,
-                                                          EntitiesLimit(
-                                                              type: _entitiesLimitType!,
-                                                              count: 0));
-                                                }
-                                                _onChange();
-                                              });
-                                            },
-                                            entries: entries,
-                                            initial: entries.first.value,
-                                            width: constraints.maxWidth,
-                                            enabled: _koEnabled,
-                                            validator: _koEnabled
-                                                ? (value) {
-                                                    final text =
-                                                        _koGroupsCreatorController.text;
-                                                    if (text.isEmpty) {
-                                                      return 'Potrzebujemy tego';
-                                                    }
-                                                    return null;
-                                                  }
-                                                : null,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    const Gap(UiFieldWidgetsConstants
-                                        .gapBetweenFieldAndHelpButton),
-                                    HelpIconButton(onPressed: () {
-                                      throw UnimplementedError();
-                                    }),
-                                  ],
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    final entries = _constructEntries<KoGroupsCreator>();
+                                    return MyDropdownFormField(
+                                      formKey: _koGroupsCreatorFormFieldKey,
+                                      controller: _koGroupsCreatorController,
+                                      label: const Text('Dobieranie Grup KO'),
+                                      onChange: (key) {
+                                        setState(() {
+                                          _koGroupsCreator = context
+                                              .read<
+                                                  DbEditingAvailableObjectsRepo<
+                                                      KoGroupsCreator>>()
+                                              .getObject(key!);
+                                          if (_koGroupsCreator
+                                              is DefaultClassicKoGroupsCreator) {
+                                            _groupSizeController.text = 2.toString();
+                                            _koAdvancementDeterminator =
+                                                const NBestKoRoundAdvancementDeterminator();
+                                            final determinatorsRepo = context.read<
+                                                DbEditingAvailableObjectsRepo<
+                                                    KoRoundAdvancementDeterminator>>();
+                                            _koAdvancementDeterminatorController.text =
+                                                determinatorsRepo.getDisplayName(
+                                                    determinatorsRepo.getKeyByObject(
+                                                        const NBestKoRoundAdvancementDeterminator()));
+                                            _groupAdvancementCountController.text =
+                                                1.toString();
+                                            _entitiesLimitType = EntitiesLimitType.exact;
+                                            _entitiesLimitTypeController.text =
+                                                translatedEntitiesLimitType(
+                                                    context,
+                                                    EntitiesLimit(
+                                                        type: _entitiesLimitType!,
+                                                        count: 0));
+                                          }
+                                          _onChange();
+                                        });
+                                      },
+                                      entries: entries,
+                                      initial: entries.first.value,
+                                      width: constraints.maxWidth,
+                                      enabled: _koEnabled,
+                                      validator: _koEnabled
+                                          ? (value) {
+                                              final text =
+                                                  _koGroupsCreatorController.text;
+                                              if (text.isEmpty) {
+                                                return 'Potrzebujemy tego';
+                                              }
+                                              return null;
+                                            }
+                                          : null,
+                                    );
+                                  },
                                 ),
                               ),
                               gap,
                               Flexible(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Builder(builder: (context) {
-                                        final min = _koGroupsCreator
-                                                is DefaultClassicKoGroupsCreator
-                                            ? 2
-                                            : 2;
-                                        final max = _koGroupsCreator
-                                                is DefaultClassicKoGroupsCreator
-                                            ? 2
-                                            : 100;
-                                        final enabled = _koGroupsCreator
-                                                is DefaultClassicKoGroupsCreator ==
-                                            false;
-                                        return MyNumeralTextField(
-                                          controller: _groupSizeController,
-                                          onChange: () {
-                                            _onChange();
-                                            _ensureCorrectGroupAdvancementCount();
-                                          },
-                                          labelText: 'Liczebność grupy',
-                                          step: 1,
-                                          min: min,
-                                          max: max,
-                                          enabled: enabled, // TODO: LOL
-                                        );
-                                      }),
-                                    ),
-                                    const Gap(UiFieldWidgetsConstants
-                                        .gapBetweenFieldAndHelpButton),
-                                    HelpIconButton(onPressed: () {
-                                      throw UnimplementedError();
-                                    }),
-                                  ],
-                                ),
+                                child: Builder(builder: (context) {
+                                  final min =
+                                      _koGroupsCreator is DefaultClassicKoGroupsCreator
+                                          ? 2
+                                          : 2;
+                                  final max =
+                                      _koGroupsCreator is DefaultClassicKoGroupsCreator
+                                          ? 2
+                                          : 100;
+                                  final enabled =
+                                      _koGroupsCreator is DefaultClassicKoGroupsCreator ==
+                                          false;
+                                  return MyNumeralTextField(
+                                    controller: _groupSizeController,
+                                    onChange: () {
+                                      _onChange();
+                                      _ensureCorrectGroupAdvancementCount();
+                                    },
+                                    labelText: 'Liczebność grupy',
+                                    step: 1,
+                                    min: min,
+                                    max: max,
+                                    enabled: enabled,
+                                  );
+                                }),
                               ),
                               gap,
                             ],
@@ -814,58 +800,50 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                           Row(
                             children: [
                               Flexible(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: LayoutBuilder(
-                                        builder: (context, constraints) {
-                                          final entries = _constructEntries<
-                                              KoRoundAdvancementDeterminator>();
-                                          return MyDropdownFormField(
-                                            formKey:
-                                                _koRoundAdvancementDeterminatorFormFieldKey,
-                                            controller:
-                                                _koAdvancementDeterminatorController,
-                                            label: const Text('Awans z Grupy KO'),
-                                            onChange: (key) {
-                                              setState(() {
-                                                _koAdvancementDeterminator =
-                                                    switch (key) {
-                                                  'n_best' =>
-                                                    const NBestKoRoundAdvancementDeterminator(),
-                                                  _ => throw ArgumentError(
-                                                      'Invalid KoRoundAdvancementDeterminator key ($key)'),
-                                                };
-                                                _onChange();
-                                              });
-                                            },
-                                            entries: entries,
-                                            initial: entries.first.value,
-                                            width: constraints.maxWidth,
-                                            enabled: _koEnabled,
-                                            validator: _koEnabled
-                                                ? (value) {
-                                                    final text =
-                                                        _koAdvancementDeterminatorController
-                                                            .text;
-                                                    if (text.isEmpty) {
-                                                      return 'Potrzebujemy tego';
-                                                    }
-                                                    return null;
-                                                  }
-                                                : null,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    const Gap(UiFieldWidgetsConstants
-                                        .gapBetweenFieldAndHelpButton),
-                                    HelpIconButton(onPressed: () {
-                                      throw UnimplementedError();
-                                    }),
-                                  ],
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    final entries = _constructEntries<
+                                        KoRoundAdvancementDeterminator>();
+                                    return MyDropdownFormField(
+                                      formKey:
+                                          _koRoundAdvancementDeterminatorFormFieldKey,
+                                      controller: _koAdvancementDeterminatorController,
+                                      label: const Text('Awans z Grupy KO'),
+                                      onChange: (key) {
+                                        setState(() {
+                                          _koAdvancementDeterminator = switch (key) {
+                                            'n_best' =>
+                                              const NBestKoRoundAdvancementDeterminator(),
+                                            _ => throw ArgumentError(
+                                                'Invalid KoRoundAdvancementDeterminator key ($key)'),
+                                          };
+                                          _onChange();
+                                        });
+                                      },
+                                      entries: entries,
+                                      initial: entries.first.value,
+                                      width: constraints.maxWidth,
+                                      enabled: _koEnabled,
+                                      validator: _koEnabled
+                                          ? (value) {
+                                              final text =
+                                                  _koAdvancementDeterminatorController
+                                                      .text;
+                                              if (text.isEmpty) {
+                                                return 'Potrzebujemy tego';
+                                              }
+                                              return null;
+                                            }
+                                          : null,
+                                    );
+                                  },
                                 ),
                               ),
+                              const Gap(
+                                  UiFieldWidgetsConstants.gapBetweenFieldAndHelpButton),
+                              HelpIconButton(onPressed: () {
+                                throw UnimplementedError();
+                              }),
                               gap,
                               Flexible(
                                 child: Row(
@@ -1011,6 +989,14 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                                     _sortStartlistBeforeGroup = value!;
                                                     _onChange();
                                                   });
+                                                },
+                                                onHelpButtonTap: () {
+                                                  showSimpleHelpDialog(
+                                                      context: context,
+                                                      title:
+                                                          'Grupa w konkursie drużynowym',
+                                                      content:
+                                                          'Jest to część rundy, w której skacze jeden zawodnik z każdej drużyny. Grup jest tyle, ile zawodników w drużynie.');
                                                 },
                                               ),
                                             ),

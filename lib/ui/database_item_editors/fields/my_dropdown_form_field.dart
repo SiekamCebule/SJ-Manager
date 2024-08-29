@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/dropdown_menu_form_field.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
+import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
 import 'package:sj_manager/utils/colors.dart';
 
 class MyDropdownFormField<T> extends StatelessWidget {
@@ -21,6 +22,7 @@ class MyDropdownFormField<T> extends StatelessWidget {
     this.requestFocusOnTap,
     this.focusNode,
     required this.validator,
+    this.onHelpButtonTap,
   });
 
   final GlobalKey<FormFieldState>? formKey;
@@ -38,6 +40,7 @@ class MyDropdownFormField<T> extends StatelessWidget {
   final bool? requestFocusOnTap;
   final FocusNode? focusNode;
   final String? Function(T? value)? validator;
+  final VoidCallback? onHelpButtonTap;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +51,8 @@ class MyDropdownFormField<T> extends StatelessWidget {
         color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
-    return DropdownMenuFormField<T>(
+    final showHelpButton = onHelpButtonTap != null;
+    final field = DropdownMenuFormField<T>(
       key: formKey,
       enabled: enabled,
       enableSearch: enableSearch ?? true,
@@ -82,5 +86,13 @@ class MyDropdownFormField<T> extends StatelessWidget {
       ),
       validator: validator,
     );
+    return showHelpButton
+        ? Row(
+            children: [
+              Expanded(child: field),
+              HelpIconButton(onPressed: onHelpButtonTap!),
+            ],
+          )
+        : field;
   }
 }

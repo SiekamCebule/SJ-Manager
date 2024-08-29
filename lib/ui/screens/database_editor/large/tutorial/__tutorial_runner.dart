@@ -5,12 +5,9 @@ class _TutorialRunner {
   late TutorialCoachMark _tutorial;
 
   void addWidgetKey({required _TutorialStep step, required GlobalKey key}) {
-    if (_widgetKeys.containsKey(step)) {
-      throw ArgumentError(
-        'Cannot add second key in to the $step step in database editor\'s _TutorialRunner',
-      );
+    if (!_widgetKeys.containsKey(step)) {
+      _widgetKeys[step] = key;
     }
-    _widgetKeys[step] = key;
   }
 
   void runTutorial(BuildContext context) {
@@ -19,7 +16,6 @@ class _TutorialRunner {
   }
 
   TutorialCoachMark _constructTutorial(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
     final goNextButton = ElevatedButton(
       style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),

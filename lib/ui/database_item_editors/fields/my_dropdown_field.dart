@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
+import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
 import 'package:sj_manager/utils/colors.dart';
 
 class MyDropdownField<T> extends StatelessWidget {
@@ -18,6 +19,7 @@ class MyDropdownField<T> extends StatelessWidget {
     this.menuHeight,
     this.requestFocusOnTap,
     this.focusNode,
+    this.onHelpButtonTap,
   });
 
   final TextEditingController? controller;
@@ -33,6 +35,7 @@ class MyDropdownField<T> extends StatelessWidget {
   final double? menuHeight;
   final bool? requestFocusOnTap;
   final FocusNode? focusNode;
+  final VoidCallback? onHelpButtonTap;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,8 @@ class MyDropdownField<T> extends StatelessWidget {
         color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
-    return DropdownMenu<T>(
+    final showHelpButton = onHelpButtonTap != null;
+    final field = DropdownMenu<T>(
       enabled: enabled,
       enableSearch: enableSearch ?? true,
       requestFocusOnTap: false,
@@ -74,5 +78,14 @@ class MyDropdownField<T> extends StatelessWidget {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
       ),
     );
+
+    return showHelpButton
+        ? Row(
+            children: [
+              Expanded(child: field),
+              HelpIconButton(onPressed: onHelpButtonTap!),
+            ],
+          )
+        : field;
   }
 }

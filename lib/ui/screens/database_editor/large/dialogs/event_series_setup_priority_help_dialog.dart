@@ -7,8 +7,7 @@ class EventSeriesSetupPriorityHelpDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Priorytet'),
-      content: const Text(
-          'Im niższa cyfra, tym zawody są ważniejsze. Najważniejszy cykl w symulacji powinien mieć numer 1, tak jak imprezy mistrzowskie. Zaplecze jako 2, zaplecze zaplecza 3, i tak dalej...'),
+      content: const Text(''),
       actions: [
         TextButton(
           key: const Key('close'),

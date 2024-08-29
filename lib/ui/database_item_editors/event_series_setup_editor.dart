@@ -11,6 +11,7 @@ import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dar
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_form_field.dart';
+import 'package:sj_manager/ui/dialogs/simple_help_dialog.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/event_series_setup_id_help_dialog.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/event_series_setup_priority_help_dialog.dart';
@@ -144,39 +145,24 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                           ],
                         ),
                         gap,
-                        Row(
-                          children: [
-                            Expanded(
-                              key: const Key('priority_expanded'),
-                              child: MyNumeralTextField(
-                                key: _priorityFieldKey,
-                                controller: _priorityController,
-                                onChange: () {
-                                  _validateAndSubmit();
-                                },
-                                formatters: doubleTextInputFormatters,
-                                labelText: 'Priorytet',
-                                min: 1,
-                                max: 10,
-                                step: 1,
-                              ),
-                            ),
-                            const Gap(
-                                UiFieldWidgetsConstants.gapBetweenFieldAndHelpButton),
-                            HelpIconButton(
-                                key: const Key('priorityHelpButton'),
-                                onPressed: () async {
-                                  await showDialog(
-                                    context: context,
-                                    builder: (context) => Center(
-                                      child: ConstrainedBox(
-                                        constraints: const BoxConstraints(maxWidth: 700),
-                                        child: const EventSeriesSetupPriorityHelpDialog(),
-                                      ),
-                                    ),
-                                  );
-                                }),
-                          ],
+                        MyNumeralTextField(
+                          key: _priorityFieldKey,
+                          controller: _priorityController,
+                          onChange: () {
+                            _validateAndSubmit();
+                          },
+                          formatters: doubleTextInputFormatters,
+                          labelText: 'Priorytet',
+                          min: 1,
+                          max: 10,
+                          step: 1,
+                          onHelpButtonTap: () {
+                            showSimpleHelpDialog(
+                                context: context,
+                                title: 'Priorytet',
+                                content:
+                                    'Im niższa cyfra, tym zawody są ważniejsze. Najważniejszy cykl w symulacji powinien mieć numer 1, tak jak imprezy mistrzowskie. Zaplecze jako 2, zaplecze zaplecza 3, i tak dalej...');
+                          },
                         ),
                       ],
                     ),
@@ -220,6 +206,13 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                     return DropdownMenuEntry(value: preset, label: preset.name);
                   }),
                 ],
+                onHelpButtonTap: () {
+                  showSimpleHelpDialog(
+                      context: context,
+                      title: 'Domyślny kalendarz',
+                      content:
+                          'Zostanie on automatycznie przypisany do cyklu podczas rozpoczynania rozgrywki');
+                },
               ),
             ],
           ),

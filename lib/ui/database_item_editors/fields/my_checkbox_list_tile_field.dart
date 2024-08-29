@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
+import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
 
 class MyCheckboxListTileField extends StatelessWidget {
   const MyCheckboxListTileField({
@@ -10,6 +11,7 @@ class MyCheckboxListTileField extends StatelessWidget {
     this.tristate = false,
     required this.onChange,
     this.customShape,
+    this.onHelpButtonTap,
   });
 
   final Widget title;
@@ -18,11 +20,12 @@ class MyCheckboxListTileField extends StatelessWidget {
   final bool tristate;
   final Function(bool? value) onChange;
   final ShapeBorder? customShape;
+  final VoidCallback? onHelpButtonTap;
 
   @override
   Widget build(BuildContext context) {
-    return CheckboxListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 12),
+    final tile = CheckboxListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
       title: title,
       value: value,
       enabled: enabled,
@@ -37,5 +40,15 @@ class MyCheckboxListTileField extends StatelessWidget {
             borderRadius: const BorderRadius.all(UiFieldWidgetsConstants.borderRadius),
           ),
     );
+    return onHelpButtonTap != null
+        ? Row(
+            children: [
+              Expanded(child: tile),
+              HelpIconButton(
+                onPressed: onHelpButtonTap!,
+              ),
+            ],
+          )
+        : tile;
   }
 }

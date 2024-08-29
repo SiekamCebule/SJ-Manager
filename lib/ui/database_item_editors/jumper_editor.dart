@@ -14,6 +14,7 @@ import 'package:sj_manager/repositories/database_editing/db_editing_defaults_rep
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
+import 'package:sj_manager/ui/dialogs/simple_help_dialog.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
@@ -204,6 +205,13 @@ class JumperEditorState extends State<JumperEditor> {
                   width: constraints.maxWidth,
                   initial: JumpsConsistency.average,
                   label: Text(translate(context).jumps),
+                  onHelpButtonTap: () {
+                    showSimpleHelpDialog(
+                        context: context,
+                        title: 'Równość skoków',
+                        content:
+                            'Szansa zawodnika na oddanie kilku równych skoków. Nie mylić z długoterminową równością formy.');
+                  },
                 ),
                 gap,
                 MyDropdownField(
@@ -220,6 +228,13 @@ class JumperEditorState extends State<JumperEditor> {
                   width: constraints.maxWidth,
                   initial: LandingStyle.average,
                   label: Text(translate(context).landing),
+                  onHelpButtonTap: () {
+                    showSimpleHelpDialog(
+                        context: context,
+                        title: 'Styl lądowania',
+                        content:
+                            'Przekłada się to na wysokość not sędziowskich. Ma też pewien wpływ na odporność przed upadkami.'); // TODO: Verify that info
+                  },
                 ),
                 gap,
                 MyNumeralTextField(
@@ -231,6 +246,13 @@ class JumperEditorState extends State<JumperEditor> {
                   min: 0.0,
                   max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
                   maxDecimalPlaces: 2,
+                  onHelpButtonTap: () {
+                    showSimpleHelpDialog(
+                        context: context,
+                        title: 'Jakość na mniejszych skoczniach',
+                        content:
+                            'Decyduje o odległościach na mniejszych skoczniach, choć ma znaczenie również na skoczniach większych');
+                  },
                 ),
                 gap,
                 MyNumeralTextField(
@@ -242,6 +264,13 @@ class JumperEditorState extends State<JumperEditor> {
                   min: 0.0,
                   max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
                   maxDecimalPlaces: 2,
+                  onHelpButtonTap: () {
+                    showSimpleHelpDialog(
+                        context: context,
+                        title: 'Jakość na większych skoczniach',
+                        content:
+                            'Decyduje o odległościach na większych skoczniach, choć ma znaczenie również na skoczniach mniejszych. Wysoką wartością odznaczają się tak zwani "lotnicy" i "lotniczki"');
+                  },
                 ),
                 gap,
               ],

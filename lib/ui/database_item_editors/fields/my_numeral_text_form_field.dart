@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';
+import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
 import 'package:sj_manager/utils/doubles.dart';
 import 'package:sj_manager/utils/math.dart';
 
@@ -28,6 +29,7 @@ class MyNumeralTextFormField extends StatefulWidget {
     this.onSaved,
     this.validator,
     this.errorMaxLines,
+    this.onHelpButtonTap,
   }) : assert(initial == null || (initial >= min && initial <= max));
 
   final Key? formKey;
@@ -49,6 +51,7 @@ class MyNumeralTextFormField extends StatefulWidget {
   final void Function(String?)? onSaved;
   final String? Function(String? value)? validator;
   final int? errorMaxLines;
+  final VoidCallback? onHelpButtonTap;
 
   @override
   State<MyNumeralTextFormField> createState() => MyNumeralTextFormFieldState();
@@ -74,7 +77,10 @@ class MyNumeralTextFormFieldState extends State<MyNumeralTextFormField> {
         color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
-    return IntrinsicHeight(
+
+    final showHelpButton = widget.onHelpButtonTap != null;
+
+    final textField = IntrinsicHeight(
       child: Row(
         children: [
           Expanded(
@@ -146,6 +152,15 @@ class MyNumeralTextFormFieldState extends State<MyNumeralTextFormField> {
         ],
       ),
     );
+
+    return showHelpButton
+        ? Row(
+            children: [
+              Expanded(child: textField),
+              HelpIconButton(onPressed: widget.onHelpButtonTap!),
+            ],
+          )
+        : textField;
   }
 
   void _onTextFieldChange() {

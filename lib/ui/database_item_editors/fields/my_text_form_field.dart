@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
+import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
 
 class MyTextFormField extends StatelessWidget {
   const MyTextFormField({
@@ -16,6 +17,7 @@ class MyTextFormField extends StatelessWidget {
     this.onSaved,
     this.validator,
     this.errorMaxLines,
+    this.onHelpButtonTap,
   });
 
   final Key? textFormFieldKey;
@@ -29,6 +31,7 @@ class MyTextFormField extends StatelessWidget {
   final void Function(String?)? onSaved;
   final String? Function(String?)? validator;
   final int? errorMaxLines;
+  final VoidCallback? onHelpButtonTap;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,10 @@ class MyTextFormField extends StatelessWidget {
         color: Theme.of(context).colorScheme.onSurfaceVariant,
       ),
     );
-    return TextFormField(
+
+    final showHelpButton = onHelpButtonTap != null;
+
+    final textField = TextFormField(
       key: textFormFieldKey,
       enabled: enabled,
       controller: controller,
@@ -57,5 +63,14 @@ class MyTextFormField extends StatelessWidget {
       validator: validator,
       focusNode: focusNode,
     );
+
+    return showHelpButton
+        ? Row(
+            children: [
+              Expanded(child: textField),
+              HelpIconButton(onPressed: onHelpButtonTap!),
+            ],
+          )
+        : textField;
   }
 }
