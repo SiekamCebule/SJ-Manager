@@ -10,6 +10,10 @@ enum AppColorScheme {
         ? appLightSchemes[this]!
         : appDarkSchemes[this]!;
   }
+
+  static AppColorScheme fromString(String string) {
+    return AppColorScheme.values.singleWhere((value) => value.name == string);
+  }
 }
 
 final appLightSchemes = {

@@ -30,11 +30,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       _initializeRepos();
       await _initializeCubits();
       _initialized.value = true;
-      await Future.delayed(
-        const Duration(seconds: 1),
-        () => _tutorialRunner.runTutorial(context),
-      );
-      ;
+      await _maybeRunTutorial();
     });
 
     FlutterWindowClose.setWindowShouldCloseHandler(() async {
@@ -58,6 +54,19 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       }
     });
     super.initState();
+  }
+
+  Future<void> _maybeRunTutorial() async {
+    if (!mounted) return;
+    final shouldRunTutorial =
+        !(context.read<UserSettingsRepo>().databaseEditorTutorialShown ?? false);
+    if (shouldRunTutorial) {
+      await Future.delayed(const Duration(milliseconds: 1000), () {
+        if (!mounted) return;
+        _tutorialRunner.runTutorial(context);
+        //context.read<UserSettingsRepo>().setDatabaseEditorTutorialShown(true);
+      });
+    }
   }
 
   void _initializeRepos() {

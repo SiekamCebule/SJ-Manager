@@ -2,6 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sj_manager/json/simulation_db_loading/classification_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/classification_score_creator_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/competition_loader.dart';
@@ -75,6 +76,8 @@ import 'package:sj_manager/repositories/countries/country_flags/country_flags_re
 import 'package:sj_manager/repositories/countries/country_flags/local_storage_country_flags_repo.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
+import 'package:sj_manager/repositories/settings/local_user_settings_repo.dart';
+import 'package:sj_manager/repositories/settings/user_settings_repo.dart';
 import 'package:sj_manager/setup/default_loaders.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/app_initializer.dart';
@@ -93,6 +96,7 @@ final router = FluroRouter();
 bool routerIsInitialized = false;
 
 void main() async {
+  final sharedPrefs = await SharedPreferences.getInstance();
   final pathsCache = PlarformSpecificPathsCache();
   await pathsCache.setup();
 
@@ -125,6 +129,11 @@ void main() async {
       create: (context) => LocaleCubit(),
       child: MultiRepositoryProvider(
         providers: [
+          RepositoryProvider<UserSettingsRepo>(
+            create: (context) => LocalUserSettingsRepo(
+              prefs: sharedPrefs,
+            ),
+          ),
           RepositoryProvider<CountryFlagsRepo>(
             create: (context) {
               final storageDirectory = userDataDirectory(
