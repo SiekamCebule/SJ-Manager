@@ -36,8 +36,6 @@ abstract class DefaultWindAverager extends WindAverager with EquatableMixin {
         countedWinds.add(wind);
       }
     });
-    print('counted winds: $countedWinds');
-    print('partially: $partiallyIncomplete');
   }
 
   Wind computeAverage();
