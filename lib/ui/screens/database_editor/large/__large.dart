@@ -15,6 +15,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   late final EventSeriesSetupIdsRepo _eventSeriesSetupIds;
   late final _TutorialRunner _tutorialRunner;
 
+  late final StreamSubscription _localDbCopyChangesSubscription;
   late final LocalDatabaseCopyCubit _localDbCopy;
   late final ChangeStatusCubit _dbChangeStatus;
   late final DatabaseItemsCubit _items;
@@ -90,6 +91,10 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       filtersRepo: _filters,
       itemsRepos: _localDbCopy.state!,
     );
+    _localDbCopyChangesSubscription = _localDbCopy.stream.listen((state) {
+      print('update items repo');
+      _items.updateItemsRepo(state!);
+    });
     final teamsRepo =
         TeamsRepo<CountryTeam>(initial: _localDbCopy.originalDb.get<Team>().last.cast());
     _countries = DatabaseEditorCountriesCubit(
@@ -110,6 +115,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
 
   void _cleanResources() {
     debugPrint('_Large(): _cleanResources()');
+    _localDbCopyChangesSubscription.cancel();
     _localDbCopy.close();
     _localDbCopy.dispose();
     _dbChangeStatus.close();

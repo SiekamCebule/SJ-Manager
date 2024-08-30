@@ -13,17 +13,20 @@ import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
+import 'package:sj_manager/repositories/generic/items_repo.dart';
 
 class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
   DatabaseItemsCubit({
     required this.filtersRepo,
-    required this.itemsRepos,
-  }) : super(_initial) {
+    required ItemsReposRegistry itemsRepos,
+  })  : _itemsRepos = itemsRepos,
+        super(_initial) {
     changeType(state.itemsType);
   }
 
   final DbFiltersRepo filtersRepo;
-  final ItemsReposRegistry itemsRepos;
+  ItemsReposRegistry _itemsRepos;
+  ItemsReposRegistry get itemsRepos => _itemsRepos;
 
   final Set<StreamSubscription> _subscriptions = {};
 
@@ -55,10 +58,15 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
     }
   }
 
+  void updateItemsRepo(ItemsReposRegistry repo) {
+    _itemsRepos = repo;
+    changeType(state.itemsType);
+  }
+
   void changeType(Type type) {
     _itemsSubscription?.cancel();
     final filtersStream = filtersRepo.streamByTypeArgument(type);
-    final itemsStream = itemsRepos.byTypeArgument(type);
+    final itemsStream = _itemsRepos.byTypeArgument(type);
     _itemsSubscription = Rx.combineLatest2(
       itemsStream.items,
       filtersStream,
@@ -113,7 +121,7 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
       subscription.cancel();
     }
     filtersRepo.close();
-    itemsRepos.dispose();
+    _itemsRepos.dispose();
   }
 
   static const DatabaseItemsState _initial = DatabaseItemsEmpty(

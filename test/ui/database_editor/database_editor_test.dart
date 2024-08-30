@@ -8,7 +8,6 @@ import 'package:sj_manager/bloc/database_editing/database_items_cubit.dart';
 import 'package:sj_manager/bloc/database_editing/state/database_items_state.dart';
 import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
-import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
@@ -50,7 +49,7 @@ import 'package:sj_manager/ui/theme/app_theme_brightness_repo.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
-import '../../local_database/bloc/database_editing_logic_test.mocks.dart';
+import 'database_editor_test.mocks.dart';
 
 @GenerateMocks([TeamsRepo])
 void main() {
@@ -427,19 +426,6 @@ void main() {
       Future<void> selectTab(int index) async {
         final tab = tester.widget<TabBar>(tabBar).tabs[index];
         await tester.tap(find.byWidget(tab));
-        await tester.pumpAndSettle();
-      }
-
-      Future<void> tapItem(int index) async {
-        final itemTile = find.descendant(
-            of: find.byType(DatabaseItemsList), matching: find.byKey(ValueKey(index)));
-        await tester.ensureVisible(itemTile);
-        await tester.tap(itemTile);
-        await tester.pumpAndSettle();
-      }
-
-      Future<void> tap(Finder finder) async {
-        await tester.tap(finder);
         await tester.pumpAndSettle();
       }
 

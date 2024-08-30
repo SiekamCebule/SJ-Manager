@@ -8,9 +8,9 @@ import 'package:sj_manager/repositories/generic/items_repo.dart';
 
 class ItemsReposRegistry extends ItemsRepo<ItemsRepo> with EquatableMixin {
   ItemsReposRegistry({
-    Set<ItemsRepo> initial = const {},
+    Set<ItemsRepo>? initial,
   }) {
-    set(Set.of(initial));
+    set(initial ?? {});
   }
 
   ItemsReposRegistry clone() {
@@ -49,6 +49,7 @@ class ItemsReposRegistry extends ItemsRepo<ItemsRepo> with EquatableMixin {
 
   ItemsRepo byTypeArgument(Type type) {
     final singleOrNull = _repos.where((repo) {
+      print('repo type: ${repo.itemsType}, tpe: $type');
       return repo.itemsType == type;
     }).singleOrNull;
     if (singleOrNull == null) {
