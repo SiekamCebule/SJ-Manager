@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 
-class CompetitionResultsCubit<E, SJS extends SingleJumpScore>
+class CompetitionResultsCubit<E, SJS extends JumpScore>
     extends Cubit<CompetitionResultsState<E>> {
   CompetitionResultsCubit({
     required this.standings,

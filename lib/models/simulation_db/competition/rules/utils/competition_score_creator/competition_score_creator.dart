@@ -4,7 +4,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/general/
 import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/unary_algorithm.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
@@ -41,7 +41,7 @@ class IndividualCompetitionScoreCreatingContext
     required this.lastJumpScore,
   });
 
-  final SingleJumpScore<Jumper> lastJumpScore;
+  final JumpScore<Jumper> lastJumpScore;
 }
 
 class TeamCompetitionScoreCreatingContext
@@ -58,7 +58,7 @@ class TeamCompetitionScoreCreatingContext
   });
 
   final int? currentGroup;
-  final SingleJumpScore<Jumper> lastJumpScore;
+  final JumpScore<Jumper> lastJumpScore;
 }
 
 abstract class CompetitionScoreCreator<S extends CompetitionScore>

@@ -3,7 +3,7 @@ import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/classification_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/simple_points_score.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
@@ -20,7 +20,7 @@ class ScoreSerializer implements SimulationDbPartSerializer<Score> {
   }
 
   Json _serializeAppropriateScore(Score score) {
-    if (score is SingleJumpScore) {
+    if (score is JumpScore) {
       return _serializeSingleJumpScore(score);
     } else if (score is CompetitionJumperScore) {
       return _serializeCompetitionJumperScore(score);
@@ -35,16 +35,29 @@ class ScoreSerializer implements SimulationDbPartSerializer<Score> {
     }
   }
 
-  Json _serializeSingleJumpScore(SingleJumpScore score) {
-    return {
-      'type': 'single_jump_score',
-      'entityId': idsRepo.idOf(score.entity),
-      'distancePoints': score.distancePoints,
-      'judgesPoints': score.judgesPoints,
-      'gatePoints': score.gatePoints,
-      'windPoints': score.windPoints,
-      'jumpRecordId': idsRepo.idOf(score.jumpRecord),
-    };
+  Json _serializeSingleJumpScore(JumpScore score) {
+    if (score is DefaultJumpScore) {
+      return {
+        'type': 'default_jump_score',
+        'entityId': idsRepo.idOf(score.entity),
+        'distancePoints': score.distancePoints,
+        'judgesPoints': score.judgesPoints,
+        'gatePoints': score.gatePoints,
+        'windPoints': score.windPoints,
+        'jumpRecordId': idsRepo.idOf(score.jumpRecord),
+      };
+    } else if (score is SimpleJumpScore) {
+      return {
+        'type': 'simple_jump_score',
+        'entityId': idsRepo.idOf(score.entity),
+        'points': score.points,
+        'jumpRecordId': idsRepo.idOf(score.jumpRecord),
+      };
+    } else {
+      throw ArgumentError(
+        'An invalid type of JumpScore when serializing (we do not have a proper serializer for ${score.runtimeType} class)',
+      );
+    }
   }
 
   Json _serializeCompetitionJumperScore(CompetitionJumperScore score) {

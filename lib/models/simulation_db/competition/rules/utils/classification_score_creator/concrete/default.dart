@@ -3,13 +3,13 @@ import 'package:sj_manager/models/simulation_db/competition/competition_labels.d
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/classification_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
 abstract class DefaultClassificationScoreCreator<
     E,
     C extends DefaultClassificationScoreCreatingContext<E>,
-    SJS extends SingleJumpScore> extends ClassificationScoreCreator<E, C> {
+    SJS extends JumpScore> extends ClassificationScoreCreator<E, C> {
   late C context;
   var significantCompetitions = <Competition>[];
   var competitionScores = <CompetitionScore>[];

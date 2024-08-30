@@ -15,7 +15,7 @@ class DefaultLinearIndividualCompetitionScoreCreator
     } else {
       return CompetitionJumperScore(
         entity: context.entity,
-        points: context.currentScore!.points,
+        points: context.currentScore!.points + context.lastJumpScore.points,
         jumpScores: [
           ...context.currentScore!.jumpScores,
           context.lastJumpScore,

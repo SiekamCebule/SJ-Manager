@@ -2,19 +2,19 @@ import 'dart:math';
 
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/util_functions.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart';
 
 class DefaultClassicJumpScoreCreator extends JumpScoreCreator {
   late JumpScoreCreatingContext _context;
 
   @override
-  SingleJumpScore compute(JumpScoreCreatingContext context) {
+  JumpScore compute(JumpScoreCreatingContext context) {
     _context = context;
 
     final gatePoints =
         (_context.gate - _context.initialGate) * _context.hill.pointsForGate;
 
-    return SingleJumpScore(
+    return DefaultJumpScore(
       entity: _context.entity,
       distancePoints: _calculateDistancePoints(),
       judgesPoints: _calculateJudgesPoints(),

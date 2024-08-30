@@ -11,6 +11,8 @@ class TeamFacts {
     this.record,
   });
 
+  const TeamFacts.empty() : this(stars: 0, record: null);
+
   final int stars;
   final SimpleJump? record;
 
