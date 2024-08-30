@@ -374,7 +374,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                           context: context,
                                           title: 'Rodzaj limitu',
                                           content:
-                                              'Limit miękki pozwala na przejście większej ilości zawodników w przypadku ex aequo. Nie pozwala na to limit ścisły');
+                                              'Limit miękki pozwala na przejście większej ilości zawodników w przypadku ex aequo. Nie pozwala na to limit dosłowny');
                                     },
                                   ),
                                 ),

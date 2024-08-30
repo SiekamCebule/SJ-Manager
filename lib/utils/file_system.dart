@@ -7,9 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:path/path.dart' as path;
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
+import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/team/team.dart';
 
 class PlarformSpecificPathsCache {
   PlarformSpecificPathsCache();
@@ -25,11 +30,11 @@ class PlarformSpecificPathsCache {
 File userDataFile(PlarformSpecificPathsCache pathsCache, String fileName) {
   final documentsDir = pathsCache.applicationDocumentsDirectory;
   final databaseDir = Directory(path.join(documentsDir.path, 'sj_manager', 'user_data'));
-  
+
   if (!databaseDir.existsSync()) {
     databaseDir.createSync(recursive: true);
   }
-  
+
   final file = File(path.join(databaseDir.path, fileName));
   return file;
 }
@@ -41,19 +46,19 @@ File databaseFile(PlarformSpecificPathsCache pathsCache, String fileName) {
 Directory userDataDirectory(PlarformSpecificPathsCache pathsCache, String directoryName) {
   final documentsDir = pathsCache.applicationDocumentsDirectory;
   final databaseDir = Directory(path.join(documentsDir.path, 'sj_manager', 'user_data'));
-  
+
   if (!databaseDir.existsSync()) {
     databaseDir.createSync(recursive: true);
   }
-  
+
   if (directoryName.isEmpty) return Directory(databaseDir.path);
-  
+
   final dir = Directory(path.join(databaseDir.path, directoryName));
-  
+
   if (!dir.existsSync()) {
     dir.createSync(recursive: true);
   }
-  
+
   return dir;
 }
 
@@ -79,22 +84,34 @@ File fileByNameWithoutExtension(Directory directory, String name) {
   throw FileSystemException('No file found with the base name $name');
 }
 
-
-
 bool directoryIsValidForDatabase(BuildContext context, Directory directory) {
-  final correctFolderStructure = {
-    fileInDirectory(directory,
-            path.basename(context.read<DbItemsFilePathsRegistry>().get<MaleJumper>()))
-        .path,
-    fileInDirectory(directory,
-            path.basename(context.read<DbItemsFilePathsRegistry>().get<FemaleJumper>()))
-        .path,
-    fileInDirectory(directory,
-            path.basename(context.read<DbItemsFilePathsRegistry>().get<Hill>()))
-        .path,
-  };
-  final currentFolderStructure = directory.listSync().map((file) => file.path).toSet();
+  final dbRegistry = context.read<DbItemsFilePathsRegistry>();
 
+  // Define the correct folder structure using the registry paths directly
+  final correctFolderStructure = {
+    fileInDirectory(directory, dbRegistry.get<MaleJumper>()).path,
+    fileInDirectory(directory, dbRegistry.get<FemaleJumper>()).path,
+    fileInDirectory(directory, dbRegistry.get<Hill>()).path,
+    fileInDirectory(directory, dbRegistry.get<EventSeriesSetup>()).path,
+    fileInDirectory(directory, dbRegistry.get<EventSeriesCalendarPreset>()).path,
+    fileInDirectory(directory, dbRegistry.get<DefaultCompetitionRulesPreset>()).path,
+    fileInDirectory(directory, dbRegistry.get<Team>()).path,
+    fileInDirectory(directory, dbRegistry.get<Country>()).path,
+  };
+
+  // Create a set to store all the file paths found in the directory and subdirectories
+  final currentFolderStructure = <String>{};
+
+  for (var entity in directory.listSync(recursive: true)) {
+    if (entity is File) {
+      currentFolderStructure.add(entity.path);
+    }
+  }
+
+  print('correct: $correctFolderStructure');
+  print('current: $currentFolderStructure');
+
+  // Check if all required files are present
   return currentFolderStructure.containsAll(correctFolderStructure);
 }
 
@@ -151,7 +168,6 @@ Future<void> copyAssetsDir(String assetsDirPath, Directory destination) async {
     print('Error copying assets directory: $e');
   }
 }
-
 
 List<String> filePathsInDirectory(Directory directory) {
   final fsEntities = directory.listSync();

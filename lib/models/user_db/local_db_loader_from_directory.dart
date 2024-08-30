@@ -31,11 +31,11 @@ class LocalDbLoaderFromDirectory {
   Future<ItemsReposRegistry> load({required BuildContext context}) async {
     _context = context;
     _filePaths = context.read<DbItemsFilePathsRegistry>();
-    final registry = ItemsReposRegistry();
+    _registry = ItemsReposRegistry();
     await _registerEditableItemsRepos();
     await _registerCountries();
     await _registerTeams();
-    return registry;
+    return _registry;
   }
 
   Future<void> _registerEditableItemsRepos() async {
