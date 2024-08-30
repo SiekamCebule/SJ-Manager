@@ -5,6 +5,7 @@ import 'package:osje_sim/osje_sim.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/concrete/individual/default_linear.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/concrete/team/default_linear.dart';
+
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
@@ -14,7 +15,7 @@ import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
 import 'package:sj_manager/models/user_db/team/country_team.dart';
 
-import 'default_competition_score_creators_test.mocks.dart';
+import 'competition_rules_utilities.mocks.dart';
 
 @GenerateMocks([
   IndividualCompetitionScoreCreatingContext,

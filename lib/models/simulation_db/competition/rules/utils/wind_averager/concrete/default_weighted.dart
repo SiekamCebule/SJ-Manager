@@ -1,6 +1,5 @@
 import 'package:osje_sim/osje_sim.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/concrete/default.dart';
-import 'package:sj_manager/utils/averaging.dart';
 
 class DefaultWeightedWindAverager extends DefaultWindAverager {
   DefaultWeightedWindAverager({
@@ -10,8 +9,8 @@ class DefaultWeightedWindAverager extends DefaultWindAverager {
 
   @override
   Wind computeAverage() {
-    final weights = context.windMeasurementWeights;
-    if (weights.length !=
+    /*final weights = context.windMeasurementWeights;
+    if (weights!.length !=
         complete.length +
             (partiallyIncomplete != null ? 1 : 0) +
             (skipNonAchievedSensors ? 0 : whollyIncomplete.length)) {
@@ -53,13 +52,9 @@ class DefaultWeightedWindAverager extends DefaultWindAverager {
       if (partiallyIncomplete != null) partiallyIncomplete!.direction.value,
     ];
 
-    final averageWindDirection = Degrees(averageDirection(
-      directions
-          .map((direction) => direction * weights[directions.indexOf(direction)])
-          .toList(),
-      totalWeight.toDouble(),
-    ));
+    final averageWindDirection = Degrees(averageDirection(directions, weights));
 
-    return Wind(direction: averageWindDirection, strength: averageWindStrength);
+    return Wind(direction: averageWindDirection, strength: averageWindStrength);*/
+    throw UnimplementedError();
   }
 }

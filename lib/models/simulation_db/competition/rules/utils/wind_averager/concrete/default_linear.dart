@@ -10,28 +10,32 @@ class DefaultLinearWindAverager extends DefaultWindAverager {
 
   @override
   Wind computeAverage() {
-    final divider = complete.length + (partialIncompletionFactor ?? 0);
+    double divider = countedWinds.length.toDouble();
+    if (partiallyIncomplete != null) {
+      divider += partialIncompletionFactor!;
+    }
 
     var averageWindStrength =
-        complete.fold<double>(0, (sum, wind) => sum + wind.strength);
-    if (computePreciselyPartialMeasurement) {
-      final first = partiallyIncomplete?.strength ?? 0;
-      final second = partialIncompletionFactor ?? 0;
-      averageWindStrength += (first * second);
-    }
-    if (!skipNonAchievedSensors) {
-      averageWindStrength += whollyIncomplete.fold(0, (sum, wind) => sum + wind.strength);
+        countedWinds.fold<double>(0, (sum, wind) => sum + wind.strength);
+    if (partiallyIncomplete != null) {
+      averageWindStrength += partiallyIncomplete!.strength * partialIncompletionFactor!;
     }
     averageWindStrength /= divider;
 
     final directions = [
-      if (!skipNonAchievedSensors)
-        ...whollyIncomplete.map((wind) => wind.direction.value),
-      ...complete.map((wind) => wind.direction.value),
+      ...countedWinds.map((wind) => wind.direction.value),
       if (partiallyIncomplete != null) partiallyIncomplete!.direction.value,
     ];
-    final averageWindDirection =
-        Degrees(averageDirection(directions, divider.toDouble()));
+    late double lastWeight = 1.0;
+    if (partiallyIncomplete != null) {
+      lastWeight = partialIncompletionFactor!;
+    }
+    final averageWindDirection = Degrees(
+      averageDirectionWeightedForLast(
+        directions,
+        lastWeight: lastWeight,
+      ),
+    );
 
     return Wind(direction: averageWindDirection, strength: averageWindStrength);
   }

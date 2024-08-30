@@ -16,8 +16,8 @@ class WindAveragingContext extends EntityRelatedAlgorithmContext {
     required this.initialGate,
     required this.gate,
     required this.windMeasurement,
-    required this.windMeasurementWeights,
-    required this.jumpRecord,
+    this.windMeasurementWeights,
+    required this.distance,
   });
 
   // TODO: final SimulationData simulationData;
@@ -30,8 +30,8 @@ class WindAveragingContext extends EntityRelatedAlgorithmContext {
   final int initialGate;
   final int gate;
   final WindMeasurement windMeasurement;
-  final List<double> windMeasurementWeights;
-  final JumpSimulationRecord jumpRecord;
+  final List<double>? windMeasurementWeights;
+  final double distance;
 }
 
 abstract class WindAverager implements UnaryAlgorithm<WindAveragingContext, Wind> {

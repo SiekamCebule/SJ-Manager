@@ -631,7 +631,7 @@ packages:
     description:
       path: "."
       ref: dev
-      resolved-ref: dcf9e2630275eef722ca03a0f2b5049f5187cdae
+      resolved-ref: "72541c7fbe0348c1ace2166b523936874a24f60f"
       url: "https://github.com/SiekamCebule/osje-sim.git"
     source: git
     version: "1.0.0"
