@@ -3,8 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/ui/responsiveness/responsive_builder.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
-import 'package:sj_manager/ui/screens/settings/widgets/app_color_scheme_dropdown_list_tile.dart';
-import 'package:sj_manager/ui/screens/settings/widgets/language_dropdown_list_tile.dart';
+import 'package:sj_manager/ui/screens/settings/widgets/app_color_scheme_dropdown.dart';
+import 'package:sj_manager/ui/screens/settings/widgets/app_theme_brigthness_dropdown.dart';
+import 'package:sj_manager/ui/screens/settings/widgets/language_dropdown.dart';
 
 part 'large/__large.dart';
 

@@ -8,7 +8,9 @@ part of 'team_facts.dart';
 
 TeamFacts _$TeamFactsFromJson(Map<String, dynamic> json) => TeamFacts(
       stars: (json['stars'] as num).toInt(),
-      record: SimpleJump.fromJson(json['record'] as Map<String, dynamic>),
+      record: json['record'] == null
+          ? null
+          : SimpleJump.fromJson(json['record'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$TeamFactsToJson(TeamFacts instance) => <String, dynamic>{

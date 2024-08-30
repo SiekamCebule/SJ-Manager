@@ -13,9 +13,11 @@ class _Large extends StatelessWidget {
       body: const Center(
         child: Column(
           children: [
-            LanguageDropdownListTile(),
+            LanguageDropdown(),
             gap,
-            AppColorSchemeDropdownListTile(),
+            AppColorSchemeDropdown(),
+            gap,
+            AppThemeBrigthnessDropdown(),
           ],
         ),
       ),

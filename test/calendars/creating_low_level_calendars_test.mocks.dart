@@ -22,9 +22,9 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ru
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeCompetitionRules_0<T1> extends _i1.SmartFake
+class _FakeDefaultCompetitionRules_0<T1> extends _i1.SmartFake
     implements _i2.DefaultCompetitionRules<T1> {
-  _FakeCompetitionRules_0(
+  _FakeDefaultCompetitionRules_0(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -33,11 +33,12 @@ class _FakeCompetitionRules_0<T1> extends _i1.SmartFake
         );
 }
 
-/// A class which mocks [CompetitionRules].
+/// A class which mocks [DefaultCompetitionRules].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCompetitionRules<T> extends _i1.Mock implements _i2.DefaultCompetitionRules<T> {
-  MockCompetitionRules() {
+class MockDefaultCompetitionRules<T> extends _i1.Mock
+    implements _i2.DefaultCompetitionRules<T> {
+  MockDefaultCompetitionRules() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -56,7 +57,7 @@ class MockCompetitionRules<T> extends _i1.Mock implements _i2.DefaultCompetition
   @override
   _i2.DefaultCompetitionRules<T> get competitionRules => (super.noSuchMethod(
         Invocation.getter(#competitionRules),
-        returnValue: _FakeCompetitionRules_0<T>(
+        returnValue: _FakeDefaultCompetitionRules_0<T>(
           this,
           Invocation.getter(#competitionRules),
         ),
@@ -67,4 +68,23 @@ class MockCompetitionRules<T> extends _i1.Mock implements _i2.DefaultCompetition
         Invocation.getter(#props),
         returnValue: <Object?>[],
       ) as List<Object?>);
+
+  @override
+  _i2.DefaultCompetitionRules<T> copyWith(
+          {List<_i3.DefaultCompetitionRoundRules<T>>? rounds}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #copyWith,
+          [],
+          {#rounds: rounds},
+        ),
+        returnValue: _FakeDefaultCompetitionRules_0<T>(
+          this,
+          Invocation.method(
+            #copyWith,
+            [],
+            {#rounds: rounds},
+          ),
+        ),
+      ) as _i2.DefaultCompetitionRules<T>);
 }

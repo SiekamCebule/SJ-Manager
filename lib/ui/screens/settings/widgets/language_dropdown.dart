@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/ui/providers/locale_notifier.dart';
+import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
+import 'package:sj_manager/ui/providers/locale_cubit.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 
-class LanguageDropdownListTile extends StatelessWidget {
-  const LanguageDropdownListTile({super.key});
+class LanguageDropdown extends StatelessWidget {
+  const LanguageDropdown({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +22,15 @@ class LanguageDropdownListTile extends StatelessWidget {
             leading: const Icon(Symbols.language),
           ),
         ),
-        DropdownMenu(
-          initialSelection: context.read<LocaleCubit>().languageCode,
-          dropdownMenuEntries: [
+        MyDropdownField(
+          initial: context.read<LocaleCubit>().languageCode,
+          entries: [
             DropdownMenuEntry(value: 'pl', label: translate(context).polish),
             DropdownMenuEntry(value: 'en', label: translate(context).english),
             DropdownMenuEntry(value: 'cs', label: translate(context).czech),
           ],
-          onSelected: (selected) {
-            context.read<LocaleCubit>().update(Locale(selected!));
+          onChange: (selected) async {
+            await context.read<LocaleCubit>().update(Locale(selected!));
           },
         ),
       ],

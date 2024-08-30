@@ -49,7 +49,6 @@ class ItemsReposRegistry extends ItemsRepo<ItemsRepo> with EquatableMixin {
 
   ItemsRepo byTypeArgument(Type type) {
     final singleOrNull = _repos.where((repo) {
-      print('repo type: ${repo.itemsType}, tpe: $type');
       return repo.itemsType == type;
     }).singleOrNull;
     if (singleOrNull == null) {

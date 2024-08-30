@@ -23,8 +23,8 @@ void main() {
         .copyWith(locality: 'Sapporo', hs: 137);
     final vikersund = const Hill.empty(country: Country.emptyNone())
         .copyWith(locality: 'Vikersund', hs: 240);
-    final ind = MockCompetitionRules<Jumper>();
-    final team = MockCompetitionRules<Team>();
+    final ind = MockDefaultCompetitionRules<Jumper>();
+    final team = MockDefaultCompetitionRules<Team>();
 
     const week = Duration(days: 7);
     const day = Duration(days: 1);

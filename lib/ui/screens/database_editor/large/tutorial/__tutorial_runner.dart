@@ -29,12 +29,22 @@ class _TutorialRunner {
             ),
       ),
     );
+    print('color of text in tutorial: ${Theme.of(context).textTheme.bodyLarge!.color}');
+    final textColor = Theme.of(context).brightness == Brightness.dark
+        ? Theme.of(context).colorScheme.onSurface
+        : Theme.of(context).colorScheme.surface;
+    final shadowColor = Theme.of(context).brightness == Brightness.dark
+        ? Theme.of(context).colorScheme.surface.blendWithBg(Brightness.dark, 0.15)
+        : Theme.of(context).colorScheme.onSurface.blendWithBg(Brightness.light, -0.05);
+    final textStyle = Theme.of(context).textTheme.bodyLarge!.copyWith(color: textColor);
     return TutorialCoachMark(
       textSkip: 'Pomiń przewodnik',
-      textStyleSkip: Theme.of(context).textTheme.headlineSmall!,
+      textStyleSkip:
+          Theme.of(context).textTheme.headlineSmall!.copyWith(color: textColor),
       opacityShadow: 0.935,
       pulseEnable: false,
       alignSkip: const Alignment(0.98, 0.88),
+      colorShadow: shadowColor,
       targets: [
         TargetFocus(
           shape: ShapeLightFocus.RRect,
@@ -51,7 +61,7 @@ class _TutorialRunner {
                     padding: const EdgeInsets.only(left: 25.0),
                     child: Text(
                       'Możesz edytować 6 różnych rodzajów danych',
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: textStyle,
                     ),
                   ),
                   const Gap(15),
@@ -79,7 +89,7 @@ class _TutorialRunner {
                         padding: const EdgeInsets.only(left: 25.0),
                         child: Text(
                           'W tym miejscu widzisz listę elementów. Po kliknięciu na jeden z nich wyświetli się edytor',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          style: textStyle,
                         ),
                       ),
                       const Gap(15),
@@ -105,7 +115,7 @@ class _TutorialRunner {
                     padding: const EdgeInsets.only(left: 25.0),
                     child: Text(
                       'Dodawaj i usuwaj dane używajac tych przycisków',
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: textStyle,
                     ),
                   ),
                   const Gap(15),
@@ -124,14 +134,14 @@ class _TutorialRunner {
             TargetContent(
               padding: EdgeInsets.zero,
               align: ContentAlign.custom,
-              customPosition: CustomTargetContentPosition(top: 200, right: 450),
+              customPosition: CustomTargetContentPosition(top: 200, right: 400),
               child: Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 25.0),
                     child: Text(
                       'Kiedy wybierzesz jakiś przedmiot, pojawi się tu zaawansowany edytor',
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: textStyle,
                     ),
                   ),
                   const Gap(15),
@@ -155,7 +165,7 @@ class _TutorialRunner {
                     padding: const EdgeInsets.only(left: 25.0),
                     child: Text(
                       'Pokaż tylko te przedmioty, które cię interesują. Pomogą ci w tym filtry',
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: textStyle,
                     ),
                   ),
                   const Gap(15),
@@ -179,7 +189,7 @@ class _TutorialRunner {
                     padding: const EdgeInsets.only(left: 25.0),
                     child: Text(
                       'Możesz wczytać bazę danych z dysku, lub stworzyć kopię w wybranym folderze',
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: textStyle,
                     ),
                   ),
                   const Gap(15),
