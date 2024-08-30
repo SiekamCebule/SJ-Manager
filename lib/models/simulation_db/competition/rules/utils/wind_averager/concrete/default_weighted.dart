@@ -1,5 +1,7 @@
 import 'package:osje_sim/osje_sim.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/concrete/default.dart';
+import 'package:sj_manager/utils/averaging.dart';
+import 'package:sj_manager/utils/math.dart';
 
 class DefaultWeightedWindAverager extends DefaultWindAverager {
   DefaultWeightedWindAverager({
@@ -9,52 +11,34 @@ class DefaultWeightedWindAverager extends DefaultWindAverager {
 
   @override
   Wind computeAverage() {
-    /*final weights = context.windMeasurementWeights;
-    if (weights!.length !=
-        complete.length +
-            (partiallyIncomplete != null ? 1 : 0) +
-            (skipNonAchievedSensors ? 0 : whollyIncomplete.length)) {
+    //const ok = 2;
+    final weights = context.windMeasurementWeights!;
+    weights.length = (countedWinds.length + (partiallyIncomplete != null ? 1 : 0));
+
+    final appropriateWeightsCount =
+        countedWinds.length + (partiallyIncomplete != null ? 1 : 0);
+    if (weights.length != appropriateWeightsCount) {
       throw ArgumentError(
-          "The length of weights must match the number of wind measurements being averaged.");
+        "The length of weights must match the number of wind measurements being averaged (there is ${weights.length}, but should be $appropriateWeightsCount)",
+      );
     }
 
-    int currentIndex = 0;
-
-    double weightedSumStrength = 0;
-    double totalWeight = 0;
-
-    for (var wind in complete) {
-      weightedSumStrength += wind.strength * weights[currentIndex];
-      totalWeight += weights[currentIndex];
-      currentIndex++;
+    if (partiallyIncomplete != null) {
+      weights[weights.length - 1] =
+          weights[weights.length - 1] * partialIncompletionFactor!;
     }
 
-    if (computePreciselyPartialMeasurement && partiallyIncomplete != null) {
-      weightedSumStrength += (partiallyIncomplete!.strength * weights[currentIndex]);
-      totalWeight += weights[currentIndex];
-      currentIndex++;
-    }
-
-    if (!skipNonAchievedSensors) {
-      for (var wind in whollyIncomplete) {
-        weightedSumStrength += wind.strength * weights[currentIndex];
-        totalWeight += weights[currentIndex];
-        currentIndex++;
-      }
-    }
-
-    final averageWindStrength = weightedSumStrength / totalWeight;
-
-    final directions = [
-      if (!skipNonAchievedSensors)
-        ...whollyIncomplete.map((wind) => wind.direction.value),
-      ...complete.map((wind) => wind.direction.value),
+    final angles = [
+      ...countedWinds.map((wind) => wind.direction.value),
       if (partiallyIncomplete != null) partiallyIncomplete!.direction.value,
     ];
+    final strengths = [
+      ...countedWinds.map((wind) => wind.strength),
+      if (partiallyIncomplete != null) partiallyIncomplete!.strength,
+    ];
+    final averageDir = averageDirection(angles, weights);
+    final averageStrength = weightedAverage(strengths, weights);
 
-    final averageWindDirection = Degrees(averageDirection(directions, weights));
-
-    return Wind(direction: averageWindDirection, strength: averageWindStrength);*/
-    throw UnimplementedError();
+    return Wind(direction: Degrees(averageDir), strength: averageStrength);
   }
 }
