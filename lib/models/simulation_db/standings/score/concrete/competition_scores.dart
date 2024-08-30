@@ -1,30 +1,30 @@
 import 'package:sj_manager/models/simulation_db/standings/score/mixins/has_points_mixin.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/single_jump_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 
-mixin CompetitionScore<E, SJS extends SingleJumpScore> on HasPointsMixin<E>, Score<E> {
+mixin CompetitionScore<E, SJS extends JumpScore> on HasPointsMixin<E>, Score<E> {
   List<SJS> get jumpScores;
 }
 
 class CompetitionJumperScore<E extends Jumper> extends Score<E>
-    with HasPointsMixin<E>, CompetitionScore<E, SingleJumpScore<E>> {
+    with HasPointsMixin<E>, CompetitionScore<E, JumpScore<E>> {
   const CompetitionJumperScore({
     required super.entity,
     required double points,
-    required List<SingleJumpScore<E>> jumpScores,
+    required List<JumpScore<E>> jumpScores,
   })  : _points = points,
         _jumpScores = jumpScores;
 
   final double _points;
-  final List<SingleJumpScore<E>> _jumpScores;
+  final List<JumpScore<E>> _jumpScores;
 
   @override
   List<double> get components => [_points];
 
   @override
-  List<SingleJumpScore<E>> get jumpScores => _jumpScores;
+  List<JumpScore<E>> get jumpScores => _jumpScores;
 
   @override
   List<Object?> get props => [
@@ -35,7 +35,7 @@ class CompetitionJumperScore<E extends Jumper> extends Score<E>
 }
 
 class CompetitionTeamScore<E extends Team> extends Score<E>
-    with HasPointsMixin<E>, CompetitionScore<E, SingleJumpScore<Jumper>> {
+    with HasPointsMixin<E>, CompetitionScore<E, JumpScore<Jumper>> {
   const CompetitionTeamScore({
     required super.entity,
     required double points,
@@ -53,7 +53,7 @@ class CompetitionTeamScore<E extends Team> extends Score<E>
   List<double> get components => [_points];
 
   @override
-  List<SingleJumpScore<Jumper>> get jumpScores {
+  List<JumpScore<Jumper>> get jumpScores {
     return jumperScores.expand((score) => score.jumpScores).toList();
   }
 

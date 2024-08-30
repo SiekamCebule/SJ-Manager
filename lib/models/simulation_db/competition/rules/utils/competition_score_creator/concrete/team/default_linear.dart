@@ -1,6 +1,7 @@
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
+import 'package:collection/collection.dart';
 
 class DefaultLinearTeamCompetitionScoreCreator
     extends CompetitionScoreCreator<CompetitionTeamScore<CompetitionTeam>> {
@@ -36,6 +37,18 @@ class DefaultLinearTeamCompetitionScoreCreator
           return jumperScore;
         }
       }).toList();
+      final jumperHaveScore = updatedJumperScores.singleWhereOrNull(
+              (jumperScore) => jumperScore.entity == context.lastJumpScore.entity) !=
+          null;
+      if (!jumperHaveScore) {
+        updatedJumperScores.add(
+          CompetitionJumperScore(
+            entity: context.lastJumpScore.entity,
+            points: context.lastJumpScore.points,
+            jumpScores: [context.lastJumpScore],
+          ),
+        );
+      }
       return CompetitionTeamScore(
         entity: context.entity,
         points: context.currentScore!.points + context.lastJumpScore.points,
