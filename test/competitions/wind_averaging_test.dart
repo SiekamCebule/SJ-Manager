@@ -1,0 +1,89 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import 'package:osje_sim/osje_sim.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/concrete/default_linear.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/wind_averager.dart';
+
+import 'wind_averaging_test.mocks.dart';
+
+@GenerateMocks([WindAveragingContext])
+void main() {
+  group('DefaultLinearWindAverager Tests', () {
+    late final WindAveragingContext context;
+
+    setUpAll(() {
+      context = MockWindAveragingContext();
+      when(context.distance).thenReturn(120);
+      when(context.windMeasurement).thenReturn(
+        WindMeasurement(
+          winds: {
+            (0, 22): Wind(direction: Degrees(121.5), strength: 1.44),
+            (22, 44): Wind(direction: Degrees(180.5), strength: 1.7),
+            (44, 66): Wind(direction: Degrees(40.5), strength: 3.0),
+            (66, 88): Wind(direction: Degrees(200.9), strength: 1.01),
+            (88, 110): Wind(direction: Degrees(140.5), strength: 0.66),
+            (110, 132): Wind(direction: Degrees(90.11), strength: 3.5),
+            (132, 154): Wind(direction: Degrees(190.5), strength: 5.0),
+          },
+        ),
+      );
+    });
+
+    test(
+        'Scenario 1: skipNonAchievedSensors = true, computePreciselyPartialMeasurement = true',
+        () {
+      final averager = DefaultLinearWindAverager(
+        skipNonAchievedSensors: true,
+        computePreciselyPartialMeasurement: true,
+      );
+
+      final averageWind = averager.compute(context);
+
+      expect(averageWind.strength, closeTo(1.722, 0.01));
+      expect(averageWind.direction.value, closeTo(138, 0.1));
+    });
+
+    test(
+        'Scenario 2: skipNonAchievedSensors = true, computePreciselyPartialMeasurement = false',
+        () {
+      final averager = DefaultLinearWindAverager(
+        skipNonAchievedSensors: true,
+        computePreciselyPartialMeasurement: false,
+      );
+
+      final averageWind = averager.compute(context);
+
+      expect(averageWind.strength, closeTo(1.885, 0.001));
+      expect(averageWind.direction.value, closeTo(131.7, 0.1));
+    });
+
+    test(
+        'Scenario 3: skipNonAchievedSensors = false, computePreciselyPartialMeasurement = true',
+        () {
+      final averager = DefaultLinearWindAverager(
+        skipNonAchievedSensors: false,
+        computePreciselyPartialMeasurement: true,
+      );
+
+      final averageWind = averager.compute(context);
+
+      expect(averageWind.strength, closeTo(2.33, 0.001));
+      expect(averageWind.direction.value, closeTo(143.1, 0.1));
+    });
+
+    test(
+        'Scenario 4: skipNonAchievedSensors = false, computePreciselyPartialMeasurement = false',
+        () {
+      final averager = DefaultLinearWindAverager(
+        skipNonAchievedSensors: false,
+        computePreciselyPartialMeasurement: false,
+      );
+
+      final averageWind = averager.compute(context);
+
+      expect(averageWind.strength, closeTo(2.33, 0.001));
+      expect(averageWind.direction.value, closeTo(143.1, 0.1));
+    });
+  });
+}

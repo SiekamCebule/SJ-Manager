@@ -9,8 +9,7 @@ abstract class DefaultWindAverager extends WindAverager with EquatableMixin {
   });
 
   late WindAveragingContext context;
-  final complete = <Wind>[];
-  final whollyIncomplete = <Wind>[];
+  var countedWinds = <Wind>[];
   Wind? partiallyIncomplete;
   double? partialIncompletionFactor;
 
@@ -21,27 +20,40 @@ abstract class DefaultWindAverager extends WindAverager with EquatableMixin {
   final bool computePreciselyPartialMeasurement;
 
   void fillCompletnessData() {
-    final distance = context.jumpRecord.distance;
+    final distance = context.distance;
     final measurement = context.windMeasurement;
     measurement.winds.forEach((range, wind) {
       if (distance <= range.$1) {
-        whollyIncomplete.add(wind);
-      } else if (distance > range.$1 && distance < range.$2) {
+        if (!skipNonAchievedSensors) {
+          countedWinds.add(wind);
+        }
+      } else if (distance > range.$1 &&
+          distance < range.$2 &&
+          (computePreciselyPartialMeasurement && skipNonAchievedSensors)) {
         partiallyIncomplete = wind;
-        partialIncompletionFactor = (distance - range.$1) / (range.$2 / range.$1);
+        partialIncompletionFactor = (distance - range.$1) / (range.$2 - range.$1);
       } else {
-        complete.add(wind);
+        countedWinds.add(wind);
       }
     });
+    print('counted winds: $countedWinds');
+    print('partially: $partiallyIncomplete');
   }
 
   Wind computeAverage();
 
   @override
   Wind compute(WindAveragingContext input) {
+    clearData();
     context = input;
     fillCompletnessData();
     return computeAverage();
+  }
+
+  void clearData() {
+    countedWinds = [];
+    partiallyIncomplete = null;
+    partialIncompletionFactor = null;
   }
 
   @override
