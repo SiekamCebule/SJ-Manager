@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/errors/translation_not_found.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/ui/providers/locale_notifier.dart';
+import 'package:sj_manager/ui/providers/locale_cubit.dart';
 
 class MultilingualString {
   const MultilingualString({

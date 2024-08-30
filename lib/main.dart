@@ -81,12 +81,10 @@ import 'package:sj_manager/repositories/settings/user_settings_repo.dart';
 import 'package:sj_manager/setup/default_loaders.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/app_initializer.dart';
-import 'package:sj_manager/ui/providers/locale_notifier.dart';
+import 'package:sj_manager/ui/providers/locale_cubit.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
 import 'package:sj_manager/ui/screens/main_screen/main_screen.dart';
-import 'package:sj_manager/ui/theme/app_theme_brightness_repo.dart';
-import 'package:sj_manager/ui/theme/app_color_scheme_repo.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/id_generator.dart';
@@ -125,325 +123,328 @@ void main() async {
   }
 
   runApp(
-    BlocProvider(
-      create: (context) => LocaleCubit(),
-      child: MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider<UserSettingsRepo>(
-            create: (context) => LocalUserSettingsRepo(
-              prefs: sharedPrefs,
-            ),
+    MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<UserSettingsRepo>(
+          create: (context) => LocalUserSettingsRepo(
+            prefs: sharedPrefs,
           ),
-          RepositoryProvider<CountryFlagsRepo>(
-            create: (context) {
-              final storageDirectory = userDataDirectory(
-                  pathsCache, path.join('database', 'countries', 'country_flags'));
-              return LocalStorageCountryFlagsRepo(
-                imagesDirectory: storageDirectory,
-                imagesExtension: 'png',
-              );
-            },
-          ),
-          RepositoryProvider(
-            create: (context) => ItemsReposRegistry(initial: {
-              EditableItemsRepo<MaleJumper>(),
-              EditableItemsRepo<FemaleJumper>(),
-              EditableItemsRepo<Hill>(),
-              EditableItemsRepo<EventSeriesSetup>(),
-              EditableItemsRepo<EventSeriesCalendarPreset>(),
-              EditableItemsRepo<DefaultCompetitionRulesPreset>(),
-              TeamsRepo(),
-              CountriesRepo(),
-            }),
-          ),
-          RepositoryProvider(create: (context) {
-            return DbEditingDefaultsRepo.appDefault();
-          }),
-          RepositoryProvider(
-            create: (context) => AppThemeBrightnessRepo(),
-          ),
-          RepositoryProvider(
-            create: (context) => AppColorSchemeRepo(),
-          ),
-        ],
-        child: MultiProvider(
+        ),
+      ],
+      child: BlocProvider(
+        create: (context) => LocaleCubit(
+          settingsRepo: context.read(),
+        ),
+        child: MultiRepositoryProvider(
           providers: [
-            Provider(create: (context) {
-              return DbItemImageGeneratingSetup<Jumper>(
-                imagesDirectory:
-                    databaseDirectory(pathsCache, path.join('jumper_images')),
-                toFileName: (jumper) {
-                  return '${jumper.country.code.toLowerCase()}_${jumper.name.toLowerCase()}_${jumper.surname.toLowerCase()}'
-                      .replaceAll(' ', '_');
-                },
-              );
-            }),
-            Provider(create: (context) {
-              return DbItemImageGeneratingSetup<Hill>(
-                  imagesDirectory:
-                      databaseDirectory(pathsCache, path.join('hill_images')),
-                  toFileName: (hill) {
-                    return '${hill.locality.toLowerCase()}_${hill.hs.truncate().toString()}'
-                        .replaceAll(' ', '_');
-                  });
-            }),
-            Provider(create: (context) {
-              return DbItemImageGeneratingSetup<EventSeriesLogoImageWrapper>(
-                  imagesDirectory:
-                      databaseDirectory(pathsCache, path.join('assets', 'logos')),
-                  toFileName: (logoImage) => logoImage.eventSeriesSetup.id);
-            }),
-            Provider(create: (context) {
-              return DbItemImageGeneratingSetup<EventSeriesTrophyImageWrapper>(
-                  imagesDirectory:
-                      databaseDirectory(pathsCache, path.join('assets', 'trophies')),
-                  toFileName: (logoImage) => logoImage.eventSeriesSetup.id);
-            }),
-            Provider(
-              create: (context) => DbItemsFilePathsRegistry(initial: {
-                MaleJumper: 'jumpers_male.json',
-                FemaleJumper: 'jumpers_female.json',
-                Hill: 'hills.json',
-                EventSeriesSetup: 'event_series_setups.json',
-                EventSeriesCalendarPreset: 'event_series_calendar_presets.json',
-                DefaultCompetitionRulesPreset: 'default_competition_rules_presets.json',
-                Country: path.join('countries', 'countries.json'),
-                Team: path.join('teams', 'teams.json'),
+            RepositoryProvider<CountryFlagsRepo>(
+              create: (context) {
+                final storageDirectory = userDataDirectory(
+                    pathsCache, path.join('database', 'countries', 'country_flags'));
+                return LocalStorageCountryFlagsRepo(
+                  imagesDirectory: storageDirectory,
+                  imagesExtension: 'png',
+                );
+              },
+            ),
+            RepositoryProvider(
+              create: (context) => ItemsReposRegistry(initial: {
+                EditableItemsRepo<MaleJumper>(),
+                EditableItemsRepo<FemaleJumper>(),
+                EditableItemsRepo<Hill>(),
+                EditableItemsRepo<EventSeriesSetup>(),
+                EditableItemsRepo<EventSeriesCalendarPreset>(),
+                EditableItemsRepo<DefaultCompetitionRulesPreset>(),
+                TeamsRepo(),
+                CountriesRepo(),
               }),
             ),
-            Provider(
-              create: (context) => DbItemsDirectoryPathsRegistry(
-                initial: {
-                  CountryFlag: path.join('countries', 'country_flags'),
-                },
-              ),
-            ),
-            Provider(create: (context) {
-              return ItemsIdsRepo();
+            RepositoryProvider(create: (context) {
+              return DbEditingDefaultsRepo.appDefault();
             }),
-            Provider<IdGenerator>(create: (context) {
-              return const NanoIdGenerator(size: 10);
-            }),
-            Provider(create: (context) {
-              return DbItemsJsonConfiguration<MaleJumper>(
-                fromJson: (json) => maleJumperFromJson(json, context),
-                toJson: (jumper) => jumper.toJson(
-                  countrySaver: const JsonCountryCodeSaver(),
-                ),
-              );
-            }),
-            Provider(create: (context) {
-              return DbItemsJsonConfiguration<FemaleJumper>(
-                fromJson: (json) => femaleJumperFromJson(json, context),
-                toJson: (jumper) => jumper.toJson(
-                  countrySaver: const JsonCountryCodeSaver(),
-                ),
-              );
-            }),
-            Provider(create: (context) {
-              return DbItemsJsonConfiguration<Hill>(
-                fromJson: (json) => hillFromJson(json, context),
-                toJson: (hill) => hill.toJson(
-                  countrySaver: const JsonCountryCodeSaver(),
-                ),
-              );
-            }),
-            Provider(create: (context) {
-              return DbItemsJsonConfiguration<Country>(
-                fromJson: (json) {
-                  return Country.fromJson(json);
-                },
-                toJson: (hill) => {},
-              );
-            }),
-            Provider(create: (context) {
-              return DbItemsJsonConfiguration<Team>(
-                fromJson: (json) => JsonTeamParser(
-                        countryLoader:
-                            JsonCountryLoaderByCode(repo: countriesRepo(context)))
-                    .parseTeam(json),
-                toJson: (team) =>
-                    JsonTeamSerializer(countrySaver: const JsonCountryCodeSaver())
-                        .serializeTeam(team),
-              );
-            }),
-            Provider(create: (context) {
-              return DbItemsJsonConfiguration<EventSeriesSetup>(
-                fromJson: (json) =>
-                    EventSeriesSetupParser(idsRepo: context.read()).parse(json),
-                toJson: (series) =>
-                    EventSeriesSetupSerializer(idsRepo: context.read()).serialize(series),
-              );
-            }),
-            Provider<SimulationDbPartParser<DefaultCompetitionRoundRules>>(
-                create: (context) => CompetitionRoundRulesParser(
-                      idsRepo: context.read(),
-                      entitiesLimitParser: EntitiesLimitParser(idsRepo: context.read()),
-                      positionsCreatorParser: StandingsPositionsCreatorParser(),
-                      teamCompetitionGroupRulesParser:
-                          TeamCompetitionGroupRulesParser(idsRepo: context.read()),
-                      koRoundRulesParser: KoRoundRulesParser(
-                        idsRepo: context.read(),
-                        advancementDeterminatorParser:
-                            KoRoundAdvancementDeterminatorLoader(
-                                idsRepo: context.read(),
-                                entitiesLimitParser: EntitiesLimitParser(
-                                  idsRepo: context.read(),
-                                )),
-                        koGroupsCreatorParser:
-                            KoGroupsCreatorLoader(idsRepo: context.read()),
-                      ),
-                      windAveragerParser: WindAveragerParser(idsRepo: context.read()),
-                      judgesCreatorParser: JudgesCreatorLoader(idsRepo: context.read()),
-                      competitionScoreCreatorParser:
-                          CompetitionScoreCreatorLoader(idsRepo: context.read()),
-                      jumpScoreCreatorParser:
-                          JumpScoreCreatorLoader(idsRepo: context.read()),
-                    )),
-            Provider<SimulationDbPartSerializer<DefaultCompetitionRoundRules>>(
-              create: (context) => DefaultCompetitionRoundRulesSerializer(
-                idsRepo: context.read(),
-                teamCompetitionGroupRulesSerializer:
-                    TeamCompetitionGroupRulesSerializer(idsRepo: context.read()),
-                entitiesLimitSerializer: EntitiesLimitSerializer(idsRepo: context.read()),
-                positionsCreatorSerializer: StandingsPositionsCreatorSerializer(),
-                koRoundRulesSerializer: KoRoundRulesSerializer(
-                  idsRepo: context.read(),
-                  advancementDeterminatorSerializer:
-                      KoRoundAdvancementDeterminatorSerializer(
-                    idsRepo: context.read(),
-                    entitiesLimitSerializer: EntitiesLimitSerializer(
-                      idsRepo: context.read(),
-                    ),
-                  ),
-                  koGroupsCreatorSerializer:
-                      KoGroupsCreatorSerializer(idsRepo: context.read()),
-                ),
-                windAveragerSerializer: WindAveragerSerializer(idsRepo: context.read()),
-                judgesCreatorSerializer: JudgesCreatorSerializer(idsRepo: context.read()),
-                competitionScoreCreatorSerializer:
-                    CompetitionScoreCreatorSerializer(idsRepo: context.read()),
-                jumpScoreCreatorSerializer:
-                    JumpScoreCreatorSerializer(idsRepo: context.read()),
-              ),
-            ),
-            Provider<SimulationDbPartParser<DefaultCompetitionRules>>(
-                create: (context) => DefaultCompetitionRulesParser(
-                    idsRepo: context.read(), roundRulesParser: context.read())),
-            Provider<SimulationDbPartSerializer<DefaultCompetitionRules>>(
-                create: (context) => DefaultCompetitionRulesSerializer(
-                    idsRepo: context.read(), roundRulesSerializer: context.read())),
-            Provider(create: (context) {
-              return DbItemsJsonConfiguration<DefaultCompetitionRulesProvider>(
-                fromJson: (json) => CompetitionRulesProviderParser(
-                  idsRepo: context.read(),
-                  rulesParser: context.read(),
-                ).parse(json),
-                toJson: (provider) => CompetitionRulesProviderSerializer(
-                  idsRepo: context.read(),
-                  rulesSerializer: context.read(),
-                ).serialize(provider),
-              );
-            }),
-            Provider(create: (context) {
-              return StandingsParser(
-                idsRepo: context.read(),
-                idGenerator: context.read(),
-                scoreParser: ScoreParser(
-                  idsRepo: context.read(),
-                ),
-                positionsCreatorParser: StandingsPositionsCreatorParser(),
-              );
-            }),
-            Provider<SimulationDbPartSerializer<Standings>>(create: (context) {
-              return StandingsSerializer(
-                idsRepo: context.read(),
-                scoreSerializer: ScoreSerializer(
-                  idsRepo: context.read(),
-                ),
-                positionsCreatorSerializer: StandingsPositionsCreatorSerializer(),
-              );
-            }),
-            Provider(create: (context) {
-              return DbItemsJsonConfiguration<EventSeriesCalendarPreset>(
-                fromJson: (json) => EventSeriesCalendarPresetParser(
-                  idsRepo: context.read(),
-                  calendarParser: EventSeriesCalendarParser(
-                    idsRepo: context.read(),
-                    idGenerator: context.read(),
-                    competitionParser: CompetitionParser(
-                      idsRepo: context.read(),
-                      rulesParser: context.read(),
-                      standingsParser: context.read(),
-                    ),
-                    classificationParser: ClassificationParser(
-                      idsRepo: context.read(),
-                      standingsParser: context.read(),
-                      defaultClassificationRulesParser: DefaultClassificationRulesParser(
-                        idsRepo: context.read(),
-                        classificationScoreCreatorParser:
-                            ClassificationScoreCreatorParser(idsRepo: context.read()),
-                      ),
-                    ),
-                  ),
-                ).parse(json),
-                toJson: (preset) => EventSeriesCalendarPresetSerializer(
-                  idsRepo: context.read(),
-                  calendarSerializer: EventSeriesCalendarSerializer(
-                    idsRepo: context.read(),
-                    competitionSerializer: CompetitionSerializer(
-                        idsRepo: context.read(),
-                        competitionRulesSerializer: context.read(),
-                        standingsSerializer: context.read()),
-                    classificationSerializer: ClassificationSerializer(
-                      idsRepo: context.read(),
-                      standingsSerializer: context.read(),
-                      defaultClassificationRulesSerializer:
-                          DefaultClassificationRulesSerializer(
-                        idsRepo: context.read(),
-                        classificationScoreCreatorSerializer:
-                            ClassificationScoreCreatorSerializer(idsRepo: context.read()),
-                      ),
-                    ),
-                  ),
-                ).serialize(preset),
-              );
-            }),
-            Provider(create: (context) {
-              return DbItemsJsonConfiguration<DefaultCompetitionRulesPreset>(
-                fromJson: (json) => CompetitionRulesPresetParser(
-                  idsRepo: context.read(),
-                  rulesParser: context.read(),
-                ).parse(json),
-                toJson: (preset) => CompetitionRulesPresetSerializer(
-                  idsRepo: context.read(),
-                  rulesSerializer: context.read(),
-                ).serialize(preset),
-              );
-            }),
-            Provider.value(
-              value: pathsCache,
-            ),
           ],
-          child: MultiBlocProvider(
+          child: MultiProvider(
             providers: [
-              BlocProvider(create: (context) {
-                return ThemeCubit(
-                  colorSchemeRepo: context.read(),
-                  brightnessRepo: context.read(),
+              Provider(create: (context) {
+                return DbItemImageGeneratingSetup<Jumper>(
+                  imagesDirectory:
+                      databaseDirectory(pathsCache, path.join('jumper_images')),
+                  toFileName: (jumper) {
+                    return '${jumper.country.code.toLowerCase()}_${jumper.name.toLowerCase()}_${jumper.surname.toLowerCase()}'
+                        .replaceAll(' ', '_');
+                  },
                 );
               }),
+              Provider(create: (context) {
+                return DbItemImageGeneratingSetup<Hill>(
+                    imagesDirectory:
+                        databaseDirectory(pathsCache, path.join('hill_images')),
+                    toFileName: (hill) {
+                      return '${hill.locality.toLowerCase()}_${hill.hs.truncate().toString()}'
+                          .replaceAll(' ', '_');
+                    });
+              }),
+              Provider(create: (context) {
+                return DbItemImageGeneratingSetup<EventSeriesLogoImageWrapper>(
+                    imagesDirectory:
+                        databaseDirectory(pathsCache, path.join('assets', 'logos')),
+                    toFileName: (logoImage) => logoImage.eventSeriesSetup.id);
+              }),
+              Provider(create: (context) {
+                return DbItemImageGeneratingSetup<EventSeriesTrophyImageWrapper>(
+                    imagesDirectory:
+                        databaseDirectory(pathsCache, path.join('assets', 'trophies')),
+                    toFileName: (logoImage) => logoImage.eventSeriesSetup.id);
+              }),
+              Provider(
+                create: (context) => DbItemsFilePathsRegistry(initial: {
+                  MaleJumper: 'jumpers_male.json',
+                  FemaleJumper: 'jumpers_female.json',
+                  Hill: 'hills.json',
+                  EventSeriesSetup: 'event_series_setups.json',
+                  EventSeriesCalendarPreset: 'event_series_calendar_presets.json',
+                  DefaultCompetitionRulesPreset: 'default_competition_rules_presets.json',
+                  Country: path.join('countries', 'countries.json'),
+                  Team: path.join('teams', 'teams.json'),
+                }),
+              ),
+              Provider(
+                create: (context) => DbItemsDirectoryPathsRegistry(
+                  initial: {
+                    CountryFlag: path.join('countries', 'country_flags'),
+                  },
+                ),
+              ),
+              Provider(create: (context) {
+                return ItemsIdsRepo();
+              }),
+              Provider<IdGenerator>(create: (context) {
+                return const NanoIdGenerator(size: 10);
+              }),
+              Provider(create: (context) {
+                return DbItemsJsonConfiguration<MaleJumper>(
+                  fromJson: (json) => maleJumperFromJson(json, context),
+                  toJson: (jumper) => jumper.toJson(
+                    countrySaver: const JsonCountryCodeSaver(),
+                  ),
+                );
+              }),
+              Provider(create: (context) {
+                return DbItemsJsonConfiguration<FemaleJumper>(
+                  fromJson: (json) => femaleJumperFromJson(json, context),
+                  toJson: (jumper) => jumper.toJson(
+                    countrySaver: const JsonCountryCodeSaver(),
+                  ),
+                );
+              }),
+              Provider(create: (context) {
+                return DbItemsJsonConfiguration<Hill>(
+                  fromJson: (json) => hillFromJson(json, context),
+                  toJson: (hill) => hill.toJson(
+                    countrySaver: const JsonCountryCodeSaver(),
+                  ),
+                );
+              }),
+              Provider(create: (context) {
+                return DbItemsJsonConfiguration<Country>(
+                  fromJson: (json) {
+                    return Country.fromJson(json);
+                  },
+                  toJson: (hill) => {},
+                );
+              }),
+              Provider(create: (context) {
+                return DbItemsJsonConfiguration<Team>(
+                  fromJson: (json) => JsonTeamParser(
+                          countryLoader:
+                              JsonCountryLoaderByCode(repo: countriesRepo(context)))
+                      .parseTeam(json),
+                  toJson: (team) =>
+                      JsonTeamSerializer(countrySaver: const JsonCountryCodeSaver())
+                          .serializeTeam(team),
+                );
+              }),
+              Provider(create: (context) {
+                return DbItemsJsonConfiguration<EventSeriesSetup>(
+                  fromJson: (json) =>
+                      EventSeriesSetupParser(idsRepo: context.read()).parse(json),
+                  toJson: (series) => EventSeriesSetupSerializer(idsRepo: context.read())
+                      .serialize(series),
+                );
+              }),
+              Provider<SimulationDbPartParser<DefaultCompetitionRoundRules>>(
+                  create: (context) => CompetitionRoundRulesParser(
+                        idsRepo: context.read(),
+                        entitiesLimitParser: EntitiesLimitParser(idsRepo: context.read()),
+                        positionsCreatorParser: StandingsPositionsCreatorParser(),
+                        teamCompetitionGroupRulesParser:
+                            TeamCompetitionGroupRulesParser(idsRepo: context.read()),
+                        koRoundRulesParser: KoRoundRulesParser(
+                          idsRepo: context.read(),
+                          advancementDeterminatorParser:
+                              KoRoundAdvancementDeterminatorLoader(
+                                  idsRepo: context.read(),
+                                  entitiesLimitParser: EntitiesLimitParser(
+                                    idsRepo: context.read(),
+                                  )),
+                          koGroupsCreatorParser:
+                              KoGroupsCreatorLoader(idsRepo: context.read()),
+                        ),
+                        windAveragerParser: WindAveragerParser(idsRepo: context.read()),
+                        judgesCreatorParser: JudgesCreatorLoader(idsRepo: context.read()),
+                        competitionScoreCreatorParser:
+                            CompetitionScoreCreatorLoader(idsRepo: context.read()),
+                        jumpScoreCreatorParser:
+                            JumpScoreCreatorLoader(idsRepo: context.read()),
+                      )),
+              Provider<SimulationDbPartSerializer<DefaultCompetitionRoundRules>>(
+                create: (context) => DefaultCompetitionRoundRulesSerializer(
+                  idsRepo: context.read(),
+                  teamCompetitionGroupRulesSerializer:
+                      TeamCompetitionGroupRulesSerializer(idsRepo: context.read()),
+                  entitiesLimitSerializer:
+                      EntitiesLimitSerializer(idsRepo: context.read()),
+                  positionsCreatorSerializer: StandingsPositionsCreatorSerializer(),
+                  koRoundRulesSerializer: KoRoundRulesSerializer(
+                    idsRepo: context.read(),
+                    advancementDeterminatorSerializer:
+                        KoRoundAdvancementDeterminatorSerializer(
+                      idsRepo: context.read(),
+                      entitiesLimitSerializer: EntitiesLimitSerializer(
+                        idsRepo: context.read(),
+                      ),
+                    ),
+                    koGroupsCreatorSerializer:
+                        KoGroupsCreatorSerializer(idsRepo: context.read()),
+                  ),
+                  windAveragerSerializer: WindAveragerSerializer(idsRepo: context.read()),
+                  judgesCreatorSerializer:
+                      JudgesCreatorSerializer(idsRepo: context.read()),
+                  competitionScoreCreatorSerializer:
+                      CompetitionScoreCreatorSerializer(idsRepo: context.read()),
+                  jumpScoreCreatorSerializer:
+                      JumpScoreCreatorSerializer(idsRepo: context.read()),
+                ),
+              ),
+              Provider<SimulationDbPartParser<DefaultCompetitionRules>>(
+                  create: (context) => DefaultCompetitionRulesParser(
+                      idsRepo: context.read(), roundRulesParser: context.read())),
+              Provider<SimulationDbPartSerializer<DefaultCompetitionRules>>(
+                  create: (context) => DefaultCompetitionRulesSerializer(
+                      idsRepo: context.read(), roundRulesSerializer: context.read())),
+              Provider(create: (context) {
+                return DbItemsJsonConfiguration<DefaultCompetitionRulesProvider>(
+                  fromJson: (json) => CompetitionRulesProviderParser(
+                    idsRepo: context.read(),
+                    rulesParser: context.read(),
+                  ).parse(json),
+                  toJson: (provider) => CompetitionRulesProviderSerializer(
+                    idsRepo: context.read(),
+                    rulesSerializer: context.read(),
+                  ).serialize(provider),
+                );
+              }),
+              Provider(create: (context) {
+                return StandingsParser(
+                  idsRepo: context.read(),
+                  idGenerator: context.read(),
+                  scoreParser: ScoreParser(
+                    idsRepo: context.read(),
+                  ),
+                  positionsCreatorParser: StandingsPositionsCreatorParser(),
+                );
+              }),
+              Provider<SimulationDbPartSerializer<Standings>>(create: (context) {
+                return StandingsSerializer(
+                  idsRepo: context.read(),
+                  scoreSerializer: ScoreSerializer(
+                    idsRepo: context.read(),
+                  ),
+                  positionsCreatorSerializer: StandingsPositionsCreatorSerializer(),
+                );
+              }),
+              Provider(create: (context) {
+                return DbItemsJsonConfiguration<EventSeriesCalendarPreset>(
+                  fromJson: (json) => EventSeriesCalendarPresetParser(
+                    idsRepo: context.read(),
+                    calendarParser: EventSeriesCalendarParser(
+                      idsRepo: context.read(),
+                      idGenerator: context.read(),
+                      competitionParser: CompetitionParser(
+                        idsRepo: context.read(),
+                        rulesParser: context.read(),
+                        standingsParser: context.read(),
+                      ),
+                      classificationParser: ClassificationParser(
+                        idsRepo: context.read(),
+                        standingsParser: context.read(),
+                        defaultClassificationRulesParser:
+                            DefaultClassificationRulesParser(
+                          idsRepo: context.read(),
+                          classificationScoreCreatorParser:
+                              ClassificationScoreCreatorParser(idsRepo: context.read()),
+                        ),
+                      ),
+                    ),
+                  ).parse(json),
+                  toJson: (preset) => EventSeriesCalendarPresetSerializer(
+                    idsRepo: context.read(),
+                    calendarSerializer: EventSeriesCalendarSerializer(
+                      idsRepo: context.read(),
+                      competitionSerializer: CompetitionSerializer(
+                          idsRepo: context.read(),
+                          competitionRulesSerializer: context.read(),
+                          standingsSerializer: context.read()),
+                      classificationSerializer: ClassificationSerializer(
+                        idsRepo: context.read(),
+                        standingsSerializer: context.read(),
+                        defaultClassificationRulesSerializer:
+                            DefaultClassificationRulesSerializer(
+                          idsRepo: context.read(),
+                          classificationScoreCreatorSerializer:
+                              ClassificationScoreCreatorSerializer(
+                                  idsRepo: context.read()),
+                        ),
+                      ),
+                    ),
+                  ).serialize(preset),
+                );
+              }),
+              Provider(create: (context) {
+                return DbItemsJsonConfiguration<DefaultCompetitionRulesPreset>(
+                  fromJson: (json) => CompetitionRulesPresetParser(
+                    idsRepo: context.read(),
+                    rulesParser: context.read(),
+                  ).parse(json),
+                  toJson: (preset) => CompetitionRulesPresetSerializer(
+                    idsRepo: context.read(),
+                    rulesSerializer: context.read(),
+                  ).serialize(preset),
+                );
+              }),
+              Provider.value(
+                value: pathsCache,
+              ),
             ],
-            child: App(
-              home: Builder(builder: (context) {
-                return AppInitializer(
-                  shouldSetUpRouting: true,
-                  shouldSetUpUserData: true,
-                  shouldLoadDatabase: true,
-                  createLoaders: (context) => defaultDbItemsListLoaders(context),
-                  child: const MainScreen(),
-                );
-              }),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (context) {
+                  return ThemeCubit(
+                    settingsRepo: context.read(),
+                  );
+                }),
+              ],
+              child: App(
+                home: Builder(builder: (context) {
+                  return AppInitializer(
+                    shouldSetUpRouting: true,
+                    shouldSetUpUserData: true,
+                    shouldLoadDatabase: true,
+                    createLoaders: (context) => defaultDbItemsListLoaders(context),
+                    child: const MainScreen(),
+                  );
+                }),
+              ),
             ),
           ),
         ),

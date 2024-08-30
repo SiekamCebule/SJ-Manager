@@ -30,12 +30,13 @@ import 'package:sj_manager/repositories/database_editing/db_editing_defaults_rep
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
+import 'package:sj_manager/repositories/settings/local_user_settings_repo.dart';
 import 'package:sj_manager/setup/app_configurator.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
-import 'package:sj_manager/ui/providers/locale_notifier.dart';
+import 'package:sj_manager/ui/providers/locale_cubit.dart';
 import 'package:sj_manager/ui/reusable_widgets/animations/animated_visibility.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/jumper_info_list_tile.dart';
@@ -44,14 +45,12 @@ import 'package:sj_manager/ui/screens/database_editor/database_editor_screen.dar
 import 'package:flutter/material.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropriate_db_item_list_tile.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
-import 'package:sj_manager/ui/theme/app_color_scheme_repo.dart';
-import 'package:sj_manager/ui/theme/app_theme_brightness_repo.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
 import 'database_editor_test.mocks.dart';
 
-@GenerateMocks([TeamsRepo])
+@GenerateMocks([TeamsRepo, LocalUserSettingsRepo])
 void main() {
   const MethodChannel flutterWindowCloseChannel = MethodChannel('flutter_window_close');
 
@@ -168,12 +167,6 @@ void main() {
         providers: [
           MultiProvider(
             providers: [
-              RepositoryProvider(
-                create: (context) => AppThemeBrightnessRepo(),
-              ),
-              RepositoryProvider(
-                create: (context) => AppColorSchemeRepo(),
-              ),
               Provider(
                 create: (context) => AppConfigurator(
                   shouldSetUpRouting: true,
@@ -184,13 +177,13 @@ void main() {
               ),
               BlocProvider(create: (context) {
                 return ThemeCubit(
-                  colorSchemeRepo: context.read(),
-                  brightnessRepo: context.read(),
+                  settingsRepo: context.read(),
                 );
               }),
               BlocProvider(
                 create: (context) => LocaleCubit(
                   initial: const Locale('en'),
+                  settingsRepo: MockLocalUserSettingsRepo(),
                 ),
               ),
             ],

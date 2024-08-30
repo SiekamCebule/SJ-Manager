@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:sj_manager/ui/providers/locale_notifier.dart';
+import 'package:sj_manager/ui/providers/locale_cubit.dart';
 import 'package:sj_manager/ui/theme/app_theme_data_creator.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
 

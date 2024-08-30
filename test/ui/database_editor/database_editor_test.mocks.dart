@@ -3,11 +3,17 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'dart:ui' as _i8;
+
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:rxdart/rxdart.dart' as _i2;
-import 'package:sj_manager/models/user_db/team/team.dart' as _i3;
+import 'package:shared_preferences/shared_preferences.dart' as _i3;
+import 'package:sj_manager/models/user_db/team/team.dart' as _i4;
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart'
-    as _i4;
+    as _i5;
+import 'package:sj_manager/repositories/settings/local_user_settings_repo.dart'
+    as _i6;
+import 'package:sj_manager/ui/theme/app_schemes.dart' as _i7;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -43,11 +49,22 @@ class _FakeType_1 extends _i1.SmartFake implements Type {
         );
 }
 
+class _FakeSharedPreferences_2 extends _i1.SmartFake
+    implements _i3.SharedPreferences {
+  _FakeSharedPreferences_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [TeamsRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTeamsRepo<T extends _i3.Team> extends _i1.Mock
-    implements _i4.TeamsRepo<T> {
+class MockTeamsRepo<T extends _i4.Team> extends _i1.Mock
+    implements _i5.TeamsRepo<T> {
   MockTeamsRepo() {
     _i1.throwOnMissingStub(this);
   }
@@ -96,6 +113,70 @@ class MockTeamsRepo<T extends _i3.Team> extends _i1.Mock
         Invocation.method(
           #dispose,
           [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [LocalUserSettingsRepo].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockLocalUserSettingsRepo extends _i1.Mock
+    implements _i6.LocalUserSettingsRepo {
+  MockLocalUserSettingsRepo() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.SharedPreferences get prefs => (super.noSuchMethod(
+        Invocation.getter(#prefs),
+        returnValue: _FakeSharedPreferences_2(
+          this,
+          Invocation.getter(#prefs),
+        ),
+      ) as _i3.SharedPreferences);
+
+  @override
+  _i2.ValueStream<void> get stream => (super.noSuchMethod(
+        Invocation.getter(#stream),
+        returnValue: _FakeValueStream_0<void>(
+          this,
+          Invocation.getter(#stream),
+        ),
+      ) as _i2.ValueStream<void>);
+
+  @override
+  void setAppColorScheme(_i7.AppColorScheme? scheme) => super.noSuchMethod(
+        Invocation.method(
+          #setAppColorScheme,
+          [scheme],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setAppThemeBrightness(_i8.Brightness? brightness) => super.noSuchMethod(
+        Invocation.method(
+          #setAppThemeBrightness,
+          [brightness],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setDatabaseEditorTutorialShown(bool? shown) => super.noSuchMethod(
+        Invocation.method(
+          #setDatabaseEditorTutorialShown,
+          [shown],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void setLanguageCode(String? code) => super.noSuchMethod(
+        Invocation.method(
+          #setLanguageCode,
+          [code],
         ),
         returnValueForMissingStub: null,
       );

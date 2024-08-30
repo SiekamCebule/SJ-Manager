@@ -111,5 +111,8 @@
     "exact": "Dosłowny",
     "jsonIsEmptyExceptionContent": "Plik JSON jest całkowicie pusty. Jeśli sam nic nie zmieniałeś, prosimy o zgłoszenie tego błędu",
     "invalidJsonFormatExceptionContent": "Format pliku JSON jest nieprawidłowy (sprawdź nawiasy i przecinki. Dla ułatwienia użyj edytora kodu, który wspiera ten format)",
-    "unknownError": "Nie wiemy co się stało. Możesz nam pomóc, zgłaszając ten błąd"
+    "unknownError": "Nie wiemy co się stało. Możesz nam pomóc, zgłaszając ten błąd",
+    "darkTheme": "Ciemny",
+    "lightTheme": "Jasny",
+    "themeBrightness": "Motyw aplikacji"
 }
