@@ -10,7 +10,13 @@ class DefaultPotsKoGroupsCreator<E>
     remainingEntities = context.remainingEntities;
 
     for (var potIndex = 0; potIndex < potsCount; potIndex++) {
-      for (var entity in context.pots[potIndex]) {
+      final pot = context.pots[potIndex];
+      if (pot.length > entitiesInGroup) {
+        throw ArgumentError(
+          'A pot length (pot: $pot, length: ${pot.length}) cannot be less than entitiesInGroup ($entitiesInGroup) passed in the context',
+        );
+      }
+      for (var entity in pot) {
         final randomGroup = groupsWithSize(potIndex).randomElement();
         randomGroup.entities.add(entity);
       }

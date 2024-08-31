@@ -17,7 +17,7 @@ import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
 import 'package:sj_manager/models/user_db/team/country_team.dart';
 
-import 'competition_rules_utilities.mocks.dart';
+import 'competition_rules_utilities_test.mocks.dart';
 
 @GenerateMocks([
   IndividualCompetitionScoreCreatingContext,
