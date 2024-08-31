@@ -8,6 +8,7 @@ enum KoGroupsCreatorRemainingEntitiesAction {
   placeRandomly,
   placeAtBegin,
   placeAtEnd,
+  placeInSmallestGroup,
   doNothing,
   throwError,
 }
@@ -15,8 +16,12 @@ enum KoGroupsCreatorRemainingEntitiesAction {
 abstract class DefaultSizedKoGroupsCreator<E, C extends KoGroupsCreatingContext<E>>
     extends KoGroupsCreator<E, C> with EquatableMixin {
   late C context;
-  List<KoGroup<E>> koGroups = [];
+  List<KoGroup<E>> groups = [];
   List<E> remainingEntities = [];
+
+  int get entitiesInGroupForEvenGroups {
+    return context.entitiesCount ~/ groups.length;
+  }
 
   int get entitiesInGroup;
   KoGroupsCreatorRemainingEntitiesAction get remainingEntitiesAction;
@@ -28,7 +33,7 @@ abstract class DefaultSizedKoGroupsCreator<E, C extends KoGroupsCreatingContext<
     setUpGroups();
     constructGroupsAndRemainingEntities();
     allocateRemainingEntities();
-    return koGroups;
+    return groups;
   }
 
   void setUpContext(C context) {
@@ -41,16 +46,16 @@ abstract class DefaultSizedKoGroupsCreator<E, C extends KoGroupsCreatingContext<
     final shouldThrow = !entitiesLengthIsDividableByPassedSize &&
         remainingEntitiesAction == KoGroupsCreatorRemainingEntitiesAction.throwError;
     if (shouldThrow) {
-      throw StateError(
+      throw ArgumentError(
         'Passed entities list length (${context.entitiesCount}) is not dividable by passed entitiesInGroup ($entitiesInGroup), and remainingEntitiesAction is set to $remainingEntitiesAction',
       );
     }
   }
 
   void setUpGroups() {
-    koGroups = List.generate(
-      context.entitiesCount ~/ entitiesInGroup,
-      (_) => const KoGroup(
+    groups = List.generate(
+      (context.entitiesCount / entitiesInGroup).ceil(),
+      (_) => KoGroup<E>(
         entities: [],
       ),
     );
@@ -58,31 +63,40 @@ abstract class DefaultSizedKoGroupsCreator<E, C extends KoGroupsCreatingContext<
 
   void constructGroupsAndRemainingEntities();
 
-  bool get everyGroupAreFull {
-    return groupsWithSize(entitiesInGroup).isEmpty;
+  bool get everyGroupIsFull {
+    return groupsWithSmallerSize(entitiesInGroupForEvenGroups).isEmpty;
   }
 
-  List<KoGroup> groupsWithSize(int size) {
-    return koGroups.where((group) => group.size == size).toList();
+  List<KoGroup<E>> groupsWithSize(int size) {
+    return groups.where((group) => group.size == size).toList();
   }
 
-  List<KoGroup> get nonFullGroups {
-    return koGroups
-        .whereNot((group) => group.entities.length == entitiesInGroup)
-        .toList();
+  List<KoGroup<E>> groupsWithSmallerSize(int size) {
+    return groups.where((group) => group.size < size).toList();
+  }
+
+  List<KoGroup<E>> get nonFullGroups {
+    return groups.whereNot((group) => group.entities.length == entitiesInGroup).toList();
   }
 
   void allocateRemainingEntities() {
     for (var entity in remainingEntities) {
       switch (remainingEntitiesAction) {
         case KoGroupsCreatorRemainingEntitiesAction.placeAtBegin:
-          koGroups.first.entities.add(entity);
+          groups.first.entities.add(entity);
         case KoGroupsCreatorRemainingEntitiesAction.placeAtEnd:
-          koGroups.last.entities.add(entity);
+          groups.last.entities.add(entity);
         case KoGroupsCreatorRemainingEntitiesAction.placeRandomly:
-          koGroups.randomElement().entities.add(entity);
-        case KoGroupsCreatorRemainingEntitiesAction.doNothing:
+          groups.randomElement().entities.add(entity);
+        case KoGroupsCreatorRemainingEntitiesAction.placeInSmallestGroup:
+          while (remainingEntities.isNotEmpty) {
+            var smallestGroup = nonFullGroups
+                .reduce((a, b) => a.entities.length < b.entities.length ? a : b);
+            smallestGroup.entities.add(remainingEntities.removeAt(0));
+          }
           break;
+
+        case KoGroupsCreatorRemainingEntitiesAction.doNothing:
         case KoGroupsCreatorRemainingEntitiesAction.throwError:
           throw StateError(
             'That shouldn\'t even occur, because it should be handled earlier. allocateRemainingEntities(). remainingEntitiesAction is set to \'throwError\'',

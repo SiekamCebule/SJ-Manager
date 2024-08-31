@@ -6,6 +6,7 @@ import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/details/competition_score_details.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/details/jump_score_details.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
@@ -24,7 +25,7 @@ abstract class CompetitionScoreCreatingContext<T>
   // TODO: final SimulationData simulationData;
   // TODO: final Season season;
   final EventSeries eventSeries;
-  final Competition<T, dynamic> competition;
+  final Competition<T, Standings> competition;
   final int currentRound;
   final Hill hill;
   final Score<T, dynamic>? currentScore;

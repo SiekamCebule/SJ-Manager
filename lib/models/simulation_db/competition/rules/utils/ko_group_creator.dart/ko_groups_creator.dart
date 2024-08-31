@@ -4,6 +4,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_group.da
 import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/unary_algorithm.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/concrete/default.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 
 abstract class KoGroupsCreatingContext<T> {
@@ -17,7 +18,7 @@ abstract class KoGroupsCreatingContext<T> {
   // TODO: final SimulationData simulationData;
   // TODO: final Season season;
   final EventSeries eventSeries;
-  final Competition<T, dynamic> competition;
+  final Competition<T, Standings> competition;
   final int currentRound;
   final Hill hill;
 

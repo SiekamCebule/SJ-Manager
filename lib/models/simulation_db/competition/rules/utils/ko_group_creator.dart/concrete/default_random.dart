@@ -7,11 +7,17 @@ class DefaultRandomKoGroupsCreator<E>
   @override
   void constructGroupsAndRemainingEntities() {
     for (var entity in context.entities) {
-      if (everyGroupAreFull) {
+      if (everyGroupIsFull) {
         remainingEntities.add(entity);
       } else {
-        final randomKoGroup = nonFullGroups.randomElement();
-        randomKoGroup.entities.add(entity);
+        int minSize = nonFullGroups
+            .map((group) => group.entities.length)
+            .reduce((a, b) => a < b ? a : b);
+        var smallestGroups =
+            nonFullGroups.where((group) => group.entities.length == minSize).toList();
+
+        var targetGroup = smallestGroups.randomElement();
+        targetGroup.entities.add(entity);
       }
     }
   }

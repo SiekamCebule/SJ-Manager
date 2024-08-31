@@ -6,7 +6,7 @@ class DefaultClassicKoGroupsCreator<E>
   @override
   void validateData() {
     if (entitiesInGroup.remainder(2) != 0) {
-      throw StateError(
+      throw ArgumentError(
         'In DefaultClassicKoGroupsCreator, the entities count must be dividable by 2.',
       );
     }
@@ -19,10 +19,10 @@ class DefaultClassicKoGroupsCreator<E>
     int startIndex = middle - 1;
     int endIndex = middle;
 
-    for (var group in koGroups) {
+    for (var group in groups) {
       if (startIndex >= 0 && endIndex < context.entities.length) {
-        group.entities.add(context.entities[startIndex]);
         group.entities.add(context.entities[endIndex]);
+        group.entities.add(context.entities[startIndex]);
       }
       startIndex--;
       endIndex++;
