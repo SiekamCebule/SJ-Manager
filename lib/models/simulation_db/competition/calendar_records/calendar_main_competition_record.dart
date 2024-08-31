@@ -3,6 +3,7 @@ import 'package:sj_manager/models/simulation_db/competition/calendar_records/cal
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition_labels.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
@@ -85,26 +86,26 @@ class _Converter {
     return comps;
   }
 
-  Competition<T> _competitionWithPreservedType<T>({
+  Competition<T, Standings> _competitionWithPreservedType<T>({
     required Hill hill,
     required DateTime date,
     required DefaultCompetitionRules<T> rules,
     List<Object> labels = const [],
   }) {
     if (rules is DefaultCompetitionRules<Jumper>) {
-      return Competition<Jumper>(
+      return Competition<Jumper, Standings>(
         hill: hill,
         date: date,
         rules: rules as DefaultCompetitionRules<Jumper>,
         labels: labels,
-      ) as Competition<T>;
+      ) as Competition<T, Standings>;
     } else if (rules is DefaultCompetitionRules<CompetitionTeam>) {
-      return Competition<CompetitionTeam>(
+      return Competition<CompetitionTeam, Standings>(
         hill: hill,
         date: date,
         rules: rules as DefaultCompetitionRules<CompetitionTeam>,
         labels: labels,
-      ) as Competition<T>;
+      ) as Competition<T, Standings>;
     } else {
       throw TypeError();
     }

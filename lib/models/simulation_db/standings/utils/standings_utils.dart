@@ -1,54 +1,61 @@
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/competition_score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 
-Standings<Jumper> createIndividualStandingsForTeamCompetition({
-  required Standings<Team> teamStandings,
+Standings<Jumper, CompetitionJumperScoreDetails>
+    createIndividualStandingsForTeamCompetition({
+  required Standings<Team, CompetitionTeamScoreDetails> teamStandings,
   required StandingsPositionsCreator positionsCreator,
 }) {
-  final individualStandings = Standings<Jumper>(positionsCreator: positionsCreator);
+  final individualStandings = Standings<Jumper, CompetitionJumperScoreDetails>(
+      positionsCreator: positionsCreator);
   for (final score in teamStandings.scores) {
     final teamScore = score as CompetitionTeamScore;
-    for (var jumperScore in teamScore.jumperScores) {
+    for (var jumperScore in teamScore.details.jumperScores) {
       individualStandings.addScore(newScore: jumperScore);
     }
   }
   return individualStandings;
 }
 
-Standings<CompetitionTeam> createTeamStandingsForIndividualCompetition({
-  required Standings<Jumper> individualStandings,
+Standings<CompetitionTeam, CompetitionTeamScoreDetails>
+    createTeamStandingsForIndividualCompetition({
+  required Standings<Jumper, CompetitionJumperScoreDetails> individualStandings,
   required StandingsPositionsCreator positionsCreator,
   required List<CompetitionTeam> teams,
 }) {
-  final teamStandings = Standings<CompetitionTeam>(positionsCreator: positionsCreator);
+  final teamStandings = Standings<CompetitionTeam, CompetitionTeamScoreDetails>(
+      positionsCreator: positionsCreator);
   for (var team in teams) {
     teamStandings.addScore(
-      newScore: CompetitionTeamScore(entity: team, points: 0, jumperScores: []),
+      newScore: CompetitionTeamScore(
+        entity: team,
+        points: 0,
+        details: CompetitionTeamScoreDetails(jumperScores: []),
+      ),
     );
   }
 
   for (final score in individualStandings.scores) {
-    final individualScore = score as CompetitionJumperScore;
     final teamOfJumper =
-        teamOfJumperInStandings(jumper: individualScore.entity, standings: teamStandings);
-    final teamScore =
-        teamStandings.scoreOf(teamOfJumper!)! as CompetitionTeamScore<CompetitionTeam>;
-    final updatedJumperScores = teamScore.jumperScores.map((currentScore) {
-      if (currentScore.entity == individualScore.entity) {
-        return individualScore;
+        teamOfJumperInStandings(jumper: score.entity, standings: teamStandings);
+    final teamScore = teamStandings.scoreOf(teamOfJumper!)!;
+    final updatedJumperScores = teamScore.details.jumperScores.map((currentScore) {
+      if (currentScore.entity == score.entity) {
+        return score;
       } else {
         return currentScore;
       }
     }).toList();
     final newTeamScore = CompetitionTeamScore(
       entity: teamScore.entity,
-      points: teamScore.points + individualScore.points,
-      jumperScores: updatedJumperScores,
+      points: teamScore.points + score.points,
+      details: CompetitionTeamScoreDetails(jumperScores: updatedJumperScores),
     );
     teamStandings.addScore(newScore: newTeamScore);
   }
@@ -57,7 +64,8 @@ Standings<CompetitionTeam> createTeamStandingsForIndividualCompetition({
 }
 
 E? teamOfJumperInStandings<E extends CompetitionTeam>(
-    {required Jumper jumper, required Standings<E> standings}) {
+    {required Jumper jumper,
+    required Standings<E, CompetitionTeamScoreDetails> standings}) {
   for (var teamScore in standings.scores) {
     if (teamScore.entity.jumpers.contains(jumper)) {
       return teamScore.entity;
@@ -68,7 +76,7 @@ E? teamOfJumperInStandings<E extends CompetitionTeam>(
 
 CompetitionTeam<T> findCompetitionTeam<T extends Team>({
   required T parentTeam,
-  required Competition<CompetitionTeam> competition,
+  required Competition<CompetitionTeam, dynamic> competition,
 }) {
   final competitionTeams = competition.standings!.scores.map((score) => score.entity);
   return competitionTeams

@@ -4,14 +4,18 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:osje_sim/osje_sim.dart' as _i5;
+import 'package:osje_sim/osje_sim.dart' as _i7;
 import 'package:sj_manager/models/simulation_db/competition/competition.dart'
-    as _i3;
+    as _i5;
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/wind_averager.dart'
-    as _i6;
+    as _i8;
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart'
     as _i2;
-import 'package:sj_manager/models/user_db/hill/hill.dart' as _i4;
+import 'package:sj_manager/models/simulation_db/standings/score/details/score_details.dart'
+    as _i4;
+import 'package:sj_manager/models/simulation_db/standings/standings.dart'
+    as _i3;
+import 'package:sj_manager/models/user_db/hill/hill.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -36,8 +40,8 @@ class _FakeEventSeries_0 extends _i1.SmartFake implements _i2.EventSeries {
         );
 }
 
-class _FakeCompetition_1<E> extends _i1.SmartFake
-    implements _i3.Competition<E> {
+class _FakeCompetition_1<E, S extends _i3.Standings<dynamic, _i4.ScoreDetails>>
+    extends _i1.SmartFake implements _i5.Competition<E, S> {
   _FakeCompetition_1(
     Object parent,
     Invocation parentInvocation,
@@ -47,7 +51,7 @@ class _FakeCompetition_1<E> extends _i1.SmartFake
         );
 }
 
-class _FakeHill_2 extends _i1.SmartFake implements _i4.Hill {
+class _FakeHill_2 extends _i1.SmartFake implements _i6.Hill {
   _FakeHill_2(
     Object parent,
     Invocation parentInvocation,
@@ -58,7 +62,7 @@ class _FakeHill_2 extends _i1.SmartFake implements _i4.Hill {
 }
 
 class _FakeWindMeasurement_3 extends _i1.SmartFake
-    implements _i5.WindMeasurement {
+    implements _i7.WindMeasurement {
   _FakeWindMeasurement_3(
     Object parent,
     Invocation parentInvocation,
@@ -72,7 +76,7 @@ class _FakeWindMeasurement_3 extends _i1.SmartFake
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockWindAveragingContext extends _i1.Mock
-    implements _i6.WindAveragingContext {
+    implements _i8.WindAveragingContext {
   MockWindAveragingContext() {
     _i1.throwOnMissingStub(this);
   }
@@ -87,13 +91,16 @@ class MockWindAveragingContext extends _i1.Mock
       ) as _i2.EventSeries);
 
   @override
-  _i3.Competition<dynamic> get competition => (super.noSuchMethod(
-        Invocation.getter(#competition),
-        returnValue: _FakeCompetition_1<dynamic>(
-          this,
-          Invocation.getter(#competition),
-        ),
-      ) as _i3.Competition<dynamic>);
+  _i5.Competition<dynamic, _i3.Standings<dynamic, _i4.ScoreDetails>>
+      get competition => (super.noSuchMethod(
+            Invocation.getter(#competition),
+            returnValue: _FakeCompetition_1<dynamic,
+                _i3.Standings<dynamic, _i4.ScoreDetails>>(
+              this,
+              Invocation.getter(#competition),
+            ),
+          ) as _i5
+              .Competition<dynamic, _i3.Standings<dynamic, _i4.ScoreDetails>>);
 
   @override
   int get currentRound => (super.noSuchMethod(
@@ -102,13 +109,13 @@ class MockWindAveragingContext extends _i1.Mock
       ) as int);
 
   @override
-  _i4.Hill get hill => (super.noSuchMethod(
+  _i6.Hill get hill => (super.noSuchMethod(
         Invocation.getter(#hill),
         returnValue: _FakeHill_2(
           this,
           Invocation.getter(#hill),
         ),
-      ) as _i4.Hill);
+      ) as _i6.Hill);
 
   @override
   int get initialGate => (super.noSuchMethod(
@@ -123,19 +130,13 @@ class MockWindAveragingContext extends _i1.Mock
       ) as int);
 
   @override
-  _i5.WindMeasurement get windMeasurement => (super.noSuchMethod(
+  _i7.WindMeasurement get windMeasurement => (super.noSuchMethod(
         Invocation.getter(#windMeasurement),
         returnValue: _FakeWindMeasurement_3(
           this,
           Invocation.getter(#windMeasurement),
         ),
-      ) as _i5.WindMeasurement);
-
-  @override
-  List<double> get windMeasurementWeights => (super.noSuchMethod(
-        Invocation.getter(#windMeasurementWeights),
-        returnValue: <double>[],
-      ) as List<double>);
+      ) as _i7.WindMeasurement);
 
   @override
   double get distance => (super.noSuchMethod(

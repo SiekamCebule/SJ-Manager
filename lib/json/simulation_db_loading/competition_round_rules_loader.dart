@@ -11,7 +11,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/competit
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/judges_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/wind_averager.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
@@ -61,8 +61,7 @@ class CompetitionRoundRulesParser
     }
     final competitionScoreCreator =
         competitionScoreCreatorParser.parse(json['competitionScoreCreator']);
-    if (competitionScoreCreator
-            is CompetitionScoreCreator<CompetitionScore<Jumper, dynamic>> ==
+    if (competitionScoreCreator is CompetitionScoreCreator<CompetitionScore<Jumper>> ==
         false) {
       throw ArgumentError(
         '(Parsing) The loaded competition score creator type is not a valid one for individual competition rules (${competitionScoreCreator.runtimeType})',
@@ -85,8 +84,8 @@ class CompetitionRoundRulesParser
       judgesCount: json['judgesCount'],
       judgesCreator: judgesCreatorParser.parse(json['judgesCreator']),
       significantJudgesCount: json['significantJudgesCount'],
-      competitionScoreCreator: competitionScoreCreator
-          as CompetitionScoreCreator<CompetitionScore<Jumper, dynamic>>,
+      competitionScoreCreator:
+          competitionScoreCreator as CompetitionScoreCreator<CompetitionScore<Jumper>>,
       jumpScoreCreator: jumpScoreCreatorParser.parse(json['jumpScoreCreator']),
       koRules: koRulesJson != null ? koRoundRulesParser.parse(koRulesJson) : null,
     );
@@ -109,7 +108,7 @@ class CompetitionRoundRulesParser
     final competitionScoreCreator =
         competitionScoreCreatorParser.parse(json['competitionScoreCreator']);
     if (competitionScoreCreator
-            is CompetitionScoreCreator<CompetitionScore<CompetitionTeam, dynamic>> ==
+            is CompetitionScoreCreator<CompetitionScore<CompetitionTeam>> ==
         false) {
       throw ArgumentError(
         '(Parsing) The loaded competition score creator type is not a valid one for team competition rules (${competitionScoreCreator.runtimeType})',
@@ -133,7 +132,7 @@ class CompetitionRoundRulesParser
       judgesCreator: judgesCreatorParser.parse(json['judgesCreator']),
       significantJudgesCount: json['significantJudgesCount'],
       competitionScoreCreator: competitionScoreCreator
-          as CompetitionScoreCreator<CompetitionScore<CompetitionTeam, dynamic>>,
+          as CompetitionScoreCreator<CompetitionScore<CompetitionTeam>>,
       jumpScoreCreator: jumpScoreCreatorParser.parse(json['jumpScoreCreator']),
       groups: groups,
       koRules: koRulesJson != null ? koRoundRulesParser.parse(koRulesJson) : null,

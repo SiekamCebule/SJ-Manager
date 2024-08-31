@@ -20,3 +20,7 @@ double weightedAverage(List<double> values, List<double> weights) {
 
   return weightedSum / totalWeight;
 }
+
+extension DoubleToPrecision on double {
+  double toPrecision(int n) => double.parse(toStringAsFixed(n));
+}

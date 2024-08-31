@@ -1,41 +1,142 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/simple_points_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/score_details.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_no_ex_aequo_creator.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 
 void main() {
   late StandingsPositionsCreator creator;
   const recordsWithoutExAequo = [
-    SimplePointsScore(140.5, entity: 'Maciej Kot'),
-    SimplePointsScore(137.2, entity: 'Dawid Kubacki'),
-    SimplePointsScore(132.5, entity: 'Kamil Stoch'),
-    SimplePointsScore(130.4, entity: 'Jakub Wolny'),
-    SimplePointsScore(128.5, entity: 'Paweł Wasek'),
-    SimplePointsScore(111.5, entity: 'Andrzej Stękała'),
+    Score<String, SimplePointsScoreDetails>(
+      points: 140.5,
+      entity: 'Maciej Kot',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 137.2,
+      entity: 'Dawid Kubacki',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 132.5,
+      entity: 'Kamil Stoch',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 130.4,
+      entity: 'Jakub Wolny',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 128.5,
+      entity: 'Paweł Wasek',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 111.5,
+      entity: 'Andrzej Stękała',
+      details: SimplePointsScoreDetails(),
+    ),
   ];
 
   const recordsWithExAequos = [
-    SimplePointsScore(140.5, entity: 'Maciej Kot'),
-    SimplePointsScore(140.5, entity: 'Dawid Kubacki'),
-    SimplePointsScore(140.5, entity: 'Piotr Żyła'),
-    SimplePointsScore(130.1, entity: 'Kamil Stoch'),
-    SimplePointsScore(129.0, entity: 'Jakub Wolny'),
-    SimplePointsScore(129.0, entity: 'Paweł Wasek'),
-    SimplePointsScore(110.0, entity: 'Andrzej Stękała'),
-    SimplePointsScore(110.0, entity: 'Kacper Tomasiak'),
-    SimplePointsScore(107.6, entity: 'Stefan Hula'),
-    SimplePointsScore(103.5, entity: 'Tymek Amilkiewicz'),
+    Score<String, SimplePointsScoreDetails>(
+      points: 140.5,
+      entity: 'Maciej Kot',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 140.5,
+      entity: 'Dawid Kubacki',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 140.5,
+      entity: 'Piotr Żyła',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 130.1,
+      entity: 'Kamil Stoch',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 129.0,
+      entity: 'Jakub Wolny',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 129.0,
+      entity: 'Paweł Wasek',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 110.0,
+      entity: 'Andrzej Stękała',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 110.0,
+      entity: 'Kacper Tomasiak',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 107.6,
+      entity: 'Stefan Hula',
+      details: SimplePointsScoreDetails(),
+    ),
+    Score<String, SimplePointsScoreDetails>(
+      points: 103.5,
+      entity: 'Tymek Amilkiewicz',
+      details: SimplePointsScoreDetails(),
+    ),
   ];
 
   group('When no aequos', () {
     const expected = {
-      1: [SimplePointsScore(140.5, entity: 'Maciej Kot')],
-      2: [SimplePointsScore(137.2, entity: 'Dawid Kubacki')],
-      3: [SimplePointsScore(132.5, entity: 'Kamil Stoch')],
-      4: [SimplePointsScore(130.4, entity: 'Jakub Wolny')],
-      5: [SimplePointsScore(128.5, entity: 'Paweł Wasek')],
-      6: [SimplePointsScore(111.5, entity: 'Andrzej Stękała')],
+      1: [
+        Score<String, SimplePointsScoreDetails>(
+          points: 140.5,
+          entity: 'Maciej Kot',
+          details: SimplePointsScoreDetails(),
+        )
+      ],
+      2: [
+        Score<String, SimplePointsScoreDetails>(
+          points: 137.2,
+          entity: 'Dawid Kubacki',
+          details: SimplePointsScoreDetails(),
+        )
+      ],
+      3: [
+        Score<String, SimplePointsScoreDetails>(
+          points: 132.5,
+          entity: 'Kamil Stoch',
+          details: SimplePointsScoreDetails(),
+        )
+      ],
+      4: [
+        Score<String, SimplePointsScoreDetails>(
+          points: 130.4,
+          entity: 'Jakub Wolny',
+          details: SimplePointsScoreDetails(),
+        )
+      ],
+      5: [
+        Score<String, SimplePointsScoreDetails>(
+          points: 128.5,
+          entity: 'Paweł Wasek',
+          details: SimplePointsScoreDetails(),
+        )
+      ],
+      6: [
+        Score<String, SimplePointsScoreDetails>(
+          points: 111.5,
+          entity: 'Andrzej Stękała',
+          details: SimplePointsScoreDetails(),
+        )
+      ],
     };
     test('No ex aequos for StandingsPositionsWithNoExAequoCreator', () {
       creator = StandingsPositionsWithNoExAequoCreator();
@@ -54,40 +155,144 @@ void main() {
       creator = StandingsPositionsWithNoExAequoCreator();
       final positions = creator.create(recordsWithExAequos);
       expect(positions, const {
-        1: [SimplePointsScore(140.5, entity: 'Maciej Kot')],
-        2: [SimplePointsScore(140.5, entity: 'Dawid Kubacki')],
-        3: [SimplePointsScore(140.5, entity: 'Piotr Żyła')],
-        4: [SimplePointsScore(130.1, entity: 'Kamil Stoch')],
-        5: [SimplePointsScore(129.0, entity: 'Jakub Wolny')],
-        6: [SimplePointsScore(129.0, entity: 'Paweł Wasek')],
-        7: [SimplePointsScore(110.0, entity: 'Andrzej Stękała')],
-        8: [SimplePointsScore(110.0, entity: 'Kacper Tomasiak')],
-        9: [SimplePointsScore(107.6, entity: 'Stefan Hula')],
-        10: [SimplePointsScore(103.5, entity: 'Tymek Amilkiewicz')],
+        1: [
+          Score<String, SimplePointsScoreDetails>(
+            points: 140.5,
+            entity: 'Maciej Kot',
+            details: SimplePointsScoreDetails(),
+          )
+        ],
+        2: [
+          Score<String, SimplePointsScoreDetails>(
+            points: 140.5,
+            entity: 'Dawid Kubacki',
+            details: SimplePointsScoreDetails(),
+          )
+        ],
+        3: [
+          Score<String, SimplePointsScoreDetails>(
+            points: 140.5,
+            entity: 'Piotr Żyła',
+            details: SimplePointsScoreDetails(),
+          )
+        ],
+        4: [
+          Score<String, SimplePointsScoreDetails>(
+            points: 130.1,
+            entity: 'Kamil Stoch',
+            details: SimplePointsScoreDetails(),
+          )
+        ],
+        5: [
+          Score<String, SimplePointsScoreDetails>(
+            points: 129.0,
+            entity: 'Jakub Wolny',
+            details: SimplePointsScoreDetails(),
+          )
+        ],
+        6: [
+          Score<String, SimplePointsScoreDetails>(
+            points: 129.0,
+            entity: 'Paweł Wasek',
+            details: SimplePointsScoreDetails(),
+          )
+        ],
+        7: [
+          Score<String, SimplePointsScoreDetails>(
+            points: 110.0,
+            entity: 'Andrzej Stękała',
+            details: SimplePointsScoreDetails(),
+          )
+        ],
+        8: [
+          Score<String, SimplePointsScoreDetails>(
+            points: 110.0,
+            entity: 'Kacper Tomasiak',
+            details: SimplePointsScoreDetails(),
+          )
+        ],
+        9: [
+          Score<String, SimplePointsScoreDetails>(
+            points: 107.6,
+            entity: 'Stefan Hula',
+            details: SimplePointsScoreDetails(),
+          )
+        ],
+        10: [
+          Score<String, SimplePointsScoreDetails>(
+            points: 103.5,
+            entity: 'Tymek Amilkiewicz',
+            details: SimplePointsScoreDetails(),
+          )
+        ],
       });
     });
-    test('Ex aequos for StandingsPositionsWithNoAequosCreator', () {
+    test('Ex aequos for StandingsPositionsWithExAequosCreator', () {
       creator = StandingsPositionsWithExAequosCreator();
       final positions = creator.create(recordsWithExAequos);
       expect(positions, const {
         1: [
-          SimplePointsScore(140.5, entity: 'Maciej Kot'),
-          SimplePointsScore(140.5, entity: 'Dawid Kubacki'),
-          SimplePointsScore(140.5, entity: 'Piotr Żyła'),
+          Score<String, SimplePointsScoreDetails>(
+            points: 140.5,
+            entity: 'Maciej Kot',
+            details: SimplePointsScoreDetails(),
+          ),
+          Score<String, SimplePointsScoreDetails>(
+            points: 140.5,
+            entity: 'Dawid Kubacki',
+            details: SimplePointsScoreDetails(),
+          ),
+          Score<String, SimplePointsScoreDetails>(
+            points: 140.5,
+            entity: 'Piotr Żyła',
+            details: SimplePointsScoreDetails(),
+          ),
         ],
         4: [
-          SimplePointsScore(130.1, entity: 'Kamil Stoch'),
+          Score<String, SimplePointsScoreDetails>(
+            points: 130.1,
+            entity: 'Kamil Stoch',
+            details: SimplePointsScoreDetails(),
+          ),
         ],
         5: [
-          SimplePointsScore(129.0, entity: 'Jakub Wolny'),
-          SimplePointsScore(129.0, entity: 'Paweł Wasek'),
+          Score<String, SimplePointsScoreDetails>(
+            points: 129.0,
+            entity: 'Jakub Wolny',
+            details: SimplePointsScoreDetails(),
+          ),
+          Score<String, SimplePointsScoreDetails>(
+            points: 129.0,
+            entity: 'Paweł Wasek',
+            details: SimplePointsScoreDetails(),
+          ),
         ],
         7: [
-          SimplePointsScore(110.0, entity: 'Andrzej Stękała'),
-          SimplePointsScore(110.0, entity: 'Kacper Tomasiak'),
+          Score<String, SimplePointsScoreDetails>(
+            points: 110.0,
+            entity: 'Andrzej Stękała',
+            details: SimplePointsScoreDetails(),
+          ),
+          Score<String, SimplePointsScoreDetails>(
+            points: 110.0,
+            entity: 'Kacper Tomasiak',
+            details: SimplePointsScoreDetails(),
+          ),
         ],
-        9: [SimplePointsScore(107.6, entity: 'Stefan Hula')],
-        10: [SimplePointsScore(103.5, entity: 'Tymek Amilkiewicz')],
+        9: [
+          Score<String, SimplePointsScoreDetails>(
+            points: 107.6,
+            entity: 'Stefan Hula',
+            details: SimplePointsScoreDetails(),
+          ),
+        ],
+        10: [
+          Score<String, SimplePointsScoreDetails>(
+            points: 103.5,
+            entity: 'Tymek Amilkiewicz',
+            details: SimplePointsScoreDetails(),
+          ),
+        ],
       });
     });
   });

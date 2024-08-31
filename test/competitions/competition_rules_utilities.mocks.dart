@@ -3,23 +3,25 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i13;
-import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i12;
-import 'package:sj_manager/models/simulation_db/competition/competition.dart'
-    as _i4;
+import 'package:flutter/material.dart' as _i16;
+import 'package:mockito/mockito.dart' as _i2;
+import 'package:mockito/src/dummies.dart' as _i15;
+import 'package:sj_manager/models/simulation_db/competition/competition.dart' as _i6;
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/competition_score_creator.dart'
-    as _i11;
-import 'package:sj_manager/models/simulation_db/event_series/event_series.dart'
-    as _i3;
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart'
-    as _i2;
-import 'package:sj_manager/models/user_db/country/country.dart' as _i10;
-import 'package:sj_manager/models/user_db/hill/hill.dart' as _i5;
-import 'package:sj_manager/models/user_db/jumper/jumper.dart' as _i6;
-import 'package:sj_manager/models/user_db/team/competition_team.dart' as _i8;
-import 'package:sj_manager/models/user_db/team/team.dart' as _i7;
-import 'package:sj_manager/utils/multilingual_string.dart' as _i9;
+    as _i13;
+import 'package:sj_manager/models/simulation_db/event_series/event_series.dart' as _i4;
+import 'package:sj_manager/models/simulation_db/standings/score/details/jump_score_details.dart'
+    as _i14;
+import 'package:sj_manager/models/simulation_db/standings/score/details/score_details.dart'
+    as _i1;
+import 'package:sj_manager/models/simulation_db/standings/score/score.dart' as _i3;
+import 'package:sj_manager/models/simulation_db/standings/standings.dart' as _i5;
+import 'package:sj_manager/models/user_db/country/country.dart' as _i12;
+import 'package:sj_manager/models/user_db/hill/hill.dart' as _i7;
+import 'package:sj_manager/models/user_db/jumper/jumper.dart' as _i8;
+import 'package:sj_manager/models/user_db/team/competition_team.dart' as _i10;
+import 'package:sj_manager/models/user_db/team/team.dart' as _i9;
+import 'package:sj_manager/utils/multilingual_string.dart' as _i11;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -34,8 +36,9 @@ import 'package:sj_manager/utils/multilingual_string.dart' as _i9;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeJumpScore_0<E> extends _i1.SmartFake implements _i2.JumpScore<E> {
-  _FakeJumpScore_0(
+class _FakeScore_0<E, D extends _i1.ScoreDetails> extends _i2.SmartFake
+    implements _i3.Score<E, D> {
+  _FakeScore_0(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -44,7 +47,7 @@ class _FakeJumpScore_0<E> extends _i1.SmartFake implements _i2.JumpScore<E> {
         );
 }
 
-class _FakeEventSeries_1 extends _i1.SmartFake implements _i3.EventSeries {
+class _FakeEventSeries_1 extends _i2.SmartFake implements _i4.EventSeries {
   _FakeEventSeries_1(
     Object parent,
     Invocation parentInvocation,
@@ -54,8 +57,8 @@ class _FakeEventSeries_1 extends _i1.SmartFake implements _i3.EventSeries {
         );
 }
 
-class _FakeCompetition_2<E> extends _i1.SmartFake
-    implements _i4.Competition<E> {
+class _FakeCompetition_2<E, S extends _i5.Standings<dynamic, _i1.ScoreDetails>>
+    extends _i2.SmartFake implements _i6.Competition<E, S> {
   _FakeCompetition_2(
     Object parent,
     Invocation parentInvocation,
@@ -65,7 +68,7 @@ class _FakeCompetition_2<E> extends _i1.SmartFake
         );
 }
 
-class _FakeHill_3 extends _i1.SmartFake implements _i5.Hill {
+class _FakeHill_3 extends _i2.SmartFake implements _i7.Hill {
   _FakeHill_3(
     Object parent,
     Invocation parentInvocation,
@@ -75,7 +78,7 @@ class _FakeHill_3 extends _i1.SmartFake implements _i5.Hill {
         );
 }
 
-class _FakeJumper_4 extends _i1.SmartFake implements _i6.Jumper {
+class _FakeJumper_4 extends _i2.SmartFake implements _i8.Jumper {
   _FakeJumper_4(
     Object parent,
     Invocation parentInvocation,
@@ -85,8 +88,8 @@ class _FakeJumper_4 extends _i1.SmartFake implements _i6.Jumper {
         );
 }
 
-class _FakeCompetitionTeam_5<T extends _i7.Team> extends _i1.SmartFake
-    implements _i8.CompetitionTeam<T> {
+class _FakeCompetitionTeam_5<T extends _i9.Team> extends _i2.SmartFake
+    implements _i10.CompetitionTeam<T> {
   _FakeCompetitionTeam_5(
     Object parent,
     Invocation parentInvocation,
@@ -96,8 +99,7 @@ class _FakeCompetitionTeam_5<T extends _i7.Team> extends _i1.SmartFake
         );
 }
 
-class _FakeMultilingualString_6 extends _i1.SmartFake
-    implements _i9.MultilingualString {
+class _FakeMultilingualString_6 extends _i2.SmartFake implements _i11.MultilingualString {
   _FakeMultilingualString_6(
     Object parent,
     Invocation parentInvocation,
@@ -107,7 +109,7 @@ class _FakeMultilingualString_6 extends _i1.SmartFake
         );
 }
 
-class _FakeCountry_7 extends _i1.SmartFake implements _i10.Country {
+class _FakeCountry_7 extends _i2.SmartFake implements _i12.Country {
   _FakeCountry_7(
     Object parent,
     Invocation parentInvocation,
@@ -120,38 +122,38 @@ class _FakeCountry_7 extends _i1.SmartFake implements _i10.Country {
 /// A class which mocks [IndividualCompetitionScoreCreatingContext].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockIndividualCompetitionScoreCreatingContext extends _i1.Mock
-    implements _i11.IndividualCompetitionScoreCreatingContext {
+class MockIndividualCompetitionScoreCreatingContext extends _i2.Mock
+    implements _i13.IndividualCompetitionScoreCreatingContext {
   MockIndividualCompetitionScoreCreatingContext() {
-    _i1.throwOnMissingStub(this);
+    _i2.throwOnMissingStub(this);
   }
 
   @override
-  _i2.JumpScore<_i6.Jumper> get lastJumpScore => (super.noSuchMethod(
+  _i3.Score<_i8.Jumper, _i14.JumpScoreDetails> get lastJumpScore => (super.noSuchMethod(
         Invocation.getter(#lastJumpScore),
-        returnValue: _FakeJumpScore_0<_i6.Jumper>(
+        returnValue: _FakeScore_0<_i8.Jumper, _i14.JumpScoreDetails>(
           this,
           Invocation.getter(#lastJumpScore),
         ),
-      ) as _i2.JumpScore<_i6.Jumper>);
+      ) as _i3.Score<_i8.Jumper, _i14.JumpScoreDetails>);
 
   @override
-  _i3.EventSeries get eventSeries => (super.noSuchMethod(
+  _i4.EventSeries get eventSeries => (super.noSuchMethod(
         Invocation.getter(#eventSeries),
         returnValue: _FakeEventSeries_1(
           this,
           Invocation.getter(#eventSeries),
         ),
-      ) as _i3.EventSeries);
+      ) as _i4.EventSeries);
 
   @override
-  _i4.Competition<_i6.Jumper> get competition => (super.noSuchMethod(
+  _i6.Competition<_i8.Jumper, dynamic> get competition => (super.noSuchMethod(
         Invocation.getter(#competition),
-        returnValue: _FakeCompetition_2<_i6.Jumper>(
+        returnValue: _FakeCompetition_2<_i8.Jumper, _i5.Standings>(
           this,
           Invocation.getter(#competition),
         ),
-      ) as _i4.Competition<_i6.Jumper>);
+      ) as _i6.Competition<_i8.Jumper, dynamic>);
 
   @override
   int get currentRound => (super.noSuchMethod(
@@ -160,60 +162,60 @@ class MockIndividualCompetitionScoreCreatingContext extends _i1.Mock
       ) as int);
 
   @override
-  _i5.Hill get hill => (super.noSuchMethod(
+  _i7.Hill get hill => (super.noSuchMethod(
         Invocation.getter(#hill),
         returnValue: _FakeHill_3(
           this,
           Invocation.getter(#hill),
         ),
-      ) as _i5.Hill);
+      ) as _i7.Hill);
 
   @override
-  _i6.Jumper get entity => (super.noSuchMethod(
+  _i8.Jumper get entity => (super.noSuchMethod(
         Invocation.getter(#entity),
         returnValue: _FakeJumper_4(
           this,
           Invocation.getter(#entity),
         ),
-      ) as _i6.Jumper);
+      ) as _i8.Jumper);
 }
 
 /// A class which mocks [TeamCompetitionScoreCreatingContext].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTeamCompetitionScoreCreatingContext extends _i1.Mock
-    implements _i11.TeamCompetitionScoreCreatingContext {
+class MockTeamCompetitionScoreCreatingContext extends _i2.Mock
+    implements _i13.TeamCompetitionScoreCreatingContext {
   MockTeamCompetitionScoreCreatingContext() {
-    _i1.throwOnMissingStub(this);
+    _i2.throwOnMissingStub(this);
   }
 
   @override
-  _i2.JumpScore<_i6.Jumper> get lastJumpScore => (super.noSuchMethod(
+  _i3.Score<_i8.Jumper, _i14.JumpScoreDetails> get lastJumpScore => (super.noSuchMethod(
         Invocation.getter(#lastJumpScore),
-        returnValue: _FakeJumpScore_0<_i6.Jumper>(
+        returnValue: _FakeScore_0<_i8.Jumper, _i14.JumpScoreDetails>(
           this,
           Invocation.getter(#lastJumpScore),
         ),
-      ) as _i2.JumpScore<_i6.Jumper>);
+      ) as _i3.Score<_i8.Jumper, _i14.JumpScoreDetails>);
 
   @override
-  _i3.EventSeries get eventSeries => (super.noSuchMethod(
+  _i4.EventSeries get eventSeries => (super.noSuchMethod(
         Invocation.getter(#eventSeries),
         returnValue: _FakeEventSeries_1(
           this,
           Invocation.getter(#eventSeries),
         ),
-      ) as _i3.EventSeries);
+      ) as _i4.EventSeries);
 
   @override
-  _i4.Competition<_i8.CompetitionTeam<_i7.Team>> get competition =>
+  _i6.Competition<_i10.CompetitionTeam<_i9.Team>, dynamic> get competition =>
       (super.noSuchMethod(
         Invocation.getter(#competition),
-        returnValue: _FakeCompetition_2<_i8.CompetitionTeam<_i7.Team>>(
+        returnValue: _FakeCompetition_2<_i10.CompetitionTeam<_i9.Team>, _i5.Standings>(
           this,
           Invocation.getter(#competition),
         ),
-      ) as _i4.Competition<_i8.CompetitionTeam<_i7.Team>>);
+      ) as _i6.Competition<_i10.CompetitionTeam<_i9.Team>, dynamic>);
 
   @override
   int get currentRound => (super.noSuchMethod(
@@ -222,49 +224,49 @@ class MockTeamCompetitionScoreCreatingContext extends _i1.Mock
       ) as int);
 
   @override
-  _i5.Hill get hill => (super.noSuchMethod(
+  _i7.Hill get hill => (super.noSuchMethod(
         Invocation.getter(#hill),
         returnValue: _FakeHill_3(
           this,
           Invocation.getter(#hill),
         ),
-      ) as _i5.Hill);
+      ) as _i7.Hill);
 
   @override
-  _i8.CompetitionTeam<_i7.Team> get entity => (super.noSuchMethod(
+  _i10.CompetitionTeam<_i9.Team> get entity => (super.noSuchMethod(
         Invocation.getter(#entity),
-        returnValue: _FakeCompetitionTeam_5<_i7.Team>(
+        returnValue: _FakeCompetitionTeam_5<_i9.Team>(
           this,
           Invocation.getter(#entity),
         ),
-      ) as _i8.CompetitionTeam<_i7.Team>);
+      ) as _i10.CompetitionTeam<_i9.Team>);
 }
 
 /// A class which mocks [Country].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCountry extends _i1.Mock implements _i10.Country {
+class MockCountry extends _i2.Mock implements _i12.Country {
   MockCountry() {
-    _i1.throwOnMissingStub(this);
+    _i2.throwOnMissingStub(this);
   }
 
   @override
   String get code => (super.noSuchMethod(
         Invocation.getter(#code),
-        returnValue: _i12.dummyValue<String>(
+        returnValue: _i15.dummyValue<String>(
           this,
           Invocation.getter(#code),
         ),
       ) as String);
 
   @override
-  _i9.MultilingualString get multilingualName => (super.noSuchMethod(
+  _i11.MultilingualString get multilingualName => (super.noSuchMethod(
         Invocation.getter(#multilingualName),
         returnValue: _FakeMultilingualString_6(
           this,
           Invocation.getter(#multilingualName),
         ),
-      ) as _i9.MultilingualString);
+      ) as _i11.MultilingualString);
 
   @override
   List<Object?> get props => (super.noSuchMethod(
@@ -273,12 +275,12 @@ class MockCountry extends _i1.Mock implements _i10.Country {
       ) as List<Object?>);
 
   @override
-  String name(_i13.BuildContext? context) => (super.noSuchMethod(
+  String name(_i16.BuildContext? context) => (super.noSuchMethod(
         Invocation.method(
           #name,
           [context],
         ),
-        returnValue: _i12.dummyValue<String>(
+        returnValue: _i15.dummyValue<String>(
           this,
           Invocation.method(
             #name,
@@ -297,9 +299,9 @@ class MockCountry extends _i1.Mock implements _i10.Country {
       ) as Map<String, dynamic>);
 
   @override
-  _i10.Country copyWith({
+  _i12.Country copyWith({
     String? code,
-    _i9.MultilingualString? multilingualName,
+    _i11.MultilingualString? multilingualName,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -321,5 +323,5 @@ class MockCountry extends _i1.Mock implements _i10.Country {
             },
           ),
         ),
-      ) as _i10.Country);
+      ) as _i12.Country);
 }

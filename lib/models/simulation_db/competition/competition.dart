@@ -2,10 +2,11 @@ import 'package:equatable/equatable.dart';
 
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_provider.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/score_details.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 
-class Competition<E> with EquatableMixin {
+class Competition<E, S extends Standings<dynamic, ScoreDetails>> with EquatableMixin {
   const Competition({
     required this.hill,
     required this.date,
@@ -17,17 +18,17 @@ class Competition<E> with EquatableMixin {
   final Hill hill;
   final DateTime date;
   final DefaultCompetitionRulesProvider<E> rules;
-  final Standings<E>? standings;
+  final S? standings;
   final List<Object> labels;
 
-  Competition<E> copyWith({
+  Competition<E, S> copyWith({
     Hill? hill,
     DateTime? date,
     DefaultCompetitionRules<E>? rules,
-    Standings<E>? standings,
+    S? standings,
     List<Object>? labels,
   }) {
-    return Competition<E>(
+    return Competition<E, S>(
       hill: hill ?? this.hill,
       date: date ?? this.date,
       rules: rules ?? this.rules,

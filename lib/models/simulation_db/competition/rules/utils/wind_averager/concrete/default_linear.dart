@@ -9,7 +9,7 @@ class DefaultLinearWindAverager extends DefaultWindAverager {
   });
 
   @override
-  Wind computeAverage() {
+  void computeAveragedWindObject() {
     double divider = countedWinds.length.toDouble();
     if (partiallyIncomplete != null) {
       divider += partialIncompletionFactor!;
@@ -37,6 +37,7 @@ class DefaultLinearWindAverager extends DefaultWindAverager {
       ),
     );
 
-    return Wind(direction: averageWindDirection, strength: averageWindStrength);
+    averagedWindObject =
+        Wind(direction: averageWindDirection, strength: averageWindStrength);
   }
 }

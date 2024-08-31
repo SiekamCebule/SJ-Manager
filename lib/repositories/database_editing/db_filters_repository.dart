@@ -51,9 +51,6 @@ class DbFiltersRepo with EquatableMixin {
     return _filtersByType[type]?.stream ?? _neverStream();
   }
 
-  static _doesNotHaveTypeInMap(Type type) =>
-      StateError('The DbFiltersRepo does not have a filters list subject for type $type');
-
   bool containsType(Type type) => _filtersByType.containsKey(type);
 
   bool get hasValidFilter {

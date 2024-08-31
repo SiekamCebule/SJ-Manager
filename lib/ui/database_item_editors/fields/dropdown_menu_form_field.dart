@@ -74,12 +74,6 @@ class DropdownMenuFormFieldState<T> extends FormFieldState<T> {
       widget as DropdownMenuFormField<T>;
 
   @override
-  void didChange(T? value) {
-    super.didChange(value);
-    // _dropdownMenuFormField.onSelected!(value);
-  }
-
-  @override
   void didUpdateWidget(DropdownMenuFormField<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.initialValue != widget.initialValue) {
@@ -91,12 +85,5 @@ class DropdownMenuFormFieldState<T> extends FormFieldState<T> {
   void reset() {
     super.reset();
     _dropdownMenuFormField.onSelected!(value);
-  }
-
-  @override
-  bool validate() {
-    print('VALIDATE IN DROPDOWN');
-    // TODO: implement validate
-    return super.validate();
   }
 }

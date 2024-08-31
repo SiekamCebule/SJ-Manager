@@ -5,13 +5,16 @@ import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/general/entity_related_algorithm_context.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/unary_algorithm.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/classification_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/classification_score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
 
-abstract class ClassificationScoreCreatingContext<E,
-        C extends Classification<E, ClassificationRules<E>>>
-    extends EntityRelatedAlgorithmContext<E> {
+abstract class ClassificationScoreCreatingContext<
+    E,
+    C extends Classification<E, Standings<E, ClassificationScoreDetails>,
+        ClassificationRules<E>>> extends EntityRelatedAlgorithmContext<E> {
   const ClassificationScoreCreatingContext({
     required super.entity,
     required this.eventSeries,
@@ -28,7 +31,8 @@ abstract class ClassificationScoreCreatingContext<E,
 }
 
 abstract class DefaultClassificationScoreCreatingContext<E>
-    extends ClassificationScoreCreatingContext<E, DefaultClassification<E>> {
+    extends ClassificationScoreCreatingContext<E,
+        DefaultClassification<E, Standings<E, ClassificationScoreDetails>>> {
   const DefaultClassificationScoreCreatingContext({
     required super.entity,
     required super.eventSeries,
@@ -65,8 +69,10 @@ class DefaultIndividualClassificationScoreCreatingContext
 
 abstract class ClassificationScoreCreator<
         E,
-        C extends ClassificationScoreCreatingContext<E,
-            Classification<E, ClassificationRules<E>>>>
+        C extends ClassificationScoreCreatingContext<
+            E,
+            Classification<E, Standings<E, ClassificationScoreDetails>,
+                ClassificationRules<E>>>>
     with EquatableMixin
     implements UnaryAlgorithm<C, ClassificationScore<E>> {
   @override

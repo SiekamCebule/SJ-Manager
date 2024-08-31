@@ -2,27 +2,26 @@ import 'package:sj_manager/models/simulation_db/classification/default_classific
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/concrete/default.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/simulation_db/standings/utils/standings_utils.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
 
 class DefaultIndividualClassificationScoreCreator
     extends DefaultClassificationScoreCreator<Jumper,
-        DefaultIndividualClassificationScoreCreatingContext, JumpScore<Jumper>> {
+        DefaultIndividualClassificationScoreCreatingContext> {
   @override
   void setUpCompetitionScores() {
     final classificationRules =
         context.classification.rules as DefaultIndividualClassificationRules;
     for (var competition in significantCompetitions) {
-      if (competition is Competition<Jumper>) {
-        final maybeScore =
-            competition.standings!.scoreOf(context.entity) as CompetitionJumperScore?;
+      if (competition is Competition<Jumper, IndividualCompetitionStandings>) {
+        final maybeScore = competition.standings!.scoreOf(context.entity);
         if (maybeScore != null) {
           competitionScores.add(maybeScore);
         }
-      } else if (competition is Competition<CompetitionTeam>) {
+      } else if (competition is Competition<CompetitionTeam, TeamCompetitionStandings>) {
         if (classificationRules.includeIndividualPlaceFromTeamCompetitions) {
           final score = _jumperScoreFromTeam(competition);
           if (score != null) {
@@ -36,15 +35,16 @@ class DefaultIndividualClassificationScoreCreator
   @override
   void calculatePoints() {
     for (var competition in significantCompetitions) {
-      if (competition is Competition<Jumper>) {
+      if (competition is Competition<Jumper, IndividualCompetitionStandings>) {
         _addPointsForIndividual(competition);
-      } else if (competition is Competition<CompetitionTeam>) {
+      } else if (competition is Competition<CompetitionTeam, TeamCompetitionStandings>) {
         _addPointsForTeam(competition);
       }
     }
   }
 
-  void _addPointsForIndividual(Competition<Jumper> competition) {
+  void _addPointsForIndividual(
+      Competition<Jumper, IndividualCompetitionStandings> competition) {
     final rules = context.classification.rules;
     switch (rules.scoringType) {
       case DefaultClassificationScoringType.pointsFromCompetitions:
@@ -56,11 +56,13 @@ class DefaultIndividualClassificationScoreCreator
     }
   }
 
-  CompetitionJumperScore? _jumperScoreFromIndividual(Competition<Jumper> competition) {
+  CompetitionJumperScore? _jumperScoreFromIndividual(
+      Competition<Jumper, Standings> competition) {
     return competition.standings!.scoreOf(context.entity) as CompetitionJumperScore?;
   }
 
-  void _addPointsForTeam(Competition<CompetitionTeam> competition) {
+  void _addPointsForTeam(
+      Competition<CompetitionTeam, TeamCompetitionStandings> competition) {
     final rules = context.classification.rules;
     switch (rules.scoringType) {
       case DefaultClassificationScoringType.pointsFromCompetitions:
@@ -77,15 +79,15 @@ class DefaultIndividualClassificationScoreCreator
     }
   }
 
-  CompetitionJumperScore? _jumperScoreFromTeam(Competition<CompetitionTeam> competition) {
+  CompetitionJumperScore? _jumperScoreFromTeam(
+      Competition<CompetitionTeam, TeamCompetitionStandings> competition) {
     final teamOfJumper = teamOfJumperInStandings(
       jumper: context.entity,
       standings: competition.standings!,
     );
     if (teamOfJumper != null) {
-      final teamScore =
-          competition.standings!.scoreOf(teamOfJumper)! as CompetitionTeamScore;
-      final jumperScore = teamScore.jumperScore(context.entity);
+      final teamScore = competition.standings!.scoreOf(teamOfJumper)!;
+      final jumperScore = teamScore.details.jumperScore(context.entity)!;
       return jumperScore;
     } else {
       return null;

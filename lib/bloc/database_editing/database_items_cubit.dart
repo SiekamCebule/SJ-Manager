@@ -13,7 +13,6 @@ import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
-import 'package:sj_manager/repositories/generic/items_repo.dart';
 
 class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
   DatabaseItemsCubit({
