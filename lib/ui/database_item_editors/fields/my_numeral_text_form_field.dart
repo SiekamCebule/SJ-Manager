@@ -163,17 +163,6 @@ class MyNumeralTextFormFieldState extends State<MyNumeralTextFormField> {
         : textField;
   }
 
-  void _onTextFieldChange() {
-    _setToMinIfEmpty();
-    widget.onChange();
-  }
-
-  void _setToMinIfEmpty() {
-    if (widget.controller.text.isEmpty) {
-      widget.controller.text = widget.min.toString();
-    }
-  }
-
   double preparedNumber(double number) {
     return double.parse(
         minimizeDecimalPlaces(roundToNDecimalPlaces(number, widget.maxDecimalPlaces!)));

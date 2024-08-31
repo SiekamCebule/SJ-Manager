@@ -64,9 +64,6 @@ class CompetitionStartlistRepo<E> with EquatableMixin {
     return _completionMap.values.every((value) => value == true);
   }
 
-  Error _everyEntityHasCompletedError() => StateError(
-      'Tried to get first entity which hasn\'t completed, but every entity has completed its jump');
-
   void moveEntity({required E entity, required int newIndex}) {
     late final int currentIndex;
     try {

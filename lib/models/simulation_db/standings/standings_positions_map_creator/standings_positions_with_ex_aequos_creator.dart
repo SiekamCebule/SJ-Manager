@@ -24,13 +24,18 @@ class StandingsPositionsWithExAequosCreator extends StandingsPositionsCreator {
     int currentPosition = 1;
     int currentRank = 1;
 
-    for (int i = 0; i < _scores.length; i++) {
-      if (i > 0 && _scores[i] != _scores[i - 1]) {
-        currentRank = currentPosition;
+    while (currentPosition <= _scores.length) {
+      List<Score> tiedScores = [];
+      double currentPoints = _scores[currentPosition - 1].points;
+
+      while (currentPosition <= _scores.length &&
+          _scores[currentPosition - 1].points == currentPoints) {
+        tiedScores.add(_scores[currentPosition - 1]);
+        currentPosition++;
       }
 
-      positionsMap.putIfAbsent(currentRank, () => []).add(_scores[i]);
-      currentPosition++;
+      positionsMap[currentRank] = tiedScores;
+      currentRank += tiedScores.length;
     }
 
     return positionsMap;

@@ -25,7 +25,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_round
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_round_advancement_determinator/ko_round_advancement_determinator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/concrete/default_linear.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/wind_averager.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -163,7 +163,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
 
   @override
   Widget build(BuildContext context) {
-    print('rules editor: build(): _groupsCount: $_groupsCount');
     const gap = Gap(UiItemEditorsConstants.verticalSpaceBetweenFields);
     final mainBody = Column(
       children: [
@@ -202,10 +201,10 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                     condition: (config) {
                       if (_competitionType == _CompetitionType.individual) {
                         return config.object
-                            is CompetitionScoreCreator<CompetitionScore<Jumper, dynamic>>;
+                            is CompetitionScoreCreator<CompetitionScore<Jumper>>;
                       } else {
-                        return config.object is CompetitionScoreCreator<
-                            CompetitionScore<CompetitionTeam, dynamic>>;
+                        return config.object
+                            is CompetitionScoreCreator<CompetitionScore<CompetitionTeam>>;
                       }
                     },
                   );
@@ -213,7 +212,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                     controller: _competitionScoreCreatorController,
                     label: const Text('Tworzenie wyniku konkursowego'),
                     onChange: (key) {
-                      print('CompetitionScoreCreator Dropdown changed: $key');
                       setState(() {
                         _competitionScoreCreator = context
                             .read<
@@ -846,45 +844,34 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                               }),
                               gap,
                               Flexible(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Builder(
-                                        builder: (context) {
-                                          final enabled = _koEnabled &&
-                                              _koGroupsCreator
-                                                      is DefaultClassicKoGroupsCreator ==
-                                                  false;
-                                          var min = 1;
-                                          var max = 100;
-                                          if (_koGroupsCreator
-                                              is DefaultClassicKoGroupsCreator) {
-                                            min = 1;
-                                            max = 1;
-                                          }
-                                          return MyNumeralTextField(
-                                            controller: _groupAdvancementCountController,
-                                            onChange: () {
-                                              _onChange();
-                                              _ensureCorrectNumberInGroup();
-                                            },
-                                            labelText: 'Ilość awansujących z grupy',
-                                            step: 1,
-                                            min: min,
-                                            max: max,
-                                            enabled: enabled &&
-                                                _koAdvancementDeterminator
-                                                    is NBestKoRoundAdvancementDeterminator,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    /*const Gap(
-                                        UiFieldWidgetsConstants.gapBetweenFieldAndHelpButton),
-                                    HelpIconButton(onPressed: () {
-                                      throw UnimplementedError();
-                                    }),*/ // TODO: ???
-                                  ],
+                                child: Builder(
+                                  builder: (context) {
+                                    final enabled = _koEnabled &&
+                                        _koGroupsCreator
+                                                is DefaultClassicKoGroupsCreator ==
+                                            false;
+                                    var min = 1;
+                                    var max = 100;
+                                    if (_koGroupsCreator
+                                        is DefaultClassicKoGroupsCreator) {
+                                      min = 1;
+                                      max = 1;
+                                    }
+                                    return MyNumeralTextField(
+                                      controller: _groupAdvancementCountController,
+                                      onChange: () {
+                                        _onChange();
+                                        _ensureCorrectNumberInGroup();
+                                      },
+                                      labelText: 'Ilość awansujących z grupy',
+                                      step: 1,
+                                      min: min,
+                                      max: max,
+                                      enabled: enabled &&
+                                          _koAdvancementDeterminator
+                                              is NBestKoRoundAdvancementDeterminator,
+                                    );
+                                  },
                                 ),
                               ),
                             ],
@@ -1108,7 +1095,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
   void _addGroupAt(int index) {
     final defaultItem = context.read<DefaultItemsRepo>().get<TeamCompetitionGroupRules>();
     final roundRules = _cachedRules!.rounds[_selectedRoundIndex];
-    print('_addGroupAt($index): roundRules.runtimeType: ${roundRules.runtimeType}');
     if (roundRules is DefaultTeamCompetitionRoundRules == false) {
       throw StateError('Cannot add a group for the individual competition');
     }
@@ -1185,7 +1171,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
 
   void _fillRoundFields(DefaultCompetitionRules competitionRules) {
     final rules = competitionRules.rounds[_selectedRoundIndex];
-    print('_fillRoundFields: selected round: $_selectedRoundIndex');
     _entitiesLimitCountController.text = rules.limit?.count.toString() ?? '';
     _entitiesLimitTypeController.text = translatedEntitiesLimitType(context, rules.limit);
     _entitiesLimitType = rules.limit?.type;
@@ -1233,7 +1218,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
     repo = context.read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>();
     _competitionScoreCreatorController.text =
         repo.getDisplayName(repo.getKeyByObject(rules.competitionScoreCreator));
-    _competitionScoreCreator = rules.competitionScoreCreator as CompetitionScoreCreator;
+    _competitionScoreCreator = rules.competitionScoreCreator;
 
     if (rules is DefaultTeamCompetitionRoundRules) {
       _groupsCount = rules.groupsCount;
@@ -1256,7 +1241,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
   }
 
   DefaultCompetitionRules _constructAndCache() {
-    print('rules editor: _constructAndCache()');
     final rounds = List.of(_cachedRules!.rounds);
     rounds[_selectedRoundIndex] = _constructCurrentRound();
     final rules = _competitionType == _CompetitionType.individual
@@ -1285,11 +1269,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
           )
         : null;
 
-    print('_constructCurrentRound(): koEnabled: $_koEnabled');
-    print('_constructCurrentRound(): _competitionType: $_competitionType');
-
-    // TODO: Może tutaj ensuring?
-
     switch (_competitionType) {
       case _CompetitionType.individual:
         return DefaultIndividualCompetitionRoundRules(
@@ -1307,7 +1286,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
           judgesCount: int.parse(_judgesCountController.text),
           significantJudgesCount: int.parse(_significantJudgesCountController.text),
           competitionScoreCreator: _competitionScoreCreator
-              as CompetitionScoreCreator<CompetitionScore<Jumper, dynamic>>,
+              as CompetitionScoreCreator<CompetitionScore<Jumper>>,
           jumpScoreCreator: _jumpScoreCreator,
           judgesCreator: _judgesCreator,
           koRules: _koEnabled ? _constructKoRulesForCurrentRound() : null,
@@ -1341,7 +1320,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
           judgesCount: int.parse(_judgesCountController.text),
           significantJudgesCount: int.parse(_significantJudgesCountController.text),
           competitionScoreCreator: _competitionScoreCreator
-              as CompetitionScoreCreator<CompetitionScore<CompetitionTeam, dynamic>>,
+              as CompetitionScoreCreator<CompetitionScore<CompetitionTeam>>,
           jumpScoreCreator: _jumpScoreCreator,
           judgesCreator: _judgesCreator,
           koRules: _koEnabled ? _constructKoRulesForCurrentRound() : null,
@@ -1356,17 +1335,13 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
     final defaultIndividualRoundRules =
         context.read<DefaultItemsRepo>().get<DefaultIndividualCompetitionRoundRules>();
 
-    print(
-      '_ensureCorrectRoundTypes: defaultTeamRoundRules.groupsCount: ${defaultTeamRoundRules.groupsCount}',
-    );
-
-    print('_ensureCorrectRoundTypes');
     if (T == DefaultCompetitionRoundRules<CompetitionTeam>) {
       return rounds
           .map((roundRules) {
             if (roundRules is DefaultIndividualCompetitionRoundRules) {
               return roundRules.toTeam(
-                competitionScoreCreator: defaultTeamRoundRules.competitionScoreCreator,
+                competitionScoreCreator: defaultTeamRoundRules.competitionScoreCreator
+                    as CompetitionScoreCreator<CompetitionTeamScore>,
                 groups: defaultTeamRoundRules.groups,
               );
             } else {
@@ -1381,7 +1356,8 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
             if (roundRules is DefaultTeamCompetitionRoundRules) {
               return roundRules.toIndividual(
                 competitionScoreCreator:
-                    defaultIndividualRoundRules.competitionScoreCreator,
+                    defaultIndividualRoundRules.competitionScoreCreator
+                        as CompetitionScoreCreator<CompetitionJumperScore>,
               );
             } else {
               return roundRules;
@@ -1429,7 +1405,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
 
   void _ensureCorrectCompetitionScoreCreator() {
     final repo = context.read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>();
-    print('_ensureCorrectCompetitionScoreCreator(): repo.objects: ${repo.objects}');
     final whereType = switch (_competitionType) {
       _CompetitionType.individual => repo.objects.whereType<
           DbEditingAvaiableObjectConfig<
@@ -1446,7 +1421,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
     final ok = _koGroupsCreatorFormFieldKey.currentState!.validate() &&
         _koRoundAdvancementDeterminatorFormFieldKey.currentState!.validate() &&
         _entitiesLimitCountFormFieldKey.currentState!.validate();
-    print('_validateFormFields(): ok: $ok');
     return ok;
   }
 

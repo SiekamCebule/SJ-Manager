@@ -46,7 +46,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_ave
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
@@ -60,7 +60,6 @@ import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
 import 'package:sj_manager/models/user_db/team/country_team.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
@@ -315,9 +314,8 @@ List<RepositoryProvider> defaultDbEditorProviders(BuildContext context) {
             .getObject('default'),
         significantJudgesCount: 3,
         competitionScoreCreator: context
-                .read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>()
-                .getObject('classic_team')
-            as CompetitionScoreCreator<CompetitionTeamScore<CompetitionTeam>>,
+            .read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>()
+            .getObject('classic_team') as CompetitionScoreCreator<CompetitionTeamScore>,
         jumpScoreCreator: context
             .read<DbEditingAvailableObjectsRepo<JumpScoreCreator>>()
             .getObject('classic'),

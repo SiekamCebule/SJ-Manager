@@ -5,7 +5,7 @@ import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 
-abstract class KoRoundAdvancementDeterminingContext<T> {
+abstract class KoRoundAdvancementDeterminingContext<E> {
   const KoRoundAdvancementDeterminingContext({
     required this.eventSeries,
     required this.competition,
@@ -18,11 +18,11 @@ abstract class KoRoundAdvancementDeterminingContext<T> {
   // TODO: final SimulationData simulationData;
   // TODO: final Season season;
   final EventSeries eventSeries;
-  final Competition<T> competition;
-  final Standings<T> koStandings;
+  final Competition<E, dynamic> competition;
+  final Standings<E, dynamic> koStandings;
   final int currentRound;
   final Hill hill;
-  final List<T> entities;
+  final List<E> entities;
 }
 
 abstract class KoRoundAdvancementDeterminator<E,

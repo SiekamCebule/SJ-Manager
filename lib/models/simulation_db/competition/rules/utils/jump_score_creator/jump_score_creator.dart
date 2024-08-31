@@ -2,12 +2,13 @@ import 'package:equatable/equatable.dart';
 import 'package:osje_sim/osje_sim.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/general/entity_related_algorithm_context.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/unary_algorithm.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/jump_score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 
-class JumpScoreCreatingContext extends EntityRelatedAlgorithmContext {
+class JumpScoreCreatingContext<E> extends EntityRelatedAlgorithmContext<E> {
   const JumpScoreCreatingContext(
       {required super.entity,
       required this.eventSeries,
@@ -32,14 +33,17 @@ class JumpScoreCreatingContext extends EntityRelatedAlgorithmContext {
   final int initialGate;
   final int gate;
   final WindMeasurement windDuringJump;
-  final Wind averagedWind;
+  final double averagedWind;
   final JumpSimulationRecord jumpRecord;
   final List<double> judges;
 }
 
-abstract class JumpScoreCreator
-    with EquatableMixin
-    implements UnaryAlgorithm<JumpScoreCreatingContext, JumpScore> {
+abstract class JumpScoreCreator<E>
+    with
+        EquatableMixin
+    implements
+        UnaryAlgorithm<JumpScoreCreatingContext<E>,
+            Score<E, CompetitionJumpScoreDetails>> {
   const JumpScoreCreator();
 
   @override

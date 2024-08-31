@@ -34,6 +34,6 @@ class WindAveragingContext extends EntityRelatedAlgorithmContext {
   final double distance;
 }
 
-abstract class WindAverager implements UnaryAlgorithm<WindAveragingContext, Wind> {
+abstract class WindAverager implements UnaryAlgorithm<WindAveragingContext, double> {
   const WindAverager();
 }

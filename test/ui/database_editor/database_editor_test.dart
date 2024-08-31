@@ -31,6 +31,8 @@ import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/repositories/settings/local_user_settings_repo.dart';
+import 'package:sj_manager/repositories/settings/mocked_user_settings_repo.dart';
+import 'package:sj_manager/repositories/settings/user_settings_repo.dart';
 import 'package:sj_manager/setup/app_configurator.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
@@ -45,6 +47,7 @@ import 'package:sj_manager/ui/screens/database_editor/database_editor_screen.dar
 import 'package:flutter/material.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropriate_db_item_list_tile.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
+import 'package:sj_manager/ui/theme/app_schemes.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
@@ -167,6 +170,14 @@ void main() {
         providers: [
           MultiProvider(
             providers: [
+              Provider<UserSettingsRepo>(
+                create: (context) => const MockedUserSettingsRepo(
+                  appColorScheme: AppColorScheme.blue,
+                  appThemeBrightness: Brightness.dark,
+                  databaseEditorTutorialShown: true,
+                  languageCode: 'en',
+                ),
+              ),
               Provider(
                 create: (context) => AppConfigurator(
                   shouldSetUpRouting: true,
@@ -370,13 +381,6 @@ void main() {
           find.byKey(const Key('name')),
           'Puchar Świata',
         );
-        await tap(find.byKey(const Key('priorityHelpButton')));
-        await tap(find.byKey(const Key('close')));
-        await tester.enterText(
-            find.descendant(
-                of: find.byKey(const Key('priority_expanded')),
-                matching: find.byType(MyNumeralTextField)),
-            '1');
         await tester.pumpAndSettle();
         expect((itemsCubit.state as DatabaseItemsNonEmpty).filteredItems.length, 1);
         await tester.tapAt(Offset.zero);

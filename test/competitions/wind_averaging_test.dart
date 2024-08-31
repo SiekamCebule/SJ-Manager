@@ -39,7 +39,8 @@ void main() {
         computePreciselyPartialMeasurement: true,
       );
 
-      final averageWind = averager.compute(context);
+      averager.compute(context);
+      final averageWind = averager.averagedWindObject!;
 
       expect(averageWind.strength, closeTo(1.722, 0.01));
       expect(averageWind.direction.value, closeTo(138, 0.1));
@@ -53,7 +54,8 @@ void main() {
         computePreciselyPartialMeasurement: false,
       );
 
-      final averageWind = averager.compute(context);
+      averager.compute(context);
+      final averageWind = averager.averagedWindObject!;
 
       expect(averageWind.strength, closeTo(1.885, 0.001));
       expect(averageWind.direction.value, closeTo(131.7, 0.1));
@@ -67,7 +69,8 @@ void main() {
         computePreciselyPartialMeasurement: true,
       );
 
-      final averageWind = averager.compute(context);
+      averager.compute(context);
+      final averageWind = averager.averagedWindObject!;
 
       expect(averageWind.strength, closeTo(2.33, 0.001));
       expect(averageWind.direction.value, closeTo(143.1, 0.1));
@@ -81,7 +84,8 @@ void main() {
         computePreciselyPartialMeasurement: false,
       );
 
-      final averageWind = averager.compute(context);
+      averager.compute(context);
+      final averageWind = averager.averagedWindObject!;
 
       expect(averageWind.strength, closeTo(2.33, 0.001));
       expect(averageWind.direction.value, closeTo(143.1, 0.1));
@@ -119,7 +123,8 @@ void main() {
         computePreciselyPartialMeasurement: true,
       );
 
-      final averageWind = averager.compute(context);
+      averager.compute(context);
+      final averageWind = averager.averagedWindObject!;
 
       expect(averageWind.strength, closeTo(2.009, 0.01));
       expect(averageWind.direction.value, closeTo(118.32, 0.1));
@@ -133,7 +138,8 @@ void main() {
         computePreciselyPartialMeasurement: false,
       );
 
-      final averageWind = averager.compute(context);
+      averager.compute(context);
+      final averageWind = averager.averagedWindObject!;
 
       expect(averageWind.strength, closeTo(2.38, 0.01));
       expect(averageWind.direction.value, closeTo(115.26, 0.1));
@@ -147,7 +153,8 @@ void main() {
         computePreciselyPartialMeasurement: false,
       );
 
-      final averageWind = averager.compute(context);
+      averager.compute(context);
+      final averageWind = averager.averagedWindObject!;
 
       expect(averageWind.strength, closeTo(2.265, 0.01));
       expect(averageWind.direction.value, closeTo(111.40, 0.1));

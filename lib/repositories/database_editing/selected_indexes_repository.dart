@@ -33,7 +33,6 @@ class SelectedIndexesRepo {
     } else {
       newSelectedIndexes = {index};
     }
-    print('new selected: $newSelectedIndexes');
     _subject.add(newSelectedIndexes);
   }
 

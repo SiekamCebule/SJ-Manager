@@ -5,7 +5,8 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/competit
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/judges_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/wind_averager.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/competition_score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart';
 
 abstract class DefaultCompetitionRoundRules<T> with EquatableMixin {
@@ -44,7 +45,8 @@ abstract class DefaultCompetitionRoundRules<T> with EquatableMixin {
   final JudgesCreator judgesCreator;
   final int significantJudgesCount;
   final JumpScoreCreator jumpScoreCreator;
-  final CompetitionScoreCreator<CompetitionScore<T, dynamic>> competitionScoreCreator;
+  final CompetitionScoreCreator<Score<T, CompetitionScoreDetails>>
+      competitionScoreCreator;
   final KoRoundRules? koRules;
 
   bool get judgesEnabled => judgesCount > 0;

@@ -115,8 +115,6 @@ class _DefaultCompetitionRulesPresetEditorState
 
   void _fillFields(DefaultCompetitionRulesPreset preset) {
     _nameController.text = preset.name;
-    print(preset.rules.rounds.first.koRules);
-    print('Preset editor: before _fillFields\'s setUp on rules editor');
     _rulesEditorKey.currentState!.setUp(preset.rules);
   }
 }

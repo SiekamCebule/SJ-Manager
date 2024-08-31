@@ -87,7 +87,6 @@ File fileByNameWithoutExtension(Directory directory, String name) {
 bool directoryIsValidForDatabase(BuildContext context, Directory directory) {
   final dbRegistry = context.read<DbItemsFilePathsRegistry>();
 
-  // Define the correct folder structure using the registry paths directly
   final correctFolderStructure = {
     fileInDirectory(directory, dbRegistry.get<MaleJumper>()).path,
     fileInDirectory(directory, dbRegistry.get<FemaleJumper>()).path,
@@ -99,7 +98,6 @@ bool directoryIsValidForDatabase(BuildContext context, Directory directory) {
     fileInDirectory(directory, dbRegistry.get<Country>()).path,
   };
 
-  // Create a set to store all the file paths found in the directory and subdirectories
   final currentFolderStructure = <String>{};
 
   for (var entity in directory.listSync(recursive: true)) {
@@ -108,10 +106,6 @@ bool directoryIsValidForDatabase(BuildContext context, Directory directory) {
     }
   }
 
-  print('correct: $correctFolderStructure');
-  print('current: $currentFolderStructure');
-
-  // Check if all required files are present
   return currentFolderStructure.containsAll(correctFolderStructure);
 }
 

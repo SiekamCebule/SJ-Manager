@@ -1,18 +1,39 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/simple_points_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 
 void main() {
   group(Standings, () {
-    late Standings<String> repo;
+    late Standings<String, SimplePointsScoreDetails> repo;
 
     test('Adding, editing and removing; updating standings', () {
-      const stoch = SimplePointsScore(315.5, entity: 'Kamil Stoch');
-      const kubacki = SimplePointsScore(333.4, entity: 'Dawid Kubacki');
-      const zyla = SimplePointsScore(315.5, entity: 'Piotr Żyła');
-      const geiger = SimplePointsScore(330.0, entity: 'Karl Geiger');
-      const eisenbichler = SimplePointsScore(350.1, entity: 'Markus Eisenbichler');
+      const stoch = Score<String, SimplePointsScoreDetails>(
+        entity: 'Kamil Stoch',
+        points: 315.5,
+        details: SimplePointsScoreDetails(),
+      );
+      const kubacki = Score<String, SimplePointsScoreDetails>(
+        entity: 'Dawid Kubacki',
+        points: 333.4,
+        details: SimplePointsScoreDetails(),
+      );
+      const zyla = Score<String, SimplePointsScoreDetails>(
+        entity: 'Piotr Żyła',
+        points: 315.5,
+        details: SimplePointsScoreDetails(),
+      );
+      const geiger = Score<String, SimplePointsScoreDetails>(
+        entity: 'Karl Geiger',
+        points: 330.0,
+        details: SimplePointsScoreDetails(),
+      );
+      const eisenbichler = Score<String, SimplePointsScoreDetails>(
+        entity: 'Markus Eisenbichler',
+        points: 350.1,
+        details: SimplePointsScoreDetails(),
+      );
 
       repo = Standings(
         positionsCreator: StandingsPositionsWithExAequosCreator(),
@@ -36,15 +57,51 @@ void main() {
     });
 
     group('Repo view utilities', () {
-      const kot = SimplePointsScore(116.4, entity: 'Maciej Kot');
-      const hula = SimplePointsScore(116.4, entity: 'Stefan Hula');
-      const kobayashi = SimplePointsScore(137.8, entity: 'Ryoyu Kobayashi');
-      const danielHuber = SimplePointsScore(137.8, entity: 'Daniel Huber');
-      const stefanHuber = SimplePointsScore(120.1, entity: 'Stefan Huber');
-      const wohlgenannt = SimplePointsScore(111.5, entity: 'Ulrich Wohlgenannt');
-      const kos = SimplePointsScore(127.5, entity: 'Lovro Kos');
-      const prevc = SimplePointsScore(114.9, entity: 'Domen Prevc');
-      const peier = SimplePointsScore(110.8, entity: 'Killian Peier');
+      const kot = Score<String, SimplePointsScoreDetails>(
+        entity: 'Maciej Kot',
+        points: 116.4,
+        details: SimplePointsScoreDetails(),
+      );
+      const hula = Score<String, SimplePointsScoreDetails>(
+        entity: 'Stefan Hula',
+        points: 116.4,
+        details: SimplePointsScoreDetails(),
+      );
+      const kobayashi = Score<String, SimplePointsScoreDetails>(
+        entity: 'Ryoyu Kobayashi',
+        points: 137.8,
+        details: SimplePointsScoreDetails(),
+      );
+      const danielHuber = Score<String, SimplePointsScoreDetails>(
+        entity: 'Daniel Huber',
+        points: 137.8,
+        details: SimplePointsScoreDetails(),
+      );
+      const stefanHuber = Score<String, SimplePointsScoreDetails>(
+        entity: 'Stefan Huber',
+        points: 120.1,
+        details: SimplePointsScoreDetails(),
+      );
+      const wohlgenannt = Score<String, SimplePointsScoreDetails>(
+        entity: 'Ulrich Wohlgenannt',
+        points: 111.5,
+        details: SimplePointsScoreDetails(),
+      );
+      const kos = Score<String, SimplePointsScoreDetails>(
+        entity: 'Lovro Kos',
+        points: 127.5,
+        details: SimplePointsScoreDetails(),
+      );
+      const prevc = Score<String, SimplePointsScoreDetails>(
+        entity: 'Domen Prevc',
+        points: 114.9,
+        details: SimplePointsScoreDetails(),
+      );
+      const peier = Score<String, SimplePointsScoreDetails>(
+        entity: 'Killian Peier',
+        points: 110.8,
+        details: SimplePointsScoreDetails(),
+      );
 
       setUpAll(() {
         repo = Standings(
@@ -82,10 +139,20 @@ void main() {
       });
 
       test('score by entity', () {
-        expect(repo.scoreOf('Domen Prevc'),
-            const SimplePointsScore(114.9, entity: 'Domen Prevc'));
-        expect(repo.scoreOf('Daniel Huber'),
-            const SimplePointsScore(137.8, entity: 'Daniel Huber'));
+        expect(
+            repo.scoreOf('Domen Prevc'),
+            const Score<String, SimplePointsScoreDetails>(
+              entity: 'Domen Prevc',
+              points: 114.9,
+              details: SimplePointsScoreDetails(),
+            ));
+        expect(
+            repo.scoreOf('Daniel Huber'),
+            const Score<String, SimplePointsScoreDetails>(
+              entity: 'Daniel Huber',
+              points: 137.8,
+              details: SimplePointsScoreDetails(),
+            ));
         expect(() => repo.scoreOf('Peter Prevc'), throwsA(isA<StateError>()));
       });
 

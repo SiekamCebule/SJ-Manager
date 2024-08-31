@@ -1,10 +1,11 @@
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/classification_score.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/simple_points_score.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/classification_score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/competition_score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/jump_score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/score_details.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class ScoreParser implements SimulationDbPartParser<Score> {
@@ -22,7 +23,7 @@ class ScoreParser implements SimulationDbPartParser<Score> {
   Score _loadAppropriate(Json json) {
     final type = json['type'] as String;
     return switch (type) {
-      'default_jump_score' => _loadDefaultJumpScore(json),
+      'competition_jump_score' => _loadCompetitionJumpScore(json),
       'jump_score' => _loadSimpleJumpScore(json),
       'jumper_competition_score' => _loadCompetitionJumperScore(json),
       'team_competition_score' => _loadCompetitionTeamScore(json),
@@ -32,25 +33,28 @@ class ScoreParser implements SimulationDbPartParser<Score> {
     };
   }
 
-  DefaultJumpScore _loadDefaultJumpScore(Json json) {
+  CompetitionJumpScore _loadCompetitionJumpScore(Json json) {
     final entity = idsRepo.get(json['entityId']);
     final jumpRecord = idsRepo.get(json['jumpRecordId']);
-    return DefaultJumpScore(
+    return CompetitionJumpScore(
       entity: entity,
-      distancePoints: json['distancePoints'],
-      judgesPoints: json['judgesPoints'],
-      gatePoints: json['gatePoints'],
-      windPoints: json['windPoints'],
-      jumpRecord: jumpRecord,
+      details: CompetitionJumpScoreDetails(
+        jumpRecord: jumpRecord,
+        distancePoints: json['distancePoints'],
+        judgesPoints: json['judgesPoints'],
+        gatePoints: json['gatePoints'],
+        windPoints: json['windPoints'],
+      ),
+      points: json['points'],
     );
   }
 
-  SimpleJumpScore _loadSimpleJumpScore(Json json) {
+  Score<dynamic, SimpleJumpScoreDetails> _loadSimpleJumpScore(Json json) {
     final entity = idsRepo.get(json['entityId']);
     final jumpRecord = idsRepo.get(json['jumpRecordId']);
-    return SimpleJumpScore(
+    return Score<dynamic, SimpleJumpScoreDetails>(
       entity: entity,
-      jumpRecord: jumpRecord,
+      details: SimpleJumpScoreDetails(jumpRecord: jumpRecord),
       points: json['points'],
     );
   }
@@ -64,7 +68,9 @@ class ScoreParser implements SimulationDbPartParser<Score> {
     return CompetitionJumperScore(
       entity: entity,
       points: json['points'],
-      jumpScores: jumpScores.cast(),
+      details: CompetitionJumperScoreDetails(
+        jumpScores: jumpScores.cast(),
+      ),
     );
   }
 
@@ -77,15 +83,18 @@ class ScoreParser implements SimulationDbPartParser<Score> {
     return CompetitionTeamScore(
       entity: entity,
       points: json['points'],
-      jumperScores: jumperScores,
+      details: CompetitionTeamScoreDetails(
+        jumperScores: jumperScores,
+      ),
     );
   }
 
-  SimplePointsScore _loadSimplePointsScore(Json json) {
+  Score<dynamic, SimplePointsScoreDetails> _loadSimplePointsScore(Json json) {
     final entity = idsRepo.get(json['entityId']);
-    return SimplePointsScore(
-      json['points'],
+    return Score<dynamic, SimplePointsScoreDetails>(
       entity: entity,
+      points: json['points'],
+      details: const SimplePointsScoreDetails(),
     );
   }
 
@@ -97,7 +106,9 @@ class ScoreParser implements SimulationDbPartParser<Score> {
     return ClassificationScore(
       entity: idsRepo.get(json['entityId']),
       points: json['points'],
-      competitionScores: competitionScores.cast<CompetitionScore>(),
+      details: ClassificationScoreDetails(
+        competitionScores: competitionScores.cast<CompetitionScore>(),
+      ),
     );
   }
 }

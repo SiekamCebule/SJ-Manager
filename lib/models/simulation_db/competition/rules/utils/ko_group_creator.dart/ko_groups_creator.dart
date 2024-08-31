@@ -17,7 +17,7 @@ abstract class KoGroupsCreatingContext<T> {
   // TODO: final SimulationData simulationData;
   // TODO: final Season season;
   final EventSeries eventSeries;
-  final Competition<T> competition;
+  final Competition<T, dynamic> competition;
   final int currentRound;
   final Hill hill;
 

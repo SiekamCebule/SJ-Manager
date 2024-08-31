@@ -3,8 +3,9 @@ import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/general/entity_related_algorithm_context.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/unary_algorithm.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/competition_score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/jump_score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
@@ -23,10 +24,10 @@ abstract class CompetitionScoreCreatingContext<T>
   // TODO: final SimulationData simulationData;
   // TODO: final Season season;
   final EventSeries eventSeries;
-  final Competition<T> competition;
+  final Competition<T, dynamic> competition;
   final int currentRound;
   final Hill hill;
-  final CompetitionScore<T, dynamic>? currentScore;
+  final Score<T, dynamic>? currentScore;
 }
 
 class IndividualCompetitionScoreCreatingContext
@@ -41,7 +42,7 @@ class IndividualCompetitionScoreCreatingContext
     required this.lastJumpScore,
   });
 
-  final JumpScore<Jumper> lastJumpScore;
+  final Score<Jumper, JumpScoreDetails> lastJumpScore;
 }
 
 class TeamCompetitionScoreCreatingContext
@@ -58,10 +59,10 @@ class TeamCompetitionScoreCreatingContext
   });
 
   final int? currentGroup;
-  final JumpScore<Jumper> lastJumpScore;
+  final Score<Jumper, JumpScoreDetails> lastJumpScore;
 }
 
-abstract class CompetitionScoreCreator<S extends CompetitionScore>
+abstract class CompetitionScoreCreator<S extends Score<dynamic, CompetitionScoreDetails>>
     with EquatableMixin
     implements UnaryAlgorithm<CompetitionScoreCreatingContext, S> {
   @override

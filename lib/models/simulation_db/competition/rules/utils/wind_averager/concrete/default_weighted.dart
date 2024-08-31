@@ -10,7 +10,7 @@ class DefaultWeightedWindAverager extends DefaultWindAverager {
   });
 
   @override
-  Wind computeAverage() {
+  void computeAveragedWindObject() {
     //const ok = 2;
     final weights = context.windMeasurementWeights!;
     weights.length = (countedWinds.length + (partiallyIncomplete != null ? 1 : 0));
@@ -39,6 +39,6 @@ class DefaultWeightedWindAverager extends DefaultWindAverager {
     final averageDir = averageDirection(angles, weights);
     final averageStrength = weightedAverage(strengths, weights);
 
-    return Wind(direction: Degrees(averageDir), strength: averageStrength);
+    averagedWindObject = Wind(direction: Degrees(averageDir), strength: averageStrength);
   }
 }

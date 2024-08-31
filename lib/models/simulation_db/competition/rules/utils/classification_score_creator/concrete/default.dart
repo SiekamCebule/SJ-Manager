@@ -1,15 +1,13 @@
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition_labels.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/classification_score.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/classification_score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
-abstract class DefaultClassificationScoreCreator<
-    E,
-    C extends DefaultClassificationScoreCreatingContext<E>,
-    SJS extends JumpScore> extends ClassificationScoreCreator<E, C> {
+abstract class DefaultClassificationScoreCreator<E,
+        C extends DefaultClassificationScoreCreatingContext<E>>
+    extends ClassificationScoreCreator<E, C> {
   late C context;
   var significantCompetitions = <Competition>[];
   var competitionScores = <CompetitionScore>[];
@@ -39,7 +37,7 @@ abstract class DefaultClassificationScoreCreator<
   void setUpSignificantCompetitions() {
     significantCompetitions.clear();
     for (final competition in context.classification.rules.competitions) {
-      if (competition is Competition<Jumper>) {
+      if (competition is Competition<Jumper, IndividualCompetitionStandings>) {
         if (competition.labels.contains(CompetitionPlayedStatus.played)) {
           significantCompetitions.add(competition);
         }
@@ -68,10 +66,12 @@ abstract class DefaultClassificationScoreCreator<
   void calculatePoints();
 
   ClassificationScore<E> constructScore() {
-    return ClassificationScore(
+    return ClassificationScore<E>(
       entity: context.entity,
       points: points,
-      competitionScores: competitionScores,
+      details: ClassificationScoreDetails(
+        competitionScores: competitionScores,
+      ),
     );
   }
 }

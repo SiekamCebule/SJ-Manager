@@ -14,7 +14,6 @@ import 'package:sj_manager/ui/database_item_editors/fields/my_text_form_field.da
 import 'package:sj_manager/ui/dialogs/simple_help_dialog.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/event_series_setup_id_help_dialog.dart';
-import 'package:sj_manager/ui/screens/database_editor/large/dialogs/event_series_setup_priority_help_dialog.dart';
 import 'package:sj_manager/ui/providers/locale_cubit.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable/text_formatters.dart';

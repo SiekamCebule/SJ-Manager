@@ -7,9 +7,8 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/competit
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/judges_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/wind_averager.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
 
 class DefaultTeamCompetitionRoundRules
@@ -36,8 +35,7 @@ class DefaultTeamCompetitionRoundRules
   });
 
   DefaultIndividualCompetitionRoundRules toIndividual({
-    required CompetitionScoreCreator<CompetitionScore<Jumper, dynamic>>
-        competitionScoreCreator,
+    required CompetitionScoreCreator<CompetitionJumperScore> competitionScoreCreator,
   }) {
     return DefaultIndividualCompetitionRoundRules(
       limit: limit,
@@ -80,8 +78,7 @@ class DefaultTeamCompetitionRoundRules
     JudgesCreator? judgesCreator,
     int? significantJudgesCount,
     JumpScoreCreator? jumpScoreCreator,
-    CompetitionScoreCreator<CompetitionScore<CompetitionTeam, dynamic>>?
-        competitionScoreCreator,
+    CompetitionScoreCreator<CompetitionTeamScore>? competitionScoreCreator,
     KoRoundRules? koRules,
     List<TeamCompetitionGroupRules>? groups,
   }) {

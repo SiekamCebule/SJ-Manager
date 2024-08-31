@@ -2,9 +2,8 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ro
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
 
 class DefaultIndividualCompetitionRoundRules
     extends DefaultCompetitionRoundRules<Jumper> {
@@ -29,8 +28,7 @@ class DefaultIndividualCompetitionRoundRules
   });
 
   DefaultTeamCompetitionRoundRules toTeam({
-    required CompetitionScoreCreator<CompetitionScore<CompetitionTeam, dynamic>>
-        competitionScoreCreator,
+    required CompetitionScoreCreator<CompetitionTeamScore> competitionScoreCreator,
     required List<TeamCompetitionGroupRules> groups,
   }) {
     return DefaultTeamCompetitionRoundRules(

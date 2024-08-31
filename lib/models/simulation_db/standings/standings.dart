@@ -1,11 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/score_details.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
 
-class Standings<E> with EquatableMixin implements ValueRepo<Map<int, List<Score<E>>>> {
-  Standings({required this.positionsCreator, List<Score<E>>? initialScores}) {
+class Standings<E, D extends ScoreDetails>
+    with EquatableMixin
+    implements ValueRepo<Map<int, List<Score<E, D>>>> {
+  Standings({required this.positionsCreator, List<Score<E, D>>? initialScores}) {
     if (initialScores != null) {
       _scores = List.of(initialScores);
       update();
@@ -13,14 +16,14 @@ class Standings<E> with EquatableMixin implements ValueRepo<Map<int, List<Score<
     }
   }
 
-  var _scores = <Score<E>>[];
-  var _standings = <int, List<Score<E>>>{};
-  final _subject = BehaviorSubject<Map<int, List<Score<E>>>>.seeded({});
+  var _scores = <Score<E, D>>[];
+  var _standings = <int, List<Score<E, D>>>{};
+  final _subject = BehaviorSubject<Map<int, List<Score<E, D>>>>.seeded({});
 
   StandingsPositionsCreator positionsCreator;
 
-  void addScore({required Score<E> newScore, bool overwrite = false}) {
-    Score<E>? scoreToChange;
+  void addScore({required Score<E, D> newScore, bool overwrite = false}) {
+    Score<E, D>? scoreToChange;
     for (var score in _scores) {
       if (score.entity == newScore.entity) {
         scoreToChange = score;
@@ -40,7 +43,7 @@ class Standings<E> with EquatableMixin implements ValueRepo<Map<int, List<Score<
     set(_standings);
   }
 
-  void remove({required Score<E> score}) {
+  void remove({required Score<E, D> score}) {
     _scores.remove(score);
     update();
     set(_standings);
@@ -50,11 +53,11 @@ class Standings<E> with EquatableMixin implements ValueRepo<Map<int, List<Score<
     _standings = positionsCreator.create(_scores).cast();
   }
 
-  List<Score<E>> get leaders {
+  List<Score<E, D>> get leaders {
     return atPosition(1);
   }
 
-  List<Score<E>> atPosition(int position) {
+  List<Score<E, D>> atPosition(int position) {
     if (!_standings.containsKey(position)) {
       throw StateError('Standings does not have any entity at $position position');
     }
@@ -72,7 +75,7 @@ class Standings<E> with EquatableMixin implements ValueRepo<Map<int, List<Score<
     return null;
   }
 
-  Score<E>? scoreOf(E entity) {
+  Score<E, D>? scoreOf(E entity) {
     for (var score in _scores) {
       if (score.entity == entity) {
         return score;
@@ -98,17 +101,17 @@ class Standings<E> with EquatableMixin implements ValueRepo<Map<int, List<Score<
   }
 
   @override
-  void set(Map<int, List<Score<E>>> value) {
+  void set(Map<int, List<Score<E, D>>> value) {
     _subject.add(Map.of(value));
   }
 
   @override
-  ValueStream<Map<int, List<Score<E>>>> get items => _subject.stream;
+  ValueStream<Map<int, List<Score<E, D>>>> get items => _subject.stream;
 
   @override
-  Map<int, List<Score<E>>> get last => items.value;
+  Map<int, List<Score<E, D>>> get last => items.value;
 
-  List<Score<E>> get scores => _scores;
+  List<Score<E, D>> get scores => _scores;
 
   @override
   void dispose() {

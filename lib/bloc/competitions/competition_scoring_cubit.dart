@@ -3,23 +3,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:osje_sim/osje_sim.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/competition_scores.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/concrete/jump_score.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
-class CompetitionScoringCubit<E, SJS extends JumpScore>
-    extends Cubit<CompetitionScoringState> {
+class CompetitionScoringCubit<E> extends Cubit<CompetitionScoringState> {
   CompetitionScoringCubit({
     required this.jumpScoreCreator,
     required this.competitionScoreCreator,
   }) : super(const CompetitionScoringEmpty());
 
-  final JumpScoreCreator jumpScoreCreator;
-  final CompetitionScoreCreator<CompetitionScore<E, SJS>> competitionScoreCreator;
+  final JumpScoreCreator<Jumper> jumpScoreCreator;
+  final CompetitionScoreCreator<CompetitionScore<E>> competitionScoreCreator;
 
-  void calculateScore(
-      {required JumpSimulationRecord jumpSimulationRecord,
-      required JumpScoreCreatingContext jumpScoreCreatingContext,
-      required CompetitionScoreCreatingContext competitionScoreCreatingContext}) {
+  void calculateScore({
+    required JumpSimulationRecord jumpSimulationRecord,
+    required JumpScoreCreatingContext<Jumper> jumpScoreCreatingContext,
+    required CompetitionScoreCreatingContext<E> competitionScoreCreatingContext,
+  }) {
     final jumpScore = jumpScoreCreator.compute(jumpScoreCreatingContext);
     final competitionScore =
         competitionScoreCreator.compute(competitionScoreCreatingContext);
@@ -43,7 +43,7 @@ class CompetitionScoringNonEmpty<S extends CompetitionScore>
     required this.lastCompetitionScore,
   });
 
-  final JumpScore lastSingleJumpScore;
+  final CompetitionJumpScore lastSingleJumpScore;
   final S lastCompetitionScore;
 
   @override

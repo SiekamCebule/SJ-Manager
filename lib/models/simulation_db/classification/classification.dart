@@ -1,7 +1,10 @@
 import 'package:sj_manager/models/simulation_db/classification/default_classification_rules.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/classification_score_details.dart';
 
-abstract class Classification<E, R extends ClassificationRules<E>> {
+abstract class Classification<E, S extends Standings<E, ClassificationScoreDetails>,
+    R extends ClassificationRules<E>> {
   const Classification({
     required this.name,
     required this.standings,
@@ -9,7 +12,7 @@ abstract class Classification<E, R extends ClassificationRules<E>> {
   });
 
   final String name;
-  final Standings<E>? standings;
+  final S? standings;
   final R rules;
 
   void updateStandings() {
@@ -22,7 +25,8 @@ abstract class Classification<E, R extends ClassificationRules<E>> {
 
 // TODO: Custom classification
 
-class DefaultClassification<E> extends Classification<E, DefaultClassificationRules<E>> {
+class DefaultClassification<E, S extends Standings<E, ClassificationScoreDetails>>
+    extends Classification<E, S, DefaultClassificationRules<E>> {
   const DefaultClassification({
     required super.name,
     required super.standings,

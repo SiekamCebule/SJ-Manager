@@ -1,17 +1,44 @@
 import 'package:equatable/equatable.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/score_details.dart';
 
-abstract class Score<E> with EquatableMixin implements Comparable {
+class Score<E, D extends ScoreDetails>
+    with EquatableMixin
+    implements Comparable<Score<E, D>> {
   const Score({
     required this.entity,
+    required this.points,
+    required this.details,
   });
 
   final E entity;
+  final double points;
+  final D details;
 
-  bool operator <(Score other);
-  bool operator >(Score other);
+  Score<E, D> copyWith({
+    E? entity,
+    double? points,
+    D? details,
+  }) {
+    return Score<E, D>(
+      entity: entity ?? this.entity,
+      points: points ?? this.points,
+      details: details ?? this.details,
+    );
+  }
+
+  bool operator <(Score other) {
+    return points < other.points;
+  }
+
+  bool operator >(Score other) {
+    return points > other.points;
+  }
 
   @override
-  List<Object?> get props => [
-        entity,
-      ];
+  int compareTo(Score<E, D> other) {
+    return points.compareTo(other.points);
+  }
+
+  @override
+  List<Object?> get props => [entity];
 }
