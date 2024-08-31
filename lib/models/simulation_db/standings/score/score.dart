@@ -40,5 +40,9 @@ class Score<E, D extends ScoreDetails>
   }
 
   @override
-  List<Object?> get props => [entity];
+  List<Object?> get props => [
+        entity,
+        points,
+        details,
+      ];
 }
