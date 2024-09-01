@@ -6,21 +6,40 @@ class DefaultPotsKoGroupsCreator<E>
     extends DefaultSizedKoGroupsCreator<E, KoGroupsPotsCreatingContext<E>> {
   @override
   void constructGroupsAndRemainingEntities() {
-    final potsCount = entitiesInGroup;
-    remainingEntities = context.remainingEntities;
+    List<E> priorityEntities = [];
 
-    for (var potIndex = 0; potIndex < potsCount; potIndex++) {
-      final pot = context.pots[potIndex];
-      if (pot.length > entitiesInGroup) {
-        throw ArgumentError(
-          'A pot length (pot: $pot, length: ${pot.length}) cannot be less than entitiesInGroup ($entitiesInGroup) passed in the context',
-        );
+    for (var drawRoundIndex = 0; drawRoundIndex < context.pots.length; drawRoundIndex++) {
+      var pot = context.pots[drawRoundIndex];
+
+      List<E> addedPriorities = [];
+      for (var prioritiedEntity in priorityEntities) {
+        if (addedPriorities.length < groups.length) {
+          var targetGroup = groupsWithSize(drawRoundIndex).first;
+          targetGroup.entities.add(prioritiedEntity);
+          addedPriorities.add(prioritiedEntity);
+        }
       }
-      for (var entity in pot) {
-        final randomGroup = groupsWithSize(potIndex).randomElement();
-        randomGroup.entities.add(entity);
+
+      priorityEntities.removeWhere((e) => addedPriorities.contains(e));
+
+      List<E> addedFromPot = [];
+      while (pot.isNotEmpty &&
+          addedFromPot.length + addedPriorities.length < groups.length) {
+        var entityFromPot = pot.removeAt(pot.indexOf(pot.randomElement()));
+        var targetGroup = groupsWithSize(drawRoundIndex).first;
+        targetGroup.entities.add(entityFromPot);
+        addedFromPot.add(entityFromPot);
       }
+
+      final remainingEntities = [
+        ...pot,
+        ...priorityEntities,
+      ];
+
+      priorityEntities = remainingEntities;
     }
+
+    remainingEntities = priorityEntities;
   }
 
   @override
@@ -33,5 +52,3 @@ class DefaultPotsKoGroupsCreator<E>
   @override
   List<Object?> get props => [runtimeType];
 }
-
-// Jak ustalić remainingEntities?

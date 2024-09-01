@@ -19,9 +19,9 @@ import 'ko_competition_utilities_test.mocks.dart';
   KoGroupsPotsCreatingContext,
 ])
 void main() {
-  group(KoGroupsCreator, () {
+  group('KoGroupsCreator', () {
     const country = Country.emptyNone();
-    group(DefaultClassicKoGroupsCreator, () {
+    group('DefaultClassicKoGroupsCreator', () {
       test(
           'Creates groups for 8 jumpers in good order (groups\'s order and the order wihin group). Checks if passing uneven number causes an error',
           () {
@@ -61,8 +61,8 @@ void main() {
       });
     });
 
-    group(DefaultRandomKoGroupsCreator, () {
-      test('Entities count fits perfectly', () {
+    group('DefaultRandomKoGroupsCreator', () {
+      test('Even groups', () {
         final context = MockRandomKoGroupsCreatingContext<Jumper>();
         final jumpers = [
           Jumper.empty(country: country).copyWith(name: 'Jumper 1'),
@@ -115,9 +115,8 @@ void main() {
 
         final groups = creator.compute(context);
 
-        expect(groups.length, 3);
-        expect(groups.where((group) => group.entities.length == 4).length, 1);
-        expect(groups.where((group) => group.entities.length == 3).length, 2);
+        expect(groups.length, 2);
+        expect(groups.where((group) => group.entities.length == 5).length, 2);
         expect(groups.expand((group) => group.entities).toSet().length,
             jumpers.length); // no duplicates
       });
@@ -135,6 +134,7 @@ void main() {
           Jumper.empty(country: country).copyWith(name: 'Jumper 8'),
           Jumper.empty(country: country).copyWith(name: 'Jumper 9'),
           Jumper.empty(country: country).copyWith(name: 'Jumper 10'),
+          Jumper.empty(country: country).copyWith(name: 'Jumper 11'),
         ];
         final creator = DefaultRandomKoGroupsCreator<Jumper>();
 
@@ -142,13 +142,13 @@ void main() {
         when(context.entitiesCount).thenReturn(jumpers.length);
         when(context.entitiesInGroup).thenReturn(4);
         when(context.remainingEntitiesAction)
-            .thenReturn(KoGroupsCreatorRemainingEntitiesAction.placeInSmallestGroup);
+            .thenReturn(KoGroupsCreatorRemainingEntitiesAction.placeRandomly);
 
         final groups = creator.compute(context);
 
-        expect(groups.length, 3);
-        expect(groups.where((group) => group.entities.length == 4).length,
-            anyOf(isZero, equals(1)));
+        expect(groups.length, 2);
+        expect(groups.where((group) => group.entities.length == 5).length, 1);
+        expect(groups.where((group) => group.entities.length == 6).length, 1);
         expect(groups.expand((group) => group.entities).toSet().length,
             jumpers.length); // no duplicates
       });
@@ -165,7 +165,6 @@ void main() {
           Jumper.empty(country: country).copyWith(name: 'Jumper 7'),
           Jumper.empty(country: country).copyWith(name: 'Jumper 8'),
           Jumper.empty(country: country).copyWith(name: 'Jumper 9'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 10'),
         ];
         final creator = DefaultRandomKoGroupsCreator<Jumper>();
 
@@ -176,15 +175,15 @@ void main() {
             .thenReturn(KoGroupsCreatorRemainingEntitiesAction.placeAtBegin);
 
         final groups = creator.compute(context);
-        expect(groups.length, 3);
-        expect(groups.first.entities.length, 4);
-        expect(groups.where((group) => group.entities.length == 3).length, 2);
+        expect(groups.length, 2);
+        expect(groups.first.entities.length, 5);
+        expect(groups[1].entities.length, 4);
         expect(groups.expand((group) => group.entities).toSet().length,
             jumpers.length); // no duplicates
       });
     });
 
-    group(DefaultPotsKoGroupsCreator, () {
+    group('DefaultPotsKoGroupsCreator', () {
       test('Typical scenario', () {
         final context = MockKoGroupsPotsCreatingContext();
         final pots = [
@@ -214,20 +213,143 @@ void main() {
         when(context.pots).thenReturn(pots);
         when(context.entitiesCount)
             .thenReturn(pots.expand((entities) => entities).length);
-        when(context.entitiesInGroup).thenReturn(3);
+        when(context.entitiesInGroup).thenReturn(4);
         when(context.remainingEntitiesAction)
             .thenReturn(KoGroupsCreatorRemainingEntitiesAction.throwError);
 
         final groups = creator.compute(context);
-        expect(groups.length, 4);
-        expect(groups.every((group) => group.entities.length == 3), isTrue);
-        expect(groups[0].entities, containsAll(pots[0]));
-        expect(groups[1].entities, containsAll(pots[1]));
-        expect(groups[2].entities, containsAll(pots[2]));
-        expect(groups[3].entities, containsAll(pots[3]));
+        expect(groups.length, 3);
+        expect(groups.every((group) => group.entities.length == 4), isTrue);
+        expect(groups.map((group) => group.entities.first), containsAll(pots[0]));
+      });
+      test('Uneven groups, remainingEntitiesAction - placeRandomly', () {
+        final context = MockKoGroupsPotsCreatingContext();
+        final additionalJumper =
+            Jumper.empty(country: country).copyWith(name: 'Jumper 3.5');
+        final pots = [
+          [
+            Jumper.empty(country: country).copyWith(name: 'Jumper 1'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 2'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 3'),
+            additionalJumper,
+          ],
+          [
+            Jumper.empty(country: country).copyWith(name: 'Jumper 4'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 5'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 6'),
+          ],
+          [
+            Jumper.empty(country: country).copyWith(name: 'Jumper 7'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 8'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 9'),
+          ],
+          [
+            Jumper.empty(country: country).copyWith(name: 'Jumper 10'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 11'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 12'),
+          ],
+        ];
+        final creator = DefaultPotsKoGroupsCreator();
+        when(context.pots).thenReturn(pots);
+        when(context.entitiesCount)
+            .thenReturn(pots.expand((entities) => entities).length);
+        when(context.entitiesInGroup).thenReturn(4);
+        when(context.remainingEntitiesAction)
+            .thenReturn(KoGroupsCreatorRemainingEntitiesAction.placeRandomly);
+
+        final groups = creator.compute(context);
+        expect(groups.length, 3);
+        expect(groups.where((group) => group.entities.length == 4).length, 2);
+        expect(groups.where((group) => group.entities.length == 5).length, 1);
+        final firstEntities = groups.map((group) => group.entities[0]);
+        final secondEntities = groups.map((group) => group.entities[1]);
+        expect(
+          firstEntities.contains(additionalJumper) ||
+              secondEntities.contains(additionalJumper),
+          true,
+        );
       });
 
-      test('Typical scenario', () {});
+      test('Overwhelming entities count in first group', () {
+        final context = MockKoGroupsPotsCreatingContext();
+        final pots = [
+          [
+            Jumper.empty(country: country).copyWith(name: 'Jumper 1'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 2'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 3'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 4'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 5'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 6'),
+          ],
+          [
+            Jumper.empty(country: country).copyWith(name: 'Jumper 7'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 8'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 9'),
+          ],
+          [
+            Jumper.empty(country: country).copyWith(name: 'Jumper 10'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 11'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 12'),
+          ],
+          [
+            Jumper.empty(country: country).copyWith(name: 'Jumper 13'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 14'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 15'),
+          ],
+        ];
+        final creator = DefaultPotsKoGroupsCreator();
+        when(context.pots).thenReturn(pots);
+        when(context.entitiesCount)
+            .thenReturn(pots.expand((entities) => entities).length);
+        when(context.entitiesInGroup).thenReturn(4);
+        when(context.remainingEntitiesAction)
+            .thenReturn(KoGroupsCreatorRemainingEntitiesAction.placeRandomly);
+
+        final groups = creator.compute(context);
+        expect(groups.length, 3);
+        expect(groups.expand((group) => group.entities).length, 15);
+      });
+
+      test('Additional pot with one entity', () {
+        final context = MockKoGroupsPotsCreatingContext();
+        final pots = [
+          [
+            Jumper.empty(country: country).copyWith(name: 'Jumper 1'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 2'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 3'),
+          ],
+          [
+            Jumper.empty(country: country).copyWith(name: 'Jumper 4'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 5'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 6'),
+          ],
+          [
+            Jumper.empty(country: country).copyWith(name: 'Jumper 7'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 8'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 9'),
+          ],
+          [
+            Jumper.empty(country: country).copyWith(name: 'Jumper 10'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 11'),
+            Jumper.empty(country: country).copyWith(name: 'Jumper 12'),
+          ],
+          [
+            Jumper.empty(country: country).copyWith(name: 'Jumper 13'),
+          ],
+        ];
+        final creator = DefaultPotsKoGroupsCreator();
+        when(context.pots).thenReturn(pots);
+        when(context.entitiesCount)
+            .thenReturn(pots.expand((entities) => entities).length);
+        when(context.entitiesInGroup).thenReturn(4);
+        when(context.remainingEntitiesAction)
+            .thenReturn(KoGroupsCreatorRemainingEntitiesAction.placeRandomly);
+
+        final groups = creator.compute(context);
+        expect(groups.length, 3);
+        expect(groups.where((group) => group.entities.length == 4).length, 2);
+        expect(groups.where((group) => group.entities.length == 5).length, 1);
+      });
     });
   });
 }

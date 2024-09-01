@@ -1,3 +1,4 @@
+import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_group.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/concrete/default_customizable.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/ko_groups_creator.dart';
 import 'package:sj_manager/utils/iterable.dart';
@@ -10,13 +11,19 @@ class DefaultRandomKoGroupsCreator<E>
       if (everyGroupIsFull) {
         remainingEntities.add(entity);
       } else {
-        int minSize = nonFullGroups
-            .map((group) => group.entities.length)
-            .reduce((a, b) => a < b ? a : b);
-        var smallestGroups =
-            nonFullGroups.where((group) => group.entities.length == minSize).toList();
+        late KoGroup<E> targetGroup;
+        if (nonFullGroups.length > 1) {
+          int minSize = nonFullGroups
+              .map((group) => group.entities.length)
+              .reduce((a, b) => a < b ? a : b);
+          var smallestGroups =
+              nonFullGroups.where((group) => group.entities.length == minSize).toList();
+          targetGroup = smallestGroups.randomElement();
+        } else {
+          print('non full length: ${nonFullGroups.length}');
+          targetGroup = nonFullGroups.single;
+        }
 
-        var targetGroup = smallestGroups.randomElement();
         targetGroup.entities.add(entity);
       }
     }

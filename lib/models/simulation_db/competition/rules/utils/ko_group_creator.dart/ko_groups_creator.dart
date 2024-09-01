@@ -80,16 +80,13 @@ class KoGroupsPotsCreatingContext<T> extends KoGroupsCustomizableCreatingContext
     required super.entitiesInGroup,
     required super.remainingEntitiesAction,
     required this.pots,
-    required this.remainingEntities,
   });
 
   final List<List<T>> pots;
-  final List<T> remainingEntities;
 
   @override
   int get entitiesCount {
-    final inPots = pots.fold<int>(0, (sum, pot) => sum + pot.length);
-    return inPots + remainingEntities.length;
+    return pots.fold<int>(0, (sum, pot) => sum + pot.length);
   }
 }
 
