@@ -15,7 +15,7 @@ abstract class DefaultClassificationScoreCreator<E,
 
   @override
   ClassificationScore<E> compute(C input) {
-    setUpContext(context);
+    setUpContext(input);
     clearData();
     setUpSignificantCompetitions();
     validateSignificantCompetitions();
@@ -26,6 +26,7 @@ abstract class DefaultClassificationScoreCreator<E,
 
   void setUpContext(C context) {
     this.context = context;
+    print('context has set up');
   }
 
   void clearData() {
