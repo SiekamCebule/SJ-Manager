@@ -7,7 +7,7 @@ class ClassificationScoreDetails extends ScoreDetails {
     required this.competitionScores,
   });
 
-  final List<Score<dynamic, CompetitionScoreDetails>> competitionScores;
+  final List<Score<dynamic, CompetitionScoreDetails<dynamic>>> competitionScores;
 
   @override
   List<Object?> get props => [super.props, competitionScores];

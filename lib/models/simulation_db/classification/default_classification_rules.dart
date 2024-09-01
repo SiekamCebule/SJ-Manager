@@ -1,6 +1,7 @@
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/classification_score_details.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
@@ -11,10 +12,11 @@ abstract class ClassificationRules<E> {
   });
 
   final ClassificationScoreCreator<
+      E,
+      ClassificationScoreCreatingContext<
           E,
-          ClassificationScoreCreatingContext<E,
-              Classification<E, Standings<E, dynamic>, ClassificationRules<E>>>>
-      classificationScoreCreator;
+          Classification<E, Standings<E, ClassificationScoreDetails>,
+              ClassificationRules<E>>>> classificationScoreCreator;
 }
 
 abstract class DefaultClassificationRules<E> extends ClassificationRules<E> {

@@ -6,6 +6,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/general/
 import 'package:sj_manager/models/simulation_db/competition/rules/user_algorithms/unary_algorithm.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/details/classification_score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/competition_score_details.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
@@ -25,9 +26,9 @@ abstract class ClassificationScoreCreatingContext<
   // TODO: final SimulationData simulationData;
   // TODO: final Season season;
   final EventSeries eventSeries;
-  final Competition lastCompetition;
+  final Competition<E, Standings<E, CompetitionScoreDetails>> lastCompetition;
   final C classification;
-  final ClassificationScore? currentScore;
+  final ClassificationScore<E>? currentScore;
 }
 
 abstract class DefaultClassificationScoreCreatingContext<E>
