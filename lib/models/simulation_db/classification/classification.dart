@@ -1,6 +1,5 @@
 import 'package:sj_manager/models/simulation_db/classification/default_classification_rules.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/details/classification_score_details.dart';
 
 abstract class Classification<E, S extends Standings<E, ClassificationScoreDetails>,

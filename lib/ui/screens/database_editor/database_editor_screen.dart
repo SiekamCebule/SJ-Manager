@@ -253,8 +253,10 @@ List<RepositoryProvider> defaultDbEditorProviders(BuildContext context) {
           (context.read<ItemsReposRegistry>().get<Country>() as CountriesRepo).none;
       final koRoundRules = KoRoundRules(
         advancementDeterminator: context
-            .read<DbEditingAvailableObjectsRepo<KoRoundAdvancementDeterminator>>()
-            .getObject('n_best'),
+                .read<DbEditingAvailableObjectsRepo<KoRoundAdvancementDeterminator>>()
+                .getObject('n_best')
+            as KoRoundAdvancementDeterminator<dynamic,
+                KoRoundAdvancementDeterminingContext>,
         advancementCount: 1,
         koGroupsCreator: context
             .read<DbEditingAvailableObjectsRepo<KoGroupsCreator>>()

@@ -20,7 +20,7 @@ class Standings<E, D extends ScoreDetails>
   var _standings = <int, List<Score<E, D>>>{};
   final _subject = BehaviorSubject<Map<int, List<Score<E, D>>>>.seeded({});
 
-  StandingsPositionsCreator positionsCreator;
+  StandingsPositionsCreator<Score<E, D>> positionsCreator;
 
   void addScore({required Score<E, D> newScore, bool overwrite = false}) {
     Score<E, D>? scoreToChange;
@@ -50,7 +50,7 @@ class Standings<E, D extends ScoreDetails>
   }
 
   void update() {
-    _standings = positionsCreator.create(_scores).cast();
+    _standings = positionsCreator.create(_scores);
   }
 
   List<Score<E, D>> get leaders {
@@ -102,7 +102,7 @@ class Standings<E, D extends ScoreDetails>
 
   @override
   void set(Map<int, List<Score<E, D>>> value) {
-    _subject.add(Map.of(value));
+    _subject.add(Map<int, List<Score<E, D>>>.of(value));
   }
 
   @override

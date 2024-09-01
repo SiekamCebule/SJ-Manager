@@ -3,13 +3,13 @@ import 'dart:math';
 import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart';
 
-class StandingsPositionsWithShuffleOnEqualPositionsCreator
-    extends StandingsPositionsCreator {
+class StandingsPositionsWithShuffleOnEqualPositionsCreator<S extends Score>
+    extends StandingsPositionsCreator<S> {
   final Random _random = Random();
-  late List<Score> _scores;
+  late List<S> _scores;
 
   @override
-  Map<int, List<Score>> create(List<Score> scores) {
+  Map<int, List<S>> create(List<S> scores) {
     _scores = List.of(scores);
     _sortScores();
     return _generatePositionsMap();
@@ -23,8 +23,8 @@ class StandingsPositionsWithShuffleOnEqualPositionsCreator
     });
   }
 
-  Map<int, List<Score>> _generatePositionsMap() {
-    Map<int, List<Score>> positionsMap = {};
+  Map<int, List<S>> _generatePositionsMap() {
+    Map<int, List<S>> positionsMap = {};
     int currentPosition = 1;
     int currentRank = 1;
 
