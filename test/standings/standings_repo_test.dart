@@ -49,7 +49,7 @@ void main() {
       expect(repo.leaders.single, kubacki);
       expect(repo.length, 4);
       expect(repo.containsEntity('Markus Eisenbichler'), false);
-      repo.addScore(newScore: stoch.copyWith(points: 441.4));
+      repo.addScore(newScore: stoch.copyWith(points: 441.4), overwrite: true);
       expect(repo.leaders.single.entity, 'Kamil Stoch');
       expect(repo.length, 4);
 
@@ -135,7 +135,7 @@ void main() {
       test('position by entity', () {
         expect(repo.positionOf('Ulrich Wohlgenannt'), 8);
         expect(repo.positionOf('Stefan Huber'), 4);
-        expect(() => repo.positionOf('Karol Wojtyła'), throwsA(isA<StateError>()));
+        expect(repo.positionOf('Karol Wojtyła'), isNull);
       });
 
       test('score by entity', () {
@@ -153,7 +153,7 @@ void main() {
               points: 137.8,
               details: SimplePointsScoreDetails(),
             ));
-        expect(() => repo.scoreOf('Peter Prevc'), throwsA(isA<StateError>()));
+        expect(repo.scoreOf('Peter Prevc'), isNull);
       });
 
       test('length', () {

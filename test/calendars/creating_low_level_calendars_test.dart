@@ -10,7 +10,7 @@ import 'package:sj_manager/models/simulation_db/competition/high_level_calendar.
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/user_db/team/competition_team.dart';
 
 import 'creating_low_level_calendars_test.mocks.dart';
 
@@ -24,7 +24,7 @@ void main() {
     final vikersund = const Hill.empty(country: Country.emptyNone())
         .copyWith(locality: 'Vikersund', hs: 240);
     final ind = MockDefaultCompetitionRules<Jumper>();
-    final team = MockDefaultCompetitionRules<Team>();
+    final team = MockDefaultCompetitionRules<CompetitionTeam>();
 
     const week = Duration(days: 7);
     const day = Duration(days: 1);
