@@ -36,7 +36,7 @@ class Standings<E, D extends ScoreDetails>
       _scores[_scores.indexOf(scoreToChange)] = newScore;
     } else {
       throw StateError(
-          'The score $newScore is already contained in the standings, but the overwrite flag is set to false. Thus, the score cannot be added');
+          'The score with entity (score: $newScore) is already contained in the standings, but the overwrite flag is set to false. Thus, the score cannot be added');
     }
 
     update();
