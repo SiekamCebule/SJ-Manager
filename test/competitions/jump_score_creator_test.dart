@@ -21,7 +21,6 @@ import 'jump_score_creator_test.mocks.dart';
 ])
 void main() {
   group(DefaultClassicJumpScoreCreator, () {
-    provideDummy(Jumper);
     late DefaultClassicJumpScoreCreator<Jumper> creator;
 
     setUp(() {

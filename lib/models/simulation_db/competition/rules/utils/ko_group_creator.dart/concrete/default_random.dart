@@ -20,7 +20,6 @@ class DefaultRandomKoGroupsCreator<E>
               nonFullGroups.where((group) => group.entities.length == minSize).toList();
           targetGroup = smallestGroups.randomElement();
         } else {
-          print('non full length: ${nonFullGroups.length}');
           targetGroup = nonFullGroups.single;
         }
 

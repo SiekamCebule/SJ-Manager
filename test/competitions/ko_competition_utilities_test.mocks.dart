@@ -4,12 +4,15 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i10;
 import 'package:sj_manager/models/simulation_db/competition/competition.dart'
     as _i5;
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/concrete/default.dart'
     as _i8;
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/ko_groups_creator.dart'
     as _i7;
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_round_advancement_determinator/concrete/n_best.dart'
+    as _i9;
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart'
     as _i2;
 import 'package:sj_manager/models/simulation_db/standings/score/details/score_details.dart'
@@ -256,12 +259,6 @@ class MockKoGroupsPotsCreatingContext<T> extends _i1.Mock
       ) as List<List<T>>);
 
   @override
-  List<T> get remainingEntities => (super.noSuchMethod(
-        Invocation.getter(#remainingEntities),
-        returnValue: <T>[],
-      ) as List<T>);
-
-  @override
   int get entitiesCount => (super.noSuchMethod(
         Invocation.getter(#entitiesCount),
         returnValue: 0,
@@ -314,4 +311,63 @@ class MockKoGroupsPotsCreatingContext<T> extends _i1.Mock
           Invocation.getter(#hill),
         ),
       ) as _i6.Hill);
+}
+
+/// A class which mocks [KoRoundNBestAdvancementDeterminingContext].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockKoRoundNBestAdvancementDeterminingContext<T,
+        S extends _i3.Standings<dynamic, _i4.ScoreDetails>> extends _i1.Mock
+    implements _i9.KoRoundNBestAdvancementDeterminingContext<T, S> {
+  MockKoRoundNBestAdvancementDeterminingContext() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.EventSeries get eventSeries => (super.noSuchMethod(
+        Invocation.getter(#eventSeries),
+        returnValue: _FakeEventSeries_0(
+          this,
+          Invocation.getter(#eventSeries),
+        ),
+      ) as _i2.EventSeries);
+
+  @override
+  _i5.Competition<T, S> get competition => (super.noSuchMethod(
+        Invocation.getter(#competition),
+        returnValue: _FakeCompetition_1<T, S>(
+          this,
+          Invocation.getter(#competition),
+        ),
+      ) as _i5.Competition<T, S>);
+
+  @override
+  S get koStandings => (super.noSuchMethod(
+        Invocation.getter(#koStandings),
+        returnValue: _i10.dummyValue<S>(
+          this,
+          Invocation.getter(#koStandings),
+        ),
+      ) as S);
+
+  @override
+  int get currentRound => (super.noSuchMethod(
+        Invocation.getter(#currentRound),
+        returnValue: 0,
+      ) as int);
+
+  @override
+  _i6.Hill get hill => (super.noSuchMethod(
+        Invocation.getter(#hill),
+        returnValue: _FakeHill_2(
+          this,
+          Invocation.getter(#hill),
+        ),
+      ) as _i6.Hill);
+
+  @override
+  List<T> get entities => (super.noSuchMethod(
+        Invocation.getter(#entities),
+        returnValue: <T>[],
+      ) as List<T>);
 }

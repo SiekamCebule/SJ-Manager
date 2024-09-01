@@ -1374,7 +1374,9 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
 
   KoRoundRules _constructKoRulesForCurrentRound() {
     return KoRoundRules(
-      advancementDeterminator: _koAdvancementDeterminator,
+      advancementDeterminator: _koAdvancementDeterminator
+          as KoRoundAdvancementDeterminator<dynamic,
+              KoRoundAdvancementDeterminingContext>,
       advancementCount: int.parse(_groupAdvancementCountController.text),
       koGroupsCreator: _koGroupsCreator,
       groupSize: int.parse(_groupSizeController.text),

@@ -4,6 +4,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/classifi
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/concrete/default.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/models/simulation_db/standings/utils/standings_utils.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
@@ -70,8 +71,9 @@ class DefaultIndividualClassificationScoreCreator
         points += (_jumperScoreFromTeam(competition)!.points) * multiplier;
       case DefaultClassificationScoringType.pointsFromMap:
         final individualStandings = createIndividualStandingsForTeamCompetition(
-            teamStandings: competition.standings!,
-            positionsCreator: competition.standings!.positionsCreator);
+          teamStandings: competition.standings!,
+          positionsCreator: StandingsPositionsWithExAequosCreator(),
+        );
         final position = individualStandings.positionOf(context.entity);
         if (position != null) {
           points += rules.pointsMap![position] ?? 0;

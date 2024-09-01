@@ -10,7 +10,7 @@ import 'package:sj_manager/models/user_db/team/team.dart';
 Standings<Jumper, CompetitionJumperScoreDetails>
     createIndividualStandingsForTeamCompetition({
   required Standings<Team, CompetitionTeamScoreDetails> teamStandings,
-  required StandingsPositionsCreator positionsCreator,
+  required StandingsPositionsCreator<CompetitionJumperScore> positionsCreator,
 }) {
   final individualStandings = Standings<Jumper, CompetitionJumperScoreDetails>(
       positionsCreator: positionsCreator);
@@ -26,7 +26,7 @@ Standings<Jumper, CompetitionJumperScoreDetails>
 Standings<CompetitionTeam, CompetitionTeamScoreDetails>
     createTeamStandingsForIndividualCompetition({
   required Standings<Jumper, CompetitionJumperScoreDetails> individualStandings,
-  required StandingsPositionsCreator positionsCreator,
+  required StandingsPositionsCreator<CompetitionTeamScore> positionsCreator,
   required List<CompetitionTeam> teams,
 }) {
   final teamStandings = Standings<CompetitionTeam, CompetitionTeamScoreDetails>(

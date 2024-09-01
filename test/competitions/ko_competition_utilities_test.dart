@@ -1,12 +1,20 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_group.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/concrete/default.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/concrete/default_classic.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/concrete/default_random.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/concrete/default_with_pots.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/ko_groups_creator.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_round_advancement_determinator/concrete/n_best.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_no_ex_aequo_creator.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_shuffle_on_equal_positions_creator.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
@@ -17,10 +25,11 @@ import 'ko_competition_utilities_test.mocks.dart';
   ClassicKoGroupsCreatingContext,
   RandomKoGroupsCreatingContext,
   KoGroupsPotsCreatingContext,
+  KoRoundNBestAdvancementDeterminingContext
 ])
 void main() {
+  const country = Country.emptyNone();
   group('KoGroupsCreator', () {
-    const country = Country.emptyNone();
     group('DefaultClassicKoGroupsCreator', () {
       test(
           'Creates groups for 8 jumpers in good order (groups\'s order and the order wihin group). Checks if passing uneven number causes an error',
@@ -349,6 +358,290 @@ void main() {
         expect(groups.length, 3);
         expect(groups.where((group) => group.entities.length == 4).length, 2);
         expect(groups.where((group) => group.entities.length == 5).length, 1);
+      });
+    });
+  });
+
+  group('KoRoundAdvancementDeterminator', () {
+    group('NBestKoRoundAdvancementDeterminator', () {
+      test('Typical without ex aequo conflicts', () {
+        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final jumpers = [
+          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
+          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+        ];
+        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+          positionsCreator: StandingsPositionsWithExAequosCreator(),
+          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[0],
+              points: 127.7,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[1],
+              points: 134.5,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[2],
+              points: 105.4,
+              details: const SimplePointsScoreDetails(),
+            ),
+          ],
+        );
+        provideDummy(standings);
+        when(context.entities).thenReturn(jumpers);
+        when(context.limit).thenReturn(const EntitiesLimit.exact(1));
+        when(context.koStandings).thenReturn(
+          standings,
+        );
+        final advanced = determinator.compute(context);
+        expect(advanced, [jumpers[1]]);
+      });
+
+      test('Ex aequo on first place, but limit is exact(1)', () {
+        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final jumpers = [
+          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
+          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+        ];
+        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+          positionsCreator: StandingsPositionsWithExAequosCreator(),
+          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[0],
+              points: 127.7,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[1],
+              points: 127.7,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[2],
+              points: 105.4,
+              details: const SimplePointsScoreDetails(),
+            ),
+          ],
+        );
+        provideDummy(standings);
+        when(context.entities).thenReturn(jumpers);
+        when(context.limit).thenReturn(const EntitiesLimit.exact(1));
+        when(context.koStandings).thenReturn(
+          standings,
+        );
+        final advanced = determinator.compute(context);
+        expect(advanced.length, 1);
+      });
+
+      test('No ex aequos, but same points count', () {
+        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final jumpers = [
+          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
+          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+        ];
+        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+          positionsCreator: StandingsPositionsWithNoExAequoCreator(),
+          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[0],
+              points: 127.7,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[1],
+              points: 127.7,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[2],
+              points: 105.4,
+              details: const SimplePointsScoreDetails(),
+            ),
+          ],
+        );
+        provideDummy(standings);
+        when(context.entities).thenReturn(jumpers);
+        when(context.limit).thenReturn(const EntitiesLimit.exact(1));
+        when(context.koStandings).thenReturn(
+          standings,
+        );
+        final advanced = determinator.compute(context);
+        expect(advanced, [jumpers[0]]);
+      });
+
+      test('Shuffle on same points count', () {
+        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final jumpers = [
+          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
+          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+        ];
+        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+          positionsCreator: StandingsPositionsWithShuffleOnEqualPositionsCreator(),
+          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[0],
+              points: 127.7,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[1],
+              points: 127.7,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[2],
+              points: 105.4,
+              details: const SimplePointsScoreDetails(),
+            ),
+          ],
+        );
+        provideDummy(standings);
+        when(context.entities).thenReturn(jumpers);
+        when(context.limit).thenReturn(const EntitiesLimit.exact(1));
+        when(context.koStandings).thenReturn(
+          standings,
+        );
+        final advanced = determinator.compute(context);
+        expect(advanced.length, 1);
+      });
+
+      test('Soft limit + ex aequo', () {
+        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final jumpers = [
+          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
+          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+        ];
+        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+          positionsCreator: StandingsPositionsWithExAequosCreator(),
+          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[0],
+              points: 127.7,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[1],
+              points: 127.7,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[2],
+              points: 105.4,
+              details: const SimplePointsScoreDetails(),
+            ),
+          ],
+        );
+        provideDummy(standings);
+        when(context.entities).thenReturn(jumpers);
+        when(context.limit).thenReturn(const EntitiesLimit.soft(1));
+        when(context.koStandings).thenReturn(
+          standings,
+        );
+        final advanced = determinator.compute(context);
+        expect(advanced.toSet(), {jumpers[0], jumpers[1]});
+      });
+
+      test('Soft limit (count: 2) + ex aequo on first place', () {
+        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final jumpers = [
+          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
+          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+        ];
+        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+          positionsCreator: StandingsPositionsWithExAequosCreator(),
+          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[0],
+              points: 127.7,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[1],
+              points: 127.7,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[2],
+              points: 105.4,
+              details: const SimplePointsScoreDetails(),
+            ),
+          ],
+        );
+        provideDummy(standings);
+        when(context.entities).thenReturn(jumpers);
+        when(context.limit).thenReturn(const EntitiesLimit.soft(2));
+        when(context.koStandings).thenReturn(
+          standings,
+        );
+        final advanced = determinator.compute(context);
+        expect(advanced.toSet(), {jumpers[0], jumpers[1]});
+      });
+
+      test('No limit', () {
+        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
+            Standings<Jumper, SimplePointsScoreDetails>>();
+        final jumpers = [
+          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
+          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+        ];
+        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+          positionsCreator: StandingsPositionsWithShuffleOnEqualPositionsCreator(),
+          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[0],
+              points: 127.7,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[1],
+              points: 127.7,
+              details: const SimplePointsScoreDetails(),
+            ),
+            Score<Jumper, SimplePointsScoreDetails>(
+              entity: jumpers[2],
+              points: 105.4,
+              details: const SimplePointsScoreDetails(),
+            ),
+          ],
+        );
+        provideDummy(standings);
+        when(context.entities).thenReturn(jumpers);
+        when(context.limit).thenReturn(null);
+        when(context.koStandings).thenReturn(
+          standings,
+        );
+        final advanced = determinator.compute(context);
+        expect(advanced, jumpers);
       });
     });
   });

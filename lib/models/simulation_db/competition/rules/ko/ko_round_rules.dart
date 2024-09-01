@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/ko_groups_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_round_advancement_determinator/ko_round_advancement_determinator.dart';
+import 'package:sj_manager/models/simulation_db/standings/score/details/score_details.dart';
+import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 
 class KoRoundRules<E> with EquatableMixin {
   const KoRoundRules({
@@ -10,7 +12,8 @@ class KoRoundRules<E> with EquatableMixin {
     required this.groupSize,
   });
 
-  final KoRoundAdvancementDeterminator<E, KoRoundAdvancementDeterminingContext<E>>
+  final KoRoundAdvancementDeterminator<E,
+          KoRoundAdvancementDeterminingContext<E, Standings<E, ScoreDetails>>>
       advancementDeterminator;
   final int advancementCount;
   final KoGroupsCreator<E, KoGroupsCreatingContext<E>> koGroupsCreator;
