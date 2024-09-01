@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/judges_creator.dart';
 
-class CompetitionJudgingCubit<E> extends Cubit<CompetitionJudgingState> {
+class CompetitionJudgingCubit extends Cubit<CompetitionJudgingState> {
   CompetitionJudgingCubit({
     required this.judgesCreator,
   }) : super(const CompetitionJudgingNoJudges());
@@ -11,7 +11,7 @@ class CompetitionJudgingCubit<E> extends Cubit<CompetitionJudgingState> {
 
   void judgeJumpStyle({
     required JudgesCreatingContext context,
-    required Duration Function()? delayJudgeShowing,
+    required Duration Function(int judgeIndex)? delayJudgeShowing,
   }) {
     final judges = judgesCreator.compute(context);
 
@@ -29,7 +29,7 @@ class CompetitionJudgingCubit<E> extends Cubit<CompetitionJudgingState> {
 
     if (delayJudgeShowing != null) {
       for (var judgeIndex = 0; judgeIndex < judges.length; judgeIndex++) {
-        final delay = delayJudgeShowing();
+        final delay = delayJudgeShowing(judgeIndex);
         Future.delayed(delay, () {
           final castedState = state as CompetitionJudgingHasData;
           emit(castedState.withAddedAvailableIndex(judgeIndex));
