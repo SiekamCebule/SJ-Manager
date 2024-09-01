@@ -54,7 +54,7 @@ abstract class DefaultSizedKoGroupsCreator<E, C extends KoGroupsCreatingContext<
 
   void setUpGroups() {
     groups = List.generate(
-      (context.entitiesCount / entitiesInGroup).ceil(),
+      (context.entitiesCount ~/ entitiesInGroup).ceil(),
       (_) => KoGroup<E>(
         entities: [],
       ),
@@ -64,7 +64,7 @@ abstract class DefaultSizedKoGroupsCreator<E, C extends KoGroupsCreatingContext<
   void constructGroupsAndRemainingEntities();
 
   bool get everyGroupIsFull {
-    return groupsWithSmallerSize(entitiesInGroupForEvenGroups).isEmpty;
+    return nonFullGroups.isEmpty;
   }
 
   List<KoGroup<E>> groupsWithSize(int size) {
@@ -76,7 +76,9 @@ abstract class DefaultSizedKoGroupsCreator<E, C extends KoGroupsCreatingContext<
   }
 
   List<KoGroup<E>> get nonFullGroups {
-    return groups.whereNot((group) => group.entities.length == entitiesInGroup).toList();
+    return groups
+        .whereNot((group) => group.entities.length == entitiesInGroupForEvenGroups)
+        .toList();
   }
 
   void allocateRemainingEntities() {
@@ -89,12 +91,9 @@ abstract class DefaultSizedKoGroupsCreator<E, C extends KoGroupsCreatingContext<
         case KoGroupsCreatorRemainingEntitiesAction.placeRandomly:
           groups.randomElement().entities.add(entity);
         case KoGroupsCreatorRemainingEntitiesAction.placeInSmallestGroup:
-          while (remainingEntities.isNotEmpty) {
-            var smallestGroup = nonFullGroups
-                .reduce((a, b) => a.entities.length < b.entities.length ? a : b);
-            smallestGroup.entities.add(remainingEntities.removeAt(0));
-          }
-          break;
+          var smallestGroup = nonFullGroups
+              .reduce((a, b) => a.entities.length < b.entities.length ? a : b);
+          smallestGroup.entities.add(entity);
 
         case KoGroupsCreatorRemainingEntitiesAction.doNothing:
         case KoGroupsCreatorRemainingEntitiesAction.throwError:
