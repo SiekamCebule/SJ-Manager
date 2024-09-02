@@ -1,75 +1,64 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/bloc/simulation_wizard/linear_navigation_permissions_repo.dart';
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_screen.dart';
 import 'package:sj_manager/bloc/simulation_wizard/state/simulation_wizard_navigation_state.dart';
 
 class SimulationWizardNavigationCubit extends Cubit<SimulationWizardNavigationState> {
-  SimulationWizardNavigationCubit({required this.navPermissions})
-      : super(const UninitializedSimulationWizardNavigationState());
+  SimulationWizardNavigationCubit({
+    required this.screens,
+  }) : super(
+          SimulationWizardNavigationState(
+            currentScreenIndex: 0,
+            screen: screens[0],
+            canGoBack: false,
+            canGoForward: screens.length > 1,
+          ),
+        );
 
-  final LinearNavigationPermissionsRepo navPermissions;
-
-  void setUp({
-    required List<SimulationWizardScreen> screens,
-  }) {
-    emit(InitializedSimulationWizardNavigationState(
-      screens: screens,
-      currentScreenIndex: 0,
-    ));
-  }
+  final List<SimulationWizardScreen> screens;
 
   void goForward() {
-    if (state is InitializedSimulationWizardNavigationState) {
-      _tryGoForward();
-    } else {
-      _throwUninitializedWhenNavigatingError();
+    if (!state.canGoForward) {
+      throw StateError('Cannot go forward in current state');
     }
-  }
-
-  void _tryGoForward() {
-    final prevState = state as InitializedSimulationWizardNavigationState;
-    if (navPermissions.canGoForward) {
-      final int currentIndex = prevState.currentScreenIndex + 1;
-      emit(InitializedSimulationWizardNavigationState(
-        screens: prevState.screens,
-        currentScreenIndex: currentIndex,
-      ));
-    } else {
-      _throwCannotGoForwardError();
-    }
+    final currentIndex = state.currentScreenIndex;
+    emit(
+      SimulationWizardNavigationState(
+        currentScreenIndex: currentIndex + 1,
+        screen: screens[currentIndex + 1],
+        canGoBack: true,
+        canGoForward: _shouldBeAbleToGoForward(),
+      ),
+    );
   }
 
   void goBack() {
-    if (state is InitializedSimulationWizardNavigationState) {
-      _tryGoBack();
-    } else {
-      _throwUninitializedWhenNavigatingError();
+    if (!state.canGoBack) {
+      throw StateError('Cannot go forward in current state');
     }
+    final currentIndex = state.currentScreenIndex;
+    emit(
+      SimulationWizardNavigationState(
+        currentScreenIndex: currentIndex - 1,
+        screen: screens[currentIndex - 1],
+        canGoBack: currentIndex - 1 > 0,
+        canGoForward: true,
+      ),
+    );
   }
 
-  void _tryGoBack() {
-    final prevState = state as InitializedSimulationWizardNavigationState;
-    if (navPermissions.canGoBack) {
-      final currentIndex = prevState.currentScreenIndex - 1;
-      emit(InitializedSimulationWizardNavigationState(
-        screens: prevState.screens,
-        currentScreenIndex: currentIndex,
-      ));
-    } else {
-      _throwCannotGoBackError();
-    }
+  void blockGoingForward() {
+    emit(state.copyWith(
+      canGoForward: false,
+    ));
   }
 
-  void _throwCannotGoForwardError() {
-    throw StateError(
-        'SimulationWizardCubit cannot go forward in the actual state ($state)');
+  void unblockGoingForward() {
+    emit(state.copyWith(
+      canGoForward: _shouldBeAbleToGoForward(),
+    ));
   }
 
-  void _throwCannotGoBackError() {
-    throw StateError('SimulationWizardCubit cannot go back in the actual state ($state)');
-  }
-
-  void _throwUninitializedWhenNavigatingError() {
-    throw StateError('SimulationWizardCubit must be initialized before navigating');
+  bool _shouldBeAbleToGoForward() {
+    return screens.length + 1 > state.currentScreenIndex + 1;
   }
 }

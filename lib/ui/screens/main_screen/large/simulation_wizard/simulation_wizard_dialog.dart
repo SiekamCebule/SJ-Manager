@@ -6,7 +6,6 @@ import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/bloc/simulation_wizard/linear_navigation_permissions_repo.dart';
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_screen.dart';
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_navigation_cubit.dart';
 import 'package:sj_manager/bloc/simulation_wizard/state/simulation_wizard_navigation_state.dart';
@@ -48,28 +47,14 @@ class SimulationWizardDialog extends StatefulWidget {
 class _SimulationWizardDialogState extends State<SimulationWizardDialog>
     with SingleTickerProviderStateMixin {
   late final SimulationWizardNavigationCubit _navCubit;
-  late final StreamSubscription _navStateSubscription;
-  late final LinearNavigationPermissionsRepo _navPermissions;
 
   @override
   void initState() {
-    _navPermissions = LinearNavigationPermissionsRepo();
-    _navCubit = SimulationWizardNavigationCubit(navPermissions: _navPermissions);
-    _navStateSubscription = _navCubit.stream.listen((state) {
-      if (state is InitializedSimulationWizardNavigationState) {
-        _navPermissions.canGoForward = state.indexAllowsGoingForward;
-        _navPermissions.canGoBack = state.indexAllowsGoingBack;
-      } else {
-        _navPermissions.entirelyBlock();
-      }
-    });
-    scheduleMicrotask(() {
-      _navCubit.setUp(screens: [
-        SimulationWizardScreen.mode,
-        SimulationWizardScreen.team,
-        SimulationWizardScreen.eventsSeries
-      ]);
-    });
+    _navCubit = SimulationWizardNavigationCubit(screens: [
+      SimulationWizardScreen.mode,
+      SimulationWizardScreen.team,
+      SimulationWizardScreen.eventsSeries
+    ]);
 
     super.initState();
   }
@@ -77,7 +62,6 @@ class _SimulationWizardDialogState extends State<SimulationWizardDialog>
   @override
   void dispose() {
     _navCubit.close();
-    _navStateSubscription.cancel();
     super.dispose();
   }
 
@@ -86,38 +70,25 @@ class _SimulationWizardDialogState extends State<SimulationWizardDialog>
     return StreamBuilder<Object>(
         stream: _navCubit.stream,
         builder: (context, snapshot) {
-          final state = _navCubit.state;
-          if (state is InitializedSimulationWizardNavigationState) {
-            return MultiProvider(
+          return MultiProvider(
+            providers: [
+              Provider(create: (context) => SimulationWizardOptionsRepo()),
+            ],
+            child: MultiBlocProvider(
               providers: [
-                Provider(create: (context) => SimulationWizardOptionsRepo()),
-                Provider.value(value: _navPermissions),
+                BlocProvider.value(value: _navCubit),
               ],
-              child: MultiBlocProvider(
-                providers: [
-                  BlocProvider.value(value: _navCubit),
+              child: const Column(
+                children: [
+                  _Header(),
+                  Expanded(
+                    child: _DynamicContent(),
+                  ),
+                  _Footer(),
                 ],
-                child: const Column(
-                  children: [
-                    _Header(),
-                    Expanded(
-                      child: _DynamicContent(),
-                    ),
-                    _Footer(),
-                  ],
-                ),
               ),
-            );
-          } else if (state is UninitializedSimulationWizardNavigationState) {
-            return const Center(
-              child: SizedBox.square(
-                dimension: 100,
-                child: CircularProgressIndicator(),
-              ),
-            );
-          } else {
-            throw StateError('Invalid simulation wizard screen state');
-          }
+            ),
+          );
         });
   }
 }
