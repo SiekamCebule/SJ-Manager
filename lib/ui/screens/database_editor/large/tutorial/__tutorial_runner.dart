@@ -29,7 +29,6 @@ class _TutorialRunner {
             ),
       ),
     );
-    print('color of text in tutorial: ${Theme.of(context).textTheme.bodyLarge!.color}');
     final textColor = Theme.of(context).brightness == Brightness.dark
         ? Theme.of(context).colorScheme.onSurface
         : Theme.of(context).colorScheme.surface;

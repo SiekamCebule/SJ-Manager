@@ -6,12 +6,12 @@ import 'package:sj_manager/ui/providers/locale_cubit.dart';
 
 class MultilingualString {
   const MultilingualString({
-    required this.namesByLanguage,
+    required this.valuesByLanguage,
   });
 
-  const MultilingualString.empty() : namesByLanguage = const {};
+  const MultilingualString.empty() : valuesByLanguage = const {};
 
-  final Map<String, String> namesByLanguage;
+  final Map<String, String> valuesByLanguage;
 
   String translate(BuildContext context) {
     final code = context.read<LocaleCubit>().languageCode;
@@ -19,32 +19,32 @@ class MultilingualString {
   }
 
   String byCode(String languageCode) {
-    if (!namesByLanguage.containsKey(languageCode)) {
+    if (!valuesByLanguage.containsKey(languageCode)) {
       throw TranslationNotFoundError(
         multilingualString: this,
         languageCode: languageCode,
       );
     }
-    return namesByLanguage[languageCode]!;
+    return valuesByLanguage[languageCode]!;
   }
 
   MultilingualString copyWith({
     required String languageCode,
-    required String name,
+    required String value,
   }) {
-    final newNames = Map.of(namesByLanguage);
-    newNames[languageCode] = name;
-    return MultilingualString(namesByLanguage: newNames);
+    final newNames = Map.of(valuesByLanguage);
+    newNames[languageCode] = value;
+    return MultilingualString(valuesByLanguage: newNames);
   }
 
   @override
   String toString() {
-    return namesByLanguage.toString();
+    return valuesByLanguage.toString();
   }
 
-  Json toJson() => namesByLanguage;
+  Json toJson() => valuesByLanguage;
 
   static MultilingualString fromJson(Json json) => MultilingualString(
-        namesByLanguage: json.cast(),
+        valuesByLanguage: json.cast(),
       );
 }

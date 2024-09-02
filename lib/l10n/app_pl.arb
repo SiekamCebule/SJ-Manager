@@ -114,5 +114,12 @@
     "unknownError": "Nie wiemy co się stało. Możesz nam pomóc, zgłaszając ten błąd",
     "darkTheme": "Ciemny",
     "lightTheme": "Jasny",
-    "themeBrightness": "Motyw aplikacji"
+    "themeBrightness": "Motyw aplikacji",
+    "veryLowPrize": "Bardzo niska",
+    "lowPrize": "Niska",
+    "averagePrize": "Średnia",
+    "highPrize": "Wysoka",
+    "veryHighPrize": "Bardzo wysoka",
+    "description": "Opis",
+    "relativeMoneyPrize": "Względna nagroda pieniężna"
 }

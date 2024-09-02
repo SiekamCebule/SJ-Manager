@@ -74,8 +74,6 @@ class _DefaultCompetitionRulesPresetEditorState
                 scrollable: false,
                 onChange: (currentRules) {
                   _rules = currentRules;
-                  print(
-                      'Preset editor has got new rules object. Invoking _onChange() in a moment...');
                   _onChange();
                 },
                 onAdvancedEditorChosen: () {
@@ -96,9 +94,6 @@ class _DefaultCompetitionRulesPresetEditorState
   }
 
   DefaultCompetitionRulesPreset _constructAndCache() {
-    print('Preset editor: _constructAndCache()');
-    print(
-        'Preset editor: _constructAndCache(): koRules of rules object: ${_rules!.rounds.first.koRules}');
     final preset = DefaultCompetitionRulesPreset(
       name: _nameController.text,
       rules: _rules!,

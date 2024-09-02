@@ -13,11 +13,18 @@ class EventSeriesSetupParser implements SimulationDbPartParser<EventSeriesSetup>
 
   @override
   EventSeriesSetup parse(Json json) {
-    final name = MultilingualString(namesByLanguage: (json['name'] as Map).cast());
+    final name = MultilingualString(valuesByLanguage: (json['name'] as Map).cast());
+    final descriptionJson = json['description'] as Map?;
+    final description = descriptionJson != null
+        ? MultilingualString(valuesByLanguage: descriptionJson.cast())
+        : null;
     final setup = EventSeriesSetup(
       id: json['id'],
       multilingualName: name,
+      multilingualDescription: description,
       priority: json['priority'],
+      relativeMoneyPrize: EventSeriesRelativeMoneyPrize.values
+          .singleWhere((value) => value.name == json['relativeMoneyPrize']),
     );
     return setup;
   }

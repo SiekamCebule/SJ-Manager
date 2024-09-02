@@ -6,23 +6,37 @@ class EventSeriesSetup {
   const EventSeriesSetup({
     required this.id,
     required this.multilingualName,
+    required this.multilingualDescription,
     required this.priority,
+    required this.relativeMoneyPrize,
     this.calendarPreset,
   });
 
   const EventSeriesSetup.empty()
       : this(
           id: '',
-          multilingualName: const MultilingualString(namesByLanguage: {}),
+          multilingualName: const MultilingualString.empty(),
+          multilingualDescription: const MultilingualString.empty(),
           priority: 1,
+          relativeMoneyPrize: EventSeriesRelativeMoneyPrize.average,
         );
 
   final String id;
   final MultilingualString multilingualName;
+  final MultilingualString? multilingualDescription;
   final int priority;
+  final EventSeriesRelativeMoneyPrize relativeMoneyPrize;
   final EventSeriesCalendarPreset? calendarPreset;
 
   String name(BuildContext context) {
     return multilingualName.translate(context);
   }
+}
+
+enum EventSeriesRelativeMoneyPrize {
+  veryLow,
+  low,
+  average,
+  high,
+  veryHigh,
 }

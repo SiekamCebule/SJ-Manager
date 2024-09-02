@@ -59,6 +59,6 @@ class SimulationWizardNavigationCubit extends Cubit<SimulationWizardNavigationSt
   }
 
   bool _shouldBeAbleToGoForward() {
-    return screens.length + 1 > state.currentScreenIndex + 1;
+    return screens.length > state.currentScreenIndex + 1;
   }
 }
