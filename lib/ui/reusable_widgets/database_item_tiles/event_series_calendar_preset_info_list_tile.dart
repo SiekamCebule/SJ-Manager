@@ -23,8 +23,7 @@ class EventSeriesCalendarPresetInfoListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tile = ListTile(
-      leading: const Icon(Symbols
-          .calendar_month), // TODO: Logo of assigned event series, or calendar icon
+      leading: const Icon(Symbols.calendar_month),
       title: Text(eventSeriesCalendarPreset.name),
       onTap: onTap,
       selected: selected,

@@ -25,18 +25,18 @@ class _DynamicContent extends StatelessWidget {
           SimulationWizardScreen.mode => _ModeScreen(onChange: (mode) {
               context.read<SimulationWizardOptionsRepo>().mode.set(mode);
               if (mode != null) {
-                navCubit.blockGoingForward();
-              } else {
                 navCubit.unblockGoingForward();
+              } else {
+                navCubit.blockGoingForward();
               }
             }),
           SimulationWizardScreen.team => _TeamScreen(
               onChange: (team) {
                 context.read<SimulationWizardOptionsRepo>().team.set(team);
                 if (team != null) {
-                  navCubit.blockGoingForward();
-                } else {
                   navCubit.unblockGoingForward();
+                } else {
+                  navCubit.blockGoingForward();
                 }
               },
             ),

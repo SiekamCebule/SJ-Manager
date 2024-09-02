@@ -22,8 +22,6 @@ class _ItemsListEmptyStateBody extends StatelessWidget {
         ? _ContentType.noSearchResults
         : _ContentType.addFirstElement;
 
-    const iconSize = 90.0;
-
     final content = switch (contentType) {
       _ContentType.addFirstElement => Column(
           mainAxisSize: MainAxisSize.min,
@@ -31,7 +29,7 @@ class _ItemsListEmptyStateBody extends StatelessWidget {
             Icon(
               Symbols.folder_open,
               color: onSurfaceColor,
-              size: iconSize,
+              size: UiItemEditorsConstants.emptyStateIconSize,
             ),
             const Gap(10),
             RichText(
@@ -60,7 +58,7 @@ class _ItemsListEmptyStateBody extends StatelessWidget {
             Icon(
               Symbols.search_off,
               color: onSurfaceColor,
-              size: iconSize,
+              size: UiItemEditorsConstants.emptyStateIconSize,
             ),
             const Gap(10),
             Column(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sj_manager/errors/translation_not_found.dart';
+import 'package:sj_manager/l10n/event_series_setup_translations.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_image_asset.dart';
@@ -39,9 +40,12 @@ class EventSeriesSetupEditor extends StatefulWidget {
 class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
   late final TextEditingController _idController;
   late final TextEditingController _nameController;
+  late final TextEditingController _descriptionController;
   late final TextEditingController _priorityController;
+  late final TextEditingController _relativeMoneyPrizeController;
   late final TextEditingController _calendarController;
 
+  var _relativeMoneyPrize = EventSeriesRelativeMoneyPrize.average;
   EventSeriesCalendarPreset? _calendarPreset;
   EventSeriesSetup? _cachedSetup;
   late final ScrollController _scrollController;
@@ -54,7 +58,9 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
     _scrollController = ScrollController();
     _idController = TextEditingController();
     _nameController = TextEditingController();
+    _descriptionController = TextEditingController();
     _priorityController = TextEditingController();
+    _relativeMoneyPrizeController = TextEditingController();
     _calendarController = TextEditingController();
     super.initState();
   }
@@ -64,7 +70,9 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
     _scrollController.dispose();
     _idController.dispose();
     _nameController.dispose();
+    _descriptionController.dispose();
     _priorityController.dispose();
+    _relativeMoneyPrizeController.dispose();
     _calendarController.dispose();
     super.dispose();
   }
@@ -104,6 +112,15 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                             _validateAndSubmit();
                           },
                           labelText: translate(context).name,
+                        ),
+                        gap,
+                        MyTextField(
+                          key: const Key('description'),
+                          controller: _descriptionController,
+                          onChange: () {
+                            _validateAndSubmit();
+                          },
+                          labelText: translate(context).description,
                         ),
                         gap,
                         Row(
@@ -157,10 +174,35 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
                           step: 1,
                           onHelpButtonTap: () {
                             showSimpleHelpDialog(
-                                context: context,
-                                title: 'Priorytet',
-                                content:
-                                    'Im niższa cyfra, tym zawody są ważniejsze. Najważniejszy cykl w symulacji powinien mieć numer 1, tak jak imprezy mistrzowskie. Zaplecze jako 2, zaplecze zaplecza 3, i tak dalej...');
+                              context: context,
+                              title: 'Priorytet',
+                              content:
+                                  'Im niższa cyfra, tym zawody są ważniejsze. Najważniejszy cykl w symulacji powinien mieć numer 1, tak jak imprezy mistrzowskie. Zaplecze jako 2, zaplecze zaplecza 3, i tak dalej...',
+                            );
+                          },
+                        ),
+                        gap,
+                        MyDropdownField(
+                          controller: _relativeMoneyPrizeController,
+                          onChange: (value) {
+                            _relativeMoneyPrize = value!;
+                            _validateAndSubmit();
+                          },
+                          entries: EventSeriesRelativeMoneyPrize.values.map((prize) {
+                            return DropdownMenuEntry(
+                                value: prize,
+                                label: translatedRelativeMoneyPrize(context, prize));
+                          }).toList(),
+                          width: constraints.maxWidth,
+                          initial: _relativeMoneyPrize,
+                          label: Text(translate(context).relativeMoneyPrize),
+                          onHelpButtonTap: () {
+                            showSimpleHelpDialog(
+                              context: context,
+                              title: 'Nagroda pieniężna',
+                              content:
+                                  'Na nagrody pieniężne w cyklu w dużym stopniu wpływa priorytet. Tutaj możemy to jeszcze wyregulować. Przykładowo w Raw Air nagrody te są większe niż w TCS, który ma za to większy prestiż',
+                            );
                           },
                         ),
                       ],
@@ -233,11 +275,16 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
     if (changedTranslatedName.isEmpty) {
       changedTranslatedName = translate(context).unnamed;
     }
+    var changedTranslatedDescription = _descriptionController.text;
     var name = _cachedSetup!.multilingualName
-        .copyWith(languageCode: languageCode, name: changedTranslatedName);
+        .copyWith(languageCode: languageCode, value: changedTranslatedName);
+    var description = _cachedSetup!.multilingualDescription
+        ?.copyWith(languageCode: languageCode, value: changedTranslatedDescription);
     final setup = EventSeriesSetup(
       id: _idController.text,
       multilingualName: name,
+      multilingualDescription: description,
+      relativeMoneyPrize: _relativeMoneyPrize,
       priority: int.tryParse(_priorityController.text) ?? 1,
       calendarPreset: _calendarPreset,
     );
@@ -258,6 +305,9 @@ class EventSeriesSetupEditorState extends State<EventSeriesSetupEditor> {
     } on TranslationNotFoundError {
       _nameController.text = translate(context).unnamed;
     }
+    _relativeMoneyPrize = setup.relativeMoneyPrize;
+    _relativeMoneyPrizeController.text =
+        translatedRelativeMoneyPrize(context, _relativeMoneyPrize);
     _priorityController.text = setup.priority.toString();
     _idController.text = setup.id;
     _idFormFieldKey.currentState!.validate();

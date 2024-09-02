@@ -1,6 +1,5 @@
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
-import 'package:sj_manager/utils/multilingual_string.dart';
 
 class EventSeries {
   const EventSeries({
@@ -11,11 +10,7 @@ class EventSeries {
   const EventSeries.empty()
       : this(
           calendar: const EventSeriesCalendar.empty(),
-          setup: const EventSeriesSetup(
-            id: '',
-            multilingualName: MultilingualString(namesByLanguage: {}),
-            priority: 0,
-          ),
+          setup: const EventSeriesSetup.empty(),
         );
 
   final EventSeriesCalendar calendar;

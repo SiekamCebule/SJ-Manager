@@ -60,4 +60,10 @@ abstract class UiItemEditorsConstants {
   static const double hillImagePlaceholderWidth = 175;
 
   static const double wideMainActionButtonHeight = 50;
+
+  static const double emptyStateIconSize = 90.0;
+}
+
+abstract class UiSpecificItemConstants {
+  static const double countryFlagAspectRatio = 4 / 3;
 }

@@ -17,7 +17,7 @@ class _ItemEditorEmptyStateBody extends StatelessWidget {
           Icon(
             Symbols.edit,
             color: color,
-            size: 90,
+            size: UiItemEditorsConstants.emptyStateIconSize,
           ),
           const Gap(10),
           Text(

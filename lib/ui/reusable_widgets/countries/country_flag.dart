@@ -34,7 +34,7 @@ class CountryFlag extends StatelessWidget {
               fit: imageFit,
             )
           : AspectRatio(
-              aspectRatio: 4 / 3,
+              aspectRatio: UiSpecificItemConstants.countryFlagAspectRatio,
               child: SizedBox(
                 width: width,
                 child: Placeholder(
