@@ -5,10 +5,16 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:osje_sim/osje_sim.dart' as _i8;
+import 'package:sj_manager/models/running/competition_start_list_repository.dart'
+    as _i10;
+import 'package:sj_manager/models/running/default_competition_flow_controllers.dart'
+    as _i12;
 import 'package:sj_manager/models/simulation_db/competition/competition.dart'
     as _i6;
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/concrete/default.dart'
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart'
     as _i9;
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/concrete/default.dart'
+    as _i11;
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/judges_creator.dart'
     as _i2;
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart'
@@ -18,6 +24,7 @@ import 'package:sj_manager/models/simulation_db/standings/score/details/score_de
 import 'package:sj_manager/models/simulation_db/standings/standings.dart'
     as _i4;
 import 'package:sj_manager/models/user_db/hill/hill.dart' as _i7;
+import 'package:sj_manager/models/user_db/jumper/jumper.dart' as _i13;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -96,11 +103,33 @@ class _FakeJumpSimulationRecord_5 extends _i1.SmartFake
         );
 }
 
+class _FakeDefaultCompetitionRules_6<T> extends _i1.SmartFake
+    implements _i9.DefaultCompetitionRules<T> {
+  _FakeDefaultCompetitionRules_6(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeCompetitionStartlistRepo_7<E> extends _i1.SmartFake
+    implements _i10.CompetitionStartlistRepo<E> {
+  _FakeCompetitionStartlistRepo_7(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [DefaultJudgesCreator].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDefaultJudgesCreator extends _i1.Mock
-    implements _i9.DefaultJudgesCreator {
+    implements _i11.DefaultJudgesCreator {
   MockDefaultJudgesCreator() {
     _i1.throwOnMissingStub(this);
   }
@@ -217,4 +246,66 @@ class MockJudgesCreatingContext extends _i1.Mock
         Invocation.getter(#judgesCount),
         returnValue: 0,
       ) as int);
+}
+
+/// A class which mocks [DefaultIndividualCompetitionFlowController].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockDefaultIndividualCompetitionFlowController extends _i1.Mock
+    implements _i12.DefaultIndividualCompetitionFlowController {
+  MockDefaultIndividualCompetitionFlowController() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i9.DefaultCompetitionRules<_i13.Jumper> get rules => (super.noSuchMethod(
+        Invocation.getter(#rules),
+        returnValue: _FakeDefaultCompetitionRules_6<_i13.Jumper>(
+          this,
+          Invocation.getter(#rules),
+        ),
+      ) as _i9.DefaultCompetitionRules<_i13.Jumper>);
+
+  @override
+  _i10.CompetitionStartlistRepo<_i13.Jumper> get startlist =>
+      (super.noSuchMethod(
+        Invocation.getter(#startlist),
+        returnValue: _FakeCompetitionStartlistRepo_7<_i13.Jumper>(
+          this,
+          Invocation.getter(#startlist),
+        ),
+      ) as _i10.CompetitionStartlistRepo<_i13.Jumper>);
+
+  @override
+  int get currentRoundIndex => (super.noSuchMethod(
+        Invocation.getter(#currentRoundIndex),
+        returnValue: 0,
+      ) as int);
+
+  @override
+  set currentRoundIndex(int? _currentRoundIndex) => super.noSuchMethod(
+        Invocation.setter(
+          #currentRoundIndex,
+          _currentRoundIndex,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool shouldEndCompetition() => (super.noSuchMethod(
+        Invocation.method(
+          #shouldEndCompetition,
+          [],
+        ),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  bool shouldEndRound() => (super.noSuchMethod(
+        Invocation.method(
+          #shouldEndRound,
+          [],
+        ),
+        returnValue: false,
+      ) as bool);
 }

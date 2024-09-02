@@ -2,52 +2,75 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/models/running/competition_start_list_repository.dart';
 
-class CompetitionStartlistCubit<E> extends Cubit<CompetitionStartlistUnfinished> {
+class CompetitionStartlistCubit<E> extends Cubit<CompetitionStartlistState> {
   CompetitionStartlistCubit({
     required this.startlist,
-  }) : super(
-          CompetitionStartlistUnfinished(startlist: startlist),
-        );
+  }) : super(CompetitionStartlistInitial<E>()) {
+    emit(_createUnfinishedStartlistState());
+  }
 
   CompetitionStartlistRepo<E> startlist;
 
   void complete(E entity) {
     startlist.complete(entity);
-    emit(CompetitionStartlistUnfinished(startlist: startlist));
+    if (startlist.everyHasCompleted) {
+      emit(CompetitionStartlistFinished<E>());
+    } else {
+      emit(_createUnfinishedStartlistState());
+    }
   }
 
   void updateStartlist(CompetitionStartlistRepo<E> newStartlist) {
-    emit(CompetitionStartlistUnfinished(startlist: newStartlist));
+    if (newStartlist.everyHasCompleted) {
+      emit(CompetitionStartlistFinished<E>());
+    } else {
+      emit(_createUnfinishedStartlistState());
+    }
+  }
+
+  CompetitionStartlistUnfinished<E> _createUnfinishedStartlistState() {
+    return CompetitionStartlistUnfinished(
+      currentEntity: startlist.incompleted.first! as E,
+      nextEntity: startlist.incompleted.elementAtOrNull(1),
+      currentEntityIndexInStartlist: startlist.indexOf(startlist.incompleted.first! as E),
+      remainingEntities: startlist.incompleted,
+    );
   }
 }
 
 abstract class CompetitionStartlistState<E> with EquatableMixin {
-  const CompetitionStartlistState({
-    required this.startlist,
-  });
-
-  final CompetitionStartlistRepo<E> startlist;
+  const CompetitionStartlistState();
 
   @override
   List<Object?> get props => [];
 }
 
+class CompetitionStartlistInitial<E> extends CompetitionStartlistState {
+  const CompetitionStartlistInitial();
+}
+
 class CompetitionStartlistUnfinished<E> extends CompetitionStartlistState<E> {
-  const CompetitionStartlistUnfinished({required super.startlist});
+  const CompetitionStartlistUnfinished({
+    required this.currentEntity,
+    required this.nextEntity,
+    required this.currentEntityIndexInStartlist,
+    required this.remainingEntities,
+  });
 
-  E get currentEntity => startlist.firstIncompleted!;
-  int get currentEntityIndexInStartlist {
-    return startlist.indexOf(currentEntity);
-  }
-
-  E? get nextEntity => startlist.atNFromIncompleted(2);
+  final E currentEntity;
+  final E? nextEntity;
+  final int currentEntityIndexInStartlist;
+  final List<E> remainingEntities;
 
   @override
   List<Object?> get props => [
-        startlist,
+        currentEntity,
+        nextEntity,
+        currentEntityIndexInStartlist,
+        remainingEntities,
       ];
 }
 
 class CompetitionStartlistFinished<E> extends CompetitionStartlistState<E> {
-  const CompetitionStartlistFinished({required super.startlist});
+  const CompetitionStartlistFinished();
 }

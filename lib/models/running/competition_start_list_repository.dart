@@ -41,23 +41,8 @@ class CompetitionStartlistRepo<E> with EquatableMixin {
     return _startlistOrder.indexOf(entity);
   }
 
-  E? get firstIncompleted {
-    return atNFromIncompleted(1);
-  }
-
-  E? atNFromIncompleted(int n) {
-    var currentN = 1;
-    E? wantedEntity;
-    for (var entity in _startlistOrder) {
-      if (hasCompleted(entity)) {
-        if (currentN == n) {
-          wantedEntity = entity;
-        } else {
-          currentN++;
-        }
-      }
-    }
-    return wantedEntity;
+  List<E> get incompleted {
+    return _startlistOrder.where((entity) => !hasCompleted(entity)).toList();
   }
 
   bool get everyHasCompleted {

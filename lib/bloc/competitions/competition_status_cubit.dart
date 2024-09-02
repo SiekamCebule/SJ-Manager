@@ -14,10 +14,10 @@ class CompetitionStatusCubit<E> extends Cubit<CompetitionStatusState> {
   CompetitionFlowController<E> flowController;
 
   static CompetitionStatusState _resolveInitial<E>() {
-    if (E is Jumper) {
+    if (E == Jumper) {
       return const IndividualCompetitionStatusState(
           status: CompetitionStatus.nonStarted, roundIndex: 0);
-    } else if (E is Team) {
+    } else if (E == Team) {
       return const TeamCompetitionStatusState(
         status: CompetitionStatus.nonStarted,
         roundIndex: 0,
@@ -25,11 +25,17 @@ class CompetitionStatusCubit<E> extends Cubit<CompetitionStatusState> {
       );
     } else {
       throw UnsupportedError(
-          'Unsupported entities type in CompetitionStatusCubit\'s initial work');
+          'Unsupported entities type in CompetitionStatusCubit\'s initial work ($E)');
     }
   }
 
-  void ensureByFlowController() {
+  void ensureEnds() {
+    if (state.status == CompetitionStatus.endingGroup ||
+        state.status == CompetitionStatus.endingRound ||
+        state.status == CompetitionStatus.endingEntirely) {
+      throw StateError(
+          'Some of competition part is during ending (checkForEnds()). Status: ${state.status}');
+    }
     if (flowController.shouldEndCompetition()) {
       emit(state.copyWith(status: CompetitionStatus.endingEntirely));
     } else if (flowController.shouldEndRound()) {
@@ -47,6 +53,22 @@ class CompetitionStatusCubit<E> extends Cubit<CompetitionStatusState> {
 
   void goToNextRound() {
     emit(state.copyWith(roundIndex: state.roundIndex + 1));
+  }
+
+  void start() {
+    if (state.status != CompetitionStatus.nonStarted) {
+      throw StateError(
+          'Cannot start the competition again (it has been already started)');
+    }
+    emit(state.copyWith(status: CompetitionStatus.running));
+  }
+
+  void resume() {
+    emit(state.copyWith(status: CompetitionStatus.running));
+  }
+
+  void startBreak() {
+    emit(state.copyWith(status: CompetitionStatus.duringBreak));
   }
 
   void goToNextGroup() {

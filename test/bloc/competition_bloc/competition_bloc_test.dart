@@ -1,19 +1,26 @@
-import 'dart:math';
-
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sj_manager/bloc/competitions/competition_gate_cubit.dart';
 import 'package:sj_manager/bloc/competitions/competition_judging_cubit.dart';
+import 'package:sj_manager/bloc/competitions/competition_startlist_cubit.dart';
+import 'package:sj_manager/bloc/competitions/competition_status_cubit.dart';
+import 'package:sj_manager/bloc/competitions/states/competition_status_state.dart';
+import 'package:sj_manager/models/running/competition_flow_controller.dart';
+import 'package:sj_manager/models/running/competition_start_list_repository.dart';
+import 'package:sj_manager/models/running/competition_status.dart';
+import 'package:sj_manager/models/running/default_competition_flow_controllers.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/concrete/default.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/judges_creator.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
 import 'competition_bloc_test.mocks.dart';
 
 @GenerateMocks([
   DefaultJudgesCreator,
   JudgesCreatingContext,
+  DefaultIndividualCompetitionFlowController
 ])
 void main() {
   group('CompetitionGateCubit', () {
@@ -146,5 +153,89 @@ void main() {
 
       competitionJudgingCubit.close();
     });
+  });
+  group('CompetitionStartlistCubit', () {
+    late CompetitionStartlistCubit<String> startlistCubit;
+    final startlist = CompetitionStartlistRepo.fromEntitiesList(
+        entities: ['Kamil Stoch', 'Dawid Kubacki', 'Jakub Wolny']);
+
+    setUp(() {
+      startlistCubit = CompetitionStartlistCubit(startlist: startlist);
+    });
+
+    blocTest(
+      'Typical scenario',
+      build: () => startlistCubit,
+      expect: () => <CompetitionStartlistState<String>>[
+        const CompetitionStartlistUnfinished(
+          currentEntity: 'Dawid Kubacki',
+          nextEntity: 'Jakub Wolny',
+          currentEntityIndexInStartlist: 1,
+          remainingEntities: ['Dawid Kubacki', 'Jakub Wolny'],
+        ),
+        const CompetitionStartlistUnfinished(
+          currentEntity: 'Jakub Wolny',
+          nextEntity: null,
+          currentEntityIndexInStartlist: 2,
+          remainingEntities: ['Jakub Wolny'],
+        ),
+        const CompetitionStartlistFinished(),
+      ],
+      act: (bloc) {
+        startlistCubit.complete('Kamil Stoch');
+        startlistCubit.complete('Dawid Kubacki');
+        startlistCubit.complete('Jakub Wolny');
+      },
+      tearDown: () => startlistCubit.close(),
+    );
+  });
+
+  group('CompetitionStatusCubit', () {
+    late CompetitionStatusCubit<Jumper> competitionStatusCubit;
+    late CompetitionFlowController<Jumper> flowController;
+
+    setUp(() {
+      flowController = MockDefaultIndividualCompetitionFlowController();
+      when(flowController.currentRoundIndex).thenReturnInOrder([0, 0, 0, 0, 1, 1, 1]);
+      when(flowController.shouldEndRound())
+          .thenReturnInOrder([false, false, false, true, false, false, true]);
+      when(flowController.shouldEndCompetition())
+          .thenReturnInOrder([false, false, false, false, false, false, true]);
+      competitionStatusCubit = CompetitionStatusCubit(flowController: flowController);
+    });
+
+    blocTest(
+      'Typical scenario',
+      build: () => competitionStatusCubit,
+      expect: () => const [
+        IndividualCompetitionStatusState(
+            roundIndex: 0, status: CompetitionStatus.running),
+        IndividualCompetitionStatusState(
+            roundIndex: 0, status: CompetitionStatus.endingRound),
+        IndividualCompetitionStatusState(
+            roundIndex: 0, status: CompetitionStatus.duringBreak),
+        IndividualCompetitionStatusState(
+            roundIndex: 1, status: CompetitionStatus.duringBreak),
+        IndividualCompetitionStatusState(
+            roundIndex: 1, status: CompetitionStatus.running),
+        IndividualCompetitionStatusState(
+            roundIndex: 1, status: CompetitionStatus.endingEntirely),
+      ],
+      act: (bloc) {
+        competitionStatusCubit.start();
+        competitionStatusCubit.ensureEnds();
+        competitionStatusCubit.ensureEnds();
+        competitionStatusCubit.ensureEnds();
+        competitionStatusCubit.ensureEnds();
+        competitionStatusCubit.startBreak();
+        competitionStatusCubit.goToNextRound();
+        competitionStatusCubit.resume();
+        competitionStatusCubit.ensureEnds();
+        competitionStatusCubit.ensureEnds();
+        competitionStatusCubit.ensureEnds();
+        // Do some work after competition end (in UI)
+      },
+      tearDown: () => competitionStatusCubit.close(),
+    );
   });
 }
