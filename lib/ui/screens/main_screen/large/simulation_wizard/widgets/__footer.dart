@@ -12,12 +12,9 @@ class _FooterState extends State<_Footer> {
   Widget build(BuildContext context) {
     final navCubit = context.watch<SimulationWizardNavigationCubit>();
     final navCubitState = navCubit.state;
-    final navPermissions = context.watch<LinearNavigationPermissionsRepo>();
     final selectedOptions = context.watch<SimulationWizardOptionsRepo>();
 
-    final shouldShowDatabaseInfo =
-        (navCubitState is InitializedSimulationWizardNavigationState) &&
-            navCubitState.currentScreen == SimulationWizardScreen.team;
+    final shouldShowDatabaseInfo = navCubitState.screen == SimulationWizardScreen.team;
 
     return SizedBox(
       height: 70,
@@ -28,27 +25,23 @@ class _FooterState extends State<_Footer> {
               builder: (context, snapshot) {
                 return Row(
                   children: [
-                    StreamBuilder(
-                        stream: navPermissions.canGoBackStream,
-                        builder: (context, snapshot) {
-                          return Visibility(
-                            maintainAnimation: true,
-                            maintainSize: true,
-                            maintainState: true,
-                            maintainInteractivity: false,
-                            visible: navPermissions.canGoBack,
-                            child: SizedBox(
-                              width: 80,
-                              child: IconButton(
-                                onPressed: () {
-                                  navCubit.goBack();
-                                },
-                                icon: const Icon(Symbols.arrow_back),
-                                style: IconButton.styleFrom(iconSize: 35),
-                              ),
-                            ),
-                          );
-                        }),
+                    Visibility(
+                      maintainAnimation: true,
+                      maintainSize: true,
+                      maintainState: true,
+                      maintainInteractivity: false,
+                      visible: navCubit.state.canGoBack,
+                      child: SizedBox(
+                        width: 80,
+                        child: IconButton(
+                          onPressed: () {
+                            navCubit.goBack();
+                          },
+                          icon: const Icon(Symbols.arrow_back),
+                          style: IconButton.styleFrom(iconSize: 35),
+                        ),
+                      ),
+                    ),
                     const Spacer(),
                     if (shouldShowDatabaseInfo) ...[
                       TextButton(
@@ -63,27 +56,23 @@ class _FooterState extends State<_Footer> {
                       ),
                     ],
                     const Spacer(),
-                    StreamBuilder(
-                        stream: navPermissions.canGoForwardStream,
-                        builder: (context, snapshot) {
-                          return Visibility(
-                            maintainAnimation: true,
-                            maintainSize: true,
-                            maintainState: true,
-                            maintainInteractivity: false,
-                            visible: navPermissions.canGoForward,
-                            child: SizedBox(
-                              width: 80,
-                              child: IconButton(
-                                onPressed: () {
-                                  navCubit.goForward();
-                                },
-                                icon: const Icon(Symbols.arrow_forward),
-                                style: IconButton.styleFrom(iconSize: 35),
-                              ),
-                            ),
-                          );
-                        }),
+                    Visibility(
+                      maintainAnimation: true,
+                      maintainSize: true,
+                      maintainState: true,
+                      maintainInteractivity: false,
+                      visible: navCubit.state.canGoForward,
+                      child: SizedBox(
+                        width: 80,
+                        child: IconButton(
+                          onPressed: () {
+                            navCubit.goForward();
+                          },
+                          icon: const Icon(Symbols.arrow_forward),
+                          style: IconButton.styleFrom(iconSize: 35),
+                        ),
+                      ),
+                    ),
                   ],
                 );
               }),

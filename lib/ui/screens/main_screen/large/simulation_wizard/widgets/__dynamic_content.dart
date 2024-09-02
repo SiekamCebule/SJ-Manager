@@ -5,9 +5,7 @@ class _DynamicContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screen = (context.watch<SimulationWizardNavigationCubit>().state
-            as InitializedSimulationWizardNavigationState)
-        .currentScreen;
+    final navCubit = context.watch<SimulationWizardNavigationCubit>();
 
     return ClipRect(
       child: AnimatedSwitcher(
@@ -15,8 +13,7 @@ class _DynamicContent extends StatelessWidget {
         switchInCurve: Curves.easeIn,
         switchOutCurve: Curves.easeOut,
         transitionBuilder: (child, animation) {
-          final slide =
-              CurvedAnimation(parent: animation, curve: Curves.easeInOut).drive(
+          final slide = CurvedAnimation(parent: animation, curve: Curves.easeInOut).drive(
             Tween(begin: const Offset(-1, 0), end: Offset.zero),
           );
           return SlideTransition(
@@ -24,22 +21,22 @@ class _DynamicContent extends StatelessWidget {
             child: child,
           );
         },
-        child: switch (screen) {
+        child: switch (navCubit.state.screen) {
           SimulationWizardScreen.mode => _ModeScreen(onChange: (mode) {
               context.read<SimulationWizardOptionsRepo>().mode.set(mode);
               if (mode != null) {
-                updateCanGoForward(true, context);
+                navCubit.blockGoingForward();
               } else {
-                updateCanGoForward(false, context);
+                navCubit.unblockGoingForward();
               }
             }),
           SimulationWizardScreen.team => _TeamScreen(
               onChange: (team) {
                 context.read<SimulationWizardOptionsRepo>().team.set(team);
                 if (team != null) {
-                  updateCanGoForward(true, context);
+                  navCubit.blockGoingForward();
                 } else {
-                  updateCanGoForward(false, context);
+                  navCubit.unblockGoingForward();
                 }
               },
             ),
@@ -47,23 +44,5 @@ class _DynamicContent extends StatelessWidget {
         },
       ),
     );
-  }
-
-  void updateCanGoForward(bool can, BuildContext context) {
-    final navCubit = context.read<SimulationWizardNavigationCubit>();
-    final navState = navCubit.state;
-    if (navState is InitializedSimulationWizardNavigationState) {
-      final navPermissions = context.read<LinearNavigationPermissionsRepo>();
-      navPermissions.canGoForward = navState.indexAllowsGoingForward && can;
-    }
-  }
-
-  void updateCanGoBack(bool can, BuildContext context) {
-    final navCubit = context.read<SimulationWizardNavigationCubit>();
-    final navState = navCubit.state;
-    if (navState is InitializedSimulationWizardNavigationState) {
-      final navPermissions = context.read<LinearNavigationPermissionsRepo>();
-      navPermissions.canGoBack = navState.indexAllowsGoingBack && can;
-    }
   }
 }
