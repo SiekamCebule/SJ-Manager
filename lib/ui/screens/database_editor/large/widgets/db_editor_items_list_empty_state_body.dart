@@ -1,7 +1,7 @@
 part of '../../database_editor_screen.dart';
 
-class _ItemsListEmptyStateBody extends StatelessWidget {
-  const _ItemsListEmptyStateBody();
+class DbEditorItemsListEmptyStateBody extends StatelessWidget {
+  const DbEditorItemsListEmptyStateBody({super.key});
 
   @override
   Widget build(BuildContext context) {

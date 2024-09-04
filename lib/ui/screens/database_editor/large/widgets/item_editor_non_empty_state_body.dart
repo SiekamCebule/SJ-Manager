@@ -1,11 +1,12 @@
 part of '../../database_editor_screen.dart';
 
-class _ItemEditorNonEmptyStateBody extends StatelessWidget {
-  const _ItemEditorNonEmptyStateBody({
+class ItemEditorNonEmptyStateBody extends StatelessWidget {
+  const ItemEditorNonEmptyStateBody({
+    super.key,
     required this.editorKey,
   });
 
-  final GlobalKey<_AppropriateItemEditorState> editorKey;
+  final GlobalKey<AppropriateItemEditorState> editorKey;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class _ItemEditorNonEmptyStateBody extends StatelessWidget {
     final editableItemsRepo =
         context.watch<LocalDatabaseCopyCubit>().state!.getEditable(itemsType);
 
-    return _AppropriateItemEditor(
+    return AppropriateItemEditor(
       key: editorKey,
       itemType: itemsType,
       onChange: (changedItem) async {

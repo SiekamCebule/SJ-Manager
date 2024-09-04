@@ -6,7 +6,7 @@ import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
 class MyTextField extends StatelessWidget {
   const MyTextField({
     super.key,
-    required this.controller,
+    this.controller,
     required this.onChange,
     this.formatters,
     required this.labelText,
@@ -17,7 +17,7 @@ class MyTextField extends StatelessWidget {
 
   final bool enabled;
   final VoidCallback onChange;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final List<TextInputFormatter>? formatters;
   final String labelText;
   final FocusNode? focusNode;

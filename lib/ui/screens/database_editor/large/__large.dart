@@ -31,7 +31,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       _initializeRepos();
       await _initializeCubits();
       _initialized.value = true;
-      await _maybeRunTutorial();
+      //await _maybeRunTutorial();
     });
 
     FlutterWindowClose.setWindowShouldCloseHandler(() async {

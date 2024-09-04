@@ -30,6 +30,7 @@ import 'package:sj_manager/models/simulation_db/standings/standings_positions_ma
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
+import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_avaiable_objects_repo.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/dropdown_menu_form_field.dart';
@@ -89,7 +90,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
   DefaultCompetitionRules? _cachedRules;
   DefaultCompetitionRules? get currentCached => _cachedRules;
 
-  var _competitionType = _CompetitionType.individual;
+  var _competitionType = CompetitionTypeByEntity.individual;
 
   var _roundsCount = 0;
   var _selectedRoundIndex = 0;
@@ -174,12 +175,12 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
               child: SegmentedButton(
                 segments: const [
                   ButtonSegment(
-                    value: _CompetitionType.individual,
+                    value: CompetitionTypeByEntity.individual,
                     icon: Icon(Symbols.person),
                     label: Text('Indywidualny'),
                   ),
                   ButtonSegment(
-                    value: _CompetitionType.team,
+                    value: CompetitionTypeByEntity.team,
                     icon: Icon(Symbols.group),
                     label: Text('Drużynowy'),
                   ),
@@ -199,7 +200,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                 builder: (context, constraints) {
                   final entries = _constructEntries<CompetitionScoreCreator>(
                     condition: (config) {
-                      if (_competitionType == _CompetitionType.individual) {
+                      if (_competitionType == CompetitionTypeByEntity.individual) {
                         return config.object
                             is CompetitionScoreCreator<CompetitionScore<Jumper>>;
                       } else {
@@ -317,10 +318,10 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                   formKey: _entitiesLimitCountFormFieldKey,
                                   controller: _entitiesLimitCountController,
                                   onChange: _onChange,
-                                  labelText:
-                                      _competitionType == _CompetitionType.individual
-                                          ? 'Limit zawodników'
-                                          : 'Limit drużyn',
+                                  labelText: _competitionType ==
+                                          CompetitionTypeByEntity.individual
+                                      ? 'Limit zawodników'
+                                      : 'Limit drużyn',
                                   step: 1,
                                   min: 1,
                                   max: 100000,
@@ -876,7 +877,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                               ),
                             ],
                           ),
-                          if (_competitionType == _CompetitionType.team) ...[
+                          if (_competitionType == CompetitionTypeByEntity.team) ...[
                             const Divider(
                               height:
                                   UiItemEditorsConstants.verticalSpaceBetweenFields * 2.5,
@@ -1061,7 +1062,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
 
   void _addRoundAt(int index) {
     final DefaultCompetitionRoundRules defaultItem = _competitionType ==
-            _CompetitionType.individual
+            CompetitionTypeByEntity.individual
         ? context.read<DefaultItemsRepo>().get<DefaultIndividualCompetitionRoundRules>()
         : context.read<DefaultItemsRepo>().get<DefaultTeamCompetitionRoundRules>();
     _roundsCount++;
@@ -1163,8 +1164,8 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
 
   void _fillFields(DefaultCompetitionRules rules) {
     _competitionType = rules.competitionRules is DefaultCompetitionRules<Jumper>
-        ? _CompetitionType.individual
-        : _CompetitionType.team;
+        ? CompetitionTypeByEntity.individual
+        : CompetitionTypeByEntity.team;
     _roundsCount = rules.roundsCount;
     _fillRoundFields(rules);
   }
@@ -1243,7 +1244,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
   DefaultCompetitionRules _constructAndCache() {
     final rounds = List.of(_cachedRules!.rounds);
     rounds[_selectedRoundIndex] = _constructCurrentRound();
-    final rules = _competitionType == _CompetitionType.individual
+    final rules = _competitionType == CompetitionTypeByEntity.individual
         ? DefaultCompetitionRules<Jumper>(
             rounds: _ensureCorrectRoundTypes(rounds),
           )
@@ -1270,7 +1271,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
         : null;
 
     switch (_competitionType) {
-      case _CompetitionType.individual:
+      case CompetitionTypeByEntity.individual:
         return DefaultIndividualCompetitionRoundRules(
           limit: limit,
           startlistIsSorted: _startlistIsSorted,
@@ -1291,7 +1292,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
           judgesCreator: _judgesCreator,
           koRules: _koEnabled ? _constructKoRulesForCurrentRound() : null,
         );
-      case _CompetitionType.team:
+      case CompetitionTypeByEntity.team:
         List<TeamCompetitionGroupRules> newGroups;
         final currentRound = _cachedRules!.rounds[_selectedRoundIndex];
         if (currentRound is DefaultTeamCompetitionRoundRules) {
@@ -1408,10 +1409,10 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
   void _ensureCorrectCompetitionScoreCreator() {
     final repo = context.read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>();
     final whereType = switch (_competitionType) {
-      _CompetitionType.individual => repo.objects.whereType<
+      CompetitionTypeByEntity.individual => repo.objects.whereType<
           DbEditingAvaiableObjectConfig<
               CompetitionScoreCreator<CompetitionJumperScore>>>(),
-      _CompetitionType.team => repo.objects.whereType<
+      CompetitionTypeByEntity.team => repo.objects.whereType<
           DbEditingAvaiableObjectConfig<CompetitionScoreCreator<CompetitionTeamScore>>>(),
     };
     final firstDefault = whereType.first.object as CompetitionScoreCreator;
@@ -1429,7 +1430,11 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
   bool get judgesEnabled => (int.tryParse(_judgesCountController.text) ?? 0) > 0;
 }
 
-enum _CompetitionType {
+enum CompetitionTypeByEntity {
   individual,
-  team,
+  team;
+
+  Type toEntityType() {
+    return this == CompetitionTypeByEntity.individual ? Jumper : Team;
+  }
 }

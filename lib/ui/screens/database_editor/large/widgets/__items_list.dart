@@ -39,7 +39,7 @@ class _ItemsListState extends State<_ItemsList> {
           duration: Durations.medium1,
           curve: Curves.easeIn,
           visible: !shouldShowList,
-          child: const _ItemsListEmptyStateBody(),
+          child: const DbEditorItemsListEmptyStateBody(),
         ),
       ],
     );

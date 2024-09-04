@@ -1,17 +1,20 @@
 part of '../../database_editor_screen.dart';
 
-class _AnimatedEditor extends StatefulWidget {
-  const _AnimatedEditor({
-    required this.editorKey,
+class DbEditorAnimatedEditor extends StatefulWidget {
+  const DbEditorAnimatedEditor({
+    super.key,
+    required this.nonEmptyStateWidget,
+    required this.emptyStateWidget,
   });
 
-  final GlobalKey<_AppropriateItemEditorState> editorKey;
+  final Widget nonEmptyStateWidget;
+  final Widget? emptyStateWidget;
 
   @override
-  State<_AnimatedEditor> createState() => _AnimatedEditorState();
+  State<DbEditorAnimatedEditor> createState() => DbEditorAnimatedEditorState();
 }
 
-class _AnimatedEditorState extends State<_AnimatedEditor> {
+class DbEditorAnimatedEditorState extends State<DbEditorAnimatedEditor> {
   final _editorStreamBuilderKey = GlobalKey();
 
   @override
@@ -41,14 +44,15 @@ class _AnimatedEditorState extends State<_AnimatedEditor> {
               duration: Durations.medium1,
               curve: Curves.easeIn,
               visible: editorShouldBeVisible,
-              child: _ItemEditorNonEmptyStateBody(editorKey: widget.editorKey),
+              child: widget.nonEmptyStateWidget,
             ),
-            AnimatedVisibility(
-              duration: Durations.medium1,
-              curve: Curves.easeIn,
-              visible: !editorShouldBeVisible,
-              child: const _ItemEditorEmptyStateBody(),
-            ),
+            if (widget.emptyStateWidget != null)
+              AnimatedVisibility(
+                duration: Durations.medium1,
+                curve: Curves.easeIn,
+                visible: !editorShouldBeVisible,
+                child: widget.emptyStateWidget!,
+              ),
           ],
         );
       },
