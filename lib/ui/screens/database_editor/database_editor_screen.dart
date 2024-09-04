@@ -96,7 +96,7 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 part 'large/__large.dart';
 part 'large/widgets/__items_and_editor_row.dart';
-part 'large/widgets/__appropriate_item_editor.dart';
+part 'large/widgets/appropriate_item_editor.dart';
 part 'large/widgets/__app_bar.dart';
 part 'large/widgets/__bottom_app_bar.dart';
 part 'large/widgets/filters/__for_jumpers_typed.dart';
@@ -104,13 +104,13 @@ part 'large/widgets/filters/__for_hills.dart';
 part 'large/widgets/__add_fab.dart';
 part 'large/widgets/__remove_fab.dart';
 part 'large/widgets/__items_list.dart';
-part 'large/widgets/__animated_editor.dart';
+part 'large/widgets/db_editor_animated_editor.dart';
 part 'large/widgets/__save_as_button.dart';
 part 'large/widgets/__load_button.dart';
-part 'large/widgets/__items_list_empty_state_body.dart';
+part 'large/widgets/db_editor_items_list_empty_state_body.dart';
 part 'large/widgets/__items_list_non_empty_state_body.dart';
-part 'large/widgets/__item_editor_empty_state_body.dart';
-part 'large/widgets/__item_editor_non_empty_state_body.dart';
+part 'large/widgets/item_editor_empty_state_body.dart';
+part 'large/widgets/item_editor_non_empty_state_body.dart';
 part 'large/widgets/__main_body.dart';
 part 'large/tutorial/__tutorial_runner.dart';
 

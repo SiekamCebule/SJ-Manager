@@ -8,7 +8,7 @@ class _ItemsAndEditorRow extends StatefulWidget {
 }
 
 class _ItemsAndEditorRowState extends State<_ItemsAndEditorRow> {
-  final _editorKey = GlobalKey<_AppropriateItemEditorState>();
+  final _editorKey = GlobalKey<AppropriateItemEditorState>();
   late final StreamSubscription _selectionChangesSubscription;
 
   @override
@@ -42,21 +42,22 @@ class _ItemsAndEditorRowState extends State<_ItemsAndEditorRow> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       children: [
-        const Expanded(
+        Expanded(
           flex: 10,
           child: _ItemsList(),
         ),
-        const Gap(UiDatabaseEditorConstants.horizontalSpaceBetweenListAndEditor / 2),
-        const VerticalDivider(),
-        const Gap(UiDatabaseEditorConstants.horizontalSpaceBetweenListAndEditor / 2),
+        Gap(UiDatabaseEditorConstants.horizontalSpaceBetweenListAndEditor / 2),
+        VerticalDivider(),
+        Gap(UiDatabaseEditorConstants.horizontalSpaceBetweenListAndEditor / 2),
         Expanded(
           flex: 16,
           child: Align(
             alignment: Alignment.topCenter,
-            child: _AnimatedEditor(
-              editorKey: _editorKey,
+            child: DbEditorAnimatedEditor(
+              emptyStateWidget: DbEditorItemsListEmptyStateBody(),
+              nonEmptyStateWidget: _ItemsListNonEmptyStateBody(),
             ),
           ),
         ),

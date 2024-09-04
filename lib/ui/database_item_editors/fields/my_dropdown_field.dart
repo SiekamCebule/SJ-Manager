@@ -14,10 +14,10 @@ class MyDropdownField<T> extends StatelessWidget {
     this.leadingIcon,
     this.trailingIcon,
     this.label,
-    this.enableSearch,
+    this.enableSearch = true,
     this.enabled = true,
     this.menuHeight,
-    this.requestFocusOnTap,
+    this.requestFocusOnTap = false,
     this.focusNode,
     this.onHelpButtonTap,
   });
@@ -30,10 +30,10 @@ class MyDropdownField<T> extends StatelessWidget {
   final Widget? label;
   final Widget? leadingIcon;
   final Widget? trailingIcon;
-  final bool? enableSearch;
+  final bool enableSearch;
   final bool enabled;
   final double? menuHeight;
-  final bool? requestFocusOnTap;
+  final bool requestFocusOnTap;
   final FocusNode? focusNode;
   final VoidCallback? onHelpButtonTap;
 
@@ -49,8 +49,8 @@ class MyDropdownField<T> extends StatelessWidget {
     final showHelpButton = onHelpButtonTap != null;
     final field = DropdownMenu<T>(
       enabled: enabled,
-      enableSearch: enableSearch ?? true,
-      requestFocusOnTap: false,
+      enableSearch: enableSearch,
+      requestFocusOnTap: requestFocusOnTap,
       width: width,
       controller: controller,
       initialSelection: initial,

@@ -1,7 +1,7 @@
 part of '../../database_editor_screen.dart';
 
-class _AppropriateItemEditor extends StatefulWidget {
-  const _AppropriateItemEditor({
+class AppropriateItemEditor extends StatefulWidget {
+  const AppropriateItemEditor({
     super.key,
     required this.itemType,
     required this.onChange,
@@ -11,10 +11,10 @@ class _AppropriateItemEditor extends StatefulWidget {
   final Function(dynamic) onChange;
 
   @override
-  State<_AppropriateItemEditor> createState() => _AppropriateItemEditorState();
+  State<AppropriateItemEditor> createState() => AppropriateItemEditorState();
 }
 
-class _AppropriateItemEditorState extends State<_AppropriateItemEditor> {
+class AppropriateItemEditorState extends State<AppropriateItemEditor> {
   final _key = GlobalKey();
 
   @override
