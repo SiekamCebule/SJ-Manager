@@ -3,11 +3,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
+import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 
 class SimpleCalendarEditingCubit extends Cubit<SimpleCalendarEditingState> {
-  SimpleCalendarEditingCubit()
-      : super(
-          const SimpleCalendarEditingState(competitionRecords: []),
+  SimpleCalendarEditingCubit({
+    required SimpleEventSeriesCalendarPreset preset,
+  }) : super(
+          SimpleCalendarEditingState(
+              competitionRecords: preset.highLevelCalendar.highLevelCompetitions),
         );
 
   void add(CalendarMainCompetitionRecord record, int index) {

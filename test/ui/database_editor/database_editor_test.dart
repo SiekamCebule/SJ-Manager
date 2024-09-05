@@ -35,7 +35,6 @@ import 'package:sj_manager/repositories/settings/mocked_user_settings_repo.dart'
 import 'package:sj_manager/repositories/settings/user_settings_repo.dart';
 import 'package:sj_manager/setup/app_configurator.dart';
 import 'package:sj_manager/ui/app.dart';
-import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
 import 'package:sj_manager/ui/providers/locale_cubit.dart';
@@ -364,13 +363,16 @@ void main() {
         await tap(removeFab);
         await tapItem(1); // Schattenbergschanze
         expect(find.byType(HillEditor), findsOneWidget);
-        expect(tester.widget<MyTextField>(find.byKey(const Key('name'))).controller.text,
+        expect(tester.widget<MyTextField>(find.byKey(const Key('name'))).controller!.text,
             'Schattenbergschanze');
         final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
         expect(selectedIndexesRepo.last.single, 1);
         await tapItem(2);
         expect(
-            tester.widget<MyTextField>(find.byKey(const Key('locality'))).controller.text,
+            tester
+                .widget<MyTextField>(find.byKey(const Key('locality')))
+                .controller!
+                .text,
             'Zakopane');
 
         await selectTab(3);

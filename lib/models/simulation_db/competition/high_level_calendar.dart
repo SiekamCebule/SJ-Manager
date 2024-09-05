@@ -7,6 +7,9 @@ class HighLevelCalendar<C extends HighLevelCompetitionRecord> {
     required this.classifications,
   });
 
+  const HighLevelCalendar.empty()
+      : this(highLevelCompetitions: const [], classifications: const []);
+
   final List<C> highLevelCompetitions;
   final List<Classification> classifications;
 }

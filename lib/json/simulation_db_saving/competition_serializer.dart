@@ -34,10 +34,10 @@ class CompetitionSerializer implements SimulationDbPartSerializer<Competition> {
 
   String _labelJsonString(Object label) {
     return switch (label) {
-      CompetitionType.competition => 'competition',
-      CompetitionType.qualifications => 'qualifications',
-      CompetitionType.trialRound => 'trialRound',
-      CompetitionType.training => 'training',
+      DefaultCompetitionType.competition => 'competition',
+      DefaultCompetitionType.qualifications => 'qualifications',
+      DefaultCompetitionType.trialRound => 'trialRound',
+      DefaultCompetitionType.training => 'training',
       _ => throw ArgumentError('Invalid competition label: $label'),
     };
   }

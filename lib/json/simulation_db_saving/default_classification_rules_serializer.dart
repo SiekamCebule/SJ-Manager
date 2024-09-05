@@ -30,8 +30,8 @@ class DefaultClassificationRulesSerializer
   Json _serializeAccordingly({
     required DefaultClassificationRules rules,
   }) {
-    final classificationScoreCreatorJson = classificationScoreCreatorSerializer
-        .serialize(rules.classificationScoreCreator as ClassificationScoreCreator);
+    final classificationScoreCreatorJson =
+        classificationScoreCreatorSerializer.serialize(rules.classificationScoreCreator);
     final scoringTypeJson = _serializeType(rules.scoringType);
     final pointsMapJson = rules.pointsMap;
     final competitionIdsJson =

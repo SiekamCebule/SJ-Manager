@@ -3,6 +3,7 @@ import 'package:sj_manager/models/simulation_db/competition/calendar_records/cal
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition_labels.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_provider.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -39,25 +40,20 @@ class _Converter {
         hill: record.hill,
         date: record.date,
         rules: rules,
-        labels: const [CompetitionType.trialRound],
+        labels: const [DefaultCompetitionType.trialRound],
       );
     }
 
-    int trainingIndex = 0;
-    final trainings = record.setup.trainingsRules
-        ?.map((rules) {
-          trainingIndex++;
-          final daysSubtraction =
-              trainingsDateBaseSubtraction + Duration(days: trainingIndex ~/ 3);
-          return _competitionWithPreservedType(
-            hill: record.hill,
-            date: record.date.subtract(daysSubtraction),
-            rules: rules,
-            labels: const [CompetitionType.training],
-          );
-        })
-        .toList()
-        .reversed;
+    final trainings = List.generate(record.setup.trainingsCount, (trainingIndex) {
+      final daysSubtraction =
+          trainingsDateBaseSubtraction + Duration(days: trainingIndex ~/ 3);
+      return _competitionWithPreservedType(
+        hill: record.hill,
+        date: record.date.subtract(daysSubtraction),
+        rules: record.setup.trainingsRules!,
+        labels: const [DefaultCompetitionType.training],
+      );
+    });
 
     Competition? quals;
     if (record.setup.qualificationsRules != null) {
@@ -65,7 +61,7 @@ class _Converter {
         hill: record.hill,
         date: record.date.subtract(qualificationsDateSubtraction),
         rules: record.setup.qualificationsRules!,
-        labels: const [CompetitionType.qualifications],
+        labels: const [DefaultCompetitionType.qualifications],
       );
     }
 
@@ -73,11 +69,11 @@ class _Converter {
       hill: record.hill,
       date: record.date,
       rules: record.setup.mainCompRules,
-      labels: const [CompetitionType.competition],
+      labels: const [DefaultCompetitionType.competition],
     );
 
     final comps = [
-      if (trainings != null) ...trainings,
+      ...trainings,
       if (quals != null) quals,
       if (trialRound != null) trialRound,
       mainCompetition,
@@ -89,7 +85,7 @@ class _Converter {
   Competition<T, Standings> _competitionWithPreservedType<T>({
     required Hill hill,
     required DateTime date,
-    required DefaultCompetitionRules<T> rules,
+    required DefaultCompetitionRulesProvider<T> rules,
     List<Object> labels = const [],
   }) {
     if (rules is DefaultCompetitionRules<Jumper>) {

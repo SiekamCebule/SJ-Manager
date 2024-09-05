@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
+import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record_setup.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_provider.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -15,26 +18,65 @@ import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/utils/platform.dart';
 import 'package:provider/provider.dart';
 
-class SimpleCalendarItemEditor extends StatefulWidget {
-  const SimpleCalendarItemEditor({
+class CompetitionMainRecordEditor extends StatefulWidget {
+  const CompetitionMainRecordEditor({
     super.key,
+    required this.onChange,
   });
 
+  final void Function(CalendarMainCompetitionRecord record) onChange;
+
   @override
-  State<SimpleCalendarItemEditor> createState() => _SimpleCalendarItemEditorState();
+  State<CompetitionMainRecordEditor> createState() => _CompetitionMainRecordEditorState();
 }
 
-class _SimpleCalendarItemEditorState extends State<SimpleCalendarItemEditor> {
+class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEditor> {
   late final ScrollController _scrollController;
+  late TextEditingController _hillController;
+  late TextEditingController _dateController;
+  late TextEditingController _trainingsCountController;
+  late TextEditingController _trainingsRulesProviderController;
+  late TextEditingController _trialRoundRulesProviderController;
 
+  late TextEditingController _qualsRulesProviderController;
+  late TextEditingController _mainCompetitionRulesProviderController;
+
+  CalendarMainCompetitionRecord? _cached;
   Hill? _hill;
   DateTime? _date;
   var _competitionType = CompetitionTypeByEntity.individual;
+  int get _trainingsCount => int.parse(_trainingsCountController.text);
+  DefaultCompetitionRulesProvider? _mainCompetitionRulesProvider;
+  DefaultCompetitionRulesProvider? _qualsRulesProvider;
+  DefaultCompetitionRulesProvider? _trialRoundRulesProvider;
+  DefaultCompetitionRulesProvider? _trainingsRulesProvider;
 
   @override
   void initState() {
     _scrollController = ScrollController();
+    _hillController = TextEditingController();
+    _dateController = TextEditingController();
+    _trainingsCountController = TextEditingController();
+    _trainingsRulesProviderController = TextEditingController();
+    _trialRoundRulesProviderController = TextEditingController();
+    _qualsRulesProviderController = TextEditingController();
+
+    _mainCompetitionRulesProviderController = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _hillController.dispose();
+    _dateController.dispose();
+    _trainingsCountController.dispose();
+    _trainingsRulesProviderController.dispose();
+    _trialRoundRulesProviderController.dispose();
+    _qualsRulesProviderController.dispose();
+
+    _mainCompetitionRulesProviderController.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,6 +96,7 @@ class _SimpleCalendarItemEditorState extends State<SimpleCalendarItemEditor> {
                 MyDropdownField(
                   onChange: (value) {
                     _hill = value!;
+                    _onChange();
                   },
                   entries: _constructHillEntries(),
                   label: const Text('Skocznia'),
@@ -67,6 +110,7 @@ class _SimpleCalendarItemEditorState extends State<SimpleCalendarItemEditor> {
                   lastDate: context.read<DbEditingDefaultsRepo>().lastDate,
                   onDateSaved: (value) {
                     _date = value;
+                    _onChange();
                   },
                 ),
                 gap,
@@ -85,24 +129,31 @@ class _SimpleCalendarItemEditorState extends State<SimpleCalendarItemEditor> {
                   ],
                   selected: {_competitionType},
                   onSelectionChanged: (selected) {
-                    setState(() {
-                      _competitionType = selected.single;
-                    });
+                    _competitionType = selected.single;
+                    _onChange();
                   },
                 ),
                 gap,
                 Row(
                   children: [
                     MyNumeralTextField(
-                        controller: controller,
-                        onChange: onChange,
+                        controller: _trainingsCountController,
+                        onChange: () {
+                          _onChange();
+                        },
                         labelText: 'Ilość treningów',
                         step: 1,
                         min: 0,
                         max: 10),
                     gap,
                     MyDropdownField(
-                        label: Text('Treningi'), onChange: onChange, entries: entries)
+                      label: const Text('Treningi'),
+                      onChange: (value) {
+                        _trainingsRulesProvider = value;
+                        _onChange();
+                      },
+                      entries: _constructRulesPresetEntries(type: null),
+                    ),
                   ],
                 ),
                 gap,
@@ -110,7 +161,10 @@ class _SimpleCalendarItemEditorState extends State<SimpleCalendarItemEditor> {
                   label: const Text('Seria próbna'),
                   leadingIcon: _iconForCompetitionType(_competitionType.toEntityType()),
                   width: constraints.maxWidth,
-                  onChange: (value) {},
+                  onChange: (value) {
+                    _trialRoundRulesProvider = value;
+                    _onChange();
+                  },
                   entries: _constructRulesPresetEntries(type: null),
                 ),
                 gap,
@@ -118,7 +172,10 @@ class _SimpleCalendarItemEditorState extends State<SimpleCalendarItemEditor> {
                   label: const Text('Kwalifikacje'),
                   leadingIcon: _iconForCompetitionType(_competitionType.toEntityType()),
                   width: constraints.maxWidth,
-                  onChange: (value) {},
+                  onChange: (value) {
+                    _qualsRulesProvider = value;
+                    _onChange();
+                  },
                   entries:
                       _constructRulesPresetEntries(type: _competitionType.toEntityType()),
                 ),
@@ -127,7 +184,10 @@ class _SimpleCalendarItemEditorState extends State<SimpleCalendarItemEditor> {
                   label: const Text('Konkurs główny'),
                   leadingIcon: _iconForCompetitionType(_competitionType.toEntityType()),
                   width: constraints.maxWidth,
-                  onChange: (value) {},
+                  onChange: (value) {
+                    _mainCompetitionRulesProvider = value;
+                    _onChange();
+                  },
                   entries:
                       _constructRulesPresetEntries(type: _competitionType.toEntityType()),
                 ),
@@ -167,6 +227,49 @@ class _SimpleCalendarItemEditorState extends State<SimpleCalendarItemEditor> {
         leadingIcon: _iconForCompetitionType(presetType),
       );
     }).toList();
+  }
+
+  void _onChange() {
+    // TODO: validate fields
+    widget.onChange(_constructAndCache());
+  }
+
+  CalendarMainCompetitionRecord _constructAndCache() {
+    final record = CalendarMainCompetitionRecord(
+      hill: _hill!,
+      date: _date!,
+      setup: CalendarMainCompetitionRecordSetup(
+        mainCompRules: _mainCompetitionRulesProvider!,
+        qualificationsRules: _qualsRulesProvider,
+        trialRoundRules: _trialRoundRulesProvider,
+        trainingsCount: _trainingsCount,
+        trainingsRules: _trainingsRulesProvider,
+      ),
+    );
+    _cached = record;
+    return record;
+  }
+
+  void setUp(CalendarMainCompetitionRecord record) {
+    setState(() {
+      _cached = record;
+    });
+    _fillFields(record);
+    FocusScope.of(context).unfocus();
+  }
+
+  void _fillFields(CalendarMainCompetitionRecord record) {
+    _hillController.text = record.hill.toString();
+    _dateController.text = record.date.toString();
+    _trainingsCountController.text = record.setup.trainingsCount.toString();
+    _trainingsRulesProviderController.text =
+        (record.setup.trainingsRules as DefaultCompetitionRulesPreset).name;
+    _trialRoundRulesProviderController.text =
+        (record.setup.trialRoundRules as DefaultCompetitionRulesPreset).name;
+    _qualsRulesProviderController.text =
+        (record.setup.qualificationsRules as DefaultCompetitionRulesPreset).name;
+    _mainCompetitionRulesProviderController.text =
+        (record.setup.mainCompRules as DefaultCompetitionRulesPreset).name;
   }
 
   Widget _iconForCompetitionType(Type type) {
