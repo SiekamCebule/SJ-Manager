@@ -39,10 +39,10 @@ class CompetitionParser implements SimulationDbPartParser<Competition> {
 
   Object _label(String jsonString) {
     return switch (jsonString) {
-      'competition' => CompetitionType.competition,
-      'qualifications' => CompetitionType.qualifications,
-      'trialRound' => CompetitionType.trialRound,
-      'training' => CompetitionType.training,
+      'competition' => DefaultCompetitionType.competition,
+      'qualifications' => DefaultCompetitionType.qualifications,
+      'trialRound' => DefaultCompetitionType.trialRound,
+      'training' => DefaultCompetitionType.training,
       _ => throw ArgumentError('Invalid competition label ID ($jsonString)'),
     };
   }

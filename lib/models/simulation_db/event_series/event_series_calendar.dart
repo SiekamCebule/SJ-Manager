@@ -19,6 +19,10 @@ class EventSeriesCalendar {
   final List<Classification> classifications;
   final Map<Competition, Competition> qualifications;
 
+  bool get isEmpty {
+    return competitions.isEmpty && classifications.isEmpty;
+  }
+
   List<Competition> compsWhoseQualsAre(Competition competition) {
     final areQualificationsForCompetiton = <Competition>[];
     for (final entry in qualifications.entries) {

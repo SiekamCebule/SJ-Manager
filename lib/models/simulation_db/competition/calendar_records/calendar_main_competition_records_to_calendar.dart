@@ -56,7 +56,7 @@ class CalendarMainCompetitionRecordsToCalendarConverter
       required List<Competition> rawComps}) {
     if (highLevelComp.setup.mainCompRules is DefaultCompetitionRules<Jumper>) {
       final trainings = highLevelComp.setup.trainingsRules != null
-          ? rawComps.sublist(0, highLevelComp.setup.trainingsRules!.length)
+          ? rawComps.sublist(0, highLevelComp.setup.trainingsCount)
           : null;
       Competition? quals;
       if (highLevelComp.setup.qualificationsRules != null) {
@@ -149,8 +149,8 @@ class CalendarMainCompetitionRecordsToCalendarConverter
     return currentlyChecked;
   }
 
-  CompetitionType? _competitionType(Competition competition) {
-    final types = competition.labels.whereType<CompetitionType>();
+  DefaultCompetitionType? _competitionType(Competition competition) {
+    final types = competition.labels.whereType<DefaultCompetitionType>();
     if (types.length > 1) {
       throw StateError(
           'The competition ($competition) has more than two competition types');
@@ -180,15 +180,15 @@ class CalendarMainCompetitionRecordsToCalendarConverter
 
   void _addDayForTrainingsAndTrialRoundsAfterCompetitionOrQualificationsIfSameDay() {
     final compsToChange = <Competition>[];
-    CompetitionType? prevCompType;
+    DefaultCompetitionType? prevCompType;
     DateTime? prevCompDate;
     for (var comp in _lowLevelComps) {
       final compType = _competitionType(comp);
-      final byCurrentCompType =
-          compType == CompetitionType.training || compType == CompetitionType.trialRound;
+      final byCurrentCompType = compType == DefaultCompetitionType.training ||
+          compType == DefaultCompetitionType.trialRound;
       final byPrevCompType = prevCompType != null &&
-          (prevCompType == CompetitionType.competition ||
-              prevCompType == CompetitionType.qualifications);
+          (prevCompType == DefaultCompetitionType.competition ||
+              prevCompType == DefaultCompetitionType.qualifications);
       final byDate = (prevCompDate != null) &&
           (_withoutTime(comp.date) == _withoutTime(prevCompDate));
       final shouldBeChanged = byCurrentCompType && byPrevCompType && byDate;

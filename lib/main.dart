@@ -367,7 +367,7 @@ void main() async {
                 return DbItemsJsonConfiguration<EventSeriesCalendarPreset>(
                   fromJson: (json) => EventSeriesCalendarPresetParser(
                     idsRepo: context.read(),
-                    calendarParser: EventSeriesCalendarParser(
+                    lowLevelCalendarParser: EventSeriesCalendarParser(
                       idsRepo: context.read(),
                       idGenerator: context.read(),
                       competitionParser: CompetitionParser(

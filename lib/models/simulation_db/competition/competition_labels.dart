@@ -1,4 +1,4 @@
-enum CompetitionType {
+enum DefaultCompetitionType {
   competition,
   qualifications,
   trialRound,
