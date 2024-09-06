@@ -8,9 +8,6 @@ class _MainBody extends StatefulWidget {
 }
 
 class _MainBodyState extends State<_MainBody> with SingleTickerProviderStateMixin {
-  final _fabsColumnKey = GlobalKey();
-  final _tabsRowKey = GlobalKey();
-
   late final AnimationController _bodyAnimationController;
   var _currentTabIndex = _SelectedTabIndex(0);
 
@@ -21,11 +18,6 @@ class _MainBodyState extends State<_MainBody> with SingleTickerProviderStateMixi
       duration: Durations.short3,
       value: 1.0,
     );
-    scheduleMicrotask(() async {
-      final tutorialRunner = context.read<_TutorialRunner>();
-      tutorialRunner.addWidgetKey(step: _TutorialStep.fabs, key: _fabsColumnKey);
-      tutorialRunner.addWidgetKey(step: _TutorialStep.tabs, key: _tabsRowKey);
-    });
     super.initState();
   }
 
@@ -67,7 +59,6 @@ class _MainBodyState extends State<_MainBody> with SingleTickerProviderStateMixi
                     curve: Curves.easeIn,
                     visible: shouldShowFabs,
                     child: Column(
-                      key: _fabsColumnKey,
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -96,7 +87,6 @@ class _MainBodyState extends State<_MainBody> with SingleTickerProviderStateMixi
                         child: Column(
                           children: [
                             TabBar(
-                              key: _tabsRowKey,
                               tabs: [
                                 Tab(
                                   text: translate(context).maleCompetitiors,

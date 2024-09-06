@@ -18,16 +18,6 @@ class DbEditorAnimatedEditorState extends State<DbEditorAnimatedEditor> {
   final _editorStreamBuilderKey = GlobalKey();
 
   @override
-  void initState() {
-    scheduleMicrotask(() async {
-      context
-          .read<_TutorialRunner>()
-          .addWidgetKey(step: _TutorialStep.editor, key: _editorStreamBuilderKey);
-    });
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
 

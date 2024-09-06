@@ -35,6 +35,8 @@ class _AddFab extends StatelessWidget {
             selectedIndexesRepo.setSelection(addIndex, true);
             changeStatusCubit.markAsChanged();
           },
+          tooltip: translate(context).add,
+          child: const Icon(Symbols.add),
         );
       },
     );

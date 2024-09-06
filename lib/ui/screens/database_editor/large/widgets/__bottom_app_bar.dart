@@ -1,24 +1,7 @@
 part of '../../database_editor_screen.dart';
 
-class _BottomAppBar extends StatefulWidget {
+class _BottomAppBar extends StatelessWidget {
   const _BottomAppBar();
-
-  @override
-  State<_BottomAppBar> createState() => _BottomAppBarState();
-}
-
-class _BottomAppBarState extends State<_BottomAppBar> {
-  final _bottomAppBarKey = GlobalKey();
-
-  @override
-  void initState() {
-    scheduleMicrotask(() async {
-      context
-          .read<_TutorialRunner>()
-          .addWidgetKey(step: _TutorialStep.filters, key: _bottomAppBarKey);
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +22,6 @@ class _BottomAppBarState extends State<_BottomAppBar> {
     }
 
     return BottomAppBar(
-      key: _bottomAppBarKey,
       color: Theme.of(context).colorScheme.surfaceContainer,
       child: body,
     );

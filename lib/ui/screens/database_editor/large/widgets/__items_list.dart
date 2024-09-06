@@ -1,32 +1,20 @@
 part of '../../database_editor_screen.dart';
 
-class _ItemsList extends StatefulWidget {
+class _ItemsList extends StatelessWidget {
   const _ItemsList();
-
-  @override
-  State<_ItemsList> createState() => _ItemsListState();
-}
-
-class _ItemsListState extends State<_ItemsList> {
-  final _itemsListStackKey = GlobalKey();
-
-  @override
-  void initState() {
-    scheduleMicrotask(() async {
-      context
-          .read<_TutorialRunner>()
-          .addWidgetKey(step: _TutorialStep.items, key: _itemsListStackKey);
-    });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     final itemsState = context.watch<DatabaseItemsCubit>().state;
     final shouldShowList = itemsState is DatabaseItemsNonEmpty;
+    late final DbEditorItemsListEmptyStateContentType contentType;
+    if (itemsState is DatabaseItemsEmpty && itemsState.hasValidFilters) {
+      contentType = DbEditorItemsListEmptyStateContentType.noSearchResults;
+    } else {
+      contentType = DbEditorItemsListEmptyStateContentType.addFirstElement;
+    }
 
     return Stack(
-      key: _itemsListStackKey,
       fit: StackFit.expand,
       children: [
         AnimatedVisibility(
@@ -39,7 +27,16 @@ class _ItemsListState extends State<_ItemsList> {
           duration: Durations.medium1,
           curve: Curves.easeIn,
           visible: !shouldShowList,
-          child: const DbEditorItemsListEmptyStateBody(),
+          child: DbEditorItemsListEmptyStateBody(
+            showNothing: itemsState is DatabaseItemsEmpty,
+            contentType: contentType,
+            removeFilters: () {
+              context.read<DbFiltersRepo>().setByGenericAndArgumentType(
+                type: itemsState.itemsType,
+                filters: [],
+              );
+            },
+          ),
         ),
       ],
     );
