@@ -42,22 +42,24 @@ class _ItemsAndEditorRowState extends State<_ItemsAndEditorRow> {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
-        Expanded(
+        const Expanded(
           flex: 10,
           child: _ItemsList(),
         ),
-        Gap(UiDatabaseEditorConstants.horizontalSpaceBetweenListAndEditor / 2),
-        VerticalDivider(),
-        Gap(UiDatabaseEditorConstants.horizontalSpaceBetweenListAndEditor / 2),
+        const Gap(UiDatabaseEditorConstants.horizontalSpaceBetweenListAndEditor / 2),
+        const VerticalDivider(),
+        const Gap(UiDatabaseEditorConstants.horizontalSpaceBetweenListAndEditor / 2),
         Expanded(
           flex: 16,
           child: Align(
             alignment: Alignment.topCenter,
             child: DbEditorAnimatedEditor(
-              emptyStateWidget: DbEditorItemsListEmptyStateBody(),
-              nonEmptyStateWidget: _ItemsListNonEmptyStateBody(),
+              emptyStateWidget: const ItemEditorEmptyStateBody(),
+              nonEmptyStateWidget: ItemEditorNonEmptyStateBody(
+                editorKey: _editorKey,
+              ),
             ),
           ),
         ),

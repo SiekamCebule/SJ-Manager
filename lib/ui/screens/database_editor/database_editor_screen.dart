@@ -22,6 +22,9 @@ import 'package:sj_manager/filters/hills/hill_matching_algorithms.dart';
 import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/main.dart';
+import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
+import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record_setup.dart';
+import 'package:sj_manager/models/simulation_db/competition/high_level_calendar.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart';
@@ -70,10 +73,9 @@ import 'package:sj_manager/repositories/database_editing/default_items_repositor
 import 'package:sj_manager/repositories/database_editing/event_series_setup_ids_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
-import 'package:sj_manager/repositories/settings/user_settings_repo.dart';
 import 'package:sj_manager/ui/assets/icons.dart';
 import 'package:sj_manager/ui/database_item_editors/default_competition_rules_preset_editor/default_competition_rules_preset_editor.dart';
-import 'package:sj_manager/ui/database_item_editors/event_series_calendar_preset_thumbnail.dart';
+import 'package:sj_manager/ui/database_item_editors/calendar_editor/event_series_calendar_preset_thumbnail.dart';
 import 'package:sj_manager/ui/database_item_editors/event_series_setup_editor.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
@@ -92,7 +94,6 @@ import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_ite
 import 'package:sj_manager/utils/colors.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/single_where_type.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 part 'large/__large.dart';
 part 'large/widgets/__items_and_editor_row.dart';
@@ -112,7 +113,6 @@ part 'large/widgets/__items_list_non_empty_state_body.dart';
 part 'large/widgets/item_editor_empty_state_body.dart';
 part 'large/widgets/item_editor_non_empty_state_body.dart';
 part 'large/widgets/__main_body.dart';
-part 'large/tutorial/__tutorial_runner.dart';
 
 List<RepositoryProvider> defaultDbEditorProviders(BuildContext context) {
   final translator = translate(context);
@@ -338,7 +338,21 @@ List<RepositoryProvider> defaultDbEditorProviders(BuildContext context) {
           MaleJumper.empty(country: noneCountry),
           Hill.empty(country: noneCountry),
           const EventSeriesSetup.empty(),
-          const EventSeriesCalendarPreset.empty().copyWith(name: translator.unnamed),
+          const LowLevelEventSeriesCalendarPreset.empty(),
+          const SimpleEventSeriesCalendarPreset.empty(),
+          const HighLevelCalendar.empty(),
+          CalendarMainCompetitionRecord(
+            hill: context.read<ItemsReposRegistry>().get<Hill>().last.firstOrNull ??
+                const Hill.empty(country: Country.emptyNone()),
+            date: DateTime.now(),
+            setup: CalendarMainCompetitionRecordSetup(
+              mainCompRules: context
+                  .read<ItemsReposRegistry>()
+                  .get<DefaultCompetitionRulesPreset>()
+                  .last
+                  .first,
+            ),
+          ),
           DefaultCompetitionRulesPreset<dynamic>(
             name: translator.unnamed,
             rules: defaultCompetitionRules,

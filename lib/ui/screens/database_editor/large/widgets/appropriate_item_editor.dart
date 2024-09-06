@@ -22,7 +22,9 @@ class AppropriateItemEditorState extends State<AppropriateItemEditor> {
     final filtersRepo = context.watch<DbFiltersRepo>();
     final type = context.watch<DatabaseItemsCubit>().state.itemsType;
     context.watch<ValueRepo<_SelectedTabIndex>>();
-    final initialItem = context.watch<DefaultItemsRepo>().getByTypeArgument(type);
+    final initialItem = type == EventSeriesCalendarPreset
+        ? context.watch<DefaultItemsRepo>().get<SimpleEventSeriesCalendarPreset>()
+        : context.watch<DefaultItemsRepo>().getByTypeArgument(type);
 
     return _DbItemEditorFactory.create(
       key: _key,

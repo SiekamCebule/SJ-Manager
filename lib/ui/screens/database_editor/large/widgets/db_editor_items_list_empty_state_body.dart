@@ -1,16 +1,22 @@
 part of '../../database_editor_screen.dart';
 
 class DbEditorItemsListEmptyStateBody extends StatelessWidget {
-  const DbEditorItemsListEmptyStateBody({super.key});
+  const DbEditorItemsListEmptyStateBody({
+    super.key,
+    this.showNothing = false,
+    required this.contentType,
+    required this.removeFilters,
+  });
+
+  final bool showNothing;
+  final DbEditorItemsListEmptyStateContentType contentType;
+  final VoidCallback removeFilters;
 
   @override
   Widget build(BuildContext context) {
-    final itemsState = context.watch<DatabaseItemsCubit>().state;
-    if (itemsState is DatabaseItemsNonEmpty) {
+    if (showNothing) {
       return const SizedBox();
     }
-    final itemsStateEmpty = itemsState as DatabaseItemsEmpty;
-    final itemsType = itemsState.itemsType;
 
     final onSurfaceLightColor = Theme.of(context).colorScheme.onSurface;
     final onSurfaceColor =
@@ -18,12 +24,8 @@ class DbEditorItemsListEmptyStateBody extends StatelessWidget {
     final textStyle =
         Theme.of(context).textTheme.bodyLarge!.copyWith(color: onSurfaceColor);
 
-    final contentType = itemsStateEmpty.hasValidFilters
-        ? _ContentType.noSearchResults
-        : _ContentType.addFirstElement;
-
     final content = switch (contentType) {
-      _ContentType.addFirstElement => Column(
+      DbEditorItemsListEmptyStateContentType.addFirstElement => Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
@@ -52,7 +54,7 @@ class DbEditorItemsListEmptyStateBody extends StatelessWidget {
             ),
           ],
         ),
-      _ContentType.noSearchResults => Column(
+      DbEditorItemsListEmptyStateContentType.noSearchResults => Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
@@ -69,12 +71,7 @@ class DbEditorItemsListEmptyStateBody extends StatelessWidget {
                 ),
                 const Gap(5),
                 TextButton(
-                  onPressed: () {
-                    context.read<DbFiltersRepo>().setByGenericAndArgumentType(
-                      type: itemsType,
-                      filters: [],
-                    );
-                  },
+                  onPressed: removeFilters,
                   child: const Text('Usuń filtry'),
                 ),
               ],
@@ -89,7 +86,7 @@ class DbEditorItemsListEmptyStateBody extends StatelessWidget {
   }
 }
 
-enum _ContentType {
+enum DbEditorItemsListEmptyStateContentType {
   addFirstElement,
   noSearchResults;
 }

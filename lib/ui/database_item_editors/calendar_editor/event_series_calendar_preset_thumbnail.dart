@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/l10n/helpers.dart';
+import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
-import 'package:sj_manager/ui/database_item_editors/calendar_editor/simple_calendar_editor/simple_calendar_editor_screen.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/dialogs/feature_not_available_dialog.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
@@ -81,18 +82,20 @@ class _EventSeriesCalendarPresetThumbnailState
                 ],
                 onSelectionChanged: (selected) {
                   // TODO: if preset is not empty, show warning
-                  if (!_cachedPreset!.calendar.isEmpty) {
-                    if (selected.single is SimpleEventSeriesCalendarPreset) {
-                      _cachedPreset = context
-                          .read<DefaultItemsRepo>()
-                          .get<SimpleEventSeriesCalendarPreset>();
-                    } else if (selected.single is LowLevelEventSeriesCalendarPreset) {
-                      _cachedPreset = context
-                          .read<DefaultItemsRepo>()
-                          .get<LowLevelEventSeriesCalendarPreset>();
+                  setState(() {
+                    if (_cachedPreset!.calendar.isEmpty) {
+                      if (selected.single == SimpleEventSeriesCalendarPreset) {
+                        _cachedPreset = context
+                            .read<DefaultItemsRepo>()
+                            .get<SimpleEventSeriesCalendarPreset>();
+                      } else if (selected.single == LowLevelEventSeriesCalendarPreset) {
+                        _cachedPreset = context
+                            .read<DefaultItemsRepo>()
+                            .get<LowLevelEventSeriesCalendarPreset>();
+                      }
+                      _onChange();
                     }
-                    _onChange();
-                  }
+                  });
                 },
                 selected: {_calendarPresetType},
               ),
@@ -104,12 +107,17 @@ class _EventSeriesCalendarPresetThumbnailState
                   child: ElevatedButton(
                     onPressed: () {
                       if (_calendarPresetType == SimpleEventSeriesCalendarPreset) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) {
-                            return SimpleCalendarEditorScreen(
-                              preset: _cachedPreset as SimpleEventSeriesCalendarPreset,
-                            );
-                          }),
+                        final presets = context
+                            .read<ItemsReposRegistry>()
+                            .get<EventSeriesCalendarPreset>()
+                            .last
+                            .toList();
+
+                        final presetIndexInList = presets.indexOf(_cachedPreset!);
+                        print('preset index in list: $presetIndexInList');
+                        router.navigateTo(
+                          context,
+                          '/databaseEditor/simpleCalendarEditor/$presetIndexInList',
                         );
                       } else if (_calendarPresetType ==
                           LowLevelEventSeriesCalendarPreset) {
@@ -117,13 +125,6 @@ class _EventSeriesCalendarPresetThumbnailState
                           context: context,
                           child: const FeatureNotAvailableDialog(),
                         );
-                        /* TODO: Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) {
-                            return SimpleCalendarEditorScreen(
-                              preset: _cachedPreset as SimpleEventSeriesCalendarPreset,
-                            );
-                          }),
-                        );*/
                       }
                     },
                     child: Text(

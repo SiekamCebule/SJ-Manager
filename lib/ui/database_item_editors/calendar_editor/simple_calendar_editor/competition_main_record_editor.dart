@@ -1,3 +1,4 @@
+import 'package:date_format_field/date_format_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
@@ -12,6 +13,7 @@ import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/default_competition_rules_preset_editor/default_competition_rules_editor.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
+import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_form_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_numeral_text_field.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
@@ -31,6 +33,8 @@ class CompetitionMainRecordEditor extends StatefulWidget {
 }
 
 class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEditor> {
+  final _mainCompetitionRulesProviderFieldKey = GlobalKey<FormFieldState>();
+
   late final ScrollController _scrollController;
   late TextEditingController _hillController;
   late TextEditingController _dateController;
@@ -89,6 +93,7 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
           thumbVisibility: platformIsDesktop,
           controller: _scrollController,
           child: SingleChildScrollView(
+            controller: _scrollController,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -98,20 +103,26 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
                     _hill = value!;
                     _onChange();
                   },
+                  width: constraints.maxWidth,
                   entries: _constructHillEntries(),
                   label: const Text('Skocznia'),
                   requestFocusOnTap: true,
                   enableSearch: true,
                 ),
                 gap,
-                InputDatePickerFormField(
-                  initialDate: DateTime.now(),
-                  firstDate: context.read<DbEditingDefaultsRepo>().firstDate,
-                  lastDate: context.read<DbEditingDefaultsRepo>().lastDate,
-                  onDateSaved: (value) {
+                DateFormatField(
+                  onComplete: (value) {
                     _date = value;
                     _onChange();
                   },
+                  type: DateFormatType.type4, // 12-02-2022
+                  decoration: InputDecoration(
+                    labelText: 'Data zawodów głównych',
+                  ),
+                  addCalendar: true,
+                  initialDate: DateTime.now(),
+                  firstDate: context.read<DbEditingDefaultsRepo>().firstDate,
+                  lastDate: context.read<DbEditingDefaultsRepo>().lastDate,
                 ),
                 gap,
                 SegmentedButton(
@@ -136,23 +147,27 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
                 gap,
                 Row(
                   children: [
-                    MyNumeralTextField(
-                        controller: _trainingsCountController,
-                        onChange: () {
+                    Expanded(
+                      child: MyNumeralTextField(
+                          controller: _trainingsCountController,
+                          onChange: () {
+                            _onChange();
+                          },
+                          labelText: 'Ilość treningów',
+                          step: 1,
+                          min: 0,
+                          max: 10),
+                    ),
+                    gap,
+                    Expanded(
+                      child: MyDropdownField(
+                        label: const Text('Treningi'),
+                        onChange: (value) {
+                          _trainingsRulesProvider = value;
                           _onChange();
                         },
-                        labelText: 'Ilość treningów',
-                        step: 1,
-                        min: 0,
-                        max: 10),
-                    gap,
-                    MyDropdownField(
-                      label: const Text('Treningi'),
-                      onChange: (value) {
-                        _trainingsRulesProvider = value;
-                        _onChange();
-                      },
-                      entries: _constructRulesPresetEntries(type: null),
+                        entries: _constructRulesPresetEntries(type: null),
+                      ),
                     ),
                   ],
                 ),
@@ -180,13 +195,20 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
                       _constructRulesPresetEntries(type: _competitionType.toEntityType()),
                 ),
                 gap,
-                MyDropdownField(
+                MyDropdownFormField(
+                  formKey: _mainCompetitionRulesProviderFieldKey,
                   label: const Text('Konkurs główny'),
                   leadingIcon: _iconForCompetitionType(_competitionType.toEntityType()),
                   width: constraints.maxWidth,
                   onChange: (value) {
                     _mainCompetitionRulesProvider = value;
                     _onChange();
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Potrzebujemy konkursu głównego';
+                    }
+                    return null;
                   },
                   entries:
                       _constructRulesPresetEntries(type: _competitionType.toEntityType()),
@@ -207,7 +229,10 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
       return DropdownMenuEntry(
         value: hill,
         label: hill.toString(),
-        leadingIcon: CountryFlag(country: hill.country),
+        leadingIcon: CountryFlag(
+          country: hill.country,
+          width: 24,
+        ),
       );
     }).toList();
   }
@@ -230,8 +255,13 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
   }
 
   void _onChange() {
-    // TODO: validate fields
-    widget.onChange(_constructAndCache());
+    if (_validateFields()) {
+      widget.onChange(_constructAndCache());
+    }
+  }
+
+  bool _validateFields() {
+    return _mainCompetitionRulesProviderFieldKey.currentState!.validate();
   }
 
   CalendarMainCompetitionRecord _constructAndCache() {

@@ -13,7 +13,6 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   late final DbFiltersRepo _filters;
   late final SelectedIndexesRepo _selectedIndexes;
   late final EventSeriesSetupIdsRepo _eventSeriesSetupIds;
-  late final _TutorialRunner _tutorialRunner;
 
   late final StreamSubscription _localDbCopyChangesSubscription;
   late final LocalDatabaseCopyCubit _localDbCopy;
@@ -27,11 +26,9 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     scheduleMicrotask(() async {
-      _tutorialRunner = _TutorialRunner();
       _initializeRepos();
       await _initializeCubits();
       _initialized.value = true;
-      //await _maybeRunTutorial();
     });
 
     FlutterWindowClose.setWindowShouldCloseHandler(() async {
@@ -55,19 +52,6 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       }
     });
     super.initState();
-  }
-
-  Future<void> _maybeRunTutorial() async {
-    if (!mounted) return;
-    final shouldRunTutorial =
-        !(context.read<UserSettingsRepo>().databaseEditorTutorialShown ?? false);
-    if (shouldRunTutorial) {
-      await Future.delayed(const Duration(milliseconds: 1000), () {
-        if (!mounted) return;
-        _tutorialRunner.runTutorial(context);
-        context.read<UserSettingsRepo>().setDatabaseEditorTutorialShown(true);
-      });
-    }
   }
 
   void _initializeRepos() {
@@ -152,52 +136,49 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
           ),
         );
         final child = prepared
-            ? Provider.value(
-                value: _tutorialRunner,
-                child: MultiRepositoryProvider(
+            ? MultiRepositoryProvider(
+                providers: [
+                  RepositoryProvider.value(value: _filters),
+                  RepositoryProvider.value(value: _selectedIndexes),
+                  RepositoryProvider.value(value: _eventSeriesSetupIds),
+                ],
+                child: MultiBlocProvider(
                   providers: [
-                    RepositoryProvider.value(value: _filters),
-                    RepositoryProvider.value(value: _selectedIndexes),
-                    RepositoryProvider.value(value: _eventSeriesSetupIds),
+                    BlocProvider.value(value: _localDbCopy),
+                    BlocProvider.value(value: _dbChangeStatus),
+                    BlocProvider.value(value: _items),
+                    BlocProvider.value(value: _countries),
                   ],
-                  child: MultiBlocProvider(
-                    providers: [
-                      BlocProvider.value(value: _localDbCopy),
-                      BlocProvider.value(value: _dbChangeStatus),
-                      BlocProvider.value(value: _items),
-                      BlocProvider.value(value: _countries),
-                    ],
-                    child: Builder(builder: (context) {
-                      context.watch<LocalDatabaseCopyCubit>();
-                      context.watch<ChangeStatusCubit>();
-                      context.watch<DatabaseItemsCubit>();
-                      return PopScope(
-                        canPop: false,
-                        onPopInvokedWithResult: (didPop, value) async {
-                          if (didPop || _closed) {
-                            return;
-                          } else if (!_dbChangeStatus.state) {
-                            _cleanResources();
-                            Navigator.pop(context);
-                            return;
-                          }
-                          String? action = await _showSaveChangesDialog();
-                          bool shouldClose = await _shouldCloseAfterDialog(action);
-                          if (action == 'yes') {
-                            if (!context.mounted) return;
-                            await _localDbCopy.saveChangesToOriginalRepos(context);
-                          }
-                          if (shouldClose) {
-                            _cleanResources();
-                            _closed = true;
-                            if (!context.mounted) return;
-                            router.pop(context);
-                          }
-                        },
-                        child: const _MainBody(),
-                      );
-                    }),
-                  ),
+                  child: Builder(builder: (context) {
+                    context.watch<LocalDatabaseCopyCubit>();
+                    context.watch<ChangeStatusCubit>();
+                    context.watch<DatabaseItemsCubit>();
+                    return PopScope(
+                      canPop: false,
+                      onPopInvokedWithResult: (didPop, value) async {
+                        if (didPop || _closed) {
+                          return;
+                        } else if (!_dbChangeStatus.state) {
+                          _cleanResources();
+                          Navigator.pop(context);
+                          return;
+                        }
+                        String? action = await _showSaveChangesDialog();
+                        bool shouldClose = await _shouldCloseAfterDialog(action);
+                        if (action == 'yes') {
+                          if (!context.mounted) return;
+                          await _localDbCopy.saveChangesToOriginalRepos(context);
+                        }
+                        if (shouldClose) {
+                          _cleanResources();
+                          _closed = true;
+                          if (!context.mounted) return;
+                          router.pop(context);
+                        }
+                      },
+                      child: const _MainBody(),
+                    );
+                  }),
                 ),
               )
             : progressIndicator;

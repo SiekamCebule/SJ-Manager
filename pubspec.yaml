@@ -73,6 +73,7 @@ dependencies:
   petitparser: ^6.0.2
   tutorial_coach_mark: ^1.2.11
   shared_preferences: ^2.3.2
+  date_format_field: ^0.1.0
 
 dev_dependencies:
   flutter_test:

@@ -37,8 +37,12 @@ class _AddFab extends StatelessWidget {
               } else {
                 addIndex = lastIndex;
               }
+              var ensuredType = itemsType == EventSeriesCalendarPreset
+                  ? SimpleEventSeriesCalendarPreset
+                  : itemsType;
+
               editableItemsForCurrentType.add(
-                defaultItems.getByTypeArgument(itemsType),
+                defaultItems.getByTypeArgument(ensuredType),
                 addIndex,
               );
 
