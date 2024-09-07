@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_records_to_calendar.dart';
 import 'package:sj_manager/models/simulation_db/competition/high_level_calendar.dart';
@@ -32,6 +33,16 @@ class SimpleEventSeriesCalendarPreset extends EventSeriesCalendarPreset {
     final calendar =
         CalendarMainCompetitionRecordsToCalendarConverter().convert(highLevelCalendar);
     return calendar;
+  }
+
+  SimpleEventSeriesCalendarPreset copyWith({
+    String? name,
+    HighLevelCalendar<CalendarMainCompetitionRecord>? highLevelCalendar,
+  }) {
+    return SimpleEventSeriesCalendarPreset(
+      name: name ?? this.name,
+      highLevelCalendar: highLevelCalendar ?? this.highLevelCalendar,
+    );
   }
 }
 

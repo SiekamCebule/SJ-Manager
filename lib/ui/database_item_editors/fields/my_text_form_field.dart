@@ -18,6 +18,8 @@ class MyTextFormField extends StatelessWidget {
     this.validator,
     this.errorMaxLines,
     this.onHelpButtonTap,
+    this.trailing,
+    this.leading,
   });
 
   final Key? textFormFieldKey;
@@ -32,6 +34,8 @@ class MyTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final int? errorMaxLines;
   final VoidCallback? onHelpButtonTap;
+  final Widget? trailing;
+  final Widget? leading;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +58,8 @@ class MyTextFormField extends StatelessWidget {
         enabledBorder: border,
         border: border,
         errorMaxLines: errorMaxLines,
+        prefixIcon: leading,
+        suffixIcon: trailing,
       ),
       inputFormatters: formatters,
       onEditingComplete: () => onChange(),

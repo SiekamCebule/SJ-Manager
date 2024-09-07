@@ -1,8 +1,8 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
+import 'package:sj_manager/repositories/generic/items_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/calendar_editor/simple_calendar_editor/simple_calendar_editor_screen.dart';
 import 'package:sj_manager/ui/screens/database_editor/database_editor_screen.dart';
 import 'package:sj_manager/ui/screens/main_screen/main_screen.dart';
@@ -47,20 +47,26 @@ void configureRoutes(FluroRouter router) {
   define('/settings', (context, params) => const SettingsScreen());
   define('/databaseEditor', (context, params) => const DatabaseEditorScreen());
   define('/databaseEditor/simpleCalendarEditor/:presetIndexInList', (context, params) {
-    print('so');
     final presetIndexInList = int.parse(params['presetIndexInList']![0]);
-    print('presetIndexInList: $presetIndexInList');
     final preset = context!
         .read<ItemsReposRegistry>()
         .get<EventSeriesCalendarPreset>()
         .last
         .elementAt(presetIndexInList) as SimpleEventSeriesCalendarPreset;
-    final reposRegistry = context.read<ItemsReposRegistry>();
-    print('hills: ${reposRegistry.get<Hill>().last}');
-    print('reposRegistry: $reposRegistry');
     return MultiProvider(
       providers: defaultDbEditorProviders(context),
-      child: SimpleCalendarEditorScreen(preset: preset),
+      child: SimpleCalendarEditorScreen(
+        preset: preset,
+        onChange: (changedPreset) {
+          context
+              .read<ItemsReposRegistry>()
+              .getEditable(EventSeriesCalendarPreset)
+              .replace(
+                oldIndex: presetIndexInList,
+                newItem: changedPreset,
+              );
+        },
+      ),
     );
   });
 }

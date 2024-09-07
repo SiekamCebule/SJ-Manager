@@ -17,7 +17,7 @@ class CalendarMainCompetitionRecord implements HighLevelCompetitionRecord {
   });
 
   final Hill hill;
-  final DateTime date;
+  final DateTime? date;
   final CalendarMainCompetitionRecordSetup setup;
 
   @override
@@ -38,7 +38,7 @@ class _Converter {
       final rules = record.setup.trialRoundRules!;
       trialRound = _competitionWithPreservedType(
         hill: record.hill,
-        date: record.date,
+        date: record.date!,
         rules: rules,
         labels: const [DefaultCompetitionType.trialRound],
       );
@@ -49,7 +49,7 @@ class _Converter {
           trainingsDateBaseSubtraction + Duration(days: trainingIndex ~/ 3);
       return _competitionWithPreservedType(
         hill: record.hill,
-        date: record.date.subtract(daysSubtraction),
+        date: record.date!.subtract(daysSubtraction),
         rules: record.setup.trainingsRules!,
         labels: const [DefaultCompetitionType.training],
       );
@@ -59,7 +59,7 @@ class _Converter {
     if (record.setup.qualificationsRules != null) {
       quals = _competitionWithPreservedType(
         hill: record.hill,
-        date: record.date.subtract(qualificationsDateSubtraction),
+        date: record.date!.subtract(qualificationsDateSubtraction),
         rules: record.setup.qualificationsRules!,
         labels: const [DefaultCompetitionType.qualifications],
       );
@@ -67,7 +67,7 @@ class _Converter {
 
     final mainCompetition = _competitionWithPreservedType(
       hill: record.hill,
-      date: record.date,
+      date: record.date!,
       rules: record.setup.mainCompRules,
       labels: const [DefaultCompetitionType.competition],
     );

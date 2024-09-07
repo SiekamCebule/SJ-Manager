@@ -23,7 +23,7 @@ class _RemoveFab extends StatelessWidget {
             var subtraction = 0;
             for (var removeIndex in selectedIndexesRepo.last) {
               removeIndex -= subtraction;
-              editingCubit.removeAt(removeIndex);
+              editingCubit.removeCompetitionAt(removeIndex);
               subtraction += 1;
             }
             if (selectedIndexesRepo.last.length > 1 ||

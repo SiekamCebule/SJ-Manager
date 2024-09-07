@@ -1,4 +1,3 @@
-import 'package:date_format_field/date_format_field.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
@@ -9,8 +8,6 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ru
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
-import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/default_competition_rules_preset_editor/default_competition_rules_editor.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_form_field.dart';
@@ -34,10 +31,10 @@ class CompetitionMainRecordEditor extends StatefulWidget {
 
 class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEditor> {
   final _mainCompetitionRulesProviderFieldKey = GlobalKey<FormFieldState>();
+  final _hillFieldKey = GlobalKey<FormFieldState>();
 
   late final ScrollController _scrollController;
   late TextEditingController _hillController;
-  late TextEditingController _dateController;
   late TextEditingController _trainingsCountController;
   late TextEditingController _trainingsRulesProviderController;
   late TextEditingController _trialRoundRulesProviderController;
@@ -47,7 +44,6 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
 
   CalendarMainCompetitionRecord? _cached;
   Hill? _hill;
-  DateTime? _date;
   var _competitionType = CompetitionTypeByEntity.individual;
   int get _trainingsCount => int.parse(_trainingsCountController.text);
   DefaultCompetitionRulesProvider? _mainCompetitionRulesProvider;
@@ -59,7 +55,6 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
   void initState() {
     _scrollController = ScrollController();
     _hillController = TextEditingController();
-    _dateController = TextEditingController();
     _trainingsCountController = TextEditingController();
     _trainingsRulesProviderController = TextEditingController();
     _trialRoundRulesProviderController = TextEditingController();
@@ -73,7 +68,6 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
   void dispose() {
     _scrollController.dispose();
     _hillController.dispose();
-    _dateController.dispose();
     _trainingsCountController.dispose();
     _trainingsRulesProviderController.dispose();
     _trialRoundRulesProviderController.dispose();
@@ -98,31 +92,24 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 gap,
-                MyDropdownField(
+                MyDropdownFormField(
+                  formKey: _hillFieldKey,
+                  controller: _hillController,
                   onChange: (value) {
                     _hill = value!;
                     _onChange();
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Potrzebujemy skoczni';
+                    }
+                    return null;
                   },
                   width: constraints.maxWidth,
                   entries: _constructHillEntries(),
                   label: const Text('Skocznia'),
                   requestFocusOnTap: true,
                   enableSearch: true,
-                ),
-                gap,
-                DateFormatField(
-                  onComplete: (value) {
-                    _date = value;
-                    _onChange();
-                  },
-                  type: DateFormatType.type4, // 12-02-2022
-                  decoration: InputDecoration(
-                    labelText: 'Data zawodów głównych',
-                  ),
-                  addCalendar: true,
-                  initialDate: DateTime.now(),
-                  firstDate: context.read<DbEditingDefaultsRepo>().firstDate,
-                  lastDate: context.read<DbEditingDefaultsRepo>().lastDate,
                 ),
                 gap,
                 SegmentedButton(
@@ -242,14 +229,13 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
   }) {
     final localDb = context.watch<ItemsReposRegistry>();
     final rulesPresets = localDb.get<DefaultCompetitionRulesPreset>().last.where(
-          (preset) => (preset.runtimeType == type) || type == null,
+          (preset) => (preset.entityType == type) || type == null,
         );
     return rulesPresets.map((preset) {
-      final presetType = preset is DefaultCompetitionRulesPreset<Jumper> ? Jumper : Team;
       return DropdownMenuEntry(
         value: preset,
         label: preset.name,
-        leadingIcon: _iconForCompetitionType(presetType),
+        leadingIcon: _iconForCompetitionType(preset.entityType),
       );
     }).toList();
   }
@@ -261,13 +247,19 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
   }
 
   bool _validateFields() {
-    return _mainCompetitionRulesProviderFieldKey.currentState!.validate();
+    final conditions = [
+      _mainCompetitionRulesProviderFieldKey.currentState!.validate(),
+      _hillFieldKey.currentState!.validate(),
+    ];
+    return conditions.every((condition) => condition == true);
   }
 
   CalendarMainCompetitionRecord _constructAndCache() {
+    print('hill: $_hill');
+    print('main comp rules: $_mainCompetitionRulesProvider');
     final record = CalendarMainCompetitionRecord(
       hill: _hill!,
-      date: _date!,
+      date: null,
       setup: CalendarMainCompetitionRecordSetup(
         mainCompRules: _mainCompetitionRulesProvider!,
         qualificationsRules: _qualsRulesProvider,
@@ -290,7 +282,6 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
 
   void _fillFields(CalendarMainCompetitionRecord record) {
     _hillController.text = record.hill.toString();
-    _dateController.text = record.date.toString();
     _trainingsCountController.text = record.setup.trainingsCount.toString();
     _trainingsRulesProviderController.text =
         (record.setup.trainingsRules as DefaultCompetitionRulesPreset).name;

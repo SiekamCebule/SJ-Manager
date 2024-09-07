@@ -158,8 +158,7 @@ Future<void> copyAssetsDir(String assetsDirPath, Directory destination) async {
       await file.writeAsBytes(bytes);
     }
   } catch (e) {
-    // Handle exceptions, such as file not found or write errors
-    print('Error copying assets directory: $e');
+    rethrow;
   }
 }
 
