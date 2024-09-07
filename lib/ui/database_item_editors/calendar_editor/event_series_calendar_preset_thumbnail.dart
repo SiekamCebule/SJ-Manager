@@ -6,6 +6,7 @@ import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
+import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/ui/dialogs/feature_not_available_dialog.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
@@ -105,7 +106,7 @@ class _EventSeriesCalendarPresetThumbnailState
                 child: SizedBox(
                   height: UiItemEditorsConstants.wideMainActionButtonHeight,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_calendarPresetType == SimpleEventSeriesCalendarPreset) {
                         final presets = context
                             .read<ItemsReposRegistry>()
@@ -114,11 +115,20 @@ class _EventSeriesCalendarPresetThumbnailState
                             .toList();
 
                         final presetIndexInList = presets.indexOf(_cachedPreset!);
-                        print('preset index in list: $presetIndexInList');
-                        router.navigateTo(
+                        final preset = await router.navigateTo(
                           context,
                           '/databaseEditor/simpleCalendarEditor/$presetIndexInList',
-                        );
+                        ) as EventSeriesCalendarPreset;
+                        if (!context.mounted) return;
+                        context
+                            .read<ItemsReposRegistry>()
+                            .getEditable(EventSeriesCalendarPreset)
+                            .replace(oldIndex: presetIndexInList, newItem: preset);
+                        await Future.delayed(Duration.zero);
+                        if (!context.mounted) return;
+                        final selectedIndexesRepo = context.read<SelectedIndexesRepo>();
+                        selectedIndexesRepo.setSelection(presetIndexInList, false);
+                        selectedIndexesRepo.setSelection(presetIndexInList, true);
                       } else if (_calendarPresetType ==
                           LowLevelEventSeriesCalendarPreset) {
                         showSjmDialog(

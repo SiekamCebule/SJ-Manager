@@ -13,13 +13,20 @@ class SimpleCalendarEditingCubit extends Cubit<SimpleCalendarEditingState> {
               competitionRecords: preset.highLevelCalendar.highLevelCompetitions),
         );
 
-  void add(CalendarMainCompetitionRecord record, int index) {
+  void addCompetition(CalendarMainCompetitionRecord record, int index) {
     final newList = List.of(state.competitionRecords);
     newList.insert(index, record);
     emit(state.copyWith(competitionRecords: newList));
   }
 
-  void removeAt(int index) {
+  void replaceCompetition(
+      {required int index, required CalendarMainCompetitionRecord record}) {
+    final newList = List.of(state.competitionRecords);
+    newList[index] = record;
+    emit(state.copyWith(competitionRecords: newList));
+  }
+
+  void removeCompetitionAt(int index) {
     final newList = List.of(state.competitionRecords);
     newList.removeAt(index);
     emit(state.copyWith(competitionRecords: newList));
@@ -34,7 +41,9 @@ class SimpleCalendarEditingState with EquatableMixin {
   final List<CalendarMainCompetitionRecord> competitionRecords;
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [
+        competitionRecords,
+      ];
 
   SimpleCalendarEditingState copyWith({
     List<CalendarMainCompetitionRecord>? competitionRecords,
