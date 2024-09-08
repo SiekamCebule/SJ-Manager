@@ -91,7 +91,7 @@
     "imageNotFound": "Nie znaleziono zdjęcia",
     "searchDot3": "Wyszukaj...",
     "jumperImageHelpContent": "SJM automatycznie wyszukuje zdjęcia skoczków i skoczkiń z folderu jumper_images.\nWzór: <kraj>_<imię>_<nazwisko>.<dowolne rozszerzenie>",
-    "hillImageHelpContent": "SJM automatycznie wyszukuje zdjęcia skoczkiń z folderu hill_images.\nWzór: <lokalizacja>_<punkt hs>.<dowolne rozszerzenie",
+    "hillImageHelpContent": "SJM automatycznie wyszukuje zdjęcia skoczni z folderu hill_images.\nWzór: <lokalizacja>_<punkt hs>.<dowolne rozszerzenie",
     "eventSeriesLogoHelpContent": "SJM automatycznie wyszukuje zdjęcia lóg cyklów zawodów z folderu assets/logos.\nPowinien istnieć tam plik z nazwą taką, jak identyfikator cyklu.",
     "eventSeriesTrophyHelpContent": "SJM automatycznie wyszukuje zdjęcia trofeów cyklów zawodów z folderu assets/trophies.\nPowinien istnieć tam plik z nazwą taką, jak identyfikator cyklu.",
     "maleCompetitiors": "Zawodnicy",

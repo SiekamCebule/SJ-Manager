@@ -270,6 +270,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                 setState(() {
                                   _selectRound(roundIndex: index);
                                   _fillRoundFields(_cachedRules!);
+                                  _onChange();
                                 });
                               },
                               trailing: showDeleteButton
@@ -277,6 +278,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                       icon: const Icon(Symbols.delete),
                                       onPressed: () {
                                         _removeRoundAt(index);
+                                        _onChange();
                                       },
                                     )
                                   : null,
@@ -292,6 +294,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                             setState(() {
                               _addRoundAt(_selectedRoundIndex + 1);
                               _selectRound(roundIndex: _selectedRoundIndex + 1);
+                              _onChange();
                             });
                           },
                           label: const Text('Dodaj rundę'),
@@ -329,6 +332,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                   validator: (value) {
                                     if (_koGroupsCreator
                                             is DefaultClassicKoGroupsCreator &&
+                                        _koEnabled &&
                                         int.parse(value!).isOdd) {
                                       return 'Dla klasycznego KO limit musi być parzysty';
                                     }
@@ -529,8 +533,8 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                 child: MyNumeralTextField(
                                   controller: _judgesCountController,
                                   onChange: () {
-                                    _onChange();
                                     _ensureCorrectSignificantJudgesCount();
+                                    _onChange();
                                   },
                                   labelText: 'Ilość sędziów',
                                   step: 1,
@@ -543,8 +547,8 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                 child: MyNumeralTextField(
                                   controller: _significantJudgesCountController,
                                   onChange: () {
-                                    _onChange();
                                     _ensureCorrectJudgesCount();
+                                    _onChange();
                                   },
                                   labelText: 'Ilość wliczanych not',
                                   step: 1,
@@ -781,8 +785,8 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                   return MyNumeralTextField(
                                     controller: _groupSizeController,
                                     onChange: () {
-                                      _onChange();
                                       _ensureCorrectGroupAdvancementCount();
+                                      _onChange();
                                     },
                                     labelText: 'Liczebność grupy',
                                     step: 1,
@@ -861,8 +865,8 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                     return MyNumeralTextField(
                                       controller: _groupAdvancementCountController,
                                       onChange: () {
-                                        _onChange();
                                         _ensureCorrectNumberInGroup();
+                                        _onChange();
                                       },
                                       labelText: 'Ilość awansujących z grupy',
                                       step: 1,
@@ -922,12 +926,14 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                                   setState(() {
                                                     _selectGroup(groupIndex: index);
                                                     _fillGroupFields(_selectedGroupIndex);
+                                                    _onChange();
                                                   });
                                                 },
                                                 trailing: showDeleteButton
                                                     ? IconButton(
                                                         onPressed: () {
                                                           _removeGroupAt(index);
+                                                          _onChange();
                                                         },
                                                         icon: const Icon(Symbols.delete),
                                                       )
@@ -946,7 +952,9 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                                   _selectedGroupIndex + 1,
                                                 );
                                                 _selectGroup(
-                                                    groupIndex: _selectedRoundIndex + 1);
+                                                  groupIndex: _selectedRoundIndex + 1,
+                                                );
+                                                _onChange();
                                               });
                                             },
                                             style: TextButton.styleFrom(
@@ -1067,7 +1075,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
         : context.read<DefaultItemsRepo>().get<DefaultTeamCompetitionRoundRules>();
     _roundsCount++;
     _cachedRules!.rounds.insert(index, defaultItem);
-    _onChange();
     _fillRoundFields(_cachedRules!);
   }
 
@@ -1079,7 +1086,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
         }
         _roundsCount--;
         _cachedRules!.rounds.removeAt(index);
-        _onChange();
         _fillRoundFields(_cachedRules!);
       });
     }
@@ -1089,7 +1095,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
     setState(() {
       _selectedRoundIndex = roundIndex;
       _fillRoundFields(_cachedRules!);
-      _onChange();
     });
   }
 
@@ -1101,7 +1106,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
     }
     _groupsCount++;
     (roundRules as DefaultTeamCompetitionRoundRules).groups.insert(index, defaultItem);
-    _onChange();
     _fillGroupFields(_selectedGroupIndex);
   }
 
@@ -1128,7 +1132,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
           },
         ).toList();
         _cachedRules = _cachedRules!.copyWith(rounds: newRounds);
-        _onChange();
         _fillGroupFields(_selectedGroupIndex);
       });
     }
@@ -1138,7 +1141,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
     setState(() {
       _selectedGroupIndex = groupIndex;
       _fillGroupFields(_selectedGroupIndex);
-      _onChange();
     });
   }
 
