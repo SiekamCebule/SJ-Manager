@@ -13,6 +13,7 @@ import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
 import 'package:path/path.dart' as path;
@@ -20,9 +21,11 @@ import 'package:path/path.dart' as path;
 class LocalDatabaseCopyCubit extends Cubit<ItemsReposRegistry?> {
   LocalDatabaseCopyCubit({
     required this.originalDb,
+    required this.idsRepo,
   }) : super(null);
 
   ItemsReposRegistry originalDb;
+  final ItemsIdsRepo idsRepo;
 
   Future<void> setUp() async {
     emit(
@@ -81,10 +84,11 @@ class LocalDatabaseCopyCubit extends Cubit<ItemsReposRegistry?> {
     required BuildContext context,
     required File file,
   }) async {
-    await saveItemsListToJsonFile<T>(
+    await saveItemsMapToJsonFile(
       file: file,
       items: originalDb.get<T>().last.toList(),
       toJson: context.read<DbItemsJsonConfiguration<T>>().toJson,
+      idsRepo: idsRepo,
     );
   }
 

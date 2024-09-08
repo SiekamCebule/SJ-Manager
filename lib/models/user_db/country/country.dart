@@ -59,7 +59,10 @@ class Country with EquatableMixin {
   }
 
   @override
-  List<Object?> get props => [code, multilingualName];
+  List<Object?> get props => [
+        code.toLowerCase(),
+        multilingualName,
+      ];
 }
 
 String stringFromMultilingualJson(Json json,

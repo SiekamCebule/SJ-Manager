@@ -167,8 +167,8 @@ List<String> filePathsInDirectory(Directory directory) {
   return fsEntities.whereType<File>().map((file) => file.path).toList();
 }
 
-void createFileWithEmptyJsonList(String filePath) {
+void createFileWithEmptyJsonMap(String filePath) {
   final file = File(filePath);
   file.createSync(recursive: true);
-  file.writeAsStringSync('[]');
+  file.writeAsStringSync('{"items":{}, "orderedIds":[]}');
 }

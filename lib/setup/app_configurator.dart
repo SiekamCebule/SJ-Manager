@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,27 +60,6 @@ class AppConfigurator {
     if (!await flagsDir.exists()) {
       await copyAssetsDir('defaults/country_flags', flagsDir);
     }
-
-    /* final forMaleJumpers = await _createFileIfNotExists<MaleJumper>();
-    if (forMaleJumpers.$2 == false) await forMaleJumpers.$1.writeAsString('[]');
-
-    final forFemaleJumpers = await _createFileIfNotExists<FemaleJumper>();
-    if (forFemaleJumpers.$2 == false) await forFemaleJumpers.$1.writeAsString('[]');
-
-    final forHills = await _createFileIfNotExists<Hill>();
-    if (forHills.$2 == false) await forHills.$1.writeAsString('[]');
-
-    final forTeams = await _createFileIfNotExists<Team>();
-    if (forTeams.$2 == false) await forTeams.$1.writeAsString('[]');*/
-  }
-
-  Future<(File, bool)> _createFileIfNotExists<T>() async {
-    final file =
-        databaseFile(_context.read(), _context.read<DbItemsFilePathsRegistry>().get<T>());
-    if (!await file.exists()) {
-      return (await file.create(recursive: true), false);
-    }
-    return (file, true);
   }
 
   Future<void> loadDatabase() async {

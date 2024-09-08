@@ -69,7 +69,10 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
 
   Future<void> _initializeCubits() async {
     _dbChangeStatus = ChangeStatusCubit();
-    _localDbCopy = LocalDatabaseCopyCubit(originalDb: context.read());
+    _localDbCopy = LocalDatabaseCopyCubit(
+      originalDb: context.read(),
+      idsRepo: context.read(),
+    );
     await _localDbCopy.setUp();
     _items = DatabaseItemsCubit(
       filtersRepo: _filters,

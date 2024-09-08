@@ -220,11 +220,11 @@ void main() async {
                   },
                 ),
               ),
-              Provider(create: (context) {
-                return ItemsIdsRepo();
+              Provider<ItemsIdsRepo>(create: (context) {
+                return ItemsIdsRepo<String>();
               }),
               Provider<IdGenerator>(create: (context) {
-                return const NanoIdGenerator(size: 10);
+                return const NanoIdGenerator(size: 15);
               }),
               Provider(create: (context) {
                 return DbItemsJsonConfiguration<MaleJumper>(
@@ -349,6 +349,18 @@ void main() async {
                   ).serialize(provider),
                 );
               }),
+              Provider<SimulationDbPartSerializer<DefaultCompetitionRulesProvider>>(
+                create: (context) => CompetitionRulesProviderSerializer(
+                  idsRepo: context.read(),
+                  rulesSerializer: context.read(),
+                ),
+              ),
+              Provider<SimulationDbPartParser<DefaultCompetitionRulesProvider>>(
+                create: (context) => CompetitionRulesProviderParser(
+                  idsRepo: context.read(),
+                  rulesParser: context.read(),
+                ),
+              ),
               Provider(create: (context) {
                 return StandingsParser(
                   idsRepo: context.read(),

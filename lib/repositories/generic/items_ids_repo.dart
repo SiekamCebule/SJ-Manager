@@ -1,47 +1,116 @@
 class ItemsIdsRepo<ID extends Object> {
-  final Map<ID, dynamic> _items = {};
+  final Map<ID, _ItemWithCount> _items = {};
+  final Map<dynamic, ID> _reverseItems = {};
+  final List<ID> _orderedIds = [];
 
   T get<T>(ID id) {
-    if (!_items.containsKey(id)) {
+    if (!containsId(id)) {
       throw StateError(
-        'Ids repo does not contain any object of type $T with that id ($id)',
-      );
+          'Ids repo does not contain any object of type $T with that id ($id)');
     }
-    final item = _items[id]!;
-    if (!item is T) {
+    final item = _items[id]!.item;
+    if (item is! T) {
       throw StateError('The item ($item) doesn\'t have a requested type of $T');
     }
-    return _items[id]!;
+    return item;
   }
 
   ID idOf(dynamic item) {
-    return _items.keys.singleWhere((id) {
-      return _items[id] == item;
-    });
+    final id = _reverseItems[item];
+    if (id == null) {
+      throw StateError('The repo does not contain the item ($item)');
+    }
+    return id;
   }
 
-  void register(dynamic item,
-      {required ID id, bool override = false, bool overrideIfSameType = false}) {
-    assert((!override && !overrideIfSameType) || (override ^ overrideIfSameType));
-    if (_items.containsKey(id)) {
+  void update({
+    required ID id,
+    required dynamic newItem,
+  }) {
+    if (!containsId(id)) {
+      throw StateError(
+          'Cannot update the item because the id ($id) does not exist in the repository.');
+    }
+    final oldItem = _items[id]!.item;
+    _items[id] = _ItemWithCount(newItem, _items[id]!.count);
+
+    _reverseItems.remove(oldItem);
+    _reverseItems[newItem] = id;
+  }
+
+  void removeById({required ID id}) {
+    final entry = _items[id];
+    if (entry == null) {
+      throw StateError(
+          'Cannot remove an item with id of $id, because it does not even exist in the repo');
+    }
+
+    if (entry.count > 1) {
+      entry.count--;
+    } else {
+      _reverseItems.remove(entry.item);
+      _items.remove(id);
+    }
+    _orderedIds.remove(id);
+  }
+
+  void removeByItem({required dynamic item}) {
+    final id = _reverseItems[item];
+    if (id == null) {
+      throw StateError(
+          'Cannot remove an item $item, because it doesn\'t even exist in the repo');
+    }
+    removeById(id: id);
+  }
+
+  void register(dynamic item, {required ID id, bool override = false}) {
+    if (containsId(id)) {
       if (!override) {
-        throw StateError(
-          'An item with the ID of $id already exists, and that item is $item. You can set the override parameter to true, if you want to override already contained item with that id',
-        );
-      } else if (overrideIfSameType) {
-        final existingItem = _items[id]!;
-        if (existingItem.runtimeType == item.runtimeType) {
-          _items[id] = item;
-        } else {
-          throw StateError(
-            'Existing item has the ${existingItem.runtimeType} type which is different from new item\'s type - ${item.runtimeType}. The overrideIfSameType flag is enabled, so cannot register the new item',
-          );
-        }
+        throw StateError('An item with the ID of $id already exists.');
+      } else {
+        _items[id]!.count++;
+      }
+    } else {
+      _items[id] = _ItemWithCount(item, 1);
+      _reverseItems[item] = id;
+      _orderedIds.add(id);
+    }
+  }
+
+  void registerMany(
+    Iterable<dynamic> items, {
+    required Function(dynamic item) generateId,
+    bool skipDuplicates = false,
+  }) {
+    for (var item in items) {
+      final id = generateId(item);
+      if (!containsId(id) || skipDuplicates) {
+        register(item, id: id);
       }
     }
-    _items[id] = item;
   }
 
-  Map<ID, dynamic> get items => _items;
-  int get itemsCount => items.length;
+  bool containsId(ID id) {
+    return _items.containsKey(id);
+  }
+
+  List<dynamic> getOrderedItems() {
+    return _orderedIds.map((id) => _items[id]!.item).toList();
+  }
+
+  void clear() {
+    _items.clear();
+    _reverseItems.clear();
+    _orderedIds.clear();
+  }
+
+  Map<ID, dynamic> get items => _items.map((id, entry) => MapEntry(id, entry.item));
+  int get itemsCount => _items.length;
+}
+
+class _ItemWithCount {
+  final dynamic item;
+  int count;
+
+  _ItemWithCount(this.item, this.count);
 }

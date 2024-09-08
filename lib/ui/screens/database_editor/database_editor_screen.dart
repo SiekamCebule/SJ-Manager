@@ -72,6 +72,7 @@ import 'package:sj_manager/repositories/database_editing/db_filters_repository.d
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/repositories/database_editing/event_series_setup_ids_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
 import 'package:sj_manager/ui/assets/icons.dart';
 import 'package:sj_manager/ui/database_item_editors/default_competition_rules_preset_editor/default_competition_rules_preset_editor.dart';
@@ -93,6 +94,7 @@ import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropriate_
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
 import 'package:sj_manager/utils/colors.dart';
 import 'package:sj_manager/utils/file_system.dart';
+import 'package:sj_manager/utils/id_generator.dart';
 import 'package:sj_manager/utils/single_where_type.dart';
 
 part 'large/__large.dart';
@@ -347,10 +349,11 @@ List<RepositoryProvider> defaultDbEditorProviders(BuildContext context) {
             date: DateTime.now(),
             setup: CalendarMainCompetitionRecordSetup(
               mainCompRules: context
-                  .read<ItemsReposRegistry>()
-                  .get<DefaultCompetitionRulesPreset>()
-                  .last
-                  .first,
+                      .read<ItemsReposRegistry>()
+                      .get<DefaultCompetitionRulesPreset>()
+                      .last
+                      .firstOrNull ??
+                  const DefaultCompetitionRulesPreset.empty(),
             ),
           ),
           DefaultCompetitionRulesPreset<dynamic>(

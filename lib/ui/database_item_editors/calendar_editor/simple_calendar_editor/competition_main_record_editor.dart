@@ -255,8 +255,6 @@ class _CompetitionMainRecordEditorState extends State<CompetitionMainRecordEdito
   }
 
   CalendarMainCompetitionRecord _constructAndCache() {
-    print('hill: $_hill');
-    print('main comp rules: $_mainCompetitionRulesProvider');
     final record = CalendarMainCompetitionRecord(
       hill: _hill!,
       date: null,

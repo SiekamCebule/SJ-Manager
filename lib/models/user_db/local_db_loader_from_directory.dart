@@ -17,6 +17,8 @@ import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
+import 'package:sj_manager/setup/loading_from_file/db_items_list_loader_from_file_high_level_wrapper.dart';
 
 class LocalDbLoaderFromDirectory {
   LocalDbLoaderFromDirectory({
@@ -24,11 +26,16 @@ class LocalDbLoaderFromDirectory {
   });
 
   final Directory directory;
+
+  late final ItemsIdsRepo _idsRepo;
   late final BuildContext _context;
   late final DbItemsFilePathsRegistry _filePaths;
   late final ItemsReposRegistry _registry;
 
-  Future<ItemsReposRegistry> load({required BuildContext context}) async {
+  Future<ItemsReposRegistry> load(
+      {required BuildContext context, required ItemsIdsRepo idsRepo}) async {
+    _idsRepo = idsRepo;
+    _idsRepo.clear();
     _context = context;
     _filePaths = context.read<DbItemsFilePathsRegistry>();
     _registry = ItemsReposRegistry();
@@ -48,30 +55,52 @@ class LocalDbLoaderFromDirectory {
   }
 
   Future<void> _registerCountries() async {
-    final countries = CountriesRepo(
-        initial: await loadItemsListFromJsonFile(
+    final loadedItemsMap = await loadItemsMapFromJsonFile(
       file: _getFile(_filePaths.get<Country>()),
       fromJson: _context.read<DbItemsJsonConfiguration<Country>>().fromJson,
-    ));
-    _registry.register(countries);
+    );
+    _registry.register(CountriesRepo(
+        initial: _registerAndReturnItems(
+      loadedItemsMap: loadedItemsMap,
+    )));
   }
 
   Future<void> _registerTeams() async {
-    final teams = await TeamsRepo.fromDirectory(
-      directory,
-      context: _context,
+    final loadedItemsMap = await loadItemsMapFromJsonFile(
+      file: _getFile(_filePaths.get<Team>()),
       fromJson: _context.read<DbItemsJsonConfiguration<Team>>().fromJson,
     );
-    _registry.register(teams);
+    _registry.register(TeamsRepo(
+        initial: _registerAndReturnItems(
+      loadedItemsMap: loadedItemsMap,
+    )));
   }
 
   Future<EditableItemsRepo<T>> _loadEditableItemsRepo<T>() async {
+    final loadedItemsMap = await loadItemsMapFromJsonFile(
+      file: _getFile(_filePaths.get<T>()),
+      fromJson: _context.read<DbItemsJsonConfiguration<T>>().fromJson,
+    );
     return EditableItemsRepo<T>(
-      initial: await loadItemsListFromJsonFile(
-        file: _getFile(_filePaths.get<T>()),
-        fromJson: _context.read<DbItemsJsonConfiguration<T>>().fromJson,
+        initial: _registerAndReturnItems(
+      loadedItemsMap: loadedItemsMap,
+    ));
+  }
+
+  List<T> _registerAndReturnItems<T>({
+    required LoadedItemsMap<T> loadedItemsMap,
+  }) {
+    final items = loadedItemsMapToItemsList(loadedItemsMap: loadedItemsMap);
+    final idsByItems = Map.fromEntries(
+      loadedItemsMap.items.entries.map(
+        (entry) => MapEntry(entry.value.$1, entry.key),
       ),
     );
+    _idsRepo.registerMany(
+      items,
+      generateId: (item) => idsByItems[item],
+    );
+    return items;
   }
 
   File _getFile(String fileName) => File('${directory.path}/$fileName');
