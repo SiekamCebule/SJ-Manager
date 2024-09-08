@@ -23,6 +23,10 @@ class ItemsIdsRepo<ID extends Object> {
     return id;
   }
 
+  int countOfItemsWithId(ID id) {
+    return _items[id]?.count ?? 0;
+  }
+
   void update({
     required ID id,
     required dynamic newItem,
@@ -63,13 +67,11 @@ class ItemsIdsRepo<ID extends Object> {
     removeById(id: id);
   }
 
-  void register(dynamic item, {required ID id, bool override = false}) {
-    if (containsId(id)) {
-      if (!override) {
-        throw StateError('An item with the ID of $id already exists.');
-      } else {
-        _items[id]!.count++;
-      }
+  void register(dynamic item, {required ID id}) {
+    if (containsItem(item)) {
+      final id = _reverseItems[item]!;
+      _items[id]!.count++;
+      _orderedIds.add(id);
     } else {
       _items[id] = _ItemWithCount(item, 1);
       _reverseItems[item] = id;
@@ -84,14 +86,16 @@ class ItemsIdsRepo<ID extends Object> {
   }) {
     for (var item in items) {
       final id = generateId(item);
-      if (!containsId(id) || skipDuplicates) {
-        register(item, id: id);
-      }
+      register(item, id: id);
     }
   }
 
   bool containsId(ID id) {
     return _items.containsKey(id);
+  }
+
+  bool containsItem(dynamic item) {
+    return _reverseItems.containsKey(item);
   }
 
   List<dynamic> getOrderedItems() {

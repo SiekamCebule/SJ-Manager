@@ -50,6 +50,9 @@ Future<LoadedItemsMap<T>> loadItemsMapFromJsonFile<T>({
     items[id] = (item, count);
   }
 
+  print('ordered ids: $orderedIds');
+  print('loaded items: $items');
+
   return LoadedItemsMap<T>(
     orderedIds: orderedIds,
     items: items,

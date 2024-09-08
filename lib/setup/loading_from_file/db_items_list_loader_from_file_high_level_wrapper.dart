@@ -88,25 +88,8 @@ List<T> loadedItemsMapToItemsList<T, ID extends Object>({
   required LoadedItemsMap<T> loadedItemsMap,
 }) {
   final itemsByIds = loadedItemsMap.items;
-  final idsByItems = Map.fromEntries(
-    loadedItemsMap.items.entries.map(
-      (entry) => MapEntry(entry.value.$1, entry.key),
-    ),
-  );
-  print('ids by items: $idsByItems');
-  var items = itemsByIds.values.expand((itemAndCount) {
-    final count = itemAndCount.$2;
-    final item = itemAndCount.$1;
-    return List.generate(count, (_) => item);
-  }).toList(); // List<T>
   final orderedIds = loadedItemsMap.orderedIds; // List<dynamic>
-  final itemToIdMap = {for (var item in items) item: idsByItems[item]};
-
-  items.sort((a, b) {
-    final idA = itemToIdMap[a]!;
-    final idB = itemToIdMap[b]!;
-    return orderedIds.indexOf(idA).compareTo(orderedIds.indexOf(idB));
-  });
-
-  return items.toList();
+  return [
+    for (var id in orderedIds) itemsByIds[id]!.$1,
+  ];
 }
