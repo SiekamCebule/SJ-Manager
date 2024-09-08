@@ -28,7 +28,7 @@ class _ItemsList extends StatelessWidget {
           curve: Curves.easeIn,
           visible: !shouldShowList,
           child: DbEditorItemsListEmptyStateBody(
-            showNothing: itemsState is DatabaseItemsEmpty,
+            showNothing: itemsState is DatabaseItemsNonEmpty,
             contentType: contentType,
             removeFilters: () {
               context.read<DbFiltersRepo>().setByGenericAndArgumentType(

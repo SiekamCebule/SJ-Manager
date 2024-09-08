@@ -32,13 +32,11 @@ class ItemEditorNonEmptyStateBody extends StatelessWidget {
           idsRepo.removeById(id: previousItemId);
 
           final newId = context.read<IdGenerator>().generate();
+          print('newId: $newId');
           idsRepo.register(changedItem, id: newId);
 
           print(
-              'items with previous id $previousItemId ${idsRepo.countOfItemsWithId(previousItemId)}');
-          final maleJumpersInIdsRepo = Map.of(idsRepo.items);
-          maleJumpersInIdsRepo.removeWhere((id, item) => item is Jumper == false);
-          print('male jumpers in idsrepo: $maleJumpersInIdsRepo');
+              'count of items with previous id \'$previousItemId\': ${idsRepo.countOfItemsWithId(previousItemId)}');
 
           dbIsChangedCubit.markAsChanged();
         }
