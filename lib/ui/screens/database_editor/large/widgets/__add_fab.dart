@@ -41,9 +41,12 @@ class _AddFab extends StatelessWidget {
                   ? SimpleEventSeriesCalendarPreset
                   : itemsType;
 
-              editableItemsForCurrentType.add(
-                defaultItems.getByTypeArgument(ensuredType),
-                addIndex,
+              final itemToAdd = defaultItems.getByTypeArgument(ensuredType);
+              editableItemsForCurrentType.add(itemToAdd, addIndex);
+              final idsRepo = context.read<ItemsIdsRepo>();
+              idsRepo.register(
+                itemToAdd,
+                id: context.read<IdGenerator>().generate(),
               );
 
               if (selectedExists) {

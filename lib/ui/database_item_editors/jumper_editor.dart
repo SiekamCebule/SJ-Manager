@@ -134,6 +134,8 @@ class JumperEditorState extends State<JumperEditor> {
                             formatters: [
                               if (widget.forceUpperCaseOnSurname)
                                 const UpperCaseTextFormatter(),
+                              if (!widget.forceUpperCaseOnSurname)
+                                const CapitalizeTextFormatter(),
                             ],
                             labelText: translate(context).surname,
                           ),

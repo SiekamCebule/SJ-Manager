@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:sj_manager/models/user_db/local_db_loader_from_directory.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
+import 'package:provider/provider.dart';
 
 class ItemsReposRegistry extends ItemsRepo<ItemsRepo> with EquatableMixin {
   ItemsReposRegistry({
@@ -60,7 +61,8 @@ class ItemsReposRegistry extends ItemsRepo<ItemsRepo> with EquatableMixin {
 
   static Future<ItemsReposRegistry> fromDirectory(Directory directory,
       {required BuildContext context}) async {
-    return LocalDbLoaderFromDirectory(directory: directory).load(context: context);
+    return LocalDbLoaderFromDirectory(directory: directory)
+        .load(context: context, idsRepo: context.read());
   }
 
   static _repoWithTypeDoesNotExist(Type type) => StateError(

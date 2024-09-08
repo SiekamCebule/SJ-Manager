@@ -28,6 +28,10 @@ class _AddFab extends StatelessWidget {
             }
             final defaultRecord =
                 context.read<DefaultItemsRepo>().get<CalendarMainCompetitionRecord>();
+            context.read<ItemsIdsRepo>().register(
+                  defaultRecord,
+                  id: context.read<IdGenerator>().generate(),
+                );
             editingCubit.addCompetition(defaultRecord, addIndex);
             if (selectedExists) {
               selectedIndexesRepo.setSelection(addIndex - 1, false);

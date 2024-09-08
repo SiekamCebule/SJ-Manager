@@ -26,7 +26,11 @@ class _RemoveFab extends StatelessWidget {
               var subtraction = 0;
               for (var removeIndex in selectedIndexesRepo.last) {
                 removeIndex -= subtraction;
+                final itemToRemove = editableItemsForCurrentType.last[removeIndex];
                 editableItemsForCurrentType.removeAt(removeIndex);
+                await Future.delayed(Duration.zero);
+                if (!context.mounted) return;
+                context.read<ItemsIdsRepo>().removeByItem(item: itemToRemove);
                 subtraction += 1;
               }
               if (selectedIndexesRepo.last.length > 1 ||

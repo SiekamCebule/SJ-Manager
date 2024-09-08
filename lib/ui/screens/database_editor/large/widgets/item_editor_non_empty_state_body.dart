@@ -22,7 +22,13 @@ class ItemEditorNonEmptyStateBody extends StatelessWidget {
       onChange: (changedItem) async {
         if (selectedIndexesRepo.last.length == 1 && changedItem != null) {
           final index = selectedIndexesRepo.last.single;
+          final idsRepo = context.read<ItemsIdsRepo>();
+          final previousItemId = idsRepo.idOf(editableItemsRepo.last[index]);
           editableItemsRepo.replace(oldIndex: index, newItem: changedItem);
+          context.read<ItemsIdsRepo>().update(
+                id: previousItemId,
+                newItem: changedItem,
+              );
           dbIsChangedCubit.markAsChanged();
         }
       },

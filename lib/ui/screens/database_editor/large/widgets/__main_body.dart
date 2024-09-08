@@ -101,16 +101,16 @@ class _MainBodyState extends State<_MainBody> with SingleTickerProviderStateMixi
                                   icon: const ImageIcon(hillIcon),
                                 ),
                                 Tab(
-                                  text: 'Cykle zawodów',
-                                  icon: const Icon(Symbols.trophy),
+                                  text: 'Konkursy',
+                                  icon: const Icon(Symbols.contract),
                                 ),
                                 Tab(
                                   text: 'Kalendarze',
                                   icon: const Icon(Symbols.calendar_month),
                                 ),
                                 Tab(
-                                  text: 'Konkursy',
-                                  icon: const Icon(Symbols.contract),
+                                  text: 'Cykle zawodów',
+                                  icon: const Icon(Symbols.trophy),
                                 ),
                               ],
                               onTap: _onChangeTab,

@@ -22,9 +22,11 @@ class HighLevelCalendarSerializer
   @override
   Json serialize(HighLevelCalendar<CalendarMainCompetitionRecord> record) {
     return {
-      'competitions':
-          record.highLevelCompetitions.map(mainCompetitionRecordSerializer.serialize),
-      'classifications': record.classifications.map(classificationSerializer.serialize),
+      'competitions': record.highLevelCompetitions
+          .map(mainCompetitionRecordSerializer.serialize)
+          .toList(),
+      'classifications':
+          record.classifications.map(classificationSerializer.serialize).toList(),
     };
   }
 }

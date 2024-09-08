@@ -107,9 +107,9 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
       0 => MaleJumper,
       1 => FemaleJumper,
       2 => Hill,
-      3 => EventSeriesSetup,
+      3 => DefaultCompetitionRulesPreset,
       4 => EventSeriesCalendarPreset,
-      5 => DefaultCompetitionRulesPreset,
+      5 => EventSeriesSetup,
       _ => throw TypeError(),
     };
     changeType(type);
