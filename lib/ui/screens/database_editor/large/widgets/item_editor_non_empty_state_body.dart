@@ -23,12 +23,23 @@ class ItemEditorNonEmptyStateBody extends StatelessWidget {
         if (selectedIndexesRepo.last.length == 1 && changedItem != null) {
           final index = selectedIndexesRepo.last.single;
           final idsRepo = context.read<ItemsIdsRepo>();
+          print('previous item: ${editableItemsRepo.last[index]}');
           final previousItemId = idsRepo.idOf(editableItemsRepo.last[index]);
+          print('previous id: $previousItemId');
+
           editableItemsRepo.replace(oldIndex: index, newItem: changedItem);
-          context.read<ItemsIdsRepo>().update(
-                id: previousItemId,
-                newItem: changedItem,
-              );
+
+          idsRepo.removeById(id: previousItemId);
+
+          final newId = context.read<IdGenerator>().generate();
+          idsRepo.register(changedItem, id: newId);
+
+          print(
+              'items with previous id $previousItemId ${idsRepo.countOfItemsWithId(previousItemId)}');
+          final maleJumpersInIdsRepo = Map.of(idsRepo.items);
+          maleJumpersInIdsRepo.removeWhere((id, item) => item is Jumper == false);
+          print('male jumpers in idsrepo: $maleJumpersInIdsRepo');
+
           dbIsChangedCubit.markAsChanged();
         }
       },

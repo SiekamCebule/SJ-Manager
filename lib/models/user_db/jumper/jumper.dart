@@ -55,11 +55,6 @@ class Jumper with EquatableMixin {
       );
 
   @override
-  String toString() {
-    return '$name $surname ($country) - $sex, ${age}yo';
-  }
-
-  @override
   List<Object?> get props => [
         age,
         name,
