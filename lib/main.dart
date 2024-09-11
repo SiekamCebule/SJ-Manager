@@ -361,7 +361,7 @@ void main() async {
                   rulesParser: context.read(),
                 ),
               ),
-              Provider(create: (context) {
+              Provider<SimulationDbPartParser<Standings>>(create: (context) {
                 return StandingsParser(
                   idsRepo: context.read(),
                   idGenerator: context.read(),

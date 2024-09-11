@@ -6,13 +6,13 @@ import 'package:sj_manager/models/user_db/jumper/landing_style.dart';
 String translatedLandingStyleDescription(
     BuildContext context, LandingStyle landingStyle) {
   return switch (landingStyle) {
-    LandingStyle.terrible => translate(context).terrible,
     LandingStyle.veryUgly => translate(context).veryUgly,
     LandingStyle.ugly => translate(context).ugly,
+    LandingStyle.slightlyUgly => translate(context).slightlyUgly,
     LandingStyle.average => translate(context).averageForLandingStyle,
+    LandingStyle.quiteGraceful => translate(context).quiteGraceful,
     LandingStyle.graceful => translate(context).graceful,
     LandingStyle.veryGraceful => translate(context).veryGraceful,
-    LandingStyle.perfect => translate(context).perfect,
   };
 }
 

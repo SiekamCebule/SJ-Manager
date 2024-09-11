@@ -3,53 +3,75 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
+import 'package:sj_manager/models/simulation_db/competition/high_level_calendar.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 
 class SimpleCalendarEditingCubit extends Cubit<SimpleCalendarEditingState> {
   SimpleCalendarEditingCubit({
     required SimpleEventSeriesCalendarPreset preset,
   }) : super(
-          SimpleCalendarEditingState(
-              competitionRecords: preset.highLevelCalendar.highLevelCompetitions),
+          SimpleCalendarEditingState(highLevelCalendar: preset.highLevelCalendar),
         );
 
   void addCompetition(CalendarMainCompetitionRecord record, int index) {
-    final newList = List.of(state.competitionRecords);
+    final newList = List.of(state.highLevelCalendar.highLevelCompetitions);
     newList.insert(index, record);
-    emit(state.copyWith(competitionRecords: newList));
+    emit(state.copyWithCompetitions(highLevelCompetitions: newList));
   }
 
   void replaceCompetition(
       {required int index, required CalendarMainCompetitionRecord record}) {
-    final newList = List.of(state.competitionRecords);
+    final newList = List.of(state.highLevelCalendar.highLevelCompetitions);
     newList[index] = record;
-    emit(state.copyWith(competitionRecords: newList));
+    emit(state.copyWithCompetitions(highLevelCompetitions: newList));
+  }
+
+  void moveCompetition({
+    required int from,
+    required int to,
+  }) {
+    final newList = List.of(state.highLevelCalendar.highLevelCompetitions);
+    final removed = newList.removeAt(from);
+    newList.insert(to, removed);
+    emit(state.copyWithCompetitions(highLevelCompetitions: newList));
   }
 
   void removeCompetitionAt(int index) {
-    final newList = List.of(state.competitionRecords);
+    final newList = List.of(state.highLevelCalendar.highLevelCompetitions);
     newList.removeAt(index);
-    emit(state.copyWith(competitionRecords: newList));
+    emit(state.copyWithCompetitions(highLevelCompetitions: newList));
   }
 }
 
 class SimpleCalendarEditingState with EquatableMixin {
   const SimpleCalendarEditingState({
-    required this.competitionRecords,
+    required this.highLevelCalendar,
   });
 
-  final List<CalendarMainCompetitionRecord> competitionRecords;
+  final HighLevelCalendar<CalendarMainCompetitionRecord> highLevelCalendar;
+
+  List<CalendarMainCompetitionRecord> get competitionRecords =>
+      highLevelCalendar.highLevelCompetitions;
 
   @override
   List<Object?> get props => [
-        competitionRecords,
+        highLevelCalendar,
       ];
 
-  SimpleCalendarEditingState copyWith({
-    List<CalendarMainCompetitionRecord>? competitionRecords,
+  SimpleCalendarEditingState copyWithCompetitions({
+    List<CalendarMainCompetitionRecord>? highLevelCompetitions,
   }) {
     return SimpleCalendarEditingState(
-      competitionRecords: competitionRecords ?? this.competitionRecords,
+      highLevelCalendar:
+          highLevelCalendar.copyWith(highLevelCompetitions: highLevelCompetitions),
+    );
+  }
+
+  SimpleCalendarEditingState copyWith({
+    HighLevelCalendar<CalendarMainCompetitionRecord>? highLevelCalendar,
+  }) {
+    return SimpleCalendarEditingState(
+      highLevelCalendar: highLevelCalendar ?? this.highLevelCalendar,
     );
   }
 }

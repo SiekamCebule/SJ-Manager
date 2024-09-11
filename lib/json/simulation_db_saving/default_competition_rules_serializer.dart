@@ -26,7 +26,7 @@ class DefaultCompetitionRulesSerializer
     } else if (rules is DefaultCompetitionRules<CompetitionTeam>) {
       return {
         'type': 'team',
-        'round': _serializeRounds(rules.rounds),
+        'rounds': _serializeRounds(rules.rounds),
       };
     } else {
       throw UnsupportedError(

@@ -24,15 +24,15 @@ class EventSeriesCalendarPresetParser
   EventSeriesCalendarPreset parse(Json json) {
     final type = json['type'] as String;
     return switch (type) {
-      'simple' => SimpleEventSeriesCalendarPreset(
-          name: json['name'],
-          highLevelCalendar: highLevelCalendarParser.parse(
-            json['calendar'],
-          ),
-        ),
       'lowLevel' => LowLevelEventSeriesCalendarPreset(
           name: json['name'],
           calendar: lowLevelCalendarParser.parse(
+            json['calendar'],
+          ),
+        ),
+      'highLevel' => SimpleEventSeriesCalendarPreset(
+          name: json['name'],
+          highLevelCalendar: highLevelCalendarParser.parse(
             json['calendar'],
           ),
         ),

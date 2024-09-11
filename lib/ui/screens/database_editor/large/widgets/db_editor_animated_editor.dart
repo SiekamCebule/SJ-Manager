@@ -26,6 +26,7 @@ class DbEditorAnimatedEditorState extends State<DbEditorAnimatedEditor> {
       stream: selectedIndexesRepo.stream,
       builder: (context, snapshot) {
         final editorShouldBeVisible = selectedIndexesRepo.last.length == 1;
+        print('EDITOR SHOULD BE VISIBLE: $editorShouldBeVisible');
         return Stack(
           fit: StackFit.expand,
           children: [

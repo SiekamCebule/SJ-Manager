@@ -23,11 +23,13 @@ class EventSeriesCalendarPresetSerializer
   Json serialize(EventSeriesCalendarPreset preset) {
     if (preset is LowLevelEventSeriesCalendarPreset) {
       return {
+        'type': 'lowLevel',
         'name': preset.name,
         'calendar': lowLevelCalendarSerializer.serialize(preset.calendar),
       };
     } else if (preset is SimpleEventSeriesCalendarPreset) {
       return {
+        'type': 'highLevel',
         'name': preset.name,
         'calendar': highLevelCalendarSerializer.serialize(preset.highLevelCalendar),
       };

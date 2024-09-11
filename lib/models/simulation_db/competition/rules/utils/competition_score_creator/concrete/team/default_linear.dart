@@ -4,9 +4,10 @@ import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
 import 'package:collection/collection.dart';
+import 'package:sj_manager/models/user_db/team/team.dart';
 
-class DefaultLinearTeamCompetitionScoreCreator
-    extends CompetitionScoreCreator<Score<CompetitionTeam, CompetitionTeamScoreDetails>> {
+class DefaultLinearTeamCompetitionScoreCreator extends CompetitionScoreCreator<
+    Score<CompetitionTeam<Team>, CompetitionTeamScoreDetails>> {
   @override
   Score<CompetitionTeam, CompetitionTeamScoreDetails> compute(
       covariant TeamCompetitionScoreCreatingContext context) {

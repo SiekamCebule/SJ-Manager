@@ -8,8 +8,11 @@ import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
+import 'package:equatable/equatable.dart';
 
-class CalendarMainCompetitionRecord implements HighLevelCompetitionRecord {
+class CalendarMainCompetitionRecord
+    with EquatableMixin
+    implements HighLevelCompetitionRecord {
   const CalendarMainCompetitionRecord({
     required this.hill,
     required this.date,
@@ -24,6 +27,9 @@ class CalendarMainCompetitionRecord implements HighLevelCompetitionRecord {
   List<Competition> createRawCompetitions() {
     return _Converter().convert(this);
   }
+
+  @override
+  List<Object?> get props => [hill, date, setup];
 }
 
 class _Converter {

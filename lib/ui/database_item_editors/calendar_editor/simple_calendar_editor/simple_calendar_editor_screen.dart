@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -31,15 +33,18 @@ class SimpleCalendarEditorScreen extends StatefulWidget {
   });
 
   final SimpleEventSeriesCalendarPreset preset;
-  final Function(SimpleEventSeriesCalendarPreset preset) onChange;
+  final Function(SimpleEventSeriesCalendarPreset preset)? onChange;
 
   @override
   State<SimpleCalendarEditorScreen> createState() => _SimpleCalendarEditorScreenState();
 }
 
 class _SimpleCalendarEditorScreenState extends State<SimpleCalendarEditorScreen> {
+  final _competitionRecordEditorKey = GlobalKey<CompetitionMainRecordEditorState>();
+
   late SimpleCalendarEditingCubit _editingCubit;
   late SelectedIndexesRepo _selectedIndexesRepo;
+  late StreamSubscription<Set<int>> _selectedIndexesSubscription;
   late ChangeStatusCubit _changeStatusCubit;
   late SimpleEventSeriesCalendarPreset _cached;
 
@@ -48,6 +53,13 @@ class _SimpleCalendarEditorScreenState extends State<SimpleCalendarEditorScreen>
     super.initState();
     _editingCubit = SimpleCalendarEditingCubit(preset: widget.preset);
     _selectedIndexesRepo = SelectedIndexesRepo();
+    _selectedIndexesSubscription = _selectedIndexesRepo.stream.listen((selectedIndexes) {
+      final singleIndex = selectedIndexes.singleOrNull;
+      if (singleIndex != null) {
+        final record = _editingCubit.state.competitionRecords[singleIndex];
+        _competitionRecordEditorKey.currentState!.setUp(record);
+      }
+    });
     _changeStatusCubit = ChangeStatusCubit();
     _cached = widget.preset;
   }
@@ -56,6 +68,8 @@ class _SimpleCalendarEditorScreenState extends State<SimpleCalendarEditorScreen>
   void dispose() {
     _editingCubit.close();
     _selectedIndexesRepo.close();
+    _selectedIndexesSubscription.cancel();
+    _changeStatusCubit.close();
     super.dispose();
   }
 
@@ -90,13 +104,13 @@ class _SimpleCalendarEditorScreenState extends State<SimpleCalendarEditorScreen>
                       child: Row(
                         children: [
                           fabsGap,
-                          const Column(
+                          Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               fabsGap,
-                              _AddFab(),
+                              _AddFab(additionalOnTap: _onChange),
                               fabsGap,
-                              _RemoveFab(),
+                              _RemoveFab(additionalOnTap: _onChange),
                             ],
                           ),
                           fabsGap,
@@ -139,6 +153,7 @@ class _SimpleCalendarEditorScreenState extends State<SimpleCalendarEditorScreen>
                             flex: 15,
                             child: DbEditorAnimatedEditor(
                               nonEmptyStateWidget: CompetitionMainRecordEditor(
+                                key: _competitionRecordEditorKey,
                                 onChange: (competitionRecord) async {
                                   final selectedIndex = _selectedIndexesRepo.last.single;
                                   context
@@ -147,12 +162,7 @@ class _SimpleCalendarEditorScreenState extends State<SimpleCalendarEditorScreen>
                                         index: selectedIndex,
                                         record: competitionRecord,
                                       );
-                                  _cached = _cached.copyWith(
-                                    highLevelCalendar: _cached.highLevelCalendar.copyWith(
-                                      highLevelCompetitions:
-                                          _editingCubit.state.competitionRecords,
-                                    ),
-                                  );
+                                  _onChange();
                                 },
                               ),
                               emptyStateWidget: const ItemEditorEmptyStateBody(),
@@ -165,6 +175,20 @@ class _SimpleCalendarEditorScreenState extends State<SimpleCalendarEditorScreen>
                 ),
               );
             }),
+      ),
+    );
+  }
+
+  void _onChange() {
+    _updateCached();
+    print('cachedD: $_cached');
+    widget.onChange?.call(_cached);
+  }
+
+  void _updateCached() {
+    _cached = _cached.copyWith(
+      highLevelCalendar: _cached.highLevelCalendar.copyWith(
+        highLevelCompetitions: _editingCubit.state.competitionRecords,
       ),
     );
   }

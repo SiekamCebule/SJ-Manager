@@ -88,7 +88,7 @@ class DefaultCompetitionRoundRulesSerializer
   Json _serializeTeam(DefaultTeamCompetitionRoundRules rules) {
     final groupsJson = rules.groups.map((rules) {
       return teamCompetitionGroupRulesSerializer.serialize(rules);
-    });
+    }).toList();
     return {
       'type': 'team',
       'bibsAreReassigned': rules.bibsAreReassigned,

@@ -1,6 +1,6 @@
 part of '../../database_editor_screen.dart';
 
-class ItemEditorNonEmptyStateBody extends StatelessWidget {
+class ItemEditorNonEmptyStateBody extends StatefulWidget {
   const ItemEditorNonEmptyStateBody({
     super.key,
     required this.editorKey,
@@ -8,6 +8,11 @@ class ItemEditorNonEmptyStateBody extends StatelessWidget {
 
   final GlobalKey<AppropriateItemEditorState> editorKey;
 
+  @override
+  State<ItemEditorNonEmptyStateBody> createState() => _ItemEditorNonEmptyStateBodyState();
+}
+
+class _ItemEditorNonEmptyStateBodyState extends State<ItemEditorNonEmptyStateBody> {
   @override
   Widget build(BuildContext context) {
     final itemsType = context.watch<DatabaseItemsCubit>().state.itemsType;
@@ -17,7 +22,7 @@ class ItemEditorNonEmptyStateBody extends StatelessWidget {
         context.watch<LocalDatabaseCopyCubit>().state!.getEditable(itemsType);
 
     return AppropriateItemEditor(
-      key: editorKey,
+      key: widget.editorKey,
       itemType: itemsType,
       onChange: (changedItem) async {
         if (selectedIndexesRepo.last.length == 1 && changedItem != null) {
@@ -25,18 +30,17 @@ class ItemEditorNonEmptyStateBody extends StatelessWidget {
           final idsRepo = context.read<ItemsIdsRepo>();
           print('previous item: ${editableItemsRepo.last[index]}');
           final previousItemId = idsRepo.idOf(editableItemsRepo.last[index]);
-          print('previous id: $previousItemId');
 
           editableItemsRepo.replace(oldIndex: index, newItem: changedItem);
+          print('changed item : $changedItem');
 
           idsRepo.removeById(id: previousItemId);
 
           final newId = context.read<IdGenerator>().generate();
-          print('newId: $newId');
           idsRepo.register(changedItem, id: newId);
 
           print(
-              'count of items with previous id \'$previousItemId\': ${idsRepo.countOfItemsWithId(previousItemId)}');
+              'count of items with previous id (\'$previousItemId\'): ${idsRepo.countOfItemsWithId(previousItemId)}');
 
           dbIsChangedCubit.markAsChanged();
         }

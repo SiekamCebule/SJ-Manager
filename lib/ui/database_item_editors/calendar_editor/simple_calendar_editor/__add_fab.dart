@@ -1,7 +1,11 @@
 part of 'simple_calendar_editor_screen.dart';
 
 class _AddFab extends StatelessWidget {
-  const _AddFab();
+  const _AddFab({
+    this.additionalOnTap,
+  });
+
+  final VoidCallback? additionalOnTap;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +42,7 @@ class _AddFab extends StatelessWidget {
             }
             selectedIndexesRepo.setSelection(addIndex, true);
             changeStatusCubit.markAsChanged();
+            additionalOnTap?.call();
           },
           tooltip: translate(context).add,
           child: const Icon(Symbols.add),
