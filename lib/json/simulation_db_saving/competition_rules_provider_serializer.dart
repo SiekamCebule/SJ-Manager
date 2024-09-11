@@ -30,7 +30,7 @@ class CompetitionRulesProviderSerializer
   Json _serializePreset(DefaultCompetitionRulesPreset rulesPreset) {
     return {
       'type': 'fromPreset',
-      'presetId': idsRepo.idOf(rulesPreset.competitionRules),
+      'presetId': idsRepo.idOf(rulesPreset),
     };
   }
 }

@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_records_to_calendar.dart';
 import 'package:sj_manager/models/simulation_db/competition/high_level_calendar.dart';
@@ -11,7 +12,8 @@ abstract class EventSeriesCalendarPreset {
   EventSeriesCalendar get calendar;
 }
 
-class SimpleEventSeriesCalendarPreset extends EventSeriesCalendarPreset {
+class SimpleEventSeriesCalendarPreset extends EventSeriesCalendarPreset
+    with EquatableMixin {
   const SimpleEventSeriesCalendarPreset({
     required this.name,
     required this.highLevelCalendar,
@@ -44,9 +46,16 @@ class SimpleEventSeriesCalendarPreset extends EventSeriesCalendarPreset {
       highLevelCalendar: highLevelCalendar ?? this.highLevelCalendar,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        name,
+        highLevelCalendar,
+      ];
 }
 
-class LowLevelEventSeriesCalendarPreset extends EventSeriesCalendarPreset {
+class LowLevelEventSeriesCalendarPreset extends EventSeriesCalendarPreset
+    with EquatableMixin {
   const LowLevelEventSeriesCalendarPreset({
     required this.name,
     required this.calendar,
@@ -63,4 +72,10 @@ class LowLevelEventSeriesCalendarPreset extends EventSeriesCalendarPreset {
 
   @override
   final EventSeriesCalendar calendar;
+
+  @override
+  List<Object?> get props => [
+        name,
+        calendar,
+      ];
 }

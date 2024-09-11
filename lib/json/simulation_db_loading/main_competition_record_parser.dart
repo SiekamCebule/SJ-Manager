@@ -34,7 +34,8 @@ class MainCompetitionRecordParser
 
     return CalendarMainCompetitionRecord(
       hill: idsRepo.get(json['hillId']),
-      date: DateTime.parse(json['date']),
+      date: null,
+      //date: DateTime.parse(json['date']),
       setup: CalendarMainCompetitionRecordSetup(
         mainCompRules: mainCompetitionRules,
         qualificationsRules: qualsRules,

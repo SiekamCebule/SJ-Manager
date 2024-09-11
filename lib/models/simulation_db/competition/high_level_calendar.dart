@@ -1,8 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/high_level_competition_record.dart';
+import 'package:equatable/equatable.dart';
 
-class HighLevelCalendar<C extends HighLevelCompetitionRecord> {
+class HighLevelCalendar<C extends HighLevelCompetitionRecord> with EquatableMixin {
   const HighLevelCalendar({
     required this.highLevelCompetitions,
     required this.classifications,
@@ -23,4 +23,7 @@ class HighLevelCalendar<C extends HighLevelCompetitionRecord> {
       classifications: classifications ?? this.classifications,
     );
   }
+
+  @override
+  List<Object?> get props => [highLevelCompetitions, classifications];
 }

@@ -120,6 +120,10 @@ class _EventSeriesCalendarPresetThumbnailState
                           '/databaseEditor/simpleCalendarEditor/$presetIndexInList',
                         ) as EventSeriesCalendarPreset;
                         if (!context.mounted) return;
+                        print('NICEE');
+                        print('preset: $preset');
+                        _cachedPreset = preset;
+                        _onChange();
                         context
                             .read<ItemsReposRegistry>()
                             .getEditable(EventSeriesCalendarPreset)

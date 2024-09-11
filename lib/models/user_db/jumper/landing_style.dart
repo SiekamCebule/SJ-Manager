@@ -2,23 +2,23 @@ import 'package:json_annotation/json_annotation.dart';
 
 enum LandingStyle {
   @JsonValue(3)
-  perfect,
-
-  @JsonValue(2)
   veryGraceful,
 
-  @JsonValue(1)
+  @JsonValue(2)
   graceful,
+
+  @JsonValue(1)
+  quiteGraceful,
 
   @JsonValue(0)
   average,
 
   @JsonValue(-1)
-  ugly,
+  slightlyUgly,
 
   @JsonValue(-2)
-  veryUgly,
+  ugly,
 
   @JsonValue(-3)
-  terrible,
+  veryUgly,
 }

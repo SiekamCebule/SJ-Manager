@@ -341,7 +341,9 @@ List<RepositoryProvider> defaultDbEditorProviders(BuildContext context) {
           Hill.empty(country: noneCountry),
           const EventSeriesSetup.empty(),
           const LowLevelEventSeriesCalendarPreset.empty(),
-          const SimpleEventSeriesCalendarPreset.empty(),
+          const SimpleEventSeriesCalendarPreset.empty().copyWith(
+            name: translator.unnamed,
+          ),
           const HighLevelCalendar.empty(),
           CalendarMainCompetitionRecord(
             hill: context.read<ItemsReposRegistry>().get<Hill>().last.firstOrNull ??

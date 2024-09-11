@@ -22,13 +22,13 @@ class HighLevelCalendarParser
 
   @override
   HighLevelCalendar<CalendarMainCompetitionRecord> parse(Json json) {
-    final competitionsJson = json['competitions'] as List<Json>;
+    final competitionsJson = (json['competitions'] as List).cast<Json>();
     final competitions = competitionsJson.map((json) {
       final competitionRecord = mainCompetitionRecordParser.parse(json);
       idsRepo.register(competitionRecord, id: idGenerator.generate());
       return competitionRecord;
     });
-    final classificationsJson = json['classifications'] as List<Json>;
+    final classificationsJson = (json['classifications'] as List).cast<Json>();
     final classifications = classificationsJson.map((json) {
       final classification = classificationParser.parse(json);
       idsRepo.register(classification, id: idGenerator.generate());

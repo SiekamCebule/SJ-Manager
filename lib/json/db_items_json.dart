@@ -50,9 +50,6 @@ Future<LoadedItemsMap<T>> loadItemsMapFromJsonFile<T>({
     items[id] = (item, count);
   }
 
-  print('ordered ids: $orderedIds');
-  print('loaded items: $items');
-
   return LoadedItemsMap<T>(
     orderedIds: orderedIds,
     items: items,
@@ -114,6 +111,8 @@ Future<void> saveItemsMapToJsonFile<T>({
     'orderedIds': orderedIdsJson,
     'items': itemsJson,
   };
+  print('ok');
+  print('json: $json');
   final encodedJson = jsonEncode(json);
   await file.writeAsString(encodedJson);
 }

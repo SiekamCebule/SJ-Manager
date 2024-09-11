@@ -49,11 +49,13 @@ class EditableItemsRepo<T> extends ItemsRepo<T> {
   }
 
   void replace({required int oldIndex, required T newItem}) {
+    print('replace an item in editable items repo. Type is $T');
     _items[oldIndex] = newItem;
     _addToStream();
   }
 
   void _addToStream() {
+    print('update editable items repo');
     _subject.add(_items);
   }
 

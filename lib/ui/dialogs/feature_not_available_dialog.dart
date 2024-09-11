@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/ui/reusable/sjm_dialog_ok_button.dart';
+import 'package:sj_manager/ui/reusable_widgets/sjm_dialog_ok_button.dart';
 
 class FeatureNotAvailableDialog extends StatelessWidget {
   const FeatureNotAvailableDialog({super.key});

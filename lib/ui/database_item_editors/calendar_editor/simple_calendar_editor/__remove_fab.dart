@@ -1,7 +1,11 @@
 part of 'simple_calendar_editor_screen.dart';
 
 class _RemoveFab extends StatelessWidget {
-  const _RemoveFab();
+  const _RemoveFab({
+    this.additionalOnTap,
+  });
+
+  final VoidCallback? additionalOnTap;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +42,7 @@ class _RemoveFab extends StatelessWidget {
               selectedIndexesRepo.selectOnlyAt(selectedIndexesRepo.last.single - 1);
             }
             changeStatusCubit.markAsChanged();
+            additionalOnTap?.call();
           },
           tooltip: translate(context).remove,
           child: const Icon(Symbols.remove),

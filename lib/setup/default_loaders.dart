@@ -35,16 +35,16 @@ List<DbItemsListLoader> defaultDbItemsListLoaders(BuildContext context) => [
         fileNotFoundDialogTitle: 'Nie znaleziono pliku ze skoczniami',
         loadingFailedDialogTitle: 'Nie udało się wczytać skoczni',
       ).toLowLevel(context),
-      const DbItemsListLoaderFromFileHighLevelWrapper<EventSeriesSetup>(
-        fileNotFoundDialogTitle: 'Nie znaleziono pliku z cyklami zawodów',
-        loadingFailedDialogTitle: 'Nie udało się wczytać cyklów zawodów',
+      const DbItemsListLoaderFromFileHighLevelWrapper<DefaultCompetitionRulesPreset>(
+        fileNotFoundDialogTitle: 'Nie znaleziono pliku z presetami konkursów',
+        loadingFailedDialogTitle: 'Nie udało się wczytać presetów konkursów',
       ).toLowLevel(context),
       const DbItemsListLoaderFromFileHighLevelWrapper<EventSeriesCalendarPreset>(
         fileNotFoundDialogTitle: 'Nie znaleziono pliku z kalendarzami',
         loadingFailedDialogTitle: 'Nie udało się wczytać kalendarzy',
       ).toLowLevel(context),
-      const DbItemsListLoaderFromFileHighLevelWrapper<DefaultCompetitionRulesPreset>(
-        fileNotFoundDialogTitle: 'Nie znaleziono pliku z presetami konkursów',
-        loadingFailedDialogTitle: 'Nie udało się wczytać presetów konkursów',
+      const DbItemsListLoaderFromFileHighLevelWrapper<EventSeriesSetup>(
+        fileNotFoundDialogTitle: 'Nie znaleziono pliku z cyklami zawodów',
+        loadingFailedDialogTitle: 'Nie udało się wczytać cyklów zawodów',
       ).toLowLevel(context),
     ];

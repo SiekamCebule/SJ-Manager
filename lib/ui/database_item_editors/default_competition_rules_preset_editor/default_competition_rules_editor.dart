@@ -94,6 +94,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
 
   var _roundsCount = 0;
   var _selectedRoundIndex = 0;
+  var _roundRules = <DefaultCompetitionRoundRules>[];
 
   EntitiesLimitType? _entitiesLimitType;
   var _bibsAreReassigned = false;
@@ -200,12 +201,13 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                 builder: (context, constraints) {
                   final entries = _constructEntries<CompetitionScoreCreator>(
                     condition: (config) {
+                      print(config.object.runtimeType);
                       if (_competitionType == CompetitionTypeByEntity.individual) {
                         return config.object
-                            is CompetitionScoreCreator<CompetitionScore<Jumper>>;
+                            is CompetitionScoreCreator<CompetitionJumperScore>;
                       } else {
                         return config.object
-                            is CompetitionScoreCreator<CompetitionScore<CompetitionTeam>>;
+                            is CompetitionScoreCreator<CompetitionTeamScore>;
                       }
                     },
                   );
@@ -221,7 +223,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                       });
                     },
                     entries: entries,
-                    initial: entries.first.value,
+                    initial: entries.firstOrNull?.value,
                     width: constraints.maxWidth,
                   );
                 },
@@ -270,15 +272,16 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                 setState(() {
                                   _selectRound(roundIndex: index);
                                   _fillRoundFields(_cachedRules!);
-                                  _onChange();
                                 });
                               },
                               trailing: showDeleteButton
                                   ? IconButton(
                                       icon: const Icon(Symbols.delete),
                                       onPressed: () {
-                                        _removeRoundAt(index);
-                                        _onChange();
+                                        setState(() {
+                                          _removeRoundAt(index);
+                                          _onChange();
+                                        });
                                       },
                                     )
                                   : null,
@@ -293,8 +296,9 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                           onPressed: () {
                             setState(() {
                               _addRoundAt(_selectedRoundIndex + 1);
-                              _selectRound(roundIndex: _selectedRoundIndex + 1);
                               _onChange();
+                              _selectRound(roundIndex: _selectedRoundIndex + 1);
+                              _fillRoundFields(_cachedRules!);
                             });
                           },
                           label: const Text('Dodaj rundę'),
@@ -756,6 +760,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                       enabled: _koEnabled,
                                       validator: _koEnabled
                                           ? (value) {
+                                              if (!_koEnabled) return null;
                                               final text =
                                                   _koGroupsCreatorController.text;
                                               if (text.isEmpty) {
@@ -933,6 +938,8 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                                     ? IconButton(
                                                         onPressed: () {
                                                           _removeGroupAt(index);
+                                                          _fillGroupFields(
+                                                              _selectedGroupIndex);
                                                           _onChange();
                                                         },
                                                         icon: const Icon(Symbols.delete),
@@ -954,6 +961,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                                 _selectGroup(
                                                   groupIndex: _selectedRoundIndex + 1,
                                                 );
+                                                _fillGroupFields(_selectedGroupIndex);
                                                 _onChange();
                                               });
                                             },
@@ -1074,43 +1082,36 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
         ? context.read<DefaultItemsRepo>().get<DefaultIndividualCompetitionRoundRules>()
         : context.read<DefaultItemsRepo>().get<DefaultTeamCompetitionRoundRules>();
     _roundsCount++;
-    _cachedRules!.rounds.insert(index, defaultItem);
-    _fillRoundFields(_cachedRules!);
+
+    _roundRules.insert(index, defaultItem);
   }
 
   void _removeRoundAt(int index) {
     if (_roundsCount > 1) {
-      setState(() {
-        if (_selectedRoundIndex + 1 == _roundsCount) {
-          _selectedRoundIndex--;
-        }
-        _roundsCount--;
-        _cachedRules!.rounds.removeAt(index);
-        _fillRoundFields(_cachedRules!);
-      });
+      if (_selectedRoundIndex + 1 == _roundsCount) {
+        _selectedRoundIndex--;
+      }
+      _roundsCount--;
+      _roundRules.removeAt(index);
     }
   }
 
   void _selectRound({required int roundIndex}) {
-    setState(() {
-      _selectedRoundIndex = roundIndex;
-      _fillRoundFields(_cachedRules!);
-    });
+    _selectedRoundIndex = roundIndex;
   }
 
   void _addGroupAt(int index) {
     final defaultItem = context.read<DefaultItemsRepo>().get<TeamCompetitionGroupRules>();
-    final roundRules = _cachedRules!.rounds[_selectedRoundIndex];
+    final roundRules = _roundRules[_selectedRoundIndex];
     if (roundRules is DefaultTeamCompetitionRoundRules == false) {
       throw StateError('Cannot add a group for the individual competition');
     }
     _groupsCount++;
     (roundRules as DefaultTeamCompetitionRoundRules).groups.insert(index, defaultItem);
-    _fillGroupFields(_selectedGroupIndex);
   }
 
   void _removeGroupAt(int index) {
-    final roundRules = _cachedRules!.rounds[_selectedRoundIndex];
+    final roundRules = _roundRules[_selectedRoundIndex];
     if (roundRules is DefaultTeamCompetitionRoundRules == false) {
       throw StateError('Cannot remove a group from the individual competition');
     }
@@ -1120,7 +1121,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
           _selectedGroupIndex--;
         }
         _groupsCount--;
-        final newRounds = _cachedRules!.rounds.mapIndexed(
+        final newRounds = _roundRules.mapIndexed(
           (index, roundRulesRaw) {
             final roundRules = roundRulesRaw as DefaultTeamCompetitionRoundRules;
             if (index == _selectedRoundIndex) {
@@ -1132,7 +1133,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
           },
         ).toList();
         _cachedRules = _cachedRules!.copyWith(rounds: newRounds);
-        _fillGroupFields(_selectedGroupIndex);
       });
     }
   }
@@ -1140,11 +1140,11 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
   void _selectGroup({required int groupIndex}) {
     setState(() {
       _selectedGroupIndex = groupIndex;
-      _fillGroupFields(_selectedGroupIndex);
     });
   }
 
   void _onChange() {
+    print('_onChange()');
     if (!_validateFormFields()) return;
     widget.onChange(_constructAndCache());
   }
@@ -1152,6 +1152,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
   void setUp(DefaultCompetitionRules rules) {
     setState(() {
       _cachedRules = rules;
+      _roundRules = List.of(rules.rounds);
       _selectedRoundIndex = 0;
       _selectedGroupIndex = 0;
       _fillFields(rules);
@@ -1238,27 +1239,32 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
 
   void _fillGroupFields(int groupIndex) {
     final groupRules =
-        (_cachedRules!.rounds[_selectedRoundIndex] as DefaultTeamCompetitionRoundRules)
+        (_roundRules[_selectedRoundIndex] as DefaultTeamCompetitionRoundRules)
             .groups[_selectedGroupIndex];
     _sortStartlistBeforeGroup = groupRules.sortStartList;
   }
 
   DefaultCompetitionRules _constructAndCache() {
-    final rounds = List.of(_cachedRules!.rounds);
+    final rounds = List.of(_roundRules);
     rounds[_selectedRoundIndex] = _constructCurrentRound();
+    print('comp type: $_competitionType');
     final rules = _competitionType == CompetitionTypeByEntity.individual
         ? DefaultCompetitionRules<Jumper>(
-            rounds: _ensureCorrectRoundTypes(rounds),
+            rounds:
+                _ensureCorrectRoundTypes<DefaultCompetitionRoundRules<Jumper>>(rounds),
           )
         : DefaultCompetitionRules<CompetitionTeam>(
-            rounds: _ensureCorrectRoundTypes(rounds),
+            rounds:
+                _ensureCorrectRoundTypes<DefaultCompetitionRoundRules<CompetitionTeam>>(
+                    rounds),
           );
-    _cachedRules = rules;
+    _roundRules = rounds;
+    _cachedRules = DefaultCompetitionRules(rounds: _roundRules);
     setState(() {
       if (rules is DefaultCompetitionRules<CompetitionTeam>) {
-        _groupsCount = (_cachedRules!.rounds[_selectedRoundIndex]
-                as DefaultTeamCompetitionRoundRules)
-            .groupsCount;
+        _groupsCount =
+            (_roundRules[_selectedRoundIndex] as DefaultTeamCompetitionRoundRules)
+                .groupsCount;
       }
     });
     return rules;
@@ -1288,15 +1294,15 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
           ruleOf95HsFallEnabled: _ruleOf95HsEnabled,
           judgesCount: int.parse(_judgesCountController.text),
           significantJudgesCount: int.parse(_significantJudgesCountController.text),
-          competitionScoreCreator: _competitionScoreCreator
-              as CompetitionScoreCreator<CompetitionScore<Jumper>>,
+          competitionScoreCreator:
+              _competitionScoreCreator as CompetitionScoreCreator<CompetitionJumperScore>,
           jumpScoreCreator: _jumpScoreCreator,
           judgesCreator: _judgesCreator,
           koRules: _koEnabled ? _constructKoRulesForCurrentRound() : null,
         );
       case CompetitionTypeByEntity.team:
         List<TeamCompetitionGroupRules> newGroups;
-        final currentRound = _cachedRules!.rounds[_selectedRoundIndex];
+        final currentRound = _roundRules[_selectedRoundIndex];
         if (currentRound is DefaultTeamCompetitionRoundRules) {
           newGroups = List.of(currentRound.groups);
         } else {
@@ -1322,8 +1328,8 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
           ruleOf95HsFallEnabled: _ruleOf95HsEnabled,
           judgesCount: int.parse(_judgesCountController.text),
           significantJudgesCount: int.parse(_significantJudgesCountController.text),
-          competitionScoreCreator: _competitionScoreCreator
-              as CompetitionScoreCreator<CompetitionScore<CompetitionTeam>>,
+          competitionScoreCreator:
+              _competitionScoreCreator as CompetitionScoreCreator<CompetitionTeamScore>,
           jumpScoreCreator: _jumpScoreCreator,
           judgesCreator: _judgesCreator,
           koRules: _koEnabled ? _constructKoRulesForCurrentRound() : null,
@@ -1347,8 +1353,10 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                     as CompetitionScoreCreator<CompetitionTeamScore>,
                 groups: defaultTeamRoundRules.groups,
               );
-            } else {
+            } else if (roundRules is DefaultTeamCompetitionRoundRules) {
               return roundRules;
+            } else {
+              throw StateError('Something strange');
             }
           })
           .toList()
@@ -1362,8 +1370,10 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                     defaultIndividualRoundRules.competitionScoreCreator
                         as CompetitionScoreCreator<CompetitionJumperScore>,
               );
-            } else {
+            } else if (roundRules is DefaultIndividualCompetitionRoundRules) {
               return roundRules;
+            } else {
+              throw StateError('Something strange');
             }
           })
           .toList()
@@ -1410,6 +1420,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
 
   void _ensureCorrectCompetitionScoreCreator() {
     final repo = context.read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>();
+    print('type: $_competitionType');
     final whereType = switch (_competitionType) {
       CompetitionTypeByEntity.individual => repo.objects.whereType<
           DbEditingAvaiableObjectConfig<
@@ -1419,6 +1430,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
     };
     final firstDefault = whereType.first.object as CompetitionScoreCreator;
     _competitionScoreCreator = firstDefault;
+    print('competition score creator: $_competitionScoreCreator');
     _competitionScoreCreatorController.text = repo.getKeyByObject(firstDefault);
   }
 

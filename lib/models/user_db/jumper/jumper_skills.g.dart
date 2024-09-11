@@ -10,12 +10,10 @@ JumperSkills _$JumperSkillsFromJson(Map<String, dynamic> json) => JumperSkills(
       qualityOnSmallerHills: (json['qualityOnSmallerHills'] as num).toDouble(),
       qualityOnLargerHills: (json['qualityOnLargerHills'] as num).toDouble(),
       landingStyle: $enumDecode(_$LandingStyleEnumMap, json['landingStyle']),
-      jumpsConsistency:
-          $enumDecode(_$JumpsConsistencyEnumMap, json['jumpsConsistency']),
+      jumpsConsistency: $enumDecode(_$JumpsConsistencyEnumMap, json['jumpsConsistency']),
     );
 
-Map<String, dynamic> _$JumperSkillsToJson(JumperSkills instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$JumperSkillsToJson(JumperSkills instance) => <String, dynamic>{
       'qualityOnSmallerHills': instance.qualityOnSmallerHills,
       'qualityOnLargerHills': instance.qualityOnLargerHills,
       'landingStyle': _$LandingStyleEnumMap[instance.landingStyle]!,
@@ -23,13 +21,13 @@ Map<String, dynamic> _$JumperSkillsToJson(JumperSkills instance) =>
     };
 
 const _$LandingStyleEnumMap = {
-  LandingStyle.perfect: 3,
-  LandingStyle.veryGraceful: 2,
-  LandingStyle.graceful: 1,
+  LandingStyle.veryGraceful: 3,
+  LandingStyle.graceful: 2,
+  LandingStyle.quiteGraceful: 1,
   LandingStyle.average: 0,
-  LandingStyle.ugly: -1,
-  LandingStyle.veryUgly: -2,
-  LandingStyle.terrible: -3,
+  LandingStyle.slightlyUgly: -1,
+  LandingStyle.ugly: -2,
+  LandingStyle.veryUgly: -3,
 };
 
 const _$JumpsConsistencyEnumMap = {

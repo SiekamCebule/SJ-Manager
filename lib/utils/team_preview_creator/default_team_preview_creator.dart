@@ -114,13 +114,13 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
       JumpsConsistency.veryInconsistent => 0.92,
     };
     final multiplierByLandingStyle = switch (skills.landingStyle) {
-      LandingStyle.perfect => 1.06,
-      LandingStyle.veryGraceful => 1.04,
-      LandingStyle.graceful => 1.02,
+      LandingStyle.veryGraceful => 1.06,
+      LandingStyle.graceful => 1.04,
+      LandingStyle.quiteGraceful => 1.02,
       LandingStyle.average => 1.00,
-      LandingStyle.ugly => 0.98,
-      LandingStyle.veryUgly => 0.96,
-      LandingStyle.terrible => 0.94,
+      LandingStyle.slightlyUgly => 0.98,
+      LandingStyle.ugly => 0.96,
+      LandingStyle.veryUgly => 0.94,
     };
     final rating = (byQualityOnSmallerHills + byQualityOnLargerHills) *
         multiplierByConsistency *
