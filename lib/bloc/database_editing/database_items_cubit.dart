@@ -16,7 +16,6 @@ import 'package:sj_manager/repositories/database_editing/db_filters_repository.d
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/utils/id_generator.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
   DatabaseItemsCubit({
@@ -140,18 +139,16 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
   }
 
   void remove() {
-    final indexes = [...selectedIndexesRepo.last];
+    final indexes = [...selectedIndexesRepo.last]
+      ..sort((a, b) => b - a); // Sort in descending order
     if (indexes.isEmpty) {
       throw StateError(
         'Cannot remove an item from DatabaseItemsCubit because there is no item selected',
       );
     } else {
-      var subtraction = 0;
       for (var index in indexes) {
-        index -= subtraction;
         final removedItem = _itemsRepos.getEditable(state.itemsType).removeAt(index);
         idsRepo.removeByItem(item: removedItem);
-        subtraction++;
       }
       if (selectedIndexesRepo.last.length > 1 ||
           itemsRepos.getEditable(state.itemsType).items.value.isEmpty) {
