@@ -1181,9 +1181,9 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
     _judgesCountController.text = rules.judgesCount.toString();
     _significantJudgesCountController.text = rules.significantJudgesCount.toString();
 
-    _groupSizeController.text = (rules.koRules?.groupSize ?? 0).toString();
+    _groupSizeController.text = (rules.koRules?.groupSize ?? 2).toString();
     _groupAdvancementCountController.text =
-        (rules.koRules?.advancementCount ?? 0).toString();
+        (rules.koRules?.advancementCount ?? 1).toString();
 
     DbEditingAvailableObjectsRepo repo =
         context.read<DbEditingAvailableObjectsRepo<KoGroupsCreator>>();

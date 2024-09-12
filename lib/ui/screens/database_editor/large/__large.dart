@@ -74,12 +74,15 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       idsRepo: context.read(),
     );
     await _localDbCopy.setUp();
+    if (!mounted) return;
     _items = DatabaseItemsCubit(
       filtersRepo: _filters,
       itemsRepos: _localDbCopy.state!,
+      selectedIndexesRepo: _selectedIndexes,
+      idsRepo: context.read(),
+      idGenerator: context.read(),
     );
     _localDbCopyChangesSubscription = _localDbCopy.stream.listen((state) {
-      print('update items repo');
       _items.updateItemsRepo(state!);
     });
     final teamsRepo =

@@ -5,13 +5,13 @@ class _ItemsListNonEmptyStateBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemsState = context.watch<DatabaseItemsCubit>().state;
+    final itemsCubit = context.watch<DatabaseItemsCubit>();
+    final itemsState = itemsCubit.state;
     if (itemsState is DatabaseItemsEmpty) {
       return const SizedBox();
     }
     final itemsStateNonEmpty = itemsState as DatabaseItemsNonEmpty;
     final itemsType = itemsStateNonEmpty.itemsType;
-    final itemsRepo = context.watch<ItemsReposRegistry>().getEditable(itemsType);
     final selectedIndexesRepo = context.watch<SelectedIndexesRepo>();
     final dbIsChangedCubit = context.watch<ChangeStatusCubit>();
 
@@ -23,11 +23,7 @@ class _ItemsListNonEmptyStateBody extends StatelessWidget {
           return DatabaseItemsList(
             reorderable: listShouldBeReorderable,
             onReorder: (oldIndex, newIndex) async {
-              if (newIndex > oldIndex) {
-                newIndex -= 1;
-              }
-              itemsRepo.move(from: oldIndex, to: newIndex);
-              selectedIndexesRepo.moveSelection(from: oldIndex, to: newIndex);
+              itemsCubit.move(from: oldIndex, to: newIndex);
               dbIsChangedCubit.markAsChanged();
             },
             length: itemsStateNonEmpty.filteredItems.length,

@@ -430,7 +430,7 @@ void main() {
 
       final context = tester.element(find.byType(DatabaseItemsList)) as BuildContext;
       final itemsCubit = context.read<DatabaseItemsCubit>();
-      itemsCubit.selectByIndex(1);
+      itemsCubit.selectTab(1);
       await tester.pumpAndSettle();
       itemsCubit.itemsRepos.get<FemaleJumper>().set([
         ...femaleJumpers,
