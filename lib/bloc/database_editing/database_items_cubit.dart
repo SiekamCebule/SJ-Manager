@@ -13,10 +13,17 @@ import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
+import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
+import 'package:sj_manager/utils/id_generator.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
   DatabaseItemsCubit({
     required this.filtersRepo,
+    required this.selectedIndexesRepo,
+    required this.idsRepo,
+    required this.idGenerator,
     required ItemsReposRegistry itemsRepos,
   })  : _itemsRepos = itemsRepos,
         super(_initial) {
@@ -24,6 +31,9 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
   }
 
   final DbFiltersRepo filtersRepo;
+  final SelectedIndexesRepo selectedIndexesRepo;
+  final ItemsIdsRepo idsRepo;
+  final IdGenerator idGenerator;
   ItemsReposRegistry _itemsRepos;
   ItemsReposRegistry get itemsRepos => _itemsRepos;
 
@@ -102,7 +112,91 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
     });
   }
 
-  void selectByIndex(int index) {
+  void add({required dynamic item}) {
+    if (selectedIndexesRepo.last.length > 1) {
+      throw StateError(
+        'Cannot add an item to DatabaseItemsCubit because there are more than one item selected',
+      );
+    }
+    final singleSelectedOrNull = selectedIndexesRepo.last.singleOrNull;
+    final lastIndex = state is DatabaseItemsNonEmpty
+        ? itemsRepos.getEditable(state.itemsType).last.length
+        : 0;
+    int addIndex;
+    if (singleSelectedOrNull != null) {
+      addIndex = singleSelectedOrNull + 1;
+    } else {
+      addIndex = singleSelectedOrNull ?? lastIndex;
+    }
+    _itemsRepos.getEditable(state.itemsType).add(item, addIndex);
+    if (singleSelectedOrNull != null) {
+      selectedIndexesRepo.setSelection(addIndex - 1, false);
+    }
+    selectedIndexesRepo.setSelection(addIndex, true);
+    idsRepo.register(
+      item,
+      id: idGenerator.generate(),
+    );
+  }
+
+  void remove() {
+    final indexes = [...selectedIndexesRepo.last];
+    if (indexes.isEmpty) {
+      throw StateError(
+        'Cannot remove an item from DatabaseItemsCubit because there is no item selected',
+      );
+    } else {
+      var subtraction = 0;
+      for (var index in indexes) {
+        index -= subtraction;
+        final removedItem = _itemsRepos.getEditable(state.itemsType).removeAt(index);
+        idsRepo.removeByItem(item: removedItem);
+        subtraction++;
+      }
+      if (selectedIndexesRepo.last.length > 1 ||
+          itemsRepos.getEditable(state.itemsType).items.value.isEmpty) {
+        selectedIndexesRepo.clearSelection();
+      } else if (selectedIndexesRepo.last.length == 1 &&
+          selectedIndexesRepo.last.single != 0) {
+        selectedIndexesRepo.selectOnlyAt(selectedIndexesRepo.last.single - 1);
+      }
+    }
+  }
+
+  void replace({required dynamic changedItem}) async {
+    if (selectedIndexesRepo.last.length != 1) {
+      throw StateError(
+        'Cannot replace an item in the database if there are no selected items',
+      );
+    }
+    if (changedItem == null) {
+      throw StateError('Cannot add a null item to the database');
+    }
+
+    // Map the selected index from the filtered list to the original list
+    final selectedIndex = selectedIndexesRepo.last.single;
+    final filteredItems = (state as DatabaseItemsNonEmpty).filteredItems;
+    final originalItems = itemsRepos.getEditable(state.itemsType).last;
+    final originalIndex = originalItems.indexOf(filteredItems[selectedIndex]);
+
+    // Replace the item in the original list using the mapped index
+    final itemsByTypeRepo = itemsRepos.getEditable(state.itemsType);
+    final previousItemId = idsRepo.idOf(originalItems[originalIndex]);
+    itemsByTypeRepo.replace(oldIndex: originalIndex, newItem: changedItem);
+    idsRepo.removeById(id: previousItemId);
+    final newId = idGenerator.generate();
+    idsRepo.register(changedItem, id: newId);
+  }
+
+  void move({required int from, required int to}) {
+    if (to > from) {
+      to -= 1;
+    }
+    itemsRepos.getEditable(state.itemsType).move(from: from, to: to);
+    selectedIndexesRepo.moveSelection(from: from, to: to);
+  }
+
+  void selectTab(int index) {
     final type = switch (index) {
       0 => MaleJumper,
       1 => FemaleJumper,
@@ -112,6 +206,8 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
       5 => EventSeriesSetup,
       _ => throw TypeError(),
     };
+    selectedIndexesRepo.clearSelection();
+    filtersRepo.clear();
     changeType(type);
   }
 

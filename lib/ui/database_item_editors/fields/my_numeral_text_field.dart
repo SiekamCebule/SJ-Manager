@@ -82,12 +82,7 @@ class MyNumeralTextFieldState extends State<MyNumeralTextField> {
                 enabledBorder: border,
                 suffixText: widget.suffixText,
               ),
-              inputFormatters: [
-                ...widget.formatters,
-                _numberInRangeEnforcer,
-                if (widget.maxDecimalPlaces != null)
-                  NDecimalPlacesEnforcer(decimalPlaces: widget.maxDecimalPlaces!)
-              ],
+              inputFormatters: _inputFormatters,
               onSubmitted: (value) => _onTextFieldChange(),
               onTapOutside: (event) => _onTextFieldChange(),
               focusNode: widget.focusNode,
@@ -102,12 +97,7 @@ class MyNumeralTextFieldState extends State<MyNumeralTextField> {
                       if (widget.maxDecimalPlaces != null) {
                         decremented = preparedNumber(decremented.toDouble());
                       }
-                      widget.controller.text = _numberInRangeEnforcer
-                          .formatEditUpdate(
-                              widget.controller.value,
-                              widget.controller.value
-                                  .copyWith(text: decremented.toString()))
-                          .text;
+                      _updateController(decremented.toString());
                       widget.onChange();
                     }
                   : null,
@@ -122,12 +112,7 @@ class MyNumeralTextFieldState extends State<MyNumeralTextField> {
                       if (widget.maxDecimalPlaces != null) {
                         incremented = preparedNumber(incremented.toDouble());
                       }
-                      widget.controller.text = _numberInRangeEnforcer
-                          .formatEditUpdate(
-                              widget.controller.value,
-                              widget.controller.value
-                                  .copyWith(text: incremented.toString()))
-                          .text;
+                      _updateController(incremented.toString());
                       widget.onChange();
                     }
                   : null,
@@ -171,4 +156,24 @@ class MyNumeralTextFieldState extends State<MyNumeralTextField> {
   num get _numberFromController {
     return num.parse(widget.controller.text);
   }
+
+  void _updateController(String text) {
+    print('chuj, ${widget.maxDecimalPlaces}');
+    var textEditingValue = widget.controller.value;
+    for (var formatter in _inputFormatters) {
+      textEditingValue = formatter.formatEditUpdate(
+        textEditingValue,
+        textEditingValue.copyWith(text: text.toString()),
+      );
+      print('value: $textEditingValue');
+    }
+    widget.controller.value = textEditingValue;
+  }
+
+  List<TextInputFormatter> get _inputFormatters => [
+        ...widget.formatters,
+        _numberInRangeEnforcer,
+        if (widget.maxDecimalPlaces != null)
+          NDecimalPlacesEnforcer(decimalPlaces: widget.maxDecimalPlaces!)
+      ];
 }

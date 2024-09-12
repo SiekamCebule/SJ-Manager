@@ -115,13 +115,21 @@ class NDecimalPlacesEnforcer extends TextInputFormatter {
     if (newValue.text == '-') {
       return newValue;
     }
-    if (newValue.text == '.') {
-      return newValue;
-    }
     final value = double.tryParse(newValue.text);
     if (value == null) {
       return oldValue;
     }
+    if (decimalPlaces == 0) {
+      if (newValue.text.contains('.')) {
+        final integerText = newValue.text.split('.').first;
+        return newValue.copyWith(
+          text: integerText,
+          selection: TextSelection.collapsed(offset: integerText.length),
+        );
+      }
+      return newValue;
+    }
+
     final decimalIndex = newValue.text.indexOf('.');
     if (decimalIndex == -1 || newValue.text.length - decimalIndex - 1 <= decimalPlaces) {
       return newValue;

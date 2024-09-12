@@ -143,9 +143,7 @@ class _MainBodyState extends State<_MainBody> with SingleTickerProviderStateMixi
 
   Future<void> _onChangeTab(int index) async {
     if (_currentTabIndex.index != index) {
-      context.read<SelectedIndexesRepo>().clearSelection();
-      context.read<DbFiltersRepo>().clear();
-      context.read<DatabaseItemsCubit>().selectByIndex(index);
+      context.read<DatabaseItemsCubit>().selectTab(index);
       _currentTabIndex = _SelectedTabIndex(index);
       await _animateBodyFromZero();
     }
