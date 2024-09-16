@@ -139,8 +139,7 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
   }
 
   void remove() {
-    final indexes = [...selectedIndexesRepo.last]
-      ..sort((a, b) => b - a); // Sort in descending order
+    final indexes = [...selectedIndexesRepo.last]..sort((a, b) => b - a);
     if (indexes.isEmpty) {
       throw StateError(
         'Cannot remove an item from DatabaseItemsCubit because there is no item selected',
@@ -197,10 +196,10 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
     final type = switch (index) {
       0 => MaleJumper,
       1 => FemaleJumper,
-      2 => Hill,
-      3 => DefaultCompetitionRulesPreset,
-      4 => EventSeriesCalendarPreset,
-      5 => EventSeriesSetup,
+      //2 => Hill,
+      //3 => DefaultCompetitionRulesPreset,
+      //4 => EventSeriesCalendarPreset,
+      //5 => EventSeriesSetup,
       _ => throw TypeError(),
     };
     selectedIndexesRepo.clearSelection();

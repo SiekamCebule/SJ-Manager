@@ -10,8 +10,7 @@ import 'package:sj_manager/models/simulation_db/classification/classification.da
     as _i12;
 import 'package:sj_manager/models/simulation_db/classification/default_classification_rules.dart'
     as _i10;
-import 'package:sj_manager/models/simulation_db/competition/competition.dart'
-    as _i6;
+import 'package:sj_manager/models/simulation_db/competition/competition.dart' as _i6;
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_competition_round_rules.dart'
     as _i27;
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart'
@@ -32,18 +31,15 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_c
     as _i16;
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/jump_score_creator.dart'
     as _i17;
-import 'package:sj_manager/models/simulation_db/event_series/event_series.dart'
-    as _i14;
+import 'package:sj_manager/models/simulation_db/event_series/event_series.dart' as _i14;
 import 'package:sj_manager/models/simulation_db/standings/score/details/classification_score_details.dart'
     as _i13;
 import 'package:sj_manager/models/simulation_db/standings/score/details/competition_score_details.dart'
     as _i18;
 import 'package:sj_manager/models/simulation_db/standings/score/details/score_details.dart'
     as _i5;
-import 'package:sj_manager/models/simulation_db/standings/score/score.dart'
-    as _i7;
-import 'package:sj_manager/models/simulation_db/standings/standings.dart'
-    as _i4;
+import 'package:sj_manager/models/simulation_db/standings/score/score.dart' as _i7;
+import 'package:sj_manager/models/simulation_db/standings/standings.dart' as _i4;
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_creator.dart'
     as _i8;
 import 'package:sj_manager/models/user_db/hill/hill.dart' as _i2;
@@ -95,8 +91,7 @@ class _FakeDefaultCompetitionRulesProvider_2<T> extends _i1.SmartFake
         );
 }
 
-class _FakeCompetition_3<E1,
-        S1 extends _i4.Standings<dynamic, _i5.ScoreDetails>>
+class _FakeCompetition_3<E1, S1 extends _i4.Standings<dynamic, _i5.ScoreDetails>>
     extends _i1.SmartFake implements _i6.Competition<E1, S1> {
   _FakeCompetition_3(
     Object parent,
@@ -107,9 +102,8 @@ class _FakeCompetition_3<E1,
         );
 }
 
-class _FakeStandingsPositionsCreator_4<
-        S extends _i7.Score<dynamic, _i5.ScoreDetails>> extends _i1.SmartFake
-    implements _i8.StandingsPositionsCreator<S> {
+class _FakeStandingsPositionsCreator_4<S extends _i7.Score<dynamic, _i5.ScoreDetails>>
+    extends _i1.SmartFake implements _i8.StandingsPositionsCreator<S> {
   _FakeStandingsPositionsCreator_4(
     Object parent,
     Invocation parentInvocation,
@@ -119,8 +113,7 @@ class _FakeStandingsPositionsCreator_4<
         );
 }
 
-class _FakeValueStream_5<T> extends _i1.SmartFake
-    implements _i9.ValueStream<T> {
+class _FakeValueStream_5<T> extends _i1.SmartFake implements _i9.ValueStream<T> {
   _FakeValueStream_5(
     Object parent,
     Invocation parentInvocation,
@@ -145,9 +138,7 @@ class _FakeClassificationScoreCreator_7<
         E,
         C extends _i11.ClassificationScoreCreatingContext<
             E,
-            _i12.Classification<
-                E,
-                _i4.Standings<E, _i13.ClassificationScoreDetails>,
+            _i12.Classification<E, _i4.Standings<E, _i13.ClassificationScoreDetails>,
                 _i10.ClassificationRules<E>>>> extends _i1.SmartFake
     implements _i11.ClassificationScoreCreator<E, C> {
   _FakeClassificationScoreCreator_7(
@@ -170,8 +161,8 @@ class _FakeEventSeries_8 extends _i1.SmartFake implements _i14.EventSeries {
 }
 
 class _FakeDefaultClassification_9<E,
-        S extends _i4.Standings<E, _i13.ClassificationScoreDetails>>
-    extends _i1.SmartFake implements _i12.DefaultClassification<E, S> {
+        S extends _i4.Standings<E, _i13.ClassificationScoreDetails>> extends _i1.SmartFake
+    implements _i12.DefaultClassification<E, S> {
   _FakeDefaultClassification_9(
     Object parent,
     Invocation parentInvocation,
@@ -202,8 +193,7 @@ class _FakeScore_11<E1, D1 extends _i5.ScoreDetails> extends _i1.SmartFake
         );
 }
 
-class _FakeJudgesCreator_12 extends _i1.SmartFake
-    implements _i16.JudgesCreator {
+class _FakeJudgesCreator_12 extends _i1.SmartFake implements _i16.JudgesCreator {
   _FakeJudgesCreator_12(
     Object parent,
     Invocation parentInvocation,
@@ -392,8 +382,7 @@ class MockStandings<E, D extends _i5.ScoreDetails> extends _i1.Mock
       ) as int);
 
   @override
-  _i9.ValueStream<Map<int, List<_i7.Score<E, D>>>> get items =>
-      (super.noSuchMethod(
+  _i9.ValueStream<Map<int, List<_i7.Score<E, D>>>> get items => (super.noSuchMethod(
         Invocation.getter(#items),
         returnValue: _FakeValueStream_5<Map<int, List<_i7.Score<E, D>>>>(
           this,
@@ -508,8 +497,8 @@ class MockStandings<E, D extends _i5.ScoreDetails> extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDefaultClassification<E,
-        S extends _i4.Standings<E, _i13.ClassificationScoreDetails>>
-    extends _i1.Mock implements _i12.DefaultClassification<E, S> {
+        S extends _i4.Standings<E, _i13.ClassificationScoreDetails>> extends _i1.Mock
+    implements _i12.DefaultClassification<E, S> {
   MockDefaultClassification() {
     _i1.throwOnMissingStub(this);
   }
@@ -552,7 +541,7 @@ class MockDefaultIndividualClassificationRules extends _i1.Mock
   }
 
   @override
-  bool get includeIndividualPlaceFromTeamCompetitions => (super.noSuchMethod(
+  bool get includeApperancesInTeamCompetitions => (super.noSuchMethod(
         Invocation.getter(#includeIndividualPlaceFromTeamCompetitions),
         returnValue: false,
       ) as bool);
@@ -560,19 +549,16 @@ class MockDefaultIndividualClassificationRules extends _i1.Mock
   @override
   _i10.DefaultClassificationScoringType get scoringType => (super.noSuchMethod(
         Invocation.getter(#scoringType),
-        returnValue:
-            _i10.DefaultClassificationScoringType.pointsFromCompetitions,
+        returnValue: _i10.DefaultClassificationScoringType.pointsFromCompetitions,
       ) as _i10.DefaultClassificationScoringType);
 
   @override
   List<_i6.Competition<dynamic, _i4.Standings<dynamic, _i5.ScoreDetails>>>
       get competitions => (super.noSuchMethod(
             Invocation.getter(#competitions),
-            returnValue: <_i6.Competition<dynamic,
-                _i4.Standings<dynamic, _i5.ScoreDetails>>>[],
-          ) as List<
-              _i6
-              .Competition<dynamic, _i4.Standings<dynamic, _i5.ScoreDetails>>>);
+            returnValue: <_i6
+                .Competition<dynamic, _i4.Standings<dynamic, _i5.ScoreDetails>>>[],
+          ) as List<_i6.Competition<dynamic, _i4.Standings<dynamic, _i5.ScoreDetails>>>);
 
   @override
   Map<_i6.Competition<dynamic, _i4.Standings<dynamic, _i5.ScoreDetails>>, double>
@@ -581,9 +567,7 @@ class MockDefaultIndividualClassificationRules extends _i1.Mock
             returnValue: <_i6
                 .Competition<dynamic, _i4.Standings<dynamic, _i5.ScoreDetails>>,
                 double>{},
-          ) as Map<
-              _i6
-              .Competition<dynamic, _i4.Standings<dynamic, _i5.ScoreDetails>>,
+          ) as Map<_i6.Competition<dynamic, _i4.Standings<dynamic, _i5.ScoreDetails>>,
               double>);
 
   @override
@@ -594,8 +578,7 @@ class MockDefaultIndividualClassificationRules extends _i1.Mock
           _i12.Classification<
               _i15.Jumper,
               _i4.Standings<_i15.Jumper, _i13.ClassificationScoreDetails>,
-              _i10
-              .ClassificationRules<_i15.Jumper>>>> get classificationScoreCreator =>
+              _i10.ClassificationRules<_i15.Jumper>>>> get classificationScoreCreator =>
       (super.noSuchMethod(
         Invocation.getter(#classificationScoreCreator),
         returnValue: _FakeClassificationScoreCreator_7<
@@ -642,17 +625,13 @@ class MockDefaultIndividualClassificationScoreCreatingContext extends _i1.Mock
           _i4.Standings<_i15.Jumper, _i18.CompetitionScoreDetails<dynamic>>>
       get lastCompetition => (super.noSuchMethod(
             Invocation.getter(#lastCompetition),
-            returnValue: _FakeCompetition_3<
-                _i15.Jumper,
-                _i4
-                .Standings<_i15.Jumper, _i18.CompetitionScoreDetails<dynamic>>>(
+            returnValue: _FakeCompetition_3<_i15.Jumper,
+                _i4.Standings<_i15.Jumper, _i18.CompetitionScoreDetails<dynamic>>>(
               this,
               Invocation.getter(#lastCompetition),
             ),
-          ) as _i6.Competition<
-              _i15.Jumper,
-              _i4
-              .Standings<_i15.Jumper, _i18.CompetitionScoreDetails<dynamic>>>);
+          ) as _i6.Competition<_i15.Jumper,
+              _i4.Standings<_i15.Jumper, _i18.CompetitionScoreDetails<dynamic>>>);
 
   @override
   _i12.DefaultClassification<_i15.Jumper,
@@ -747,8 +726,7 @@ class MockScore<E, D extends _i5.ScoreDetails> extends _i1.Mock
       ) as _i7.Score<E, D>);
 
   @override
-  bool operator <(_i7.Score<dynamic, _i5.ScoreDetails>? other) =>
-      (super.noSuchMethod(
+  bool operator <(_i7.Score<dynamic, _i5.ScoreDetails>? other) => (super.noSuchMethod(
         Invocation.method(
           #<,
           [other],
@@ -757,8 +735,7 @@ class MockScore<E, D extends _i5.ScoreDetails> extends _i1.Mock
       ) as bool);
 
   @override
-  bool operator >(_i7.Score<dynamic, _i5.ScoreDetails>? other) =>
-      (super.noSuchMethod(
+  bool operator >(_i7.Score<dynamic, _i5.ScoreDetails>? other) => (super.noSuchMethod(
         Invocation.method(
           #>,
           [other],
@@ -837,13 +814,12 @@ class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
   _i8.StandingsPositionsCreator<_i7.Score<dynamic, _i5.ScoreDetails>>
       get positionsCreator => (super.noSuchMethod(
             Invocation.getter(#positionsCreator),
-            returnValue: _FakeStandingsPositionsCreator_4<
-                _i7.Score<dynamic, _i5.ScoreDetails>>(
+            returnValue:
+                _FakeStandingsPositionsCreator_4<_i7.Score<dynamic, _i5.ScoreDetails>>(
               this,
               Invocation.getter(#positionsCreator),
             ),
-          ) as _i8
-              .StandingsPositionsCreator<_i7.Score<dynamic, _i5.ScoreDetails>>);
+          ) as _i8.StandingsPositionsCreator<_i7.Score<dynamic, _i5.ScoreDetails>>);
 
   @override
   bool get ruleOf95HsFallEnabled => (super.noSuchMethod(
@@ -903,8 +879,7 @@ class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
   @override
   _i20.DefaultTeamCompetitionRoundRules toTeam({
     required _i19.CompetitionScoreCreator<
-            _i7.Score<_i24.CompetitionTeam<_i25.Team>,
-                _i18.CompetitionTeamScoreDetails>>?
+            _i7.Score<_i24.CompetitionTeam<_i25.Team>, _i18.CompetitionTeamScoreDetails>>?
         competitionScoreCreator,
     required List<_i26.TeamCompetitionGroupRules>? groups,
   }) =>

@@ -1,3 +1,4 @@
+import 'package:sj_manager/models/simulation_db/classification/classification.dart';
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/converter.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
@@ -12,6 +13,14 @@ import 'package:sj_manager/utils/iterable.dart';
 
 class CalendarMainCompetitionRecordsToCalendarConverter
     implements LowLevelCalendarCreator<CalendarMainCompetitionRecord> {
+  CalendarMainCompetitionRecordsToCalendarConverter({
+    this.provideClassifications,
+  });
+
+  final List<Classification> Function(
+          List<Competition> competitions, Map<Competition, Competition> qualifications)?
+      provideClassifications;
+
   late List<CalendarMainCompetitionRecord> _highLevelComps;
   late List<Competition> _lowLevelComps;
   var _qualifications = <Competition, Competition>{};
@@ -32,9 +41,12 @@ class CalendarMainCompetitionRecordsToCalendarConverter
     _moveAppropriateCompetitionsBehindTeamComps();
     _addDayForTrainingsAndTrialRoundsAfterCompetitionOrQualificationsIfSameDay();
 
+    final classifications =
+        provideClassifications?.call(_lowLevelComps, _qualifications) ??
+            highLevelCalendar.classifications;
     return EventSeriesCalendar(
       competitions: _lowLevelComps,
-      classifications: highLevelCalendar.classifications,
+      classifications: classifications,
       qualifications: _qualifications,
     );
   }

@@ -54,7 +54,7 @@ class DefaultClassificationRulesParser
           pointsMap: json['pointsMap'],
           competitions: competitions.toList(),
           pointsModifiers: pointsModifiers,
-          includeIndividualPlaceFromTeamCompetitions:
+          includeApperancesInTeamCompetitions:
               json['includeIndividualPlaceFromTeamCompetitions'],
         );
       } else {
