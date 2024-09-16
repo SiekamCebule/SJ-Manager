@@ -23,7 +23,7 @@ class DefaultIndividualClassificationScoreCreator
           competitionScores.add(maybeScore);
         }
       } else if (competition is Competition<CompetitionTeam, TeamCompetitionStandings>) {
-        if (classificationRules.includeIndividualPlaceFromTeamCompetitions) {
+        if (classificationRules.includeApperancesInTeamCompetitions) {
           final score = _jumperScoreFromTeam(competition);
           if (score != null) {
             competitionScores.add(score);

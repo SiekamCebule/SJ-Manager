@@ -41,10 +41,10 @@ class DefaultIndividualClassificationRules extends DefaultClassificationRules<Ju
     required super.pointsMap,
     required super.competitions,
     required super.pointsModifiers,
-    required this.includeIndividualPlaceFromTeamCompetitions,
+    required this.includeApperancesInTeamCompetitions,
   });
 
-  final bool includeIndividualPlaceFromTeamCompetitions;
+  final bool includeApperancesInTeamCompetitions;
 }
 
 class DefaultTeamClassificationRules extends DefaultClassificationRules<Team> {

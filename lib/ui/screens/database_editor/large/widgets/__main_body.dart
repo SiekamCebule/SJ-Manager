@@ -81,7 +81,7 @@ class _MainBodyState extends State<_MainBody> with SingleTickerProviderStateMixi
                   ),
                   const Gap(UiDatabaseEditorConstants.gapBetweenFabs),
                   DefaultTabController(
-                    length: 6,
+                    length: 2,
                     child: Expanded(
                       child: Center(
                         child: Column(
@@ -95,22 +95,6 @@ class _MainBodyState extends State<_MainBody> with SingleTickerProviderStateMixi
                                 Tab(
                                   text: translate(context).femaleCompetitors,
                                   icon: const Icon(Symbols.female),
-                                ),
-                                Tab(
-                                  text: translate(context).hills,
-                                  icon: const ImageIcon(hillIcon),
-                                ),
-                                Tab(
-                                  text: 'Konkursy',
-                                  icon: const Icon(Symbols.contract),
-                                ),
-                                Tab(
-                                  text: 'Kalendarze',
-                                  icon: const Icon(Symbols.calendar_month),
-                                ),
-                                Tab(
-                                  text: 'Cykle zawodów',
-                                  icon: const Icon(Symbols.trophy),
                                 ),
                               ],
                               onTap: _onChangeTab,
