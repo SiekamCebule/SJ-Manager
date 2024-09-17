@@ -6,7 +6,7 @@ class _SaveAsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () async {
+      /*onPressed: () async {
         final dirPath = await FilePicker.platform.getDirectoryPath();
         if (!context.mounted || dirPath == null) return;
         await context.read<LocalDatabaseCopyCubit>().saveAs(context, Directory(dirPath));
@@ -17,7 +17,8 @@ class _SaveAsButton extends StatelessWidget {
             dirPath: dirPath,
           ),
         );
-      },
+      },*/
+      onPressed: null, // TODO: DO THAT
       child: Text(translate(context).saveAs),
     );
   }

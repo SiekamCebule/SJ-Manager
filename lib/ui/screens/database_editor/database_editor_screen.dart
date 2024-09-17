@@ -22,6 +22,7 @@ import 'package:sj_manager/filters/hills/hill_matching_algorithms.dart';
 import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/main.dart';
+import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record_setup.dart';
 import 'package:sj_manager/models/simulation_db/competition/high_level_calendar.dart';
@@ -251,8 +252,9 @@ List<RepositoryProvider> defaultDbEditorProviders(BuildContext context) {
       ]),
     ),
     RepositoryProvider<DefaultItemsRepo>(create: (context) {
-      final noneCountry =
-          (context.read<ItemsReposRegistry>().get<Country>() as CountriesRepo).none;
+      final tempCountriesRepo =
+          CountriesRepo(initial: context.read<GameVariant>().countries);
+      final noneCountry = tempCountriesRepo.none;
       final koRoundRules = KoRoundRules(
         advancementDeterminator: context
                 .read<DbEditingAvailableObjectsRepo<KoRoundAdvancementDeterminator>>()

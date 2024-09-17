@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/models/game_variants/default_game_variants/constants.dart';
+import 'package:sj_manager/models/game_variants/default_game_variants/variants_registry.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
 import 'package:sj_manager/models/simulation_db/classification/default_classification_rules.dart';
@@ -17,6 +19,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_round_ru
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/concrete/individual_default.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/concrete/team_default.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/concrete/individual/default_linear.dart';
+import 'package:collection/collection.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/concrete/default.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/concrete/default_classic.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/concrete/default_classic.dart';
@@ -28,32 +31,77 @@ import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.
 import 'package:sj_manager/models/simulation_db/simulation_season.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
+import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/hill/hill_profile_type.dart';
 import 'package:sj_manager/models/user_db/hill/jumps_variability.dart';
 import 'package:sj_manager/models/user_db/hill/landing_ease.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/team/country_team.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
+import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/utils/multilingual_string.dart';
 import 'package:provider/provider.dart';
 
-GameVariant constructTestGameVariant({
+Future<GameVariant> constructTestGameVariant({
   required BuildContext context,
-  required List<Jumper> jumpers,
-}) {
-  return _TestGameVariantCreator().construct(context: context, jumpers: jumpers);
+}) async {
+  return await _TestGameVariantCreator().construct(
+    context: context,
+  );
 }
 
 class _TestGameVariantCreator {
   late BuildContext _context;
   late List<Hill> _hills;
+  late CountriesRepo _countriesRepo;
 
-  GameVariant construct({
+  Error get _contextIsNotMountedError => StateError('Context is not mounted, but should');
+
+  Future<GameVariant> construct({
     required BuildContext context,
-    required List<Jumper> jumpers,
-  }) {
+  }) async {
     _context = context;
+
+    final countries = await loadItemsForGameVariant<Country>(
+      context: context,
+      gameVariantId: 'test',
+      fromJson: context.read<DbItemsJsonConfiguration<Country>>().fromJson,
+    );
+    _countriesRepo = CountriesRepo(initial: countries);
+    if (!context.mounted) throw _contextIsNotMountedError;
+    final teams = await loadItemsForGameVariant<Team>(
+      context: context,
+      gameVariantId: 'test',
+      fromJson: (json) {
+        return CountryTeam.fromJson(json,
+            countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo));
+      },
+    );
+    if (!context.mounted) throw _contextIsNotMountedError;
+    final males = await loadItemsForGameVariant<MaleJumper>(
+      context: context,
+      gameVariantId: 'test',
+      fromJson: (json) {
+        return MaleJumper.fromJson(json,
+            countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo));
+      },
+    );
+    if (!context.mounted) throw _contextIsNotMountedError;
+    final females = await loadItemsForGameVariant<FemaleJumper>(
+      context: context,
+      gameVariantId: 'test',
+      fromJson: (json) {
+        return FemaleJumper.fromJson(json,
+            countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo));
+      },
+    );
+    final jumpers = [
+      ...males,
+      ...females,
+    ];
+
     setUpHills();
     final wcCalendar = _constructWcCalendar();
     return GameVariant(
@@ -63,6 +111,8 @@ class _TestGameVariantCreator {
         'en': 'Test 24/25',
       }),
       hills: _hills,
+      countries: countries,
+      teams: teams,
       jumpers: jumpers,
       season: SimulationSeason(
         eventSeries: [
@@ -93,12 +143,11 @@ class _TestGameVariantCreator {
   }
 
   void setUpHills() {
-    final countries = _context.read<CountriesRepo>();
     _hills = [
       Hill(
         name: 'Letalncia',
         locality: 'Planica',
-        country: countries.byCode('si'),
+        country: _countriesRepo.byCode('si'),
         k: 200,
         hs: 240,
         landingEase: LandingEase.fairlyLow,
@@ -111,7 +160,7 @@ class _TestGameVariantCreator {
       Hill(
         name: 'Erzberg Arena',
         locality: 'Eisenerz-Ramsau',
-        country: countries.byCode('at'),
+        country: _countriesRepo.byCode('at'),
         k: 98,
         hs: 109,
         landingEase: LandingEase.average,
@@ -124,7 +173,7 @@ class _TestGameVariantCreator {
       Hill(
         name: 'Malinka',
         locality: 'Wisła',
-        country: countries.byCode('pl'),
+        country: _countriesRepo.byCode('pl'),
         k: 120,
         hs: 134,
         landingEase: LandingEase.high,
@@ -211,7 +260,7 @@ class _TestGameVariantCreator {
     final competitions = [
       CalendarMainCompetitionRecord(
         date: DateTime(2024, 11, 23),
-        hill: _hillByLocalityAndHs('Lillehammer', 140),
+        hill: _hillByLocalityAndHs('Eisenerz-Ramsau', 109),
         setup: CalendarMainCompetitionRecordSetup(
           mainCompRules: individualCompetitionRulesSaturday,
           qualificationsRules: individualQualificationsRules,
@@ -222,7 +271,7 @@ class _TestGameVariantCreator {
       ),
       CalendarMainCompetitionRecord(
         date: DateTime(2024, 11, 24),
-        hill: _hillByLocalityAndHs('Lillehammer', 140),
+        hill: _hillByLocalityAndHs('Eisenerz-Ramsau', 109),
         setup: CalendarMainCompetitionRecordSetup(
           mainCompRules: individualCompetitionRulesSunday,
           qualificationsRules: individualQualificationsRules,
@@ -230,7 +279,7 @@ class _TestGameVariantCreator {
       ),
       CalendarMainCompetitionRecord(
         date: DateTime(2024, 11, 30),
-        hill: _hillByLocalityAndHs('Ruka', 142),
+        hill: _hillByLocalityAndHs('Wisła', 134),
         setup: CalendarMainCompetitionRecordSetup(
           mainCompRules: individualCompetitionRulesSaturday,
           qualificationsRules: individualQualificationsRules,
@@ -241,7 +290,7 @@ class _TestGameVariantCreator {
       ),
       CalendarMainCompetitionRecord(
         date: DateTime(2024, 12, 01),
-        hill: _hillByLocalityAndHs('Ruka', 142),
+        hill: _hillByLocalityAndHs('Wisła', 134),
         setup: CalendarMainCompetitionRecordSetup(
           mainCompRules: individualCompetitionRulesSunday,
           qualificationsRules: individualQualificationsRules,
@@ -249,7 +298,7 @@ class _TestGameVariantCreator {
       ),
       CalendarMainCompetitionRecord(
         date: DateTime(2024, 12, 07),
-        hill: _hillByLocalityAndHs('Wisła', 134),
+        hill: _hillByLocalityAndHs('Planica', 240),
         setup: CalendarMainCompetitionRecordSetup(
           mainCompRules: individualKoCompetitionRules,
           qualificationsRules: individualQualificationsRules,
@@ -282,7 +331,7 @@ class _TestGameVariantCreator {
                     2) // duety
               ncCompetition: 0.5
         };
-        final kuusamoSevenCompetitions = competitions.where(
+        final wislaSixCompetitions = competitions.where(
           (competition) =>
               (competition.labels.contains(
                     DefaultCompetitionType.competition,
@@ -290,7 +339,7 @@ class _TestGameVariantCreator {
                   competition.labels.contains(
                     DefaultCompetitionType.qualifications,
                   )) &&
-              competition.hill.locality == 'Ruka',
+              competition.hill == _hillByLocalityAndHs('Wisła', 134),
         );
         return [
           DefaultClassification(
@@ -320,14 +369,14 @@ class _TestGameVariantCreator {
             ),
           ),
           DefaultClassification(
-            name: 'Kuusamo Six',
+            name: 'Wisła Six',
             standings:
                 Standings(positionsCreator: StandingsPositionsWithExAequosCreator()),
             rules: DefaultIndividualClassificationRules(
               classificationScoreCreator: DefaultIndividualClassificationScoreCreator(),
               scoringType: DefaultClassificationScoringType.pointsFromCompetitions,
               pointsMap: null,
-              competitions: kuusamoSevenCompetitions.toList(),
+              competitions: wislaSixCompetitions.toList(),
               pointsModifiers: const {},
               includeApperancesInTeamCompetitions: true,
             ),
@@ -338,6 +387,12 @@ class _TestGameVariantCreator {
   }
 
   Hill _hillByLocalityAndHs(String locality, double hs) {
-    return _hills.singleWhere((hill) => hill.locality == locality && hill.hs == hs);
+    final hill =
+        _hills.singleWhereOrNull((hill) => hill.locality == locality && hill.hs == hs);
+    if (hill == null) {
+      throw StateError(
+          '(Test game variant): Cannot find a hill with locality $locality and hs $hs');
+    }
+    return hill;
   }
 }

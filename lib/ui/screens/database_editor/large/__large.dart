@@ -37,7 +37,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
         final shouldClose = await _shouldCloseAfterDialog(action);
         if (action == 'yes') {
           if (!mounted) return true;
-          await _localDbCopy.saveChangesToOriginalRepos(context);
+          await _localDbCopy.saveChangesToGameVariant(context);
         }
         if (!_closed && shouldClose) {
           _closed = shouldClose;
@@ -70,7 +70,8 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   Future<void> _initializeCubits() async {
     _dbChangeStatus = ChangeStatusCubit();
     _localDbCopy = LocalDatabaseCopyCubit(
-      originalDb: context.read(),
+      gameVariant: context.read(),
+      gameVariantsRepo: context.read(),
       idsRepo: context.read(),
     );
     await _localDbCopy.setUp();
@@ -86,9 +87,9 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       _items.updateItemsRepo(state!);
     });
     final teamsRepo =
-        TeamsRepo<CountryTeam>(initial: _localDbCopy.originalDb.get<Team>().last.cast());
+        TeamsRepo<CountryTeam>(initial: _localDbCopy.state!.get<Team>().last.cast());
     _countries = DatabaseEditorCountriesCubit(
-      countriesRepo: _localDbCopy.originalDb.get<Country>() as CountriesRepo,
+      countriesRepo: _localDbCopy.state!.get<Country>() as CountriesRepo,
       teamsRepo: teamsRepo,
     );
     _countries.setUp();
@@ -173,7 +174,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                         bool shouldClose = await _shouldCloseAfterDialog(action);
                         if (action == 'yes') {
                           if (!context.mounted) return;
-                          await _localDbCopy.saveChangesToOriginalRepos(context);
+                          await _localDbCopy.saveChangesToGameVariant(context);
                         }
                         if (shouldClose) {
                           _cleanResources();
