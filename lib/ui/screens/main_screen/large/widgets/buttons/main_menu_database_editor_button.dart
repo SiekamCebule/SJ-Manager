@@ -9,19 +9,23 @@ class MainMenuDatabaseEditorButton extends StatelessWidget {
       titleText: translate(context).databaseEditor,
       iconData: Symbols.edit,
       onTap: () async {
-        final gameVariants = constructDefaultGameVariants(
-          context: context,
-        ); // TODO: Do it once and keep in some repo or something like that
+        final gameVariants = context.read<ItemsRepo<GameVariant>>();
+        if (!context.mounted) return;
         final gameVariantToEdit = await showSjmDialog(
           context: context,
           child: SelectGameVariantToEditDialog(
-            gameVariants: gameVariants,
+            gameVariants: gameVariants.last.toList(),
           ),
         ) as GameVariant?;
         if (!context.mounted) return;
         print('game variant to edit: $gameVariantToEdit');
+        print('ff');
+        router.printTree();
         if (gameVariantToEdit != null) {
-          router.navigateTo(context, '/databaseEditor');
+          router.navigateTo(
+            context,
+            '/databaseEditor/${gameVariantToEdit.id}',
+          );
         }
       },
     );

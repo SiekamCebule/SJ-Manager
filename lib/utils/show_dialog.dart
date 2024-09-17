@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 Future<T?> showSjmDialog<T>({
   required BuildContext context,
   required Widget child,
+  bool barrierDismissible = true,
 }) async {
   return await showDialog<T>(
     context: context,
-    barrierDismissible: false,
+    barrierDismissible: barrierDismissible,
     builder: (context) {
       return Center(
         child: ConstrainedBox(

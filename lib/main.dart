@@ -56,6 +56,7 @@ import 'package:sj_manager/json/simulation_db_saving/standings_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/team_competition_group_rules_serializer.dart';
 import 'package:sj_manager/json/manual_json/json_team.dart';
 import 'package:sj_manager/json/simulation_db_saving/wind_averager_serializer.dart';
+import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
@@ -81,9 +82,10 @@ import 'package:sj_manager/repositories/countries/country_flags/country_flags_re
 import 'package:sj_manager/repositories/countries/country_flags/local_storage_country_flags_repo.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
+import 'package:sj_manager/repositories/generic/items_repo.dart';
 import 'package:sj_manager/repositories/settings/local_user_settings_repo.dart';
 import 'package:sj_manager/repositories/settings/user_settings_repo.dart';
-import 'package:sj_manager/setup/default_loaders.dart';
+import 'package:sj_manager/setup/game_variants_loader.dart';
 import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/app_initializer.dart';
 import 'package:sj_manager/ui/providers/locale_cubit.dart';
@@ -205,10 +207,10 @@ void main() async {
                 create: (context) => DbItemsFilePathsRegistry(initial: {
                   MaleJumper: 'jumpers_male.json',
                   FemaleJumper: 'jumpers_female.json',
-                  Hill: 'hills.json',
+                  /*Hill: 'hills.json',
                   EventSeriesSetup: 'event_series_setups.json',
                   EventSeriesCalendarPreset: 'event_series_calendar_presets.json',
-                  DefaultCompetitionRulesPreset: 'default_competition_rules_presets.json',
+                  DefaultCompetitionRulesPreset: 'default_competition_rules_presets.json',*/
                   Country: path.join('countries', 'countries.json'),
                   Team: path.join('teams', 'teams.json'),
                 }),
@@ -464,6 +466,9 @@ void main() async {
               Provider.value(
                 value: pathsCache,
               ),
+              Provider(
+                create: (context) => ItemsRepo<GameVariant>(),
+              ),
             ],
             child: MultiBlocProvider(
               providers: [
@@ -479,7 +484,9 @@ void main() async {
                     shouldSetUpRouting: true,
                     shouldSetUpUserData: true,
                     shouldLoadDatabase: true,
-                    createLoaders: (context) => defaultDbItemsListLoaders(context),
+                    createLoaders: (context) => [
+                      GameVariantsLoader(context: context),
+                    ],
                     child: const MainScreen(),
                   );
                 }),

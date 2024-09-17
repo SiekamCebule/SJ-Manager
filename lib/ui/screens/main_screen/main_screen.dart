@@ -3,9 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/main.dart';
-import 'package:sj_manager/models/game_variants/default_game_variants/variants_registry.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
+import 'package:sj_manager/repositories/generic/items_repo.dart';
 import 'package:sj_manager/ui/dialogs/main_menu/select_game_variant_to_edit_dialog.dart';
 import 'package:sj_manager/ui/responsiveness/responsive_builder.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
@@ -17,6 +17,7 @@ import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_men
 import 'package:sj_manager/ui/screens/main_screen/widgets/shaking_app_title.dart';
 import 'package:sj_manager/utils/show_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
 
 part 'large/__large.dart';
 part 'large/widgets/__buttons_table.dart';

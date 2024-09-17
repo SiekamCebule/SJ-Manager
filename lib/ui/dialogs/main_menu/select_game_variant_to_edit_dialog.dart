@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 
@@ -27,10 +28,13 @@ class _SelectGameVariantToEditDialogState extends State<SelectGameVariantToEditD
       width: bodyWidth,
       height: bodyHeight,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(Symbols.search_off),
+          Gap(8),
           Text('Brak wariantów gry'),
+          Gap(3),
           Text('Dziwne...'),
         ],
       ),
@@ -39,16 +43,22 @@ class _SelectGameVariantToEditDialogState extends State<SelectGameVariantToEditD
       width: bodyWidth,
       height: bodyHeight,
       child: ListView.builder(
+        itemCount: widget.gameVariants.length,
         itemBuilder: (context, index) {
           final gameVariant = widget.gameVariants[index];
           return ListTile(
             key: ValueKey(index),
+            leading: const Icon(Symbols.circle),
             title: Text(gameVariant.name.translate(context)),
             subtitle: Text('ID: ${gameVariant.id}'),
             selected: _selectedGameVariant == gameVariant,
             onTap: () {
               setState(() {
-                _selectedGameVariant = gameVariant;
+                if (_selectedGameVariant == null) {
+                  _selectedGameVariant = gameVariant;
+                } else {
+                  _selectedGameVariant = null;
+                }
               });
             },
           );
@@ -57,7 +67,7 @@ class _SelectGameVariantToEditDialogState extends State<SelectGameVariantToEditD
     );
 
     return AlertDialog(
-      title: const Text('Jaki wariant gry chcesz edytować?'),
+      title: const Text('Który wariant gry chcesz edytować?'),
       content: widget.gameVariants.isNotEmpty ? nonEmptyBody : emptyBody,
       actions: [
         TextButton(
