@@ -12,7 +12,7 @@ import 'package:sj_manager/models/simulation_db/competition/rules/competition_ru
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/country/team_facts.dart';
+import 'package:sj_manager/models/user_db/country/country_team_facts.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/hill/hill_profile_type.dart';
 import 'package:sj_manager/models/user_db/hill/jumps_variability.dart';
@@ -21,6 +21,7 @@ import 'package:sj_manager/models/user_db/hill/typical_wind_direction.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
+import 'package:sj_manager/models/user_db/psyche/personality.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/models/user_db/team/country_team.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
@@ -68,7 +69,8 @@ void main() {
       name: 'Adrian',
       surname: 'Nowak',
       country: slovenia,
-      age: 24,
+      dateOfBirth: DateTime.now(),
+      personality: Personalities.balanced,
       skills: JumperSkills.empty
           .copyWith(qualityOnLargerHills: 67, qualityOnSmallerHills: 44),
     ),
@@ -76,14 +78,16 @@ void main() {
       name: 'Maciej',
       surname: 'Bąk',
       country: switzerland,
-      age: 34,
+      dateOfBirth: DateTime.now(),
+      personality: Personalities.balanced,
       skills: JumperSkills.empty,
     ),
     MaleJumper(
       name: 'Caroll',
       surname: 'King',
       country: switzerland,
-      age: 14,
+      dateOfBirth: DateTime.now(),
+      personality: Personalities.balanced,
       skills: JumperSkills.empty,
     ),
   ];
@@ -145,25 +149,30 @@ void main() {
       when(teamsRepo.itemsType).thenReturn(Team);
       when(teamsRepo.last).thenReturn([
         CountryTeam(
-            facts: const TeamFacts(stars: 5, record: null),
-            sex: Sex.male,
-            country: germany),
+          facts: const CountryTeamFacts(stars: 5, record: null),
+          sex: Sex.male,
+          country: germany,
+        ),
         CountryTeam(
-            facts: const TeamFacts(stars: 3, record: null),
-            sex: Sex.female,
-            country: switzerland),
+          facts: const CountryTeamFacts(stars: 3, record: null),
+          sex: Sex.female,
+          country: switzerland,
+        ),
         CountryTeam(
-            facts: const TeamFacts(stars: 4, record: null),
-            sex: Sex.male,
-            country: switzerland),
+          facts: const CountryTeamFacts(stars: 4, record: null),
+          sex: Sex.male,
+          country: switzerland,
+        ),
         CountryTeam(
-            facts: const TeamFacts(stars: 5, record: null),
-            sex: Sex.female,
-            country: slovenia),
+          facts: const CountryTeamFacts(stars: 5, record: null),
+          sex: Sex.female,
+          country: slovenia,
+        ),
         CountryTeam(
-            facts: const TeamFacts(stars: 5, record: null),
-            sex: Sex.male,
-            country: slovenia),
+          facts: const CountryTeamFacts(stars: 5, record: null),
+          sex: Sex.male,
+          country: slovenia,
+        ),
       ]);
       appWidget = MultiProvider(
         providers: [

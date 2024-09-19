@@ -1,9 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/models/user_db/country/team_facts.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 
-class CompetitionTeam<T extends Team> with EquatableMixin implements Team {
+class CompetitionTeam<T extends Team> extends Team with EquatableMixin {
   const CompetitionTeam({
     required this.parentTeam,
     required this.jumpers,
@@ -24,8 +23,4 @@ class CompetitionTeam<T extends Team> with EquatableMixin implements Team {
         parentTeam,
         jumpers,
       ];
-
-  @override
-  TeamFacts get facts =>
-      throw UnsupportedError('CompetitionTeam cannot have facts at the moment');
 }

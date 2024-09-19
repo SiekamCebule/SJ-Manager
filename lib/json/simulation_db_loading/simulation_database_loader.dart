@@ -1,13 +1,13 @@
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/json/manual_json/json_team.dart';
 import 'package:sj_manager/models/simulation_db/simulation_database.dart';
 import 'package:sj_manager/models/simulation_db/simulation_season.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
@@ -21,12 +21,14 @@ class SimulationDatabaseParser<E, S extends Score>
     required this.idGenerator,
     required this.countryLoader,
     required this.seasonParser,
+    required this.teamParser,
   });
 
   final ItemsIdsRepo idsRepo;
   final IdGenerator idGenerator;
   final JsonCountryLoader countryLoader;
   final SimulationDbPartParser<SimulationSeason> seasonParser;
+  final SimulationDbPartParser<Team> teamParser;
 
   late Json _json;
   late ItemsRepo<Jumper> _jumpers;
@@ -79,7 +81,7 @@ class SimulationDatabaseParser<E, S extends Score>
   void _loadTeams() {
     final teamsJson = _json['teams'] as List<Json>;
     final teams = teamsJson.map((json) {
-      return JsonTeamParser(countryLoader: countryLoader).parseTeam(json);
+      return teamParser.parse(json);
     });
     _teams = TeamsRepo(initial: teams.toList());
   }

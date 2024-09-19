@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_screen.dart';
+import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_screen_type.dart';
 
 class SimulationWizardNavigationState with EquatableMixin {
   const SimulationWizardNavigationState({
@@ -10,7 +10,7 @@ class SimulationWizardNavigationState with EquatableMixin {
   });
 
   final int currentScreenIndex;
-  final SimulationWizardScreen screen;
+  final SimulationWizardScreenType screen;
   final bool canGoBack;
   final bool canGoForward;
 
@@ -24,7 +24,7 @@ class SimulationWizardNavigationState with EquatableMixin {
 
   SimulationWizardNavigationState copyWith({
     int? currentScreenIndex,
-    SimulationWizardScreen? screen,
+    SimulationWizardScreenType? screen,
     bool? canGoBack,
     bool? canGoForward,
   }) {

@@ -14,7 +14,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/bloc/database_editing/database_editor_countries_cubit.dart';
 import 'package:sj_manager/bloc/database_editing/state/database_editor_countries_state.dart';
 import 'package:sj_manager/bloc/database_editing/state/database_items_state.dart';
-import 'package:sj_manager/bloc/database_editing/local_database_copy_cubit.dart';
+import 'package:sj_manager/bloc/database_editing/local_database_cubit.dart';
 import 'package:sj_manager/bloc/database_editing/change_status_cubit.dart';
 import 'package:sj_manager/bloc/database_editing/database_items_cubit.dart';
 import 'package:sj_manager/filters/filter.dart';
@@ -73,9 +73,7 @@ import 'package:sj_manager/repositories/database_editing/db_filters_repository.d
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/repositories/database_editing/event_series_setup_ids_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
-import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
-import 'package:sj_manager/ui/assets/icons.dart';
 import 'package:sj_manager/ui/database_item_editors/default_competition_rules_preset_editor/default_competition_rules_preset_editor.dart';
 import 'package:sj_manager/ui/database_item_editors/calendar_editor/event_series_calendar_preset_thumbnail.dart';
 import 'package:sj_manager/ui/database_item_editors/event_series_setup_editor.dart';
@@ -89,13 +87,11 @@ import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart
 import 'package:sj_manager/ui/reusable_widgets/filtering/search_text_field.dart';
 import 'package:sj_manager/ui/reusable_widgets/menu_entries/predefined_reusable_entries.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/database_editor_unsaved_changes_dialog.dart';
-import 'package:sj_manager/ui/screens/database_editor/large/dialogs/database_successfully_saved_dialog.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/selected_db_is_not_valid_dialog.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropriate_db_item_list_tile.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
 import 'package:sj_manager/utils/colors.dart';
 import 'package:sj_manager/utils/file_system.dart';
-import 'package:sj_manager/utils/id_generator.dart';
 import 'package:sj_manager/utils/single_where_type.dart';
 
 part 'large/__large.dart';

@@ -1,9 +1,9 @@
+import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/jumper/jumps_consistency.dart';
 import 'package:sj_manager/models/user_db/jumper/landing_style.dart';
 import 'package:sj_manager/models/user_db/jumps/simple_jump.dart';
-import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/models/user_db/team/country_team.dart';
 import 'package:sj_manager/utils/db_items.dart';
@@ -11,14 +11,16 @@ import 'package:sj_manager/utils/team_preview_creator/team_preview_creator.dart'
 
 class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
   const DefaultCountryTeamPreviewCreator({
-    required this.database,
+    required this.gameVariant,
+    required this.currentDate,
   });
 
-  final ItemsReposRegistry database;
+  final GameVariant gameVariant;
+  final DateTime currentDate;
 
   @override
   Hill? largestHill(CountryTeam team) {
-    final fromCountry = database.get<Hill>().last.fromCountryByCode(team.country.code);
+    final fromCountry = gameVariant.hills.fromCountryByCode(team.country.code);
     if (fromCountry.isEmpty) return null;
     return fromCountry.reduce((previous, current) {
       return previous.hs > current.hs ? previous : current;
@@ -70,13 +72,13 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
 
   Iterable<Jumper> _jumpersBySex(Sex sex) {
     return sex == Sex.male
-        ? database.get<MaleJumper>().last
-        : database.get<FemaleJumper>().last;
+        ? gameVariant.jumpers.whereType<MaleJumper>()
+        : gameVariant.jumpers.whereType<FemaleJumper>();
   }
 
   double _calculateRatingForRisingStar(Jumper jumper) {
     final base = _calculateRating(jumper);
-    final age = jumper.age;
+    final age = jumper.age(date: currentDate);
     final multiplierByAge = _multiplierByAge(age);
     print('$jumper multiplier by age ($age): $multiplierByAge');
     final rating = base * multiplierByAge;

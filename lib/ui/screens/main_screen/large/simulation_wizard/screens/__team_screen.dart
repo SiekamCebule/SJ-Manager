@@ -24,11 +24,14 @@ class _TeamScreenState extends State<_TeamScreen> {
   @override
   void initState() {
     widget.onChange(_selectedTeam);
-    _setDatabaseToLocal();
-    final db = context.read<SimulationWizardOptionsRepo>().database.last;
-    _teamPreviewCreator = DefaultCountryTeamPreviewCreator(database: db);
+    final variant = context.read<SimulationWizardOptionsRepo>().gameVariant.last!;
+    final date = context.read<SimulationWizardOptionsRepo>().startDate.last!;
+    _teamPreviewCreator = DefaultCountryTeamPreviewCreator(
+      gameVariant: variant,
+      currentDate: date,
+    );
     _dbChangesSubscription =
-        context.read<SimulationWizardOptionsRepo>().database.items.listen((_) {
+        context.read<SimulationWizardOptionsRepo>().gameVariant.items.listen((_) {
       _setUpMaleAndFemaleTeams();
     });
     _setUpMaleAndFemaleTeams();
@@ -37,17 +40,13 @@ class _TeamScreenState extends State<_TeamScreen> {
   }
 
   void _setUpMaleAndFemaleTeams() {
-    final db = context.read<SimulationWizardOptionsRepo>().database.last;
+    final variant = context.read<SimulationWizardOptionsRepo>().gameVariant.last!;
     setState(() {
-      _maleTeams = db
-          .get<Team>()
-          .last
+      _maleTeams = variant.teams
           .cast<CountryTeam>()
           .where((team) => team.sex == Sex.male)
           .toList();
-      _femaleTeams = db
-          .get<Team>()
-          .last
+      _femaleTeams = variant.teams
           .cast<CountryTeam>()
           .where((team) => team.sex == Sex.female)
           .toList();
@@ -131,15 +130,5 @@ class _TeamScreenState extends State<_TeamScreen> {
         ),
       ),
     );
-  }
-
-  void _setDatabaseToLocal() {
-    setState(() {
-      context
-          .read<SimulationWizardOptionsRepo>()
-          .database
-          .set(context.read<ItemsReposRegistry>());
-      context.read<SimulationWizardOptionsRepo>().databaseIsExternal.set(false);
-    });
   }
 }

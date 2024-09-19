@@ -1,9 +1,9 @@
 import 'package:sj_manager/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/json/manual_json/json_team.dart';
 import 'package:sj_manager/models/simulation_db/simulation_database.dart';
 import 'package:sj_manager/models/simulation_db/simulation_season.dart';
+import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class SimulationDatabaseSerializer
@@ -12,11 +12,13 @@ class SimulationDatabaseSerializer
     required this.idsRepo,
     required this.countrySaver,
     required this.seasonSerializer,
+    required this.teamSerializer,
   });
 
   final ItemsIdsRepo idsRepo;
   final JsonCountrySaver countrySaver;
   final SimulationDbPartSerializer<SimulationSeason> seasonSerializer;
+  final SimulationDbPartSerializer<Team> teamSerializer;
 
   late SimulationDatabase _database;
   late List<Json> _jumpersJson;
@@ -62,7 +64,7 @@ class SimulationDatabaseSerializer
 
   void _serializeTeams() {
     _teamsJson = _database.teams.last.map((team) {
-      return JsonTeamSerializer(countrySaver: countrySaver).serializeTeam(team);
+      return teamSerializer.serialize(team);
     }).toList();
   }
 

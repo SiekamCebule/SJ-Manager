@@ -111,8 +111,6 @@ Future<void> saveItemsMapToJsonFile<T>({
     'orderedIds': orderedIdsJson,
     'items': itemsJson,
   };
-  print('ok');
-  print('json: $json');
   final encodedJson = jsonEncode(json);
   await file.writeAsString(encodedJson);
 }

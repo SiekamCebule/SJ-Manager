@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -5,6 +6,7 @@ import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
+import 'package:sj_manager/models/user_db/psyche/personality.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
 
 part '../../../json/manual_json/jumper_json.dart';
@@ -15,7 +17,8 @@ class Jumper with EquatableMixin {
     required this.surname,
     required this.country,
     required this.sex,
-    required this.age,
+    required this.dateOfBirth,
+    required this.personality,
     required this.skills,
   });
 
@@ -25,17 +28,41 @@ class Jumper with EquatableMixin {
       surname: '',
       country: country,
       sex: Sex.male,
-      age: 0,
+      dateOfBirth: DateTime.now(),
+      personality: Personalities.resourceful,
       skills: JumperSkills.empty,
     );
   }
 
-  final int age;
+  final DateTime dateOfBirth;
   final String name;
   final String surname;
   final Country country;
   final Sex sex;
+  final Personalities personality;
   final JumperSkills skills;
+
+  int age({required DateTime date}) {
+    int age = date.year - dateOfBirth.year;
+    if (date.month < dateOfBirth.month ||
+        (date.month == dateOfBirth.month && date.day < dateOfBirth.day)) {
+      age--;
+    }
+    return age;
+  }
+
+  int calculateAge(DateTime birthDate) {
+    DateTime currentDate = DateTime.now();
+    int age = currentDate.year - birthDate.year;
+
+    // Sprawdzanie, czy urodziny były już w tym roku
+    if (currentDate.month < birthDate.month ||
+        (currentDate.month == birthDate.month && currentDate.day < birthDate.day)) {
+      age--;
+    }
+
+    return age;
+  }
 
   String nameAndSurname({bool capitalizeSurname = false, bool reverse = false}) {
     var appropriateSurname = surname;
@@ -56,7 +83,8 @@ class Jumper with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        age,
+        dateOfBirth,
+        personality,
         name,
         surname,
         country,
@@ -65,19 +93,21 @@ class Jumper with EquatableMixin {
       ];
 
   Jumper copyWith({
-    int? age,
+    DateTime? dateOfBirth,
     String? name,
     String? surname,
     Country? country,
     Sex? sex,
+    Personalities? personality,
     JumperSkills? skills,
   }) {
     return Jumper(
-      age: age ?? this.age,
+      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       name: name ?? this.name,
       surname: surname ?? this.surname,
       country: country ?? this.country,
       sex: sex ?? this.sex,
+      personality: personality ?? this.personality,
       skills: skills ?? this.skills,
     );
   }
@@ -88,7 +118,8 @@ class MaleJumper extends Jumper {
     required super.name,
     required super.surname,
     required super.country,
-    required super.age,
+    required super.dateOfBirth,
+    required super.personality,
     required super.skills,
   }) : super(sex: Sex.male);
 
@@ -98,7 +129,8 @@ class MaleJumper extends Jumper {
       name: jumper.name,
       surname: jumper.surname,
       country: jumper.country,
-      age: jumper.age,
+      dateOfBirth: DateTime.now(),
+      personality: Personalities.resourceful,
       skills: jumper.skills,
     );
   }
@@ -108,22 +140,25 @@ class MaleJumper extends Jumper {
       name: '',
       surname: '',
       country: country,
-      age: 0,
+      dateOfBirth: DateTime.now(),
+      personality: Personalities.resourceful,
       skills: JumperSkills.empty,
     );
   }
 
   @override
   MaleJumper copyWith({
-    int? age,
+    DateTime? dateOfBirth,
     String? name,
     String? surname,
     Country? country,
     Sex? sex,
+    Personalities? personality,
     JumperSkills? skills,
   }) {
     return MaleJumper(
-      age: age ?? this.age,
+      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      personality: personality ?? this.personality,
       name: name ?? this.name,
       surname: surname ?? this.surname,
       country: country ?? this.country,
@@ -137,7 +172,8 @@ class FemaleJumper extends Jumper {
     required super.name,
     required super.surname,
     required super.country,
-    required super.age,
+    required super.dateOfBirth,
+    required super.personality,
     required super.skills,
   }) : super(sex: Sex.female);
 
@@ -147,7 +183,8 @@ class FemaleJumper extends Jumper {
       name: jumper.name,
       surname: jumper.surname,
       country: jumper.country,
-      age: jumper.age,
+      dateOfBirth: jumper.dateOfBirth,
+      personality: jumper.personality,
       skills: jumper.skills,
     );
   }
@@ -157,22 +194,25 @@ class FemaleJumper extends Jumper {
       name: '',
       surname: '',
       country: country,
-      age: 0,
+      dateOfBirth: DateTime.now(),
+      personality: Personalities.resourceful,
       skills: JumperSkills.empty,
     );
   }
 
   @override
   FemaleJumper copyWith({
-    int? age,
+    DateTime? dateOfBirth,
     String? name,
     String? surname,
     Country? country,
     Sex? sex,
+    Personalities? personality,
     JumperSkills? skills,
   }) {
     return FemaleJumper(
-      age: age ?? this.age,
+      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      personality: personality ?? this.personality,
       name: name ?? this.name,
       surname: surname ?? this.surname,
       country: country ?? this.country,

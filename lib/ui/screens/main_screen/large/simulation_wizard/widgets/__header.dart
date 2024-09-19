@@ -39,15 +39,13 @@ class _Header extends StatelessWidget {
     );
   }
 
-  String _appropriateTitleText(BuildContext context, SimulationWizardScreen screen) {
+  String _appropriateTitleText(BuildContext context, SimulationWizardScreenType screen) {
     return switch (screen) {
-      SimulationWizardScreen.mode => "Wybierz tryb rozgrywki",
-      SimulationWizardScreen.calendars => "Wybierz kalendarze",
-      SimulationWizardScreen.team => "Wybierz swój kraj",
-      SimulationWizardScreen.formGenerating => "Skonfiguruj generator formy",
-      SimulationWizardScreen.otherOptions => "Przyjrzyj się innym opcjom",
-      SimulationWizardScreen.eventsSeries => "Ustal cykle rozgrywek",
-      SimulationWizardScreen.startDate => "Wybierz datę startową",
+      SimulationWizardScreenType.mode => "Wybierz tryb rozgrywki",
+      SimulationWizardScreenType.gameVariant => "Wybierz wariant rozgrywki",
+      SimulationWizardScreenType.team => "Wybierz swój kraj",
+      SimulationWizardScreenType.squads => "Ustal swoją kadrę",
+      SimulationWizardScreenType.otherOptions => "Przyjrzyj się innym opcjom",
     };
   }
 }

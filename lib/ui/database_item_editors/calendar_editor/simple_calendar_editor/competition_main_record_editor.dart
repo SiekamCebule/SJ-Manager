@@ -299,7 +299,6 @@ class CompetitionMainRecordEditorState extends State<CompetitionMainRecordEditor
   void setUp(CalendarMainCompetitionRecord record) {
     setState(() {
       _cached = record;
-      print('YYY: ${_cached!.setup.typeByEntity}');
       _competitionType = _cached!.setup.typeByEntity;
     });
     _fillFields(record);

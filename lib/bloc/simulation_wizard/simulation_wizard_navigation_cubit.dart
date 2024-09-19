@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_screen.dart';
+import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_screen_type.dart';
 import 'package:sj_manager/bloc/simulation_wizard/state/simulation_wizard_navigation_state.dart';
 
 class SimulationWizardNavigationCubit extends Cubit<SimulationWizardNavigationState> {
@@ -14,7 +14,7 @@ class SimulationWizardNavigationCubit extends Cubit<SimulationWizardNavigationSt
           ),
         );
 
-  final List<SimulationWizardScreen> screens;
+  final List<SimulationWizardScreenType> screens;
 
   void goForward() {
     if (!state.canGoForward) {

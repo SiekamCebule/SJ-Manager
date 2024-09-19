@@ -11,7 +11,7 @@ import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
 
 import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/country/team_facts.dart';
+import 'package:sj_manager/models/user_db/country/country_team_facts.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
@@ -85,7 +85,7 @@ void main() {
     final germany = Country.monolingual(code: 'de', language: 'en', name: 'Germany');
     final team = CompetitionTeam(
       parentTeam: CountryTeam(
-        facts: const TeamFacts.empty(),
+        facts: const CountryTeamFacts.empty(),
         sex: Sex.male,
         country: germany,
       ),

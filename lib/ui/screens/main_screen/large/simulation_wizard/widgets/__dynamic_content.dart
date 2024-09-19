@@ -22,7 +22,7 @@ class _DynamicContent extends StatelessWidget {
           );
         },
         child: switch (navCubit.state.screen) {
-          SimulationWizardScreen.mode => _ModeScreen(onChange: (mode) {
+          SimulationWizardScreenType.mode => _ModeScreen(onChange: (mode) {
               context.read<SimulationWizardOptionsRepo>().mode.set(mode);
               if (mode != null) {
                 navCubit.unblockGoingForward();
@@ -30,10 +30,21 @@ class _DynamicContent extends StatelessWidget {
                 navCubit.blockGoingForward();
               }
             }),
-          SimulationWizardScreen.team => _TeamScreen(
+          SimulationWizardScreenType.team => _TeamScreen(
               onChange: (team) {
                 context.read<SimulationWizardOptionsRepo>().team.set(team);
                 if (team != null) {
+                  navCubit.unblockGoingForward();
+                } else {
+                  navCubit.blockGoingForward();
+                }
+              },
+            ),
+          SimulationWizardScreenType.gameVariant => _GameVariantScreen(
+              gameVariants: context.read<ItemsRepo<GameVariant>>().last,
+              onChange: (variant) {
+                context.read<SimulationWizardOptionsRepo>().gameVariant.set(variant);
+                if (variant != null) {
                   navCubit.unblockGoingForward();
                 } else {
                   navCubit.blockGoingForward();
