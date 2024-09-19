@@ -15,7 +15,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   late final EventSeriesSetupIdsRepo _eventSeriesSetupIds;
 
   late final StreamSubscription _localDbCopyChangesSubscription;
-  late final LocalDatabaseCopyCubit _localDbCopy;
+  late final LocalDatabaseCubit _localDbCopy;
   late final ChangeStatusCubit _dbChangeStatus;
   late final DatabaseItemsCubit _items;
   late final DatabaseEditorCountriesCubit _countries;
@@ -69,7 +69,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
 
   Future<void> _initializeCubits() async {
     _dbChangeStatus = ChangeStatusCubit();
-    _localDbCopy = LocalDatabaseCopyCubit(
+    _localDbCopy = LocalDatabaseCubit(
       gameVariant: context.read(),
       gameVariantsRepo: context.read(),
       idsRepo: context.read(),
@@ -157,7 +157,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
                     BlocProvider.value(value: _countries),
                   ],
                   child: Builder(builder: (context) {
-                    context.watch<LocalDatabaseCopyCubit>();
+                    context.watch<LocalDatabaseCubit>();
                     context.watch<ChangeStatusCubit>();
                     context.watch<DatabaseItemsCubit>();
                     return PopScope(

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
+import 'package:sj_manager/models/game_variants/game_variants_io_utils.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -11,12 +12,13 @@ import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
+import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
 
-class LocalDatabaseCopyCubit extends Cubit<ItemsReposRegistry?> {
-  LocalDatabaseCopyCubit({
+class LocalDatabaseCubit extends Cubit<ItemsReposRegistry?> {
+  LocalDatabaseCubit({
     required this.gameVariant,
     required this.gameVariantsRepo,
     required this.idsRepo,
@@ -42,7 +44,10 @@ class LocalDatabaseCopyCubit extends Cubit<ItemsReposRegistry?> {
 
   Future<void> saveChangesToGameVariant(BuildContext context) async {
     final newVariant = gameVariant.copyWith(
-      jumpers: state!.get<Jumper>().last.toList(),
+      jumpers: [
+        ...state!.get<MaleJumper>().last,
+        ...state!.get<FemaleJumper>().last,
+      ],
       countries: state!.get<Country>().last.toList(),
       teams: state!.get<Team>().last.toList(),
       hills: state!.get<Hill>().last.toList(),
@@ -50,7 +55,26 @@ class LocalDatabaseCopyCubit extends Cubit<ItemsReposRegistry?> {
     gameVariantsRepo.set(gameVariantsRepo.last.map((variant) {
       return variant.id == newVariant.id ? newVariant : variant;
     }));
-    // TODO: Save to file
+    await _saveNewGameVariantToFiles(newVariant: newVariant, context: context);
+  }
+
+  Future<void> _saveNewGameVariantToFiles({
+    required GameVariant newVariant,
+    required BuildContext context,
+  }) async {
+    await saveGameVariantItems<MaleJumper>(
+      items: newVariant.jumpers.whereType<MaleJumper>().toList(),
+      context: context,
+      toJson: context.read<DbItemsJsonConfiguration<MaleJumper>>().toJson,
+      gameVariantId: newVariant.id,
+    );
+    if (!context.mounted) return;
+    await saveGameVariantItems<FemaleJumper>(
+      items: newVariant.jumpers.whereType<FemaleJumper>().toList(),
+      context: context,
+      toJson: context.read<DbItemsJsonConfiguration<FemaleJumper>>().toJson,
+      gameVariantId: newVariant.id,
+    );
   }
 
   Future<void> loadExternal(BuildContext context, Directory directory) async {

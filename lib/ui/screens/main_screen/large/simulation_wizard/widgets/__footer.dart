@@ -11,10 +11,7 @@ class _FooterState extends State<_Footer> {
   @override
   Widget build(BuildContext context) {
     final navCubit = context.watch<SimulationWizardNavigationCubit>();
-    final navCubitState = navCubit.state;
     final selectedOptions = context.watch<SimulationWizardOptionsRepo>();
-
-    final shouldShowDatabaseInfo = navCubitState.screen == SimulationWizardScreen.team;
 
     return SizedBox(
       height: 70,
@@ -42,19 +39,6 @@ class _FooterState extends State<_Footer> {
                         ),
                       ),
                     ),
-                    const Spacer(),
-                    if (shouldShowDatabaseInfo) ...[
-                      TextButton(
-                        onPressed: () async {
-                          final db = await pickDatabaseByDialog(context);
-                          if (db != null) {
-                            selectedOptions.database.set(db);
-                            selectedOptions.databaseIsExternal.set(true);
-                          }
-                        },
-                        child: const Text('Wczytaj bazę danych'),
-                      ),
-                    ],
                     const Spacer(),
                     Visibility(
                       maintainAnimation: true,

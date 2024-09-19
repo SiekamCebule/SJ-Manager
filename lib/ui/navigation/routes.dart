@@ -1,11 +1,15 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
+import 'package:sj_manager/repositories/countries/country_flags/country_flags_repo.dart';
+import 'package:sj_manager/repositories/countries/country_flags/local_storage_country_flags_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
 import 'package:sj_manager/ui/screens/database_editor/database_editor_screen.dart';
 import 'package:sj_manager/ui/screens/main_screen/main_screen.dart';
 import 'package:sj_manager/ui/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:sj_manager/utils/file_system.dart';
+import 'package:path/path.dart' as path;
 
 void configureRoutes(FluroRouter router) {
   void define(
@@ -66,30 +70,6 @@ void configureRoutes(FluroRouter router) {
     );
   }
 
-  Widget defaultMaterialFullscreen(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
-    final scaleIn = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic).drive(
-      Tween<double>(begin: 0.9, end: 1.0),
-    );
-
-    final fadeIn = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic).drive(
-      Tween<double>(begin: 0.0, end: 1.0),
-    );
-
-    final scaleOut =
-        CurvedAnimation(parent: secondaryAnimation, curve: Curves.easeInCubic).drive(
-      Tween<double>(begin: 1.0, end: 1.1),
-    );
-
-    return FadeTransition(
-      opacity: fadeIn,
-      child: ScaleTransition(
-        scale: animation.status == AnimationStatus.reverse ? scaleOut : scaleIn,
-        child: child,
-      ),
-    );
-  }
-
   define(
     '/',
     (context, params) => const MainScreen(),
@@ -107,9 +87,16 @@ void configureRoutes(FluroRouter router) {
           .read<ItemsRepo<GameVariant>>()
           .last
           .singleWhere((variant) => variant.id == gameVariantId);
+      final imagesDir = userDataDirectory(context.read(),
+          path.join('gameVariants', gameVariantId, 'countries', 'country_flags'));
+      final countryFlagsRepo = LocalStorageCountryFlagsRepo(
+        imagesDirectory: imagesDir,
+        imagesExtension: 'png',
+      );
       return MultiProvider(
         providers: [
           Provider.value(value: gameVariant),
+          Provider<CountryFlagsRepo>.value(value: countryFlagsRepo),
         ],
         child: const DatabaseEditorScreen(),
       );

@@ -16,20 +16,20 @@ class LocalStorageCountryFlagsRepo implements CountryFlagsRepo {
 
   final _cache = <Country, ImageProvider>{};
 
-@override
-ImageProvider<Object> imageData(Country country) {
-  if (_cache.containsKey(country)) {
-    return _cache[country]!;
-  } else {
-    final filePath = path.join(imagesDirectory.path, '${country.code}.$imagesExtension');
-    var file = File(filePath);
-    if (!file.existsSync()) {
-      file = File(path.join(imagesDirectory.path, 'none.$imagesExtension'));
+  @override
+  ImageProvider<Object> imageData(Country country, {bool throwWhenNull = false}) {
+    if (_cache.containsKey(country)) {
+      return _cache[country]!;
+    } else {
+      final filePath = path.join(
+          imagesDirectory.path, '${country.code.toLowerCase()}.$imagesExtension');
+      var file = File(filePath);
+      if (!file.existsSync()) {
+        file = File(path.join(imagesDirectory.path, 'none.$imagesExtension'));
+      }
+      final imageData = FileImage(file);
+      _cache[country] = imageData;
+      return imageData;
     }
-    final imageData = FileImage(file);
-    _cache[country] = imageData;
-    return imageData;
   }
-}
-
 }

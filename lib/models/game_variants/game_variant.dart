@@ -10,6 +10,7 @@ class GameVariant {
   const GameVariant({
     required this.id,
     required this.name,
+    required this.description,
     required this.jumpers,
     required this.hills,
     required this.countries,
@@ -19,6 +20,7 @@ class GameVariant {
 
   final String id;
   final MultilingualString name;
+  final MultilingualString description;
   final List<Jumper> jumpers;
   final List<Hill> hills;
   final List<Country> countries;
@@ -28,6 +30,7 @@ class GameVariant {
   GameVariant copyWith({
     String? id,
     MultilingualString? name,
+    MultilingualString? description,
     List<Jumper>? jumpers,
     List<Hill>? hills,
     List<Country>? countries,
@@ -37,6 +40,7 @@ class GameVariant {
     return GameVariant(
       id: id ?? this.id,
       name: name ?? this.name,
+      description: description ?? this.description,
       jumpers: jumpers ?? this.jumpers,
       hills: hills ?? this.hills,
       countries: countries ?? this.countries,

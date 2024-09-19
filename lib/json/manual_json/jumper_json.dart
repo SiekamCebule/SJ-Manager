@@ -6,8 +6,9 @@ Jumper _jumperFromJson(Json json, {required JsonCountryLoader countryLoader}) {
     name: json['name'] as String,
     surname: json['surname'] as String,
     country: country,
-    sex: $enumDecode(sexEnumJsonMap, json['sex']),
-    age: (json['age'] as num).toInt(),
+    sex: $enumDecode(_sexEnumJsonMap, json['sex']),
+    dateOfBirth: DateTime.parse(json['dateOfBirth']),
+    personality: $enumDecode(_personalitiesEnumJsonMap, json['personality']),
     skills: JumperSkills.fromJson(json['skills'] as Map<String, dynamic>),
   );
 }
@@ -16,16 +17,37 @@ Map<String, dynamic> _jumperToJson(Jumper jumper,
     {required JsonCountrySaver countrySaver}) {
   final countryJson = countrySaver.save(jumper.country);
   return <String, dynamic>{
-    'age': jumper.age,
     'name': jumper.name,
     'surname': jumper.surname,
     'country': countryJson,
-    'sex': sexEnumJsonMap[jumper.sex]!,
+    'dateOfBirth': jumper.dateOfBirth.toString(),
+    'personality': _personalitiesEnumJsonMap[jumper.personality]!,
+    'sex': _sexEnumJsonMap[jumper.sex]!,
     'skills': jumper.skills,
   };
 }
 
-const sexEnumJsonMap = {
+const _sexEnumJsonMap = {
   Sex.male: 0,
   Sex.female: 1,
+};
+
+const _personalitiesEnumJsonMap = {
+  Personalities.compromised: 'compromised',
+  Personalities.selfCritical: 'selfCritical',
+  Personalities.resigned: 'resigned',
+  Personalities.nostalgic: 'nostalgic',
+  Personalities.insecure: 'insecure',
+  Personalities.yearning: 'yearning',
+  Personalities.stubborn: 'stubborn',
+  Personalities.arrogant: 'arrogant',
+  Personalities.resourceful: 'resourceful',
+  Personalities.balanced: 'balanced',
+  Personalities.optimistic: 'optimistic',
+  Personalities.open: 'open',
+  Personalities.rational: 'rational',
+  Personalities.devoted: 'devoted',
+  Personalities.spiritualJoy: 'spiritualJoy',
+  Personalities.spiritualPeace: 'spiritualPeace',
+  Personalities.enlightened: 'enlightened',
 };

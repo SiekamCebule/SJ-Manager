@@ -28,6 +28,7 @@ import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.
 import 'package:sj_manager/json/simulation_db_loading/standings_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/standings_positions_creator_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/team_competition_group_rules_loader.dart';
+import 'package:sj_manager/json/simulation_db_loading/team_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/wind_averager_parser.dart';
 import 'package:sj_manager/json/simulation_db_saving/classification_score_creator_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/classification_serializer.dart';
@@ -54,7 +55,7 @@ import 'package:sj_manager/json/simulation_db_saving/simulation_db_part_serializ
 import 'package:sj_manager/json/simulation_db_saving/standings_positions_creator_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/standings_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/team_competition_group_rules_serializer.dart';
-import 'package:sj_manager/json/manual_json/json_team.dart';
+import 'package:sj_manager/json/simulation_db_saving/team_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/wind_averager_serializer.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
@@ -262,13 +263,13 @@ void main() async {
               }),
               Provider(create: (context) {
                 return DbItemsJsonConfiguration<Team>(
-                  fromJson: (json) => JsonTeamParser(
-                          countryLoader:
-                              JsonCountryLoaderByCode(repo: countriesRepo(context)))
-                      .parseTeam(json),
-                  toJson: (team) =>
-                      JsonTeamSerializer(countrySaver: const JsonCountryCodeSaver())
-                          .serializeTeam(team),
+                  fromJson: (json) => TeamLoader(
+                    idsRepo: context.read(),
+                    countryLoader: JsonCountryLoaderByCode(repo: countriesRepo(context)),
+                  ).parse(json),
+                  toJson: (team) => TeamSerializer(
+                    idsRepo: context.read(),
+                  ).serialize(team),
                 );
               }),
               Provider(create: (context) {

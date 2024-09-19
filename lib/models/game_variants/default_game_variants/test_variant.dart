@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/json/countries.dart';
+import 'package:sj_manager/json/simulation_db_loading/team_loader.dart';
 import 'package:sj_manager/models/game_variants/default_game_variants/constants.dart';
-import 'package:sj_manager/models/game_variants/default_game_variants/variants_registry.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
+import 'package:sj_manager/models/game_variants/game_variants_io_utils.dart';
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
 import 'package:sj_manager/models/simulation_db/classification/default_classification_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
@@ -37,7 +38,6 @@ import 'package:sj_manager/models/user_db/hill/hill_profile_type.dart';
 import 'package:sj_manager/models/user_db/hill/jumps_variability.dart';
 import 'package:sj_manager/models/user_db/hill/landing_ease.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/country_team.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
@@ -64,23 +64,25 @@ class _TestGameVariantCreator {
   }) async {
     _context = context;
 
-    final countries = await loadItemsForGameVariant<Country>(
+    final countries = await loadGameVariantItems<Country>(
       context: context,
       gameVariantId: 'test',
       fromJson: context.read<DbItemsJsonConfiguration<Country>>().fromJson,
     );
     _countriesRepo = CountriesRepo(initial: countries);
     if (!context.mounted) throw _contextIsNotMountedError;
-    final teams = await loadItemsForGameVariant<Team>(
+    final teams = await loadGameVariantItems<Team>(
       context: context,
       gameVariantId: 'test',
       fromJson: (json) {
-        return CountryTeam.fromJson(json,
-            countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo));
+        return TeamLoader(
+          idsRepo: context.read(),
+          countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo),
+        ).parse(json);
       },
     );
     if (!context.mounted) throw _contextIsNotMountedError;
-    final males = await loadItemsForGameVariant<MaleJumper>(
+    final males = await loadGameVariantItems<MaleJumper>(
       context: context,
       gameVariantId: 'test',
       fromJson: (json) {
@@ -89,7 +91,7 @@ class _TestGameVariantCreator {
       },
     );
     if (!context.mounted) throw _contextIsNotMountedError;
-    final females = await loadItemsForGameVariant<FemaleJumper>(
+    final females = await loadGameVariantItems<FemaleJumper>(
       context: context,
       gameVariantId: 'test',
       fromJson: (json) {
@@ -105,10 +107,14 @@ class _TestGameVariantCreator {
     setUpHills();
     final wcCalendar = _constructWcCalendar();
     return GameVariant(
-      id: 'test_24_25',
+      id: 'test',
       name: const MultilingualString(valuesByLanguage: {
         'pl': 'Testowe 24/25',
         'en': 'Test 24/25',
+      }),
+      description: const MultilingualString(valuesByLanguage: {
+        'pl': 'Essa rigcz imo sigma',
+        'en': 'Essa rigcz imo sigma',
       }),
       hills: _hills,
       countries: countries,

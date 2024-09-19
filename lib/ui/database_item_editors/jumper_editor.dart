@@ -300,9 +300,19 @@ class JumperEditorState extends State<JumperEditor> {
     );
     final jumper = _sex == Sex.male
         ? MaleJumper(
-            name: name, surname: surname, country: country, age: age, skills: skills)
+            name: name,
+            surname: surname,
+            country: country,
+            age: age,
+            skills: skills,
+          )
         : FemaleJumper(
-            name: name, surname: surname, country: country, age: age, skills: skills);
+            name: name,
+            surname: surname,
+            country: country,
+            age: age,
+            skills: skills,
+          );
     _cachedJumper = jumper;
     return jumper;
   }
