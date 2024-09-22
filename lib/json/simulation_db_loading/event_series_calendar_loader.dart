@@ -26,13 +26,13 @@ class EventSeriesCalendarParser implements SimulationDbPartParser<EventSeriesCal
       final competition = competitionParser.parse(json);
       idsRepo.register(competition, id: idGenerator.generate());
       return competition;
-    });
+    }).toList();
     final classificationsJson = (json['classifications'] as List).cast<Json>();
     final classifications = classificationsJson.map((json) {
       final classification = classificationParser.parse(json);
       idsRepo.register(classification, id: idGenerator.generate());
       return classification;
-    });
+    }).toList();
     final qualificationsJson = json['qualifications'] as Json;
     final qualifications = qualificationsJson.map((competitionId, qualifiactionsId) {
       return MapEntry(idsRepo.get<Competition>(competitionId),

@@ -20,7 +20,8 @@ class CompetitionSerializer implements SimulationDbPartSerializer<Competition> {
 
   @override
   Json serialize(Competition competition) {
-    final labelsJson = competition.labels.map((label) => _labelJsonString(label));
+    final labelsJson =
+        competition.labels.map((label) => _labelJsonString(label)).toList();
     return {
       'hillId': idsRepo.idOf(competition.hill),
       'labels': labelsJson,

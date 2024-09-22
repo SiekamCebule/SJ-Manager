@@ -1,4 +1,4 @@
-const worldCupPointsMap = <int, double>{
+final worldCupPointsMap = <int, double>{
   1: 100,
   2: 80,
   3: 60,
@@ -31,7 +31,7 @@ const worldCupPointsMap = <int, double>{
   30: 1,
 };
 
-const nationsCupPointsMap = <int, double>{
+final nationsCupPointsMap = <int, double>{
   1: 400.0,
   2: 350.0,
   3: 300.0,

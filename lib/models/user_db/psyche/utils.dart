@@ -1,5 +1,5 @@
-import 'package:sj_manager/models/user_db/psyche/level_of_consciousness.dart';
-import 'package:sj_manager/models/user_db/psyche/personality.dart';
+import 'package:sj_manager/models/user_db/psyche/levels_of_consciousness.dart';
+import 'package:sj_manager/models/user_db/psyche/personalities.dart';
 
 const levelOfConsciousnessWithPersonalities = {
   LevelsOfConsciousness.shame: Personalities.compromised, // Wstyd, Skompromitowany

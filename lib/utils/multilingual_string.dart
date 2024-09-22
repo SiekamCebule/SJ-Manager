@@ -50,5 +50,7 @@ class MultilingualString with EquatableMixin {
       );
 
   @override
-  List<Object?> get props => [valuesByLanguage];
+  List<Object?> get props => [
+        valuesByLanguage,
+      ];
 }

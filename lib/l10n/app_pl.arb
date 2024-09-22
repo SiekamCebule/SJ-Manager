@@ -23,7 +23,9 @@
     "veryGraceful": "Perfekcyjne",
     "veryInconsistent": "Bardzo nierówne",
     "inconsistent": "Nierówne",
+    "slightlyInconsistent": "Trochę nierówne",
     "averageForConsistency": "Przeciętnie równe",
+    "quiteConsistent": "Dosyć równe",
     "consistent": "Równe",
     "veryConsistent": "Bardzo równe",
     "highlyVariable": "Bardzo zmienne",
@@ -158,5 +160,11 @@
     "love": "Miłość",
     "joy": "Radość",
     "peace": "Pokój",
-    "enlightenment": "Oświecenie"
+    "enlightenment": "Oświecenie",
+    "gameMode": "Tryb gry",
+    "gameVariant": "Wariant gry",
+    "startDate": "Data startowa",
+    "team": "Drużyna",
+    "subteam": "Kadra",
+    "otherOptions": "Pozostałe opcje"
 }

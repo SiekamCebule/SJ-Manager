@@ -1,8 +1,9 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/utils/multilingual_string.dart';
 
-class EventSeriesSetup {
+class EventSeriesSetup with EquatableMixin {
   const EventSeriesSetup({
     required this.id,
     required this.multilingualName,
@@ -31,6 +32,16 @@ class EventSeriesSetup {
   String name(BuildContext context) {
     return multilingualName.translate(context);
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        multilingualName,
+        multilingualDescription,
+        priority,
+        relativeMoneyPrize,
+        calendarPreset,
+      ];
 }
 
 enum EventSeriesRelativeMoneyPrize {

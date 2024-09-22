@@ -27,7 +27,7 @@ class _Header extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 10),
                 child: IconButton(
                   onPressed: () {
-                    Navigator.pop(context, false);
+                    Navigator.pop(context, null);
                   },
                   icon: const Icon(Symbols.close),
                 ),
@@ -42,9 +42,10 @@ class _Header extends StatelessWidget {
   String _appropriateTitleText(BuildContext context, SimulationWizardScreenType screen) {
     return switch (screen) {
       SimulationWizardScreenType.mode => "Wybierz tryb rozgrywki",
+      SimulationWizardScreenType.startDate => "Wybierz datę startową",
       SimulationWizardScreenType.gameVariant => "Wybierz wariant rozgrywki",
       SimulationWizardScreenType.team => "Wybierz swój kraj",
-      SimulationWizardScreenType.squads => "Ustal swoją kadrę",
+      SimulationWizardScreenType.subteam => "Wybierz swoją poddrużynę (kadrę)",
       SimulationWizardScreenType.otherOptions => "Przyjrzyj się innym opcjom",
     };
   }

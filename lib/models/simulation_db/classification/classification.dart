@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation_db/classification/default_classification_rules.dart';
 import 'package:sj_manager/models/simulation_db/standings/standings.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/details/classification_score_details.dart';
 
 abstract class Classification<E, S extends Standings<E, ClassificationScoreDetails>,
-    R extends ClassificationRules<E>> {
+    R extends ClassificationRules<E>> with EquatableMixin {
   const Classification({
     required this.name,
     required this.standings,
@@ -20,9 +21,14 @@ abstract class Classification<E, S extends Standings<E, ClassificationScoreDetai
     }
     standings!.update();
   }
-}
 
-// TODO: Custom classification
+  @override
+  List<Object?> get props => [
+        name,
+        standings,
+        rules,
+      ];
+}
 
 class DefaultClassification<E, S extends Standings<E, ClassificationScoreDetails>>
     extends Classification<E, S, DefaultClassificationRules<E>> {

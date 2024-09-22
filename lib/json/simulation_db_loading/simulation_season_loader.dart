@@ -18,9 +18,9 @@ class SimulationSeasonParser implements SimulationDbPartParser<SimulationSeason>
     final eventSeriesJson = json['eventSeries'] as List<Json>;
     final eventSeries = eventSeriesJson.map((json) {
       return eventSeriesParser.parse(json);
-    });
+    }).toList();
     return SimulationSeason(
-      eventSeries: eventSeries.toList(),
+      eventSeries: eventSeries,
     );
   }
 }

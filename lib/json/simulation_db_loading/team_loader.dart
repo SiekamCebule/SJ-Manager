@@ -3,11 +3,12 @@ import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/json/utils/enums.dart';
 
-import 'package:sj_manager/models/user_db/country/country_team_facts.dart';
+import 'package:sj_manager/models/user_db/team/country_team/country_team_facts.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/jumps/simple_jump.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
-import 'package:sj_manager/models/user_db/team/country_team.dart';
+import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
+import 'package:sj_manager/models/user_db/team/country_team/subteam_type.dart';
 import 'package:sj_manager/models/user_db/team/subteam.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
@@ -36,7 +37,11 @@ class TeamLoader implements SimulationDbPartParser<Team> {
     final sex = sexEnumMap.keys.singleWhere((sex) => sexEnumMap[sex]! == json['sex']);
     final country = countryLoader.load(json['countryCode']);
     final factsJson = json['facts'] as Json;
-    final nationalRecordJson = json['record'] as Json?;
+    final nationalRecordJson = factsJson['record'] as Json?;
+    final subteamsJson = (factsJson['subteams'] as List).cast<String>();
+    final subteams = subteamsJson.map((subteamTypeName) {
+      return SubteamType.values.singleWhere((type) => type.name == subteamTypeName);
+    }).toSet();
     return CountryTeam(
       sex: sex,
       country: country,
@@ -48,6 +53,7 @@ class TeamLoader implements SimulationDbPartParser<Team> {
                 distance: nationalRecordJson['distance'],
               )
             : null,
+        subteams: subteams,
       ),
     );
   }
@@ -58,11 +64,11 @@ class TeamLoader implements SimulationDbPartParser<Team> {
     final jumperIds = json['jumperIds'] as List;
     final jumpers = jumperIds.map((id) {
       return idsRepo.get(id) as Jumper;
-    });
+    }).toList();
 
     return CompetitionTeam(
       parentTeam: parentTeam,
-      jumpers: jumpers.toList(),
+      jumpers: jumpers,
     );
   }
 

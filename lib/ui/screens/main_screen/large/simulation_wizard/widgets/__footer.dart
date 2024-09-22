@@ -47,13 +47,30 @@ class _FooterState extends State<_Footer> {
                       maintainInteractivity: false,
                       visible: navCubit.state.canGoForward,
                       child: SizedBox(
-                        width: 80,
-                        child: IconButton(
+                        width: 200,
+                        child: TextButton.icon(
                           onPressed: () {
                             navCubit.goForward();
                           },
-                          icon: const Icon(Symbols.arrow_forward),
-                          style: IconButton.styleFrom(iconSize: 35),
+                          label: navCubit.state.nextScreen != null
+                              ? Text(
+                                  briefScreenDescription(
+                                    context: context,
+                                    screenType: navCubit.state.nextScreen!,
+                                  ),
+                                )
+                              : const Text('Zacznij grę'),
+                          icon: Icon(
+                            Symbols.arrow_forward,
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                          iconAlignment: IconAlignment.end,
+                          style: IconButton.styleFrom(
+                            iconSize: 35,
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            foregroundColor:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
                         ),
                       ),
                     ),
@@ -64,4 +81,19 @@ class _FooterState extends State<_Footer> {
       ),
     );
   }
+}
+
+String briefScreenDescription({
+  required BuildContext context,
+  required SimulationWizardScreenType screenType,
+}) {
+  final translator = translate(context);
+  return switch (screenType) {
+    SimulationWizardScreenType.mode => translator.gameMode,
+    SimulationWizardScreenType.gameVariant => translator.gameVariant,
+    SimulationWizardScreenType.startDate => translator.startDate,
+    SimulationWizardScreenType.team => translator.team,
+    SimulationWizardScreenType.subteam => translator.subteam,
+    SimulationWizardScreenType.otherOptions => translator.otherOptions,
+  };
 }

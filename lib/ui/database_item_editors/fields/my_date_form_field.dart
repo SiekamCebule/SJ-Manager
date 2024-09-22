@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_text_form_field.dart';
 
-class MyDateFormField extends StatelessWidget {
+class MyDateFormField extends StatefulWidget {
   const MyDateFormField({
     super.key,
     this.formKey,
@@ -30,29 +30,54 @@ class MyDateFormField extends StatelessWidget {
   final DateTime lastDate;
 
   @override
+  State<MyDateFormField> createState() => _MyDateFormFieldState();
+}
+
+class _MyDateFormFieldState extends State<MyDateFormField> {
+  DateTime? _lastValidDate;
+
+  @override
+  void initState() {
+    _lastValidDate = widget.initialDate;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MyTextFormField(
-      textFormFieldKey: formKey,
-      controller: controller,
+      textFormFieldKey: widget.formKey,
+      controller: widget.controller,
       onChange: () {
-        final date = DateTime.tryParse(controller.text);
-        onChange(date);
+        print('current text: ${widget.controller.text}');
+        final date = widget.dateFormat.tryParse(widget.controller.text);
+        if (date != null) {
+          _lastValidDate = date;
+          widget.onChange(date);
+        } else {
+          if (_lastValidDate == null) {
+            throw StateError(
+              '(MyDateFormField): Both last valid date and changed date are null',
+            );
+          }
+          widget.controller.text = widget.dateFormat.format(_lastValidDate!);
+          widget.onChange(_lastValidDate!);
+        }
       },
-      labelText: labelText,
-      validator: validator,
+      labelText: widget.labelText,
+      validator: widget.validator,
       trailing: IconButton(
         onPressed: () async {
           final date = await showDatePicker(
             context: context,
-            initialDate: initialDate,
-            firstDate: firstDate,
-            lastDate: lastDate,
+            initialDate: widget.initialDate,
+            firstDate: widget.firstDate,
+            lastDate: widget.lastDate,
           );
-          onChange(date);
+          widget.onChange(date);
         },
         icon: const Icon(Symbols.calendar_today),
       ),
-      leading: leading,
+      leading: widget.leading,
     );
   }
 }

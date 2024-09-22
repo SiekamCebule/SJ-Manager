@@ -18,7 +18,9 @@ class StandingsSerializer implements SimulationDbPartSerializer<Standings> {
 
   @override
   Json serialize(Standings standings) {
-    final scoresJson = standings.scores.map((score) {});
+    final scoresJson = standings.scores.map((score) {
+      return scoreSerializer.serialize(score);
+    }).toList();
     return {
       'scores': scoresJson,
       'positionsCreator': positionsCreatorSerializer.serialize(standings.positionsCreator)

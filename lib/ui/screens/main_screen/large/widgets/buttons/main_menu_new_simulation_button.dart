@@ -9,7 +9,7 @@ class MainMenuNewSimulationButton extends StatelessWidget {
       borderRadius: const BorderRadius.all(UiMainMenuConstants.buttonsBorderRadius),
       onTap: () async {
         // TODO: Add dialog dimensions to UI constants
-        final shouldCreateSimulation = await showGeneralDialog<bool>(
+        final optionsRepo = await showGeneralDialog<SimulationWizardOptionsRepo?>(
           context: context,
           barrierDismissible: false,
           barrierColor: Colors.black.withOpacity(0.9),
@@ -39,7 +39,13 @@ class MainMenuNewSimulationButton extends StatelessWidget {
             );
           },
         );
-        print('shouldCreateSimulation: $shouldCreateSimulation');
+        final database = DefaultSimulationDatabaseCreator(idGenerator: context.read())
+            .create(optionsRepo!);
+        database.dispose();
+        context.read<ValueRepo<ItemsIdsRepo>>().set(database.idsRepo);
+        await Future.delayed(Duration.zero);
+        DefaultSimulationDatabaseSaverToFile().serialize(
+            database: database, simulationId: 'test_simulation', context: context);
       },
       child: MainMenuTextContentButtonBody(
         titleText: translate(context).newSimulation,

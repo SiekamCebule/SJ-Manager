@@ -28,7 +28,7 @@ class _TeamScreenState extends State<_TeamScreen> {
     final date = context.read<SimulationWizardOptionsRepo>().startDate.last!;
     _teamPreviewCreator = DefaultCountryTeamPreviewCreator(
       gameVariant: variant,
-      currentDate: date,
+      currentDate: date.date,
     );
     _dbChangesSubscription =
         context.read<SimulationWizardOptionsRepo>().gameVariant.items.listen((_) {

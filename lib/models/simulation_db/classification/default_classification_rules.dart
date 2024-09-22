@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
@@ -19,7 +20,8 @@ abstract class ClassificationRules<E> {
               ClassificationRules<E>>>> classificationScoreCreator;
 }
 
-abstract class DefaultClassificationRules<E> extends ClassificationRules<E> {
+abstract class DefaultClassificationRules<E> extends ClassificationRules<E>
+    with EquatableMixin {
   const DefaultClassificationRules({
     required super.classificationScoreCreator,
     required this.scoringType,
@@ -32,6 +34,14 @@ abstract class DefaultClassificationRules<E> extends ClassificationRules<E> {
   final Map<int, double>? pointsMap;
   final List<Competition> competitions;
   final Map<Competition, double> pointsModifiers;
+
+  @override
+  List<Object?> get props => [
+        scoringType,
+        pointsMap,
+        competitions,
+        pointsModifiers,
+      ];
 }
 
 class DefaultIndividualClassificationRules extends DefaultClassificationRules<Jumper> {
@@ -45,6 +55,12 @@ class DefaultIndividualClassificationRules extends DefaultClassificationRules<Ju
   });
 
   final bool includeApperancesInTeamCompetitions;
+
+  @override
+  List<Object?> get props => [
+        ...super.props,
+        includeApperancesInTeamCompetitions,
+      ];
 }
 
 class DefaultTeamClassificationRules extends DefaultClassificationRules<Team> {
@@ -58,6 +74,12 @@ class DefaultTeamClassificationRules extends DefaultClassificationRules<Team> {
   });
 
   final bool includeJumperPointsFromIndividualCompetitions;
+
+  @override
+  List<Object?> get props => [
+        ...super.props,
+        includeJumperPointsFromIndividualCompetitions,
+      ];
 }
 
 enum DefaultClassificationScoringType {

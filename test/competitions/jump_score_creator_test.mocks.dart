@@ -4,15 +4,19 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i15;
+import 'package:mockito/src/dummies.dart' as _i16;
 import 'package:osje_sim/osje_sim.dart' as _i7;
 import 'package:sj_manager/models/simulation_db/competition/competition.dart'
     as _i5;
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart'
-    as _i16;
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_team_competition_round_rules.dart'
     as _i14;
+import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_team_competition_round_rules.dart'
+    as _i15;
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart'
+    as _i23;
+import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart'
+    as _i18;
+import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_round_rules.dart'
     as _i20;
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/competition_score_creator.dart'
     as _i13;
@@ -20,6 +24,8 @@ import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_c
     as _i10;
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/jump_score_creator.dart'
     as _i11;
+import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/wind_averager.dart'
+    as _i19;
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart'
     as _i2;
 import 'package:sj_manager/models/simulation_db/standings/score/details/competition_score_details.dart'
@@ -34,8 +40,8 @@ import 'package:sj_manager/models/simulation_db/standings/standings_positions_ma
     as _i9;
 import 'package:sj_manager/models/user_db/hill/hill.dart' as _i6;
 import 'package:sj_manager/models/user_db/jumper/jumper.dart' as _i17;
-import 'package:sj_manager/models/user_db/team/competition_team.dart' as _i18;
-import 'package:sj_manager/models/user_db/team/team.dart' as _i19;
+import 'package:sj_manager/models/user_db/team/competition_team.dart' as _i21;
+import 'package:sj_manager/models/user_db/team/team.dart' as _i22;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -148,9 +154,20 @@ class _FakeCompetitionScoreCreator_8<
         );
 }
 
-class _FakeDefaultTeamCompetitionRoundRules_9 extends _i1.SmartFake
-    implements _i14.DefaultTeamCompetitionRoundRules {
-  _FakeDefaultTeamCompetitionRoundRules_9(
+class _FakeDefaultIndividualCompetitionRoundRules_9 extends _i1.SmartFake
+    implements _i14.DefaultIndividualCompetitionRoundRules {
+  _FakeDefaultIndividualCompetitionRoundRules_9(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeDefaultTeamCompetitionRoundRules_10 extends _i1.SmartFake
+    implements _i15.DefaultTeamCompetitionRoundRules {
+  _FakeDefaultTeamCompetitionRoundRules_10(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -249,7 +266,7 @@ class MockJumpScoreCreatingContext<E> extends _i1.Mock
   @override
   E get entity => (super.noSuchMethod(
         Invocation.getter(#entity),
-        returnValue: _i15.dummyValue<E>(
+        returnValue: _i16.dummyValue<E>(
           this,
           Invocation.getter(#entity),
         ),
@@ -260,7 +277,7 @@ class MockJumpScoreCreatingContext<E> extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
-    implements _i16.DefaultIndividualCompetitionRoundRules {
+    implements _i14.DefaultIndividualCompetitionRoundRules {
   MockDefaultIndividualCompetitionRoundRules() {
     _i1.throwOnMissingStub(this);
   }
@@ -381,12 +398,87 @@ class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
       ) as bool);
 
   @override
-  _i14.DefaultTeamCompetitionRoundRules toTeam({
+  _i14.DefaultIndividualCompetitionRoundRules copyWith({
+    _i18.EntitiesLimit? limit,
+    bool? bibsAreReassigned,
+    bool? startlistIsSorted,
+    bool? gateCanChange,
+    bool? gateCompensationsEnabled,
+    bool? windCompensationsEnabled,
+    _i19.WindAverager? windAverager,
+    bool? inrunLightsEnabled,
+    bool? dsqEnabled,
+    _i9.StandingsPositionsCreator<_i8.Score<dynamic, _i4.ScoreDetails>>?
+        positionsCreator,
+    bool? ruleOf95HsFallEnabled,
+    int? judgesCount,
+    _i10.JudgesCreator? judgesCreator,
+    int? significantJudgesCount,
+    _i11.JumpScoreCreator<dynamic>? jumpScoreCreator,
+    _i13.CompetitionScoreCreator<
+            _i8.Score<_i17.Jumper, _i12.CompetitionScoreDetails<dynamic>>>?
+        competitionScoreCreator,
+    _i20.KoRoundRules<dynamic>? koRules,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #copyWith,
+          [],
+          {
+            #limit: limit,
+            #bibsAreReassigned: bibsAreReassigned,
+            #startlistIsSorted: startlistIsSorted,
+            #gateCanChange: gateCanChange,
+            #gateCompensationsEnabled: gateCompensationsEnabled,
+            #windCompensationsEnabled: windCompensationsEnabled,
+            #windAverager: windAverager,
+            #inrunLightsEnabled: inrunLightsEnabled,
+            #dsqEnabled: dsqEnabled,
+            #positionsCreator: positionsCreator,
+            #ruleOf95HsFallEnabled: ruleOf95HsFallEnabled,
+            #judgesCount: judgesCount,
+            #judgesCreator: judgesCreator,
+            #significantJudgesCount: significantJudgesCount,
+            #jumpScoreCreator: jumpScoreCreator,
+            #competitionScoreCreator: competitionScoreCreator,
+            #koRules: koRules,
+          },
+        ),
+        returnValue: _FakeDefaultIndividualCompetitionRoundRules_9(
+          this,
+          Invocation.method(
+            #copyWith,
+            [],
+            {
+              #limit: limit,
+              #bibsAreReassigned: bibsAreReassigned,
+              #startlistIsSorted: startlistIsSorted,
+              #gateCanChange: gateCanChange,
+              #gateCompensationsEnabled: gateCompensationsEnabled,
+              #windCompensationsEnabled: windCompensationsEnabled,
+              #windAverager: windAverager,
+              #inrunLightsEnabled: inrunLightsEnabled,
+              #dsqEnabled: dsqEnabled,
+              #positionsCreator: positionsCreator,
+              #ruleOf95HsFallEnabled: ruleOf95HsFallEnabled,
+              #judgesCount: judgesCount,
+              #judgesCreator: judgesCreator,
+              #significantJudgesCount: significantJudgesCount,
+              #jumpScoreCreator: jumpScoreCreator,
+              #competitionScoreCreator: competitionScoreCreator,
+              #koRules: koRules,
+            },
+          ),
+        ),
+      ) as _i14.DefaultIndividualCompetitionRoundRules);
+
+  @override
+  _i15.DefaultTeamCompetitionRoundRules toTeam({
     required _i13.CompetitionScoreCreator<
-            _i8.Score<_i18.CompetitionTeam<_i19.Team>,
+            _i8.Score<_i21.CompetitionTeam<_i22.Team>,
                 _i12.CompetitionTeamScoreDetails>>?
         competitionScoreCreator,
-    required List<_i20.TeamCompetitionGroupRules>? groups,
+    required List<_i23.TeamCompetitionGroupRules>? groups,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -397,7 +489,7 @@ class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
             #groups: groups,
           },
         ),
-        returnValue: _FakeDefaultTeamCompetitionRoundRules_9(
+        returnValue: _FakeDefaultTeamCompetitionRoundRules_10(
           this,
           Invocation.method(
             #toTeam,
@@ -408,5 +500,5 @@ class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
             },
           ),
         ),
-      ) as _i14.DefaultTeamCompetitionRoundRules);
+      ) as _i15.DefaultTeamCompetitionRoundRules);
 }

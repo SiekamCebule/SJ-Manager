@@ -1,6 +1,6 @@
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
-import 'package:sj_manager/models/user_db/team/country_team.dart';
+import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
 
 List<CountryTeam> countryTeamsBySex(List<CountryTeam> teams, Sex sex) {
   return teams.where((team) => team.sex == sex).toList();

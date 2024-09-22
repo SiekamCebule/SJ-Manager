@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:sj_manager/models/game_variants/game_variant_start_date.dart';
 import 'package:sj_manager/models/simulation_db/simulation_season.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
@@ -16,6 +16,7 @@ class GameVariant {
     required this.countries,
     required this.teams,
     required this.season,
+    required this.startDates,
   });
 
   final String id;
@@ -26,6 +27,7 @@ class GameVariant {
   final List<Country> countries;
   final List<Team> teams;
   final SimulationSeason season;
+  final List<GameVariantStartDate> startDates;
 
   GameVariant copyWith({
     String? id,
@@ -36,6 +38,7 @@ class GameVariant {
     List<Country>? countries,
     List<Team>? teams,
     SimulationSeason? season,
+    List<GameVariantStartDate>? startDates,
   }) {
     return GameVariant(
       id: id ?? this.id,
@@ -46,6 +49,7 @@ class GameVariant {
       countries: countries ?? this.countries,
       teams: teams ?? this.teams,
       season: season ?? this.season,
+      startDates: startDates ?? this.startDates,
     );
   }
 }

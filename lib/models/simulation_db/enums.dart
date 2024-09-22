@@ -1,4 +1,5 @@
 enum SimulationMode {
-  coach,
+  classicCoach,
+  personalCoach,
   observer,
 }

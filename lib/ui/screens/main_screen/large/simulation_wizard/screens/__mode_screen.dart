@@ -22,53 +22,62 @@ class _ModeScreenState extends State<_ModeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: SimulationWizardOptionButton(
-            isSelected: _selected == SimulationMode.coach,
-            onTap: () {
-              setState(() {
-                _selected = _selected != SimulationMode.coach
-                    ? SimulationMode.coach
-                    : null;
-              });
-              widget.onChange(_selected);
-            },
-            child: const MainMenuTextContentButtonBody(
-              titleText: 'Zostań trenerem',
-              contentText:
-                  'Wybierz swoją wymarzoną reprezentację i stań się odpowiedzialny za każdy aspekt prowadzenia drużyny! Samemu wybierzesz grupę skoczków, z którymi będziesz pracował, zajmiesz się powołaniami na zawody, będziesz nadzorował treningiem, i wiele więcej...',
-              decorationWidget: Icon(
-                Symbols.person,
-                size: 140,
-              ),
+    return Material(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 100,
+            child: SimulationWizardModeOptionButton(
+              titleText: 'Klasyczny trener',
+              subtitleText:
+                  'Obejmij jedną z kadr w krajowym związku narciarskim. Odpowiadaj za rozwój i powołuj na zawody. Dbaj o dobre wyniki swoich skoczków lub skoczkiń.',
+              onTap: () {
+                setState(() {
+                  _selected = _selected != SimulationMode.classicCoach
+                      ? SimulationMode.classicCoach
+                      : null;
+                });
+                widget.onChange(_selected);
+              },
+              isSelected: _selected == SimulationMode.classicCoach,
             ),
           ),
-        ),
-        Expanded(
-          child: SimulationWizardOptionButton(
-            isSelected: _selected == SimulationMode.observer,
-            onTap: () {
-              setState(() {
-                _selected = _selected != SimulationMode.observer
-                    ? SimulationMode.observer
-                    : null;
-              });
-              widget.onChange(_selected);
-            },
-            child: const MainMenuTextContentButtonBody(
-              titleText: 'Zostań obserwatorem',
-              contentText:
-                  'Nie zaprzątaj swojej głowy prowadzeniem drużyny. Zajmij swoją głowę uważną obserwacją wszystkich emocjonujących wydarzeń ze świata skoków, oglądaj interesujące cię zawody, przeglądaj newsy... Jeśli chcesz, możesz zacząć tajnie wpływać na rzeczywistość za pomocą edytora symulacji in-game',
-              decorationWidget: Icon(
-                Symbols.eye_tracking,
-                size: 140,
-              ),
+          SizedBox(
+            height: 100,
+            child: SimulationWizardModeOptionButton(
+              titleText: 'Trener personalny',
+              subtitleText:
+                  'Wybierz z kim chcesz pracować i odpowiadaj za rozwój swoich podopiecznych. Nie ty powołujesz ich na zawody - wciąż podlegają oni swoim kadrom.',
+              onTap: () {
+                setState(() {
+                  _selected = _selected != SimulationMode.personalCoach
+                      ? SimulationMode.personalCoach
+                      : null;
+                });
+                widget.onChange(_selected);
+              },
+              isSelected: _selected == SimulationMode.personalCoach,
             ),
           ),
-        ),
-      ],
+          SizedBox(
+            height: 100,
+            child: SimulationWizardModeOptionButton(
+              titleText: 'Obserwator',
+              subtitleText:
+                  'Nie maczaj palców w prowadzeniu kadry ani w szkoleniu zawodników i zawodniczek. Obserwuj codzienne wydarzenia ze świata skoków i jeźdź na zawody. W każdym momencie możesz objąć jakąś kadrę lub zostać trenerem personalnym.',
+              onTap: () {
+                setState(() {
+                  _selected = _selected != SimulationMode.observer
+                      ? SimulationMode.observer
+                      : null;
+                });
+                widget.onChange(_selected);
+              },
+              isSelected: _selected == SimulationMode.observer,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -62,7 +62,7 @@ class ScoreSerializer implements SimulationDbPartSerializer<Score> {
   Json _serializeCompetitionJumperScore(CompetitionJumperScore score) {
     final jumpScoreJson = score.details.jumpScores.map((score) {
       _serializeSingleJumpScore(score);
-    });
+    }).toList();
     return {
       'type': 'jumper_competition_score',
       'entityId': idsRepo.idOf(score.entity),
@@ -74,7 +74,7 @@ class ScoreSerializer implements SimulationDbPartSerializer<Score> {
   Json _serializeCompetitionTeamScore(CompetitionTeamScore score) {
     final entityScoresJson = score.details.jumpScores.map((score) {
       _serializeAppropriateScore(score);
-    });
+    }).toList();
     return {
       'type': 'team_competition_score',
       'entityId': idsRepo.idOf(score.entity),
@@ -94,7 +94,7 @@ class ScoreSerializer implements SimulationDbPartSerializer<Score> {
   Json _serializeClassificationScore(ClassificationScore score) {
     final competitionScoresJson = score.details.competitionScores.map((score) {
       return _serializeAppropriateScore(score);
-    });
+    }).toList();
     return {
       'type': 'classification_score',
       'entityId': idsRepo.idOf(score.entity),

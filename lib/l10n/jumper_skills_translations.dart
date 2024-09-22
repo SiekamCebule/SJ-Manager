@@ -21,7 +21,9 @@ String translatedJumpsConsistencyDescription(
   return switch (consistency) {
     JumpsConsistency.veryInconsistent => translate(context).veryInconsistent,
     JumpsConsistency.inconsistent => translate(context).inconsistent,
+    JumpsConsistency.slightlyInconsistent => translate(context).slightlyInconsistent,
     JumpsConsistency.average => translate(context).averageForConsistency,
+    JumpsConsistency.quiteConsistent => translate(context).quiteConsistent,
     JumpsConsistency.consistent => translate(context).consistent,
     JumpsConsistency.veryConsistent => translate(context).veryConsistent,
   };

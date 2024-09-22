@@ -20,6 +20,16 @@ class SelectedIndexesRepo {
     _subject.add({index});
   }
 
+  void setSelectionInRange({
+    required int first,
+    required int last,
+    required bool selection,
+  }) {
+    for (int index = first; index <= last; index++) {
+      setSelection(index, selection);
+    }
+  }
+
   void toggleSelection(int index) {
     final newSelectedIndexes = Set.of(last);
     newSelectedIndexes.toggle(index);

@@ -24,7 +24,7 @@ class EventSeriesCalendarSerializer
     }).toList();
     final classificationsJson = calendar.classifications.map((classification) {
       return classificationSerializer.serialize(classification);
-    });
+    }).toList();
     final qualificationsJson = calendar.qualifications.map((competition, qualifications) {
       return MapEntry(idsRepo.idOf(competition), idsRepo.idOf(qualifications));
     });

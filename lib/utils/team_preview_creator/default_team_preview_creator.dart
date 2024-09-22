@@ -5,7 +5,7 @@ import 'package:sj_manager/models/user_db/jumper/jumps_consistency.dart';
 import 'package:sj_manager/models/user_db/jumper/landing_style.dart';
 import 'package:sj_manager/models/user_db/jumps/simple_jump.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
-import 'package:sj_manager/models/user_db/team/country_team.dart';
+import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
 import 'package:sj_manager/utils/db_items.dart';
 import 'package:sj_manager/utils/team_preview_creator/team_preview_creator.dart';
 
@@ -109,11 +109,13 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
     final byQualityOnSmallerHills = skills.qualityOnSmallerHills * 1.0;
     final byQualityOnLargerHills = skills.qualityOnLargerHills * 1.0;
     final multiplierByConsistency = switch (skills.jumpsConsistency) {
-      JumpsConsistency.veryConsistent => 1.08,
-      JumpsConsistency.consistent => 1.04,
+      JumpsConsistency.veryConsistent => 1.03,
+      JumpsConsistency.consistent => 1.02,
+      JumpsConsistency.quiteConsistent => 1.01,
       JumpsConsistency.average => 1.0,
-      JumpsConsistency.inconsistent => 0.96,
-      JumpsConsistency.veryInconsistent => 0.92,
+      JumpsConsistency.slightlyInconsistent => 0.99,
+      JumpsConsistency.inconsistent => 0.98,
+      JumpsConsistency.veryInconsistent => 0.97,
     };
     final multiplierByLandingStyle = switch (skills.landingStyle) {
       LandingStyle.veryGraceful => 1.06,
