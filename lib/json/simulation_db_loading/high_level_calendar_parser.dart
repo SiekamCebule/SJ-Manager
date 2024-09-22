@@ -27,13 +27,13 @@ class HighLevelCalendarParser
       final competitionRecord = mainCompetitionRecordParser.parse(json);
       idsRepo.register(competitionRecord, id: idGenerator.generate());
       return competitionRecord;
-    });
+    }).toList();
     final classificationsJson = (json['classifications'] as List).cast<Json>();
     final classifications = classificationsJson.map((json) {
       final classification = classificationParser.parse(json);
       idsRepo.register(classification, id: idGenerator.generate());
       return classification;
-    });
+    }).toList();
     return HighLevelCalendar(
       highLevelCompetitions: competitions.toList(),
       classifications: classifications.toList(),

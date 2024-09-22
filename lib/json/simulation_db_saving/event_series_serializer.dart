@@ -9,18 +9,18 @@ class EventSeriesSerializer implements SimulationDbPartSerializer<EventSeries> {
   const EventSeriesSerializer({
     required this.idsRepo,
     required this.calendarSerializer,
-    required this.factsSerializer,
+    required this.setupSerializer,
   });
 
   final ItemsIdsRepo idsRepo;
   final SimulationDbPartSerializer<EventSeriesCalendar> calendarSerializer;
-  final SimulationDbPartSerializer<EventSeriesSetup> factsSerializer;
+  final SimulationDbPartSerializer<EventSeriesSetup> setupSerializer;
 
   @override
   Json serialize(EventSeries series) {
     return {
       'calendar': calendarSerializer.serialize(series.calendar),
-      'facts': factsSerializer.serialize(series.setup),
+      'facts': setupSerializer.serialize(series.setup),
     };
   }
 }

@@ -8,15 +8,13 @@ import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 class EventSeriesParser implements SimulationDbPartParser<EventSeries> {
   const EventSeriesParser({
     required this.idsRepo,
-    required this.languageCode,
     required this.calendarParser,
-    required this.factsParser,
+    required this.setupParser,
   });
 
   final ItemsIdsRepo idsRepo;
-  final String languageCode;
   final SimulationDbPartParser<EventSeriesCalendar> calendarParser;
-  final SimulationDbPartParser<EventSeriesSetup> factsParser;
+  final SimulationDbPartParser<EventSeriesSetup> setupParser;
 
   @override
   EventSeries parse(Json json) {
@@ -24,7 +22,7 @@ class EventSeriesParser implements SimulationDbPartParser<EventSeries> {
 
     return EventSeries(
       calendar: calendar,
-      setup: factsParser.parse(json['facts']),
+      setup: setupParser.parse(json['facts']),
     );
   }
 }

@@ -22,16 +22,23 @@ Future<List<T>> loadGameVariantItems<T>({
   );
 }
 
+Directory gameVariantDirectory({
+  required BuildContext context,
+  required String gameVariantId,
+}) {
+  return userDataDirectory(
+    context.read(),
+    path.join('gameVariants', gameVariantId),
+  );
+}
+
 File getFileForGameVariantItems<T>({
   required BuildContext context,
   required String gameVariantId,
 }) {
   final fileName = context.read<DbItemsFilePathsRegistry>().get<T>();
   return fileInDirectory(
-    userDataDirectory(
-      context.read(),
-      path.join('gameVariants', gameVariantId),
-    ),
+    gameVariantDirectory(context: context, gameVariantId: gameVariantId),
     fileName,
   );
 }

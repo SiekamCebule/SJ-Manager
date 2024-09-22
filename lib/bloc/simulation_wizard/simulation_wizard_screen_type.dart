@@ -1,7 +1,8 @@
 enum SimulationWizardScreenType {
   mode,
   gameVariant,
+  startDate,
   team,
-  squads,
+  subteam,
   otherOptions,
 }

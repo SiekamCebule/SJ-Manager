@@ -35,7 +35,7 @@ class DefaultClassificationRulesSerializer
     final scoringTypeJson = _serializeType(rules.scoringType);
     final pointsMapJson = rules.pointsMap;
     final competitionIdsJson =
-        rules.competitions.map((competition) => idsRepo.idOf(competition));
+        rules.competitions.map((competition) => idsRepo.idOf(competition)).toList();
     final pointsModifiersJson = rules.pointsModifiers
         .map((competition, modifier) => MapEntry(idsRepo.idOf(competition), modifier));
 

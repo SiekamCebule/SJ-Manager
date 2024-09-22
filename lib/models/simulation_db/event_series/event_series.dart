@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
 
-class EventSeries {
+class EventSeries with EquatableMixin {
   const EventSeries({
     required this.calendar,
     required this.setup,
@@ -18,4 +19,10 @@ class EventSeries {
 
   DateTime get startDate => calendar.competitions.first.date;
   DateTime get endDate => calendar.competitions.last.date;
+
+  @override
+  List<Object?> get props => [
+        calendar,
+        setup,
+      ];
 }

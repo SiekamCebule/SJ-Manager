@@ -9,13 +9,40 @@ class SimulationSeason with EquatableMixin {
 
   final List<EventSeries> eventSeries;
 
-  // TODO:
   DateTime get startDate {
-    throw UnimplementedError();
+    DateTime? firstDate;
+    final calendars = eventSeries.map((eventSeries) => eventSeries.calendar).toList();
+    for (var calendar in calendars) {
+      final firstCompetitionDate = calendar.competitions.first.date;
+      firstDate ??= firstCompetitionDate;
+      if (firstCompetitionDate.isBefore(firstDate)) {
+        firstDate = firstCompetitionDate;
+      }
+    }
+    if (firstDate == null) {
+      throw StateError(
+        'The event series does not have any competitions, so cannot compute the start date',
+      );
+    }
+    return firstDate;
   }
 
   DateTime get endDate {
-    throw UnimplementedError();
+    DateTime? lastDate;
+    final calendars = eventSeries.map((eventSeries) => eventSeries.calendar).toList();
+    for (var calendar in calendars) {
+      final lastCompetitionDate = calendar.competitions.last.date;
+      lastDate ??= lastCompetitionDate;
+      if (lastCompetitionDate.isAfter(lastDate)) {
+        lastDate = lastCompetitionDate;
+      }
+    }
+    if (lastDate == null) {
+      throw StateError(
+        'The event series does not have any competitions, so cannot compute the end date',
+      );
+    }
+    return lastDate;
   }
 
   String yearsFormattedString({
@@ -28,7 +55,9 @@ class SimulationSeason with EquatableMixin {
       );
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [
+        eventSeries,
+      ];
 }
 
 String getSimulationSeasonYearsFormattedString({

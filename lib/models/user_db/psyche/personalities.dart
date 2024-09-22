@@ -17,3 +17,20 @@ enum Personalities {
   spiritualPeace, // Pokój, Duchowy Spokój
   enlightened // Oświecenie, Oświecony
 }
+
+var sjmPersonalities = Personalities.values.where(
+  (personality) {
+    const exclude = {
+      Personalities.compromised,
+      Personalities.selfCritical,
+      Personalities.spiritualJoy,
+      Personalities.spiritualPeace,
+      Personalities.enlightened,
+    };
+    if (exclude.contains(personality)) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+);

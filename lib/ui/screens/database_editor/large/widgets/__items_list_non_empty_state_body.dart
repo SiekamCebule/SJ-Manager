@@ -36,7 +36,17 @@ class _ItemsListNonEmptyStateBody extends StatelessWidget {
                 indexInList: index,
                 onItemTap: () async {
                   bool ctrlIsPressed = HardwareKeyboard.instance.isControlPressed;
-                  if (ctrlIsPressed) {
+                  bool shiftIsPressed = HardwareKeyboard.instance.isShiftPressed;
+                  if (shiftIsPressed && selectedIndexesRepo.last.length == 1) {
+                    final singleSelected = selectedIndexesRepo.last.single;
+                    final first = min(singleSelected, index);
+                    final last = max(singleSelected, index);
+                    selectedIndexesRepo.setSelectionInRange(
+                      first: first,
+                      last: last,
+                      selection: true,
+                    );
+                  } else if (ctrlIsPressed) {
                     selectedIndexesRepo.toggleSelection(index);
                   } else {
                     selectedIndexesRepo.toggleSelectionAtOnly(index);

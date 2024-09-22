@@ -6,7 +6,7 @@ import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
-import 'package:sj_manager/models/user_db/psyche/personality.dart';
+import 'package:sj_manager/models/user_db/psyche/personalities.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
 
 part '../../../json/manual_json/jumper_json.dart';
@@ -129,7 +129,7 @@ class MaleJumper extends Jumper {
       name: jumper.name,
       surname: jumper.surname,
       country: jumper.country,
-      dateOfBirth: DateTime.now(),
+      dateOfBirth: jumper.dateOfBirth,
       personality: Personalities.resourceful,
       skills: jumper.skills,
     );

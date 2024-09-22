@@ -38,13 +38,10 @@ class MainMenuContinueButton extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    CountryFlag(
-                      country: Country.monolingual(
-                        code: 'bg',
-                        language: 'pl',
-                        name: 'Bułgaria',
-                      ),
+                    const SizedBox(
+                      width: 50,
                       height: UiMainMenuConstants.continueButtonSimulationInfoIconSize,
+                      child: Placeholder(),
                     ),
                     const Gap(
                       UiMainMenuConstants.continueButtonSimulationInfoVerticalGap,

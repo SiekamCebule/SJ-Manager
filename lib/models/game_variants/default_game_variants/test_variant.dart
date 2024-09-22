@@ -3,6 +3,7 @@ import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/simulation_db_loading/team_loader.dart';
 import 'package:sj_manager/models/game_variants/default_game_variants/constants.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
+import 'package:sj_manager/models/game_variants/game_variant_start_date.dart';
 import 'package:sj_manager/models/game_variants/game_variants_io_utils.dart';
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
 import 'package:sj_manager/models/simulation_db/classification/default_classification_rules.dart';
@@ -41,6 +42,8 @@ import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
+import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
+import 'package:sj_manager/repositories/generic/value_repo.dart';
 import 'package:sj_manager/utils/multilingual_string.dart';
 import 'package:provider/provider.dart';
 
@@ -56,6 +59,7 @@ class _TestGameVariantCreator {
   late BuildContext _context;
   late List<Hill> _hills;
   late CountriesRepo _countriesRepo;
+  late ItemsIdsRepo _idsRepo;
 
   Error get _contextIsNotMountedError => StateError('Context is not mounted, but should');
 
@@ -63,6 +67,7 @@ class _TestGameVariantCreator {
     required BuildContext context,
   }) async {
     _context = context;
+    _idsRepo = context.read<ValueRepo<ItemsIdsRepo>>().last;
 
     final countries = await loadGameVariantItems<Country>(
       context: context,
@@ -76,11 +81,12 @@ class _TestGameVariantCreator {
       gameVariantId: 'test',
       fromJson: (json) {
         return TeamLoader(
-          idsRepo: context.read(),
+          idsRepo: _idsRepo,
           countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo),
         ).parse(json);
       },
     );
+    print('teams: $teams');
     if (!context.mounted) throw _contextIsNotMountedError;
     final males = await loadGameVariantItems<MaleJumper>(
       context: context,
@@ -116,6 +122,29 @@ class _TestGameVariantCreator {
         'pl': 'Essa rigcz imo sigma',
         'en': 'Essa rigcz imo sigma',
       }),
+      startDates: [
+        GameVariantStartDate(
+          label: const MultilingualString(valuesByLanguage: {
+            'pl': 'Początek okresu przygotowawczego',
+            'en': 'Start of the preparation period',
+          }),
+          date: DateTime(2024, 5, 1),
+        ),
+        GameVariantStartDate(
+          label: const MultilingualString(valuesByLanguage: {
+            'pl': 'Przed startem sezonu letniego',
+            'en': 'Before the summer season start',
+          }),
+          date: DateTime(2024, 7, 10),
+        ),
+        GameVariantStartDate(
+          label: const MultilingualString(valuesByLanguage: {
+            'pl': 'Przed startem sezonu zimowego',
+            'en': 'Before the winter season start',
+          }),
+          date: DateTime(2024, 11, 5),
+        ),
+      ],
       hills: _hills,
       countries: countries,
       teams: teams,
@@ -142,7 +171,7 @@ class _TestGameVariantCreator {
               priority: 1,
               relativeMoneyPrize: EventSeriesRelativeMoneyPrize.average,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -357,7 +386,7 @@ class _TestGameVariantCreator {
               scoringType: DefaultClassificationScoringType.pointsFromMap,
               pointsMap: worldCupPointsMap,
               competitions: wcCompetitions.toList(),
-              pointsModifiers: const {},
+              pointsModifiers: {},
               includeApperancesInTeamCompetitions: false,
             ),
           ),
@@ -383,7 +412,7 @@ class _TestGameVariantCreator {
               scoringType: DefaultClassificationScoringType.pointsFromCompetitions,
               pointsMap: null,
               competitions: wislaSixCompetitions.toList(),
-              pointsModifiers: const {},
+              pointsModifiers: {},
               includeApperancesInTeamCompetitions: true,
             ),
           ),

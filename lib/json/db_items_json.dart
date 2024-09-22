@@ -97,9 +97,11 @@ Future<void> saveItemsMapToJsonFile<T>({
   required List<T> items,
   required ToJson<T> toJson,
   required ItemsIdsRepo idsRepo,
+  bool createDirectoriesAndFilesIfNeeded = false,
 }) async {
   final orderedIdsJson = <Object>[];
-  final itemsJson = <Object, dynamic>{};
+  var itemsJson = <Object, dynamic>{};
+
   for (var item in items) {
     final id = idsRepo.idOf(item);
     orderedIdsJson.add(id);
@@ -107,10 +109,41 @@ Future<void> saveItemsMapToJsonFile<T>({
       itemsJson[id] = toJson(item);
     }
   }
-  final json = {
+
+  // This function converts non-serializable objects (_Map) to serializable Map<String, dynamic>
+  dynamic convertToEncodable(dynamic value) {
+    if (value is Map) {
+      return value.map((key, innerValue) => MapEntry(
+          key.toString(), convertToEncodable(innerValue))); // Ensure keys are Strings
+    } else if (value is List) {
+      return value.map((item) => convertToEncodable(item)).toList();
+    } else {
+      return value; // Return other types as they are
+    }
+  }
+
+  itemsJson = convertToEncodable(itemsJson);
+
+  final encodableJson = {
     'orderedIds': orderedIdsJson,
-    'items': itemsJson,
+    'items': itemsJson, // Convert itemsJson recursively
   };
-  final encodedJson = jsonEncode(json);
+
+  void inspectMap(Map<dynamic, dynamic> map) {
+    for (var value in map.values) {
+      print('value type: ${value.runtimeType}');
+      if (value is Map) {
+        inspectMap(value);
+      }
+    }
+  }
+
+  inspectMap(encodableJson);
+
+  final encodedJson = jsonEncode(encodableJson);
+
+  if (!await file.exists()) {
+    await file.create(recursive: true);
+  }
   await file.writeAsString(encodedJson);
 }

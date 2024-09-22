@@ -11,11 +11,11 @@ import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
 import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
 
 import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/country/country_team_facts.dart';
+import 'package:sj_manager/models/user_db/team/country_team/country_team_facts.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
-import 'package:sj_manager/models/user_db/team/country_team.dart';
+import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
 
 import 'competition_rules_utilities_test.mocks.dart';
 

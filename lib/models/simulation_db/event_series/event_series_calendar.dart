@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
 import 'package:sj_manager/models/simulation_db/competition/competition.dart';
 
-class EventSeriesCalendar {
+class EventSeriesCalendar with EquatableMixin {
   const EventSeriesCalendar({
     required this.competitions,
     required this.classifications,
@@ -32,4 +33,11 @@ class EventSeriesCalendar {
     }
     return areQualificationsForCompetiton;
   }
+
+  @override
+  List<Object?> get props => [
+        competitions,
+        classifications,
+        qualifications,
+      ];
 }
