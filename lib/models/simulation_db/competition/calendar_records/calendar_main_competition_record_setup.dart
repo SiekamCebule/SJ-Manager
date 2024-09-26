@@ -24,7 +24,6 @@ class CalendarMainCompetitionRecordSetup with EquatableMixin {
   final bool moveQualificationsBeforeTeamCompetition;
 
   CompetitionTypeByEntity get typeByEntity {
-    print("MAIN COMP RULES: $mainCompRules");
     return mainCompRules.competitionRules is DefaultCompetitionRules<Jumper>
         ? CompetitionTypeByEntity.individual
         : CompetitionTypeByEntity.team;

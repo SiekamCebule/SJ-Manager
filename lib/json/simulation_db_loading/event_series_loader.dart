@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
@@ -17,12 +19,12 @@ class EventSeriesParser implements SimulationDbPartParser<EventSeries> {
   final SimulationDbPartParser<EventSeriesSetup> setupParser;
 
   @override
-  EventSeries parse(Json json) {
-    final calendar = calendarParser.parse(json);
+  FutureOr<EventSeries> parse(Json json) async {
+    final calendar = await calendarParser.parse(json);
 
     return EventSeries(
       calendar: calendar,
-      setup: setupParser.parse(json['facts']),
+      setup: await setupParser.parse(json['facts']),
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
@@ -20,28 +22,44 @@ class EventSeriesCalendarParser implements SimulationDbPartParser<EventSeriesCal
   final SimulationDbPartParser<Classification> classificationParser;
 
   @override
-  EventSeriesCalendar parse(Json json) {
+  Future<EventSeriesCalendar> parse(Json json) async {
     final competitionsJson = (json['competitions'] as List).cast<Json>();
-    final competitions = competitionsJson.map((json) {
-      final competition = competitionParser.parse(json);
-      idsRepo.register(competition, id: idGenerator.generate());
-      return competition;
+    final competitionsFutures = competitionsJson.map((json) async {
+      return await _parseCompetition(json);
     }).toList();
+
     final classificationsJson = (json['classifications'] as List).cast<Json>();
-    final classifications = classificationsJson.map((json) {
-      final classification = classificationParser.parse(json);
-      idsRepo.register(classification, id: idGenerator.generate());
-      return classification;
+    final classificationsFutures = classificationsJson.map((json) async {
+      return await _parseClassification(json);
     }).toList();
+
+    final competitions = await Future.wait(competitionsFutures);
+    final classifications = await Future.wait(classificationsFutures);
+
     final qualificationsJson = json['qualifications'] as Json;
-    final qualifications = qualificationsJson.map((competitionId, qualifiactionsId) {
-      return MapEntry(idsRepo.get<Competition>(competitionId),
-          idsRepo.get<Competition>(qualifiactionsId));
+    final qualifications = qualificationsJson.map((competitionId, qualificationsId) {
+      return MapEntry(
+        idsRepo.get<Competition>(competitionId),
+        idsRepo.get<Competition>(qualificationsId),
+      );
     });
+
     return EventSeriesCalendar(
-      competitions: competitions.toList(),
-      classifications: classifications.toList(),
+      competitions: competitions,
+      classifications: classifications,
       qualifications: qualifications,
     );
+  }
+
+  FutureOr<Competition> _parseCompetition(Json json) async {
+    final competition = await competitionParser.parse(json);
+    idsRepo.register(competition, id: idGenerator.generate());
+    return competition;
+  }
+
+  FutureOr<Classification> _parseClassification(Json json) async {
+    final classification = await classificationParser.parse(json);
+    idsRepo.register(classification, id: idGenerator.generate());
+    return classification;
   }
 }

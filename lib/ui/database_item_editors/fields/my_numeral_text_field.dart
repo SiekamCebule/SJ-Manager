@@ -158,14 +158,12 @@ class MyNumeralTextFieldState extends State<MyNumeralTextField> {
   }
 
   void _updateController(String text) {
-    print('chuj, ${widget.maxDecimalPlaces}');
     var textEditingValue = widget.controller.value;
     for (var formatter in _inputFormatters) {
       textEditingValue = formatter.formatEditUpdate(
         textEditingValue,
         textEditingValue.copyWith(text: text.toString()),
       );
-      print('value: $textEditingValue');
     }
     widget.controller.value = textEditingValue;
   }

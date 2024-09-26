@@ -10,7 +10,7 @@ class CountriesRepo extends ItemsRepo<Country> {
       (country) => country.code.toLowerCase() == code.toLowerCase(),
     );
     if (toReturn == null) {
-      throw CountryNotFoundError(countryCode: code);
+      throw CountryNotFoundError(countryCode: code.toLowerCase());
     }
     return toReturn;
   }

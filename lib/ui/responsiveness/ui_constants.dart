@@ -66,4 +66,6 @@ abstract class UiItemEditorsConstants {
 
 abstract class UiSpecificItemConstants {
   static const double countryFlagAspectRatio = 4 / 3;
+  static const double simulationWizardHeight = 650;
+  static const double simulationWizardWidth = 900;
 }

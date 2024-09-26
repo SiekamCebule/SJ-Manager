@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_competition_round_rules.dart';
@@ -19,36 +21,39 @@ class DefaultCompetitionRulesParser
   final SimulationDbPartParser<DefaultCompetitionRoundRules> roundRulesParser;
 
   @override
-  DefaultCompetitionRules parse(Json json) {
+  FutureOr<DefaultCompetitionRules> parse(Json json) async {
     final type = json['type'] as String;
     return switch (type) {
-      'individual' => _loadIndividual(json),
-      'team' => _loadTeam(json),
+      'individual' => await _loadIndividual(json),
+      'team' => await _loadTeam(json),
       _ => throw ArgumentError(
           'Invalid competition round type: $type (it can be only \'individual\' or \'team\')',
         ),
     };
   }
 
-  DefaultCompetitionRules<Jumper> _loadIndividual(Json json) {
+  FutureOr<DefaultCompetitionRules<Jumper>> _loadIndividual(Json json) async {
     final rounds =
-        _loadRoundsDynamic(json).cast<DefaultIndividualCompetitionRoundRules>();
+        (await _loadRoundsDynamic(json)).cast<DefaultIndividualCompetitionRoundRules>();
     return DefaultCompetitionRules(
       rounds: rounds,
     );
   }
 
-  DefaultCompetitionRules<CompetitionTeam> _loadTeam(Json json) {
-    final rounds = _loadRoundsDynamic(json).cast<DefaultTeamCompetitionRoundRules>();
+  FutureOr<DefaultCompetitionRules<CompetitionTeam>> _loadTeam(Json json) async {
+    final rounds =
+        (await _loadRoundsDynamic(json)).cast<DefaultTeamCompetitionRoundRules>();
     return DefaultCompetitionRules<CompetitionTeam>(
       rounds: rounds,
     );
   }
 
-  List<DefaultCompetitionRoundRules> _loadRoundsDynamic(Json json) {
+  FutureOr<List<DefaultCompetitionRoundRules>> _loadRoundsDynamic(Json json) async {
     final roundsJson = json['rounds'] as List<dynamic>;
-    final rounds =
-        roundsJson.map((roundJson) => roundRulesParser.parse(roundJson)).toList();
+    final rounds = await Future.wait(
+      roundsJson.map((roundJson) async => await roundRulesParser.parse(roundJson)),
+    );
+
     return rounds;
   }
 }

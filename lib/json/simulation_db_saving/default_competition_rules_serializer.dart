@@ -39,6 +39,6 @@ class DefaultCompetitionRulesSerializer
     final jsonList = roundRulesList.map((roundRules) {
       return roundRulesSerializer.serialize(roundRules);
     }).toList();
-    return jsonList;
+    return jsonList.cast();
   }
 }

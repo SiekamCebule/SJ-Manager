@@ -48,7 +48,6 @@ class _MyDateFormFieldState extends State<MyDateFormField> {
       textFormFieldKey: widget.formKey,
       controller: widget.controller,
       onChange: () {
-        print('current text: ${widget.controller.text}');
         final date = widget.dateFormat.tryParse(widget.controller.text);
         if (date != null) {
           _lastValidDate = date;

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_round_rules.dart';
@@ -18,14 +20,14 @@ class KoRoundRulesParser implements SimulationDbPartParser<KoRoundRules> {
   final SimulationDbPartParser<KoGroupsCreator> koGroupsCreatorParser;
 
   @override
-  KoRoundRules parse(Json json) {
+  FutureOr<KoRoundRules> parse(Json json) async {
     return KoRoundRules(
       advancementDeterminator:
           advancementDeterminatorParser.parse(json['advancementDeterminator'])
               as KoRoundAdvancementDeterminator<dynamic,
                   KoRoundAdvancementDeterminingContext>,
       advancementCount: json['advancementCount'],
-      koGroupsCreator: koGroupsCreatorParser.parse(json['koGroupsCreator']),
+      koGroupsCreator: await koGroupsCreatorParser.parse(json['koGroupsCreator']),
       groupSize: json['groupSize'],
     );
   }

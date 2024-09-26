@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
@@ -19,7 +21,7 @@ class ClassificationParser implements SimulationDbPartParser<Classification> {
       defaultClassificationRulesParser;
 
   @override
-  Classification parse(Json json) {
+  FutureOr<Classification> parse(Json json) async {
     final type = json['type'] as String;
 
     return switch (type) {
@@ -29,9 +31,9 @@ class ClassificationParser implements SimulationDbPartParser<Classification> {
     };
   }
 
-  DefaultClassification _loadDefaultClassification(Json json) {
+  FutureOr<DefaultClassification> _loadDefaultClassification(Json json) async {
     final standings = standingsParser.parse(json['standings']);
-    final rules = defaultClassificationRulesParser.parse(json['rules']);
+    final rules = await defaultClassificationRulesParser.parse(json['rules']);
     return DefaultClassification(
       name: json['name'],
       standings: standings as Standings<dynamic, ClassificationScoreDetails>,

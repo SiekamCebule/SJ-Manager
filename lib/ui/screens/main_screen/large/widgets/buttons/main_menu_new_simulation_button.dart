@@ -8,7 +8,6 @@ class MainMenuNewSimulationButton extends StatelessWidget {
     return MainMenuCard(
       borderRadius: const BorderRadius.all(UiMainMenuConstants.buttonsBorderRadius),
       onTap: () async {
-        // TODO: Add dialog dimensions to UI constants
         final optionsRepo = await showGeneralDialog<SimulationWizardOptionsRepo?>(
           context: context,
           barrierDismissible: false,
@@ -17,8 +16,8 @@ class MainMenuNewSimulationButton extends StatelessWidget {
           pageBuilder: (context, animationIn, animationOut) {
             return const Center(
               child: SizedBox(
-                width: 1000,
-                height: 650,
+                width: UiSpecificItemConstants.simulationWizardWidth,
+                height: UiSpecificItemConstants.simulationWizardHeight,
                 child: SimulationWizardDialog(),
               ),
             );
@@ -39,13 +38,33 @@ class MainMenuNewSimulationButton extends StatelessWidget {
             );
           },
         );
-        final database = DefaultSimulationDatabaseCreator(idGenerator: context.read())
-            .create(optionsRepo!);
-        database.dispose();
-        context.read<ValueRepo<ItemsIdsRepo>>().set(database.idsRepo);
-        await Future.delayed(Duration.zero);
-        DefaultSimulationDatabaseSaverToFile().serialize(
-            database: database, simulationId: 'test_simulation', context: context);
+        if (!context.mounted) return;
+        if (optionsRepo != null) {
+          final database = DefaultSimulationDatabaseCreator(idGenerator: context.read())
+              .create(optionsRepo);
+          final userSimulation = UserSimulation(
+            id: optionsRepo.simulationId.last!,
+            name: optionsRepo.simulationName.last!,
+            saveTime: DateTime.now(),
+            database: database,
+          );
+          final simulationsRepo = context.read<EditableItemsRepo<UserSimulation>>();
+          simulationsRepo.add(userSimulation);
+          // TODO: disposing baz danych zapisów
+          DefaultSimulationDatabaseSaverToFile(
+            simulationId: userSimulation.id,
+            pathsCache: context.read(),
+            pathsRegistry: context.read(),
+            idsRepo: database.idsRepo,
+          ).serialize(
+            database: database,
+          );
+          await UserSimulationsRegistrySaverToFile(
+                  userSimulations: simulationsRepo.last, pathsCache: context.read())
+              .serialize();
+
+          //router.navigateTo(context, '/simulationMainScreen'); TODO
+        }
       },
       child: MainMenuTextContentButtonBody(
         titleText: translate(context).newSimulation,

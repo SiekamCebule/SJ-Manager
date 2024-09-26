@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sj_manager/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
@@ -17,9 +19,9 @@ class EventSeriesSerializer implements SimulationDbPartSerializer<EventSeries> {
   final SimulationDbPartSerializer<EventSeriesSetup> setupSerializer;
 
   @override
-  Json serialize(EventSeries series) {
+  FutureOr<Json> serialize(EventSeries series) async {
     return {
-      'calendar': calendarSerializer.serialize(series.calendar),
+      'calendar': await calendarSerializer.serialize(series.calendar),
       'facts': setupSerializer.serialize(series.setup),
     };
   }

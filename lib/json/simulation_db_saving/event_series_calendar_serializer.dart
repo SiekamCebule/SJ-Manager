@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sj_manager/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
@@ -18,21 +20,42 @@ class EventSeriesCalendarSerializer
   final SimulationDbPartSerializer<Classification> classificationSerializer;
 
   @override
-  Json serialize(EventSeriesCalendar calendar) {
-    final competitionsJson = calendar.competitions.map((competition) {
-      return competitionSerializer.serialize(competition);
+  Future<Json> serialize(EventSeriesCalendar calendar) async {
+    final competitionsJsonFutures = calendar.competitions.map((competition) async {
+      return await _serializeCompetition(competition);
     }).toList();
-    final classificationsJson = calendar.classifications.map((classification) {
-      return classificationSerializer.serialize(classification);
+
+    final classificationsJsonFutures =
+        calendar.classifications.map((classification) async {
+      return await _serializeClassification(classification);
     }).toList();
-    final qualificationsJson = calendar.qualifications.map((competition, qualifications) {
-      return MapEntry(idsRepo.idOf(competition), idsRepo.idOf(qualifications));
-    });
+
+    final qualificationsJsonFutures = calendar.qualifications.entries.map((entry) async {
+      return await _serializeQualification(MapEntry(entry.key, entry.value));
+    }).toList();
+
+    final competitionsJson = await Future.wait(competitionsJsonFutures);
+    final classificationsJson = await Future.wait(classificationsJsonFutures);
+    final qualificationsJson = await Future.wait(qualificationsJsonFutures);
 
     return {
       'competitions': competitionsJson,
       'classifications': classificationsJson,
-      'qualifications': qualificationsJson,
+      'qualifications': Map.fromEntries(qualificationsJson),
     };
+  }
+
+  FutureOr<Map<String, dynamic>> _serializeCompetition(Competition competition) async {
+    return await competitionSerializer.serialize(competition);
+  }
+
+  FutureOr<Map<String, dynamic>> _serializeClassification(
+      Classification classification) async {
+    return await classificationSerializer.serialize(classification);
+  }
+
+  FutureOr<MapEntry<Object, Object>> _serializeQualification(
+      MapEntry<Competition, Competition> entry) async {
+    return MapEntry(idsRepo.idOf(entry.key), idsRepo.idOf(entry.value));
   }
 }

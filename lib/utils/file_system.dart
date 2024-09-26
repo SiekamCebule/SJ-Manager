@@ -67,6 +67,27 @@ Directory databaseDirectory(PlarformSpecificPathsCache pathsCache, String direct
   return userDataDirectory(pathsCache, path.join('database', directoryPath));
 }
 
+Directory simulationDirectory({
+  required PlarformSpecificPathsCache pathsCache,
+  required String simulationId,
+}) {
+  return userDataDirectory(pathsCache, path.join('simulations', simulationId));
+}
+
+File simulationFile({
+  required PlarformSpecificPathsCache pathsCache,
+  required String simulationId,
+  required String fileName,
+}) {
+  return fileInDirectory(
+    simulationDirectory(
+      pathsCache: pathsCache,
+      simulationId: simulationId,
+    ),
+    fileName,
+  );
+}
+
 File fileInDirectory(Directory directory, String name) {
   return File(path.join(directory.path, name));
 }

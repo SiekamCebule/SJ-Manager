@@ -47,6 +47,7 @@ class DbItemsListLoaderFromFileHighLevelWrapper<T extends Object> {
               newFilePath: basename(path),
               targetDirectory: databaseDirectory(context.read(), '').absolute.path,
             ),
+            barrierDismissible: false,
           );
         } else {
           showSjmDialog(
@@ -57,6 +58,7 @@ class DbItemsListLoaderFromFileHighLevelWrapper<T extends Object> {
               error: error,
               stackTrace: stackTrace,
             ),
+            barrierDismissible: false,
           );
         }
       },

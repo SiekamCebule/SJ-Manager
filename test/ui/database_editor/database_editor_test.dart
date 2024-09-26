@@ -30,7 +30,6 @@ import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart'
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
-import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/repositories/settings/local_user_settings_repo.dart';
 import 'package:sj_manager/repositories/settings/mocked_user_settings_repo.dart';
 import 'package:sj_manager/repositories/settings/user_settings_repo.dart';
@@ -228,9 +227,6 @@ void main() {
                 ),
                 RepositoryProvider(create: (context) {
                   return DbEditingDefaultsRepo.appDefault();
-                }),
-                Provider(create: (context) {
-                  return ItemsIdsRepo();
                 }),
                 Provider<IdGenerator>(create: (context) {
                   return const NanoIdGenerator(size: 10);

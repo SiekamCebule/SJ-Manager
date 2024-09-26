@@ -31,6 +31,7 @@ class _DynamicContentState extends State<_DynamicContent> {
         child: switch (navCubit.state.screen) {
           SimulationWizardScreenType.mode => _ModeScreen(onChange: (mode) {
               context.read<SimulationWizardOptionsRepo>().mode.set(mode);
+              navCubit.mode = mode;
               if (mode != null) {
                 navCubit.unblockGoingForward();
               } else {

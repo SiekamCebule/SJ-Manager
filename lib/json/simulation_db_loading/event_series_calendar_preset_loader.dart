@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
@@ -21,18 +23,18 @@ class EventSeriesCalendarPresetParser
       highLevelCalendarParser;
 
   @override
-  EventSeriesCalendarPreset parse(Json json) {
+  FutureOr<EventSeriesCalendarPreset> parse(Json json) async {
     final type = json['type'] as String;
     return switch (type) {
       'lowLevel' => LowLevelEventSeriesCalendarPreset(
           name: json['name'],
-          calendar: lowLevelCalendarParser.parse(
+          calendar: await lowLevelCalendarParser.parse(
             json['calendar'],
           ),
         ),
       'highLevel' => SimpleEventSeriesCalendarPreset(
           name: json['name'],
-          highLevelCalendar: highLevelCalendarParser.parse(
+          highLevelCalendar: await highLevelCalendarParser.parse(
             json['calendar'],
           ),
         ),

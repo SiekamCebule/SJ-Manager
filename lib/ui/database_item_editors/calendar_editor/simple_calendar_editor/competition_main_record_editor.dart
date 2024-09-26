@@ -103,8 +103,7 @@ class CompetitionMainRecordEditorState extends State<CompetitionMainRecordEditor
                   validator: (value) {
                     if (value == null) {
                       _hill = _cached?.hill;
-                      return null; // TODO: Maybe it is wrong
-                      return 'Potrzebujemy skoczni';
+                      return null;
                     }
                     return null;
                   },
@@ -207,8 +206,7 @@ class CompetitionMainRecordEditorState extends State<CompetitionMainRecordEditor
                   validator: (value) {
                     if (value == null) {
                       _mainCompetitionRulesProvider = _cached?.setup.mainCompRules;
-                      return null; // TODO: Maybe it is wrong
-                      return 'Potrzebujemy konkursu głównego';
+                      return null;
                     }
                     return null;
                   },
@@ -317,8 +315,6 @@ class CompetitionMainRecordEditorState extends State<CompetitionMainRecordEditor
     _qualsRulesProviderController.text =
         (record.setup.qualificationsRules as DefaultCompetitionRulesPreset?)?.name ??
             noneText;
-    print(
-        'main name: ${(record.setup.mainCompRules as DefaultCompetitionRulesPreset).name}');
     _mainCompetitionRulesProviderController.text =
         (record.setup.mainCompRules as DefaultCompetitionRulesPreset).name;
   }

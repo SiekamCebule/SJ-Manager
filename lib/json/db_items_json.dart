@@ -10,11 +10,14 @@ Future<List<T>> loadItemsListFromJsonFile<T>({
   required FromJson<T> fromJson,
 }) async {
   final fileContent = await file.readAsString();
-  final itemsInJson = safeJsonDecode(fileContent) as List<dynamic>;
-  final items = itemsInJson.map((json) => fromJson(json)).toList();
+  final decodedContent = safeJsonDecode(fileContent);
+  final itemsInJson = decodedContent as List<dynamic>;
 
-  final list = items.toList();
-  return list;
+  final items = await Future.wait(
+    itemsInJson.map((json) async => await fromJson(json)),
+  );
+
+  return items;
 }
 
 class LoadedItemsMap<T> {
@@ -44,8 +47,9 @@ Future<LoadedItemsMap<T>> loadItemsMapFromJsonFile<T>({
         'An ID contained in \'orderedIds\' is not contained in \'items\' ($id)',
       );
     }
+
     final itemJson = itemsMap[id];
-    final item = fromJson(itemJson);
+    final item = await fromJson(itemJson); // Await on FutureOr
     final count = items[id] != null ? items[id]!.$2 + 1 : 1;
     items[id] = (item, count);
   }
@@ -74,11 +78,13 @@ Future<List<T>> loadItemsFromDirectory<T>({
   final items = <T>[];
   final files = directory.listSync().whereType<File>();
   final matchingFiles = files.where(match);
+
   for (var file in matchingFiles) {
     final json = safeJsonDecode(await file.readAsString());
-    final item = fromJson(json);
+    final item = await fromJson(json); // Await on FutureOr<T>
     items.add(item);
   }
+
   return items;
 }
 
@@ -86,9 +92,12 @@ Future<void> saveItemsListToJsonFile<T>({
   required File file,
   required List<T> items,
   required ToJson<T> toJson,
+  bool pretty = false,
 }) async {
-  final itemsInJson = items.map((item) => toJson(item)).toList();
-  final jsonContent = jsonEncode(itemsInJson);
+  final itemsInJson =
+      await Future.wait(items.map((item) async => await toJson(item)).toList());
+  final encoder = pretty ? const JsonEncoder.withIndent('  ') : const JsonEncoder();
+  final jsonContent = encoder.convert(itemsInJson);
   await file.writeAsString(jsonContent);
 }
 
@@ -106,11 +115,12 @@ Future<void> saveItemsMapToJsonFile<T>({
     final id = idsRepo.idOf(item);
     orderedIdsJson.add(id);
     if (!itemsJson.containsKey(id)) {
-      itemsJson[id] = toJson(item);
+      final itemJson = await toJson(item); // Await to handle FutureOr
+      print('ITEM JSON: $itemJson');
+      itemsJson[id] = itemJson;
     }
   }
 
-  // This function converts non-serializable objects (_Map) to serializable Map<String, dynamic>
   dynamic convertToEncodable(dynamic value) {
     if (value is Map) {
       return value.map((key, innerValue) => MapEntry(
@@ -126,24 +136,13 @@ Future<void> saveItemsMapToJsonFile<T>({
 
   final encodableJson = {
     'orderedIds': orderedIdsJson,
-    'items': itemsJson, // Convert itemsJson recursively
+    'items': itemsJson,
   };
-
-  void inspectMap(Map<dynamic, dynamic> map) {
-    for (var value in map.values) {
-      print('value type: ${value.runtimeType}');
-      if (value is Map) {
-        inspectMap(value);
-      }
-    }
-  }
-
-  inspectMap(encodableJson);
 
   final encodedJson = jsonEncode(encodableJson);
 
   if (!await file.exists()) {
-    await file.create(recursive: true);
+    await file.create(recursive: createDirectoriesAndFilesIfNeeded);
   }
   await file.writeAsString(encodedJson);
 }

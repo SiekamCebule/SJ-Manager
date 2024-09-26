@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/classification/classification.dart';
@@ -21,22 +24,35 @@ class HighLevelCalendarParser
   final SimulationDbPartParser<Classification> classificationParser;
 
   @override
-  HighLevelCalendar<CalendarMainCompetitionRecord> parse(Json json) {
+  Future<HighLevelCalendar<CalendarMainCompetitionRecord>> parse(Json json) async {
     final competitionsJson = (json['competitions'] as List).cast<Json>();
-    final competitions = competitionsJson.map((json) {
-      final competitionRecord = mainCompetitionRecordParser.parse(json);
-      idsRepo.register(competitionRecord, id: idGenerator.generate());
-      return competitionRecord;
+    final competitionsFutures = competitionsJson.map((json) {
+      return compute(_parseCompetitionRecord, json);
     }).toList();
+
     final classificationsJson = (json['classifications'] as List).cast<Json>();
-    final classifications = classificationsJson.map((json) {
-      final classification = classificationParser.parse(json);
-      idsRepo.register(classification, id: idGenerator.generate());
-      return classification;
+    final classificationsFutures = classificationsJson.map((json) {
+      return compute(_parseClassification, json);
     }).toList();
+
+    final competitions = await Future.wait(competitionsFutures);
+    final classifications = await Future.wait(classificationsFutures);
+
     return HighLevelCalendar(
-      highLevelCompetitions: competitions.toList(),
-      classifications: classifications.toList(),
+      highLevelCompetitions: competitions,
+      classifications: classifications,
     );
+  }
+
+  FutureOr<CalendarMainCompetitionRecord> _parseCompetitionRecord(Json json) async {
+    final competitionRecord = await mainCompetitionRecordParser.parse(json);
+    idsRepo.register(competitionRecord, id: idGenerator.generate());
+    return competitionRecord;
+  }
+
+  FutureOr<Classification> _parseClassification(Json json) async {
+    final classification = await classificationParser.parse(json);
+    idsRepo.register(classification, id: idGenerator.generate());
+    return classification;
   }
 }

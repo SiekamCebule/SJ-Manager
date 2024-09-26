@@ -1,4 +1,4 @@
-import 'dart:io';
+/*import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,15 +27,12 @@ class LocalDbLoaderFromDirectory {
 
   final Directory directory;
 
-  late final ItemsIdsRepo _idsRepo;
   late final BuildContext _context;
   late final DbItemsFilePathsRegistry _filePaths;
   late final ItemsReposRegistry _registry;
 
   Future<ItemsReposRegistry> load(
       {required BuildContext context, required ItemsIdsRepo idsRepo}) async {
-    _idsRepo = idsRepo;
-    _idsRepo.clear();
     _context = context;
     _filePaths = context.read<DbItemsFilePathsRegistry>();
     _registry = ItemsReposRegistry();
@@ -105,3 +102,4 @@ class LocalDbLoaderFromDirectory {
 
   File _getFile(String fileName) => File('${directory.path}/$fileName');
 }
+*/
