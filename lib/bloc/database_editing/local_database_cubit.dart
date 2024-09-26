@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,19 +12,16 @@ import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
-import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
 
 class LocalDatabaseCubit extends Cubit<ItemsReposRegistry?> {
   LocalDatabaseCubit({
     required this.gameVariant,
     required this.gameVariantsRepo,
-    required this.idsRepo,
   }) : super(null);
 
   final GameVariant gameVariant;
   final ItemsRepo<GameVariant> gameVariantsRepo;
-  final ItemsIdsRepo idsRepo;
 
   Future<void> setUp() async {
     emit(
@@ -75,13 +70,6 @@ class LocalDatabaseCubit extends Cubit<ItemsReposRegistry?> {
       toJson: context.read<DbItemsJsonConfiguration<FemaleJumper>>().toJson,
       gameVariantId: newVariant.id,
     );
-  }
-
-  Future<void> loadExternal(BuildContext context, Directory directory) async {
-    emit(await ItemsReposRegistry.fromDirectory(
-      directory,
-      context: context,
-    ));
   }
 
   void dispose() {

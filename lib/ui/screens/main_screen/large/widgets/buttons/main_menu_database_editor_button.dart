@@ -18,8 +18,6 @@ class MainMenuDatabaseEditorButton extends StatelessWidget {
           ),
         ) as GameVariant?;
         if (!context.mounted) return;
-        print('game variant to edit: $gameVariantToEdit');
-        print('ff');
         router.printTree();
         if (gameVariantToEdit != null) {
           router.navigateTo(

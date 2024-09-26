@@ -1,25 +1,49 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_screen_type.dart';
 import 'package:sj_manager/bloc/simulation_wizard/state/simulation_wizard_navigation_state.dart';
+import 'package:sj_manager/models/simulation_db/enums.dart';
 import 'package:sj_manager/utils/iterable.dart';
 
 class SimulationWizardNavigationCubit extends Cubit<SimulationWizardNavigationState> {
   SimulationWizardNavigationCubit({
-    required this.screens,
     required this.onFinish,
   }) : super(
-          SimulationWizardNavigationState(
+          const SimulationWizardNavigationState(
             currentScreenIndex: 0,
-            screen: screens[0],
-            nextScreen: screens.maybeElementAt(1),
+            screen: SimulationWizardScreenType.mode,
+            nextScreen: null,
             canGoBack: false,
-            canGoForward: screens.length > 1,
+            canGoForward: false,
           ),
         );
 
-  final List<SimulationWizardScreenType> screens;
   final Function() onFinish;
   bool _finished = false;
+  SimulationMode? _mode;
+  SimulationMode? get mode => _mode;
+  set mode(SimulationMode? other) {
+    _mode = other;
+    if (_mode == null) return;
+    final screensCache = screens;
+    emit(
+      SimulationWizardNavigationState(
+        currentScreenIndex: 0,
+        screen: screensCache.first,
+        nextScreen: screensCache.maybeElementAt(1),
+        canGoBack: false,
+        canGoForward: screensCache.length > 1,
+      ),
+    );
+  }
+
+  List<SimulationWizardScreenType> get screens {
+    return switch (mode) {
+      SimulationMode.personalCoach => forPersonalCoach,
+      SimulationMode.classicCoach => forClassicCoach,
+      SimulationMode.observer => forObserver,
+      null => [],
+    };
+  }
 
   void goForward() {
     if (state.screen == screens.last) {
@@ -74,4 +98,27 @@ class SimulationWizardNavigationCubit extends Cubit<SimulationWizardNavigationSt
   bool _shouldBeAbleToGoForward() {
     return screens.length > state.currentScreenIndex + 1;
   }
+
+  static const forPersonalCoach = [
+    SimulationWizardScreenType.mode,
+    SimulationWizardScreenType.gameVariant,
+    SimulationWizardScreenType.startDate,
+    SimulationWizardScreenType.otherOptions,
+  ];
+
+  static const forClassicCoach = [
+    SimulationWizardScreenType.mode,
+    SimulationWizardScreenType.gameVariant,
+    SimulationWizardScreenType.startDate,
+    SimulationWizardScreenType.team,
+    SimulationWizardScreenType.subteam,
+    SimulationWizardScreenType.otherOptions,
+  ];
+
+  static const forObserver = [
+    SimulationWizardScreenType.mode,
+    SimulationWizardScreenType.gameVariant,
+    SimulationWizardScreenType.startDate,
+    SimulationWizardScreenType.otherOptions,
+  ];
 }

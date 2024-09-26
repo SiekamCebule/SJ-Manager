@@ -43,7 +43,6 @@ import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
-import 'package:sj_manager/repositories/generic/value_repo.dart';
 import 'package:sj_manager/utils/multilingual_string.dart';
 import 'package:provider/provider.dart';
 
@@ -56,19 +55,14 @@ Future<GameVariant> constructTestGameVariant({
 }
 
 class _TestGameVariantCreator {
-  late BuildContext _context;
   late List<Hill> _hills;
   late CountriesRepo _countriesRepo;
-  late ItemsIdsRepo _idsRepo;
 
   Error get _contextIsNotMountedError => StateError('Context is not mounted, but should');
 
   Future<GameVariant> construct({
     required BuildContext context,
   }) async {
-    _context = context;
-    _idsRepo = context.read<ValueRepo<ItemsIdsRepo>>().last;
-
     final countries = await loadGameVariantItems<Country>(
       context: context,
       gameVariantId: 'test',
@@ -81,12 +75,11 @@ class _TestGameVariantCreator {
       gameVariantId: 'test',
       fromJson: (json) {
         return TeamLoader(
-          idsRepo: _idsRepo,
+          idsRepo: ItemsIdsRepo(), // CountryTeam loading doesn't need ids repos
           countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo),
         ).parse(json);
       },
     );
-    print('teams: $teams');
     if (!context.mounted) throw _contextIsNotMountedError;
     final males = await loadGameVariantItems<MaleJumper>(
       context: context,

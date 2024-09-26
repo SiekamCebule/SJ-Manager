@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
@@ -15,10 +17,10 @@ class CompetitionRulesPresetParser
   final SimulationDbPartParser<DefaultCompetitionRules> rulesParser;
 
   @override
-  DefaultCompetitionRulesPreset parse(Json json) {
+  FutureOr<DefaultCompetitionRulesPreset> parse(Json json) async {
     return DefaultCompetitionRulesPreset(
       name: json['name'],
-      rules: rulesParser.parse(json['rules']),
+      rules: await rulesParser.parse(json['rules']),
     );
   }
 }

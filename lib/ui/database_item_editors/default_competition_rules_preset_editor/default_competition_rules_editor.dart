@@ -201,7 +201,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                 builder: (context, constraints) {
                   final entries = _constructEntries<CompetitionScoreCreator>(
                     condition: (config) {
-                      print(config.object.runtimeType);
                       if (_competitionType == CompetitionTypeByEntity.individual) {
                         return config.object
                             is CompetitionScoreCreator<CompetitionJumperScore>;
@@ -351,7 +350,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
                                     controller: _entitiesLimitTypeController,
                                     label: const Text('Rodzaj limitu'),
                                     width: constraints.maxWidth,
-                                    entries: [
+                                    entries: const [
                                       DropdownMenuEntry(
                                         value: null,
                                         label: 'Brak limitu',
@@ -1420,7 +1419,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
 
   void _ensureCorrectCompetitionScoreCreator() {
     final repo = context.read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>();
-    print('type: $_competitionType');
     final whereType = switch (_competitionType) {
       CompetitionTypeByEntity.individual => repo.objects.whereType<
           DbEditingAvaiableObjectConfig<
@@ -1430,7 +1428,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
     };
     final firstDefault = whereType.first.object as CompetitionScoreCreator;
     _competitionScoreCreator = firstDefault;
-    print('competition score creator: $_competitionScoreCreator');
     _competitionScoreCreatorController.text = repo.getKeyByObject(firstDefault);
   }
 

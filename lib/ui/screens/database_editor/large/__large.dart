@@ -72,7 +72,6 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     _localDbCopy = LocalDatabaseCubit(
       gameVariant: context.read(),
       gameVariantsRepo: context.read(),
-      idsRepo: context.read(),
     );
     await _localDbCopy.setUp();
     if (!mounted) return;
@@ -80,7 +79,6 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       filtersRepo: _filters,
       itemsRepos: _localDbCopy.state!,
       selectedIndexesRepo: _selectedIndexes,
-      idsRepo: context.read(),
       idGenerator: context.read(),
     );
     _localDbCopyChangesSubscription = _localDbCopy.stream.listen((state) {

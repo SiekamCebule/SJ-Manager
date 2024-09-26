@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
@@ -19,23 +21,24 @@ class MainCompetitionRecordParser
   final SimulationDbPartParser<DefaultCompetitionRulesProvider> rulesProviderParser;
 
   @override
-  CalendarMainCompetitionRecord parse(Json json) {
-    final mainCompetitionRules = rulesProviderParser.parse(json['mainCompetitionRules']);
+  FutureOr<CalendarMainCompetitionRecord> parse(Json json) async {
+    final mainCompetitionRules =
+        await rulesProviderParser.parse(json['mainCompetitionRules']);
     final qualsRulesJson = json['qualsRules'] as Json?;
     final qualsRules =
-        qualsRulesJson != null ? rulesProviderParser.parse(qualsRulesJson) : null;
+        qualsRulesJson != null ? await rulesProviderParser.parse(qualsRulesJson) : null;
     final trialRoundRulesJson = json['trialRoundRules'] as Json?;
     final trialRoundRules = trialRoundRulesJson != null
-        ? rulesProviderParser.parse(trialRoundRulesJson)
+        ? await rulesProviderParser.parse(trialRoundRulesJson)
         : null;
     final trainingsRulesJson = json['trainingsRules'] as Json?;
-    final trainingsRules =
-        trainingsRulesJson != null ? rulesProviderParser.parse(trainingsRulesJson) : null;
+    final trainingsRules = trainingsRulesJson != null
+        ? await rulesProviderParser.parse(trainingsRulesJson)
+        : null;
 
     return CalendarMainCompetitionRecord(
       hill: idsRepo.get(json['hillId']),
-      date: null,
-      //date: DateTime.parse(json['date']),
+      date: DateTime.parse(json['date']),
       setup: CalendarMainCompetitionRecordSetup(
         mainCompRules: mainCompetitionRules,
         qualificationsRules: qualsRules,

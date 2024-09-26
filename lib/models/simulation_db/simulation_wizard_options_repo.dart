@@ -27,6 +27,8 @@ class SimulationWizardOptionsRepo {
   final archiveEndedSeasonResults = NullableValueRepo<bool?>(initial: null, init: true);
   final showJumperSkills = NullableValueRepo<bool?>(initial: null, init: true);
   final showJumperDynamicParameters = NullableValueRepo<bool?>(initial: null, init: true);
+  final simulationId = NullableValueRepo<String?>(initial: null, init: true);
+  final simulationName = NullableValueRepo<String?>(initial: null, init: true);
 
   List<NullableValueRepo> get _repos => [
         mode,
@@ -37,6 +39,8 @@ class SimulationWizardOptionsRepo {
         archiveEndedSeasonResults,
         showJumperSkills,
         showJumperDynamicParameters,
+        simulationId,
+        simulationName,
       ];
 
   late final Stream<void> _changes;

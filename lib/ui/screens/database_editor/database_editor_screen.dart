@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:async/async.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,16 +22,7 @@ import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
-import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
-import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record_setup.dart';
-import 'package:sj_manager/models/simulation_db/competition/high_level_calendar.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_round_rules.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/concrete/individual/default_linear.dart';
 import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/concrete/team/default_linear.dart';
@@ -63,7 +52,6 @@ import 'package:sj_manager/filters/hills/hills_filter.dart';
 import 'package:sj_manager/l10n/hill_parameters_translations.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
-import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
@@ -88,11 +76,9 @@ import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart
 import 'package:sj_manager/ui/reusable_widgets/filtering/search_text_field.dart';
 import 'package:sj_manager/ui/reusable_widgets/menu_entries/predefined_reusable_entries.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/database_editor_unsaved_changes_dialog.dart';
-import 'package:sj_manager/ui/screens/database_editor/large/dialogs/selected_db_is_not_valid_dialog.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropriate_db_item_list_tile.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
 import 'package:sj_manager/utils/colors.dart';
-import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/single_where_type.dart';
 
 part 'large/__large.dart';
@@ -107,7 +93,6 @@ part 'large/widgets/__remove_fab.dart';
 part 'large/widgets/__items_list.dart';
 part 'large/widgets/db_editor_animated_editor.dart';
 part 'large/widgets/__save_as_button.dart';
-part 'large/widgets/__load_button.dart';
 part 'large/widgets/db_editor_items_list_empty_state_body.dart';
 part 'large/widgets/__items_list_non_empty_state_body.dart';
 part 'large/widgets/item_editor_empty_state_body.dart';
@@ -115,7 +100,6 @@ part 'large/widgets/item_editor_non_empty_state_body.dart';
 part 'large/widgets/__main_body.dart';
 
 List<RepositoryProvider> defaultDbEditorProviders(BuildContext context) {
-  final translator = translate(context);
   return [
     RepositoryProvider<DbEditingAvailableObjectsRepo<StandingsPositionsCreator>>(
       create: (context) => DbEditingAvailableObjectsRepo(initial: [
@@ -252,119 +236,10 @@ List<RepositoryProvider> defaultDbEditorProviders(BuildContext context) {
       final tempCountriesRepo =
           CountriesRepo(initial: context.read<GameVariant>().countries);
       final noneCountry = tempCountriesRepo.none;
-      final koRoundRules = KoRoundRules(
-        advancementDeterminator: context
-                .read<DbEditingAvailableObjectsRepo<KoRoundAdvancementDeterminator>>()
-                .getObject('n_best')
-            as KoRoundAdvancementDeterminator<dynamic,
-                KoRoundAdvancementDeterminingContext>,
-        advancementCount: 1,
-        koGroupsCreator: context
-            .read<DbEditingAvailableObjectsRepo<KoGroupsCreator>>()
-            .getObject('classic'),
-        groupSize: 2,
-      );
-      final defaultIndividualRoundRules = DefaultIndividualCompetitionRoundRules(
-        limit: const EntitiesLimit.soft(50),
-        bibsAreReassigned: false,
-        startlistIsSorted: false,
-        gateCanChange: true,
-        gateCompensationsEnabled: true,
-        windCompensationsEnabled: true,
-        windAverager: context
-            .read<DbEditingAvailableObjectsRepo<WindAverager>>()
-            .getObject('weighted_classic'),
-        inrunLightsEnabled: true,
-        dsqEnabled: true,
-        positionsCreator: context
-            .read<DbEditingAvailableObjectsRepo<StandingsPositionsCreator>>()
-            .getObject('with_ex_aequos'),
-        ruleOf95HsFallEnabled: true,
-        judgesCount: 5,
-        judgesCreator: context
-            .read<DbEditingAvailableObjectsRepo<JudgesCreator>>()
-            .getObject('default'),
-        significantJudgesCount: 3,
-        competitionScoreCreator: context
-                .read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>()
-                .getObject('classic_individual')
-            as CompetitionScoreCreator<CompetitionJumperScore>,
-        jumpScoreCreator: context
-            .read<DbEditingAvailableObjectsRepo<JumpScoreCreator>>()
-            .getObject('classic'),
-        koRules: null,
-      );
-      const defaultGroupRules = TeamCompetitionGroupRules(sortStartList: false);
-      final defaultTeamRoundRules = DefaultTeamCompetitionRoundRules(
-        limit: const EntitiesLimit.soft(50),
-        bibsAreReassigned: true,
-        startlistIsSorted: false,
-        gateCanChange: true,
-        gateCompensationsEnabled: true,
-        windCompensationsEnabled: true,
-        windAverager: context
-            .read<DbEditingAvailableObjectsRepo<WindAverager>>()
-            .getObject('weighted_classic'),
-        inrunLightsEnabled: true,
-        dsqEnabled: true,
-        positionsCreator: context
-            .read<DbEditingAvailableObjectsRepo<StandingsPositionsCreator>>()
-            .getObject('with_ex_aequos'),
-        ruleOf95HsFallEnabled: true,
-        judgesCount: 5,
-        judgesCreator: context
-            .read<DbEditingAvailableObjectsRepo<JudgesCreator>>()
-            .getObject('default'),
-        significantJudgesCount: 3,
-        competitionScoreCreator: context
-            .read<DbEditingAvailableObjectsRepo<CompetitionScoreCreator>>()
-            .getObject('classic_team') as CompetitionScoreCreator<CompetitionTeamScore>,
-        jumpScoreCreator: context
-            .read<DbEditingAvailableObjectsRepo<JumpScoreCreator>>()
-            .getObject('classic'),
-        koRules: null,
-        groups: const [
-          TeamCompetitionGroupRules(sortStartList: false),
-          TeamCompetitionGroupRules(sortStartList: false),
-          TeamCompetitionGroupRules(sortStartList: false),
-          TeamCompetitionGroupRules(sortStartList: false),
-        ],
-      );
-
-      final defaultCompetitionRules =
-          DefaultCompetitionRules(rounds: [defaultIndividualRoundRules]);
       return DefaultItemsRepo(
         initial: {
           FemaleJumper.empty(country: noneCountry),
           MaleJumper.empty(country: noneCountry),
-          Hill.empty(country: noneCountry),
-          const EventSeriesSetup.empty(),
-          const LowLevelEventSeriesCalendarPreset.empty(),
-          const SimpleEventSeriesCalendarPreset.empty().copyWith(
-            name: translator.unnamed,
-          ),
-          const HighLevelCalendar.empty(),
-          CalendarMainCompetitionRecord(
-            hill: context.read<ItemsReposRegistry>().get<Hill>().last.firstOrNull ??
-                const Hill.empty(country: Country.emptyNone()),
-            date: DateTime.now(),
-            setup: CalendarMainCompetitionRecordSetup(
-              mainCompRules: context
-                      .read<ItemsReposRegistry>()
-                      .get<DefaultCompetitionRulesPreset>()
-                      .last
-                      .firstOrNull ??
-                  const DefaultCompetitionRulesPreset.empty(),
-            ),
-          ),
-          DefaultCompetitionRulesPreset<dynamic>(
-            name: translator.unnamed,
-            rules: defaultCompetitionRules,
-          ),
-          defaultIndividualRoundRules,
-          defaultGroupRules,
-          defaultTeamRoundRules,
-          koRoundRules
         },
       );
     }),

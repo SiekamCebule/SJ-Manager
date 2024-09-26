@@ -12,7 +12,6 @@ import 'package:sj_manager/models/simulation_db/competition/calendar_records/cal
 import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
-import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/calendar_editor/simple_calendar_editor/competition_main_record_editor.dart';
 
 import 'package:sj_manager/ui/database_item_editors/calendar_editor/simple_calendar_editor/simple_calendar_editor_competitions_list.dart';
@@ -20,7 +19,6 @@ import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/animations/animated_visibility.dart';
 import 'package:sj_manager/ui/screens/database_editor/database_editor_screen.dart';
 import 'package:sj_manager/utils/colors.dart';
-import 'package:sj_manager/utils/id_generator.dart';
 
 part '__add_fab.dart';
 part '__remove_fab.dart';
@@ -181,7 +179,6 @@ class _SimpleCalendarEditorScreenState extends State<SimpleCalendarEditorScreen>
 
   void _onChange() {
     _updateCached();
-    print('cachedD: $_cached');
     widget.onChange?.call(_cached);
   }
 

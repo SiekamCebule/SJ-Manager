@@ -14,14 +14,13 @@ import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
-import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
 class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
   DatabaseItemsCubit({
     required this.filtersRepo,
     required this.selectedIndexesRepo,
-    required this.idsRepo,
+    //required this.idsRepo,
     required this.idGenerator,
     required ItemsReposRegistry itemsRepos,
   })  : _itemsRepos = itemsRepos,
@@ -31,7 +30,7 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
 
   final DbFiltersRepo filtersRepo;
   final SelectedIndexesRepo selectedIndexesRepo;
-  final ItemsIdsRepo idsRepo;
+  //final ItemsIdsRepo idsRepo;
   final IdGenerator idGenerator;
   ItemsReposRegistry _itemsRepos;
   ItemsReposRegistry get itemsRepos => _itemsRepos;
@@ -132,10 +131,10 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
       selectedIndexesRepo.setSelection(addIndex - 1, false);
     }
     selectedIndexesRepo.setSelection(addIndex, true);
-    idsRepo.register(
+    /*idsRepo.register(
       item,
       id: idGenerator.generate(),
-    );
+    );*/
   }
 
   void remove() {
@@ -145,10 +144,6 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
         'Cannot remove an item from DatabaseItemsCubit because there is no item selected',
       );
     } else {
-      for (var index in indexes) {
-        final removedItem = _itemsRepos.getEditable(state.itemsType).removeAt(index);
-        idsRepo.removeByItem(item: removedItem);
-      }
       if (selectedIndexesRepo.last.length > 1 ||
           itemsRepos.getEditable(state.itemsType).items.value.isEmpty) {
         selectedIndexesRepo.clearSelection();
@@ -169,19 +164,13 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
       throw StateError('Cannot add a null item to the database');
     }
 
-    // Map the selected index from the filtered list to the original list
     final selectedIndex = selectedIndexesRepo.last.single;
     final filteredItems = (state as DatabaseItemsNonEmpty).filteredItems;
     final originalItems = itemsRepos.getEditable(state.itemsType).last;
     final originalIndex = originalItems.indexOf(filteredItems[selectedIndex]);
 
-    // Replace the item in the original list using the mapped index
     final itemsByTypeRepo = itemsRepos.getEditable(state.itemsType);
-    final previousItemId = idsRepo.idOf(originalItems[originalIndex]);
     itemsByTypeRepo.replace(oldIndex: originalIndex, newItem: changedItem);
-    idsRepo.removeById(id: previousItemId);
-    final newId = idGenerator.generate();
-    idsRepo.register(changedItem, id: newId);
   }
 
   void move({required int from, required int to}) {
@@ -196,10 +185,6 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
     final type = switch (index) {
       0 => MaleJumper,
       1 => FemaleJumper,
-      //2 => Hill,
-      //3 => DefaultCompetitionRulesPreset,
-      //4 => EventSeriesCalendarPreset,
-      //5 => EventSeriesSetup,
       _ => throw TypeError(),
     };
     selectedIndexesRepo.clearSelection();

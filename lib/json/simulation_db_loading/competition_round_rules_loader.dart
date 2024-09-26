@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/standings_positions_creator_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
@@ -41,22 +43,22 @@ class CompetitionRoundRulesParser
   final SimulationDbPartParser<JumpScoreCreator> jumpScoreCreatorParser;
 
   @override
-  DefaultCompetitionRoundRules parse(Json json) {
+  FutureOr<DefaultCompetitionRoundRules> parse(Json json) async {
     final type = json['type'] as String;
     return switch (type) {
-      'individual' => _loadIndividual(json),
-      'team' => _loadTeam(json),
+      'individual' => await _loadIndividual(json),
+      'team' => await _loadTeam(json),
       _ => throw ArgumentError(
           'Invalid competition round rules type: $type (it can be only \'individual\' or \'team\')',
         ),
     };
   }
 
-  DefaultCompetitionRoundRules<Jumper> _loadIndividual(Json json) {
+  FutureOr<DefaultCompetitionRoundRules<Jumper>> _loadIndividual(Json json) async {
     final entitiesLimitJson = json['limit'];
     EntitiesLimit? entitiesLimit;
     if (entitiesLimitJson != null) {
-      entitiesLimit = entitiesLimitParser.parse(entitiesLimitJson);
+      entitiesLimit = await entitiesLimitParser.parse(entitiesLimitJson);
     }
     final competitionScoreCreator =
         competitionScoreCreatorParser.parse(json['competitionScoreCreator']);
@@ -75,34 +77,34 @@ class CompetitionRoundRulesParser
       gateCanChange: json['gateCanChange'],
       gateCompensationsEnabled: json['gateCompensationsEnabled'],
       windCompensationsEnabled: json['windCompensationsEnabled'],
-      windAverager: windAveragerParser.parse(json['windAverager']),
+      windAverager: await windAveragerParser.parse(json['windAverager']),
       inrunLightsEnabled: json['inrunLightsEnabled'],
       dsqEnabled: json['dsqEnabled'],
       positionsCreator: positionsCreatorParser.parse(json['positionsCreator']),
       ruleOf95HsFallEnabled: json['dsqEnabled'],
       judgesCount: json['judgesCount'],
-      judgesCreator: judgesCreatorParser.parse(json['judgesCreator']),
+      judgesCreator: await judgesCreatorParser.parse(json['judgesCreator']),
       significantJudgesCount: json['significantJudgesCount'],
       competitionScoreCreator:
           competitionScoreCreator as CompetitionScoreCreator<CompetitionJumperScore>,
-      jumpScoreCreator: jumpScoreCreatorParser.parse(json['jumpScoreCreator']),
-      koRules: koRulesJson != null ? koRoundRulesParser.parse(koRulesJson) : null,
+      jumpScoreCreator: await jumpScoreCreatorParser.parse(json['jumpScoreCreator']),
+      koRules: koRulesJson != null ? await koRoundRulesParser.parse(koRulesJson) : null,
     );
   }
 
-  DefaultCompetitionRoundRules<Team> _loadTeam(Json json) {
+  FutureOr<DefaultCompetitionRoundRules<Team>> _loadTeam(Json json) async {
     final entitiesLimitJson = json['limit'];
     EntitiesLimit? entitiesLimit;
     if (entitiesLimitJson != null) {
-      entitiesLimit = entitiesLimitParser.parse(entitiesLimitJson);
+      entitiesLimit = await entitiesLimitParser.parse(entitiesLimitJson);
     }
 
     final groupsJson = (json['groups'] as List).cast<Json>();
-    final groups = groupsJson
-        .map(
-          (json) => teamCompetitionGroupRulesParser.parse(json),
-        )
-        .toList();
+    final groups = await Future.wait(
+      groupsJson
+          .map((json) async => await teamCompetitionGroupRulesParser.parse(json))
+          .toList(),
+    );
 
     final competitionScoreCreator =
         competitionScoreCreatorParser.parse(json['competitionScoreCreator']);
@@ -121,19 +123,19 @@ class CompetitionRoundRulesParser
       gateCanChange: json['gateCanChange'],
       gateCompensationsEnabled: json['gateCompensationsEnabled'],
       windCompensationsEnabled: json['windCompensationsEnabled'],
-      windAverager: windAveragerParser.parse(json['windAverager']),
+      windAverager: await windAveragerParser.parse(json['windAverager']),
       inrunLightsEnabled: json['inrunLightsEnabled'],
       dsqEnabled: json['dsqEnabled'],
       positionsCreator: positionsCreatorParser.parse(json['positionsCreator']),
       ruleOf95HsFallEnabled: json['dsqEnabled'],
       judgesCount: json['judgesCount'],
-      judgesCreator: judgesCreatorParser.parse(json['judgesCreator']),
+      judgesCreator: await judgesCreatorParser.parse(json['judgesCreator']),
       significantJudgesCount: json['significantJudgesCount'],
       competitionScoreCreator:
           competitionScoreCreator as CompetitionScoreCreator<CompetitionTeamScore>,
-      jumpScoreCreator: jumpScoreCreatorParser.parse(json['jumpScoreCreator']),
+      jumpScoreCreator: await jumpScoreCreatorParser.parse(json['jumpScoreCreator']),
       groups: groups,
-      koRules: koRulesJson != null ? koRoundRulesParser.parse(koRulesJson) : null,
+      koRules: koRulesJson != null ? await koRoundRulesParser.parse(koRulesJson) : null,
     );
   }
 }

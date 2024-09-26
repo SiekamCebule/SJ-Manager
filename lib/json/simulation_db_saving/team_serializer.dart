@@ -28,11 +28,14 @@ class TeamSerializer implements SimulationDbPartSerializer<Team> {
   }
 
   Json _serializeCountryTeam(CountryTeam team) {
+    final subteamsJson =
+        team.facts.subteams.map((subteamType) => subteamType.name).toList();
     return {
       'type': 'country_team',
       'sex': sexEnumMap[team.sex],
       'countryCode': team.country.code,
       'facts': {
+        'subteams': subteamsJson,
         'stars': team.facts.stars,
         'record': team.facts.record != null
             ? {

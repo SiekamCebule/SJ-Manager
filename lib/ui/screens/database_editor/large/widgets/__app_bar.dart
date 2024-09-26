@@ -15,18 +15,13 @@ class _AppBarState extends State<_AppBar> {
 
   @override
   Widget build(BuildContext context) {
-    const gapBetweenActions = Gap(UiDatabaseEditorConstants.gapBetweenAppBarActions);
     return AppBar(
       title: Text(translate(context).databaseEditor),
       actions: [
         Row(
           key: _appBarActionRowKey,
           mainAxisSize: MainAxisSize.min,
-          children: const [
-            _SaveAsButton(),
-            gapBetweenActions,
-            _LoadButton(),
-          ],
+          children: const [],
         ),
       ],
     );

@@ -28,6 +28,7 @@ import 'package:sj_manager/repositories/countries/country_flags/local_storage_co
 import 'package:sj_manager/repositories/generic/items_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_checkbox_list_tile_field.dart';
 import 'package:sj_manager/ui/dialogs/simple_help_dialog.dart';
+import 'package:sj_manager/ui/dialogs/simulation_wizard/simulation_name_dialog.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/country_screen/country_title.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/country_screen/preview_stat_texts.dart';
@@ -35,6 +36,7 @@ import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widget
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/simulation_wizard_mode_option_button.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_menu_card.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/simulation_wizard_option_button.dart';
+import 'package:sj_manager/utils/id_generator.dart';
 import 'package:sj_manager/utils/show_dialog.dart';
 import 'package:sj_manager/utils/team_preview_creator/default_team_preview_creator.dart';
 import 'package:sj_manager/utils/team_preview_creator/team_preview_creator.dart';
@@ -68,15 +70,21 @@ class _SimulationWizardDialogState extends State<SimulationWizardDialog>
   @override
   void initState() {
     _navCubit = SimulationWizardNavigationCubit(
-      screens: [
-        SimulationWizardScreenType.mode,
-        SimulationWizardScreenType.gameVariant,
-        SimulationWizardScreenType.startDate,
-        SimulationWizardScreenType.team,
-        SimulationWizardScreenType.subteam,
-        SimulationWizardScreenType.otherOptions,
-      ],
-      onFinish: () {
+      onFinish: () async {
+        final simulationId = context.read<IdGenerator>().generate();
+        if (simulationId is String == false) {
+          throw StateError('ID generator should generate strings');
+        }
+        final simulationName = await showSjmDialog(
+          context: context,
+          barrierDismissible: false,
+          child: const SimulationNameDialog(),
+        ) as String;
+
+        _optionsRepo.simulationId.set(simulationId as String);
+        _optionsRepo.simulationName.set(simulationName);
+
+        if (!mounted) return;
         router.pop(context, _optionsRepo);
       },
     );
