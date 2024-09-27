@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/simulation_db/simulation_season.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_image_asset.dart';
 import 'package:sj_manager/models/simulation_db/user_simulation.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
@@ -28,7 +27,6 @@ import 'package:sj_manager/ui/app.dart';
 import 'package:sj_manager/ui/app_initializer.dart';
 import 'package:sj_manager/ui/providers/locale_cubit.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
-import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
 import 'package:sj_manager/ui/screens/main_screen/main_screen.dart';
 import 'package:sj_manager/ui/theme/theme_cubit.dart';
 import 'package:sj_manager/utils/file_system.dart';
@@ -64,37 +62,6 @@ void main() async {
           ],
           child: MultiProvider(
             providers: [
-              Provider(create: (context) {
-                return DbItemImageGeneratingSetup<Jumper>(
-                  imagesDirectory:
-                      databaseDirectory(pathsCache, path.join('jumper_images')),
-                  toFileName: (jumper) {
-                    return '${jumper.country.code.toLowerCase()}_${jumper.name.toLowerCase()}_${jumper.surname.toLowerCase()}'
-                        .replaceAll(' ', '_');
-                  },
-                );
-              }),
-              Provider(create: (context) {
-                return DbItemImageGeneratingSetup<Hill>(
-                    imagesDirectory:
-                        databaseDirectory(pathsCache, path.join('hill_images')),
-                    toFileName: (hill) {
-                      return '${hill.locality.toLowerCase()}_${hill.hs.truncate().toString()}'
-                          .replaceAll(' ', '_');
-                    });
-              }),
-              Provider(create: (context) {
-                return DbItemImageGeneratingSetup<EventSeriesLogoImageWrapper>(
-                    imagesDirectory:
-                        databaseDirectory(pathsCache, path.join('assets', 'logos')),
-                    toFileName: (logoImage) => logoImage.eventSeriesSetup.id);
-              }),
-              Provider(create: (context) {
-                return DbItemImageGeneratingSetup<EventSeriesTrophyImageWrapper>(
-                    imagesDirectory:
-                        databaseDirectory(pathsCache, path.join('assets', 'trophies')),
-                    toFileName: (logoImage) => logoImage.eventSeriesSetup.id);
-              }),
               ...constructSimulationDbIoProvidersList(),
               Provider(
                 create: (context) => DbItemsFilePathsRegistry(initial: {

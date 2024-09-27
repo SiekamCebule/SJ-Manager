@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/exceptions/loading_database_failed_exception.dart';
 import 'package:sj_manager/main.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
 import 'package:sj_manager/setup/db_items_list_loader.dart';
 import 'package:sj_manager/ui/navigation/routes.dart';
-import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/utils/file_system.dart';
+import 'package:path/path.dart' as path;
 
 class AppConfigurator {
   AppConfigurator({
@@ -46,19 +43,15 @@ class AppConfigurator {
   }
 
   Future<void> setUpUserData() async {
-    final countriesFile = databaseFile(
-        _context.read(), _context.read<DbItemsFilePathsRegistry>().get<Country>());
-    if (!await countriesFile.exists()) {
-      await countriesFile.create(recursive: true);
-      countriesFile
-          .writeAsString(await rootBundle.loadString('assets/defaults/countries.json'));
-    }
-    if (!_context.mounted) return;
+    final userDataDir = userDataDirectory(_context.read(), '');
+    await userDataDir.create(recursive: true);
 
-    final flagsDir = databaseDirectory(_context.read(),
-        _context.read<DbItemsDirectoryPathsRegistry>().get<CountryFlag>());
-    if (!await flagsDir.exists()) {
-      await copyAssetsDir('defaults/country_flags', flagsDir);
+    if (!_context.mounted) return;
+    final simulationsFile =
+        userDataFile(_context.read(), path.join('simulations', 'simulations.json'));
+    if (!await simulationsFile.exists()) {
+      await simulationsFile.create(recursive: true);
+      simulationsFile.writeAsString('[]');
     }
   }
 

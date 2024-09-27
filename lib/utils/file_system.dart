@@ -70,8 +70,11 @@ Directory databaseDirectory(PlarformSpecificPathsCache pathsCache, String direct
 Directory simulationDirectory({
   required PlarformSpecificPathsCache pathsCache,
   required String simulationId,
+  String? directoryName,
 }) {
-  return userDataDirectory(pathsCache, path.join('simulations', simulationId));
+  final secondPart = directoryName != null ? '/$directoryName' : '';
+  final dirName = '$simulationId$secondPart';
+  return userDataDirectory(pathsCache, path.join('simulations', dirName));
 }
 
 File simulationFile({

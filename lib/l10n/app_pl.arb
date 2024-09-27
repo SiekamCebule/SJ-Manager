@@ -166,5 +166,8 @@
     "startDate": "Data startowa",
     "team": "Drużyna",
     "subteam": "Kadra",
-    "otherOptions": "Pozostałe opcje"
+    "otherOptions": "Pozostałe opcje",
+    "classicCoach": "Klasyczny trener",
+    "personalCoach": "Trener personalny",
+    "observer": "Obserwator"
 }

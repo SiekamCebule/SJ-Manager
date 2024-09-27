@@ -37,6 +37,7 @@ class DefaultSimulationDatabaseCreator {
     _seasons = ItemsRepo(initial: [options.gameVariant.last!.season]);
     _setUpIdsRepo();
     return SimulationDatabase(
+      mode: options.mode.last!,
       jumpers: _jumpers,
       hills: _hills,
       teams: _teams,
