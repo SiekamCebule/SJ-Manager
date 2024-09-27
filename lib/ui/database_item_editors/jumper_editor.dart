@@ -194,7 +194,6 @@ class JumperEditorState extends State<JumperEditor> {
                 MyDateFormField(
                   controller: _dateOfBirthController,
                   onChange: (date) {
-                    print('date: $date');
                     _dateOfBirthController.text = _dateFormat.format(date!);
                     _onChange();
                   },

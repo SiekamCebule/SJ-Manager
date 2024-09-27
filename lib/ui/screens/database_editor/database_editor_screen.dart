@@ -73,12 +73,15 @@ import 'package:sj_manager/ui/responsiveness/responsive_builder.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/animations/animated_visibility.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
 import 'package:sj_manager/ui/reusable_widgets/filtering/search_text_field.dart';
 import 'package:sj_manager/ui/reusable_widgets/menu_entries/predefined_reusable_entries.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/database_editor_unsaved_changes_dialog.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropriate_db_item_list_tile.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
 import 'package:sj_manager/utils/colors.dart';
+import 'package:sj_manager/utils/db_item_images.dart';
+import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/single_where_type.dart';
 
 part 'large/__large.dart';
@@ -99,8 +102,29 @@ part 'large/widgets/item_editor_empty_state_body.dart';
 part 'large/widgets/item_editor_non_empty_state_body.dart';
 part 'large/widgets/__main_body.dart';
 
-List<RepositoryProvider> defaultDbEditorProviders(BuildContext context) {
+List<Provider> defaultDbEditorProviders(BuildContext context) {
+  final gameVariant = context.read<GameVariant>();
   return [
+    Provider(create: (context) {
+      return DbItemImageGeneratingSetup<Jumper>(
+        imagesDirectory: simulationDirectory(
+          pathsCache: context.read(),
+          simulationId: gameVariant.id,
+          directoryName: 'jumper_images',
+        ),
+        toFileName: jumperImageName,
+      );
+    }),
+    Provider(create: (context) {
+      return DbItemImageGeneratingSetup<Hill>(
+        imagesDirectory: simulationDirectory(
+          pathsCache: context.read(),
+          simulationId: gameVariant.id,
+          directoryName: 'hill_images',
+        ),
+        toFileName: hillImageName,
+      );
+    }),
     RepositoryProvider<DbEditingAvailableObjectsRepo<StandingsPositionsCreator>>(
       create: (context) => DbEditingAvailableObjectsRepo(initial: [
         DbEditingAvaiableObjectConfig(

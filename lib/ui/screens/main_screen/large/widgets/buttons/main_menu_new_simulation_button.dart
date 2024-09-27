@@ -47,6 +47,7 @@ class MainMenuNewSimulationButton extends StatelessWidget {
             name: optionsRepo.simulationName.last!,
             saveTime: DateTime.now(),
             database: database,
+            mode: optionsRepo.mode.last!,
           );
           final simulationsRepo = context.read<EditableItemsRepo<UserSimulation>>();
           simulationsRepo.add(userSimulation);

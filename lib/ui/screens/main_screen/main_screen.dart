@@ -11,6 +11,7 @@ import 'package:sj_manager/models/simulation_db/user_simulation.dart';
 import 'package:sj_manager/models/simulation_db/user_simulations_registry_saver_to_file.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
+import 'package:sj_manager/ui/dialogs/main_menu/choose_simulation_dialog.dart';
 import 'package:sj_manager/ui/dialogs/main_menu/select_game_variant_to_edit_dialog.dart';
 import 'package:sj_manager/ui/responsiveness/responsive_builder.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';

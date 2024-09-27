@@ -51,17 +51,20 @@ class SimulationsLoader implements DbItemsListLoader {
           userSimulations.where((simulation) => !simulation.loaded).toList();
 
       final loadedSimulations = await Future.wait(
-        simulationsToLoad.map((simulation) async {
-          final loadedDatabase = await loader.load(simulationId: simulation.id);
-          return simulation.copyWith(database: loadedDatabase);
+        simulationsToLoad.map((userSimulation) async {
+          final loadedDatabase = await loader.load(
+            simulationId: userSimulation.id,
+            mode: userSimulation.mode,
+          );
+          return userSimulation.copyWith(database: loadedDatabase);
         }),
       );
 
       final updatedSimulations = [
-        ...userSimulations.map((simulation) {
+        ...userSimulations.map((userSimulation) {
           final updated = loadedSimulations.firstWhere(
-            (loadedSimulation) => loadedSimulation.id == simulation.id,
-            orElse: () => simulation,
+            (loadedSimulation) => loadedSimulation.id == userSimulation.id,
+            orElse: () => userSimulation,
           );
           return updated;
         }),

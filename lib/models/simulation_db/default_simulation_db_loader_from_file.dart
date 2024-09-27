@@ -26,6 +26,7 @@ import 'package:sj_manager/json/simulation_db_loading/standings_positions_creato
 import 'package:sj_manager/json/simulation_db_loading/team_competition_group_rules_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/team_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/wind_averager_parser.dart';
+import 'package:sj_manager/models/simulation_db/enums.dart';
 import 'package:sj_manager/models/simulation_db/simulation_database.dart';
 import 'package:sj_manager/models/simulation_db/simulation_season.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
@@ -57,6 +58,7 @@ class DefaultSimulationDbLoaderFromFile {
 
   Future<SimulationDatabase> load({
     required String simulationId,
+    required SimulationMode mode,
   }) async {
     _simulationId = simulationId;
 
@@ -92,6 +94,7 @@ class DefaultSimulationDbLoaderFromFile {
 
     _countriesRepo.dispose();
     return SimulationDatabase(
+      mode: mode,
       jumpers: ItemsRepo(initial: loadedJumpers),
       hills: ItemsRepo(initial: loadedHills.cast()),
       countries: _countriesRepo,

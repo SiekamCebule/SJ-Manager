@@ -1,3 +1,4 @@
+import 'package:sj_manager/models/simulation_db/enums.dart';
 import 'package:sj_manager/models/simulation_db/simulation_season.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -10,6 +11,7 @@ import 'package:sj_manager/repositories/generic/items_repo.dart';
 
 class SimulationDatabase {
   const SimulationDatabase({
+    required this.mode,
     required this.jumpers,
     required this.hills,
     required this.teams,
@@ -18,6 +20,7 @@ class SimulationDatabase {
     required this.idsRepo,
   });
 
+  final SimulationMode mode;
   final ItemsRepo<Jumper> jumpers;
   final ItemsRepo<Hill> hills;
   final CountriesRepo countries;

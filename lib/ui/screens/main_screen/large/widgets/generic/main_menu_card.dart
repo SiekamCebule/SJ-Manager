@@ -14,9 +14,12 @@ class MainMenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final enabled = onTap != null;
     return Material(
       borderRadius: borderRadius,
-      color: Theme.of(context).colorScheme.surfaceContainer,
+      color: enabled
+          ? Theme.of(context).colorScheme.surfaceContainer
+          : Theme.of(context).colorScheme.surfaceContainerHigh,
       child: InkWell(
         borderRadius: borderRadius,
         hoverColor: Theme.of(context).colorScheme.surfaceContainerLowest,

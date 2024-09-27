@@ -8,12 +8,12 @@ class MainMenuOnlyTitleButton extends StatelessWidget {
     super.key,
     required this.titleText,
     required this.iconData,
-    required this.onTap,
+    this.onTap,
   });
 
   final String titleText;
   final IconData iconData;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
