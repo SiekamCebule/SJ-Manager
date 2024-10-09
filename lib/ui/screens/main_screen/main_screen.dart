@@ -1,14 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
-import 'package:sj_manager/models/simulation_db/default_simulation_database_creator.dart';
-import 'package:sj_manager/models/simulation_db/default_simulation_database_saver_to_file.dart';
-import 'package:sj_manager/models/simulation_db/simulation_wizard_options_repo.dart';
-import 'package:sj_manager/models/simulation_db/user_simulation.dart';
-import 'package:sj_manager/models/simulation_db/user_simulations_registry_saver_to_file.dart';
+import 'package:sj_manager/models/game_variants/game_variants_io_utils.dart';
+import 'package:sj_manager/models/simulation/database/utils/default_simulation_database_creator.dart';
+import 'package:sj_manager/models/simulation/database/utils/default_simulation_database_saver_to_file.dart';
+import 'package:sj_manager/models/simulation/enums.dart';
+import 'package:sj_manager/models/simulation/database/simulation_wizard_options_repo.dart';
+import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
+import 'package:sj_manager/models/simulation/user_simulation/user_simulations_registry_saver_to_file.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
 import 'package:sj_manager/ui/dialogs/main_menu/choose_simulation_dialog.dart';
@@ -20,9 +25,11 @@ import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_men
 import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_menu_only_title_button.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/widgets/generic/main_menu_text_content_button_body.dart';
 import 'package:sj_manager/ui/screens/main_screen/widgets/shaking_app_title.dart';
+import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/show_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
+import 'package:path/path.dart' as path;
 
 part 'large/__large.dart';
 part 'large/widgets/__buttons_table.dart';

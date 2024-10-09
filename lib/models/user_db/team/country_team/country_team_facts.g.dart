@@ -30,5 +30,4 @@ const _$SubteamTypeEnumMap = {
   SubteamType.b: 'b',
   SubteamType.c: 'c',
   SubteamType.d: 'd',
-  SubteamType.junior: 'junior',
 };

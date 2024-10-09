@@ -15,13 +15,14 @@ class MainMenuLoadSimulationButton extends StatelessWidget {
             iconData: Symbols.open_in_new,
             onTap: enabled
                 ? () async {
-                    await showSjmDialog(
+                    showSjmDialog(
                       context: context,
                       child: ChooseSimulationDialog(
                         simulations:
                             context.read<EditableItemsRepo<UserSimulation>>().last,
                         onChoose: (simulation) {
-                          print('chosen simulation: $simulation');
+                          router.pop(context);
+                          router.navigateTo(context, '/simulation/${simulation.id}');
                         },
                       ),
                     );

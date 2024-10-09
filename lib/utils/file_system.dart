@@ -7,9 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:path/path.dart' as path;
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
@@ -96,6 +96,9 @@ File fileInDirectory(Directory directory, String name) {
 }
 
 File fileByNameWithoutExtension(Directory directory, String name) {
+  print('dir: $directory');
+  print('dir exists: ${directory.existsSync()}');
+  print('nagme: $name');
   final files = directory.listSync();
   for (var file in files) {
     if (file is File) {
@@ -183,6 +186,22 @@ Future<void> copyAssetsDir(String assetsDirPath, Directory destination) async {
     }
   } catch (e) {
     rethrow;
+  }
+}
+
+Future<void> copyDirectory(Directory sourceDir, Directory targetDir) async {
+  if (!await targetDir.exists()) {
+    await targetDir.create(recursive: true);
+  }
+
+  await for (var entity in sourceDir.list(recursive: false, followLinks: false)) {
+    if (entity is Directory) {
+      var newDirectory = Directory('${targetDir.path}/${entity.uri.pathSegments.last}');
+      await copyDirectory(entity, newDirectory);
+    } else if (entity is File) {
+      var newFile = File('${targetDir.path}/${entity.uri.pathSegments.last}');
+      await entity.copy(newFile.path);
+    }
   }
 }
 

@@ -3,17 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:ui' as _i8;
+import 'dart:ui' as _i7;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:rxdart/rxdart.dart' as _i2;
 import 'package:shared_preferences/shared_preferences.dart' as _i3;
-import 'package:sj_manager/models/user_db/team/team.dart' as _i4;
-import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart'
-    as _i5;
+import 'package:sj_manager/repositories/generic/items_repo.dart' as _i4;
 import 'package:sj_manager/repositories/settings/local_user_settings_repo.dart'
-    as _i6;
-import 'package:sj_manager/ui/theme/app_schemes.dart' as _i7;
+    as _i5;
+import 'package:sj_manager/ui/theme/app_schemes.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -60,12 +58,11 @@ class _FakeSharedPreferences_2 extends _i1.SmartFake
         );
 }
 
-/// A class which mocks [TeamsRepo].
+/// A class which mocks [ItemsRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTeamsRepo<T extends _i4.Team> extends _i1.Mock
-    implements _i5.TeamsRepo<T> {
-  MockTeamsRepo() {
+class MockItemsRepo<T> extends _i1.Mock implements _i4.ItemsRepo<T> {
+  MockItemsRepo() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -122,7 +119,7 @@ class MockTeamsRepo<T extends _i4.Team> extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLocalUserSettingsRepo extends _i1.Mock
-    implements _i6.LocalUserSettingsRepo {
+    implements _i5.LocalUserSettingsRepo {
   MockLocalUserSettingsRepo() {
     _i1.throwOnMissingStub(this);
   }
@@ -146,7 +143,7 @@ class MockLocalUserSettingsRepo extends _i1.Mock
       ) as _i2.ValueStream<void>);
 
   @override
-  void setAppColorScheme(_i7.AppColorScheme? scheme) => super.noSuchMethod(
+  void setAppColorScheme(_i6.AppColorScheme? scheme) => super.noSuchMethod(
         Invocation.method(
           #setAppColorScheme,
           [scheme],
@@ -155,7 +152,7 @@ class MockLocalUserSettingsRepo extends _i1.Mock
       );
 
   @override
-  void setAppThemeBrightness(_i8.Brightness? brightness) => super.noSuchMethod(
+  void setAppThemeBrightness(_i7.Brightness? brightness) => super.noSuchMethod(
         Invocation.method(
           #setAppThemeBrightness,
           [brightness],

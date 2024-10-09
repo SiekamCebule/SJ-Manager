@@ -5,7 +5,7 @@ class _TeamScreen extends StatefulWidget {
     required this.onChange,
   });
 
-  final void Function(Team? country) onChange;
+  final void Function(CountryTeam? country) onChange;
 
   @override
   State<_TeamScreen> createState() => _TeamScreenState();
@@ -42,11 +42,11 @@ class _TeamScreenState extends State<_TeamScreen> {
   void _setUpMaleAndFemaleTeams() {
     final variant = context.read<SimulationWizardOptionsRepo>().gameVariant.last!;
     setState(() {
-      _maleTeams = variant.teams
+      _maleTeams = variant.countryTeams
           .cast<CountryTeam>()
           .where((team) => team.sex == Sex.male)
           .toList();
-      _femaleTeams = variant.teams
+      _femaleTeams = variant.countryTeams
           .cast<CountryTeam>()
           .where((team) => team.sex == Sex.female)
           .toList();

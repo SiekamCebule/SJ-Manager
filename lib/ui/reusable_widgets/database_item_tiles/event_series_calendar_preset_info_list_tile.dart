@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_calendar_preset.dart';
 
 class EventSeriesCalendarPresetInfoListTile extends StatelessWidget {
   const EventSeriesCalendarPresetInfoListTile({

@@ -1,8 +1,8 @@
 import 'package:sj_manager/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/concrete/individual_default.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/concrete/team_default.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/classification_score_creator/concrete/individual_default.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/classification_score_creator/concrete/team_default.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class ClassificationScoreCreatorSerializer

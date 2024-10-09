@@ -1,26 +1,36 @@
+import 'package:sj_manager/json/db_items_json.dart';
+
 class ItemsIdsRepo<ID extends Object> {
   final Map<ID, _ItemWithCount> _items = {};
   final Map<dynamic, ID> _reverseItems = {};
   final List<ID> _orderedIds = [];
 
   T get<T>(ID id) {
-    if (!containsId(id)) {
+    final item = maybeGet(id);
+    if (item == null) {
       throw StateError(
           'Ids repo does not contain any object of type $T with that id ($id)');
     }
-    final item = _items[id]!.item;
-    if (item is! T) {
-      throw StateError('The item ($item) doesn\'t have a requested type of $T');
+    if (item is T == false) {
+      throw StateError('The item ($item) doesn\'t have the requested type of $T');
     }
     return item;
   }
 
+  T? maybeGet<T>(ID id) {
+    return _items[id]?.item;
+  }
+
   ID idOf(dynamic item) {
-    final id = _reverseItems[item];
+    final id = maybeIdOf(item);
     if (id == null) {
-      throw StateError('The repo does not contain the item ($item)');
+      throw StateError('Ids repo does not contain the item ($item)');
     }
     return id;
+  }
+
+  ID? maybeIdOf(dynamic item) {
+    return _reverseItems[item];
   }
 
   int countOfItemsWithId(ID id) {
@@ -88,6 +98,14 @@ class ItemsIdsRepo<ID extends Object> {
       final id = generateId(item);
       register(item, id: id);
     }
+  }
+
+  void registerFromLoadedItemsMap<T>(
+    LoadedItemsMap<T> loadedItemsMap,
+  ) {
+    loadedItemsMap.items.forEach((id, itemAndCount) {
+      register(itemAndCount.$1, id: id);
+    });
   }
 
   bool containsId(ID id) {

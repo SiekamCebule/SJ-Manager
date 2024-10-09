@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:sj_manager/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/classification/classification.dart';
-import 'package:sj_manager/models/simulation_db/classification/default_classification_rules.dart';
-import 'package:sj_manager/models/simulation_db/standings/standings.dart';
+import 'package:sj_manager/models/simulation/classification/classification.dart';
+import 'package:sj_manager/models/simulation/classification/default_classification_rules.dart';
+import 'package:sj_manager/models/simulation/standings/standings.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class ClassificationSerializer implements SimulationDbPartSerializer<Classification> {
@@ -18,7 +20,7 @@ class ClassificationSerializer implements SimulationDbPartSerializer<Classificat
       defaultClassificationRulesSerializer;
 
   @override
-  Json serialize(Classification classification) {
+  FutureOr<Json> serialize(Classification classification) {
     if (classification is DefaultClassification) {
       return _serializeDefault(classification);
     } else {
@@ -28,11 +30,12 @@ class ClassificationSerializer implements SimulationDbPartSerializer<Classificat
     }
   }
 
-  Json _serializeDefault(DefaultClassification classification) {
+  FutureOr<Json> _serializeDefault(DefaultClassification classification) async {
     return {
+      'type': 'default',
       'name': classification.name,
       'standings': classification.standings != null
-          ? standingsSerializer.serialize(classification.standings!)
+          ? await standingsSerializer.serialize(classification.standings!)
           : null,
       'rules': defaultClassificationRulesSerializer.serialize(classification.rules),
     };

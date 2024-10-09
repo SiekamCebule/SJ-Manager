@@ -1,7 +1,7 @@
 import 'package:sj_manager/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_competition_round_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_round_rules/default_competition_round_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/competition_team.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';

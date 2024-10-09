@@ -82,7 +82,7 @@ class AppThemeDataCreator {
     );
   }
 
-  DialogTheme _constructDialogTheme(DialogTheme base) {
+  DialogThemeData _constructDialogTheme(DialogThemeData base) {
     return base.copyWith(
       contentTextStyle:
           _themeData.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w300),

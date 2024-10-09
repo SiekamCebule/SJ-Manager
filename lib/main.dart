@@ -4,13 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
-import 'package:sj_manager/models/simulation_db/simulation_season.dart';
-import 'package:sj_manager/models/simulation_db/user_simulation.dart';
+import 'package:sj_manager/models/simulation/database/simulation_season.dart';
+import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
+import 'package:sj_manager/models/user_db/team/subteam.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/json/countries.dart';
@@ -69,7 +70,8 @@ void main() async {
                   FemaleJumper: 'jumpers_female.json',
                   Hill: 'hills.json',
                   Country: path.join('countries', 'countries.json'),
-                  Team: path.join('teams', 'teams.json'),
+                  CountryTeam: path.join('teams', 'country_teams.json'),
+                  Subteam: path.join('teams', 'subteams.json'),
                   SimulationSeason: 'seasons.json',
                 }),
               ),

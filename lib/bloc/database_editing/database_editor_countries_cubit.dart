@@ -4,7 +4,7 @@ import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
-import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
+import 'package:sj_manager/repositories/generic/items_repo.dart';
 
 class DatabaseEditorCountriesCubit extends Cubit<DatabaseEditorCountriesState> {
   DatabaseEditorCountriesCubit({
@@ -15,7 +15,7 @@ class DatabaseEditorCountriesCubit extends Cubit<DatabaseEditorCountriesState> {
         );
 
   final CountriesRepo countriesRepo;
-  final TeamsRepo<CountryTeam> teamsRepo;
+  final ItemsRepo<CountryTeam> teamsRepo;
 
   void setUp() {
     final rawTeams = teamsRepo.last.toList();

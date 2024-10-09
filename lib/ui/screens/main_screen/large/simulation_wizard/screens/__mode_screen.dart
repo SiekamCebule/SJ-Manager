@@ -64,7 +64,7 @@ class _ModeScreenState extends State<_ModeScreen> {
             child: SimulationWizardModeOptionButton(
               titleText: 'Obserwator',
               subtitleText:
-                  'Nie maczaj palców w prowadzeniu kadry ani w szkoleniu zawodników i zawodniczek. Obserwuj codzienne wydarzenia ze świata skoków i jeźdź na zawody. W każdym momencie możesz objąć jakąś kadrę lub zostać trenerem personalnym.',
+                  'Nie maczaj palców w prowadzeniu kadry ani w szkoleniu zawodników i zawodniczek. Obserwuj codzienne wydarzenia ze świata skoków i jeźdź na zawody. W każdym momencie możesz objąć kadrę lub zostać trenerem personalnym.',
               onTap: () {
                 setState(() {
                   _selected = _selected != SimulationMode.observer

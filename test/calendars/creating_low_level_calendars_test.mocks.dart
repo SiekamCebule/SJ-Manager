@@ -4,9 +4,9 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_competition_round_rules.dart'
+import 'package:sj_manager/models/simulation/competition/rules/competition_round_rules/default_competition_round_rules.dart'
     as _i3;
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart'
+import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules.dart'
     as _i2;
 
 // ignore_for_file: type=lint

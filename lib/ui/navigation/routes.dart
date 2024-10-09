@@ -1,13 +1,23 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
+import 'package:sj_manager/models/simulation/database/helper/jumper_level_description.dart';
+import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
+import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
+import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
+import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/repositories/countries/country_flags/country_flags_repo.dart';
 import 'package:sj_manager/repositories/countries/country_flags/local_storage_country_flags_repo.dart';
+import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
+import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
 import 'package:sj_manager/ui/screens/database_editor/database_editor_screen.dart';
+import 'package:sj_manager/ui/screens/simulation/simulation_route.dart';
 import 'package:sj_manager/ui/screens/main_screen/main_screen.dart';
 import 'package:sj_manager/ui/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:sj_manager/utils/db_item_images.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:path/path.dart' as path;
 
@@ -103,4 +113,74 @@ void configureRoutes(FluroRouter router) {
     },
     transitionBuilder: defaultInFromLeft,
   );
+  define('/simulation/:simulationId', (context, params) {
+    final simulationId = params['simulationId']![0];
+    final simulation =
+        context!.read<EditableItemsRepo<UserSimulation>>().last.singleWhere(
+              (simulation) => simulation.id == simulationId,
+            );
+    final imagesDir = userDataDirectory(context.read(),
+        path.join('simulations', simulationId, 'countries', 'country_flags'));
+
+    Jumper getJumperBySurname(String surname) => simulation.database!.jumpers.last
+        .singleWhere((jumper) => jumper.surname == surname);
+    final simulationDatabaseHelper = SimulationDatabaseHelper(
+      userSubteam: null,
+      jumpersDynamicParameters: {
+        getJumperBySurname('Forfang'): const JumperSimulationRatings(
+          levelDescription: JumperLevelDescription.top,
+          moraleRating: SimpleRating.correct,
+          resultsRating: SimpleRating.correct,
+          trainingRating: SimpleRating.excellent,
+        ),
+        getJumperBySurname('Żyła'): const JumperSimulationRatings(
+          levelDescription: JumperLevelDescription.broadTop,
+          moraleRating: SimpleRating.good,
+          resultsRating: SimpleRating.belowExpectations,
+          trainingRating: SimpleRating.belowExpectations,
+        ),
+        getJumperBySurname('Wolny'): const JumperSimulationRatings(
+          levelDescription: JumperLevelDescription.international,
+          moraleRating: SimpleRating.veryGood,
+          resultsRating: SimpleRating.good,
+          trainingRating: SimpleRating.veryGood,
+        ),
+      },
+    );
+    return MultiProvider(
+      providers: [
+        Provider.value(value: simulation),
+        Provider.value(value: simulation.database!),
+        Provider(create: (context) => simulation.database!.countries),
+        Provider<CountryFlagsRepo>(
+          create: (context) => LocalStorageCountryFlagsRepo(
+            imagesDirectory: imagesDir,
+            imagesExtension: 'png',
+          ),
+        ),
+        Provider(
+          create: (context) => DbItemImageGeneratingSetup<Jumper>(
+            imagesDirectory: simulationDirectory(
+              pathsCache: context.read(),
+              simulationId: simulationId,
+              directoryName: path.join('jumper_images'),
+            ),
+            toFileName: jumperImageName,
+          ),
+        ),
+        Provider(
+          create: (context) => DbItemImageGeneratingSetup<Hill>(
+            imagesDirectory: simulationDirectory(
+              pathsCache: context.read(),
+              simulationId: simulationId,
+              directoryName: path.join('hill_images'),
+            ),
+            toFileName: hillImageName,
+          ),
+        ),
+        Provider.value(value: simulationDatabaseHelper),
+      ],
+      child: const SimulationRoute(),
+    );
+  });
 }

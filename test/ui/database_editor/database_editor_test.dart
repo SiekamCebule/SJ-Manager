@@ -8,9 +8,9 @@ import 'package:sj_manager/bloc/database_editing/database_items_cubit.dart';
 import 'package:sj_manager/bloc/database_editing/state/database_items_state.dart';
 import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/team/country_team/country_team_facts.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
@@ -26,10 +26,10 @@ import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
-import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
+import 'package:sj_manager/repositories/generic/items_repo.dart';
 import 'package:sj_manager/repositories/settings/local_user_settings_repo.dart';
 import 'package:sj_manager/repositories/settings/mocked_user_settings_repo.dart';
 import 'package:sj_manager/repositories/settings/user_settings_repo.dart';
@@ -52,7 +52,7 @@ import 'package:sj_manager/utils/id_generator.dart';
 
 import 'database_editor_test.mocks.dart';
 
-@GenerateMocks([TeamsRepo, LocalUserSettingsRepo])
+@GenerateMocks([ItemsRepo, LocalUserSettingsRepo])
 void main() {
   const MethodChannel flutterWindowCloseChannel = MethodChannel('flutter_window_close');
 
@@ -144,7 +144,7 @@ void main() {
     late Widget appWidget;
 
     setUpAll(() {
-      final teamsRepo = MockTeamsRepo();
+      final teamsRepo = MockItemsRepo<Team>();
       when(teamsRepo.itemsType).thenReturn(Team);
       when(teamsRepo.last).thenReturn([
         CountryTeam(

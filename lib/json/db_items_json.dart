@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:sj_manager/exceptions/json_exceptions.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
+import 'package:sj_manager/utils/database_io.dart';
 
 Future<List<T>> loadItemsListFromJsonFile<T>({
   required File file,
@@ -28,6 +29,12 @@ class LoadedItemsMap<T> {
 
   final List<dynamic> orderedIds;
   final Map<dynamic, (T, int)> items;
+
+  List<T> getOrderedItems() {
+    return orderedIds.map((id) {
+      return items[id]!.$1;
+    }).toList();
+  }
 }
 
 Future<LoadedItemsMap<T>> loadItemsMapFromJsonFile<T>({
@@ -35,28 +42,9 @@ Future<LoadedItemsMap<T>> loadItemsMapFromJsonFile<T>({
   required FromJson<T> fromJson,
 }) async {
   final content = await file.readAsString();
-  final json = jsonDecode(content);
-
-  final orderedIds = List<dynamic>.from(json['orderedIds']);
-  final itemsMap = Map<dynamic, dynamic>.from(json['items']);
-  final items = <dynamic, (T, int)>{};
-
-  for (var id in orderedIds) {
-    if (!itemsMap.containsKey(id)) {
-      throw StateError(
-        'An ID contained in \'orderedIds\' is not contained in \'items\' ($id)',
-      );
-    }
-
-    final itemJson = itemsMap[id];
-    final item = await fromJson(itemJson); // Await on FutureOr
-    final count = items[id] != null ? items[id]!.$2 + 1 : 1;
-    items[id] = (item, count);
-  }
-
-  return LoadedItemsMap<T>(
-    orderedIds: orderedIds,
-    items: items,
+  return await parseItemsMap(
+    json: jsonDecode(content),
+    fromJson: fromJson,
   );
 }
 
@@ -108,37 +96,11 @@ Future<void> saveItemsMapToJsonFile<T>({
   required ItemsIdsRepo idsRepo,
   bool createDirectoriesAndFilesIfNeeded = false,
 }) async {
-  final orderedIdsJson = <Object>[];
-  var itemsJson = <Object, dynamic>{};
-
-  for (var item in items) {
-    final id = idsRepo.idOf(item);
-    orderedIdsJson.add(id);
-    if (!itemsJson.containsKey(id)) {
-      final itemJson = await toJson(item); // Await to handle FutureOr
-      print('ITEM JSON: $itemJson');
-      itemsJson[id] = itemJson;
-    }
-  }
-
-  dynamic convertToEncodable(dynamic value) {
-    if (value is Map) {
-      return value.map((key, innerValue) => MapEntry(
-          key.toString(), convertToEncodable(innerValue))); // Ensure keys are Strings
-    } else if (value is List) {
-      return value.map((item) => convertToEncodable(item)).toList();
-    } else {
-      return value; // Return other types as they are
-    }
-  }
-
-  itemsJson = convertToEncodable(itemsJson);
-
-  final encodableJson = {
-    'orderedIds': orderedIdsJson,
-    'items': itemsJson,
-  };
-
+  final encodableJson = await serializeItemsMap(
+    items: items,
+    idsRepo: idsRepo,
+    toJson: toJson,
+  );
   final encodedJson = jsonEncode(encodableJson);
 
   if (!await file.exists()) {

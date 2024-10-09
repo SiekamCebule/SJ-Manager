@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/classification/classification.dart';
-import 'package:sj_manager/models/simulation_db/classification/default_classification_rules.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/details/classification_score_details.dart';
-import 'package:sj_manager/models/simulation_db/standings/standings.dart';
+import 'package:sj_manager/models/simulation/classification/classification.dart';
+import 'package:sj_manager/models/simulation/classification/default_classification_rules.dart';
+import 'package:sj_manager/models/simulation/standings/standings.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class ClassificationParser implements SimulationDbPartParser<Classification> {
@@ -32,11 +31,14 @@ class ClassificationParser implements SimulationDbPartParser<Classification> {
   }
 
   FutureOr<DefaultClassification> _loadDefaultClassification(Json json) async {
-    final standings = standingsParser.parse(json['standings']);
+    final standingsJson = json['standings'] as Json?;
+    var standings =
+        standingsJson != null ? await standingsParser.parse(standingsJson) : null;
+
     final rules = await defaultClassificationRulesParser.parse(json['rules']);
     return DefaultClassification(
       name: json['name'],
-      standings: standings as Standings<dynamic, ClassificationScoreDetails>,
+      standings: standings,
       rules: rules,
     );
   }

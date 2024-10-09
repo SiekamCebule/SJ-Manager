@@ -42,11 +42,24 @@ class MainMenuNewSimulationButton extends StatelessWidget {
         if (optionsRepo != null) {
           final database = DefaultSimulationDatabaseCreator(idGenerator: context.read())
               .create(optionsRepo);
+          String? subteamCountryFlagPath;
+          if (database.userSubteam != null) {
+            final countryCode = optionsRepo.team.last!.country.code;
+            subteamCountryFlagPath = fileInDirectory(
+              simulationDirectory(
+                pathsCache: context.read(),
+                simulationId: optionsRepo.simulationId.last!,
+                directoryName: 'countries/country_flags',
+              ),
+              '${countryCode.toLowerCase()}.png', // TODO: not only png
+            ).path;
+          }
           final userSimulation = UserSimulation(
             id: optionsRepo.simulationId.last!,
             name: optionsRepo.simulationName.last!,
             saveTime: DateTime.now(),
             database: database,
+            subteamCountryFlagPath: subteamCountryFlagPath,
             mode: optionsRepo.mode.last!,
           );
           final simulationsRepo = context.read<EditableItemsRepo<UserSimulation>>();
@@ -60,11 +73,25 @@ class MainMenuNewSimulationButton extends StatelessWidget {
           ).serialize(
             database: database,
           );
+          await copyDirectory(
+            gameVariantDirectory(
+              pathsCache: context.read(),
+              gameVariantId: optionsRepo.gameVariant.last!.id,
+              directoryName: path.join('countries', 'country_flags'),
+            ),
+            simulationDirectory(
+              pathsCache: context.read(),
+              simulationId: optionsRepo.simulationId.last!,
+              directoryName: path.join('countries', 'country_flags'),
+            ),
+          );
+          if (!context.mounted) return;
           await UserSimulationsRegistrySaverToFile(
-                  userSimulations: simulationsRepo.last, pathsCache: context.read())
-              .serialize();
-
-          //router.navigateTo(context, '/simulationMainScreen'); TODO
+            userSimulations: simulationsRepo.last,
+            pathsCache: context.read(),
+          ).serialize();
+          if (!context.mounted) return;
+          router.navigateTo(context, '/simulation/${userSimulation.id}');
         }
       },
       child: MainMenuTextContentButtonBody(

@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:osje_sim/osje_sim.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
+import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 
 class CompetitionScoringCubit<E> extends Cubit<CompetitionScoringState> {
