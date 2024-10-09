@@ -6,9 +6,9 @@ import 'package:sj_manager/bloc/database_editing/state/database_items_state.dart
 import 'package:sj_manager/filters/filter.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
 import 'package:sj_manager/filters/mixins.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';

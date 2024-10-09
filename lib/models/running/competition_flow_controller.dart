@@ -1,5 +1,5 @@
 import 'package:sj_manager/models/running/competition_start_list_repository.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 

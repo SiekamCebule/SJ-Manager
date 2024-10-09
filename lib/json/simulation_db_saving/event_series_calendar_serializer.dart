@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:sj_manager/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/classification/classification.dart';
-import 'package:sj_manager/models/simulation_db/competition/competition.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
+import 'package:sj_manager/models/simulation/classification/classification.dart';
+import 'package:sj_manager/models/simulation/competition/competition.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_calendar.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
+import 'package:sj_manager/utils/database_io.dart';
 
 class EventSeriesCalendarSerializer
     implements SimulationDbPartSerializer<EventSeriesCalendar> {
@@ -21,21 +22,22 @@ class EventSeriesCalendarSerializer
 
   @override
   Future<Json> serialize(EventSeriesCalendar calendar) async {
-    final competitionsJsonFutures = calendar.competitions.map((competition) async {
-      return await _serializeCompetition(competition);
-    }).toList();
+    final competitionsJson = await serializeItemsMap(
+      items: calendar.competitions,
+      idsRepo: idsRepo,
+      toJson: (competition) async => await _serializeCompetition(competition),
+    );
 
-    final classificationsJsonFutures =
-        calendar.classifications.map((classification) async {
-      return await _serializeClassification(classification);
-    }).toList();
+    final classificationsJson = await serializeItemsMap(
+      items: calendar.classifications,
+      idsRepo: idsRepo,
+      toJson: (competition) async => await _serializeClassification(competition),
+    );
 
     final qualificationsJsonFutures = calendar.qualifications.entries.map((entry) async {
       return await _serializeQualification(MapEntry(entry.key, entry.value));
     }).toList();
 
-    final competitionsJson = await Future.wait(competitionsJsonFutures);
-    final classificationsJson = await Future.wait(classificationsJsonFutures);
     final qualificationsJson = await Future.wait(qualificationsJsonFutures);
 
     return {

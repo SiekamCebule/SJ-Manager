@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/classification/classification.dart';
-import 'package:sj_manager/models/simulation_db/competition/competition.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
+import 'package:sj_manager/models/simulation/classification/classification.dart';
+import 'package:sj_manager/models/simulation/competition/competition.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_calendar.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
+import 'package:sj_manager/utils/database_io.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
 class EventSeriesCalendarParser implements SimulationDbPartParser<EventSeriesCalendar> {
@@ -23,18 +24,23 @@ class EventSeriesCalendarParser implements SimulationDbPartParser<EventSeriesCal
 
   @override
   Future<EventSeriesCalendar> parse(Json json) async {
-    final competitionsJson = (json['competitions'] as List).cast<Json>();
-    final competitionsFutures = competitionsJson.map((json) async {
-      return await _parseCompetition(json);
-    }).toList();
+    final competitionsMap = await parseItemsMap(
+      json: json['competitions'],
+      fromJson: (json) async {
+        return await _parseCompetition(json);
+      },
+    );
+    final competitions = competitionsMap.getOrderedItems();
+    idsRepo.registerFromLoadedItemsMap(competitionsMap);
 
-    final classificationsJson = (json['classifications'] as List).cast<Json>();
-    final classificationsFutures = classificationsJson.map((json) async {
-      return await _parseClassification(json);
-    }).toList();
-
-    final competitions = await Future.wait(competitionsFutures);
-    final classifications = await Future.wait(classificationsFutures);
+    final classificationsMap = await parseItemsMap(
+      json: json['classifications'],
+      fromJson: (json) async {
+        return await _parseClassification(json);
+      },
+    );
+    final classifications = classificationsMap.getOrderedItems();
+    idsRepo.registerFromLoadedItemsMap(classificationsMap);
 
     final qualificationsJson = json['qualifications'] as Json;
     final qualifications = qualificationsJson.map((competitionId, qualificationsId) {
@@ -53,13 +59,11 @@ class EventSeriesCalendarParser implements SimulationDbPartParser<EventSeriesCal
 
   FutureOr<Competition> _parseCompetition(Json json) async {
     final competition = await competitionParser.parse(json);
-    idsRepo.register(competition, id: idGenerator.generate());
     return competition;
   }
 
   FutureOr<Classification> _parseClassification(Json json) async {
     final classification = await classificationParser.parse(json);
-    idsRepo.register(classification, id: idGenerator.generate());
     return classification;
   }
 }

@@ -75,15 +75,11 @@ class TeamLoader implements SimulationDbPartParser<Team> {
   Subteam _parseSubteam(Json json) {
     final parentTeamJson = json['parentTeam'] as Json;
     final parentTeam = parse(parentTeamJson);
-    final jumperIds = json['jumperIds'] as List;
-    final jumpers = jumperIds.map((id) {
-      return idsRepo.get(id) as Jumper;
-    });
+    final typeName = json['subteamType'] as String;
 
     return Subteam(
       parentTeam: parentTeam,
-      jumpers: jumpers.toList(),
-      label: json['label'],
+      type: SubteamType.values.singleWhere((subteamType) => subteamType.name == typeName),
     );
   }
 }

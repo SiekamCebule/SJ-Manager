@@ -1,7 +1,7 @@
 import 'package:sj_manager/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/classification/default_classification_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
+import 'package:sj_manager/models/simulation/classification/default_classification_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class DefaultClassificationRulesSerializer
@@ -32,7 +32,6 @@ class DefaultClassificationRulesSerializer
   }) {
     final classificationScoreCreatorJson =
         classificationScoreCreatorSerializer.serialize(rules.classificationScoreCreator);
-    final scoringTypeJson = _serializeType(rules.scoringType);
     final pointsMapJson = rules.pointsMap;
     final competitionIdsJson =
         rules.competitions.map((competition) => idsRepo.idOf(competition)).toList();
@@ -40,11 +39,18 @@ class DefaultClassificationRulesSerializer
         .map((competition, modifier) => MapEntry(idsRepo.idOf(competition), modifier));
 
     return {
+      'type': rules is DefaultIndividualClassificationRules ? 'individual' : 'team',
       'classificationScoreCreator': classificationScoreCreatorJson,
-      'scoringTypeJson': scoringTypeJson,
+      'scoringType': _serializeType(rules.scoringType),
       'pointsMapJson': pointsMapJson,
       'competitionIds': competitionIdsJson,
       'pointsModifiers': pointsModifiersJson,
+      if (rules is DefaultIndividualClassificationRules)
+        'includeIndividualPlaceFromTeamCompetitions':
+            rules.includeApperancesInTeamCompetitions,
+      if (rules is DefaultTeamClassificationRules)
+        'includeJumperPointsFromIndividualCompetitions':
+            rules.includeJumperPointsFromIndividualCompetitions
     };
   }
 

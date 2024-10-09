@@ -1,5 +1,5 @@
 import 'package:sj_manager/models/running/competition_flow_controller.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
 
 class DefaultIndividualCompetitionFlowController
     extends IndividualCompetitionFlowController {

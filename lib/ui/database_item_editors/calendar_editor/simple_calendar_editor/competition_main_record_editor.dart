@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
-import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record_setup.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_preset.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules_provider.dart';
+import 'package:sj_manager/models/simulation/competition/calendar_records/calendar_main_competition_record.dart';
+import 'package:sj_manager/models/simulation/competition/calendar_records/calendar_main_competition_record_setup.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_provider.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';

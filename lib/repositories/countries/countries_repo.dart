@@ -27,6 +27,6 @@ class CountryNotFoundError extends Error {
 
   @override
   String toString() {
-    return 'Didn\'t find a country with code \'$countryCode\'';
+    return 'Didn\'t find a country with the code of \'$countryCode\'';
   }
 }

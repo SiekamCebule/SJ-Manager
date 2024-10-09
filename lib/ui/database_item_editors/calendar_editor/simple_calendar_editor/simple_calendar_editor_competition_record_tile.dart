@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
+import 'package:sj_manager/models/simulation/competition/calendar_records/calendar_main_competition_record.dart';
 import 'package:sj_manager/ui/database_item_editors/default_competition_rules_preset_editor/default_competition_rules_editor.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 

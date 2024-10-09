@@ -7,9 +7,8 @@ import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
-import 'package:sj_manager/repositories/countries/country_facts/teams_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
@@ -27,7 +26,7 @@ class LocalDatabaseCubit extends Cubit<ItemsReposRegistry?> {
     emit(
       ItemsReposRegistry(initial: {
         CountriesRepo(initial: gameVariant.countries.toList()),
-        TeamsRepo(initial: gameVariant.teams.toList()),
+        ItemsRepo(initial: gameVariant.countryTeams.toList()),
         EditableItemsRepo<MaleJumper>(
             initial: gameVariant.jumpers.whereType<MaleJumper>().toList()),
         EditableItemsRepo<FemaleJumper>(
@@ -44,7 +43,7 @@ class LocalDatabaseCubit extends Cubit<ItemsReposRegistry?> {
         ...state!.get<FemaleJumper>().last,
       ],
       countries: state!.get<Country>().last.toList(),
-      teams: state!.get<Team>().last.toList(),
+      teams: state!.get<CountryTeam>().last.toList(),
       hills: state!.get<Hill>().last.toList(),
     );
     gameVariantsRepo.set(gameVariantsRepo.last.map((variant) {
@@ -59,14 +58,16 @@ class LocalDatabaseCubit extends Cubit<ItemsReposRegistry?> {
   }) async {
     await saveGameVariantItems<MaleJumper>(
       items: newVariant.jumpers.whereType<MaleJumper>().toList(),
-      context: context,
+      pathsCache: context.read(),
+      pathsRegistry: context.read(),
       toJson: context.read<DbItemsJsonConfiguration<MaleJumper>>().toJson,
       gameVariantId: newVariant.id,
     );
     if (!context.mounted) return;
     await saveGameVariantItems<FemaleJumper>(
       items: newVariant.jumpers.whereType<FemaleJumper>().toList(),
-      context: context,
+      pathsCache: context.read(),
+      pathsRegistry: context.read(),
       toJson: context.read<DbItemsJsonConfiguration<FemaleJumper>>().toJson,
       gameVariantId: newVariant.id,
     );

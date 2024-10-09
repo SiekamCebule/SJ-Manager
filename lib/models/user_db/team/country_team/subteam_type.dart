@@ -5,7 +5,6 @@ enum SubteamType {
   b,
   c,
   d,
-  junior,
 }
 
 const subteamTypeNames = {
@@ -25,10 +24,6 @@ const subteamTypeNames = {
     'pl': 'Kadra D',
     'en': 'Subteam D',
   }),
-  SubteamType.junior: MultilingualString(valuesByLanguage: {
-    'pl': 'Kadra Juniorska',
-    'en': 'Subteam Junior',
-  }),
 };
 
 const subteamTypeDescriptionsWhenChoosing = {
@@ -38,21 +33,16 @@ const subteamTypeDescriptionsWhenChoosing = {
   }),
   SubteamType.b: MultilingualString(valuesByLanguage: {
     'pl': 'Zaplecze kadry A, w której wciąż znajdziemy wiele talentów',
-    'en': 'Subteam B, the backup to Subteam A, still packed with talent',
+    'en': 'The backup to Subteam A, still packed with talent',
   }),
   SubteamType.c: MultilingualString(valuesByLanguage: {
-    'pl':
-        'Są tu sportowcy, którzy tylko czekają na trenera, który pomoże im się rozwinąć',
+    'pl': 'Są tu sportowcy z potencjałem, którzy tylko czekają na odpowiedniego trenera',
     'en': 'Jumpers here are waiting for the coach, who can unlock their potential',
   }),
   SubteamType.d: MultilingualString(valuesByLanguage: {
     'pl':
-        'Jest to dopiero czwarta z koleji kadra, ale ci goście wciąż umieją skakać na nartach!',
-    'en': 'It\'s only the fourth tier, but these guys can still ski jump!',
-  }),
-  SubteamType.junior: MultilingualString(valuesByLanguage: {
-    'pl':
-        'W tej kadrze znajdują się młode talenty, które wielkie skakanie mają jeszcze przed sobą',
-    'en': 'That subteam contains young talents with a bright future ahead in ski jumping',
+        'Nie ma tu zachwycającego poziomu, ale ci ludzie wciąż potrafią skakać na nartach!',
+    'en':
+        'The level here might not be impressive, but these athletes can still ski jump!',
   }),
 };

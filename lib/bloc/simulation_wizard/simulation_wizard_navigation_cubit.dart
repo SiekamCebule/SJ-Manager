@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/bloc/simulation_wizard/simulation_wizard_screen_type.dart';
 import 'package:sj_manager/bloc/simulation_wizard/state/simulation_wizard_navigation_state.dart';
-import 'package:sj_manager/models/simulation_db/enums.dart';
+import 'package:sj_manager/models/simulation/enums.dart';
 import 'package:sj_manager/utils/iterable.dart';
 
 class SimulationWizardNavigationCubit extends Cubit<SimulationWizardNavigationState> {

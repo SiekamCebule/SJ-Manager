@@ -22,7 +22,7 @@ class _OtherOptionsScreenState extends State<_OtherOptionsScreen> {
             builder: (context, snapshot) {
               return MyCheckboxListTileField(
                 title: const Text('Archiwizuj wyniki'),
-                value: snapshot.data ?? false,
+                value: snapshot.data ?? true,
                 onChange: (archiveResults) {
                   context
                       .read<SimulationWizardOptionsRepo>()
@@ -32,9 +32,37 @@ class _OtherOptionsScreenState extends State<_OtherOptionsScreen> {
                 onHelpButtonTap: () => showSjmDialog(
                   context: context,
                   child: const SimpleHelpDialog(
-                      titleText: 'Archiwizacja wyników',
-                      contentText:
-                          'Archiwizacja polega na zachowaniu wyników z zakończonych już sezonów, przez co można je potem przeglądać'),
+                    titleText: 'Archiwizacja wyników',
+                    contentText:
+                        'Archiwizacja polega na zachowaniu wyników z zakończonych już sezonów, przez co można je potem przeglądać. Archiwizacja wymaga dodatkowej pamięci na urządzeniu.',
+                  ),
+                ),
+              );
+            },
+          ),
+          const Gap(5),
+          StreamBuilder(
+            stream: context
+                .read<SimulationWizardOptionsRepo>()
+                .archiveEndedSeasonResults
+                .items,
+            builder: (context, snapshot) {
+              return MyCheckboxListTileField(
+                title: const Text('Archiwizuj wyniki'),
+                value: snapshot.data ?? true,
+                onChange: (archiveResults) {
+                  context
+                      .read<SimulationWizardOptionsRepo>()
+                      .archiveEndedSeasonResults
+                      .set(archiveResults);
+                },
+                onHelpButtonTap: () => showSjmDialog(
+                  context: context,
+                  child: const SimpleHelpDialog(
+                    titleText: 'Archiwizacja wyników',
+                    contentText:
+                        'Archiwizacja polega na zachowaniu wyników z zakończonych już sezonów, przez co można je potem przeglądać. Archiwizacja wymaga dodatkowej pamięci na urządzeniu.',
+                  ),
                 ),
               );
             },

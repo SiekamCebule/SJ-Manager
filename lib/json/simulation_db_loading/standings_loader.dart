@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:sj_manager/json/simulation_db_loading/score_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/standings_positions_creator_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
-import 'package:sj_manager/models/simulation_db/standings/standings.dart';
+import 'package:sj_manager/models/simulation/standings/score/score.dart';
+import 'package:sj_manager/models/simulation/standings/standings.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
+import 'package:sj_manager/utils/database_io.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
 class StandingsParser<E, S extends Score> implements SimulationDbPartParser<Standings> {
@@ -21,13 +24,18 @@ class StandingsParser<E, S extends Score> implements SimulationDbPartParser<Stan
   final StandingsPositionsCreatorParser positionsCreatorParser;
 
   @override
-  Standings parse(Json json) {
-    final scoresJson = json['scores'] as List<Json>;
-    final scores = scoresJson.map((json) {
-      final score = ScoreParser(idsRepo: idsRepo).parse(json);
-      idsRepo.register(score, id: idGenerator.generate());
-      return score;
-    }).toList();
+  FutureOr<Standings> parse(Json json) async {
+    final scoresMap = await parseItemsMap(
+      json: json['scores'],
+      fromJson: (json) {
+        final score = ScoreParser(idsRepo: idsRepo).parse(json);
+        idsRepo.register(score, id: idGenerator.generate());
+        return score;
+      },
+    );
+    final scores = scoresMap.getOrderedItems();
+    idsRepo.registerFromLoadedItemsMap(scoresMap);
+
     final positionsCreatorJson = json['positionsCreator'] as String;
     final positionsCreator = positionsCreatorParser.parse(positionsCreatorJson);
 

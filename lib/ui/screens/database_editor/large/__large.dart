@@ -84,8 +84,8 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     _localDbCopyChangesSubscription = _localDbCopy.stream.listen((state) {
       _items.updateItemsRepo(state!);
     });
-    final teamsRepo =
-        TeamsRepo<CountryTeam>(initial: _localDbCopy.state!.get<Team>().last.cast());
+    final teamsRepo = ItemsRepo<CountryTeam>(
+        initial: _localDbCopy.state!.get<CountryTeam>().last.cast());
     _countries = DatabaseEditorCountriesCubit(
       countriesRepo: _localDbCopy.state!.get<Country>() as CountriesRepo,
       teamsRepo: teamsRepo,

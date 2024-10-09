@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/main.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/user_db/items_repos_registry.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';

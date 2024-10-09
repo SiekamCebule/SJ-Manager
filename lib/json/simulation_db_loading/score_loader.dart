@@ -1,11 +1,11 @@
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/details/classification_score_details.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/details/competition_score_details.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/details/jump_score_details.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/details/score_details.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/score.dart';
-import 'package:sj_manager/models/simulation_db/standings/score/typedefs.dart';
+import 'package:sj_manager/models/simulation/standings/score/details/classification_score_details.dart';
+import 'package:sj_manager/models/simulation/standings/score/details/competition_score_details.dart';
+import 'package:sj_manager/models/simulation/standings/score/details/jump_score_details.dart';
+import 'package:sj_manager/models/simulation/standings/score/details/score_details.dart';
+import 'package:sj_manager/models/simulation/standings/score/score.dart';
+import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class ScoreParser implements SimulationDbPartParser<Score> {

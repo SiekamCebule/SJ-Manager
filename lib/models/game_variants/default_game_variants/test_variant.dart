@@ -5,40 +5,41 @@ import 'package:sj_manager/models/game_variants/default_game_variants/constants.
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/game_variants/game_variant_start_date.dart';
 import 'package:sj_manager/models/game_variants/game_variants_io_utils.dart';
-import 'package:sj_manager/models/simulation_db/classification/classification.dart';
-import 'package:sj_manager/models/simulation_db/classification/default_classification_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
-import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record_setup.dart';
-import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_records_to_calendar.dart';
-import 'package:sj_manager/models/simulation_db/competition/competition.dart';
-import 'package:sj_manager/models/simulation_db/competition/competition_labels.dart';
-import 'package:sj_manager/models/simulation_db/competition/high_level_calendar.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_rules/default_competition_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_round_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/concrete/individual_default.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/classification_score_creator/concrete/team_default.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/concrete/individual/default_linear.dart';
+import 'package:sj_manager/models/simulation/classification/classification.dart';
+import 'package:sj_manager/models/simulation/classification/default_classification_rules.dart';
+import 'package:sj_manager/models/simulation/competition/calendar_records/calendar_main_competition_record.dart';
+import 'package:sj_manager/models/simulation/competition/calendar_records/calendar_main_competition_record_setup.dart';
+import 'package:sj_manager/models/simulation/competition/calendar_records/calendar_main_competition_records_to_calendar.dart';
+import 'package:sj_manager/models/simulation/competition/competition.dart';
+import 'package:sj_manager/models/simulation/competition/competition_labels.dart';
+import 'package:sj_manager/models/simulation/competition/high_level_calendar.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/entities_limit.dart';
+import 'package:sj_manager/models/simulation/competition/rules/ko/ko_round_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/classification_score_creator/concrete/individual_default.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/classification_score_creator/concrete/team_default.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/competition_score_creator/concrete/individual/default_linear.dart';
 import 'package:collection/collection.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/concrete/default.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/concrete/default_classic.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_group_creator.dart/concrete/default_classic.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/ko_round_advancement_determinator/concrete/n_best.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/concrete/default_weighted.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
-import 'package:sj_manager/models/simulation_db/simulation_season.dart';
-import 'package:sj_manager/models/simulation_db/standings/standings.dart';
-import 'package:sj_manager/models/simulation_db/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/judges_creator/concrete/default.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/jump_score_creator/concrete/default_classic.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/ko_group_creator.dart/concrete/default_classic.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/ko_round_advancement_determinator/concrete/n_best.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/wind_averager/concrete/default_weighted.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_calendar.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
+import 'package:sj_manager/models/simulation/database/simulation_season.dart';
+import 'package:sj_manager/models/simulation/standings/standings.dart';
+import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/hill/hill_profile_type.dart';
 import 'package:sj_manager/models/user_db/hill/jumps_variability.dart';
 import 'package:sj_manager/models/user_db/hill/landing_ease.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
@@ -64,25 +65,28 @@ class _TestGameVariantCreator {
     required BuildContext context,
   }) async {
     final countries = await loadGameVariantItems<Country>(
-      context: context,
+      pathsCache: context.read(),
+      pathsRegistry: context.read(),
       gameVariantId: 'test',
       fromJson: context.read<DbItemsJsonConfiguration<Country>>().fromJson,
     );
     _countriesRepo = CountriesRepo(initial: countries);
     if (!context.mounted) throw _contextIsNotMountedError;
-    final teams = await loadGameVariantItems<Team>(
-      context: context,
+    final teams = await loadGameVariantItems<CountryTeam>(
+      pathsCache: context.read(),
+      pathsRegistry: context.read(),
       gameVariantId: 'test',
       fromJson: (json) {
         return TeamLoader(
           idsRepo: ItemsIdsRepo(), // CountryTeam loading doesn't need ids repos
           countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo),
-        ).parse(json);
+        ).parse(json) as CountryTeam;
       },
     );
     if (!context.mounted) throw _contextIsNotMountedError;
     final males = await loadGameVariantItems<MaleJumper>(
-      context: context,
+      pathsCache: context.read(),
+      pathsRegistry: context.read(),
       gameVariantId: 'test',
       fromJson: (json) {
         return MaleJumper.fromJson(json,
@@ -91,7 +95,8 @@ class _TestGameVariantCreator {
     );
     if (!context.mounted) throw _contextIsNotMountedError;
     final females = await loadGameVariantItems<FemaleJumper>(
-      context: context,
+      pathsCache: context.read(),
+      pathsRegistry: context.read(),
       gameVariantId: 'test',
       fromJson: (json) {
         return FemaleJumper.fromJson(json,
@@ -140,7 +145,8 @@ class _TestGameVariantCreator {
       ],
       hills: _hills,
       countries: countries,
-      teams: teams,
+      countryTeams: teams,
+      subteams: [],
       jumpers: jumpers,
       season: SimulationSeason(
         eventSeries: [

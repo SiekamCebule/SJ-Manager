@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_setup.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_calendar.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class EventSeriesParser implements SimulationDbPartParser<EventSeries> {
@@ -20,7 +20,7 @@ class EventSeriesParser implements SimulationDbPartParser<EventSeries> {
 
   @override
   FutureOr<EventSeries> parse(Json json) async {
-    final calendar = await calendarParser.parse(json);
+    final calendar = await calendarParser.parse(json['calendar']);
 
     return EventSeries(
       calendar: calendar,

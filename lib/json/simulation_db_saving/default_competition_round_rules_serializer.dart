@@ -1,16 +1,16 @@
 import 'package:sj_manager/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/standings_positions_creator_serializer.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_competition_round_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/entities_limit.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/ko/ko_round_rules.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/judges_creator/judges_creator.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
-import 'package:sj_manager/models/simulation_db/competition/rules/utils/wind_averager/wind_averager.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_round_rules/default_competition_round_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/entities_limit.dart';
+import 'package:sj_manager/models/simulation/competition/rules/ko/ko_round_rules.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/judges_creator/judges_creator.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
+import 'package:sj_manager/models/simulation/competition/rules/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class DefaultCompetitionRoundRulesSerializer

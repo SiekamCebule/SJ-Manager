@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation_db/competition/calendar_records/calendar_main_competition_record.dart';
+import 'package:sj_manager/models/simulation/competition/calendar_records/calendar_main_competition_record.dart';
 
-import 'package:sj_manager/models/simulation_db/competition/high_level_calendar.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar.dart';
-import 'package:sj_manager/models/simulation_db/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/models/simulation/competition/high_level_calendar.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_calendar.dart';
+import 'package:sj_manager/models/simulation/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class EventSeriesCalendarPresetParser

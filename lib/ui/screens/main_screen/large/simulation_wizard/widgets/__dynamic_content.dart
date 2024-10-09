@@ -53,9 +53,7 @@ class _DynamicContentState extends State<_DynamicContent> {
             ),
           SimulationWizardScreenType.subteam => _SubteamScreen(
               subteamTypes:
-                  (context.read<SimulationWizardOptionsRepo>().team.last as CountryTeam?)!
-                      .facts
-                      .subteams,
+                  context.read<SimulationWizardOptionsRepo>().team.last!.facts.subteams,
               onChange: (subteamType) {
                 context.read<SimulationWizardOptionsRepo>().subteamType.set(subteamType);
                 if (subteamType != null) {
@@ -86,7 +84,8 @@ class _DynamicContentState extends State<_DynamicContent> {
                   _countryFlagsRepo ??= LocalStorageCountryFlagsRepo(
                     imagesDirectory: Directory(
                       path.join(
-                        gameVariantDirectory(context: context, gameVariantId: variant.id)
+                        gameVariantDirectory(
+                                pathsCache: context.read(), gameVariantId: variant.id)
                             .path,
                         'countries',
                         'country_flags',
