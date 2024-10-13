@@ -33,6 +33,8 @@ import 'package:sj_manager/ui/theme/theme_cubit.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 import 'package:path/path.dart' as path;
+import 'package:sj_manager/utils/platform.dart';
+import 'package:window_manager/window_manager.dart';
 
 final router = FluroRouter();
 bool routerIsInitialized = false;
@@ -41,6 +43,11 @@ void main() async {
   final sharedPrefs = await SharedPreferences.getInstance();
   final pathsCache = PlarformSpecificPathsCache();
   await pathsCache.setup();
+  WidgetsFlutterBinding.ensureInitialized();
+  await windowManager.ensureInitialized();
+  if (platformIsDesktop) {
+    await WindowManager.instance.setMinimumSize(const Size(1350, 850));
+  }
 
   runApp(
     MultiRepositoryProvider(

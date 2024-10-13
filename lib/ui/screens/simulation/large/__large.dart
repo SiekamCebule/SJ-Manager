@@ -24,23 +24,9 @@ class _LargeState extends State<_Large> {
                 const Gap(5),
                 SizedBox(
                   height: 50,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Spacer(),
-                      const SizedBox(
-                        width: 120,
-                        child: _CurrentDateCard(),
-                      ),
-                      const Gap(6),
-                      SimulationRouteMainActionButton(
-                        labelText: 'Kontynuuj', // or "Dom"
-                        iconData: Symbols.forward, // or "home"
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
+                  child: _TopPanel(navigatorKey: _navigatorKey),
                 ),
+                const Gap(5),
                 Expanded(
                   child: Navigator(
                     key: _navigatorKey,

@@ -26,6 +26,9 @@ import 'package:sj_manager/json/simulation_db_loading/standings_positions_creato
 import 'package:sj_manager/json/simulation_db_loading/team_competition_group_rules_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/team_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/wind_averager_parser.dart';
+import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
+import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
+import 'package:sj_manager/models/simulation/database/helper/jumper_simulation_dynamic_parameters.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database.dart';
 import 'package:sj_manager/models/simulation/database/simulation_season.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
@@ -105,6 +108,36 @@ class DefaultSimulationDbLoaderFromFile {
     final String? userSubteamId = _dynamicStateJson['userSubteamId'];
     final userSubteam = idsRepo.maybeGet<Subteam>(userSubteamId ?? '');
 
+    final jumpersDynamicParametersJson =
+        _dynamicStateJson['jumpersDynamicParameters'] as Map;
+    final jumpersDynamicParameters = jumpersDynamicParametersJson.map(
+      (jumperId, paramsJson) {
+        return MapEntry(
+          idsRepo.get(jumperId) as Jumper,
+          JumperSimulationDynamicParameters.fromJson(paramsJson),
+        );
+      },
+    );
+
+    final actionDeadlinesJson = _dynamicStateJson['actionDeadlines'] as Map;
+    final actionDeadlines = actionDeadlinesJson.map((actionTypeName, dateTimeJson) {
+      return MapEntry(
+        SimulationActionType.values.singleWhere((value) => value.name == actionTypeName),
+        DateTime.parse(dateTimeJson),
+      );
+    });
+
+    final simulationActionCompletionStatusesJson =
+        _dynamicStateJson['simulationActionCompletionStatuses'] as List;
+    // TODO: Maybe we should throw, not assign the {} in the place of a null?
+    final simulationActionCompletionStatuses =
+        simulationActionCompletionStatusesJson.map((actionTypeName) {
+      return SimulationActionType.values
+          .singleWhere((value) => value.name == actionTypeName);
+    }).toSet();
+
+    // TODO: Serialization
+
     _countriesRepo.dispose();
     return SimulationDatabase(
       personalCoachJumpers: personalCoachJumpers?.toList(),
@@ -118,6 +151,9 @@ class DefaultSimulationDbLoaderFromFile {
       startDate: DateTime.parse(_dynamicStateJson['startDate']!),
       currentDate: DateTime.parse(_dynamicStateJson['currentDate']!),
       idsRepo: idsRepo,
+      actionDeadlines: actionDeadlines,
+      actionsRepo: SimulationActionsRepo(initial: simulationActionCompletionStatuses),
+      jumpersDynamicParameters: jumpersDynamicParameters,
     );
   }
 

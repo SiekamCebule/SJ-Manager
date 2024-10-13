@@ -27,6 +27,7 @@ import 'package:sj_manager/models/simulation/competition/rules/utils/jump_score_
 import 'package:sj_manager/models/simulation/competition/rules/utils/ko_group_creator.dart/concrete/default_classic.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/ko_round_advancement_determinator/concrete/n_best.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/wind_averager/concrete/default_weighted.dart';
+import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_calendar.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
@@ -143,6 +144,10 @@ class _TestGameVariantCreator {
           date: DateTime(2024, 11, 5),
         ),
       ],
+      actionDeadlines: {
+        SimulationActionType.settingUpTraining: DateTime(2024, 5, 15),
+        SimulationActionType.settingUpSubteams: DateTime(2024, 5, 10),
+      },
       hills: _hills,
       countries: countries,
       countryTeams: teams,

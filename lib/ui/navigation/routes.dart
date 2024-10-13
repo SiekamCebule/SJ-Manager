@@ -1,9 +1,13 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
+import 'package:sj_manager/bloc/simulation/simulation_screen_navigation_cubit.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/simulation/database/helper/jumper_level_description.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
 import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
+import 'package:sj_manager/models/simulation/flow/training/reports.dart';
 import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -124,33 +128,85 @@ void configureRoutes(FluroRouter router) {
 
     Jumper getJumperBySurname(String surname) => simulation.database!.jumpers.last
         .singleWhere((jumper) => jumper.surname == surname);
+
     final simulationDatabaseHelper = SimulationDatabaseHelper(
       userSubteam: null,
-      jumpersDynamicParameters: {
+      managerPoints: 40,
+      jumpersSimulationRatings: {
         getJumperBySurname('Forfang'): const JumperSimulationRatings(
-          levelDescription: JumperLevelDescription.top,
+          trainingProgressReport: JumperTrainingProgressReport(
+            generalRating: SimpleRating.good,
+            ratings: {
+              JumperTrainingProgressCategory.takeoff: SimpleRating.good,
+              JumperTrainingProgressCategory.flight: SimpleRating.good,
+              JumperTrainingProgressCategory.landing: SimpleRating.good,
+              JumperTrainingProgressCategory.jumpsConsistency: SimpleRating.poor,
+              JumperTrainingProgressCategory.form: SimpleRating.veryGood,
+            },
+          ),
+          levelReport: JumperLevelReport(
+            levelDescription: JumperLevelDescription.top,
+            characteristics: {
+              JumperLevelCharacteristicCategory.takeoff: SimpleRating.belowExpectations,
+              JumperLevelCharacteristicCategory.flight: SimpleRating.veryGood,
+              JumperLevelCharacteristicCategory.landing: SimpleRating.correct,
+              JumperLevelCharacteristicCategory.jumpsConsistency: SimpleRating.correct,
+            },
+          ),
           moraleRating: SimpleRating.correct,
           resultsRating: SimpleRating.correct,
-          trainingRating: SimpleRating.excellent,
         ),
         getJumperBySurname('Żyła'): const JumperSimulationRatings(
-          levelDescription: JumperLevelDescription.broadTop,
+          trainingProgressReport: JumperTrainingProgressReport(
+            generalRating: SimpleRating.correct,
+            ratings: {
+              JumperTrainingProgressCategory.takeoff: SimpleRating.correct,
+              JumperTrainingProgressCategory.flight: SimpleRating.correct,
+              JumperTrainingProgressCategory.landing: SimpleRating.veryPoor,
+              JumperTrainingProgressCategory.jumpsConsistency: SimpleRating.veryGood,
+              JumperTrainingProgressCategory.form: SimpleRating.veryGood,
+            },
+          ),
+          levelReport: JumperLevelReport(
+            levelDescription: JumperLevelDescription.broadTop,
+            characteristics: {
+              JumperLevelCharacteristicCategory.takeoff: SimpleRating.good,
+              JumperLevelCharacteristicCategory.flight: SimpleRating.good,
+              JumperLevelCharacteristicCategory.landing: SimpleRating.belowExpectations,
+              JumperLevelCharacteristicCategory.jumpsConsistency: SimpleRating.correct,
+            },
+          ),
           moraleRating: SimpleRating.good,
           resultsRating: SimpleRating.belowExpectations,
-          trainingRating: SimpleRating.belowExpectations,
         ),
         getJumperBySurname('Wolny'): const JumperSimulationRatings(
-          levelDescription: JumperLevelDescription.international,
+          trainingProgressReport: JumperTrainingProgressReport(
+            generalRating: SimpleRating.poor,
+            ratings: {
+              JumperTrainingProgressCategory.takeoff: SimpleRating.good,
+              JumperTrainingProgressCategory.flight: SimpleRating.veryGood,
+              JumperTrainingProgressCategory.landing: SimpleRating.belowExpectations,
+              JumperTrainingProgressCategory.jumpsConsistency: SimpleRating.veryPoor,
+              JumperTrainingProgressCategory.form: SimpleRating.poor,
+            },
+          ),
+          levelReport: JumperLevelReport(
+            levelDescription: JumperLevelDescription.international,
+            characteristics: {
+              JumperLevelCharacteristicCategory.takeoff: SimpleRating.poor,
+              JumperLevelCharacteristicCategory.flight: SimpleRating.veryGood,
+              JumperLevelCharacteristicCategory.landing: SimpleRating.veryPoor,
+              JumperLevelCharacteristicCategory.jumpsConsistency: SimpleRating.correct,
+            },
+          ),
           moraleRating: SimpleRating.veryGood,
           resultsRating: SimpleRating.good,
-          trainingRating: SimpleRating.veryGood,
         ),
       },
     );
     return MultiProvider(
       providers: [
         Provider.value(value: simulation),
-        Provider.value(value: simulation.database!),
         Provider(create: (context) => simulation.database!.countries),
         Provider<CountryFlagsRepo>(
           create: (context) => LocalStorageCountryFlagsRepo(
@@ -180,7 +236,17 @@ void configureRoutes(FluroRouter router) {
         ),
         Provider.value(value: simulationDatabaseHelper),
       ],
-      child: const SimulationRoute(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => SimulationScreenNavigationCubit(),
+          ),
+          BlocProvider(
+            create: (context) => SimulationDatabaseCubit(initial: simulation.database!),
+          ),
+        ],
+        child: const SimulationRoute(),
+      ),
     );
   });
 }

@@ -1,3 +1,5 @@
+import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
+import 'package:sj_manager/models/simulation/database/helper/jumper_simulation_dynamic_parameters.dart';
 import 'package:sj_manager/models/simulation/enums.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database.dart';
 import 'package:sj_manager/models/simulation/database/simulation_season.dart';
@@ -38,6 +40,10 @@ class DefaultSimulationDatabaseCreator {
     _seasons = ItemsRepo(initial: [options.gameVariant.last!.season]);
     final mode = options.mode.last!;
     _setUpIdsRepo();
+    final jumpersDynamicParameters = {
+      for (var jumper in _jumpers.last)
+        jumper: const JumperSimulationDynamicParameters(trainingConfig: null),
+    };
     return SimulationDatabase(
       userSubteam: mode == SimulationMode.classicCoach
           ? Subteam(parentTeam: options.team.last!, type: options.subteamType.last!)
@@ -53,6 +59,9 @@ class DefaultSimulationDatabaseCreator {
       countries: _countries,
       seasons: _seasons,
       idsRepo: _idsRepo,
+      actionDeadlines: options.gameVariant.last!.actionDeadlines,
+      actionsRepo: SimulationActionsRepo(initial: {}),
+      jumpersDynamicParameters: jumpersDynamicParameters,
     );
   }
 

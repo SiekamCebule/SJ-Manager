@@ -96,9 +96,6 @@ File fileInDirectory(Directory directory, String name) {
 }
 
 File fileByNameWithoutExtension(Directory directory, String name) {
-  print('dir: $directory');
-  print('dir exists: ${directory.existsSync()}');
-  print('nagme: $name');
   final files = directory.listSync();
   for (var file in files) {
     if (file is File) {

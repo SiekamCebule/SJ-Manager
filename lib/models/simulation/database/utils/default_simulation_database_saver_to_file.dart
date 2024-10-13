@@ -82,6 +82,17 @@ class DefaultSimulationDatabaseSaverToFile {
       'userSubteamId': idsRepo.maybeIdOf(_database.userSubteam),
       'startDate': _database.startDate.toString(),
       'currentDate': _database.currentDate.toString(),
+      'personalCoachJumperIds':
+          _database.personalCoachJumpers?.map((jumper) => idsRepo.idOf(jumper)),
+      'jumpersDynamicParameters': _database.jumpersDynamicParameters.map(
+        (jumper, params) => MapEntry(idsRepo.idOf(jumper), params.toJson()),
+      ),
+      'actionDeadlines': _database.actionDeadlines.map(
+        (actionType, dateTime) => MapEntry(actionType.name, dateTime.toString()),
+      ),
+      'simulationActionCompletionStatuses': _database.actionsRepo.completedActions
+          .map((actionType) => actionType.name)
+          .toList(),
     };
     await file.writeAsString(jsonEncode(json));
   }

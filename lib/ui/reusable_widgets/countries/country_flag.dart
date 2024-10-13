@@ -33,10 +33,11 @@ class CountryFlag extends StatelessWidget {
               height: height,
               fit: imageFit,
             )
-          : AspectRatio(
-              aspectRatio: UiSpecificItemConstants.countryFlagAspectRatio,
-              child: SizedBox(
-                width: width,
+          : SizedBox(
+              width: width,
+              height: height,
+              child: AspectRatio(
+                aspectRatio: UiSpecificItemConstants.countryFlagAspectRatio,
                 child: Placeholder(
                   color: Theme.of(context).colorScheme.onTertiary,
                 ),

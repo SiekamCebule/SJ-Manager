@@ -133,7 +133,6 @@ class _MainMenuContinueButtonState extends State<MainMenuContinueButton> {
   }
 
   Widget _constructFirstInfoWidget({required UserSimulation lastPlayed}) {
-    print('_constructFirstInfoWidget');
     late Widget iconWidget;
     late Widget labelWidget;
     final labelTextStyle = Theme.of(context).textTheme.titleMedium!.copyWith(

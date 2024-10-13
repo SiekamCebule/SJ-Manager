@@ -32,10 +32,6 @@ class _HomeScreen extends StatelessWidget {
                 flex: 100,
                 child: Placeholder(),
               ),
-              Expanded(
-                flex: 100,
-                child: Placeholder(),
-              ),
             ],
           ),
         ),
