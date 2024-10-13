@@ -1,0 +1,4 @@
+enum SimulationActionType {
+  settingUpTraining,
+  settingUpSubteams,
+}

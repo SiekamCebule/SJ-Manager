@@ -198,5 +198,22 @@
     "jumperLevelRegional": "Poziom regionalny",
     "jumperLevelLocal": "Poziom lokalny",
     "jumperLevelNational": "Poziom krajowy",
-    "jumperLevelAmateur": "Poziom amatorski"
+    "jumperLevelAmateur": "Poziom amatorski",
+    "takeoff": "Wybicie",
+    "flight": "Lot",
+    "form": "Forma",
+    "jumpsConsistencyShortened": "Równość",
+    "excellentTrainingProgressShortLabel": "Znaczny wzrost",
+    "veryGoodTrainingProgressShortLabel": "Wzrost",
+    "goodTrainingProgressShortLabel": "Pewnien wzrost",
+    "correctTrainingProgressShortLabel": "Utrzymanie",
+    "belowExpectationsTrainingProgressShortLabel": "Pewien spadek",
+    "poorTrainingProgressShortLabel": "Spadek",
+    "veryPoorTrainingProgressShortLabel": "Znaczny spadek",
+    "settingUpTraining": "Rozpoczęcie treningów",
+    "settingUpSubteams": "Powołania do kadr",
+    "today": "Dziś",
+    "tomorrow": "Jutro",
+    "dayAfterTomorrow": "Pojutrze",
+    "inNDays": "Za {daysDifference} {daysDifference, plural, one {dzień} few {dni} many {dni} other {dni}}"
 }

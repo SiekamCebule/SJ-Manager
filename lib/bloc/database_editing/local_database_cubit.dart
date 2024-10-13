@@ -43,7 +43,7 @@ class LocalDatabaseCubit extends Cubit<ItemsReposRegistry?> {
         ...state!.get<FemaleJumper>().last,
       ],
       countries: state!.get<Country>().last.toList(),
-      teams: state!.get<CountryTeam>().last.toList(),
+      countryTeams: state!.get<CountryTeam>().last.toList(),
       hills: state!.get<Hill>().last.toList(),
     );
     gameVariantsRepo.set(gameVariantsRepo.last.map((variant) {

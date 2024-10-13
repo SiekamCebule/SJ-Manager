@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:sj_manager/models/game_variants/game_variant_start_date.dart';
+import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/simulation_season.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
@@ -19,6 +21,7 @@ class GameVariant {
     required this.subteams,
     required this.season,
     required this.startDates,
+    required this.actionDeadlines,
   });
 
   final String id;
@@ -31,6 +34,7 @@ class GameVariant {
   final List<Subteam> subteams;
   final SimulationSeason season;
   final List<GameVariantStartDate> startDates;
+  final Map<SimulationActionType, DateTime> actionDeadlines;
 
   GameVariant copyWith({
     String? id,
@@ -39,10 +43,11 @@ class GameVariant {
     List<Jumper>? jumpers,
     List<Hill>? hills,
     List<Country>? countries,
-    List<CountryTeam>? teams,
+    List<CountryTeam>? countryTeams,
     List<Subteam>? subteams,
     SimulationSeason? season,
     List<GameVariantStartDate>? startDates,
+    Map<SimulationActionType, DateTime>? actionDeadlines,
   }) {
     return GameVariant(
       id: id ?? this.id,
@@ -51,10 +56,11 @@ class GameVariant {
       jumpers: jumpers ?? this.jumpers,
       hills: hills ?? this.hills,
       countries: countries ?? this.countries,
-      countryTeams: teams ?? this.countryTeams,
+      countryTeams: countryTeams ?? this.countryTeams,
       subteams: subteams ?? this.subteams,
       season: season ?? this.season,
       startDates: startDates ?? this.startDates,
+      actionDeadlines: actionDeadlines ?? this.actionDeadlines,
     );
   }
 }

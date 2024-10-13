@@ -12,8 +12,6 @@ class _NavigationRail extends StatefulWidget {
 }
 
 class _NavigationRailState extends State<_NavigationRail> {
-  var currentIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     final regularRailDestinationLabelStyle = Theme.of(context).textTheme.bodySmall!;
@@ -31,32 +29,9 @@ class _NavigationRailState extends State<_NavigationRail> {
           ),
         ),
         NavigationRailDestination(
-          icon: const Icon(Symbols.globe),
-          label: Text(
-            'Ze świata',
-            style: regularRailDestinationLabelStyle,
-          ),
-          disabled: true,
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Symbols.inbox),
-          label: Text(
-            'Skrzynka',
-            style: regularRailDestinationLabelStyle,
-          ),
-          disabled: true,
-        ),
-        NavigationRailDestination(
           icon: const Icon(Symbols.group),
           label: Text(
             'Drużyna',
-            style: regularRailDestinationLabelStyle,
-          ),
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Symbols.fitness_center),
-          label: Text(
-            'Trening',
             style: regularRailDestinationLabelStyle,
           ),
         ),
@@ -107,22 +82,20 @@ class _NavigationRailState extends State<_NavigationRail> {
           ),
         ),
       ],
-      selectedIndex: currentIndex,
+      selectedIndex: context.watch<SimulationScreenNavigationCubit>().state.screenIndex,
       minWidth: 80,
       minExtendedWidth: 150,
       onDestinationSelected: (selecetedIndex) {
         switch (selecetedIndex) {
           case 0:
             widget.navigatorKey.currentState!.pushNamed('/simulation/home');
-          case 3:
+          case 1:
             widget.navigatorKey.currentState!.pushNamed('/simulation/team');
-          case 10:
+          case 7:
             router.pop(context);
         }
-        if (selecetedIndex != 10) {
-          setState(() {
-            currentIndex = selecetedIndex;
-          });
+        if (selecetedIndex != 7) {
+          context.read<SimulationScreenNavigationCubit>().change(index: selecetedIndex);
         }
       },
     );

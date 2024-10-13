@@ -14,13 +14,14 @@ class SimulationRouteMainActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
+    return FilledButton.icon(
       onPressed: onPressed,
-      style: TextButton.styleFrom(
+      style: FilledButton.styleFrom(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
+        splashFactory: InkRipple.splashFactory,
         minimumSize: const Size(100, 50),
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
       ),
