@@ -19,7 +19,7 @@ import 'package:sj_manager/models/game_variants/game_variants_io_utils.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
-import 'package:sj_manager/models/simulation/enums.dart';
+import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/simulation/database/simulation_wizard_options_repo.dart';
 import 'package:sj_manager/models/user_db/team/country_team/subteam_type.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';

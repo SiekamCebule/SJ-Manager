@@ -12,7 +12,7 @@ class LinkTextButton extends StatelessWidget {
   });
 
   final Color? color;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String labelText;
   final TextStyle? textStyle;
   final bool excludeIcon;
@@ -27,19 +27,13 @@ class LinkTextButton extends StatelessWidget {
                 color: finalColor,
               ),
     );
-    final buttonStyle = TextButton.styleFrom(
-      overlayColor: Colors.transparent,
-    );
-
     return excludeIcon
         ? TextButton(
             onPressed: onPressed,
-            style: buttonStyle,
             child: textWidget,
           )
         : TextButton.icon(
             onPressed: onPressed,
-            //style: buttonStyle,
             label: textWidget,
             icon: Icon(
               Symbols.arrow_forward_rounded,

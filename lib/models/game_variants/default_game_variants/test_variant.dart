@@ -31,7 +31,7 @@ import 'package:sj_manager/models/simulation/database/actions/simulation_action_
 import 'package:sj_manager/models/simulation/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_calendar.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
-import 'package:sj_manager/models/simulation/database/simulation_season.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';

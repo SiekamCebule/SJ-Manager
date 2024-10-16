@@ -1,9 +1,11 @@
 import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
-import 'package:sj_manager/models/simulation/database/helper/jumper_simulation_dynamic_parameters.dart';
-import 'package:sj_manager/models/simulation/enums.dart';
-import 'package:sj_manager/models/simulation/database/simulation_database.dart';
-import 'package:sj_manager/models/simulation/database/simulation_season.dart';
+import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_simulation_dynamic_parameters.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
+import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
 import 'package:sj_manager/models/simulation/database/simulation_wizard_options_repo.dart';
+import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/classification_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/competition_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/jump_score_details.dart';
@@ -44,12 +46,29 @@ class DefaultSimulationDatabaseCreator {
       for (var jumper in _jumpers.last)
         jumper: const JumperSimulationDynamicParameters(trainingConfig: null),
     };
+    final jumperReports = {
+      for (var jumper in _jumpers.last)
+        jumper: const JumperReports(
+          levelReport: null,
+          trainingProgressReport: null,
+          moraleRating: null,
+          resultsRating: null,
+        ),
+    };
+    final userSubteam = mode == SimulationMode.classicCoach
+        ? Subteam(
+            parentTeam: options.team.last!,
+            type: options.subteamType.last!,
+          )
+        : null;
     return SimulationDatabase(
-      userSubteam: mode == SimulationMode.classicCoach
-          ? Subteam(parentTeam: options.team.last!, type: options.subteamType.last!)
-          : null,
-      personalCoachJumpers:
-          options.mode.last! == SimulationMode.personalCoach ? [] : null,
+      managerData: SimulationManagerData(
+        mode: mode,
+        userSubteam: userSubteam,
+        personalCoachJumpers:
+            options.mode.last! == SimulationMode.personalCoach ? [] : null,
+        trainingPoints: 40, // TODO: make it depend on other factors
+      ),
       startDate: options.startDate.last!.date,
       currentDate: options.startDate.last!.date,
       jumpers: _jumpers,
@@ -62,6 +81,7 @@ class DefaultSimulationDatabaseCreator {
       actionDeadlines: options.gameVariant.last!.actionDeadlines,
       actionsRepo: SimulationActionsRepo(initial: {}),
       jumpersDynamicParameters: jumpersDynamicParameters,
+      jumpersReports: jumperReports,
     );
   }
 

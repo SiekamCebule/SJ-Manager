@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
+import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:gap/gap.dart';
@@ -13,13 +13,14 @@ class JumperCardNameAndSurnameColumn extends StatelessWidget {
   });
 
   final Jumper jumper;
-  final JumperSimulationRatings jumperRatings;
+  final JumperReports jumperRatings;
 
   @override
   Widget build(BuildContext context) {
+    final levelDescription = jumperRatings.levelReport?.levelDescription;
     final jumperLevelDescriptionText = getJumperLevelDescription(
       context: context,
-      levelDescription: jumperRatings.levelReport.levelDescription,
+      levelDescription: levelDescription,
     );
 
     return Column(

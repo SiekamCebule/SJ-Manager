@@ -44,7 +44,6 @@ class _JumperTrainingConfiguratorState extends State<JumperTrainingConfigurator>
   Widget build(BuildContext context) {
     final translatedPoints =
         pluralForm(count: _availablePoints, one: 'Punkt', few: 'Punkty', many: 'Punktów');
-    print('config: ${widget.trainingConfig}');
 
     return Column(
       children: [
@@ -57,7 +56,6 @@ class _JumperTrainingConfiguratorState extends State<JumperTrainingConfigurator>
                   final newConfig = widget.trainingConfig.copyWith(
                     trainingRisk: trainingRisk,
                   );
-                  print('new config: $newConfig');
                   widget.onChange(newConfig);
                 },
               ),

@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:sj_manager/models/game_variants/game_variant_start_date.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
-import 'package:sj_manager/models/simulation/database/simulation_season.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';

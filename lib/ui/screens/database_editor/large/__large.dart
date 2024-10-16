@@ -115,9 +115,9 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   }
 
   Future<String?> _showSaveChangesDialog() async {
-    return showDialog<String>(
+    return showSjmDialog<String>(
       context: context,
-      builder: (context) => const DatabaseEditorUnsavedChangesDialog(),
+      child: const DatabaseEditorUnsavedChangesDialog(),
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
+import 'package:sj_manager/utils/show_dialog.dart';
 
 class ItemImageNotFoundPlaceholder extends StatelessWidget {
   const ItemImageNotFoundPlaceholder({
@@ -33,9 +34,9 @@ class ItemImageNotFoundPlaceholder extends StatelessWidget {
             alignment: Alignment.topRight,
             child: HelpIconButton(
               onPressed: () async {
-                await showDialog(
+                await showSjmDialog(
                   context: context,
-                  builder: (context) => helpDialog,
+                  child: helpDialog,
                 );
               },
             ),

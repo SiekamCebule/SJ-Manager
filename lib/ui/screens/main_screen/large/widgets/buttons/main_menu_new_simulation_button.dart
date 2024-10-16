@@ -11,7 +11,7 @@ class MainMenuNewSimulationButton extends StatelessWidget {
         final optionsRepo = await showGeneralDialog<SimulationWizardOptionsRepo?>(
           context: context,
           barrierDismissible: false,
-          barrierColor: Colors.black.withOpacity(0.9),
+          barrierColor: Colors.black.withValues(alpha: 0.9),
           barrierLabel: 'dismiss new simulation dialog',
           pageBuilder: (context, animationIn, animationOut) {
             return const Center(
@@ -43,7 +43,7 @@ class MainMenuNewSimulationButton extends StatelessWidget {
           final database = DefaultSimulationDatabaseCreator(idGenerator: context.read())
               .create(optionsRepo);
           String? subteamCountryFlagPath;
-          if (database.userSubteam != null) {
+          if (database.managerData.userSubteam != null) {
             final countryCode = optionsRepo.team.last!.country.code;
             subteamCountryFlagPath = fileInDirectory(
               simulationDirectory(
@@ -83,6 +83,19 @@ class MainMenuNewSimulationButton extends StatelessWidget {
               pathsCache: context.read(),
               simulationId: optionsRepo.simulationId.last!,
               directoryName: path.join('countries', 'country_flags'),
+            ),
+          );
+          if (!context.mounted) return;
+          await copyDirectory(
+            gameVariantDirectory(
+              pathsCache: context.read(),
+              gameVariantId: optionsRepo.gameVariant.last!.id,
+              directoryName: path.join('jumper_images'),
+            ),
+            simulationDirectory(
+              pathsCache: context.read(),
+              simulationId: optionsRepo.simulationId.last!,
+              directoryName: path.join('jumper_images'),
             ),
           );
           if (!context.mounted) return;

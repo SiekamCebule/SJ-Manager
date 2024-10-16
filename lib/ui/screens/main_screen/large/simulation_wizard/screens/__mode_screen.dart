@@ -40,6 +40,8 @@ class _ModeScreenState extends State<_ModeScreen> {
                 widget.onChange(_selected);
               },
               isSelected: _selected == SimulationMode.classicCoach,
+              disabled:
+                  !sjmSimulationModeAvailibilityStates[SimulationMode.classicCoach]!,
             ),
           ),
           SizedBox(
@@ -57,6 +59,8 @@ class _ModeScreenState extends State<_ModeScreen> {
                 widget.onChange(_selected);
               },
               isSelected: _selected == SimulationMode.personalCoach,
+              disabled:
+                  !sjmSimulationModeAvailibilityStates[SimulationMode.personalCoach]!,
             ),
           ),
           SizedBox(
@@ -74,6 +78,7 @@ class _ModeScreenState extends State<_ModeScreen> {
                 widget.onChange(_selected);
               },
               isSelected: _selected == SimulationMode.observer,
+              disabled: !sjmSimulationModeAvailibilityStates[SimulationMode.observer]!,
             ),
           ),
         ],
@@ -81,3 +86,9 @@ class _ModeScreenState extends State<_ModeScreen> {
     );
   }
 }
+
+const sjmSimulationModeAvailibilityStates = {
+  SimulationMode.classicCoach: false,
+  SimulationMode.personalCoach: true,
+  SimulationMode.observer: false,
+};

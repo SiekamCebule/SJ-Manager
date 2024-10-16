@@ -27,8 +27,8 @@ import 'package:sj_manager/json/simulation_db_saving/standings_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/team_competition_group_rules_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/team_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/wind_averager_serializer.dart';
-import 'package:sj_manager/models/simulation/database/simulation_database.dart';
-import 'package:sj_manager/models/simulation/database/simulation_season.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
@@ -79,11 +79,16 @@ class DefaultSimulationDatabaseSaverToFile {
     );
     await file.create(recursive: true);
     final json = {
-      'userSubteamId': idsRepo.maybeIdOf(_database.userSubteam),
+      'managerData': {
+        'simulationMode': _database.managerData.mode.name,
+        'userSubteamId': idsRepo.maybeIdOf(_database.managerData.userSubteam),
+        'personalCoachJumperIds': _database.managerData.personalCoachJumpers
+            ?.map((jumper) => idsRepo.idOf(jumper))
+            .toList(),
+        'trainingPoints': _database.managerData.trainingPoints,
+      },
       'startDate': _database.startDate.toString(),
       'currentDate': _database.currentDate.toString(),
-      'personalCoachJumperIds':
-          _database.personalCoachJumpers?.map((jumper) => idsRepo.idOf(jumper)),
       'jumpersDynamicParameters': _database.jumpersDynamicParameters.map(
         (jumper, params) => MapEntry(idsRepo.idOf(jumper), params.toJson()),
       ),
@@ -93,6 +98,9 @@ class DefaultSimulationDatabaseSaverToFile {
       'simulationActionCompletionStatuses': _database.actionsRepo.completedActions
           .map((actionType) => actionType.name)
           .toList(),
+      'jumperReports': _database.jumpersReports.map((jumper, reports) {
+        return MapEntry(idsRepo.idOf(jumper), reports.toJson());
+      }),
     };
     await file.writeAsString(jsonEncode(json));
   }

@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation/enums.dart';
-import 'package:sj_manager/models/simulation/database/simulation_database.dart';
+import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 
 class UserSimulation {
   const UserSimulation({

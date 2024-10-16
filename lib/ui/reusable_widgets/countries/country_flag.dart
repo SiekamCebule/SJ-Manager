@@ -8,12 +8,14 @@ class CountryFlag extends StatelessWidget {
   const CountryFlag({
     super.key,
     required this.country,
+    this.customImage,
     this.width,
     this.height,
     this.circularBorderRadius = UiGlobalConstants.defaultCountryFlagBorderRadius,
   }) : assert((width != null || height != null) && !(width != null && height != null));
 
   final Country country;
+  final ImageProvider? customImage;
   final double? width;
   final double? height;
   final double circularBorderRadius;
@@ -24,9 +26,17 @@ class CountryFlag extends StatelessWidget {
     final countryFlagsRepoExists = flagsRepo != null;
 
     final imageFit = width != null ? BoxFit.fitWidth : BoxFit.fitHeight;
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(circularBorderRadius),
-      child: countryFlagsRepoExists
+
+    late final Widget child;
+    if (customImage != null) {
+      child = Image(
+        image: customImage!,
+        width: width,
+        height: height,
+        fit: imageFit,
+      );
+    } else {
+      child = countryFlagsRepoExists
           ? Image(
               image: flagsRepo.imageData(country),
               width: width,
@@ -42,7 +52,12 @@ class CountryFlag extends StatelessWidget {
                   color: Theme.of(context).colorScheme.onTertiary,
                 ),
               ),
-            ),
+            );
+    }
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(circularBorderRadius),
+      child: child,
     );
   }
 }

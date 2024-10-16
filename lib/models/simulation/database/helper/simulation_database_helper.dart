@@ -1,45 +1,35 @@
-import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
-import 'package:sj_manager/models/simulation/flow/training/reports.dart';
+import 'dart:async';
+
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/subteam.dart';
 
 class SimulationDatabaseHelper {
-  const SimulationDatabaseHelper({
-    required this.userSubteam,
-    required this.managerPoints,
-    required this.jumpersSimulationRatings,
-  });
+  SimulationDatabaseHelper({
+    required this.databaseStream,
+    required SimulationDatabase initial,
+  }) : _database = initial {
+    _subscription = databaseStream.listen((database) {
+      _database = database;
+    });
+  }
 
-  final Subteam? userSubteam;
+  void dispose() {
+    _subscription.cancel();
+  }
 
-  final int managerPoints;
-  final Map<Jumper, JumperSimulationRatings> jumpersSimulationRatings;
-}
+  final Stream<SimulationDatabase> databaseStream;
+  late final StreamSubscription<SimulationDatabase> _subscription;
 
-class JumperSimulationRatings {
-  const JumperSimulationRatings({
-    required this.levelReport,
-    required this.trainingProgressReport,
-    required this.moraleRating,
-    required this.resultsRating,
-  });
+  late SimulationDatabase _database;
 
-  final JumperLevelReport levelReport;
-  final JumperTrainingProgressReport trainingProgressReport;
-  final SimpleRating moraleRating;
-  final SimpleRating resultsRating;
-
-  JumperSimulationRatings copyWith({
-    JumperLevelReport? levelReport,
-    JumperTrainingProgressReport? trainingProgressReport,
-    SimpleRating? moraleRating,
-    SimpleRating? resultsRating,
-  }) {
-    return JumperSimulationRatings(
-      levelReport: levelReport ?? this.levelReport,
-      trainingProgressReport: trainingProgressReport ?? this.trainingProgressReport,
-      moraleRating: moraleRating ?? this.moraleRating,
-      resultsRating: resultsRating ?? this.resultsRating,
-    );
+  List<Jumper> get managerJumpers {
+    return switch (_database.managerData.mode) {
+      SimulationMode.classicCoach => throw UnimplementedError(),
+      SimulationMode.personalCoach => _database.managerData.personalCoachJumpers!,
+      SimulationMode.observer => throw UnsupportedError(
+          'Prosimy o zgłoszenie nam tego błędu. W trybie obserwatora gracz nie ma żadnych podopiecznych.',
+        ),
+    };
   }
 }

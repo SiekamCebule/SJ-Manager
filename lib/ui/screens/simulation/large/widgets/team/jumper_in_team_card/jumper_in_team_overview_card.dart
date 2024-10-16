@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
+import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image.dart';
@@ -17,50 +18,73 @@ class JumperInTeamOverviewCard extends StatelessWidget {
   const JumperInTeamOverviewCard({
     super.key,
     required this.jumper,
+    required this.reports,
     this.hideLinks = false,
+    this.goToProfile,
+    this.showStats,
   });
 
   final Jumper jumper;
+  final JumperReports reports;
   final bool hideLinks;
+  final VoidCallback? goToProfile;
+  final VoidCallback? showStats;
 
   @override
   Widget build(BuildContext context) {
-    final dbHelper = context.read<SimulationDatabaseHelper>();
-    final jumperRatings = dbHelper.jumpersSimulationRatings[jumper]!;
-    final moraleRating = jumperRatings.moraleRating;
-    final resultsRating = jumperRatings.resultsRating;
-    final trainingRating = jumperRatings.trainingProgressReport.generalRating;
-    final moraleDescription = getMoraleDescription(
-      context: context,
-      rating: moraleRating,
-    );
-    final resultsDescription = getResultsDescription(
-      context: context,
-      rating: resultsRating,
-    );
-    final trainingDescription = getTrainingDescription(
-      context: context,
-      rating: trainingRating,
-    );
+    final noDataColor = Theme.of(context).colorScheme.onSurfaceVariant;
+    final moraleRating = reports.moraleRating;
+    final resultsRating = reports.resultsRating;
+    final trainingRating = reports.trainingProgressReport?.generalRating;
+
+    final moraleDescription = moraleRating != null
+        ? getMoraleDescription(
+            context: context,
+            rating: moraleRating,
+          )
+        : 'Brak danych o morale';
+    final moraleIcon = moraleRating != null
+        ? getThumbIconBySimpleRating(rating: moraleRating)
+        : Symbols.question_mark;
+    final moraleIconColor =
+        moraleRating != null ? darkThemeSimpleRatingColors[moraleRating] : noDataColor;
+    final resultsDescription = resultsRating != null
+        ? getResultsDescription(
+            context: context,
+            rating: resultsRating,
+          )
+        : 'Brak danych o wynikach';
+    final resultsIcon = resultsRating != null
+        ? getThumbIconBySimpleRating(rating: resultsRating)
+        : Symbols.question_mark;
+    final resultsIconColor =
+        moraleRating != null ? darkThemeSimpleRatingColors[moraleRating] : noDataColor;
+    final trainingDescription = trainingRating != null
+        ? getTrainingDescription(
+            context: context,
+            rating: trainingRating,
+          )
+        : 'Brak danych o treningu';
+    final trainingIcon = trainingRating != null
+        ? getThumbIconBySimpleRating(rating: trainingRating)
+        : Symbols.question_mark;
+    final trainingIconColor =
+        moraleRating != null ? darkThemeSimpleRatingColors[moraleRating] : noDataColor;
 
     final nameAndSurnameColumn = JumperCardNameAndSurnameColumn(
       jumper: jumper,
-      jumperRatings: jumperRatings,
+      jumperRatings: reports,
     );
 
     final linksColumn = Column(
       children: [
         const Spacer(),
         LinkTextButton(
-          onPressed: () {
-            // TODO
-          },
+          onPressed: goToProfile,
           labelText: 'Przejdź do profilu',
         ),
         LinkTextButton(
-          onPressed: () {
-            // TODO
-          },
+          onPressed: showStats,
           labelText: 'Zobacz statystyki',
         ),
         const Spacer(),
@@ -81,8 +105,8 @@ class JumperInTeamOverviewCard extends StatelessWidget {
               ),
               const Gap(5),
               Icon(
-                getThumbIconBySimpleRating(rating: moraleRating),
-                color: darkThemeSimpleRatingColors[moraleRating],
+                moraleIcon,
+                color: moraleIconColor,
               ),
             ],
           ),
@@ -95,8 +119,8 @@ class JumperInTeamOverviewCard extends StatelessWidget {
               ),
               const Gap(5),
               Icon(
-                getThumbIconBySimpleRating(rating: resultsRating),
-                color: darkThemeSimpleRatingColors[resultsRating],
+                resultsIcon,
+                color: resultsIconColor,
               ),
             ],
           ),
@@ -109,8 +133,8 @@ class JumperInTeamOverviewCard extends StatelessWidget {
               ),
               const Gap(5),
               Icon(
-                getThumbIconBySimpleRating(rating: trainingRating),
-                color: darkThemeSimpleRatingColors[trainingRating],
+                trainingIcon,
+                color: trainingIconColor,
               ),
             ],
           ),

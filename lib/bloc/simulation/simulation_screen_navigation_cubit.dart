@@ -1,26 +1,71 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 
 class SimulationScreenNavigationCubit extends Cubit<SimulationScreenNavigationState> {
   SimulationScreenNavigationCubit()
-      : super(const SimulationScreenNavigationState(screenIndex: 0));
+      : super(const SimulationScreenNavigationState(
+            screen: SimulationScreenNavigationTarget.home));
 
-  void change({required int index}) {
-    emit(state.copyWith(screenIndex: index));
+  void change({required SimulationScreenNavigationTarget screen}) {
+    emit(state.copyWith(screen: screen));
   }
 }
 
 class SimulationScreenNavigationState {
   const SimulationScreenNavigationState({
-    required this.screenIndex,
+    required this.screen,
   });
 
-  final int screenIndex;
+  final SimulationScreenNavigationTarget screen;
 
   SimulationScreenNavigationState copyWith({
-    int? screenIndex,
+    SimulationScreenNavigationTarget? screen,
   }) {
     return SimulationScreenNavigationState(
-      screenIndex: screenIndex ?? this.screenIndex,
+      screen: screen ?? this.screen,
     );
   }
 }
+
+enum SimulationScreenNavigationTarget {
+  home,
+  team,
+  classifications,
+  archive,
+  calendar,
+  stats,
+  settings,
+  exit,
+}
+
+final navigationTargetsBySimulationMode = {
+  SimulationMode.classicCoach: [
+    SimulationScreenNavigationTarget.home,
+    SimulationScreenNavigationTarget.team,
+    SimulationScreenNavigationTarget.classifications,
+    SimulationScreenNavigationTarget.archive,
+    SimulationScreenNavigationTarget.calendar,
+    SimulationScreenNavigationTarget.stats,
+    SimulationScreenNavigationTarget.settings,
+    SimulationScreenNavigationTarget.exit,
+  ],
+  SimulationMode.personalCoach: [
+    SimulationScreenNavigationTarget.home,
+    SimulationScreenNavigationTarget.team,
+    SimulationScreenNavigationTarget.classifications,
+    SimulationScreenNavigationTarget.archive,
+    SimulationScreenNavigationTarget.calendar,
+    SimulationScreenNavigationTarget.stats,
+    SimulationScreenNavigationTarget.settings,
+    SimulationScreenNavigationTarget.exit,
+  ],
+  SimulationMode.observer: [
+    SimulationScreenNavigationTarget.home,
+    SimulationScreenNavigationTarget.classifications,
+    SimulationScreenNavigationTarget.archive,
+    SimulationScreenNavigationTarget.calendar,
+    SimulationScreenNavigationTarget.stats,
+    SimulationScreenNavigationTarget.settings,
+    SimulationScreenNavigationTarget.exit,
+  ],
+};

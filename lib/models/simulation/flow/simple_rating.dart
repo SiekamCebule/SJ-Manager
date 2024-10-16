@@ -7,7 +7,11 @@ enum SimpleRating {
   correct,
   belowExpectations,
   poor,
-  veryPoor,
+  veryPoor;
+
+  static SimpleRating fromJson(String name) {
+    return SimpleRating.values.singleWhere((value) => value.name == name);
+  }
 }
 
 const darkThemeSimpleRatingColors = {

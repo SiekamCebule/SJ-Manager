@@ -11,22 +11,41 @@ class SimulationJumperImage extends StatelessWidget {
   const SimulationJumperImage({
     super.key,
     required this.jumper,
+    this.customImage,
+    this.aspectRatio,
   });
 
   final Jumper jumper;
+  final ImageProvider? customImage;
+  final double? aspectRatio;
 
   @override
   Widget build(BuildContext context) {
-    return DbItemImage<Jumper>(
-      item: jumper,
-      setup: context.read(),
-      errorBuilder: (_, __, ___) => ItemImageNotFoundPlaceholder(
+    Widget errorBuilder(BuildContext context, Object error, StackTrace? stackTrace) {
+      return ItemImageNotFoundPlaceholder(
         width: UiItemEditorsConstants.jumperImagePlaceholderWidth,
         height: UiItemEditorsConstants.jumperImageHeight,
         helpDialog: ItemImageHelpDialog(
           content: translate(context).jumperImageHelpContent,
         ),
-      ),
-    );
+      );
+    }
+
+    final image = customImage == null
+        ? DbItemImage<Jumper>(
+            item: jumper,
+            setup: context.read(),
+            errorBuilder: errorBuilder,
+          )
+        : Image(
+            image: customImage!,
+            errorBuilder: errorBuilder,
+          );
+    return aspectRatio != null
+        ? AspectRatio(
+            aspectRatio: aspectRatio!,
+            child: image,
+          )
+        : image;
   }
 }
