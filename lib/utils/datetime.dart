@@ -9,8 +9,7 @@ bool isSameDay({
   required DateTime today,
   required DateTime targetDate,
 }) {
-  if (today.difference(targetDate) < const Duration(hours: 24)) {
-    return today.day == targetDate.day;
-  }
-  return false;
+  return today.year == targetDate.year &&
+      today.month == targetDate.month &&
+      today.day == targetDate.day;
 }

@@ -6,7 +6,46 @@ class _TeamOverviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = context.watch<SimulationDatabaseCubit>().state;
-    final jumpers = sjmTestJumpersList(database: database);
+    final dbHelper = context.read<SimulationDatabaseHelper>();
+    final jumpers = dbHelper.managerJumpers;
+
+    final jumpersNonEmptyContent = Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const TeamSummaryCard(),
+        const Gap(15),
+        Expanded(
+          child: ListView(
+            children: [
+              for (var jumper in jumpers)
+                Builder(builder: (context) {
+                  final report = database.jumpersReports[jumper];
+                  if (report == null) {
+                    throw StateError(
+                      'Prosimy o zgłoszenie nam tego błędu. Skoczek ($jumper) nie posiada swojego JumperReports w bazie danych symulacji',
+                    );
+                  }
+                  return JumperInTeamOverviewCard(
+                    reports: report,
+                    jumper: jumper,
+                    hideLinks: true,
+                  );
+                }),
+            ],
+          ),
+        ),
+      ],
+    );
+    const double emptyStateWidgetMaxWidth = 400;
+    final content = jumpers.isEmpty
+        ? ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: emptyStateWidgetMaxWidth),
+            child: TeamOverviewCardNoJumpersInfoWidget(
+              mode: database.managerData.mode,
+            ),
+          )
+        : jumpersNonEmptyContent;
 
     return CardWithTitle(
       title: Row(
@@ -19,31 +58,15 @@ class _TeamOverviewCard extends StatelessWidget {
           LinkTextButton(
             onPressed: () {
               Navigator.of(context).pushReplacementNamed('/simulation/team');
-              context.read<SimulationScreenNavigationCubit>().change(index: 1);
+              context
+                  .read<SimulationScreenNavigationCubit>()
+                  .change(screen: SimulationScreenNavigationTarget.team);
             },
             labelText: 'Przejdź',
           ),
         ],
       ),
-      content: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const TeamSummaryCard(),
-          const Gap(15),
-          Expanded(
-            child: ListView(
-              children: [
-                for (var jumper in jumpers)
-                  JumperInTeamOverviewCard(
-                    jumper: jumper,
-                    hideLinks: true,
-                  ),
-              ],
-            ),
-          ),
-        ],
-      ),
+      content: Center(child: content),
     );
   }
 }

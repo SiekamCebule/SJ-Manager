@@ -41,6 +41,10 @@ class _JumperTrainingPointsGridState extends State<JumperTrainingPointsGrid> {
   void initState() {
     super.initState();
     final initial = widget.initialPoints != null ? Map.of(widget.initialPoints!) : null;
+    if (initial != null && initial.values.contains(0)) {
+      throw ArgumentError(
+          'Initial points map should not have any zero. Minimal points value for category is 1');
+    }
     _selectedCounts = initial ??
         {
           JumperTrainingPointsCategory.takeoff: 1,

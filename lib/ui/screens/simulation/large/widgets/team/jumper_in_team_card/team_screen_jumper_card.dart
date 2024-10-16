@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
-import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_in_team_card/jumper_in_team_overview_card.dart';
@@ -22,7 +21,6 @@ class TeamScreenJumperCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = context.watch<SimulationDatabaseCubit>().state;
-    final dbHelper = context.read<SimulationDatabaseHelper>();
     final trainingConfig = database.jumpersDynamicParameters[jumper]!.trainingConfig;
     if (trainingConfig == null && mode == TeamScreenJumperCardMode.training) {
       throw StateError(
@@ -31,13 +29,16 @@ class TeamScreenJumperCard extends StatelessWidget {
     }
 
     final mainBody = mode == TeamScreenJumperCardMode.overview
-        ? JumperInTeamOverviewCard(jumper: jumper)
+        ? JumperInTeamOverviewCard(
+            jumper: jumper,
+            reports: database.jumpersReports[jumper]!,
+          )
         : JumperInTeamTrainingCard(
             jumper: jumper,
-            jumperRatings: dbHelper.jumpersSimulationRatings[jumper]!,
+            jumperRatings: database.jumpersReports[jumper]!,
             trainingConfig: trainingConfig!,
             onTrainingChange: onTrainingChange,
-            managerPointsCount: dbHelper.managerPoints,
+            managerPointsCount: database.managerData.trainingPoints,
           );
 
     return AnimatedSize(

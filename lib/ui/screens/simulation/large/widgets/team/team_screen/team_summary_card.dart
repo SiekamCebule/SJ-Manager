@@ -10,76 +10,59 @@ class TeamSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Make it dynamic
-    return Card(
-      margin: const EdgeInsets.all(0),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 4,
-          horizontal: 10,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: Card(
-                elevation: 2,
-                color: Theme.of(context).colorScheme.surfaceContainerLow,
-                child: Row(
-                  children: [
-                    Text(
-                      'Ogólnie bardzo dobre morale',
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          color: darkThemeSimpleRatingColors[SimpleRating.veryGood]),
-                    ),
-                    const Gap(15),
-                    const Icon(Symbols.emoji_emotions),
-                  ],
-                ),
+    final baseTextStyle = Theme.of(context).textTheme.titleLarge!;
+    return SizedBox(
+      height: 150,
+      child: Card(
+        margin: const EdgeInsets.all(0),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 3,
+            horizontal: 15,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Spacer(),
+              Row(
+                children: [
+                  Text(
+                    'Ogólnie bardzo dobre morale',
+                    style: baseTextStyle.copyWith(
+                        color: darkThemeSimpleRatingColors[SimpleRating.veryGood]),
+                  ),
+                  const Gap(15),
+                  const Icon(Symbols.emoji_emotions),
+                ],
               ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: Card(
-                elevation: 2,
-                color: Theme.of(context).colorScheme.surfaceContainerLow,
-                child: Row(
-                  children: [
-                    Text(
-                      'Ogólnie przeciętne wyniki',
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          color: darkThemeSimpleRatingColors[SimpleRating.correct]),
-                    ),
-                    const Gap(15),
-                    const Icon(Symbols.analytics),
-                  ],
-                ),
+              const Spacer(),
+              Row(
+                children: [
+                  Text(
+                    'Ogólnie przeciętne wyniki',
+                    style: baseTextStyle.copyWith(
+                        color: darkThemeSimpleRatingColors[SimpleRating.correct]),
+                  ),
+                  const Gap(15),
+                  const Icon(Symbols.analytics),
+                ],
               ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: Card(
-                elevation: 2,
-                color: Theme.of(context).colorScheme.surfaceContainerLow,
-                child: Row(
-                  children: [
-                    Text(
-                      'Ogólnie efektywny trening',
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          color: darkThemeSimpleRatingColors[SimpleRating.good]),
-                    ),
-                    const Gap(15),
-                    const Icon(Symbols.fitness_center),
-                  ],
-                ),
+              const Spacer(),
+              Row(
+                children: [
+                  Text(
+                    'Ogólnie efektywny trening',
+                    style: baseTextStyle.copyWith(
+                        color: darkThemeSimpleRatingColors[SimpleRating.good]),
+                  ),
+                  const Gap(15),
+                  const Icon(Symbols.fitness_center),
+                ],
               ),
-            ),
-          ],
+              const Spacer(),
+            ],
+          ),
         ),
       ),
     );

@@ -11,8 +11,8 @@ class _TopPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = context.watch<SimulationDatabaseCubit>().state;
     final dbHelper = context.read<SimulationDatabaseHelper>();
-    final incompletedActions =
-        SimulationActionType.values.where(database.actionsRepo.isIncompleted);
+    final availableActions = possibleActionsBySimulationMode[database.managerData.mode]!;
+    final incompletedActions = availableActions.where(database.actionsRepo.isIncompleted);
     final sortedIncompletedActions = incompletedActions.sorted(
       (first, second) {
         return database.actionDeadlines[second]!
@@ -20,13 +20,14 @@ class _TopPanel extends StatelessWidget {
       },
     );
     final navigationCubit = context.watch<SimulationScreenNavigationCubit>();
-    final homeIsSelected = navigationCubit.state.screenIndex == 0;
+    final homeIsSelected =
+        navigationCubit.state.screen == SimulationScreenNavigationTarget.home;
     final mainButtonText = homeIsSelected ? 'Kontynuuj' : 'Dom';
     final mainButtonIconData = homeIsSelected ? Symbols.forward : Symbols.home;
 
     void returnToHome() {
       navigatorKey.currentState!.pushReplacementNamed('/simulation/home');
-      navigationCubit.change(index: 0);
+      navigationCubit.change(screen: SimulationScreenNavigationTarget.home);
     }
 
     void continueSimulation() async {
@@ -38,7 +39,6 @@ class _TopPanel extends StatelessWidget {
         today: changedDate,
         targetDate: database.actionDeadlines[SimulationActionType.settingUpSubteams]!,
       )) {
-        print('Setting up subteams');
         database.actionsRepo.complete(SimulationActionType.settingUpSubteams);
       }
 
@@ -46,15 +46,16 @@ class _TopPanel extends StatelessWidget {
         today: changedDate,
         targetDate: database.actionDeadlines[SimulationActionType.settingUpTraining]!,
       )) {
-        print('Setting up training');
         await showSjmDialog(
+          barrierDismissible: false,
           context: context,
           child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.8,
             child: SetUpTrainingsDialog(
-              jumpers: sjmTestJumpersList(database: database),
-              jumpersSimulationRatings: dbHelper.jumpersSimulationRatings,
-              managerPointsCount: dbHelper.managerPoints,
+              simulationMode: database.managerData.mode,
+              jumpers: dbHelper.managerJumpers,
+              jumpersSimulationRatings: database.jumpersReports,
+              managerPointsCount: database.managerData.trainingPoints,
               onSubmit: (configs) {
                 final dynamicParams = Map.of(database.jumpersDynamicParameters);
                 configs.forEach((jumper, trainingConfig) {
@@ -62,9 +63,8 @@ class _TopPanel extends StatelessWidget {
                       dynamicParams[jumper]!.copyWith(trainingConfig: trainingConfig);
                 });
                 final changedDatabase =
-                    database.copyWith(jumpersDynamicParameters: dynamicParams);
+                    changedDb.copyWith(jumpersDynamicParameters: dynamicParams);
                 context.read<SimulationDatabaseCubit>().update(changedDatabase);
-                print('trainings configs: $configs');
               },
             ),
           ),

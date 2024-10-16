@@ -62,6 +62,8 @@ class AppThemeDataCreator {
       bodyMedium: base.bodyMedium?.copyWith(
         fontFamily: 'Raleway',
         fontWeight: FontWeight.w300,
+        letterSpacing: 0.3,
+        height: 1.475,
       ),
       bodySmall: base.bodySmall?.copyWith(
         fontFamily: 'Raleway',

@@ -62,9 +62,9 @@ enum JumperTrainingPointsCategory {
 }
 
 const initialJumperTrainingPoints = {
-  JumperTrainingPointsCategory.takeoff: 0,
-  JumperTrainingPointsCategory.flight: 0,
-  JumperTrainingPointsCategory.landing: 0,
-  JumperTrainingPointsCategory.jumpsConsistency: 0,
-  JumperTrainingPointsCategory.form: 0,
+  JumperTrainingPointsCategory.takeoff: 1,
+  JumperTrainingPointsCategory.flight: 1,
+  JumperTrainingPointsCategory.landing: 1,
+  JumperTrainingPointsCategory.jumpsConsistency: 1,
+  JumperTrainingPointsCategory.form: 1,
 };

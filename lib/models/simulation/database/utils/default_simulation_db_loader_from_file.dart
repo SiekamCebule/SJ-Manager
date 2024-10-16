@@ -28,9 +28,12 @@ import 'package:sj_manager/json/simulation_db_loading/team_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/wind_averager_parser.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
-import 'package:sj_manager/models/simulation/database/helper/jumper_simulation_dynamic_parameters.dart';
-import 'package:sj_manager/models/simulation/database/simulation_database.dart';
-import 'package:sj_manager/models/simulation/database/simulation_season.dart';
+import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_simulation_dynamic_parameters.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
+import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
+import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
@@ -101,12 +104,6 @@ class DefaultSimulationDbLoaderFromFile {
     final loadedSeasons = _itemsFromLoadedMap(loadedSeasonMap);
 
     _dynamicStateJson = await _loadDynamicStateJson();
-    final personalCoachJumpersJson = _dynamicStateJson['personalCoachJumperIds'] as List?;
-    final personalCoachJumpers =
-        personalCoachJumpersJson?.map((id) => idsRepo.get(id) as Jumper);
-
-    final String? userSubteamId = _dynamicStateJson['userSubteamId'];
-    final userSubteam = idsRepo.maybeGet<Subteam>(userSubteamId ?? '');
 
     final jumpersDynamicParametersJson =
         _dynamicStateJson['jumpersDynamicParameters'] as Map;
@@ -129,19 +126,41 @@ class DefaultSimulationDbLoaderFromFile {
 
     final simulationActionCompletionStatusesJson =
         _dynamicStateJson['simulationActionCompletionStatuses'] as List;
-    // TODO: Maybe we should throw, not assign the {} in the place of a null?
+
     final simulationActionCompletionStatuses =
         simulationActionCompletionStatusesJson.map((actionTypeName) {
       return SimulationActionType.values
           .singleWhere((value) => value.name == actionTypeName);
     }).toSet();
 
-    // TODO: Serialization
+    final managerDataJson = _dynamicStateJson['managerData'] as Json;
+
+    final personalCoachJumpersJson = managerDataJson['personalCoachJumperIds'] as List?;
+    final personalCoachJumpers =
+        personalCoachJumpersJson?.map((id) => idsRepo.get(id) as Jumper);
+
+    final String? userSubteamId = managerDataJson['userSubteamId'];
+    final userSubteam = idsRepo.maybeGet<Subteam>(userSubteamId ?? '');
+
+    final managerData = SimulationManagerData(
+      mode: SimulationMode.values
+          .singleWhere((mode) => mode.name == managerDataJson['simulationMode']),
+      userSubteam: userSubteam,
+      personalCoachJumpers: personalCoachJumpers?.toList(),
+      trainingPoints: managerDataJson['trainingPoints'],
+    );
+
+    final jumperReportsJson = _dynamicStateJson['jumperReports'] as Map;
+    final jumperReports = jumperReportsJson.map((id, reportsJson) {
+      return MapEntry(
+        idsRepo.get(id) as Jumper,
+        JumperReports.fromJson(reportsJson),
+      );
+    });
 
     _countriesRepo.dispose();
     return SimulationDatabase(
-      personalCoachJumpers: personalCoachJumpers?.toList(),
-      userSubteam: userSubteam,
+      managerData: managerData,
       countryTeams: ItemsRepo(initial: loadedCountryTeams.cast()),
       subteams: ItemsRepo(initial: loadedSubteams.cast()),
       jumpers: ItemsRepo(initial: loadedJumpers),
@@ -154,6 +173,7 @@ class DefaultSimulationDbLoaderFromFile {
       actionDeadlines: actionDeadlines,
       actionsRepo: SimulationActionsRepo(initial: simulationActionCompletionStatuses),
       jumpersDynamicParameters: jumpersDynamicParameters,
+      jumpersReports: jumperReports,
     );
   }
 

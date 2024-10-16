@@ -18,6 +18,9 @@ class _NavigationRailState extends State<_NavigationRail> {
     final exitButtonStyle = Theme.of(context).textTheme.bodySmall!.copyWith(
           color: Theme.of(context).colorScheme.onErrorContainer,
         );
+    final database = context.watch<SimulationDatabaseCubit>().state;
+    final simulationMode = database.managerData.mode;
+
     return NavigationRail(
       extended: true,
       destinations: [
@@ -82,20 +85,28 @@ class _NavigationRailState extends State<_NavigationRail> {
           ),
         ),
       ],
-      selectedIndex: context.watch<SimulationScreenNavigationCubit>().state.screenIndex,
+      selectedIndex: context.watch<SimulationScreenNavigationCubit>().state.screen.index,
       minWidth: 80,
-      minExtendedWidth: 150,
+      minExtendedWidth: 160,
       onDestinationSelected: (selecetedIndex) {
-        switch (selecetedIndex) {
-          case 0:
+        final navigationTarget =
+            navigationTargetsBySimulationMode[simulationMode]![selecetedIndex];
+        switch (navigationTarget) {
+          case SimulationScreenNavigationTarget.home:
             widget.navigatorKey.currentState!.pushNamed('/simulation/home');
-          case 1:
+          case SimulationScreenNavigationTarget.team:
             widget.navigatorKey.currentState!.pushNamed('/simulation/team');
-          case 7:
+          case SimulationScreenNavigationTarget.exit:
             router.pop(context);
+          default:
+            throw ArgumentError(
+              'Prosimy o zgłoszenie nam tego błędu. Próbowano przejść do ekranu $navigationTarget (niezaimplementowano)',
+            );
         }
         if (selecetedIndex != 7) {
-          context.read<SimulationScreenNavigationCubit>().change(index: selecetedIndex);
+          context
+              .read<SimulationScreenNavigationCubit>()
+              .change(screen: navigationTarget);
         }
       },
     );

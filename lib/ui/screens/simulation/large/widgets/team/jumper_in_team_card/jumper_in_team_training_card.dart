@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
+import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/simulation_jumper_image.dart';
@@ -22,7 +22,7 @@ class JumperInTeamTrainingCard extends StatelessWidget {
   final Jumper jumper;
   final JumperTrainingConfig trainingConfig;
   final Function(JumperTrainingConfig trainingConfig) onTrainingChange;
-  final JumperSimulationRatings jumperRatings;
+  final JumperReports jumperRatings;
   final int managerPointsCount;
   final bool hideTrainingRaport;
 

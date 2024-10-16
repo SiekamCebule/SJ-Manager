@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/models/simulation/database/helper/jumper_level_description.dart';
+import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
-import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 
 String getMoraleDescription({
   required BuildContext context,
@@ -56,7 +55,7 @@ String getTrainingDescription({
 
 String getJumperLevelDescription({
   required BuildContext context,
-  required JumperLevelDescription levelDescription,
+  required JumperLevelDescription? levelDescription,
 }) {
   final translator = translate(context);
   return switch (levelDescription) {
@@ -67,6 +66,7 @@ String getJumperLevelDescription({
     JumperLevelDescription.local => translator.jumperLevelLocal,
     JumperLevelDescription.national => translator.jumperLevelNational,
     JumperLevelDescription.amateur => translator.jumperLevelAmateur,
+    _ => translator.jumperLevelNoData,
   };
 }
 

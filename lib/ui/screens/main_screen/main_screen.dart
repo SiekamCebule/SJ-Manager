@@ -10,7 +10,7 @@ import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/game_variants/game_variants_io_utils.dart';
 import 'package:sj_manager/models/simulation/database/utils/default_simulation_database_creator.dart';
 import 'package:sj_manager/models/simulation/database/utils/default_simulation_database_saver_to_file.dart';
-import 'package:sj_manager/models/simulation/enums.dart';
+import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/simulation/database/simulation_wizard_options_repo.dart';
 import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
 import 'package:sj_manager/models/simulation/user_simulation/user_simulations_registry_saver_to_file.dart';

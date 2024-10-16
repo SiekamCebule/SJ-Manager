@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/models/simulation/enums.dart';
+import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
 
 class ChooseSimulationDialog extends StatelessWidget {

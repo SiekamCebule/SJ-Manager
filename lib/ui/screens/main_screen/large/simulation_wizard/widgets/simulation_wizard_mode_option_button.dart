@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sj_manager/utils/colors.dart';
 
 class SimulationWizardModeOptionButton extends StatelessWidget {
   const SimulationWizardModeOptionButton({
@@ -9,6 +10,7 @@ class SimulationWizardModeOptionButton extends StatelessWidget {
     this.leading,
     this.trailing,
     required this.isSelected,
+    this.disabled = true,
   });
 
   final String titleText;
@@ -17,15 +19,26 @@ class SimulationWizardModeOptionButton extends StatelessWidget {
   final Widget? trailing;
   final VoidCallback? onTap;
   final bool isSelected;
+  final bool disabled;
 
   @override
   Widget build(BuildContext context) {
-    final titleColor = isSelected
-        ? Theme.of(context).colorScheme.primary
-        : Theme.of(context).colorScheme.onSurface;
+    final correctOnTap = disabled ? null : onTap;
+    late final Color titleColor;
+    if (disabled) {
+      titleColor = Theme.of(context)
+          .colorScheme
+          .onSurfaceVariant
+          .blendWithBg(Theme.of(context).brightness, 0.15);
+    } else {
+      titleColor = isSelected
+          ? Theme.of(context).colorScheme.primary
+          : Theme.of(context).colorScheme.onSurface;
+    }
     final titleStyle =
         Theme.of(context).textTheme.titleLarge!.copyWith(color: titleColor);
     return ListTile(
+      enabled: !disabled,
       title: Text(
         titleText,
         style: titleStyle,
@@ -36,7 +49,7 @@ class SimulationWizardModeOptionButton extends StatelessWidget {
       selectedColor: Theme.of(context).colorScheme.onSurfaceVariant,
       leading: leading,
       trailing: trailing,
-      onTap: onTap,
+      onTap: correctOnTap,
       selected: isSelected,
       style: ListTileStyle.list,
       shape: Border.all(width: 0),

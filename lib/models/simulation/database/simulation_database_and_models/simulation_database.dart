@@ -1,10 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
-
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
-import 'package:sj_manager/models/simulation/database/helper/jumper_simulation_dynamic_parameters.dart';
-import 'package:sj_manager/models/simulation/database/simulation_season.dart';
+import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_simulation_dynamic_parameters.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
+import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
@@ -16,8 +16,7 @@ import 'package:sj_manager/repositories/generic/items_repo.dart';
 
 class SimulationDatabase with EquatableMixin {
   const SimulationDatabase({
-    required this.userSubteam,
-    required this.personalCoachJumpers,
+    required this.managerData,
     required this.startDate,
     required this.currentDate,
     required this.jumpers,
@@ -30,10 +29,10 @@ class SimulationDatabase with EquatableMixin {
     required this.actionDeadlines,
     required this.actionsRepo,
     required this.jumpersDynamicParameters,
+    required this.jumpersReports,
   });
 
-  final Subteam? userSubteam;
-  final List<Jumper>? personalCoachJumpers;
+  final SimulationManagerData managerData;
 
   final DateTime startDate;
   final DateTime currentDate;
@@ -48,6 +47,7 @@ class SimulationDatabase with EquatableMixin {
   final Map<SimulationActionType, DateTime> actionDeadlines;
   final SimulationActionsRepo actionsRepo;
   final Map<Jumper, JumperSimulationDynamicParameters> jumpersDynamicParameters;
+  final Map<Jumper, JumperReports> jumpersReports;
 
   Iterable<MaleJumper> get maleJumpers => jumpers.last.whereType<MaleJumper>();
   Iterable<FemaleJumper> get femaleJumpers => jumpers.last.whereType<FemaleJumper>();
@@ -67,8 +67,7 @@ class SimulationDatabase with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        userSubteam,
-        personalCoachJumpers,
+        managerData,
         startDate,
         currentDate,
         jumpers,
@@ -81,11 +80,11 @@ class SimulationDatabase with EquatableMixin {
         actionDeadlines,
         actionsRepo,
         jumpersDynamicParameters,
+        jumpersReports,
       ];
 
   SimulationDatabase copyWith({
-    Subteam? userSubteam,
-    List<Jumper>? personalCoachJumpers,
+    SimulationManagerData? managerData,
     DateTime? startDate,
     DateTime? currentDate,
     ItemsRepo<Jumper>? jumpers,
@@ -98,10 +97,10 @@ class SimulationDatabase with EquatableMixin {
     Map<SimulationActionType, DateTime>? actionDeadlines,
     SimulationActionsRepo? actionsRepo,
     Map<Jumper, JumperSimulationDynamicParameters>? jumpersDynamicParameters,
+    Map<Jumper, JumperReports>? jumpersReports,
   }) {
     return SimulationDatabase(
-      userSubteam: userSubteam ?? this.userSubteam,
-      personalCoachJumpers: personalCoachJumpers ?? this.personalCoachJumpers,
+      managerData: managerData ?? this.managerData,
       startDate: startDate ?? this.startDate,
       currentDate: currentDate ?? this.currentDate,
       jumpers: jumpers ?? this.jumpers,
@@ -114,6 +113,7 @@ class SimulationDatabase with EquatableMixin {
       actionDeadlines: actionDeadlines ?? this.actionDeadlines,
       actionsRepo: actionsRepo ?? this.actionsRepo,
       jumpersDynamicParameters: jumpersDynamicParameters ?? this.jumpersDynamicParameters,
+      jumpersReports: jumpersReports ?? this.jumpersReports,
     );
   }
 }
