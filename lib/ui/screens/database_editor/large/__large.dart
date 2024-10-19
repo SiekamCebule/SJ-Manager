@@ -116,6 +116,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
 
   Future<String?> _showSaveChangesDialog() async {
     return showSjmDialog<String>(
+      barrierDismissible: true,
       context: context,
       child: const DatabaseEditorUnsavedChangesDialog(),
     );

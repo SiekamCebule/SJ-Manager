@@ -16,6 +16,7 @@ class MainMenuLoadSimulationButton extends StatelessWidget {
             onTap: enabled
                 ? () async {
                     showSjmDialog(
+                      barrierDismissible: true,
                       context: context,
                       child: ChooseSimulationDialog(
                         simulations:

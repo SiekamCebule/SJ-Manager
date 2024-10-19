@@ -22,6 +22,7 @@ class GameVariantsLoader implements DbItemsListLoader {
       context.read<ItemsRepo<GameVariant>>().set(variants);
     } catch (error, stackTrace) {
       showSjmDialog(
+        barrierDismissible: false,
         context: context,
         child: LoadingItemsFailedDialog(
           titleText: 'Błąd podczas ładowania wariantów gry',

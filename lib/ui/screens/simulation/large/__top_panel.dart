@@ -96,6 +96,7 @@ class _TopPanel extends StatelessWidget {
                   ),
               };
               await showSjmDialog(
+                barrierDismissible: true,
                 context: context,
                 child: dialogWidget,
               );

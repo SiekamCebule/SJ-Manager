@@ -134,6 +134,7 @@ class _EventSeriesCalendarPresetThumbnailState
                       } else if (_calendarPresetType ==
                           LowLevelEventSeriesCalendarPreset) {
                         showSjmDialog(
+                          barrierDismissible: true,
                           context: context,
                           child: const FeatureNotAvailableDialog(),
                         );

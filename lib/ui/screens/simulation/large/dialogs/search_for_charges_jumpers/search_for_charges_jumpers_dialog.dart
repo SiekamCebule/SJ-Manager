@@ -1,6 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
+import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
+import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
@@ -28,11 +34,27 @@ class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersD
   Jumper? _currentJumper;
   late List<Jumper> _filteredJumpers;
   late TextEditingController _searchController;
+  late StreamController<String> _searchTextStreamController;
+  late StreamSubscription<String> _filterTextSubscription;
 
   @override
   void initState() {
     _filteredJumpers = widget.jumpers;
+    _searchTextStreamController = StreamController();
     _searchController = TextEditingController();
+    _searchController.addListener(() {
+      _searchTextStreamController.add(_searchController.text);
+    });
+    _filterTextSubscription = _searchTextStreamController.stream
+        .debounceTime(const Duration(milliseconds: 250))
+        .listen(null);
+    _filterTextSubscription.onData((searchData) {
+      final filter = JumpersFilterBySearch(
+          searchAlgorithm: DefaultJumperMatchingByTextAlgorithm(text: searchData));
+      setState(() {
+        _filteredJumpers = filter(widget.jumpers);
+      });
+    });
     super.initState();
   }
 
@@ -60,16 +82,27 @@ class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersD
         content: Column(
           children: [
             SearchBar(
+              backgroundColor: WidgetStatePropertyAll(
+                Theme.of(context).colorScheme.surfaceContainerLow,
+              ),
+              overlayColor: WidgetStateColor.resolveWith((states) {
+                if (states.contains(WidgetState.hovered)) {
+                  return Theme.of(context).colorScheme.surfaceContainerLowest;
+                } else {
+                  return Colors.transparent;
+                }
+              }),
               controller: _searchController,
               autoFocus: true,
               hintText: 'Wyszukaj skoczków/skoczkinie',
-              elevation: const WidgetStatePropertyAll(5),
+              elevation: const WidgetStatePropertyAll(0),
             ),
+            const Gap(10),
             SizedBox(
               height: 500,
               width: 650,
               child: ListView.builder(
-                itemCount: widget.jumpers.length,
+                itemCount: _filteredJumpers.length,
                 itemBuilder: (context, index) {
                   final jumper = _filteredJumpers[index];
                   return _ListTile(
