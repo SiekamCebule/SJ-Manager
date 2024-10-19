@@ -69,13 +69,14 @@ class ItemsIdsRepo<ID extends Object> {
     _orderedIds.remove(id);
   }
 
-  void removeByItem({required dynamic item}) {
+  ID removeByItem({required dynamic item}) {
     final id = _reverseItems[item];
     if (id == null) {
       throw StateError(
           'Cannot remove an item $item, because it doesn\'t even exist in the repo');
     }
     removeById(id: id);
+    return id;
   }
 
   void register(dynamic item, {required ID id}) {

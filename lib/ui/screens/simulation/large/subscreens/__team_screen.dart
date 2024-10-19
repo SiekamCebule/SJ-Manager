@@ -28,16 +28,13 @@ class _TeamScreenState extends State<_TeamScreen> {
                   child: TeamScreenJumperCard(
                     jumper: jumper,
                     mode: _selectedMode,
-                    onTrainingChange: (training) {
-                      final changedDynamicParams = database.jumpersDynamicParameters;
-                      changedDynamicParams[jumper] =
-                          database.jumpersDynamicParameters[jumper]!.copyWith(
-                        trainingConfig: training,
-                      );
-                      final changedDatabase = database.copyWith(
-                        jumpersDynamicParameters: changedDynamicParams,
-                      );
-                      context.read<SimulationDatabaseCubit>().update(changedDatabase);
+                    onTrainingChange: (trainingConfig) {
+                      ChangeJumperTrainingCommand(
+                        context: context,
+                        database: database,
+                        jumper: jumper,
+                        trainingConfig: trainingConfig,
+                      ).execute();
                     },
                   ),
                 ),
@@ -45,7 +42,9 @@ class _TeamScreenState extends State<_TeamScreen> {
           )
         : TeamScreenNoJumpersInfoWidget(
             mode: database.managerData.mode,
-            searchForCandidates: _searchForCandidates,
+            searchForCandidates: () =>
+                SearchForCandidatesCommand(context: context, database: database)
+                    .execute(),
           );
 
     return Scaffold(
@@ -53,8 +52,12 @@ class _TeamScreenState extends State<_TeamScreen> {
           ? TeamScreenPersonalCoachBottomBar(
               chargesCount: database.managerData.personalCoachTeam!.jumpers.length,
               chargesLimit: sjmManagerChargesLimit,
-              searchForCandidates: _searchForCandidates,
-              endPartnership: _managePartnership,
+              searchForCandidates: () =>
+                  SearchForCandidatesCommand(context: context, database: database)
+                      .execute(),
+              endPartnership: () =>
+                  ManagePartnershipsCommand(context: context, database: database)
+                      .execute(),
             )
           : null,
       body: Column(
@@ -139,95 +142,6 @@ class _TeamScreenState extends State<_TeamScreen> {
             child: jumpersBody,
           ),
         ],
-      ),
-    );
-  }
-
-  void _searchForCandidates() async {
-    final database = context.read<SimulationDatabaseCubit>().state;
-    final jumpers = database.jumpers.last
-        .where(
-          (jumper) =>
-              database.managerData.personalCoachTeam!.jumpers.contains(jumper) == false,
-        )
-        .toList();
-
-    await showSjmDialog(
-      barrierDismissible: true,
-      context: context,
-      child: BlocProvider.value(
-        value: context.read<SimulationDatabaseCubit>(),
-        child: MultiProvider(
-          providers: [
-            Provider.value(value: context.read<CountryFlagsRepo>()),
-            Provider.value(value: context.read<DbItemImageGeneratingSetup<Jumper>>()),
-          ],
-          child: SearchForChargesJumpersDialog(
-            jumpers: jumpers,
-            onSubmit: (jumper) {
-              final oldUserTeam = database.managerData.personalCoachTeam!;
-              final changedPersonalCoachJumpers = [
-                ...database.managerData.personalCoachTeam!.jumpers,
-                jumper
-              ];
-              final newUserTeam = PersonalCoachTeam(jumpers: changedPersonalCoachJumpers);
-              final changedManagerData = database.managerData.copyWith(
-                personalCoachTeam: newUserTeam,
-              );
-              final changedDynamicParams = Map.of(database.jumpersDynamicParameters);
-              changedDynamicParams[jumper] = changedDynamicParams[jumper]!.copyWith(
-                trainingConfig: const JumperTrainingConfig(
-                    trainingRisk: TrainingRisk.balanced,
-                    points: initialJumperTrainingPoints),
-              );
-              final changedTeamReports = Map.of(database.teamReports);
-              changedTeamReports[newUserTeam] = changedTeamReports.remove(oldUserTeam)!;
-              final changedDatabase = database.copyWith(
-                managerData: changedManagerData,
-                jumpersDynamicParameters: changedDynamicParams,
-                teamReports: changedTeamReports,
-              );
-              context.read<SimulationDatabaseCubit>().update(changedDatabase);
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _managePartnership() async {
-    final database = context.read<SimulationDatabaseCubit>().state;
-    final chargeJumpers = database.managerData.personalCoachTeam!.jumpers;
-
-    await showSjmDialog(
-      barrierDismissible: true,
-      context: context,
-      child: BlocProvider.value(
-        value: context.read<SimulationDatabaseCubit>(),
-        child: MultiProvider(
-          providers: [
-            Provider.value(value: context.read<CountryFlagsRepo>()),
-            Provider.value(value: context.read<DbItemImageGeneratingSetup<Jumper>>()),
-          ],
-          child: ManagePartnershipsDialog(
-            jumpers: chargeJumpers,
-            onSubmit: (result) {
-              final oldUserTeam = database.managerData.personalCoachTeam!;
-              final changedPersonalCoachJumpers = result.newOrder;
-              final newUserTeam = PersonalCoachTeam(jumpers: changedPersonalCoachJumpers);
-              final changedManagerData = database.managerData.copyWith(
-                personalCoachTeam: newUserTeam,
-              );
-              final changedTeamReports = Map.of(database.teamReports);
-              changedTeamReports[newUserTeam] = changedTeamReports.remove(oldUserTeam)!;
-              final changedDatabase = database.copyWith(
-                managerData: changedManagerData,
-                teamReports: changedTeamReports,
-              );
-              context.read<SimulationDatabaseCubit>().update(changedDatabase);
-            },
-          ),
-        ),
       ),
     );
   }
