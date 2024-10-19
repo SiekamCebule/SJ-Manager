@@ -131,7 +131,7 @@ class TrainingProgressReportDisplay extends StatelessWidget {
           style: Theme.of(context).textTheme.titleMedium,
         ),
         const Text(
-          'Pojawi się za jakiś czas...',
+          'Pojawi się za jakiś czas',
           textAlign: TextAlign.center,
         ),
         const Spacer(),

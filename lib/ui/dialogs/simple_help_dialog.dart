@@ -38,6 +38,7 @@ Future<void> showSimpleHelpDialog({
   required String content,
 }) async {
   await showSjmDialog(
+    barrierDismissible: true,
     context: context,
     child: SimpleHelpDialog(titleText: title, contentText: content),
   );

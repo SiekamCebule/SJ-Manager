@@ -176,7 +176,7 @@ class JumperInTeamOverviewCard extends StatelessWidget {
                   if (!hideLinks) ...[
                     const Gap(30),
                     linksColumn,
-                  ]
+                  ],
                 ],
               ),
             ),

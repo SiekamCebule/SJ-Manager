@@ -82,6 +82,7 @@ class SimulationsLoader implements DbItemsListLoader {
     } catch (error, stackTrace) {
       if (!context.mounted) return;
       showSjmDialog(
+        barrierDismissible: false,
         context: context,
         child: LoadingItemsFailedDialog(
           titleText: 'Błąd podczas ładowania symulacji',

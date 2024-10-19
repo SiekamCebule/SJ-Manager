@@ -51,7 +51,10 @@ class _TeamScreenState extends State<_TeamScreen> {
     return Scaffold(
       bottomNavigationBar: database.managerData.mode == SimulationMode.personalCoach
           ? TeamScreenPersonalCoachBottomBar(
+              chargesCount: database.managerData.personalCoachJumpers!.length,
+              chargesLimit: sjmManagerChargesLimit,
               searchForCandidates: _searchForCandidates,
+              endPartnership: _managePartnership,
             )
           : null,
       body: Column(
@@ -99,6 +102,7 @@ class _TeamScreenState extends State<_TeamScreen> {
                   onSelectionChanged: (selected) async {
                     if (!trainingsAreSetUp) {
                       await showSjmDialog(
+                        barrierDismissible: true,
                         context: context,
                         child: TrainingsAreNotSetUpDialog(
                           trainingsStartDate: database
@@ -116,6 +120,7 @@ class _TeamScreenState extends State<_TeamScreen> {
                 TextButton(
                   onPressed: () async {
                     await showSjmDialog(
+                      barrierDismissible: true,
                       context: context,
                       child: const TrainingTutorialDialog(),
                     );
@@ -181,15 +186,35 @@ class _TeamScreenState extends State<_TeamScreen> {
       ),
     );
   }
-}
 
-List<Jumper> sjmTestJumpersList({
-  required SimulationDatabase database,
-}) {
-  final jumpers = database.jumpers.last;
-  return [
-    jumpers.singleWhere((jumper) => jumper.surname == 'Żyła'),
-    jumpers.singleWhere((jumper) => jumper.surname == 'Wolny'),
-    jumpers.singleWhere((jumper) => jumper.surname == 'Forfang'),
-  ];
+  void _managePartnership() async {
+    final database = context.read<SimulationDatabaseCubit>().state;
+    final chargeJumpers = database.managerData.personalCoachJumpers!;
+
+    await showSjmDialog(
+      barrierDismissible: true,
+      context: context,
+      child: BlocProvider.value(
+        value: context.read<SimulationDatabaseCubit>(),
+        child: MultiProvider(
+          providers: [
+            Provider.value(value: context.read<CountryFlagsRepo>()),
+            Provider.value(value: context.read<DbItemImageGeneratingSetup<Jumper>>()),
+          ],
+          child: ManagePartnershipsDialog(
+            jumpers: chargeJumpers,
+            onSubmit: (result) {
+              final changedPersonalCoachJumpers = result.newOrder;
+              final changedManagerData = database.managerData
+                  .copyWith(personalCoachJumpers: changedPersonalCoachJumpers);
+              final changedDatabase = database.copyWith(
+                managerData: changedManagerData,
+              );
+              context.read<SimulationDatabaseCubit>().update(changedDatabase);
+            },
+          ),
+        ),
+      ),
+    );
+  }
 }

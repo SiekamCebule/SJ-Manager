@@ -35,6 +35,7 @@ class ItemImageNotFoundPlaceholder extends StatelessWidget {
             child: HelpIconButton(
               onPressed: () async {
                 await showSjmDialog(
+                  barrierDismissible: true,
                   context: context,
                   child: helpDialog,
                 );

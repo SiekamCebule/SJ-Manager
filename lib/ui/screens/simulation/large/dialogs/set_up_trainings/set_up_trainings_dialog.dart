@@ -127,6 +127,7 @@ class _SetUpTrainingsDialogState extends State<SetUpTrainingsDialog> {
               TextButton(
                 onPressed: () async {
                   bool? shouldClose = await showSjmDialog<bool>(
+                    barrierDismissible: true,
                     context: context,
                     child: const SetUpTrainingsAreYouSureDialog(),
                   );

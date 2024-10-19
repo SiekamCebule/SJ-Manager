@@ -30,6 +30,7 @@ class _OtherOptionsScreenState extends State<_OtherOptionsScreen> {
                       .set(archiveResults);
                 },
                 onHelpButtonTap: () => showSjmDialog(
+                  barrierDismissible: true,
                   context: context,
                   child: const SimpleHelpDialog(
                     titleText: 'Archiwizacja wyników',
@@ -57,6 +58,7 @@ class _OtherOptionsScreenState extends State<_OtherOptionsScreen> {
                       .set(archiveResults);
                 },
                 onHelpButtonTap: () => showSjmDialog(
+                  barrierDismissible: true,
                   context: context,
                   child: const SimpleHelpDialog(
                     titleText: 'Archiwizacja wyników',

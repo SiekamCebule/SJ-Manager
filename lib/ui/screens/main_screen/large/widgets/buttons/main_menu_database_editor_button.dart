@@ -12,6 +12,7 @@ class MainMenuDatabaseEditorButton extends StatelessWidget {
         final gameVariants = context.read<ItemsRepo<GameVariant>>();
         if (!context.mounted) return;
         final gameVariantToEdit = await showSjmDialog(
+          barrierDismissible: true,
           context: context,
           child: SelectGameVariantToEditDialog(
             gameVariants: gameVariants.last.toList(),

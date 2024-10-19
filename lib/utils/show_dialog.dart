@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 Future<T?> showSjmDialog<T>({
   required BuildContext context,
   required Widget child,
-  bool barrierDismissible = true,
+  bool barrierDismissible = false,
 }) async {
   return await showDialog<T>(
     context: context,
