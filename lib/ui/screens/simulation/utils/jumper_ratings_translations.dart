@@ -4,52 +4,54 @@ import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
 
-String getMoraleDescription({
+String getJumperMoraleDescription({
   required BuildContext context,
-  required SimpleRating rating,
+  required SimpleRating? rating,
 }) {
   final translator = translate(context);
   return switch (rating) {
-    SimpleRating.excellent => translator.moraleExcellent,
-    SimpleRating.veryGood => translator.moraleVeryGood,
-    SimpleRating.good => translator.moraleGood,
-    SimpleRating.correct => translator.moraleCorrect,
-    SimpleRating.belowExpectations => translator.moraleBelowExpectations,
-    SimpleRating.poor => translator.moralePoor,
-    SimpleRating.veryPoor => translator.moraleVeryPoor,
+    SimpleRating.excellent => translator.jumperMoraleExcellent,
+    SimpleRating.veryGood => translator.jumperMoraleVeryGood,
+    SimpleRating.good => translator.jumperMoraleGood,
+    SimpleRating.correct => translator.jumperMoraleCorrect,
+    SimpleRating.belowExpectations => translator.jumperMoraleBelowExpectations,
+    SimpleRating.poor => translator.jumperMoralePoor,
+    SimpleRating.veryPoor => translator.jumperMoraleVeryPoor,
+    _ => translator.jumperMoraleNoData,
   };
 }
 
-String getResultsDescription({
+String getJumperJumpsDescription({
   required BuildContext context,
-  required SimpleRating rating,
+  required SimpleRating? rating,
 }) {
   final translator = translate(context);
-  ;
   return switch (rating) {
-    SimpleRating.excellent => translator.resultsExcellent,
-    SimpleRating.veryGood => translator.resultsVeryGood,
-    SimpleRating.good => translator.resultsGood,
-    SimpleRating.correct => translator.resultsCorrect,
-    SimpleRating.belowExpectations => translator.resultsBelowExpectations,
-    SimpleRating.poor => translator.resultsPoor,
-    SimpleRating.veryPoor => translator.resultsVeryPoor,
+    SimpleRating.excellent => translator.jumperJumpsExcellent,
+    SimpleRating.veryGood => translator.jumperJumpsVeryGood,
+    SimpleRating.good => translator.jumperJumpsGood,
+    SimpleRating.correct => translator.jumperJumpsCorrect,
+    SimpleRating.belowExpectations => translator.jumperJumpsBelowExpectations,
+    SimpleRating.poor => translator.jumperJumpsPoor,
+    SimpleRating.veryPoor => translator.jumperJumpsVeryPoor,
+    _ => translator.jumperJumpsNoData,
   };
 }
 
-String getTrainingDescription({
+String getJumperTrainingDescription({
   required BuildContext context,
-  required SimpleRating rating,
+  required SimpleRating? rating,
 }) {
   final translator = translate(context);
   return switch (rating) {
-    SimpleRating.excellent => translator.trainingExcellent,
-    SimpleRating.veryGood => translator.trainingVeryGood,
-    SimpleRating.good => translator.trainingGood,
-    SimpleRating.correct => translator.trainingCorrect,
-    SimpleRating.belowExpectations => translator.trainingBelowExpectations,
-    SimpleRating.poor => translator.trainingPoor,
-    SimpleRating.veryPoor => translator.trainingVeryPoor,
+    SimpleRating.excellent => translator.jumperTrainingExcellent,
+    SimpleRating.veryGood => translator.jumperTrainingVeryGood,
+    SimpleRating.good => translator.jumperTrainingGood,
+    SimpleRating.correct => translator.jumperTrainingCorrect,
+    SimpleRating.belowExpectations => translator.jumperTrainingBelowExpectations,
+    SimpleRating.poor => translator.jumperTrainingPoor,
+    SimpleRating.veryPoor => translator.jumperTrainingVeryPoor,
+    _ => translator.jumperTrainingNoData,
   };
 }
 
@@ -70,7 +72,7 @@ String getJumperLevelDescription({
   };
 }
 
-IconData getThumbIconBySimpleRating({required SimpleRating rating}) {
+IconData getThumbIconBySimpleRating({required SimpleRating? rating}) {
   switch (rating) {
     case SimpleRating.excellent:
     case SimpleRating.veryGood:
@@ -82,5 +84,7 @@ IconData getThumbIconBySimpleRating({required SimpleRating rating}) {
     case SimpleRating.poor:
     case SimpleRating.veryPoor:
       return Symbols.thumb_down_alt_rounded;
+    default:
+      return Symbols.question_mark;
   }
 }

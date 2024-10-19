@@ -51,7 +51,7 @@ class _TeamScreenState extends State<_TeamScreen> {
     return Scaffold(
       bottomNavigationBar: database.managerData.mode == SimulationMode.personalCoach
           ? TeamScreenPersonalCoachBottomBar(
-              chargesCount: database.managerData.personalCoachJumpers!.length,
+              chargesCount: database.managerData.personalCoachTeam!.jumpers.length,
               chargesLimit: sjmManagerChargesLimit,
               searchForCandidates: _searchForCandidates,
               endPartnership: _managePartnership,
@@ -59,21 +59,23 @@ class _TeamScreenState extends State<_TeamScreen> {
           : null,
       body: Column(
         children: [
-          const SizedBox(
+          SizedBox(
             height: 170,
             child: Row(
               children: [
                 Expanded(
                   flex: 1,
                   child: Card(
-                    child: TeamSummaryCard(),
+                    child: TeamSummaryCard(
+                      reports: database.teamReports[dbHelper.managerTeam]!,
+                    ),
                   ),
                 ),
-                Expanded(
+                const Expanded(
                   flex: 1,
                   child: Placeholder(),
                 ),
-                Expanded(
+                const Expanded(
                   flex: 1,
                   child: Placeholder(),
                 ),
@@ -146,7 +148,7 @@ class _TeamScreenState extends State<_TeamScreen> {
     final jumpers = database.jumpers.last
         .where(
           (jumper) =>
-              database.managerData.personalCoachJumpers!.contains(jumper) == false,
+              database.managerData.personalCoachTeam!.jumpers.contains(jumper) == false,
         )
         .toList();
 
@@ -163,21 +165,27 @@ class _TeamScreenState extends State<_TeamScreen> {
           child: SearchForChargesJumpersDialog(
             jumpers: jumpers,
             onSubmit: (jumper) {
+              final oldUserTeam = database.managerData.personalCoachTeam!;
               final changedPersonalCoachJumpers = [
-                ...database.managerData.personalCoachJumpers!,
+                ...database.managerData.personalCoachTeam!.jumpers,
                 jumper
               ];
-              final changedManagerData = database.managerData
-                  .copyWith(personalCoachJumpers: changedPersonalCoachJumpers);
+              final newUserTeam = PersonalCoachTeam(jumpers: changedPersonalCoachJumpers);
+              final changedManagerData = database.managerData.copyWith(
+                personalCoachTeam: newUserTeam,
+              );
               final changedDynamicParams = Map.of(database.jumpersDynamicParameters);
               changedDynamicParams[jumper] = changedDynamicParams[jumper]!.copyWith(
                 trainingConfig: const JumperTrainingConfig(
                     trainingRisk: TrainingRisk.balanced,
                     points: initialJumperTrainingPoints),
               );
+              final changedTeamReports = Map.of(database.teamReports);
+              changedTeamReports[newUserTeam] = changedTeamReports.remove(oldUserTeam)!;
               final changedDatabase = database.copyWith(
                 managerData: changedManagerData,
                 jumpersDynamicParameters: changedDynamicParams,
+                teamReports: changedTeamReports,
               );
               context.read<SimulationDatabaseCubit>().update(changedDatabase);
             },
@@ -189,7 +197,7 @@ class _TeamScreenState extends State<_TeamScreen> {
 
   void _managePartnership() async {
     final database = context.read<SimulationDatabaseCubit>().state;
-    final chargeJumpers = database.managerData.personalCoachJumpers!;
+    final chargeJumpers = database.managerData.personalCoachTeam!.jumpers;
 
     await showSjmDialog(
       barrierDismissible: true,
@@ -204,11 +212,17 @@ class _TeamScreenState extends State<_TeamScreen> {
           child: ManagePartnershipsDialog(
             jumpers: chargeJumpers,
             onSubmit: (result) {
+              final oldUserTeam = database.managerData.personalCoachTeam!;
               final changedPersonalCoachJumpers = result.newOrder;
-              final changedManagerData = database.managerData
-                  .copyWith(personalCoachJumpers: changedPersonalCoachJumpers);
+              final newUserTeam = PersonalCoachTeam(jumpers: changedPersonalCoachJumpers);
+              final changedManagerData = database.managerData.copyWith(
+                personalCoachTeam: newUserTeam,
+              );
+              final changedTeamReports = Map.of(database.teamReports);
+              changedTeamReports[newUserTeam] = changedTeamReports.remove(oldUserTeam)!;
               final changedDatabase = database.copyWith(
                 managerData: changedManagerData,
+                teamReports: changedTeamReports,
               );
               context.read<SimulationDatabaseCubit>().update(changedDatabase);
             },

@@ -1,6 +1,7 @@
 import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
 import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_simulation_dynamic_parameters.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
+import 'package:sj_manager/models/simulation/flow/reports/team_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
@@ -13,6 +14,7 @@ import 'package:sj_manager/models/simulation/standings/score/score.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
+import 'package:sj_manager/models/user_db/team/personal_coach_team.dart';
 import 'package:sj_manager/models/user_db/team/subteam.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
@@ -52,8 +54,22 @@ class DefaultSimulationDatabaseCreator {
           levelReport: null,
           trainingProgressReport: null,
           moraleRating: null,
-          resultsRating: null,
+          jumpsRating: null,
         ),
+    };
+    final subteams = options.gameVariant.last!.subteams;
+    final personalCoachTeam = options.mode.last! == SimulationMode.personalCoach
+        ? const PersonalCoachTeam(jumpers: [])
+        : null;
+    _idsRepo.register(personalCoachTeam, id: idGenerator.generate());
+    const defaultTeamReports = TeamReports(
+      generalMoraleRating: null,
+      generalJumpsRating: null,
+      generalTrainingRating: null,
+    );
+    final teamReports = {
+      for (var subteam in subteams) subteam: defaultTeamReports,
+      if (personalCoachTeam != null) personalCoachTeam: defaultTeamReports,
     };
     final userSubteam = mode == SimulationMode.classicCoach
         ? Subteam(
@@ -65,16 +81,15 @@ class DefaultSimulationDatabaseCreator {
       managerData: SimulationManagerData(
         mode: mode,
         userSubteam: userSubteam,
-        personalCoachJumpers:
-            options.mode.last! == SimulationMode.personalCoach ? [] : null,
-        trainingPoints: 40, // TODO: make it depend on other factors
+        personalCoachTeam: personalCoachTeam,
+        trainingPoints: 40, // TODO: make it dependent on other factors
       ),
       startDate: options.startDate.last!.date,
       currentDate: options.startDate.last!.date,
       jumpers: _jumpers,
       hills: _hills,
       countryTeams: _countryTeams,
-      subteams: ItemsRepo(initial: options.gameVariant.last!.subteams),
+      subteams: ItemsRepo(initial: subteams),
       countries: _countries,
       seasons: _seasons,
       idsRepo: _idsRepo,
@@ -82,6 +97,7 @@ class DefaultSimulationDatabaseCreator {
       actionsRepo: SimulationActionsRepo(initial: {}),
       jumpersDynamicParameters: jumpersDynamicParameters,
       jumpersReports: jumperReports,
+      teamReports: teamReports,
     );
   }
 

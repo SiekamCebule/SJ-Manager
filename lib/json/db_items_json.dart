@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:equatable/equatable.dart';
 import 'package:sj_manager/exceptions/json_exceptions.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
@@ -21,7 +22,7 @@ Future<List<T>> loadItemsListFromJsonFile<T>({
   return items;
 }
 
-class LoadedItemsMap<T> {
+class LoadedItemsMap<T> with EquatableMixin {
   const LoadedItemsMap({
     required this.orderedIds,
     required this.items,
@@ -35,6 +36,9 @@ class LoadedItemsMap<T> {
       return items[id]!.$1;
     }).toList();
   }
+
+  @override
+  List<Object?> get props => [orderedIds, items];
 }
 
 Future<LoadedItemsMap<T>> loadItemsMapFromJsonFile<T>({
