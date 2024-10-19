@@ -93,25 +93,25 @@ class JumperReports {
     required this.levelReport,
     required this.trainingProgressReport,
     required this.moraleRating,
-    required this.resultsRating,
+    required this.jumpsRating,
   });
 
   final JumperLevelReport? levelReport;
   final JumperTrainingProgressReport? trainingProgressReport;
   final SimpleRating? moraleRating;
-  final SimpleRating? resultsRating;
+  final SimpleRating? jumpsRating;
 
   JumperReports copyWith({
     JumperLevelReport? levelReport,
     JumperTrainingProgressReport? trainingProgressReport,
     SimpleRating? moraleRating,
-    SimpleRating? resultsRating,
+    SimpleRating? jumpsRating,
   }) {
     return JumperReports(
       levelReport: levelReport ?? this.levelReport,
       trainingProgressReport: trainingProgressReport ?? this.trainingProgressReport,
       moraleRating: moraleRating ?? this.moraleRating,
-      resultsRating: resultsRating ?? this.resultsRating,
+      jumpsRating: jumpsRating ?? this.jumpsRating,
     );
   }
 
@@ -124,15 +124,14 @@ class JumperReports {
         : null;
     final moraleRating =
         json['moraleRating'] != null ? SimpleRating.fromJson(json['moraleRating']) : null;
-    final resultsRating = json['resultsRating'] != null
-        ? SimpleRating.fromJson(json['resultsRating'])
-        : null;
+    final jumpsRating =
+        json['jumpsRating'] != null ? SimpleRating.fromJson(json['jumpsRating']) : null;
 
     return JumperReports(
       levelReport: levelReport,
       trainingProgressReport: trainingProgressReport,
       moraleRating: moraleRating,
-      resultsRating: resultsRating,
+      jumpsRating: jumpsRating,
     );
   }
 
@@ -141,7 +140,7 @@ class JumperReports {
       'levelReport': levelReport?.toJson(),
       'trainingProgressReport': trainingProgressReport?.toJson(),
       'moraleRating': moraleRating?.name,
-      'resultsRating': resultsRating?.name,
+      'jumpsRating': jumpsRating?.name,
     };
   }
 }

@@ -3,9 +3,11 @@ part of '../simulation_route.dart';
 class _NavigationRail extends StatefulWidget {
   const _NavigationRail({
     required this.navigatorKey,
+    required this.exit,
   });
 
   final GlobalKey<NavigatorState> navigatorKey;
+  final VoidCallback exit;
 
   @override
   State<_NavigationRail> createState() => _NavigationRailState();
@@ -76,6 +78,7 @@ class _NavigationRailState extends State<_NavigationRail> {
             'Ustawienia',
             style: regularRailDestinationLabelStyle,
           ),
+          disabled: true,
         ),
         NavigationRailDestination(
           icon: const Icon(Symbols.exit_to_app),
@@ -97,7 +100,7 @@ class _NavigationRailState extends State<_NavigationRail> {
           case SimulationScreenNavigationTarget.team:
             widget.navigatorKey.currentState!.pushNamed('/simulation/team');
           case SimulationScreenNavigationTarget.exit:
-            router.pop(context);
+            widget.exit();
           default:
             throw ArgumentError(
               'Prosimy o zgłoszenie nam tego błędu. Próbowano przejść do ekranu $navigationTarget (niezaimplementowano)',

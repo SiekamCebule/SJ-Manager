@@ -5,11 +5,13 @@ import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_simulati
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
+import 'package:sj_manager/models/simulation/flow/reports/team_reports.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
 import 'package:sj_manager/models/user_db/team/subteam.dart';
+import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
@@ -30,6 +32,7 @@ class SimulationDatabase with EquatableMixin {
     required this.actionsRepo,
     required this.jumpersDynamicParameters,
     required this.jumpersReports,
+    required this.teamReports,
   });
 
   final SimulationManagerData managerData;
@@ -46,8 +49,11 @@ class SimulationDatabase with EquatableMixin {
 
   final Map<SimulationActionType, DateTime> actionDeadlines;
   final SimulationActionsRepo actionsRepo;
+
   final Map<Jumper, JumperSimulationDynamicParameters> jumpersDynamicParameters;
   final Map<Jumper, JumperReports> jumpersReports;
+
+  final Map<Team, TeamReports> teamReports;
 
   Iterable<MaleJumper> get maleJumpers => jumpers.last.whereType<MaleJumper>();
   Iterable<FemaleJumper> get femaleJumpers => jumpers.last.whereType<FemaleJumper>();
@@ -81,6 +87,7 @@ class SimulationDatabase with EquatableMixin {
         actionsRepo,
         jumpersDynamicParameters,
         jumpersReports,
+        teamReports
       ];
 
   SimulationDatabase copyWith({
@@ -98,6 +105,7 @@ class SimulationDatabase with EquatableMixin {
     SimulationActionsRepo? actionsRepo,
     Map<Jumper, JumperSimulationDynamicParameters>? jumpersDynamicParameters,
     Map<Jumper, JumperReports>? jumpersReports,
+    Map<Team, TeamReports>? teamReports,
   }) {
     return SimulationDatabase(
       managerData: managerData ?? this.managerData,
@@ -114,6 +122,7 @@ class SimulationDatabase with EquatableMixin {
       actionsRepo: actionsRepo ?? this.actionsRepo,
       jumpersDynamicParameters: jumpersDynamicParameters ?? this.jumpersDynamicParameters,
       jumpersReports: jumpersReports ?? this.jumpersReports,
+      teamReports: teamReports ?? this.teamReports,
     );
   }
 }

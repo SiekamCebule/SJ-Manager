@@ -1,15 +1,14 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/team/personal_coach_team.dart';
 import 'package:sj_manager/models/user_db/team/subteam.dart';
 
 class SimulationManagerData with EquatableMixin {
   const SimulationManagerData({
     required this.mode,
     required this.userSubteam,
-    required this.personalCoachJumpers,
+    required this.personalCoachTeam,
     required this.trainingPoints,
   });
 
@@ -19,7 +18,7 @@ class SimulationManagerData with EquatableMixin {
   final Subteam? userSubteam;
 
   // For personal coach
-  final List<Jumper>? personalCoachJumpers;
+  final PersonalCoachTeam? personalCoachTeam;
 
   // For training purposes
   final int trainingPoints;
@@ -28,20 +27,20 @@ class SimulationManagerData with EquatableMixin {
   List<Object?> get props => [
         mode,
         userSubteam,
-        personalCoachJumpers,
+        personalCoachTeam,
         trainingPoints,
       ];
 
   SimulationManagerData copyWith({
     SimulationMode? mode,
     Subteam? userSubteam,
-    List<Jumper>? personalCoachJumpers,
+    PersonalCoachTeam? personalCoachTeam,
     int? trainingPoints,
   }) {
     return SimulationManagerData(
       mode: mode ?? this.mode,
       userSubteam: userSubteam ?? this.userSubteam,
-      personalCoachJumpers: personalCoachJumpers ?? this.personalCoachJumpers,
+      personalCoachTeam: personalCoachTeam ?? this.personalCoachTeam,
       trainingPoints: trainingPoints ?? this.trainingPoints,
     );
   }

@@ -11,7 +11,7 @@ import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/simulation_jumper_image.dart';
-import 'package:sj_manager/ui/screens/simulation/utils/ratings_displaying.dart';
+import 'package:sj_manager/ui/screens/simulation/utils/jumper_ratings_translations.dart';
 
 part '__list_tile.dart';
 

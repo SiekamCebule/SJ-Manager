@@ -3,7 +3,7 @@ import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:gap/gap.dart';
-import 'package:sj_manager/ui/screens/simulation/utils/ratings_displaying.dart';
+import 'package:sj_manager/ui/screens/simulation/utils/jumper_ratings_translations.dart';
 
 class JumperCardNameAndSurnameColumn extends StatelessWidget {
   const JumperCardNameAndSurnameColumn({

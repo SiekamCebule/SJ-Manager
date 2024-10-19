@@ -32,6 +32,7 @@ import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_simulati
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
+import 'package:sj_manager/models/simulation/flow/reports/team_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
@@ -39,6 +40,7 @@ import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
+import 'package:sj_manager/models/user_db/team/personal_coach_team.dart';
 import 'package:sj_manager/models/user_db/team/subteam.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
@@ -97,7 +99,7 @@ class DefaultSimulationDbLoaderFromFile {
 
     final loadedSubteamsMap = await _loadItems(itemsType: 'subteam');
     _addIdsFromLoadedMap(loadedSubteamsMap);
-    final loadedSubteams = _itemsFromLoadedMap(loadedCountryTeamsMap);
+    final loadedSubteams = _itemsFromLoadedMap(loadedSubteamsMap);
 
     final loadedSeasonMap = await _loadItems(itemsType: 'simulationSeason');
     _addIdsFromLoadedMap(loadedSeasonMap);
@@ -135,9 +137,17 @@ class DefaultSimulationDbLoaderFromFile {
 
     final managerDataJson = _dynamicStateJson['managerData'] as Json;
 
-    final personalCoachJumpersJson = managerDataJson['personalCoachJumperIds'] as List?;
-    final personalCoachJumpers =
-        personalCoachJumpersJson?.map((id) => idsRepo.get(id) as Jumper);
+    final personalCoachTeamJson = managerDataJson['personalCoachTeam'];
+    final personalCoachTeam = personalCoachTeamJson != null
+        ? PersonalCoachTeam.fromJson(
+            personalCoachTeamJson,
+            parseJumper: (id) => idsRepo.get(id),
+          )
+        : null;
+    final personalCoachTeamId = managerDataJson['personalCoachTeamId'];
+    if (personalCoachTeamId != null) {
+      idsRepo.register(personalCoachTeam, id: personalCoachTeamId);
+    }
 
     final String? userSubteamId = managerDataJson['userSubteamId'];
     final userSubteam = idsRepo.maybeGet<Subteam>(userSubteamId ?? '');
@@ -146,7 +156,7 @@ class DefaultSimulationDbLoaderFromFile {
       mode: SimulationMode.values
           .singleWhere((mode) => mode.name == managerDataJson['simulationMode']),
       userSubteam: userSubteam,
-      personalCoachJumpers: personalCoachJumpers?.toList(),
+      personalCoachTeam: personalCoachTeam,
       trainingPoints: managerDataJson['trainingPoints'],
     );
 
@@ -155,6 +165,14 @@ class DefaultSimulationDbLoaderFromFile {
       return MapEntry(
         idsRepo.get(id) as Jumper,
         JumperReports.fromJson(reportsJson),
+      );
+    });
+
+    final teamReportsJson = _dynamicStateJson['teamReports'] as Map;
+    final teamReports = teamReportsJson.map((id, reportsJson) {
+      return MapEntry(
+        idsRepo.get(id) as Team,
+        TeamReports.fromJson(reportsJson),
       );
     });
 
@@ -174,6 +192,7 @@ class DefaultSimulationDbLoaderFromFile {
       actionsRepo: SimulationActionsRepo(initial: simulationActionCompletionStatuses),
       jumpersDynamicParameters: jumpersDynamicParameters,
       jumpersReports: jumperReports,
+      teamReports: teamReports,
     );
   }
 

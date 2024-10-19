@@ -23,4 +23,5 @@ const darkThemeSimpleRatingColors = {
   SimpleRating.belowExpectations: Color.fromRGBO(236, 216, 186, 1.0),
   SimpleRating.poor: Color.fromRGBO(231, 169, 169, 1.0),
   SimpleRating.veryPoor: Color.fromRGBO(225, 140, 136, 1.0),
+  null: Color.fromRGBO(201, 201, 201, 1),
 };

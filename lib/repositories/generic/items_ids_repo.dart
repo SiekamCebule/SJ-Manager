@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:sj_manager/json/db_items_json.dart';
 
 class ItemsIdsRepo<ID extends Object> {
@@ -124,6 +125,12 @@ class ItemsIdsRepo<ID extends Object> {
     _items.clear();
     _reverseItems.clear();
     _orderedIds.clear();
+  }
+
+  void debug() {
+    items.forEach((id, item) {
+      debugPrint('$id ==> $item');
+    });
   }
 
   Map<ID, dynamic> get items => _items.map((id, entry) => MapEntry(id, entry.item));

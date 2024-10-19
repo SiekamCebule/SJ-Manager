@@ -158,8 +158,8 @@ class _MainMenuContinueButtonState extends State<MainMenuContinueButton> {
         iconWidget = const Icon(Symbols.group,
             size: UiMainMenuConstants.continueButtonSimulationInfoIconSize);
         labelWidget = Text(
-          translate(context)
-              .charges(lastPlayed.database!.managerData.personalCoachJumpers!.length),
+          translate(context).charges(
+              lastPlayed.database!.managerData.personalCoachTeam!.jumpers.length),
           style: labelTextStyle,
         );
       case SimulationMode.observer:

@@ -13,7 +13,10 @@ class _TeamOverviewCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const TeamSummaryCard(),
+        TeamSummaryCard(
+          excludeTitle: true,
+          reports: database.teamReports[dbHelper.managerTeam]!,
+        ),
         const Gap(15),
         Expanded(
           child: ListView(

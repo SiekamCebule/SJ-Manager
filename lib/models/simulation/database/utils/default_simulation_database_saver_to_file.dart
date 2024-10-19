@@ -82,9 +82,9 @@ class DefaultSimulationDatabaseSaverToFile {
       'managerData': {
         'simulationMode': _database.managerData.mode.name,
         'userSubteamId': idsRepo.maybeIdOf(_database.managerData.userSubteam),
-        'personalCoachJumperIds': _database.managerData.personalCoachJumpers
-            ?.map((jumper) => idsRepo.idOf(jumper))
-            .toList(),
+        'personalCoachTeam': _database.managerData.personalCoachTeam
+            ?.toJson(serializeJumper: (jumper) => idsRepo.idOf(jumper)),
+        'personalCoachTeamId': idsRepo.maybeIdOf(_database.managerData.personalCoachTeam),
         'trainingPoints': _database.managerData.trainingPoints,
       },
       'startDate': _database.startDate.toString(),
@@ -100,6 +100,9 @@ class DefaultSimulationDatabaseSaverToFile {
           .toList(),
       'jumperReports': _database.jumpersReports.map((jumper, reports) {
         return MapEntry(idsRepo.idOf(jumper), reports.toJson());
+      }),
+      'teamReports': _database.teamReports.map((team, reports) {
+        return MapEntry(idsRepo.idOf(team), reports.toJson());
       }),
     };
     await file.writeAsString(jsonEncode(json));
