@@ -1,0 +1,31 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+
+class ChangeJumperTrainingCommand {
+  const ChangeJumperTrainingCommand({
+    required this.context,
+    required this.database,
+    required this.jumper,
+    required this.trainingConfig,
+  });
+
+  final BuildContext context;
+  final SimulationDatabase database;
+  final Jumper jumper;
+  final JumperTrainingConfig trainingConfig;
+
+  void execute() {
+    final changedDynamicParams = database.jumpersDynamicParameters;
+    changedDynamicParams[jumper] = database.jumpersDynamicParameters[jumper]!.copyWith(
+      trainingConfig: trainingConfig,
+    );
+    final changedDatabase = database.copyWith(
+      jumpersDynamicParameters: changedDynamicParams,
+    );
+    context.read<SimulationDatabaseCubit>().update(changedDatabase);
+  }
+}
