@@ -70,8 +70,10 @@ void main() {
       country: slovenia,
       dateOfBirth: DateTime.now(),
       personality: Personalities.balanced,
-      skills: JumperSkills.empty
-          .copyWith(qualityOnLargerHills: 67, qualityOnSmallerHills: 44),
+      skills: JumperSkills.empty.copyWith(
+        takeoffQuality: 14,
+        flightQuality: 14,
+      ),
     ),
     MaleJumper(
       name: 'Maciej',

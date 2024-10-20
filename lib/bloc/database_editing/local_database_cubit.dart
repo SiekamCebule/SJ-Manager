@@ -26,7 +26,7 @@ class LocalDatabaseCubit extends Cubit<ItemsReposRegistry?> {
     emit(
       ItemsReposRegistry(initial: {
         CountriesRepo(initial: gameVariant.countries.toList()),
-        ItemsRepo(initial: gameVariant.countryTeams.toList()),
+        ItemsRepo<CountryTeam>(initial: gameVariant.countryTeams.toList()),
         EditableItemsRepo<MaleJumper>(
             initial: gameVariant.jumpers.whereType<MaleJumper>().toList()),
         EditableItemsRepo<FemaleJumper>(

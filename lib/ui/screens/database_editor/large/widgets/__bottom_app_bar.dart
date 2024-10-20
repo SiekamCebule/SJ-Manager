@@ -23,6 +23,7 @@ class _BottomAppBar extends StatelessWidget {
 
     return BottomAppBar(
       color: Theme.of(context).colorScheme.surfaceContainer,
+      clipBehavior: Clip.none,
       child: body,
     );
   }

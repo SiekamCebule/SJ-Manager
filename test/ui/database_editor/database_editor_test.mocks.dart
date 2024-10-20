@@ -97,6 +97,12 @@ class MockItemsRepo<T> extends _i1.Mock implements _i4.ItemsRepo<T> {
       ) as int);
 
   @override
+  List<Object?> get props => (super.noSuchMethod(
+        Invocation.getter(#props),
+        returnValue: <Object?>[],
+      ) as List<Object?>);
+
+  @override
   void set(Iterable<T>? value) => super.noSuchMethod(
         Invocation.method(
           #set,

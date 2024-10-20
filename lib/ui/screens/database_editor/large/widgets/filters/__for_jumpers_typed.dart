@@ -61,24 +61,30 @@ class _ForJumpersTypedState<T extends Jumper> extends State<_ForJumpersTyped<T>>
           ),
         ),
         const Spacer(),
-        CountriesDropdown(
-          key: _countriesDropdownKey,
-          width: 220,
-          label: Text(translate(context).filterByCountry),
-          countriesRepo: countriesRepo,
-          firstAsInitial: true,
-          onSelected: (selected) async {
-            print(
-                'countries after selection: ${countriesRepo.last} (selected $selected)');
-            _clearSelection();
-            await Future.delayed(Duration.zero);
-            var countries = <Country>{};
-            if (selected != noneCountry || selected != null) {
-              countries = {selected!};
-            }
-            _byCountry =
-                JumpersFilterByCountry(countries: countries, noneCountry: noneCountry);
-            _setFilters();
+        LayoutBuilder(
+          // TODO: IT DOESNT WORK
+          builder: (context, constraints) {
+            print('constraints: $constraints');
+            print('media query: ${MediaQuery.of(context).size}');
+            return CountriesDropdown(
+              key: _countriesDropdownKey,
+              width: 220,
+              label: Text(translate(context).filterByCountry),
+              countriesRepo: countriesRepo,
+              firstAsInitial: true,
+              menuHeight: 600,
+              onSelected: (selected) async {
+                _clearSelection();
+                await Future.delayed(Duration.zero);
+                var countries = <Country>{};
+                if (selected != noneCountry || selected != null) {
+                  countries = {selected!};
+                }
+                _byCountry = JumpersFilterByCountry(
+                    countries: countries, noneCountry: noneCountry);
+                _setFilters();
+              },
+            );
           },
         ),
       ],

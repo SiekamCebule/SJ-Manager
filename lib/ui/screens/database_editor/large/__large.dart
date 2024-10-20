@@ -58,10 +58,6 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     _filters = DbFiltersRepo(initial: {
       MaleJumper: BehaviorSubject.seeded([]),
       FemaleJumper: BehaviorSubject.seeded([]),
-      Hill: BehaviorSubject.seeded([]),
-      EventSeriesSetup: BehaviorSubject.seeded([]),
-      EventSeriesCalendarPreset: BehaviorSubject.seeded([]),
-      DefaultCompetitionRulesPreset: BehaviorSubject.seeded([]),
     });
     _selectedIndexes = SelectedIndexesRepo();
     _eventSeriesSetupIds = EventSeriesSetupIdsRepo();

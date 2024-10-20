@@ -1,8 +1,6 @@
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/jumper/jumps_consistency.dart';
-import 'package:sj_manager/models/user_db/jumper/landing_style.dart';
 import 'package:sj_manager/models/user_db/jumps/simple_jump.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
@@ -106,29 +104,10 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
 
   double _calculateRating(Jumper jumper) {
     final skills = jumper.skills;
-    final byQualityOnSmallerHills = skills.qualityOnSmallerHills * 1.0;
-    final byQualityOnLargerHills = skills.qualityOnLargerHills * 1.0;
-    final multiplierByConsistency = switch (skills.jumpsConsistency) {
-      JumpsConsistency.veryConsistent => 1.03,
-      JumpsConsistency.consistent => 1.02,
-      JumpsConsistency.quiteConsistent => 1.01,
-      JumpsConsistency.average => 1.0,
-      JumpsConsistency.slightlyInconsistent => 0.99,
-      JumpsConsistency.inconsistent => 0.98,
-      JumpsConsistency.veryInconsistent => 0.97,
-    };
-    final multiplierByLandingStyle = switch (skills.landingStyle) {
-      LandingStyle.veryGraceful => 1.06,
-      LandingStyle.graceful => 1.04,
-      LandingStyle.quiteGraceful => 1.02,
-      LandingStyle.average => 1.00,
-      LandingStyle.slightlyUgly => 0.98,
-      LandingStyle.ugly => 0.96,
-      LandingStyle.veryUgly => 0.94,
-    };
-    final rating = (byQualityOnSmallerHills + byQualityOnLargerHills) *
-        multiplierByConsistency *
-        multiplierByLandingStyle;
+    final byTakeoffQuality = skills.takeoffQuality * 1.0;
+    final byFlightQuality = skills.takeoffQuality * 1.0;
+    final byLandingQuality = skills.landingQuality * 0.1;
+    final rating = byTakeoffQuality + byFlightQuality + byLandingQuality;
     return rating;
   }
 

@@ -32,6 +32,7 @@ import 'package:sj_manager/models/simulation/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_calendar.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
+import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
@@ -147,6 +148,15 @@ class _TestGameVariantCreator {
       actionDeadlines: {
         SimulationActionType.settingUpTraining: DateTime(2024, 5, 15),
         SimulationActionType.settingUpSubteams: DateTime(2024, 5, 10),
+      },
+      jumperLevelRequirements: {
+        JumperLevelDescription.top: 87,
+        JumperLevelDescription.broadTop: 80,
+        JumperLevelDescription.international: 70,
+        JumperLevelDescription.regional: 60,
+        JumperLevelDescription.national: 45,
+        JumperLevelDescription.local: 30,
+        JumperLevelDescription.amateur: 0,
       },
       hills: _hills,
       countries: countries,

@@ -1,7 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:sj_manager/models/game_variants/game_variant_start_date.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
+import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -22,6 +22,7 @@ class GameVariant {
     required this.season,
     required this.startDates,
     required this.actionDeadlines,
+    required this.jumperLevelRequirements,
   });
 
   final String id;
@@ -35,6 +36,7 @@ class GameVariant {
   final SimulationSeason season;
   final List<GameVariantStartDate> startDates;
   final Map<SimulationActionType, DateTime> actionDeadlines;
+  final Map<JumperLevelDescription, double> jumperLevelRequirements;
 
   GameVariant copyWith({
     String? id,
@@ -48,19 +50,23 @@ class GameVariant {
     SimulationSeason? season,
     List<GameVariantStartDate>? startDates,
     Map<SimulationActionType, DateTime>? actionDeadlines,
+    Map<JumperLevelDescription, double>? jumperLevelRequirements,
   }) {
     return GameVariant(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
-      jumpers: jumpers ?? this.jumpers,
-      hills: hills ?? this.hills,
-      countries: countries ?? this.countries,
-      countryTeams: countryTeams ?? this.countryTeams,
-      subteams: subteams ?? this.subteams,
+      jumpers: jumpers ?? List<Jumper>.from(this.jumpers),
+      hills: hills ?? List<Hill>.from(this.hills),
+      countries: countries ?? List<Country>.from(this.countries),
+      countryTeams: countryTeams ?? List<CountryTeam>.from(this.countryTeams),
+      subteams: subteams ?? List<Subteam>.from(this.subteams),
       season: season ?? this.season,
-      startDates: startDates ?? this.startDates,
-      actionDeadlines: actionDeadlines ?? this.actionDeadlines,
+      startDates: startDates ?? List<GameVariantStartDate>.from(this.startDates),
+      actionDeadlines: actionDeadlines ??
+          Map<SimulationActionType, DateTime>.from(this.actionDeadlines),
+      jumperLevelRequirements: jumperLevelRequirements ??
+          Map<JumperLevelDescription, double>.from(this.jumperLevelRequirements),
     );
   }
 }

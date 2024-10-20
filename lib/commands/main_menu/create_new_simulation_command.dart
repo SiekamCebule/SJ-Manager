@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sj_manager/bloc/simulation/commands/simulation_flow/jumper_reports/set_up_jumper_level_reports_command.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/game_variants/game_variants_io_utils.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
@@ -31,6 +32,7 @@ class CreateNewSimulationCommand {
     await _updateUserSimulationsRegistry();
     await _saveToFile();
     await _copyImagesFromVariant();
+    await _setUpJumperLevelReports();
     await _showSimulationScreen();
   }
 
@@ -108,6 +110,14 @@ class CreateNewSimulationCommand {
         directoryName: path.join('jumper_images'),
       ),
     );
+  }
+
+  Future<void> _setUpJumperLevelReports() async {
+    SetUpJumperLevelReportsCommand(
+      context: context,
+      database: _database,
+      levelRequirements: simulationOptions.gameVariant.last!.jumperLevelRequirements,
+    ).execute();
   }
 
   Future<void> _showSimulationScreen() async {
