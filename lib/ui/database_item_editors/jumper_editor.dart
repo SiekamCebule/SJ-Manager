@@ -7,8 +7,7 @@ import 'package:sj_manager/l10n/jumper_skills_translations.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
-import 'package:sj_manager/models/user_db/jumper/jumps_consistency.dart';
-import 'package:sj_manager/models/user_db/jumper/landing_style.dart';
+import 'package:sj_manager/models/user_db/jumper/jumping_style.dart';
 import 'package:sj_manager/models/user_db/psyche/personalities.dart';
 import 'package:sj_manager/models/user_db/psyche/translations.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
@@ -59,17 +58,16 @@ class JumperEditorState extends State<JumperEditor> {
   late final TextEditingController _surnameController;
   late final TextEditingController _dateOfBirthController;
   late final TextEditingController _personalityController;
-  late final TextEditingController _qualityOnSmallerHillsController;
-  late final TextEditingController _qualityOnLargerHillsController;
-  late final TextEditingController _jumpsConsistencyController;
-  late final TextEditingController _landingStyleController;
+  late final TextEditingController _takeoffQualityController;
+  late final TextEditingController _flightQualityController;
+  late final TextEditingController _landingQualityController;
+  late final TextEditingController _jumpingStyleController;
 
   static final _dateFormat = DateFormat('d MMM yyyy');
 
   var _sex = Sex.male;
   var _personality = Personalities.resourceful;
-  var _jumpsConsistency = JumpsConsistency.average;
-  var _landingStyle = LandingStyle.average;
+  var _jumpingStyle = JumpingStyle.balanced;
   Country? _country;
 
   Jumper? _cachedJumper;
@@ -81,10 +79,10 @@ class JumperEditorState extends State<JumperEditor> {
     _surnameController = TextEditingController();
     _dateOfBirthController = TextEditingController();
     _personalityController = TextEditingController();
-    _qualityOnSmallerHillsController = TextEditingController();
-    _qualityOnLargerHillsController = TextEditingController();
-    _jumpsConsistencyController = TextEditingController();
-    _landingStyleController = TextEditingController();
+    _takeoffQualityController = TextEditingController();
+    _flightQualityController = TextEditingController();
+    _landingQualityController = TextEditingController();
+    _jumpingStyleController = TextEditingController();
     _scrollController = ScrollController();
     super.initState();
   }
@@ -95,11 +93,11 @@ class JumperEditorState extends State<JumperEditor> {
     _surnameController.dispose();
     _dateOfBirthController.dispose();
     _personalityController.dispose();
-    _qualityOnSmallerHillsController.dispose();
-    _qualityOnLargerHillsController.dispose();
-    _jumpsConsistencyController.dispose();
-    _landingStyleController.dispose();
+    _takeoffQualityController.dispose();
+    _flightQualityController.dispose();
+    _landingQualityController.dispose();
     _scrollController.dispose();
+    _jumpingStyleController.dispose();
     super.dispose();
   }
 
@@ -244,86 +242,85 @@ class JumperEditorState extends State<JumperEditor> {
                 gap,
                 const Divider(),
                 gap,
+                MyNumeralTextField(
+                  controller: _takeoffQualityController,
+                  onChange: _onChange,
+                  formatters: doubleTextInputFormatters,
+                  labelText: translate(context).takeoffQuality,
+                  step: 0.1,
+                  min: 0.0,
+                  max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
+                  maxDecimalPlaces: 2,
+                  onHelpButtonTap: () {
+                    showSimpleHelpDialog(
+                      context: context,
+                      title: translate(context).takeoffQuality,
+                      content:
+                          'Decyduje o odległościach na mniejszych skoczniach, choć ma znaczenie również na skoczniach większych. Dobrze wybijający się zawodnicy z reguły dobrze radzą sobie z trudnymi warunkami. Od 1 do 20.',
+                    );
+                  },
+                ),
+                gap,
+                MyNumeralTextField(
+                  controller: _flightQualityController,
+                  onChange: _onChange,
+                  formatters: doubleTextInputFormatters,
+                  labelText: translate(context).flightQuality,
+                  step: 0.1,
+                  min: 0.0,
+                  max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
+                  maxDecimalPlaces: 2,
+                  onHelpButtonTap: () {
+                    showSimpleHelpDialog(
+                      context: context,
+                      title: translate(context).flightQuality,
+                      content:
+                          'Decyduje o odległościach na większych skoczniach, choć ma znaczenie również na skoczniach mniejszych. Wysoką wartością odznaczają się tak zwani "lotnicy" i "lotniczki". Lotnicy z reguły świetnie wykorzystują wiatr pod narty. Od 1 do 20.',
+                    );
+                  },
+                ),
+                gap,
+                MyNumeralTextField(
+                  controller: _landingQualityController,
+                  onChange: _onChange,
+                  formatters: doubleTextInputFormatters,
+                  labelText: translate(context).landing,
+                  step: 0.1,
+                  min: 0.0,
+                  max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
+                  maxDecimalPlaces: 2,
+                  onHelpButtonTap: () {
+                    showSimpleHelpDialog(
+                      context: context,
+                      title: translate(context).landing,
+                      content:
+                          'Przekłada się to w znacznej mierze na noty za styl otrzymywane od sędziów. Od 1 do 20.',
+                    );
+                  },
+                ),
+                gap,
                 MyDropdownField(
-                  controller: _jumpsConsistencyController,
+                  controller: _jumpingStyleController,
                   onChange: (selected) {
-                    _jumpsConsistency = selected!;
+                    _jumpingStyle = selected!;
                     _onChange();
                   },
-                  entries: JumpsConsistency.values.map((consistency) {
+                  entries: JumpingStyle.values.map((consistency) {
                     return DropdownMenuEntry(
                         value: consistency,
-                        label:
-                            translatedJumpsConsistencyDescription(context, consistency));
+                        label: translatedJumpingStyleDescription(context, consistency));
                   }).toList(),
                   width: constraints.maxWidth,
-                  initial: JumpsConsistency.average,
-                  label: Text(translate(context).jumps),
+                  initial: JumpingStyle.balanced,
+                  label: Text(translate(context).jumpingStyle),
+                  //menuHeight: 400,
                   onHelpButtonTap: () {
                     showSimpleHelpDialog(
-                        context: context,
-                        title: 'Równość skoków',
-                        content:
-                            'Szansa zawodnika na oddanie kilku równych skoków. Nie mylić z długoterminową równością formy.');
-                  },
-                ),
-                gap,
-                MyDropdownField(
-                  controller: _landingStyleController,
-                  onChange: (selected) {
-                    _landingStyle = selected!;
-                    _onChange();
-                  },
-                  entries: LandingStyle.values.map((style) {
-                    return DropdownMenuEntry(
-                        value: style,
-                        label: translatedLandingStyleDescription(context, style));
-                  }).toList(),
-                  width: constraints.maxWidth,
-                  initial: LandingStyle.average,
-                  label: Text(translate(context).landing),
-                  onHelpButtonTap: () {
-                    showSimpleHelpDialog(
-                        context: context,
-                        title: 'Styl lądowania',
-                        content:
-                            'Przekłada się to na wysokość not sędziowskich. Ma też pewien wpływ na odporność przed upadkami.'); // TODO: Verify that info
-                  },
-                ),
-                gap,
-                MyNumeralTextField(
-                  controller: _qualityOnSmallerHillsController,
-                  onChange: _onChange,
-                  formatters: doubleTextInputFormatters,
-                  labelText: translate(context).onSmallerHills,
-                  step: 1.0,
-                  min: 0.0,
-                  max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
-                  maxDecimalPlaces: 2,
-                  onHelpButtonTap: () {
-                    showSimpleHelpDialog(
-                        context: context,
-                        title: 'Jakość na mniejszych skoczniach',
-                        content:
-                            'Decyduje o odległościach na mniejszych skoczniach, choć ma znaczenie również na skoczniach większych');
-                  },
-                ),
-                gap,
-                MyNumeralTextField(
-                  controller: _qualityOnLargerHillsController,
-                  onChange: _onChange,
-                  formatters: doubleTextInputFormatters,
-                  labelText: translate(context).onLargerHills,
-                  step: 1.0,
-                  min: 0.0,
-                  max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
-                  maxDecimalPlaces: 2,
-                  onHelpButtonTap: () {
-                    showSimpleHelpDialog(
-                        context: context,
-                        title: 'Jakość na większych skoczniach',
-                        content:
-                            'Decyduje o odległościach na większych skoczniach, choć ma znaczenie również na skoczniach mniejszych. Wysoką wartością odznaczają się tak zwani "lotnicy" i "lotniczki"');
+                      context: context,
+                      title: translate(context).jumpingStyle,
+                      content:
+                          'Ryzykownie skaczący zawodnicy częściej "psują" swoje skoki, ale też częściej "błyszczą". Niektórzy jednak skaczą bardziej zachowawczo oddając wiele równych skoków',
+                    );
                   },
                 ),
                 gap,
@@ -345,13 +342,12 @@ class JumperEditorState extends State<JumperEditor> {
     final country = _country!;
 
     final dateOfBirth = _dateFormat.parse(_dateOfBirthController.text);
-    print('pers2: $_personality');
 
     final skills = JumperSkills(
-      qualityOnSmallerHills: double.parse(_qualityOnSmallerHillsController.text),
-      qualityOnLargerHills: double.parse(_qualityOnLargerHillsController.text),
-      landingStyle: _landingStyle,
-      jumpsConsistency: _jumpsConsistency,
+      takeoffQuality: double.parse(_takeoffQualityController.text),
+      flightQuality: double.parse(_flightQualityController.text),
+      landingQuality: double.parse(_landingQualityController.text),
+      jumpingStyle: _jumpingStyle,
     );
     final jumper = _sex == Sex.male
         ? MaleJumper(
@@ -386,23 +382,19 @@ class JumperEditorState extends State<JumperEditor> {
     _nameController.text = jumper.name;
     _surnameController.text = jumper.surname;
     _dateOfBirthController.text = _dateFormat.format(jumper.dateOfBirth);
-    _qualityOnSmallerHillsController.text =
-        jumper.skills.qualityOnSmallerHills.toString();
-    _qualityOnLargerHillsController.text = jumper.skills.qualityOnLargerHills.toString();
+    _takeoffQualityController.text = jumper.skills.takeoffQuality.toString();
+    _flightQualityController.text = jumper.skills.flightQuality.toString();
+    _landingQualityController.text = jumper.skills.landingQuality.toString();
     setState(() {
       _sex = jumper.sex;
     });
 
-    print('pers: ${jumper.personality}');
     _personality = jumper.personality;
-    _jumpsConsistency = jumper.skills.jumpsConsistency;
-    _landingStyle = jumper.skills.landingStyle;
+    _jumpingStyle = jumper.skills.jumpingStyle;
     _personalityController.text =
         personalityName(context: context, personality: _personality);
-    _jumpsConsistencyController.text =
-        translatedJumpsConsistencyDescription(context, _jumpsConsistency);
-    _landingStyleController.text =
-        translatedLandingStyleDescription(context, _landingStyle);
+    _jumpingStyleController.text =
+        translatedJumpingStyleDescription(context, _jumpingStyle);
 
     _country = jumper.country;
     _countriesDropdownKey.currentState?.setManually(jumper.country);

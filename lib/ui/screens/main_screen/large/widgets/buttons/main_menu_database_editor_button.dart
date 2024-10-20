@@ -19,7 +19,6 @@ class MainMenuDatabaseEditorButton extends StatelessWidget {
           ),
         ) as GameVariant?;
         if (!context.mounted) return;
-        router.printTree();
         if (gameVariantToEdit != null) {
           router.navigateTo(
             context,

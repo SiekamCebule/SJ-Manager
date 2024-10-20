@@ -1,9 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/user_db/jumper/jumps_consistency.dart';
+import 'package:sj_manager/models/user_db/jumper/jumping_style.dart';
 import 'package:sj_manager/models/user_db/jumper/landing_style.dart';
 
 part 'jumper_skills.g.dart';
@@ -11,23 +10,23 @@ part 'jumper_skills.g.dart';
 @JsonSerializable()
 class JumperSkills with EquatableMixin {
   const JumperSkills({
-    required this.qualityOnSmallerHills,
-    required this.qualityOnLargerHills,
-    required this.landingStyle,
-    required this.jumpsConsistency,
+    required this.takeoffQuality,
+    required this.flightQuality,
+    required this.landingQuality,
+    required this.jumpingStyle,
   });
 
   static const empty = JumperSkills(
-    qualityOnSmallerHills: 0,
-    qualityOnLargerHills: 0,
-    landingStyle: LandingStyle.average,
-    jumpsConsistency: JumpsConsistency.average,
+    takeoffQuality: 0,
+    flightQuality: 0,
+    landingQuality: 0,
+    jumpingStyle: JumpingStyle.balanced,
   );
 
-  final double qualityOnSmallerHills;
-  final double qualityOnLargerHills;
-  final LandingStyle landingStyle;
-  final JumpsConsistency jumpsConsistency;
+  final double takeoffQuality;
+  final double flightQuality;
+  final double landingQuality;
+  final JumpingStyle jumpingStyle;
 
   factory JumperSkills.fromJson(Json json) => _$JumperSkillsFromJson(json);
 
@@ -35,23 +34,23 @@ class JumperSkills with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        qualityOnSmallerHills,
-        qualityOnLargerHills,
-        landingStyle,
-        jumpsConsistency,
+        takeoffQuality,
+        flightQuality,
+        landingQuality,
+        jumpingStyle,
       ];
 
   JumperSkills copyWith({
-    double? qualityOnSmallerHills,
-    double? qualityOnLargerHills,
-    LandingStyle? landingStyle,
-    JumpsConsistency? jumpsConsistency,
+    double? takeoffQuality,
+    double? flightQuality,
+    double? landingQuality,
+    JumpingStyle? jumpingStyle,
   }) {
     return JumperSkills(
-      qualityOnSmallerHills: qualityOnSmallerHills ?? this.qualityOnSmallerHills,
-      qualityOnLargerHills: qualityOnLargerHills ?? this.qualityOnLargerHills,
-      landingStyle: landingStyle ?? this.landingStyle,
-      jumpsConsistency: jumpsConsistency ?? this.jumpsConsistency,
+      takeoffQuality: takeoffQuality ?? this.takeoffQuality,
+      flightQuality: flightQuality ?? this.flightQuality,
+      landingQuality: landingQuality ?? this.landingQuality,
+      jumpingStyle: jumpingStyle ?? this.jumpingStyle,
     );
   }
 }

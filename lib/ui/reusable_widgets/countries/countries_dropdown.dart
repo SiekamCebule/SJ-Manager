@@ -14,6 +14,7 @@ class CountriesDropdown extends StatefulWidget {
     this.label,
     this.focusNode,
     this.width,
+    this.menuHeight,
     this.enabled,
   });
 
@@ -23,6 +24,7 @@ class CountriesDropdown extends StatefulWidget {
   final Widget? label;
   final FocusNode? focusNode;
   final double? width;
+  final double? menuHeight;
   final bool? enabled;
 
   @override
@@ -48,14 +50,25 @@ class CountriesDropdownState extends State<CountriesDropdown> {
   @override
   Widget build(BuildContext context) {
     final countries = widget.countriesRepo.last;
-    final windowHeight = MediaQuery.of(context).size.height;
+    final entries = [
+      ...countries.map((country) {
+        return DropdownMenuEntry(
+          value: country,
+          label: country.name(context),
+          trailingIcon: CountryFlag(
+            country: country,
+            width: UiGlobalConstants.smallCountryFlagWidth,
+          ),
+        );
+      }),
+    ];
     return MyDropdownField<Country>(
       enabled: widget.enabled ?? true,
       width: widget.width,
-      menuHeight: windowHeight * 0.6,
       enableSearch: true,
       requestFocusOnTap: false,
       label: widget.label,
+      menuHeight: widget.menuHeight,
       focusNode: widget.focusNode,
       controller: controller,
       initial: widget.firstAsInitial ? countries.first : null,
@@ -71,18 +84,7 @@ class CountriesDropdownState extends State<CountriesDropdown> {
               width: UiGlobalConstants.smallCountryFlagWidth,
             )
           : null,
-      entries: [
-        ...countries.map((country) {
-          return DropdownMenuEntry(
-            value: country,
-            label: country.name(context),
-            trailingIcon: CountryFlag(
-              country: country,
-              width: UiGlobalConstants.smallCountryFlagWidth,
-            ),
-          );
-        }),
-      ],
+      entries: entries,
     );
   }
 

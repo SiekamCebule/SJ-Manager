@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/models/user_db/jumper/jumps_consistency.dart';
+import 'package:sj_manager/models/user_db/jumper/jumping_style.dart';
 import 'package:sj_manager/models/user_db/jumper/landing_style.dart';
 
 String translatedLandingStyleDescription(
@@ -16,15 +16,19 @@ String translatedLandingStyleDescription(
   };
 }
 
-String translatedJumpsConsistencyDescription(
-    BuildContext context, JumpsConsistency consistency) {
-  return switch (consistency) {
-    JumpsConsistency.veryInconsistent => translate(context).veryInconsistent,
-    JumpsConsistency.inconsistent => translate(context).inconsistent,
-    JumpsConsistency.slightlyInconsistent => translate(context).slightlyInconsistent,
-    JumpsConsistency.average => translate(context).averageForConsistency,
-    JumpsConsistency.quiteConsistent => translate(context).quiteConsistent,
-    JumpsConsistency.consistent => translate(context).consistent,
-    JumpsConsistency.veryConsistent => translate(context).veryConsistent,
+String translatedJumpingStyleDescription(BuildContext context, JumpingStyle style) {
+  final translator = translate(context);
+  return switch (style) {
+    JumpingStyle.veryDefensive => translator.jumpingStyleVeryDefensive,
+    JumpingStyle.clearlyDefensive => translator.jumpingStyleClearlyDefensive,
+    JumpingStyle.defensive => translator.jumpingStyleDefensive,
+    JumpingStyle.cautious => translator.jumpingStyleCautious,
+    JumpingStyle.slightlyCautious => translator.jumpingStyleSlightlyCautious,
+    JumpingStyle.balanced => translator.jumpingStyleBalanced,
+    JumpingStyle.fairlyUnpredictable => translator.jumpingStyleFairlyUnpredictable,
+    JumpingStyle.unpredictable => translator.jumpingStyleUnpredictable,
+    JumpingStyle.risky => translator.jumpingStyleRisky,
+    JumpingStyle.clearlyRisky => translator.jumpingStyleClearlyRisky,
+    JumpingStyle.veryRisky => translator.jumpingStyleVeryRisky,
   };
 }

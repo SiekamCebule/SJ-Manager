@@ -20,6 +20,7 @@ class MyDropdownField<T> extends StatelessWidget {
     this.requestFocusOnTap = false,
     this.focusNode,
     this.onHelpButtonTap,
+    this.alignmentOffset,
   });
 
   final TextEditingController? controller;
@@ -36,6 +37,7 @@ class MyDropdownField<T> extends StatelessWidget {
   final bool requestFocusOnTap;
   final FocusNode? focusNode;
   final VoidCallback? onHelpButtonTap;
+  final Offset? alignmentOffset;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +54,7 @@ class MyDropdownField<T> extends StatelessWidget {
       enableSearch: enableSearch,
       requestFocusOnTap: requestFocusOnTap,
       width: width,
+      alignmentOffset: alignmentOffset,
       controller: controller,
       initialSelection: initial,
       leadingIcon: leadingIcon,
@@ -72,10 +75,12 @@ class MyDropdownField<T> extends StatelessWidget {
             enabledBorder: border,
             border: border,
           ),
+      menuHeight: menuHeight,
       menuStyle: MenuStyle(
         visualDensity: VisualDensity.standard,
         shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ),
       ),
     );
 
