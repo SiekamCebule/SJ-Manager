@@ -46,7 +46,7 @@ class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersD
       _searchTextStreamController.add(_searchController.text);
     });
     _filterTextSubscription = _searchTextStreamController.stream
-        .debounceTime(const Duration(milliseconds: 250))
+        .debounceTime(const Duration(milliseconds: 100))
         .listen(null);
     _filterTextSubscription.onData((searchData) {
       final filter = JumpersFilterBySearch(

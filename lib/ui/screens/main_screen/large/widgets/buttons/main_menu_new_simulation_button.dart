@@ -13,8 +13,9 @@ class MainMenuNewSimulationButton extends StatelessWidget {
             onFinish: (options) async {
               if (options != null) {
                 await CreateNewSimulationCommand(
-                        context: context, simulationOptions: options)
-                    .execute();
+                  context: context,
+                  simulationOptions: options,
+                ).execute();
               }
             }).execute();
       },

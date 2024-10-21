@@ -130,7 +130,7 @@ class MaleJumper extends Jumper {
       surname: jumper.surname,
       country: jumper.country,
       dateOfBirth: jumper.dateOfBirth,
-      personality: Personalities.resourceful,
+      personality: jumper.personality,
       skills: jumper.skills,
     );
   }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/bloc/simulation/commands/simulation_flow/jumper_reports/default_jumper_level_report_creator.dart';
-import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
 
@@ -10,11 +8,13 @@ class SetUpJumperLevelReportsCommand {
     required this.context,
     required this.database,
     required this.levelRequirements,
+    required this.onFinish,
   });
 
   final BuildContext context;
   final SimulationDatabase database;
   final Map<JumperLevelDescription, double> levelRequirements;
+  final void Function(SimulationDatabase changedDatabase) onFinish;
 
   void execute() {
     final changedJumpersReports = Map.of(database.jumpersReports);
@@ -26,6 +26,6 @@ class SetUpJumperLevelReportsCommand {
     }
 
     final changedDatabase = database.copyWith(jumpersReports: changedJumpersReports);
-    context.read<SimulationDatabaseCubit>().update(changedDatabase);
+    onFinish(changedDatabase);
   }
 }

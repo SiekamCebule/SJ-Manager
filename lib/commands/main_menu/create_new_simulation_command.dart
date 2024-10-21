@@ -23,16 +23,16 @@ class CreateNewSimulationCommand {
   final SimulationWizardOptionsRepo simulationOptions;
 
   late SimulationDatabase _database;
-  late String? _subteamCountryFlagPath;
+  String? _subteamCountryFlagPath;
   late UserSimulation _userSimulation;
 
   Future<void> execute() async {
     await _createSimulationDatabase();
+    await _copyImagesFromVariant();
+    await _setUpJumperLevelReports();
     await _addUserSimulationRecord();
     await _updateUserSimulationsRegistry();
     await _saveToFile();
-    await _copyImagesFromVariant();
-    await _setUpJumperLevelReports();
     await _showSimulationScreen();
   }
 
@@ -117,6 +117,9 @@ class CreateNewSimulationCommand {
       context: context,
       database: _database,
       levelRequirements: simulationOptions.gameVariant.last!.jumperLevelRequirements,
+      onFinish: (changedDatabase) {
+        _database = changedDatabase;
+      },
     ).execute();
   }
 

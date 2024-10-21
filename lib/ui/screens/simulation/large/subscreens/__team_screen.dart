@@ -55,7 +55,7 @@ class _TeamScreenState extends State<_TeamScreen> {
               searchForCandidates: () =>
                   SearchForCandidatesCommand(context: context, database: database)
                       .execute(),
-              endPartnership: () =>
+              managePartnerships: () =>
                   ManagePartnershipsCommand(context: context, database: database)
                       .execute(),
             )

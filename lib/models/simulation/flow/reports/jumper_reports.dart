@@ -1,15 +1,18 @@
+import 'package:equatable/equatable.dart';
+import 'package:sj_manager/bloc/simulation/commands/simulation_flow/jumper_reports/default_jumper_level_report_creator.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
 
-class JumperLevelReport {
+class JumperLevelReport with EquatableMixin {
   const JumperLevelReport({
     required this.levelDescription,
     required this.characteristics,
   });
 
   final JumperLevelDescription levelDescription;
-  final Map<JumperLevelCharacteristicCategory, SimpleRating> characteristics;
+  final Map<JumperLevelCharacteristicCategory, JumperCharacteristicOthernessStrength>
+      characteristics;
 
   static JumperLevelReport fromJson(Json json) {
     final characteristics = json['characteristics'] as Json;
@@ -21,7 +24,7 @@ class JumperLevelReport {
         (categoryJson, ratingJson) {
           final category = JumperLevelCharacteristicCategory.values
               .singleWhere((value) => value.name == categoryJson);
-          final rating = SimpleRating.fromJson(ratingJson);
+          final rating = JumperCharacteristicOthernessStrength.fromJson(ratingJson);
           return MapEntry(category, rating);
         },
       ),
@@ -36,16 +39,22 @@ class JumperLevelReport {
       ),
     };
   }
+
+  @override
+  List<Object?> get props => [
+        levelDescription,
+        characteristics,
+      ];
 }
 
 enum JumperLevelCharacteristicCategory {
   takeoff,
   flight,
   landing,
-  jumpsConsistency,
+  riskInJumps,
 }
 
-class JumperTrainingProgressReport {
+class JumperTrainingProgressReport with EquatableMixin {
   const JumperTrainingProgressReport({
     required this.generalRating,
     required this.ratings,
@@ -78,6 +87,12 @@ class JumperTrainingProgressReport {
       ),
     };
   }
+
+  @override
+  List<Object?> get props => [
+        generalRating,
+        ratings,
+      ];
 }
 
 enum JumperTrainingProgressCategory {
@@ -88,7 +103,7 @@ enum JumperTrainingProgressCategory {
   form,
 }
 
-class JumperReports {
+class JumperReports with EquatableMixin {
   const JumperReports({
     required this.levelReport,
     required this.trainingProgressReport,
@@ -143,4 +158,12 @@ class JumperReports {
       'jumpsRating': jumpsRating?.name,
     };
   }
+
+  @override
+  List<Object?> get props => [
+        levelReport,
+        trainingProgressReport,
+        moraleRating,
+        jumpsRating,
+      ];
 }

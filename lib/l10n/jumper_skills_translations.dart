@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/models/user_db/jumper/jumping_style.dart';
+import 'package:sj_manager/models/user_db/jumper/jumping_technique.dart';
 import 'package:sj_manager/models/user_db/jumper/landing_style.dart';
 
 String translatedLandingStyleDescription(
@@ -16,19 +16,19 @@ String translatedLandingStyleDescription(
   };
 }
 
-String translatedJumpingStyleDescription(BuildContext context, JumpingStyle style) {
+String translatedJumpingStyleDescription(BuildContext context, JumpingTechnique style) {
   final translator = translate(context);
   return switch (style) {
-    JumpingStyle.veryDefensive => translator.jumpingStyleVeryDefensive,
-    JumpingStyle.clearlyDefensive => translator.jumpingStyleClearlyDefensive,
-    JumpingStyle.defensive => translator.jumpingStyleDefensive,
-    JumpingStyle.cautious => translator.jumpingStyleCautious,
-    JumpingStyle.slightlyCautious => translator.jumpingStyleSlightlyCautious,
-    JumpingStyle.balanced => translator.jumpingStyleBalanced,
-    JumpingStyle.fairlyUnpredictable => translator.jumpingStyleFairlyUnpredictable,
-    JumpingStyle.unpredictable => translator.jumpingStyleUnpredictable,
-    JumpingStyle.risky => translator.jumpingStyleRisky,
-    JumpingStyle.clearlyRisky => translator.jumpingStyleClearlyRisky,
-    JumpingStyle.veryRisky => translator.jumpingStyleVeryRisky,
+    JumpingTechnique.veryDefensive => translator.jumpingStyleVeryDefensive,
+    JumpingTechnique.clearlyDefensive => translator.jumpingStyleClearlyDefensive,
+    JumpingTechnique.defensive => translator.jumpingStyleDefensive,
+    JumpingTechnique.cautious => translator.jumpingStyleCautious,
+    JumpingTechnique.slightlyCautious => translator.jumpingStyleSlightlyCautious,
+    JumpingTechnique.balanced => translator.jumpingStyleBalanced,
+    JumpingTechnique.fairlyUnpredictable => translator.jumpingStyleFairlyUnpredictable,
+    JumpingTechnique.unpredictable => translator.jumpingStyleUnpredictable,
+    JumpingTechnique.risky => translator.jumpingStyleRisky,
+    JumpingTechnique.clearlyRisky => translator.jumpingStyleClearlyRisky,
+    JumpingTechnique.veryRisky => translator.jumpingStyleVeryRisky,
   };
 }
