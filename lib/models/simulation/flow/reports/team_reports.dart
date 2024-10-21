@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
 
-class TeamReports {
+class TeamReports with EquatableMixin {
   const TeamReports({
     required this.generalMoraleRating,
     required this.generalJumpsRating,
@@ -33,4 +34,11 @@ class TeamReports {
       'generalTrainingRating': generalTrainingRating?.name,
     };
   }
+
+  @override
+  List<Object?> get props => [
+        generalMoraleRating,
+        generalJumpsRating,
+        generalTrainingRating,
+      ];
 }

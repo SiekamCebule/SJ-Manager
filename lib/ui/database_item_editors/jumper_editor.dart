@@ -7,7 +7,7 @@ import 'package:sj_manager/l10n/jumper_skills_translations.dart';
 import 'package:sj_manager/models/user_db/country/country.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
-import 'package:sj_manager/models/user_db/jumper/jumping_style.dart';
+import 'package:sj_manager/models/user_db/jumper/jumping_technique.dart';
 import 'package:sj_manager/models/user_db/psyche/personalities.dart';
 import 'package:sj_manager/models/user_db/psyche/translations.dart';
 import 'package:sj_manager/models/user_db/sex.dart';
@@ -67,7 +67,7 @@ class JumperEditorState extends State<JumperEditor> {
 
   var _sex = Sex.male;
   var _personality = Personalities.resourceful;
-  var _jumpingStyle = JumpingStyle.balanced;
+  var _jumpingStyle = JumpingTechnique.balanced;
   Country? _country;
 
   Jumper? _cachedJumper;
@@ -305,19 +305,19 @@ class JumperEditorState extends State<JumperEditor> {
                     _jumpingStyle = selected!;
                     _onChange();
                   },
-                  entries: JumpingStyle.values.map((consistency) {
+                  entries: JumpingTechnique.values.map((consistency) {
                     return DropdownMenuEntry(
                         value: consistency,
                         label: translatedJumpingStyleDescription(context, consistency));
                   }).toList(),
                   width: constraints.maxWidth,
-                  initial: JumpingStyle.balanced,
-                  label: Text(translate(context).jumpingStyle),
+                  initial: JumpingTechnique.balanced,
+                  label: Text(translate(context).jumpingTechnique),
                   //menuHeight: 400,
                   onHelpButtonTap: () {
                     showSimpleHelpDialog(
                       context: context,
-                      title: translate(context).jumpingStyle,
+                      title: translate(context).jumpingTechnique,
                       content:
                           'Ryzykownie skaczący zawodnicy częściej "psują" swoje skoki, ale też częściej "błyszczą". Niektórzy jednak skaczą bardziej zachowawczo oddając wiele równych skoków',
                     );
@@ -347,7 +347,7 @@ class JumperEditorState extends State<JumperEditor> {
       takeoffQuality: double.parse(_takeoffQualityController.text),
       flightQuality: double.parse(_flightQualityController.text),
       landingQuality: double.parse(_landingQualityController.text),
-      jumpingStyle: _jumpingStyle,
+      jumpingTechnique: _jumpingStyle,
     );
     final jumper = _sex == Sex.male
         ? MaleJumper(
@@ -388,9 +388,8 @@ class JumperEditorState extends State<JumperEditor> {
     setState(() {
       _sex = jumper.sex;
     });
-
     _personality = jumper.personality;
-    _jumpingStyle = jumper.skills.jumpingStyle;
+    _jumpingStyle = jumper.skills.jumpingTechnique;
     _personalityController.text =
         personalityName(context: context, personality: _personality);
     _jumpingStyleController.text =

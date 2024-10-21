@@ -8,13 +8,13 @@ class TeamScreenPersonalCoachBottomBar extends StatelessWidget {
     required this.chargesCount,
     required this.chargesLimit,
     required this.searchForCandidates,
-    required this.endPartnership,
+    required this.managePartnerships,
   });
 
   final int chargesCount;
   final int chargesLimit;
   final VoidCallback searchForCandidates;
-  final VoidCallback endPartnership;
+  final VoidCallback managePartnerships;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class TeamScreenPersonalCoachBottomBar extends StatelessWidget {
           ),
           const Gap(10),
           TextButton(
-            onPressed: endPartnership,
+            onPressed: chargesCount > 0 ? managePartnerships : null,
             child: const Text('Zarządzaj współpracami'),
           ),
         ],

@@ -26,7 +26,6 @@ abstract class DefaultClassificationScoreCreator<E,
 
   void setUpContext(C context) {
     this.context = context;
-    print('context has set up');
   }
 
   void clearData() {

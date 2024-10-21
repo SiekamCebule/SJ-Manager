@@ -1143,7 +1143,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
   }
 
   void _onChange() {
-    print('_onChange()');
     if (!_validateFormFields()) return;
     widget.onChange(_constructAndCache());
   }
@@ -1246,7 +1245,6 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
   DefaultCompetitionRules _constructAndCache() {
     final rounds = List.of(_roundRules);
     rounds[_selectedRoundIndex] = _constructCurrentRound();
-    print('comp type: $_competitionType');
     final rules = _competitionType == CompetitionTypeByEntity.individual
         ? DefaultCompetitionRules<Jumper>(
             rounds:

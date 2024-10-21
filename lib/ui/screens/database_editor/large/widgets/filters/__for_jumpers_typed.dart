@@ -64,8 +64,6 @@ class _ForJumpersTypedState<T extends Jumper> extends State<_ForJumpersTyped<T>>
         LayoutBuilder(
           // TODO: IT DOESNT WORK
           builder: (context, constraints) {
-            print('constraints: $constraints');
-            print('media query: ${MediaQuery.of(context).size}');
             return CountriesDropdown(
               key: _countriesDropdownKey,
               width: 220,

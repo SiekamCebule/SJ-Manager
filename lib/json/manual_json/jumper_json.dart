@@ -3,13 +3,14 @@ part of '../../models/user_db/jumper/jumper.dart';
 Jumper _jumperFromJson(Json json, {required JsonCountryLoader countryLoader}) {
   final country = countryLoader.load(json['country']);
   final sex = $enumDecode(_sexEnumJsonMap, json['sex']);
+  final personality = $enumDecode(_personalitiesEnumJsonMap, json['personality']);
   return sex == Sex.male
       ? MaleJumper(
           name: json['name'] as String,
           surname: json['surname'] as String,
           country: country,
           dateOfBirth: DateTime.parse(json['dateOfBirth']),
-          personality: $enumDecode(_personalitiesEnumJsonMap, json['personality']),
+          personality: personality,
           skills: JumperSkills.fromJson(json['skills'] as Map<String, dynamic>),
         )
       : FemaleJumper(
@@ -17,7 +18,7 @@ Jumper _jumperFromJson(Json json, {required JsonCountryLoader countryLoader}) {
           surname: json['surname'] as String,
           country: country,
           dateOfBirth: DateTime.parse(json['dateOfBirth']),
-          personality: $enumDecode(_personalitiesEnumJsonMap, json['personality']),
+          personality: personality,
           skills: JumperSkills.fromJson(json['skills'] as Map<String, dynamic>),
         );
 }
