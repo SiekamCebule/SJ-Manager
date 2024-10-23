@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
-import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_simulation_dynamic_parameters.dart';
+import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
@@ -50,7 +50,7 @@ class SimulationDatabase with EquatableMixin {
   final Map<SimulationActionType, DateTime> actionDeadlines;
   final SimulationActionsRepo actionsRepo;
 
-  final Map<Jumper, JumperSimulationDynamicParameters> jumpersDynamicParameters;
+  final Map<Jumper, JumperDynamicParams> jumpersDynamicParameters;
   final Map<Jumper, JumperReports> jumpersReports;
 
   final Map<Team, TeamReports> teamReports;
@@ -103,7 +103,7 @@ class SimulationDatabase with EquatableMixin {
     ItemsIdsRepo? idsRepo,
     Map<SimulationActionType, DateTime>? actionDeadlines,
     SimulationActionsRepo? actionsRepo,
-    Map<Jumper, JumperSimulationDynamicParameters>? jumpersDynamicParameters,
+    Map<Jumper, JumperDynamicParams>? jumpersDynamicParameters,
     Map<Jumper, JumperReports>? jumpersReports,
     Map<Team, TeamReports>? teamReports,
   }) {

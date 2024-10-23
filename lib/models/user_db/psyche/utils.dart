@@ -1,22 +1,24 @@
-import 'package:sj_manager/models/user_db/psyche/levels_of_consciousness.dart';
+import 'package:sj_manager/models/user_db/psyche/level_of_consciousness_labels.dart';
 import 'package:sj_manager/models/user_db/psyche/personalities.dart';
 
 const levelOfConsciousnessWithPersonalities = {
-  LevelsOfConsciousness.shame: Personalities.compromised, // Wstyd, Skompromitowany
-  LevelsOfConsciousness.guilt: Personalities.selfCritical, // Wina, Samokrytyczny
-  LevelsOfConsciousness.apathy: Personalities.resigned, // Apatia, Zrezygnowany
-  LevelsOfConsciousness.grief: Personalities.nostalgic, // Żal, Nostalgiczny
-  LevelsOfConsciousness.fear: Personalities.insecure, // Strach, Niepewny
-  LevelsOfConsciousness.desire: Personalities.yearning, // Pożądanie, Pragnący
-  LevelsOfConsciousness.anger: Personalities.stubborn, // Złość, Uparty
-  LevelsOfConsciousness.pride: Personalities.arrogant, // Duma, Dumny
-  LevelsOfConsciousness.courage: Personalities.resourceful, // Odwaga, Zaradny
-  LevelsOfConsciousness.neutrality: Personalities.balanced, // Neutralność, Wyważony
-  LevelsOfConsciousness.willingness: Personalities.optimistic, // Ochota, Optymistyczny
-  LevelsOfConsciousness.acceptance: Personalities.open, // Akceptacja, Otwarty
-  LevelsOfConsciousness.reason: Personalities.rational, // Rozsądek, Racjonalny
-  LevelsOfConsciousness.love: Personalities.devoted, // Miłość, Oddany
-  LevelsOfConsciousness.joy: Personalities.spiritualJoy, // Radość, Duchowa Radość
-  LevelsOfConsciousness.peace: Personalities.spiritualPeace, // Pokój, Duchowy Spokój
-  LevelsOfConsciousness.enlightenment: Personalities.enlightened, // Oświecenie, Oświecony
+  LevelOfConsciousnessLabels.shame: Personalities.compromised, // Wstyd, Skompromitowany
+  LevelOfConsciousnessLabels.guilt: Personalities.selfCritical, // Wina, Samokrytyczny
+  LevelOfConsciousnessLabels.apathy: Personalities.resigned, // Apatia, Zrezygnowany
+  LevelOfConsciousnessLabels.grief: Personalities.nostalgic, // Żal, Nostalgiczny
+  LevelOfConsciousnessLabels.fear: Personalities.insecure, // Strach, Niepewny
+  LevelOfConsciousnessLabels.desire: Personalities.yearning, // Pożądanie, Pragnący
+  LevelOfConsciousnessLabels.anger: Personalities.stubborn, // Złość, Uparty
+  LevelOfConsciousnessLabels.pride: Personalities.arrogant, // Duma, Dumny
+  LevelOfConsciousnessLabels.courage: Personalities.resourceful, // Odwaga, Zaradny
+  LevelOfConsciousnessLabels.neutrality: Personalities.balanced, // Neutralność, Wyważony
+  LevelOfConsciousnessLabels.willingness:
+      Personalities.optimistic, // Ochota, Optymistyczny
+  LevelOfConsciousnessLabels.acceptance: Personalities.open, // Akceptacja, Otwarty
+  LevelOfConsciousnessLabels.reason: Personalities.rational, // Rozsądek, Racjonalny
+  LevelOfConsciousnessLabels.love: Personalities.devoted, // Miłość, Oddany
+  LevelOfConsciousnessLabels.joy: Personalities.spiritualJoy, // Radość, Duchowa Radość
+  LevelOfConsciousnessLabels.peace: Personalities.spiritualPeace, // Pokój, Duchowy Spokój
+  LevelOfConsciousnessLabels.enlightenment:
+      Personalities.enlightened, // Oświecenie, Oświecony
 };
