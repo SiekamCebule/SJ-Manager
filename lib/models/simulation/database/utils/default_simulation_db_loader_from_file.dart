@@ -28,7 +28,7 @@ import 'package:sj_manager/json/simulation_db_loading/team_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/wind_averager_parser.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
-import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_simulation_dynamic_parameters.dart';
+import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
@@ -113,7 +113,7 @@ class DefaultSimulationDbLoaderFromFile {
       (jumperId, paramsJson) {
         return MapEntry(
           idsRepo.get(jumperId) as Jumper,
-          JumperSimulationDynamicParameters.fromJson(paramsJson),
+          JumperDynamicParams.fromJson(paramsJson),
         );
       },
     );

@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/bloc/simulation/commands/change_jumper_training_command.dart';
-import 'package:sj_manager/bloc/simulation/commands/continue_simulation_command.dart';
+import 'package:sj_manager/bloc/simulation/commands/simulation_flow/continue_simulation_command.dart';
 import 'package:sj_manager/bloc/simulation/commands/manage_partnerships_command.dart';
 import 'package:sj_manager/bloc/simulation/commands/search_for_candidates_command.dart';
 import 'package:sj_manager/bloc/simulation/commands/simulation_exit_command.dart';

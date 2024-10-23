@@ -1,5 +1,5 @@
 import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
-import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_simulation_dynamic_parameters.dart';
+import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
 import 'package:sj_manager/models/simulation/flow/reports/team_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
@@ -45,8 +45,7 @@ class DefaultSimulationDatabaseCreator {
     final mode = options.mode.last!;
     _setUpIdsRepo();
     final jumpersDynamicParameters = {
-      for (var jumper in _jumpers.last)
-        jumper: const JumperSimulationDynamicParameters(trainingConfig: null),
+      for (var jumper in _jumpers.last) jumper: const JumperDynamicParams.empty(),
     };
     final jumperReports = {
       for (var jumper in _jumpers.last)

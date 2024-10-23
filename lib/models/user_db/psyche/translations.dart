@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/models/user_db/psyche/levels_of_consciousness.dart';
+import 'package:sj_manager/models/user_db/psyche/level_of_consciousness_labels.dart';
 import 'package:sj_manager/models/user_db/psyche/personalities.dart';
 
 String levelOfConsciousnessName({
   required BuildContext context,
-  required LevelsOfConsciousness levelOfConsciousness,
+  required LevelOfConsciousnessLabels levelOfConsciousness,
 }) {
   final translator = translate(context);
   return switch (levelOfConsciousness) {
-    LevelsOfConsciousness.shame => translator.shame,
-    LevelsOfConsciousness.guilt => translator.guilt,
-    LevelsOfConsciousness.apathy => translator.apathy,
-    LevelsOfConsciousness.grief => translator.grief,
-    LevelsOfConsciousness.fear => translator.fear,
-    LevelsOfConsciousness.desire => translator.desire,
-    LevelsOfConsciousness.anger => translator.anger,
-    LevelsOfConsciousness.pride => translator.pride,
-    LevelsOfConsciousness.courage => translator.courage,
-    LevelsOfConsciousness.neutrality => translator.neutrality,
-    LevelsOfConsciousness.willingness => translator.willingness,
-    LevelsOfConsciousness.acceptance => translator.acceptance,
-    LevelsOfConsciousness.reason => translator.reason,
-    LevelsOfConsciousness.love => translator.love,
-    LevelsOfConsciousness.joy => translator.joy,
-    LevelsOfConsciousness.peace => translator.peace,
-    LevelsOfConsciousness.enlightenment => translator.enlightenment,
+    LevelOfConsciousnessLabels.shame => translator.shame,
+    LevelOfConsciousnessLabels.guilt => translator.guilt,
+    LevelOfConsciousnessLabels.apathy => translator.apathy,
+    LevelOfConsciousnessLabels.grief => translator.grief,
+    LevelOfConsciousnessLabels.fear => translator.fear,
+    LevelOfConsciousnessLabels.desire => translator.desire,
+    LevelOfConsciousnessLabels.anger => translator.anger,
+    LevelOfConsciousnessLabels.pride => translator.pride,
+    LevelOfConsciousnessLabels.courage => translator.courage,
+    LevelOfConsciousnessLabels.neutrality => translator.neutrality,
+    LevelOfConsciousnessLabels.willingness => translator.willingness,
+    LevelOfConsciousnessLabels.acceptance => translator.acceptance,
+    LevelOfConsciousnessLabels.reason => translator.reason,
+    LevelOfConsciousnessLabels.love => translator.love,
+    LevelOfConsciousnessLabels.joy => translator.joy,
+    LevelOfConsciousnessLabels.peace => translator.peace,
+    LevelOfConsciousnessLabels.enlightenment => translator.enlightenment,
   };
 }
 
