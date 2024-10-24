@@ -6,29 +6,41 @@ class JumperDynamicParams {
   const JumperDynamicParams({
     required this.trainingConfig,
     required this.form,
+    required this.trainingEffeciencyFactor,
     required this.jumpsConsistency,
-    required this.physicalFatigue,
-    required this.mentalFatique,
+    required this.morale,
+    required this.fatigue,
     required this.levelOfConsciousness,
   });
 
   final JumperTrainingConfig? trainingConfig;
 
-  final double form; // 1-20
-  final double jumpsConsistency; // 1-20
+  /// From 1 to 20
+  final double form;
 
-  final double physicalFatigue; // 1-20
-  final double mentalFatique; // 1-20
+  /// From 0 to 1
+  final double trainingEffeciencyFactor;
 
+  /// From 1 to 20
+  final double jumpsConsistency;
+
+  /// From -1 to 1
+  final double morale;
+
+  /// From -1 to 1
+  final double fatigue;
+
+  /// From David Hawkins' Map of Consciousness
   final LevelOfConsciousness levelOfConsciousness;
 
   JumperDynamicParams.empty()
       : this(
           trainingConfig: null,
           form: 0,
+          trainingEffeciencyFactor: 0,
           jumpsConsistency: 0,
-          physicalFatigue: 0,
-          mentalFatique: 0,
+          morale: 0,
+          fatigue: 0,
           levelOfConsciousness: LevelOfConsciousness.fromMapOfConsciousness(
               LevelOfConsciousnessLabels.courage),
         );
@@ -37,9 +49,10 @@ class JumperDynamicParams {
     return {
       'trainingConfig': trainingConfig?.toJson(),
       'form': form,
+      'trainingEffeciencyFactor': trainingEffeciencyFactor,
       'jumpsConsistency': jumpsConsistency,
-      'physicalFatigue': physicalFatigue,
-      'mentalFatique': mentalFatique,
+      'morale': morale,
+      'fatigue': fatigue,
       'levelOfConsciousness': levelOfConsciousness.logarithmicValue,
     };
   }
@@ -51,9 +64,10 @@ class JumperDynamicParams {
           ? JumperTrainingConfig.fromJson(trainingConfigJson)
           : null,
       form: json['form'],
+      trainingEffeciencyFactor: json['trainingEffeciencyFactor'],
       jumpsConsistency: json['jumpsConsistency'],
-      physicalFatigue: json['physicalFatigue'],
-      mentalFatique: json['mentalFatique'],
+      morale: json['morale'],
+      fatigue: json['fatigue'],
       levelOfConsciousness: LevelOfConsciousness(json['levelOfConsciousness']),
     );
   }
@@ -61,17 +75,19 @@ class JumperDynamicParams {
   JumperDynamicParams copyWith({
     JumperTrainingConfig? trainingConfig,
     double? form,
+    double? trainingEffeciencyFactor,
     double? jumpsConsistency,
-    double? physicalFatigue,
-    double? mentalFatique,
+    double? morale,
+    double? fatigue,
     LevelOfConsciousness? levelOfConsciousness,
   }) {
     return JumperDynamicParams(
       trainingConfig: trainingConfig ?? this.trainingConfig,
       form: form ?? this.form,
+      trainingEffeciencyFactor: trainingEffeciencyFactor ?? this.trainingEffeciencyFactor,
       jumpsConsistency: jumpsConsistency ?? this.jumpsConsistency,
-      physicalFatigue: physicalFatigue ?? this.physicalFatigue,
-      mentalFatique: mentalFatique ?? this.mentalFatique,
+      morale: morale ?? this.morale,
+      fatigue: fatigue ?? this.fatigue,
       levelOfConsciousness: levelOfConsciousness ?? this.levelOfConsciousness,
     );
   }
