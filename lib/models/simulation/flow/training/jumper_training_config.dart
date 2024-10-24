@@ -4,11 +4,9 @@ import 'package:sj_manager/models/simulation/flow/training/training_risk.dart';
 
 class JumperTrainingConfig with EquatableMixin {
   const JumperTrainingConfig({
-    required this.trainingRisk,
     required this.points,
   });
 
-  final TrainingRisk trainingRisk;
   final Map<JumperTrainingPointsCategory, int> points;
 
   JumperTrainingConfig copyWith({
@@ -16,14 +14,12 @@ class JumperTrainingConfig with EquatableMixin {
     Map<JumperTrainingPointsCategory, int>? points,
   }) {
     return JumperTrainingConfig(
-      trainingRisk: trainingRisk ?? this.trainingRisk,
       points: points ?? this.points,
     );
   }
 
   Json toJson() {
     return {
-      'trainingRisk': trainingRisk.name,
       'points': points.map((category, points) {
         return MapEntry(category.name, points);
       }),
@@ -31,7 +27,6 @@ class JumperTrainingConfig with EquatableMixin {
   }
 
   static JumperTrainingConfig fromJson(Json json) {
-    final trainingRiskName = json['trainingRisk'];
     final pointsJson = json['points'] as Json;
     final points = pointsJson.map((categoryName, points) {
       final category = JumperTrainingPointsCategory.values.singleWhere(
@@ -40,15 +35,12 @@ class JumperTrainingConfig with EquatableMixin {
       return MapEntry(category, points as int);
     });
     return JumperTrainingConfig(
-      trainingRisk:
-          TrainingRisk.values.singleWhere((value) => value.name == trainingRiskName),
       points: points,
     );
   }
 
   @override
   List<Object?> get props => [
-        trainingRisk,
         points,
       ];
 }
