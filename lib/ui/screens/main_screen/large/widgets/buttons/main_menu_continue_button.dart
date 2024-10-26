@@ -155,11 +155,15 @@ class _MainMenuContinueButtonState extends State<MainMenuContinueButton> {
           style: labelTextStyle,
         );
       case SimulationMode.personalCoach:
+        final chargesCount =
+            lastPlayed.database!.managerData.personalCoachTeam!.jumpers.length;
         iconWidget = const Icon(Symbols.group,
             size: UiMainMenuConstants.continueButtonSimulationInfoIconSize);
+        final text = chargesCount != 0
+            ? '$chargesCount ${translate(context).charges(chargesCount).toLowerCase()}'
+            : translate(context).charges(chargesCount);
         labelWidget = Text(
-          translate(context).charges(
-              lastPlayed.database!.managerData.personalCoachTeam!.jumpers.length),
+          text,
           style: labelTextStyle,
         );
       case SimulationMode.observer:

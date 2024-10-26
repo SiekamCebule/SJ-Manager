@@ -30,31 +30,34 @@ class SetUpTrainingsCommand {
     await showSjmDialog(
       barrierDismissible: false,
       context: context,
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.8,
-        child: MultiProvider(
-          providers: [
-            Provider.value(value: context.read<CountryFlagsRepo>()),
-            Provider.value(value: context.read<DbItemImageGeneratingSetup<Jumper>>()),
-          ],
-          child: SetUpTrainingsDialog(
-            simulationMode: database.managerData.mode,
-            jumpers: dbHelper.managerJumpers,
-            jumpersSimulationRatings: database.jumpersReports,
-            managerPointsCount: database.managerData.trainingPoints,
-            onSubmit: (trainingConfig) {
-              final dynamicParams = Map.of(database.jumpersDynamicParameters);
-              trainingConfig.forEach(
-                (jumper, trainingConfig) {
-                  final currentDynamicParams = dynamicParams[jumper];
-                  dynamicParams[jumper] =
-                      currentDynamicParams!.copyWith(trainingConfig: trainingConfig);
-                },
-              );
-              final changedDatabase =
-                  changedDb.copyWith(jumpersDynamicParameters: dynamicParams);
-              context.read<SimulationDatabaseCubit>().update(changedDatabase);
-            },
+      child: BlocProvider.value(
+        value: context.read<SimulationDatabaseCubit>(),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.8,
+          child: MultiProvider(
+            providers: [
+              Provider.value(value: context.read<CountryFlagsRepo>()),
+              Provider.value(value: context.read<DbItemImageGeneratingSetup<Jumper>>()),
+            ],
+            child: SetUpTrainingsDialog(
+              simulationMode: database.managerData.mode,
+              jumpers: dbHelper.managerJumpers,
+              jumpersSimulationRatings: database.jumpersReports,
+              managerPointsCount: database.managerData.trainingPoints,
+              onSubmit: (trainingConfig) {
+                final dynamicParams = Map.of(database.jumpersDynamicParameters);
+                trainingConfig.forEach(
+                  (jumper, trainingConfig) {
+                    final currentDynamicParams = dynamicParams[jumper];
+                    dynamicParams[jumper] =
+                        currentDynamicParams!.copyWith(trainingConfig: trainingConfig);
+                  },
+                );
+                final changedDatabase =
+                    changedDb.copyWith(jumpersDynamicParameters: dynamicParams);
+                context.read<SimulationDatabaseCubit>().update(changedDatabase);
+              },
+            ),
           ),
         ),
       ),

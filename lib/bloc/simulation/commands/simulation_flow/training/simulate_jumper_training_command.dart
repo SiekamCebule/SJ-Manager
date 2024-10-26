@@ -30,10 +30,18 @@ class SimulateJumperTrainingCommand {
         'Cannot simulate the training for particular jumper ($jumper) because it does not have dynamic params record in database',
       );
     }
-    final trainingResult = JumperTrainingSimulator(
-            jumper: jumper, dynamicParams: dynamicParams, scaleFactor: scaleFactor)
-        .simulateTraining();
     final changedJumpersDynamicParams = Map.of(database.jumpersDynamicParameters);
+    changedJumpersDynamicParams[jumper] = changedJumpersDynamicParams[jumper]!.copyWith(
+      jumpingTechniqueChangeTrainingDaysLeft:
+          (dynamicParams.jumpingTechniqueChangeTrainingDaysLeft ?? 0) - 1,
+    );
+
+    final trainingResult = JumperTrainingSimulator(
+      jumper: jumper,
+      dynamicParams: changedJumpersDynamicParams[jumper]!,
+      scaleFactor: scaleFactor,
+    ).simulateTraining();
+
     changedJumpersDynamicParams[jumper] = changedJumpersDynamicParams[jumper]!.copyWith(
       form: trainingResult.form,
       jumpsConsistency: trainingResult.jumpsConsistency,

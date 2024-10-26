@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/bloc/simulation/commands/simulation_flow/set_up_subteams_command.dart';
 import 'package:sj_manager/bloc/simulation/commands/simulation_flow/set_up_trainings_command.dart';
-import 'package:sj_manager/bloc/simulation/commands/simulation_flow/training/simulate_global_training_command.dart';
 import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
@@ -36,7 +35,7 @@ class ContinueSimulationCommand {
     }
 
     if (!context.mounted) return;
-    SimulateGlobalTrainingCommand(context: context, database: changedDb).execute();
+    //SimulateGlobalTrainingCommand(context: context, database: changedDb).execute();
 
     context.read<SimulationDatabaseCubit>().update(changedDb);
   }
