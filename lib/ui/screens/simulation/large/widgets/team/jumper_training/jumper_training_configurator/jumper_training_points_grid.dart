@@ -31,7 +31,6 @@ class _JumperTrainingPointsGridState extends State<JumperTrainingPointsGrid> {
     JumperTrainingPointsCategory.takeoff: 0,
     JumperTrainingPointsCategory.flight: 0,
     JumperTrainingPointsCategory.landing: 0,
-    JumperTrainingPointsCategory.jumpsConsistency: 0,
     JumperTrainingPointsCategory.form: 0,
   };
   var _usedPoints = 0;
@@ -50,7 +49,6 @@ class _JumperTrainingPointsGridState extends State<JumperTrainingPointsGrid> {
           JumperTrainingPointsCategory.takeoff: 1,
           JumperTrainingPointsCategory.flight: 1,
           JumperTrainingPointsCategory.landing: 1,
-          JumperTrainingPointsCategory.jumpsConsistency: 1,
           JumperTrainingPointsCategory.form: 1,
         };
     _updateUsedPoints();
@@ -118,8 +116,6 @@ class _JumperTrainingPointsGridState extends State<JumperTrainingPointsGrid> {
               const Gap(3),
               constructLabel(translator.landing),
               const Gap(3),
-              constructLabel(translator.jumpsConsistencyShortened),
-              const Gap(3),
               constructLabel(translator.form),
             ],
           ),
@@ -133,8 +129,6 @@ class _JumperTrainingPointsGridState extends State<JumperTrainingPointsGrid> {
               constructRow(category: JumperTrainingPointsCategory.flight),
               const Gap(3),
               constructRow(category: JumperTrainingPointsCategory.landing),
-              const Gap(3),
-              constructRow(category: JumperTrainingPointsCategory.jumpsConsistency),
               const Gap(3),
               constructRow(category: JumperTrainingPointsCategory.form),
             ],

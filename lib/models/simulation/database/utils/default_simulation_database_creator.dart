@@ -45,7 +45,7 @@ class DefaultSimulationDatabaseCreator {
     final mode = options.mode.last!;
     _setUpIdsRepo();
     final jumpersDynamicParameters = {
-      for (var jumper in _jumpers.last) jumper: const JumperDynamicParams.empty(),
+      for (var jumper in _jumpers.last) jumper: JumperDynamicParams.empty(),
     };
     final jumperReports = {
       for (var jumper in _jumpers.last)

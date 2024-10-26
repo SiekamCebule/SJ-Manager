@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
-import 'package:sj_manager/models/simulation/flow/training/training_risk.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/personal_coach_team.dart';
 import 'package:sj_manager/repositories/countries/country_flags/country_flags_repo.dart';
@@ -55,9 +54,7 @@ class SearchForCandidatesCommand {
               );
               final changedDynamicParams = Map.of(database.jumpersDynamicParameters);
               changedDynamicParams[jumper] = changedDynamicParams[jumper]!.copyWith(
-                trainingConfig: const JumperTrainingConfig(
-                    trainingRisk: TrainingRisk.balanced,
-                    points: initialJumperTrainingPoints),
+                trainingConfig: initialJumperTrainingConfig,
               );
               final changedTeamReports = Map.of(database.teamReports);
               changedTeamReports[newUserTeam] = changedTeamReports.remove(oldUserTeam)!;
