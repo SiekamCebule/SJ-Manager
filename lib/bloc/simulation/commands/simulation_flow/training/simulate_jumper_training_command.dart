@@ -1,13 +1,13 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
+import 'package:sj_manager/models/simulation/flow/training/jumping_technique_change_training.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
+import 'package:sj_manager/models/user_db/jumper/jumping_technique.dart';
 import 'package:sj_manager/utils/random/random.dart';
 
 class SimulateJumperTrainingCommand {
@@ -15,13 +15,13 @@ class SimulateJumperTrainingCommand {
     required this.context,
     required this.database,
     required this.jumper,
-    required this.scale,
+    required this.scaleFactor,
   });
 
   final BuildContext context;
   final SimulationDatabase database;
   final Jumper jumper;
-  final double scale;
+  final double scaleFactor;
 
   void execute() {
     final dynamicParams = database.jumpersDynamicParameters[jumper];
@@ -31,7 +31,7 @@ class SimulateJumperTrainingCommand {
       );
     }
     final trainingResult = JumperTrainingSimulator(
-            jumper: jumper, dynamicParams: dynamicParams, scale: scale)
+            jumper: jumper, dynamicParams: dynamicParams, scaleFactor: scaleFactor)
         .simulateTraining();
     final changedJumpersDynamicParams = Map.of(database.jumpersDynamicParameters);
     changedJumpersDynamicParams[jumper] = changedJumpersDynamicParams[jumper]!.copyWith(
@@ -53,13 +53,12 @@ class JumperTrainingSimulator {
   JumperTrainingSimulator({
     required this.jumper,
     required this.dynamicParams,
-    required this.scale,
+    required this.scaleFactor,
   });
 
   final Jumper jumper;
   final JumperDynamicParams dynamicParams;
-  final double
-      scale; // 1.0 to typowy trening. 0.5 to połowiczny trening (połowiczne wyniki, ryzyka..)
+  final double scaleFactor;
 
   late JumperTrainingConfig _trainingConfig;
   late double _developmentPotentialFactor;
@@ -67,113 +66,223 @@ class JumperTrainingSimulator {
   late double _flightQuality;
   late double _landingQuality;
   late double _form;
+  late double _formDelta;
+  late double _formStability;
+  late double _jumpsConsistency;
+  late JumpingTechnique _jumpingTechnique;
+  late double _fatigue;
 
   JumperTrainingResult simulateTraining() {
-    if (dynamicParams.trainingConfig == null) {
-      throw ArgumentError(
-        'Jumper\'s ($jumper) training config is null so cannot simulate the training',
-      );
-    }
-
-    _trainingConfig = dynamicParams.trainingConfig!;
-    // TODO: Injuries
-    _setDevelopmentPotentialFactor();
+    _setUp();
+    _calculateDevelopmentPotentialFactor();
     _simulateTakeoffTraining();
     _simulateFlightTraining();
     _simulateLandingTraining();
     _simulateFormTraining();
+    _simulateFormStabilityChange();
+    _simulateJumpsConsistencyTraining();
+    _simulateJumpingTechniqueChange();
+    _simulateFatigue();
+    _simulateInjuries();
 
     final newSkills = jumper.skills.copyWith(
       takeoffQuality: _takeoffQuality,
       flightQuality: _flightQuality,
       landingQuality: _landingQuality,
-    ); // TODO
+    );
     return JumperTrainingResult(
       skills: newSkills,
       form: _form,
-      jumpsConsistency: jumpsConsistency,
-      fatigue: fatigue,
+      formStability: _formStability,
+      jumpsConsistency: _jumpsConsistency,
+      fatigue: _fatigue,
     );
   }
 
-  void _setDevelopmentPotentialFactor() {
-    final fromMorale = dynamicParams.morale < 0.2 ? dynamicParams.morale * (70 / 100) : 0;
-    final fromFatigue =
-        -dynamicParams.fatigue * (30 / 100); // TODO: Dopasować jeszcze te mnożniki
+  void _setUp() {
+    if (dynamicParams.trainingConfig == null) {
+      throw ArgumentError(
+        'Jumper\'s ($jumper) training config is null so cannot simulate the training',
+      );
+    }
+    _trainingConfig = dynamicParams.trainingConfig!;
+  }
 
-    // Bardzo ważny współczynnik potencjału rozwoju. Tworzony deklaratywnie
+  void _calculateDevelopmentPotentialFactor() {
+    final fromMorale = dynamicParams.morale < 0.2 ? dynamicParams.morale * (40 / 100) : 0;
+    final fromFatigue = -dynamicParams.fatigue * (60 / 100);
+
     _developmentPotentialFactor = 0.5 + (fromMorale + fromFatigue) / 4;
   }
 
   void _simulateTakeoffTraining() {
     _takeoffQuality = jumper.skills.takeoffQuality;
 
-    const takeoffDivider = 100.0;
     const developmentPotentialMultiplier = 1.0;
-    const trainingEffeciencyMultiplier = 1.0;
+    const trainingEfficiencyMultiplier = 1.0;
 
-    final takeoffPoints = _trainingConfig.points[JumperTrainingPointsCategory.takeoff]!;
+    final points = _trainingConfig.points[JumperTrainingPointsCategory.takeoff]!;
 
-    var takeoffDelta = -0.05;
-    takeoffDelta += (takeoffPoints *
+    const potentialRandomForOnePoint = 0.15;
+
+    final negativeRandom = linearRandomDouble(0, potentialRandomForOnePoint * 5);
+    final positiveRandomMax =
         (_developmentPotentialFactor * developmentPotentialMultiplier) *
-        (dynamicParams.trainingEffeciencyFactor * trainingEffeciencyMultiplier));
-    takeoffDelta /= takeoffDivider;
-    const maxRandomOnOneSide = 0.03;
-    final takeoffRandom = linearRandomDouble(-maxRandomOnOneSide, maxRandomOnOneSide);
-    takeoffDelta += (takeoffRandom);
-    takeoffDelta *= scale;
+            (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
+            (potentialRandomForOnePoint * points);
 
-    _takeoffQuality += takeoffDelta;
+    final positiveRandom = linearRandomDouble(0, positiveRandomMax);
+    final random = (negativeRandom + positiveRandom) * scaleFactor;
+
+    _takeoffQuality += random;
   }
 
   void _simulateFlightTraining() {
     _flightQuality = jumper.skills.flightQuality;
 
-    const flightDivider = 100.0;
     const developmentPotentialMultiplier = 1.0;
-    const trainingEffeciencyMultiplier = 1.0;
+    const trainingEfficiencyMultiplier = 1.0;
 
-    final flightPoints = _trainingConfig.points[JumperTrainingPointsCategory.flight]!;
+    final points = _trainingConfig.points[JumperTrainingPointsCategory.flight]!;
 
-    var flightDelta = -0.05;
-    flightDelta += (flightPoints *
+    const potentialRandomForOnePoint = 0.15;
+
+    final negativeRandom = linearRandomDouble(0, potentialRandomForOnePoint * 5);
+    final positiveRandomMax =
         (_developmentPotentialFactor * developmentPotentialMultiplier) *
-        (dynamicParams.trainingEffeciencyFactor * trainingEffeciencyMultiplier));
-    flightDelta /= flightDivider;
-    const maxRandomOnOneSide = 0.03;
-    final flightRandom = linearRandomDouble(-maxRandomOnOneSide, maxRandomOnOneSide);
-    flightDelta += (flightRandom);
-    flightDelta *= scale;
+            (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
+            (potentialRandomForOnePoint * points);
 
-    _flightQuality += flightDelta;
+    final positiveRandom = linearRandomDouble(0, positiveRandomMax);
+    final random = (negativeRandom + positiveRandom) * scaleFactor;
+
+    _flightQuality += random;
   }
 
   void _simulateLandingTraining() {
     _landingQuality = jumper.skills.landingQuality;
 
-    const landingDivider = 100.0; // 100.0 dla 0.1
     const developmentPotentialMultiplier = 1.0;
-    const trainingEffeciencyMultiplier = 1.0;
+    const trainingEfficiencyMultiplier = 1.0;
 
-    final flightPoints = _trainingConfig.points[JumperTrainingPointsCategory.landing]!;
+    final points = _trainingConfig.points[JumperTrainingPointsCategory.landing]!;
 
-    var landingDelta = -0.05;
-    landingDelta += (flightPoints *
+    const potentialRandomForOnePoint = 0.15;
+
+    final negativeRandom = linearRandomDouble(0, potentialRandomForOnePoint * 5);
+    final positiveRandomMax =
         (_developmentPotentialFactor * developmentPotentialMultiplier) *
-        (dynamicParams.trainingEffeciencyFactor * trainingEffeciencyMultiplier));
-    landingDelta /= landingDivider;
-    const maxRandomOnOneSide = 0.03;
-    final landingRandom = linearRandomDouble(-maxRandomOnOneSide, maxRandomOnOneSide);
-    landingDelta += (landingRandom);
-    landingDelta *= scale;
+            (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
+            (potentialRandomForOnePoint * points);
 
-    _flightQuality += landingDelta;
+    final positiveRandom = linearRandomDouble(0, positiveRandomMax);
+    final random = (negativeRandom + positiveRandom) * scaleFactor;
+
+    _landingQuality += random;
   }
 
   void _simulateFormTraining() {
+    _form = dynamicParams.form;
+
+    const developmentPotentialMultiplier = 1.0;
+    const trainingEfficiencyMultiplier = 1.0;
+
+    final formPoints = _trainingConfig.points[JumperTrainingPointsCategory.form]!;
+
+    const potentialRandomForOnePoint = 0.15;
+
+    final negativeRandomMax =
+        potentialRandomForOnePoint * 5 * (1.0 - dynamicParams.formStability);
+    final negativeRandom = linearRandomDouble(0, negativeRandomMax);
+
+    final positiveRandomMax =
+        (_developmentPotentialFactor * developmentPotentialMultiplier) *
+            (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
+            (potentialRandomForOnePoint * formPoints) *
+            (1.0 / _form);
+
+    final positiveRandom = linearRandomDouble(0, positiveRandomMax);
+    final random = (negativeRandom + positiveRandom) * scaleFactor;
+
+    _formDelta = random;
+    _form += random;
+  }
+
+  void _simulateFormStabilityChange() {
+    _formStability = dynamicParams.formStability;
+
+    final delta = 0.05 - (_formDelta / 1);
+
+    _formStability += delta;
+  }
+
+  void _simulateJumpsConsistencyTraining() {
+    _jumpsConsistency = dynamicParams.jumpsConsistency;
+
+    const developmentPotentialMultiplier = 1.0;
+    const trainingEfficiencyMultiplier = 1.0;
+
+    _trainingConfig.balance;
+    const potentialRandomForMaxChange = 0.1;
+
+    final negativeRandomMax = (_trainingConfig.balance * 0.5);
+    final negativeRandom = linearRandomDouble(0, negativeRandomMax);
+
+    final positiveRandomMax =
+        (_developmentPotentialFactor * developmentPotentialMultiplier) *
+            (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
+            (potentialRandomForMaxChange * _trainingConfig.balance);
+    final positiveRandom = linearRandomDouble(0, positiveRandomMax);
+
+    final random = (negativeRandom + positiveRandom) * scaleFactor;
+
+    _jumpsConsistency += random;
+  }
+
+  void _simulateJumpingTechniqueChange() {
+    _jumpingTechnique = jumper.skills.jumpingTechnique;
+
+    final jumpingTechniqueChangeIsEnded = true; // TODO
+    if (jumpingTechniqueChangeIsEnded) {
+      final shouldIncrease = _trainingConfig.jumpingTechniqueChangeTraining ==
+          JumpingTechniqueChangeTrainingType.increaseRisk;
+      final shouldDecrease = _trainingConfig.jumpingTechniqueChangeTraining ==
+          JumpingTechniqueChangeTrainingType.decreaseRisk;
+      if (shouldIncrease) {
+        _jumpingTechnique = getMoreRiskyJumpingTechnique(_jumpingTechnique);
+      } else if (shouldDecrease) {
+        _jumpingTechnique = getLessRiskyJumpingTechnique(_jumpingTechnique);
+      }
+    }
+  }
+
+  void _simulateFatigue() {
+    _fatigue = 0;
+
+    const onePointEffectDivider = 100;
+    const fatigueBaseDelta = -0.5;
+
+    const takeoffDivider = 8.0;
+    const flightDivider = 8.0;
+    const landingDivider = 30.0;
+    const formDivider = 1.0;
+
+    final takeoffPoints = _trainingConfig.points[JumperTrainingPointsCategory.takeoff]!;
+    final flightPoints = _trainingConfig.points[JumperTrainingPointsCategory.flight]!;
+    final landingPoints = _trainingConfig.points[JumperTrainingPointsCategory.landing]!;
+    final formPoints = _trainingConfig.points[JumperTrainingPointsCategory.form]!;
+
+    final fatigueDelta = fatigueBaseDelta +
+        (takeoffPoints / takeoffDivider / onePointEffectDivider) +
+        (flightPoints / flightDivider / onePointEffectDivider) +
+        (landingPoints / landingDivider / onePointEffectDivider) +
+        (formPoints / formDivider / onePointEffectDivider);
+
+    _fatigue += fatigueDelta;
+  }
+
+  void _simulateInjuries() {
     // TODO
-    _form = 0;
   }
 }
 
@@ -181,12 +290,14 @@ class JumperTrainingResult {
   const JumperTrainingResult({
     required this.skills,
     required this.form,
+    required this.formStability,
     required this.jumpsConsistency,
     required this.fatigue,
   });
 
   final JumperSkills skills;
   final double form;
+  final double formStability;
   final double jumpsConsistency;
   final double fatigue;
 }

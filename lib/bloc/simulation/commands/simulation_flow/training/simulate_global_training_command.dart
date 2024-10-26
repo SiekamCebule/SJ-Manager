@@ -12,10 +12,15 @@ class SimulateGlobalTrainingCommand {
   final SimulationDatabase database;
 
   void execute() {
+    const trainingScaleFactor = 1.0; // TODO
     final jumpers = database.jumpers.last;
     for (var jumper in jumpers) {
-      SimulateJumperTrainingCommand(context: context, database: database, jumper: jumper)
-          .execute();
+      SimulateJumperTrainingCommand(
+        context: context,
+        database: database,
+        jumper: jumper,
+        scaleFactor: trainingScaleFactor,
+      ).execute();
     }
   }
 }

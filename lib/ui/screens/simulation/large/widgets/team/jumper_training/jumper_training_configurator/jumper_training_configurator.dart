@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_training/jumper_training_configurator/jumper_training_points_grid.dart';
-import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_training/jumper_training_configurator/training_risk_dropdown_menu.dart';
+import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_training/jumper_training_configurator/jumping_technique_change_training_dropdown.dart';
 import 'package:sj_manager/utils/translating.dart';
 
 class JumperTrainingConfigurator extends StatefulWidget {
@@ -50,11 +50,11 @@ class _JumperTrainingConfiguratorState extends State<JumperTrainingConfigurator>
         Row(
           children: [
             Flexible(
-              child: TrainingRiskDropdownMenu(
-                initial: widget.trainingConfig.trainingRisk,
-                onChange: (trainingRisk) {
+              child: JumpingTechniqueChangeTrainingDropdown(
+                initial: widget.trainingConfig.jumpingTechniqueChangeTraining,
+                onChange: (jumpingTechniqueChangeTraining) {
                   final newConfig = widget.trainingConfig.copyWith(
-                    trainingRisk: trainingRisk,
+                    jumpingTechniqueChangeTraining: jumpingTechniqueChangeTraining,
                   );
                   widget.onChange(newConfig);
                 },

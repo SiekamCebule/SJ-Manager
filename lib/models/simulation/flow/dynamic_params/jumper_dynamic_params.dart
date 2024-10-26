@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/user_db/psyche/level_of_consciousness_labels.dart';
@@ -6,7 +7,8 @@ class JumperDynamicParams {
   const JumperDynamicParams({
     required this.trainingConfig,
     required this.form,
-    required this.trainingEffeciencyFactor,
+    required this.formStability,
+    required this.trainingEfficiencyFactor,
     required this.jumpsConsistency,
     required this.morale,
     required this.fatigue,
@@ -18,8 +20,11 @@ class JumperDynamicParams {
   /// From 1 to 20
   final double form;
 
+  /// from 0 to 1
+  final double formStability;
+
   /// From 0 to 1
-  final double trainingEffeciencyFactor;
+  final double trainingEfficiencyFactor;
 
   /// From 1 to 20
   final double jumpsConsistency;
@@ -37,7 +42,8 @@ class JumperDynamicParams {
       : this(
           trainingConfig: null,
           form: 0,
-          trainingEffeciencyFactor: 0,
+          formStability: 0,
+          trainingEfficiencyFactor: 0,
           jumpsConsistency: 0,
           morale: 0,
           fatigue: 0,
@@ -49,7 +55,8 @@ class JumperDynamicParams {
     return {
       'trainingConfig': trainingConfig?.toJson(),
       'form': form,
-      'trainingEffeciencyFactor': trainingEffeciencyFactor,
+      'formStability': formStability,
+      'trainingEffeciencyFactor': trainingEfficiencyFactor,
       'jumpsConsistency': jumpsConsistency,
       'morale': morale,
       'fatigue': fatigue,
@@ -64,7 +71,8 @@ class JumperDynamicParams {
           ? JumperTrainingConfig.fromJson(trainingConfigJson)
           : null,
       form: json['form'],
-      trainingEffeciencyFactor: json['trainingEffeciencyFactor'],
+      formStability: json['formStability'],
+      trainingEfficiencyFactor: json['trainingEffeciencyFactor'],
       jumpsConsistency: json['jumpsConsistency'],
       morale: json['morale'],
       fatigue: json['fatigue'],
@@ -75,7 +83,8 @@ class JumperDynamicParams {
   JumperDynamicParams copyWith({
     JumperTrainingConfig? trainingConfig,
     double? form,
-    double? trainingEffeciencyFactor,
+    double? formStability,
+    double? trainingEfficiencyFactor,
     double? jumpsConsistency,
     double? morale,
     double? fatigue,
@@ -84,7 +93,8 @@ class JumperDynamicParams {
     return JumperDynamicParams(
       trainingConfig: trainingConfig ?? this.trainingConfig,
       form: form ?? this.form,
-      trainingEffeciencyFactor: trainingEffeciencyFactor ?? this.trainingEffeciencyFactor,
+      formStability: formStability ?? this.formStability,
+      trainingEfficiencyFactor: trainingEfficiencyFactor ?? this.trainingEfficiencyFactor,
       jumpsConsistency: jumpsConsistency ?? this.jumpsConsistency,
       morale: morale ?? this.morale,
       fatigue: fatigue ?? this.fatigue,
