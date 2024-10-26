@@ -7,10 +7,12 @@ import 'package:sj_manager/ui/dialogs/simple_help_dialog.dart';
 class JumpingTechniqueChangeTrainingDropdown extends StatelessWidget {
   const JumpingTechniqueChangeTrainingDropdown({
     super.key,
+    this.width,
     this.initial,
     required this.onChange,
   });
 
+  final double? width;
   final JumpingTechniqueChangeTrainingType? initial;
   final Function(JumpingTechniqueChangeTrainingType value) onChange;
 
@@ -19,6 +21,7 @@ class JumpingTechniqueChangeTrainingDropdown extends StatelessWidget {
     return MyDropdownField(
       label: const Text('Ryzyko w skokach'),
       initial: initial,
+      width: width,
       onChange: (value) => onChange(value!),
       entries: const [
         DropdownMenuEntry(

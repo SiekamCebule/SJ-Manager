@@ -29,7 +29,7 @@ class JumperInTeamTrainingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 240,
+      height: 260,
       child: Card(
         color: Theme.of(context).colorScheme.surfaceContainerLow,
         child: Row(
@@ -60,7 +60,7 @@ class JumperInTeamTrainingCard extends StatelessWidget {
                     const Gap(60),
                   ],
                   SizedBox(
-                    width: 345,
+                    width: 400,
                     child: JumperTrainingConfigurator(
                       jumper: jumper,
                       trainingConfig: trainingConfig,

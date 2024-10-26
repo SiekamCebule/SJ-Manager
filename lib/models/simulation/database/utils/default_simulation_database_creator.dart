@@ -81,7 +81,7 @@ class DefaultSimulationDatabaseCreator {
         mode: mode,
         userSubteam: userSubteam,
         personalCoachTeam: personalCoachTeam,
-        trainingPoints: 40, // TODO: make it dependent on other factors
+        trainingPoints: 29, // TODO: make it dependent on other factors
       ),
       startDate: options.startDate.last!.date,
       currentDate: options.startDate.last!.date,

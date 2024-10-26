@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
-import 'package:sj_manager/models/simulation/flow/training/jumping_technique_change_training.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
 import 'package:sj_manager/ui/reusable_widgets/sjm_dialog_ok_pop_button.dart';
