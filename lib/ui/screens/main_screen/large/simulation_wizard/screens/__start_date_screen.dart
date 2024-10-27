@@ -32,7 +32,7 @@ class _StartDateScreenState extends State<_StartDateScreen> {
         Expanded(
           flex: 5,
           child: Material(
-            color: Theme.of(context).colorScheme.surfaceContainerLow,
+            color: Theme.of(context).colorScheme.surfaceContainer,
             child: ListView.builder(
               itemCount: startDates.length,
               itemBuilder: (context, index) {

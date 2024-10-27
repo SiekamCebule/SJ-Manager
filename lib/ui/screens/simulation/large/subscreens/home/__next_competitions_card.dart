@@ -29,7 +29,7 @@ class _NextCompetitionCard extends StatelessWidget {
           ),
         ],
       ),
-      content: Column(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

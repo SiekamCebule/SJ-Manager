@@ -136,7 +136,7 @@ class JumperInTeamOverviewCard extends StatelessWidget {
     return SizedBox(
       height: 140,
       child: Card(
-        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        color: Theme.of(context).colorScheme.surfaceContainer,
         child: Row(
           children: [
             const Gap(15),

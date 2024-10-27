@@ -83,7 +83,7 @@ class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersD
           children: [
             SearchBar(
               backgroundColor: WidgetStatePropertyAll(
-                Theme.of(context).colorScheme.surfaceContainerLow,
+                Theme.of(context).colorScheme.surfaceContainer,
               ),
               overlayColor: WidgetStateColor.resolveWith((states) {
                 if (states.contains(WidgetState.hovered)) {
