@@ -29,6 +29,7 @@ class _TeamScreenState extends State<_TeamScreen> {
                     jumper: jumper,
                     mode: _selectedMode,
                     onTrainingChange: (trainingConfig) {
+                      print('change jumper training with a config of $trainingConfig');
                       ChangeJumperTrainingCommand(
                         context: context,
                         database: database,

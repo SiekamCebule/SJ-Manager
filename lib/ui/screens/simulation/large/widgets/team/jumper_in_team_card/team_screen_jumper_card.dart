@@ -22,6 +22,7 @@ class TeamScreenJumperCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = context.watch<SimulationDatabaseCubit>().state;
     final trainingConfig = database.jumpersDynamicParameters[jumper]!.trainingConfig;
+    print('rebuild TeamScreenJumperCard with training config of $trainingConfig');
     if (trainingConfig == null && mode == TeamScreenJumperCardMode.training) {
       throw StateError(
         'Prosimy o zgłoszenie nam tego błędu. Nie można wyświetlić informacji o treningu skoczka, gdyż JumperTrainingConfig skoczka jest nullem (skoczek: $jumper).',
@@ -34,6 +35,7 @@ class TeamScreenJumperCard extends StatelessWidget {
             reports: database.jumpersReports[jumper]!,
           )
         : JumperInTeamTrainingCard(
+            key: ValueKey(trainingConfig?.jumpingTechniqueChangeTraining),
             jumper: jumper,
             jumperRatings: database.jumpersReports[jumper]!,
             trainingConfig: trainingConfig!,

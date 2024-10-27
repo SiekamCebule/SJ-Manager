@@ -23,6 +23,7 @@ class ChangeJumpingTechniqueChangeTrainingCommand {
   final Function(bool confirmed) onFinish;
 
   Future<void> execute() async {
+    print('Change jumping technique training. Old: $oldTraining. New: $newTraining');
     if (oldTraining == JumpingTechniqueChangeTrainingType.maintain) {
       final bool? ok = await showSjmDialog(
         context: context,
@@ -32,7 +33,7 @@ class ChangeJumpingTechniqueChangeTrainingCommand {
         ),
       );
       onFinish(ok ?? false);
-    } else if (oldTraining != JumpingTechniqueChangeTrainingType.maintain) {
+    } else {
       final daysLeft = database
           .jumpersDynamicParameters[jumper]!.jumpingTechniqueChangeTrainingDaysLeft;
 
@@ -41,7 +42,7 @@ class ChangeJumpingTechniqueChangeTrainingCommand {
         barrierDismissible: true,
         child: _DoYouWannaStopDialog(
           oldTraining: oldTraining,
-          daysCount: daysLeft ?? -1,
+          daysCount: daysLeft ?? 5, // TODO days left
         ),
       );
       onFinish(ok ?? false);
@@ -63,7 +64,7 @@ class _DoYouWannaChangeDialog extends StatelessWidget {
         : 'Czy chcesz zacząć trening polegający na zmianie sposobu skakania? Zajmie to trochę czasu. Po zakończeniu treningu zawodnik/zawodniczka będzie wkładał(a) mniej ryzyka w swoje skoki - będą one bardziej powtarzalne, ale być może stracą na "błysku"';
 
     return AlertDialog(
-      title: const Text('Czy chcesz rozpocząć trening?'),
+      title: const Text('Zmiana sposobu skakania'),
       content: Text(contentText),
       actions: [
         TextButton(
@@ -106,7 +107,8 @@ class _DoYouWannaStopDialog extends StatelessWidget {
                   style: regularText,
                 ),
                 TextSpan(
-                  text: sjmFutureDaysDescription(context: context, days: daysCount),
+                  text: sjmFutureDaysDescription(context: context, days: daysCount)
+                      .toLowerCase(),
                   style: boldText,
                 ),
               ],
@@ -121,7 +123,8 @@ class _DoYouWannaStopDialog extends StatelessWidget {
                   style: regularText,
                 ),
                 TextSpan(
-                  text: sjmFutureDaysDescription(context: context, days: daysCount),
+                  text: sjmFutureDaysDescription(context: context, days: daysCount)
+                      .toLowerCase(),
                   style: boldText,
                 ),
               ],
@@ -129,7 +132,7 @@ class _DoYouWannaStopDialog extends StatelessWidget {
           );
 
     return AlertDialog(
-      title: const Text('Czy chcesz zakończyć trening?'),
+      title: const Text('Zakończenie zmiany sposobu skakania'),
       content: textWidget,
       actions: [
         TextButton(
