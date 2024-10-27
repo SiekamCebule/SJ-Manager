@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
+import 'package:sj_manager/commands/simulation/common/simulation_database_cubit.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_in_team_card/jumper_in_team_overview_card.dart';
@@ -22,7 +22,6 @@ class TeamScreenJumperCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final database = context.watch<SimulationDatabaseCubit>().state;
     final trainingConfig = database.jumpersDynamicParameters[jumper]!.trainingConfig;
-    print('rebuild TeamScreenJumperCard with training config of $trainingConfig');
     if (trainingConfig == null && mode == TeamScreenJumperCardMode.training) {
       throw StateError(
         'Prosimy o zgłoszenie nam tego błędu. Nie można wyświetlić informacji o treningu skoczka, gdyż JumperTrainingConfig skoczka jest nullem (skoczek: $jumper).',
@@ -35,9 +34,10 @@ class TeamScreenJumperCard extends StatelessWidget {
             reports: database.jumpersReports[jumper]!,
           )
         : JumperInTeamTrainingCard(
-            key: ValueKey(trainingConfig?.jumpingTechniqueChangeTraining),
+            //key: ValueKey(trainingConfig?.jumpingTechniqueChangeTraining),
             jumper: jumper,
             jumperRatings: database.jumpersReports[jumper]!,
+            dynamicParams: database.jumpersDynamicParameters[jumper]!,
             trainingConfig: trainingConfig!,
             onTrainingChange: onTrainingChange,
             managerPointsCount: database.managerData.trainingPoints,

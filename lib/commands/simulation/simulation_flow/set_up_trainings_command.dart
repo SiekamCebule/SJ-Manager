@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
+import 'package:sj_manager/commands/simulation/common/simulation_database_cubit.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
@@ -22,10 +22,6 @@ class SetUpTrainingsCommand {
 
   Future<void> execute() async {
     final dbHelper = context.read<SimulationDatabaseHelper>();
-
-    final changedDate = database.currentDate.add(const Duration(days: 1));
-    final changedDb = database.copyWith(currentDate: changedDate);
-    context.read<SimulationDatabaseCubit>().update(changedDb);
 
     await showSjmDialog(
       barrierDismissible: false,
@@ -53,8 +49,9 @@ class SetUpTrainingsCommand {
                         currentDynamicParams!.copyWith(trainingConfig: trainingConfig);
                   },
                 );
+                print('new dynamic params uuuuuuuu : $dynamicParams');
                 final changedDatabase =
-                    changedDb.copyWith(jumpersDynamicParameters: dynamicParams);
+                    database.copyWith(jumpersDynamicParameters: dynamicParams);
                 context.read<SimulationDatabaseCubit>().update(changedDatabase);
               },
             ),

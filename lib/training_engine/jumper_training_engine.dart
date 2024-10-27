@@ -1,64 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
-import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
-import 'package:sj_manager/models/simulation/flow/training/jumping_technique_change_training.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
-import 'package:sj_manager/models/user_db/jumper/jumping_technique.dart';
+import 'package:sj_manager/training_engine/jumper_training_result.dart';
 import 'package:sj_manager/utils/random/random.dart';
 
-class SimulateJumperTrainingCommand {
-  SimulateJumperTrainingCommand({
-    required this.context,
-    required this.database,
-    required this.jumper,
-    required this.scaleFactor,
-  });
-
-  final BuildContext context;
-  final SimulationDatabase database;
-  final Jumper jumper;
-  final double scaleFactor;
-
-  void execute() {
-    final dynamicParams = database.jumpersDynamicParameters[jumper];
-    if (dynamicParams == null) {
-      throw StateError(
-        'Cannot simulate the training for particular jumper ($jumper) because it does not have dynamic params record in database',
-      );
-    }
-    final changedJumpersDynamicParams = Map.of(database.jumpersDynamicParameters);
-    changedJumpersDynamicParams[jumper] = changedJumpersDynamicParams[jumper]!.copyWith(
-      jumpingTechniqueChangeTrainingDaysLeft:
-          (dynamicParams.jumpingTechniqueChangeTrainingDaysLeft ?? 0) - 1,
-    );
-
-    final trainingResult = JumperTrainingSimulator(
-      jumper: jumper,
-      dynamicParams: changedJumpersDynamicParams[jumper]!,
-      scaleFactor: scaleFactor,
-    ).simulateTraining();
-
-    changedJumpersDynamicParams[jumper] = changedJumpersDynamicParams[jumper]!.copyWith(
-      form: trainingResult.form,
-      jumpsConsistency: trainingResult.jumpsConsistency,
-      fatigue: trainingResult.fatigue,
-    );
-    final changedJumpers = List.of(database.jumpers.last);
-    changedJumpers[changedJumpers.indexOf(jumper)] =
-        jumper.copyWith(skills: trainingResult.skills);
-    database.jumpers.set(changedJumpers); // Maybe it doesn't work correctly
-    final changedDatabase =
-        database.copyWith(jumpersDynamicParameters: changedJumpersDynamicParams);
-    context.read<SimulationDatabaseCubit>().update(changedDatabase);
-  }
-}
-
-class JumperTrainingSimulator {
-  JumperTrainingSimulator({
+class JumperTrainingEngine {
+  JumperTrainingEngine({
     required this.jumper,
     required this.dynamicParams,
     required this.scaleFactor,
@@ -74,22 +21,18 @@ class JumperTrainingSimulator {
   late double _flightQuality;
   late double _landingQuality;
   late double _form;
-  late double _formDelta;
   late double _formStability;
   late double _jumpsConsistency;
-  late JumpingTechnique _jumpingTechnique;
   late double _fatigue;
 
-  JumperTrainingResult simulateTraining() {
+  JumperTrainingResult doTraining() {
     _setUp();
     _calculateDevelopmentPotentialFactor();
     _simulateTakeoffTraining();
     _simulateFlightTraining();
     _simulateLandingTraining();
     _simulateFormTraining();
-    _simulateFormStabilityChange();
     _simulateJumpsConsistencyTraining();
-    _simulateJumpingTechniqueChange();
     _simulateFatigue();
     _simulateInjuries();
 
@@ -199,8 +142,7 @@ class JumperTrainingSimulator {
 
     const potentialRandomForOnePoint = 0.15;
 
-    final negativeRandomMax =
-        potentialRandomForOnePoint * 5 * (1.0 - dynamicParams.formStability);
+    const negativeRandomMax = potentialRandomForOnePoint * 5;
     final negativeRandom = linearRandomDouble(0, negativeRandomMax);
 
     final positiveRandomMax =
@@ -212,16 +154,7 @@ class JumperTrainingSimulator {
     final positiveRandom = linearRandomDouble(0, positiveRandomMax);
     final random = (negativeRandom + positiveRandom) * scaleFactor;
 
-    _formDelta = random;
     _form += random;
-  }
-
-  void _simulateFormStabilityChange() {
-    _formStability = dynamicParams.formStability;
-
-    final delta = 0.05 - (_formDelta / 1);
-
-    _formStability += delta;
   }
 
   void _simulateJumpsConsistencyTraining() {
@@ -245,23 +178,6 @@ class JumperTrainingSimulator {
     final random = (negativeRandom + positiveRandom) * scaleFactor;
 
     _jumpsConsistency += random;
-  }
-
-  void _simulateJumpingTechniqueChange() {
-    _jumpingTechnique = jumper.skills.jumpingTechnique;
-
-    final jumpingTechniqueChangeIsEnded = true; // TODO
-    if (jumpingTechniqueChangeIsEnded) {
-      final shouldIncrease = _trainingConfig.jumpingTechniqueChangeTraining ==
-          JumpingTechniqueChangeTrainingType.increaseRisk;
-      final shouldDecrease = _trainingConfig.jumpingTechniqueChangeTraining ==
-          JumpingTechniqueChangeTrainingType.decreaseRisk;
-      if (shouldIncrease) {
-        _jumpingTechnique = getMoreRiskyJumpingTechnique(_jumpingTechnique);
-      } else if (shouldDecrease) {
-        _jumpingTechnique = getLessRiskyJumpingTechnique(_jumpingTechnique);
-      }
-    }
   }
 
   void _simulateFatigue() {
@@ -292,20 +208,4 @@ class JumperTrainingSimulator {
   void _simulateInjuries() {
     // TODO
   }
-}
-
-class JumperTrainingResult {
-  const JumperTrainingResult({
-    required this.skills,
-    required this.form,
-    required this.formStability,
-    required this.jumpsConsistency,
-    required this.fatigue,
-  });
-
-  final JumperSkills skills;
-  final double form;
-  final double formStability;
-  final double jumpsConsistency;
-  final double fatigue;
 }

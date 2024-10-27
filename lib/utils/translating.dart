@@ -23,7 +23,8 @@ String sjmFutureDateDescription(
   final int hoursDifference = difference.inHours;
 
   if (difference.isNegative) {
-    throw ArgumentError('The target date must be today or in the future.');
+    throw ArgumentError(
+        'The target date must be today or in the future. Difference: $difference');
   }
 
   if (hoursDifference < 24) {
@@ -51,6 +52,6 @@ String sjmFutureDaysDescription({
   } else if (days > 2) {
     return translator.inNDays(days);
   } else {
-    throw ArgumentError('The target date must be today or in the future.');
+    throw ArgumentError('The days parameter must be positive.');
   }
 }

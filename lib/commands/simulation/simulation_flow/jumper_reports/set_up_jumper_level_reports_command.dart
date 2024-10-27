@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/bloc/simulation/commands/simulation_flow/jumper_reports/default_jumper_level_report_creator.dart';
+import 'package:sj_manager/commands/simulation/simulation_flow/jumper_reports/default_jumper_level_report_creator.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
 

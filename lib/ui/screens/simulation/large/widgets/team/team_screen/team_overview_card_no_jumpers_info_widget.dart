@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/bloc/simulation/simulation_screen_navigation_cubit.dart';
+import 'package:sj_manager/commands/simulation/common/simulation_screen_navigation_cubit.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/ui/reusable_widgets/link_text_button.dart';
 

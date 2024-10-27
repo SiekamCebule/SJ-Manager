@@ -2,8 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumping_technique_change_training.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/training_engine/components/jumping_technique_change_training_duration_calculator.dart';
 import 'package:sj_manager/utils/show_dialog.dart';
 import 'package:sj_manager/utils/translating.dart';
+
+class ChangeJumpingTechniqueChangeTrainingCommandResult {
+  const ChangeJumpingTechniqueChangeTrainingCommandResult({
+    required this.confirmed,
+    this.daysLeft,
+  });
+
+  final bool confirmed;
+  final int? daysLeft;
+}
 
 class ChangeJumpingTechniqueChangeTrainingCommand {
   ChangeJumpingTechniqueChangeTrainingCommand({
@@ -20,52 +31,112 @@ class ChangeJumpingTechniqueChangeTrainingCommand {
   final Jumper jumper;
   final JumpingTechniqueChangeTrainingType oldTraining;
   final JumpingTechniqueChangeTrainingType newTraining;
-  final Function(bool confirmed) onFinish;
+  final Function(ChangeJumpingTechniqueChangeTrainingCommandResult result) onFinish;
 
   Future<void> execute() async {
-    print('Change jumping technique training. Old: $oldTraining. New: $newTraining');
     if (oldTraining == JumpingTechniqueChangeTrainingType.maintain) {
+      final levelOfConsciousness =
+          database.jumpersDynamicParameters[jumper]!.levelOfConsciousness;
+      final daysLeft = JumpingTechniqueChangeTrainingDurationCalculator().calculateDays(
+        trainingType: newTraining,
+        levelOfConsciousness: levelOfConsciousness,
+      );
       final bool? ok = await showSjmDialog(
         context: context,
         barrierDismissible: true,
         child: _DoYouWannaChangeDialog(
           newTraining: newTraining,
+          duration: daysLeft,
         ),
       );
-      onFinish(ok ?? false);
+      onFinish(ChangeJumpingTechniqueChangeTrainingCommandResult(
+        confirmed: ok ?? false,
+        daysLeft: daysLeft,
+      ));
     } else {
       final daysLeft = database
           .jumpersDynamicParameters[jumper]!.jumpingTechniqueChangeTrainingDaysLeft;
+      if (daysLeft == null) {
+        throw StateError(
+          'Jumper ($jumper) have trainingConfig.jumpingTechniqueChangeTraining set, but jumpingTechniqueChangeTrainingDaysLeft is null',
+        );
+      }
 
       final bool? ok = await showSjmDialog(
         context: context,
         barrierDismissible: true,
         child: _DoYouWannaStopDialog(
           oldTraining: oldTraining,
-          daysCount: daysLeft ?? 5, // TODO days left
+          daysCount: daysLeft,
         ),
       );
-      onFinish(ok ?? false);
+      onFinish(ChangeJumpingTechniqueChangeTrainingCommandResult(
+        confirmed: ok ?? false,
+        daysLeft: daysLeft,
+      ));
     }
   }
 }
 
 class _DoYouWannaChangeDialog extends StatelessWidget {
   const _DoYouWannaChangeDialog({
+    required this.duration,
     required this.newTraining,
   });
 
+  final int duration;
   final JumpingTechniqueChangeTrainingType newTraining;
 
   @override
   Widget build(BuildContext context) {
-    final contentText = newTraining == JumpingTechniqueChangeTrainingType.increaseRisk
-        ? 'Czy chcesz zacząć trening polegający na zmianie sposobu skakania? Zajmie to trochę czasu. Po zakończeniu treningu zawodnik/zawodniczka będzie wkładał(a) więcej ryzyka w swoje skoki - mogą czasem zyskać na "błysku" choć ogólnie będą mniej powtarzalne'
-        : 'Czy chcesz zacząć trening polegający na zmianie sposobu skakania? Zajmie to trochę czasu. Po zakończeniu treningu zawodnik/zawodniczka będzie wkładał(a) mniej ryzyka w swoje skoki - będą one bardziej powtarzalne, ale być może stracą na "błysku"';
+    final regularText = Theme.of(context).textTheme.bodyMedium;
+    final boldText = Theme.of(context).textTheme.titleSmall;
+
+    final textWidget = newTraining == JumpingTechniqueChangeTrainingType.increaseRisk
+        ? Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text:
+                      'Czy chcesz zacząć trening polegający na zmianie sposobu skakania? ',
+                  style: regularText,
+                ),
+                TextSpan(
+                  text: 'Zajmie to $duration dni. ',
+                  style: boldText,
+                ),
+                TextSpan(
+                  text:
+                      'Po zakończeniu treningu zawodnik/zawodniczka będzie wkładał(a) więcej ryzyka w swoje skoki - mogą czasem zyskać na "błysku" choć ogólnie będą mniej powtarzalne.',
+                  style: regularText,
+                ),
+              ],
+            ),
+          )
+        : Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text:
+                      'Czy chcesz zacząć trening polegający na zmianie sposobu skakania? ',
+                  style: regularText,
+                ),
+                TextSpan(
+                  text: 'Zajmie to $duration dni. ',
+                  style: boldText,
+                ),
+                TextSpan(
+                  text:
+                      'Po zakończeniu treningu zawodnik/zawodniczka będzie wkładał(a) mniej ryzyka w swoje skoki - będą one bardziej powtarzalne, ale być może stracą na "błysku".',
+                  style: regularText,
+                ),
+              ],
+            ),
+          );
 
     return AlertDialog(
       title: const Text('Zmiana sposobu skakania'),
-      content: Text(contentText),
+      content: textWidget,
       actions: [
         TextButton(
           onPressed: () {

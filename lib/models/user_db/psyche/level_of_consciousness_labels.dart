@@ -1,21 +1,21 @@
 enum LevelOfConsciousnessLabels {
-  shame,
-  guilt,
-  apathy,
-  grief,
-  fear,
-  desire,
-  anger,
-  pride,
-  courage,
-  neutrality,
-  willingness,
-  acceptance,
-  reason,
-  love,
-  joy,
-  peace,
-  enlightenment
+  shame, // Wstyd
+  guilt, // Wina
+  apathy, // Apatia
+  grief, // Żal
+  fear, // Strach
+  desire, // Pożądanie
+  anger, // Złość
+  pride, // Duma
+  courage, // Odwaga
+  neutrality, // Neutralność
+  willingness, // Ochota
+  acceptance, // Akceptacja
+  reason, // Rozsądek
+  love, // Miłość
+  joy, // Radość
+  peace, // Pokój
+  enlightenment // Oświecenie
 }
 
 const Map<LevelOfConsciousnessLabels, double> levelOfConsciousnessLog = {
