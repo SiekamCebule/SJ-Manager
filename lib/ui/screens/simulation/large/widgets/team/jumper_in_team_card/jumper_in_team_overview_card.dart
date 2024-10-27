@@ -31,7 +31,7 @@ class JumperInTeamOverviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Level report of ($jumper): ${reports.levelReport}');
+    //print('Level report of (${jumper.nameAndSurname()}): ${reports.levelReport}');
     final moraleRating = reports.moraleRating;
     final jumpsRating = reports.jumpsRating;
     final trainingRating = reports.trainingProgressReport?.generalRating;
