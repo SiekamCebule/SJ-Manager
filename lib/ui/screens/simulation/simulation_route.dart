@@ -28,7 +28,8 @@ import 'package:sj_manager/ui/screens/simulation/large/dialogs/trainings_are_not
 import 'package:sj_manager/ui/screens/simulation/large/dialogs/trainings_setting_up_help_dialog.dart';
 import 'package:sj_manager/ui/screens/simulation/large/simulation_route_main_action_button.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_in_team_card/jumper_in_team_overview_card.dart';
-import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_in_team_card/team_screen_jumper_card.dart';
+
+import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_training/jumper_training_manager_row/jumper_training_manager_row.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/team_screen/team_overview_card_no_jumpers_info_widget.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/team_screen/team_screen_no_jumpers_info_widget.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/team_screen/team_screen_personal_coach_bottom_bar.dart';

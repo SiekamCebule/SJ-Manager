@@ -9,7 +9,6 @@ import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
 import 'package:sj_manager/ui/reusable_widgets/sjm_dialog_ok_pop_button.dart';
 import 'package:sj_manager/ui/screens/simulation/large/dialogs/set_up_trainings/set_up_trainings_are_you_sure_dialog.dart';
-import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_in_team_card/jumper_in_team_training_card.dart';
 import 'package:sj_manager/utils/show_dialog.dart';
 
 class SetUpTrainingsDialog extends StatefulWidget {
@@ -102,20 +101,7 @@ class _SetUpTrainingsDialogState extends State<SetUpTrainingsDialog> {
                       width: constraints.maxWidth,
                       child: ListView(
                         children: [
-                          for (var jumper in widget.jumpers)
-                            JumperInTeamTrainingCard(
-                              jumper: jumper,
-                              trainingConfig: _trainingConfigs[jumper]!,
-                              dynamicParams: database.jumpersDynamicParameters[jumper]!,
-                              onTrainingChange: (trainingConfig) {
-                                setState(() {
-                                  _trainingConfigs[jumper] = trainingConfig;
-                                });
-                              },
-                              jumperRatings: widget.jumpersSimulationRatings[jumper]!,
-                              managerPointsCount: widget.managerPointsCount,
-                              hideTrainingRaport: true,
-                            ),
+                          Placeholder(),
                         ],
                       ),
                     ),

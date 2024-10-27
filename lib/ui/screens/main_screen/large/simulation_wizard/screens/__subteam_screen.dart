@@ -29,7 +29,7 @@ class _SubteamScreenState extends State<_SubteamScreen> {
         Expanded(
           flex: 5,
           child: Material(
-            color: Theme.of(context).colorScheme.surfaceContainerLow,
+            color: Theme.of(context).colorScheme.surfaceContainer,
             child: ListView.builder(
               itemCount: widget.subteamTypes.length,
               itemBuilder: (context, index) {

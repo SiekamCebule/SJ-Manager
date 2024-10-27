@@ -159,7 +159,7 @@ class _JumperTile extends StatelessWidget {
     return ListTile(
       leading: SimulationJumperImage(
         jumper: jumper,
-        aspectRatio: 3 / 2,
+        width: 50,
       ),
       trailing: TextButton(
         onPressed: onAction,
@@ -170,7 +170,7 @@ class _JumperTile extends StatelessWidget {
       ),
       title: Text(jumper.nameAndSurname()),
       subtitle: Text(
-        getJumperLevelDescription(
+        translateJumperLevelDescription(
           context: context,
           levelDescription: levelReport?.levelDescription,
         ),

@@ -20,7 +20,7 @@ class _ListTile extends StatelessWidget {
       selected: selected,
       leading: SimulationJumperImage(
         jumper: jumper,
-        aspectRatio: 3 / 2,
+        width: 50,
       ),
       trailing: CountryFlag(
         country: jumper.country,
@@ -30,7 +30,7 @@ class _ListTile extends StatelessWidget {
         jumper.nameAndSurname(),
       ),
       subtitle: Text(
-        getJumperLevelDescription(
+        translateJumperLevelDescription(
           context: context,
           levelDescription: levelReport?.levelDescription,
         ),

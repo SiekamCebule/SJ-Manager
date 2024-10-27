@@ -8,7 +8,7 @@ class _TeamScreen extends StatefulWidget {
 }
 
 class _TeamScreenState extends State<_TeamScreen> {
-  var _selectedMode = TeamScreenJumperCardMode.overview;
+  var _selectedMode = TeamScreenMode.overview;
 
   @override
   Widget build(BuildContext context) {
@@ -18,48 +18,44 @@ class _TeamScreenState extends State<_TeamScreen> {
         database.actionsRepo.isCompleted(SimulationActionType.settingUpTraining);
     final jumpers = dbHelper.managerJumpers;
 
-    final jumpersBody = jumpers.isNotEmpty
+    final noJumpersWidget = TeamScreenNoJumpersInfoWidget(
+      mode: database.managerData.mode,
+      searchForCandidates: () =>
+          SearchForCandidatesCommand(context: context, database: database).execute(),
+    );
+
+    final generalBody = jumpers.isNotEmpty
         ? ListView(
             children: [
               for (var jumper in jumpers)
                 AnimatedSize(
                   duration: Durations.short1,
                   curve: Curves.easeIn,
-                  child: TeamScreenJumperCard(
+                  child: JumperInTeamOverviewCard(
                     jumper: jumper,
-                    mode: _selectedMode,
-                    onTrainingChange: (trainingConfig) {
-                      ChangeJumperTrainingCommand(
-                        context: context,
-                        database: database,
-                        jumper: jumper,
-                        trainingConfig: trainingConfig,
-                      ).execute();
-                    },
+                    reports: database.jumpersReports[jumper]!,
                   ),
                 ),
             ],
           )
-        : TeamScreenNoJumpersInfoWidget(
-            mode: database.managerData.mode,
+        : noJumpersWidget;
+
+    final trainingBody = JumperTrainingManagerRow(noJumpersWidget: noJumpersWidget);
+
+    final bottomNavBar = database.managerData.mode == SimulationMode.personalCoach
+        ? TeamScreenPersonalCoachBottomBar(
+            chargesCount: database.managerData.personalCoachTeam!.jumpers.length,
+            chargesLimit: sjmManagerChargesLimit,
             searchForCandidates: () =>
                 SearchForCandidatesCommand(context: context, database: database)
                     .execute(),
-          );
+            managePartnerships: () =>
+                ManagePartnershipsCommand(context: context, database: database).execute(),
+          )
+        : null;
 
     return Scaffold(
-      bottomNavigationBar: database.managerData.mode == SimulationMode.personalCoach
-          ? TeamScreenPersonalCoachBottomBar(
-              chargesCount: database.managerData.personalCoachTeam!.jumpers.length,
-              chargesLimit: sjmManagerChargesLimit,
-              searchForCandidates: () =>
-                  SearchForCandidatesCommand(context: context, database: database)
-                      .execute(),
-              managePartnerships: () =>
-                  ManagePartnershipsCommand(context: context, database: database)
-                      .execute(),
-            )
-          : null,
+      bottomNavigationBar: bottomNavBar,
       body: Column(
         children: [
           SizedBox(
@@ -93,12 +89,12 @@ class _TeamScreenState extends State<_TeamScreen> {
                 SegmentedButton(
                   segments: const [
                     ButtonSegment(
-                      value: TeamScreenJumperCardMode.overview,
+                      value: TeamScreenMode.overview,
                       label: Text('Ogólnie'),
                       icon: Icon(Symbols.dashboard),
                     ),
                     ButtonSegment(
-                      value: TeamScreenJumperCardMode.training,
+                      value: TeamScreenMode.training,
                       label: Text('Trening'),
                       icon: Icon(Symbols.fitness_center),
                     ),
@@ -139,10 +135,15 @@ class _TeamScreenState extends State<_TeamScreen> {
           ),
           const Gap(15),
           Expanded(
-            child: jumpersBody,
+            child: _selectedMode == TeamScreenMode.overview ? generalBody : trainingBody,
           ),
         ],
       ),
     );
   }
+}
+
+enum TeamScreenMode {
+  overview,
+  training,
 }

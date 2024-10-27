@@ -18,7 +18,7 @@ class JumperCardNameAndSurnameColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final levelDescription = jumperRatings.levelReport?.levelDescription;
-    final jumperLevelDescriptionText = getJumperLevelDescription(
+    final jumperLevelDescriptionText = translateJumperLevelDescription(
       context: context,
       levelDescription: levelDescription,
     );

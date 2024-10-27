@@ -69,7 +69,7 @@ class _TeamOverviewCard extends StatelessWidget {
           ),
         ],
       ),
-      content: Center(child: content),
+      child: Center(child: content),
     );
   }
 }

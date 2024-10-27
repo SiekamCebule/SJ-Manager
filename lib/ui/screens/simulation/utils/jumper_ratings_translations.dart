@@ -55,7 +55,7 @@ String getJumperTrainingDescription({
   };
 }
 
-String getJumperLevelDescription({
+String translateJumperLevelDescription({
   required BuildContext context,
   required JumperLevelDescription? levelDescription,
 }) {

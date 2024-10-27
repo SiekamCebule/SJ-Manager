@@ -29,7 +29,7 @@ class __GameVariantScreenState extends State<_GameVariantScreen> {
         Expanded(
           flex: 5,
           child: Material(
-            color: Theme.of(context).colorScheme.surfaceContainerLow,
+            color: Theme.of(context).colorScheme.surfaceContainer,
             child: ListView.builder(
               itemCount: widget.gameVariants.length,
               itemBuilder: (context, index) {
