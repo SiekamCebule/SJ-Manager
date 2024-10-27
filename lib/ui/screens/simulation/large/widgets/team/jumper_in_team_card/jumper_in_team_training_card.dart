@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -13,6 +14,7 @@ class JumperInTeamTrainingCard extends StatelessWidget {
     super.key,
     required this.jumper,
     required this.trainingConfig,
+    required this.dynamicParams,
     required this.onTrainingChange,
     required this.jumperRatings,
     required this.managerPointsCount,
@@ -21,6 +23,7 @@ class JumperInTeamTrainingCard extends StatelessWidget {
 
   final Jumper jumper;
   final JumperTrainingConfig trainingConfig;
+  final JumperDynamicParams dynamicParams;
   final Function(JumperTrainingConfig trainingConfig) onTrainingChange;
   final JumperReports jumperRatings;
   final int managerPointsCount;
@@ -29,7 +32,7 @@ class JumperInTeamTrainingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 320,
+      height: 330,
       child: Card(
         color: Theme.of(context).colorScheme.surfaceContainerLow,
         child: Row(
@@ -64,7 +67,8 @@ class JumperInTeamTrainingCard extends StatelessWidget {
                     child: JumperTrainingConfigurator(
                       jumper: jumper,
                       trainingConfig: trainingConfig,
-                      onChange: onTrainingChange,
+                      dynamicParams: dynamicParams,
+                      onTrainingChange: onTrainingChange,
                       managerPointsCount: managerPointsCount,
                     ),
                   ),

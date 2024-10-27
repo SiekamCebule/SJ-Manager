@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:sj_manager/bloc/simulation/commands/simulation_flow/training/change_jumping_technique_change_training_command.dart';
-import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
+import 'package:sj_manager/commands/simulation/simulation_flow/training/change_jumping_technique_change_training_command.dart';
+import 'package:sj_manager/commands/simulation/common/simulation_database_cubit.dart';
+import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumping_technique_change_training.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -17,13 +18,15 @@ class JumperTrainingConfigurator extends StatefulWidget {
     super.key,
     required this.jumper,
     required this.trainingConfig,
-    required this.onChange,
+    required this.dynamicParams,
+    required this.onTrainingChange,
     required this.managerPointsCount,
   });
 
   final Jumper jumper;
   final JumperTrainingConfig trainingConfig;
-  final Function(JumperTrainingConfig config) onChange;
+  final JumperDynamicParams dynamicParams;
+  final Function(JumperTrainingConfig config) onTrainingChange;
   final int managerPointsCount;
 
   @override
@@ -45,6 +48,7 @@ class _JumperTrainingConfiguratorState extends State<JumperTrainingConfigurator>
         _availablePoints = widget.managerPointsCount - usedPoints;
         _jumpingTechniqueChangeTraining =
             widget.trainingConfig.jumpingTechniqueChangeTraining;
+        _trainingBalance = widget.trainingConfig.balance;
       });
     });
     super.initState();
@@ -63,6 +67,8 @@ class _JumperTrainingConfiguratorState extends State<JumperTrainingConfigurator>
 
   @override
   Widget build(BuildContext context) {
+    print('TRAINING CONFIG IN CONFIGURATOR: ${widget.trainingConfig}');
+
     final database = context.watch<SimulationDatabaseCubit>().state;
     final translatedPoints =
         pluralForm(count: _availablePoints, one: 'Punkt', few: 'Punkty', many: 'Punktów');
@@ -77,49 +83,27 @@ class _JumperTrainingConfiguratorState extends State<JumperTrainingConfigurator>
       trainingBalanceLabelText = 'Balans 0%';
     }
 
+    final subjectiveTrainingEfficiencyLabelText =
+        widget.dynamicParams.subjectiveTrainingEfficiency != null
+            ? '${(widget.dynamicParams.subjectiveTrainingEfficiency! * 100).round()}%'
+            : '?';
+
     return Column(
       children: [
         const Gap(7),
         Align(
-          alignment: Alignment.centerLeft,
-          child: SizedBox(
-            width: 180,
-            child: JumpingTechniqueChangeTrainingDropdown(
-              key: UniqueKey(),
-              width: 150,
-              initial: _jumpingTechniqueChangeTraining,
-              onChange: (newJumpingTechniqueChangeTraining) async {
-                if (_jumpingTechniqueChangeTraining ==
-                    newJumpingTechniqueChangeTraining) {
-                  return;
-                }
-                await ChangeJumpingTechniqueChangeTrainingCommand(
-                  context: context,
-                  database: database,
-                  jumper: widget.jumper,
-                  oldTraining: widget.trainingConfig.jumpingTechniqueChangeTraining,
-                  newTraining: newJumpingTechniqueChangeTraining,
-                  onFinish: (confirmed) {
-                    setState(() {
-                      if (confirmed) {
-                        _jumpingTechniqueChangeTraining =
-                            newJumpingTechniqueChangeTraining;
-                        print(
-                            '_jumpingTechniqueChangeTraining: ${_jumpingTechniqueChangeTraining}');
-                        final newConfig = widget.trainingConfig.copyWith(
-                          jumpingTechniqueChangeTraining:
-                              newJumpingTechniqueChangeTraining,
-                        );
-                        widget.onChange(newConfig);
-                      } else {
-                        print('not confirmed. emit ${widget.trainingConfig}');
-                        widget.onChange(widget.trainingConfig);
-                      }
-                    });
-                  },
-                ).execute();
-              },
-            ),
+          alignment: Alignment.centerRight,
+          child: Column(
+            children: [
+              Text(
+                subjectiveTrainingEfficiencyLabelText,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              Text(
+                'Efektywność',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ],
           ),
         ),
         const Gap(20),
@@ -141,7 +125,7 @@ class _JumperTrainingConfiguratorState extends State<JumperTrainingConfigurator>
                     final newConfig = widget.trainingConfig.copyWith(
                       points: points,
                     );
-                    widget.onChange(newConfig);
+                    widget.onTrainingChange(newConfig);
                   },
                 ),
               ),
@@ -214,6 +198,9 @@ class _JumperTrainingConfiguratorState extends State<JumperTrainingConfigurator>
                   onChanged: (value) {
                     setState(() {
                       _trainingBalance = value;
+                      final newConfig =
+                          widget.trainingConfig.copyWith(balance: _trainingBalance);
+                      widget.onTrainingChange(newConfig);
                     });
                   },
                 ),

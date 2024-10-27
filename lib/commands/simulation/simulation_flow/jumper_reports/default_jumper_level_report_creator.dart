@@ -1,7 +1,6 @@
 import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/jumper/jumping_technique.dart';
 
 class DefaultJumperLevelReportCreator {
   DefaultJumperLevelReportCreator({
@@ -51,21 +50,6 @@ class DefaultJumperLevelReportCreator {
     print('jumper.skills.flightQuality: ${jumper.skills.flightQuality}');
     print('jumper.skills.landingQuality: ${jumper.skills.landingQuality}');
 
-    final riskInJumps = switch (jumper.skills.jumpingTechnique) {
-      JumpingTechnique.veryDefensive => JumperCharacteristicOthernessStrength.below5,
-      JumpingTechnique.clearlyDefensive => JumperCharacteristicOthernessStrength.below4,
-      JumpingTechnique.defensive => JumperCharacteristicOthernessStrength.below3,
-      JumpingTechnique.cautious => JumperCharacteristicOthernessStrength.below2,
-      JumpingTechnique.slightlyCautious => JumperCharacteristicOthernessStrength.below1,
-      JumpingTechnique.balanced => JumperCharacteristicOthernessStrength.average,
-      JumpingTechnique.fairlyUnpredictable =>
-        JumperCharacteristicOthernessStrength.above1,
-      JumpingTechnique.unpredictable => JumperCharacteristicOthernessStrength.above2,
-      JumpingTechnique.risky => JumperCharacteristicOthernessStrength.above3,
-      JumpingTechnique.clearlyRisky => JumperCharacteristicOthernessStrength.above4,
-      JumpingTechnique.veryRisky => JumperCharacteristicOthernessStrength.above5,
-    };
-
     return JumperLevelReport(
       levelDescription: levelDescription,
       characteristics: {
@@ -78,7 +62,6 @@ class DefaultJumperLevelReportCreator {
         JumperLevelCharacteristicCategory.landing: findAppropriateOthernessStrength(
           jumper.skills.landingQuality - averageSkillRating,
         ),
-        JumperLevelCharacteristicCategory.riskInJumps: riskInJumps,
       },
     );
   }

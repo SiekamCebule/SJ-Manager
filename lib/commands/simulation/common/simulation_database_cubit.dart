@@ -5,6 +5,7 @@ class SimulationDatabaseCubit extends Cubit<SimulationDatabase> {
   SimulationDatabaseCubit({required SimulationDatabase initial}) : super(initial);
 
   void update(SimulationDatabase database) {
+    //print('update db: $database');
     emit(database);
   }
 }

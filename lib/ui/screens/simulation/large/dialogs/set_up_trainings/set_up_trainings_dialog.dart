@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:sj_manager/commands/simulation/common/simulation_database_cubit.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
@@ -24,7 +26,7 @@ class SetUpTrainingsDialog extends StatefulWidget {
   final List<Jumper> jumpers;
   final Map<Jumper, JumperReports> jumpersSimulationRatings;
   final int managerPointsCount;
-  final Function(Map<Jumper, JumperTrainingConfig> trainingConfigs) onSubmit;
+  final Function(Map<Jumper, JumperTrainingConfig>) onSubmit;
 
   @override
   State<SetUpTrainingsDialog> createState() => _SetUpTrainingsDialogState();
@@ -43,6 +45,7 @@ class _SetUpTrainingsDialogState extends State<SetUpTrainingsDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final database = context.watch<SimulationDatabaseCubit>().state;
     final paragraphStyle = Theme.of(context).textTheme.bodyMedium!;
 
     final title = SizedBox(
@@ -103,6 +106,7 @@ class _SetUpTrainingsDialogState extends State<SetUpTrainingsDialog> {
                             JumperInTeamTrainingCard(
                               jumper: jumper,
                               trainingConfig: _trainingConfigs[jumper]!,
+                              dynamicParams: database.jumpersDynamicParameters[jumper]!,
                               onTrainingChange: (trainingConfig) {
                                 setState(() {
                                   _trainingConfigs[jumper] = trainingConfig;

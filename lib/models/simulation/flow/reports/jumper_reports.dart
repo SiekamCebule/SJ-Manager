@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/bloc/simulation/commands/simulation_flow/jumper_reports/default_jumper_level_report_creator.dart';
+import 'package:sj_manager/commands/simulation/simulation_flow/jumper_reports/default_jumper_level_report_creator.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';

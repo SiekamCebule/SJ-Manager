@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/bloc/simulation/commands/simulation_flow/training/simulate_jumper_training_command.dart';
+import 'package:sj_manager/commands/simulation/simulation_flow/training/simulate_jumper_training_command.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 
 class SimulateGlobalTrainingCommand {
