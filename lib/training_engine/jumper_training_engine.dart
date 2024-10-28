@@ -1,6 +1,7 @@
 import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/psyche/level_of_consciousness_labels.dart';
 import 'package:sj_manager/training_engine/jumper_training_result.dart';
 import 'package:sj_manager/utils/random/random.dart';
 
@@ -24,6 +25,8 @@ class JumperTrainingEngine {
   late double _formStability;
   late double _jumpsConsistency;
   late double _fatigue;
+  late double _efficiencyFactor;
+  late double _subjectiveEfficiencyFactor;
 
   JumperTrainingResult doTraining() {
     _setUp();
@@ -35,6 +38,8 @@ class JumperTrainingEngine {
     _simulateJumpsConsistencyTraining();
     _simulateFatigue();
     _simulateInjuries();
+    _simulateEfficiencyFactorChange();
+    _setSubjectiveEfficiencyFactorChange();
 
     final newSkills = jumper.skills.copyWith(
       takeoffQuality: _takeoffQuality,
@@ -47,6 +52,7 @@ class JumperTrainingEngine {
       formStability: _formStability,
       jumpsConsistency: _jumpsConsistency,
       fatigue: _fatigue,
+      efficiencyFactor: _efficiencyFactor,
     );
   }
 
@@ -76,14 +82,13 @@ class JumperTrainingEngine {
 
     const potentialRandomForOnePoint = 0.15;
 
-    final negativeRandom = linearRandomDouble(0, potentialRandomForOnePoint * 5);
+    const negativeRandomMax = potentialRandomForOnePoint * 5;
     final positiveRandomMax =
         (_developmentPotentialFactor * developmentPotentialMultiplier) *
             (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
             (potentialRandomForOnePoint * points);
 
-    final positiveRandom = linearRandomDouble(0, positiveRandomMax);
-    final random = (negativeRandom + positiveRandom) * scaleFactor;
+    final random = linearRandomDouble(negativeRandomMax, positiveRandomMax) * scaleFactor;
 
     _takeoffQuality += random;
   }
@@ -98,14 +103,13 @@ class JumperTrainingEngine {
 
     const potentialRandomForOnePoint = 0.15;
 
-    final negativeRandom = linearRandomDouble(0, potentialRandomForOnePoint * 5);
+    const negativeRandomMax = potentialRandomForOnePoint * 5;
     final positiveRandomMax =
         (_developmentPotentialFactor * developmentPotentialMultiplier) *
             (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
             (potentialRandomForOnePoint * points);
 
-    final positiveRandom = linearRandomDouble(0, positiveRandomMax);
-    final random = (negativeRandom + positiveRandom) * scaleFactor;
+    final random = linearRandomDouble(negativeRandomMax, positiveRandomMax) * scaleFactor;
 
     _flightQuality += random;
   }
@@ -120,14 +124,13 @@ class JumperTrainingEngine {
 
     const potentialRandomForOnePoint = 0.15;
 
-    final negativeRandom = linearRandomDouble(0, potentialRandomForOnePoint * 5);
+    const negativeRandomMax = potentialRandomForOnePoint * 5;
     final positiveRandomMax =
         (_developmentPotentialFactor * developmentPotentialMultiplier) *
             (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
             (potentialRandomForOnePoint * points);
 
-    final positiveRandom = linearRandomDouble(0, positiveRandomMax);
-    final random = (negativeRandom + positiveRandom) * scaleFactor;
+    final random = linearRandomDouble(negativeRandomMax, positiveRandomMax) * scaleFactor;
 
     _landingQuality += random;
   }
@@ -143,16 +146,13 @@ class JumperTrainingEngine {
     const potentialRandomForOnePoint = 0.15;
 
     const negativeRandomMax = potentialRandomForOnePoint * 5;
-    final negativeRandom = linearRandomDouble(0, negativeRandomMax);
 
     final positiveRandomMax =
         (_developmentPotentialFactor * developmentPotentialMultiplier) *
             (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
             (potentialRandomForOnePoint * formPoints) *
             (1.0 / _form);
-
-    final positiveRandom = linearRandomDouble(0, positiveRandomMax);
-    final random = (negativeRandom + positiveRandom) * scaleFactor;
+    final random = linearRandomDouble(negativeRandomMax, positiveRandomMax) * scaleFactor;
 
     _form += random;
   }
@@ -167,15 +167,13 @@ class JumperTrainingEngine {
     const potentialRandomForMaxChange = 0.1;
 
     final negativeRandomMax = (_trainingConfig.balance * 0.5);
-    final negativeRandom = linearRandomDouble(0, negativeRandomMax);
 
     final positiveRandomMax =
         (_developmentPotentialFactor * developmentPotentialMultiplier) *
             (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
             (potentialRandomForMaxChange * _trainingConfig.balance);
-    final positiveRandom = linearRandomDouble(0, positiveRandomMax);
 
-    final random = (negativeRandom + positiveRandom) * scaleFactor;
+    final random = linearRandomDouble(negativeRandomMax, positiveRandomMax) * scaleFactor;
 
     _jumpsConsistency += random;
   }
@@ -207,5 +205,57 @@ class JumperTrainingEngine {
 
   void _simulateInjuries() {
     // TODO
+  }
+
+  void _simulateEfficiencyFactorChange() {
+    _efficiencyFactor = dynamicParams.trainingEfficiencyFactor;
+    final negativeRandomMax = 0.1 + (_trainingConfig.balance / 10);
+    final positiveRandomMax = 0.1 + (_trainingConfig.balance / 10);
+    final random = linearRandomDouble(negativeRandomMax, positiveRandomMax);
+    final delta = random;
+    _efficiencyFactor += delta;
+  }
+
+  void _setSubjectiveEfficiencyFactorChange() {
+    var percentsDeviation = switch (dynamicParams.levelOfConsciousness.label) {
+      LevelOfConsciousnessLabels.shame => 23,
+      LevelOfConsciousnessLabels.guilt => 22,
+      LevelOfConsciousnessLabels.apathy => 21,
+      LevelOfConsciousnessLabels.grief => 20,
+      LevelOfConsciousnessLabels.fear => 18,
+      LevelOfConsciousnessLabels.desire => 17,
+      LevelOfConsciousnessLabels.anger => 16,
+      LevelOfConsciousnessLabels.pride => 14,
+      LevelOfConsciousnessLabels.courage => 12,
+      LevelOfConsciousnessLabels.neutrality => 11,
+      LevelOfConsciousnessLabels.willingness => 9.5,
+      LevelOfConsciousnessLabels.acceptance => 8,
+      LevelOfConsciousnessLabels.reason => 6,
+      LevelOfConsciousnessLabels.love => 4,
+      LevelOfConsciousnessLabels.joy => 2,
+      LevelOfConsciousnessLabels.peace => 1,
+      LevelOfConsciousnessLabels.enlightenment => 0,
+    };
+
+    var randomMin = percentsDeviation * (1 + (_efficiencyFactor / 6));
+    var randomMax = percentsDeviation * (1 + (_efficiencyFactor / 6));
+
+    /*
+    Np. subjective 0.45, real 0.6
+    difference: 0.15
+    scale = 1 - (0.15 / 0.60) = 0.75
+    randomMax  *= 0.75
+    */
+    var difference = (_subjectiveEfficiencyFactor - _efficiencyFactor).abs();
+    var scale = 0.8 - (difference / _efficiencyFactor);
+    if (_subjectiveEfficiencyFactor > _efficiencyFactor) {
+      randomMax *= (scale.clamp(0, 1)); // Ensure scale does not reduce below 0
+    } else if (_subjectiveEfficiencyFactor < _efficiencyFactor) {
+      randomMin *= (scale.clamp(0, 1));
+    }
+
+    final random = linearRandomDouble(randomMin, randomMax) / 100; // from percents
+
+    _subjectiveEfficiencyFactor = _efficiencyFactor + random;
   }
 }

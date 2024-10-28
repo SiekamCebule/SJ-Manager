@@ -7,6 +7,7 @@ class JumperTrainingResult {
     required this.formStability,
     required this.jumpsConsistency,
     required this.fatigue,
+    required this.efficiencyFactor,
   });
 
   final JumperSkills skills;
@@ -14,4 +15,5 @@ class JumperTrainingResult {
   final double formStability;
   final double jumpsConsistency;
   final double fatigue;
+  final double efficiencyFactor;
 }
