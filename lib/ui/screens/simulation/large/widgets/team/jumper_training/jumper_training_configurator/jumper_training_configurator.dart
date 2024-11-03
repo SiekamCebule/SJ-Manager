@@ -3,11 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/ui/dialogs/simple_help_dialog.dart';
 import 'package:sj_manager/ui/reusable_widgets/card_with_title.dart';
 import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
-import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_training/jumper_training_configurator/widgets/jumper_training_points_grid.dart';
-import 'package:sj_manager/utils/translating.dart';
+import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_training/jumper_training_configurator/widgets/jumper_attribute_training_slider.dart';
 
 part 'widgets/__configuration_component.dart';
 part 'widgets/__subjective_training_efficiency_component.dart';
@@ -43,7 +41,7 @@ class _JumperTrainingConfiguratorState extends State<JumperTrainingConfigurator>
           const Gap(10),
           SizedBox(
             width: 450,
-            height: 300,
+            height: 420,
             child: _ConfigurationComponent(
               managerPointsCount: widget.managerPointsCount,
               trainingConfig: widget.trainingConfig,
@@ -51,7 +49,7 @@ class _JumperTrainingConfiguratorState extends State<JumperTrainingConfigurator>
             ),
           ),
           const Gap(10),
-          SizedBox(
+          const SizedBox(
             width: 450,
             height: 120,
             child: _SubjectiveTrainingEfficiencyComponent(

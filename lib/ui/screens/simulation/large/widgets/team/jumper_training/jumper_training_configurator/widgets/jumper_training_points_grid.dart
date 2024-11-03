@@ -18,20 +18,20 @@ class JumperTrainingPointsGrid extends StatefulWidget {
 
   final int maxPointsToUse;
   final int length;
-  final Map<JumperTrainingPointsCategory, int>? initialPoints;
-  final Function(Map<JumperTrainingPointsCategory, int> points) onChange;
+  final Map<JumperTrainingCategory, int>? initialPoints;
+  final Function(Map<JumperTrainingCategory, int> points) onChange;
 
   @override
   State<JumperTrainingPointsGrid> createState() => _JumperTrainingPointsGridState();
 }
 
 class _JumperTrainingPointsGridState extends State<JumperTrainingPointsGrid> {
-  late final Map<JumperTrainingPointsCategory, int> _selectedCounts;
+  late final Map<JumperTrainingCategory, int> _selectedCounts;
   final _hoveredCounts = {
-    JumperTrainingPointsCategory.takeoff: 0,
-    JumperTrainingPointsCategory.flight: 0,
-    JumperTrainingPointsCategory.landing: 0,
-    JumperTrainingPointsCategory.form: 0,
+    JumperTrainingCategory.takeoff: 0,
+    JumperTrainingCategory.flight: 0,
+    JumperTrainingCategory.landing: 0,
+    JumperTrainingCategory.form: 0,
   };
   var _usedPoints = 0;
   int get _availablePoints => widget.maxPointsToUse - _usedPoints;
@@ -46,10 +46,10 @@ class _JumperTrainingPointsGridState extends State<JumperTrainingPointsGrid> {
     }
     _selectedCounts = initial ??
         {
-          JumperTrainingPointsCategory.takeoff: 1,
-          JumperTrainingPointsCategory.flight: 1,
-          JumperTrainingPointsCategory.landing: 1,
-          JumperTrainingPointsCategory.form: 1,
+          JumperTrainingCategory.takeoff: 1,
+          JumperTrainingCategory.flight: 1,
+          JumperTrainingCategory.landing: 1,
+          JumperTrainingCategory.form: 1,
         };
     _updateUsedPoints();
   }
@@ -75,7 +75,7 @@ class _JumperTrainingPointsGridState extends State<JumperTrainingPointsGrid> {
     }
 
     Widget constructRow({
-      required JumperTrainingPointsCategory category,
+      required JumperTrainingCategory category,
     }) {
       return _PointsRow(
         length: widget.length,
@@ -124,13 +124,13 @@ class _JumperTrainingPointsGridState extends State<JumperTrainingPointsGrid> {
         Flexible(
           child: Column(
             children: [
-              constructRow(category: JumperTrainingPointsCategory.takeoff),
+              constructRow(category: JumperTrainingCategory.takeoff),
               const Gap(3),
-              constructRow(category: JumperTrainingPointsCategory.flight),
+              constructRow(category: JumperTrainingCategory.flight),
               const Gap(3),
-              constructRow(category: JumperTrainingPointsCategory.landing),
+              constructRow(category: JumperTrainingCategory.landing),
               const Gap(3),
-              constructRow(category: JumperTrainingPointsCategory.form),
+              constructRow(category: JumperTrainingCategory.form),
             ],
           ),
         ),

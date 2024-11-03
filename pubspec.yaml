@@ -75,6 +75,7 @@ dependencies:
   shared_preferences: ^2.3.2
   date_format_field: ^0.1.0
   window_manager: ^0.4.2
+  syncfusion_flutter_charts: ^27.1.57
 
 dev_dependencies:
   flutter_test:

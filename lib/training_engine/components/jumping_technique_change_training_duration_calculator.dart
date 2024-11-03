@@ -1,5 +1,5 @@
 import 'package:sj_manager/models/simulation/flow/training/jumping_technique_change_training.dart';
-import 'package:sj_manager/models/user_db/psyche/level_of_consciousness_labels.dart';
+import 'package:sj_manager/models/user_db/psyche/level_of_consciousness.dart';
 
 class JumpingTechniqueChangeTrainingDurationCalculator {
   static const multipliersByConsciousness = {

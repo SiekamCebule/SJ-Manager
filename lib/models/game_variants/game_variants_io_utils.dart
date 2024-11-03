@@ -29,7 +29,7 @@ Directory gameVariantDirectory({
 }) {
   return userDataDirectory(
     pathsCache,
-    path.join('gameVariants', gameVariantId, directoryName),
+    path.join('game_variants', gameVariantId, directoryName),
   );
 }
 

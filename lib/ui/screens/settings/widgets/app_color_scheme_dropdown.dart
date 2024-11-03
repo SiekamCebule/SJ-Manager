@@ -34,6 +34,7 @@ class AppColorSchemeDropdown extends StatelessWidget {
           onChange: (scheme) {
             context.read<UserSettingsRepo>().setAppColorScheme(scheme!);
           },
+          width: 150,
         ),
       ],
     );

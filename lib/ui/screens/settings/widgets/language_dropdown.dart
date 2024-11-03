@@ -32,6 +32,7 @@ class LanguageDropdown extends StatelessWidget {
           onChange: (selected) async {
             await context.read<LocaleCubit>().update(Locale(selected!));
           },
+          width: 150,
         ),
       ],
     );
