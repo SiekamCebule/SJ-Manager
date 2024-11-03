@@ -9,6 +9,7 @@ class LinkTextButton extends StatelessWidget {
     required this.labelText,
     this.textStyle,
     this.excludeIcon = false,
+    this.iconSize,
     this.customIcon,
   });
 
@@ -17,6 +18,7 @@ class LinkTextButton extends StatelessWidget {
   final String labelText;
   final TextStyle? textStyle;
   final bool excludeIcon;
+  final double? iconSize;
   final Widget? customIcon;
 
   @override
@@ -26,6 +28,7 @@ class LinkTextButton extends StatelessWidget {
         Icon(
           Symbols.arrow_forward_rounded,
           color: finalColor,
+          size: iconSize,
         );
     final textWidget = Text(
       labelText,

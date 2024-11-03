@@ -1,261 +1,227 @@
+import 'dart:math';
+
 import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/psyche/level_of_consciousness_labels.dart';
+import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
+import 'package:sj_manager/training_engine/jumper_training_engine_settings.dart';
 import 'package:sj_manager/training_engine/jumper_training_result.dart';
 import 'package:sj_manager/utils/random/random.dart';
 
 class JumperTrainingEngine {
   JumperTrainingEngine({
-    required this.jumper,
+    this.settings = sjmDefaultTrainingEngineSettings,
+    required this.jumperSkills,
     required this.dynamicParams,
     required this.scaleFactor,
   });
 
-  final Jumper jumper;
+  final JumperTrainingEngineSettings settings;
+  final JumperSkills jumperSkills;
   final JumperDynamicParams dynamicParams;
   final double scaleFactor;
 
   late JumperTrainingConfig _trainingConfig;
   late double _developmentPotentialFactor;
-  late double _takeoffQuality;
-  late double _flightQuality;
-  late double _landingQuality;
-  late double _form;
-  late double _formStability;
-  late double _jumpsConsistency;
-  late double _fatigue;
-  late double _efficiencyFactor;
-  late double _subjectiveEfficiencyFactor;
+  late Map<JumperTrainingCategory, double> _trainingFactor;
+  late Map<JumperTrainingCategory, double> _trainingFeeling;
+  late JumperTrainingResult _result;
 
   JumperTrainingResult doTraining() {
     _setUp();
     _calculateDevelopmentPotentialFactor();
-    _simulateTakeoffTraining();
-    _simulateFlightTraining();
-    _simulateLandingTraining();
-    _simulateFormTraining();
-    _simulateJumpsConsistencyTraining();
-    _simulateFatigue();
-    _simulateInjuries();
-    _simulateEfficiencyFactorChange();
-    _setSubjectiveEfficiencyFactorChange();
-
-    final newSkills = jumper.skills.copyWith(
-      takeoffQuality: _takeoffQuality,
-      flightQuality: _flightQuality,
-      landingQuality: _landingQuality,
-    );
-    return JumperTrainingResult(
-      skills: newSkills,
-      form: _form,
-      formStability: _formStability,
-      jumpsConsistency: _jumpsConsistency,
-      fatigue: _fatigue,
-      efficiencyFactor: _efficiencyFactor,
-    );
+    _createResultObject();
+    simulateInjuries();
+    return _result;
   }
 
   void _setUp() {
     if (dynamicParams.trainingConfig == null) {
       throw ArgumentError(
-        'Jumper\'s ($jumper) training config is null so cannot simulate the training',
+        'Jumper\'s ($jumperSkills) training config is null so cannot simulate the training',
       );
     }
     _trainingConfig = dynamicParams.trainingConfig!;
+    _trainingFeeling = {};
   }
 
   void _calculateDevelopmentPotentialFactor() {
-    final fromMorale = dynamicParams.morale < 0.2 ? dynamicParams.morale * (40 / 100) : 0;
-    final fromFatigue = -dynamicParams.fatigue * (60 / 100);
+    final fromMorale = dynamicParams.morale < settings.moraleFactorThreshold
+        ? dynamicParams.morale * settings.moraleFactorMultiplier
+        : 0;
+    final fromFatigue = -dynamicParams.fatigue * settings.fatigueFactorMultiplier;
 
-    _developmentPotentialFactor = 0.5 + (fromMorale + fromFatigue) / 4;
+    _developmentPotentialFactor = settings.developmentPotentialFactorBase +
+        ((fromMorale + fromFatigue) / settings.developmentPotentialDivider);
   }
 
-  void _simulateTakeoffTraining() {
-    _takeoffQuality = jumper.skills.takeoffQuality;
-
-    const developmentPotentialMultiplier = 1.0;
-    const trainingEfficiencyMultiplier = 1.0;
-
-    final points = _trainingConfig.points[JumperTrainingPointsCategory.takeoff]!;
-
-    const potentialRandomForOnePoint = 0.15;
-
-    const negativeRandomMax = potentialRandomForOnePoint * 5;
-    final positiveRandomMax =
-        (_developmentPotentialFactor * developmentPotentialMultiplier) *
-            (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
-            (potentialRandomForOnePoint * points);
-
-    final random = linearRandomDouble(negativeRandomMax, positiveRandomMax) * scaleFactor;
-
-    _takeoffQuality += random;
+  void _createResultObject() {
+    _result = JumperTrainingResult(
+      skills: jumperSkills.copyWith(
+        takeoffQuality: jumperSkills.takeoffQuality + _computeTakeoffDelta(),
+        flightQuality: jumperSkills.flightQuality + _computeFlightDelta(),
+        landingQuality: jumperSkills.landingQuality + _computeLandingDelta(),
+      ),
+      form: dynamicParams.form + _computeFormDelta(),
+      jumpsConsistency: dynamicParams.jumpsConsistency + _computeConsistencyDelta(),
+      fatigue: dynamicParams.fatigue + _computeFatigueDelta(),
+      trainingFeeling: _trainingFeeling,
+    );
   }
 
-  void _simulateFlightTraining() {
-    _flightQuality = jumper.skills.flightQuality;
+  double _computeTakeoffDelta() {
+    final balance = _trainingConfig.balance[JumperTrainingCategory.takeoff]!;
+    const mean = 0.0;
+    final scale = settings.takeoffRandomScaleBase +
+        (balance / settings.takeoffRandomScaleBalanceDivider);
+    final random = dampedCauchyDistributionRandom(
+      mean,
+      scale,
+      settings.takeoffRandomCauchyDampingFactor,
+    );
 
-    const developmentPotentialMultiplier = 1.0;
-    const trainingEfficiencyMultiplier = 1.0;
+    final distanceFromCenter = (jumperSkills.takeoffQuality - 10).abs();
+    var delta = random / settings.takeoffBalanceEffectDivider;
+    final directionalMultiplier = (jumperSkills.takeoffQuality - 10) *
+        delta.sign /
+        settings.takeoffDirectionalMultiplierDivider;
+    final exponentiationBase = 1 +
+        (distanceFromCenter / settings.takeoffDeltaDampingBaseDivider) *
+            (1 + directionalMultiplier);
+    final dampingDivider = pow(exponentiationBase, settings.takeoffDeltaDampingExponent);
+    delta /= dampingDivider;
 
-    final points = _trainingConfig.points[JumperTrainingPointsCategory.flight]!;
-
-    const potentialRandomForOnePoint = 0.15;
-
-    const negativeRandomMax = potentialRandomForOnePoint * 5;
-    final positiveRandomMax =
-        (_developmentPotentialFactor * developmentPotentialMultiplier) *
-            (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
-            (potentialRandomForOnePoint * points);
-
-    final random = linearRandomDouble(negativeRandomMax, positiveRandomMax) * scaleFactor;
-
-    _flightQuality += random;
+    return delta;
   }
 
-  void _simulateLandingTraining() {
-    _landingQuality = jumper.skills.landingQuality;
+  double _computeFlightDelta() {
+    final balance = _trainingConfig.balance[JumperTrainingCategory.flight]!;
+    const mean = 0.0;
+    final scale = settings.flightRandomScaleBase +
+        (balance / settings.flightRandomScaleBalanceDivider);
+    final random = dampedCauchyDistributionRandom(
+      mean,
+      scale,
+      settings.flightRandomCauchyDampingFactor,
+    );
 
-    const developmentPotentialMultiplier = 1.0;
-    const trainingEfficiencyMultiplier = 1.0;
+    final distanceFromCenter = (jumperSkills.flightQuality - 10).abs();
+    var delta = random / settings.flightBalanceEffectDivider;
+    final directionalMultiplier = (jumperSkills.flightQuality - 10) *
+        delta.sign /
+        settings.flightDirectionalMultiplierDivider;
+    final exponentiationBase = 1 +
+        (distanceFromCenter / settings.flightDeltaDampingBaseDivider) *
+            (1 + directionalMultiplier);
+    final dampingDivider = pow(exponentiationBase, settings.flightDeltaDampingExponent);
+    delta /= dampingDivider;
 
-    final points = _trainingConfig.points[JumperTrainingPointsCategory.landing]!;
-
-    const potentialRandomForOnePoint = 0.15;
-
-    const negativeRandomMax = potentialRandomForOnePoint * 5;
-    final positiveRandomMax =
-        (_developmentPotentialFactor * developmentPotentialMultiplier) *
-            (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
-            (potentialRandomForOnePoint * points);
-
-    final random = linearRandomDouble(negativeRandomMax, positiveRandomMax) * scaleFactor;
-
-    _landingQuality += random;
+    return delta;
   }
 
-  void _simulateFormTraining() {
-    _form = dynamicParams.form;
+  double _computeLandingDelta() {
+    final balance = _trainingConfig.balance[JumperTrainingCategory.landing]!;
+    const mean = 0.0;
+    final scale = settings.landingRandomScaleBase +
+        (balance / settings.landingRandomScaleBalanceDivider);
+    final random = dampedCauchyDistributionRandom(
+      mean,
+      scale,
+      settings.landingRandomCauchyDampingFactor,
+    );
 
-    const developmentPotentialMultiplier = 1.0;
-    const trainingEfficiencyMultiplier = 1.0;
+    final distanceFromCenter = (jumperSkills.landingQuality - 10).abs();
+    var delta = random / settings.landingBalanceEffectDivider;
+    final directionalMultiplier = (jumperSkills.landingQuality - 10) *
+        delta.sign /
+        settings.landingDirectionalMultiplierDivider;
+    final exponentiationBase = 1 +
+        (distanceFromCenter / settings.landingDeltaDampingBaseDivider) *
+            (1 + directionalMultiplier);
+    final dampingDivider = pow(exponentiationBase, settings.landingDeltaDampingExponent);
+    delta /= dampingDivider;
 
-    final formPoints = _trainingConfig.points[JumperTrainingPointsCategory.form]!;
-
-    const potentialRandomForOnePoint = 0.15;
-
-    const negativeRandomMax = potentialRandomForOnePoint * 5;
-
-    final positiveRandomMax =
-        (_developmentPotentialFactor * developmentPotentialMultiplier) *
-            (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
-            (potentialRandomForOnePoint * formPoints) *
-            (1.0 / _form);
-    final random = linearRandomDouble(negativeRandomMax, positiveRandomMax) * scaleFactor;
-
-    _form += random;
+    return delta;
   }
 
-  void _simulateJumpsConsistencyTraining() {
-    _jumpsConsistency = dynamicParams.jumpsConsistency;
+  double _computeFormDelta() {
+    final balance = _trainingConfig.balance[JumperTrainingCategory.form]!;
+    const mean = 0.0;
+    final scale =
+        settings.formRandomScaleBase + (balance / settings.formRandomScaleBalanceDivider);
+    final random = dampedCauchyDistributionRandom(
+      mean,
+      scale,
+      settings.formRandomCauchyDampingFactor,
+    );
 
-    const developmentPotentialMultiplier = 1.0;
-    const trainingEfficiencyMultiplier = 1.0;
+    // Tłumienie delty
+    final distanceFromCenter = (dynamicParams.form - 10).abs();
+    var delta = random / settings.formBalanceDivider;
+    final directionalMultiplier = (dynamicParams.form - 10) *
+        delta.sign /
+        settings.formDirectionalMultiplierDivider;
+    final exponentiationBase = 1 +
+        (distanceFromCenter / settings.formDeltaDampingBaseDivider) *
+            (1 + directionalMultiplier);
+    final dampingDivider = pow(exponentiationBase, settings.formDeltaDampingExponent);
 
-    _trainingConfig.balance;
-    const potentialRandomForMaxChange = 0.1;
+    delta /= dampingDivider;
 
-    final negativeRandomMax = (_trainingConfig.balance * 0.5);
-
-    final positiveRandomMax =
-        (_developmentPotentialFactor * developmentPotentialMultiplier) *
-            (dynamicParams.trainingEfficiencyFactor * trainingEfficiencyMultiplier) *
-            (potentialRandomForMaxChange * _trainingConfig.balance);
-
-    final random = linearRandomDouble(negativeRandomMax, positiveRandomMax) * scaleFactor;
-
-    _jumpsConsistency += random;
+    return delta;
   }
 
-  void _simulateFatigue() {
-    _fatigue = 0;
+  double _computeConsistencyDelta() {
+    final avgBalance = (_trainingConfig.balance[JumperTrainingCategory.takeoff]! * 27.5 +
+            (_trainingConfig.balance[JumperTrainingCategory.flight]! * 27.5) +
+            (_trainingConfig.balance[JumperTrainingCategory.form]! * 40) +
+            (_trainingConfig.balance[JumperTrainingCategory.landing]! * 5)) /
+        100;
 
-    const onePointEffectDivider = 100;
-    const fatigueBaseDelta = -0.5;
+    final mean = -avgBalance / settings.consistencyMeanAvgBalanceDivider;
+    final scale = settings.consistencyRandomScaleBase;
+    final random = dampedCauchyDistributionRandom(
+      mean,
+      scale,
+      settings.consistencyRandomCauchyDampingFactor,
+    );
+    // Tłumienie delty
+    final distanceFromCenter = (dynamicParams.jumpsConsistency - 10).abs();
+    var delta = random / settings.consistencyBalanceDivider;
+    final directionalMultiplier = (dynamicParams.jumpsConsistency - 10) *
+        delta.sign /
+        settings.consistencyDirectionalMultiplierDivider;
+    final exponentiationBase = 1 +
+        (distanceFromCenter / settings.consistencyDeltaDampingBaseDivider) *
+            (1 + directionalMultiplier);
+    final dampingDivider =
+        pow(exponentiationBase, settings.consistencyDeltaDampingExponent);
 
-    const takeoffDivider = 8.0;
-    const flightDivider = 8.0;
-    const landingDivider = 30.0;
-    const formDivider = 1.0;
+    delta /= dampingDivider;
 
-    final takeoffPoints = _trainingConfig.points[JumperTrainingPointsCategory.takeoff]!;
-    final flightPoints = _trainingConfig.points[JumperTrainingPointsCategory.flight]!;
-    final landingPoints = _trainingConfig.points[JumperTrainingPointsCategory.landing]!;
-    final formPoints = _trainingConfig.points[JumperTrainingPointsCategory.form]!;
-
-    final fatigueDelta = fatigueBaseDelta +
-        (takeoffPoints / takeoffDivider / onePointEffectDivider) +
-        (flightPoints / flightDivider / onePointEffectDivider) +
-        (landingPoints / landingDivider / onePointEffectDivider) +
-        (formPoints / formDivider / onePointEffectDivider);
-
-    _fatigue += fatigueDelta;
+    return delta;
   }
 
-  void _simulateInjuries() {
-    // TODO
+  double _computeFatigueDelta() {
+    return 0;
   }
 
-  void _simulateEfficiencyFactorChange() {
-    _efficiencyFactor = dynamicParams.trainingEfficiencyFactor;
-    final negativeRandomMax = 0.1 + (_trainingConfig.balance / 10);
-    final positiveRandomMax = 0.1 + (_trainingConfig.balance / 10);
-    final random = linearRandomDouble(negativeRandomMax, positiveRandomMax);
-    final delta = random;
-    _efficiencyFactor += delta;
-  }
+  void simulateInjuries() {}
 
-  void _setSubjectiveEfficiencyFactorChange() {
-    var percentsDeviation = switch (dynamicParams.levelOfConsciousness.label) {
-      LevelOfConsciousnessLabels.shame => 23,
-      LevelOfConsciousnessLabels.guilt => 22,
-      LevelOfConsciousnessLabels.apathy => 21,
-      LevelOfConsciousnessLabels.grief => 20,
-      LevelOfConsciousnessLabels.fear => 18,
-      LevelOfConsciousnessLabels.desire => 17,
-      LevelOfConsciousnessLabels.anger => 16,
-      LevelOfConsciousnessLabels.pride => 14,
-      LevelOfConsciousnessLabels.courage => 12,
-      LevelOfConsciousnessLabels.neutrality => 11,
-      LevelOfConsciousnessLabels.willingness => 9.5,
-      LevelOfConsciousnessLabels.acceptance => 8,
-      LevelOfConsciousnessLabels.reason => 6,
-      LevelOfConsciousnessLabels.love => 4,
-      LevelOfConsciousnessLabels.joy => 2,
-      LevelOfConsciousnessLabels.peace => 1,
-      LevelOfConsciousnessLabels.enlightenment => 0,
-    };
+  double _computeTrainingFeeling({
+    required JumperTrainingCategory trainingCategory,
+    required double trainingFactorDelta,
+  }) {
+    var percentagePointsDeviation =
+        settings.trainingFeelingPointsDeviationByConsciousness[
+            dynamicParams.levelOfConsciousness.label]!;
 
-    var randomMin = percentsDeviation * (1 + (_efficiencyFactor / 6));
-    var randomMax = percentsDeviation * (1 + (_efficiencyFactor / 6));
+    var trainingFeeling = _trainingFactor[trainingCategory]!;
+    var randomMin = -percentagePointsDeviation / 100;
+    var randomMax = percentagePointsDeviation / 100;
+    trainingFeeling += linearRandomDouble(randomMin, randomMax);
+    trainingFeeling -=
+        (trainingFactorDelta / settings.trainingFeelingTrainingFactorDeltaDivider);
 
-    /*
-    Np. subjective 0.45, real 0.6
-    difference: 0.15
-    scale = 1 - (0.15 / 0.60) = 0.75
-    randomMax  *= 0.75
-    */
-    var difference = (_subjectiveEfficiencyFactor - _efficiencyFactor).abs();
-    var scale = 0.8 - (difference / _efficiencyFactor);
-    if (_subjectiveEfficiencyFactor > _efficiencyFactor) {
-      randomMax *= (scale.clamp(0, 1)); // Ensure scale does not reduce below 0
-    } else if (_subjectiveEfficiencyFactor < _efficiencyFactor) {
-      randomMin *= (scale.clamp(0, 1));
-    }
-
-    final random = linearRandomDouble(randomMin, randomMax) / 100; // from percents
-
-    _subjectiveEfficiencyFactor = _efficiencyFactor + random;
+    return trainingFeeling;
   }
 }

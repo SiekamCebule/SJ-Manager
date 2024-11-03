@@ -18,6 +18,7 @@ import 'package:sj_manager/ui/screens/simulation/simulation_route.dart';
 import 'package:sj_manager/ui/screens/main_screen/main_screen.dart';
 import 'package:sj_manager/ui/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:sj_manager/ui/screens/training_analyzer/training_analyzer_screen.dart';
 import 'package:sj_manager/utils/db_item_images.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:path/path.dart' as path;
@@ -91,6 +92,14 @@ void configureRoutes(FluroRouter router) {
     transitionBuilder: defaultInFromLeft,
   );
   define(
+    '/settings/trainingAnalyzer',
+    (context, params) {
+      return const TrainingAnalyzerScreen();
+    },
+    //transitionBuilder: defaultInFromLeft,
+    transitionType: TransitionType.material,
+  );
+  define(
     '/databaseEditor/:gameVariantId',
     (context, params) {
       final gameVariantId = params['gameVariantId']![0];
@@ -99,7 +108,7 @@ void configureRoutes(FluroRouter router) {
           .last
           .singleWhere((variant) => variant.id == gameVariantId);
       final imagesDir = userDataDirectory(context.read(),
-          path.join('gameVariants', gameVariantId, 'countries', 'country_flags'));
+          path.join('game_variants', gameVariantId, 'countries', 'country_flags'));
       final countryFlagsRepo = LocalStorageCountryFlagsRepo(
         imagesDirectory: imagesDir,
         imagesExtension: 'png',

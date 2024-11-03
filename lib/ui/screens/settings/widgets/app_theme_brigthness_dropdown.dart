@@ -33,6 +33,7 @@ class AppThemeBrigthnessDropdown extends StatelessWidget {
           onChange: (selected) async {
             context.read<UserSettingsRepo>().setAppThemeBrightness(selected!);
           },
+          width: 150,
         ),
       ],
     );

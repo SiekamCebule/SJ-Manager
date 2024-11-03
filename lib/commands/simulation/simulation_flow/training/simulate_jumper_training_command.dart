@@ -26,13 +26,9 @@ class SimulateJumperTrainingCommand {
       );
     }
     final changedJumpersDynamicParams = Map.of(database.jumpersDynamicParameters);
-    changedJumpersDynamicParams[jumper] = changedJumpersDynamicParams[jumper]!.copyWith(
-      jumpingTechniqueChangeTrainingDaysLeft:
-          (dynamicParams.jumpingTechniqueChangeTrainingDaysLeft ?? 0) - 1,
-    );
 
     final trainingResult = JumperTrainingEngine(
-      jumper: jumper,
+      jumperSkills: jumper.skills,
       dynamicParams: changedJumpersDynamicParams[jumper]!,
       scaleFactor: scaleFactor,
     ).doTraining();

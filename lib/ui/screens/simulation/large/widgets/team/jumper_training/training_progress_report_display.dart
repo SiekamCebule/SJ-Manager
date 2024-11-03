@@ -89,7 +89,7 @@ class TrainingProgressReportDisplay extends StatelessWidget {
           Row(
             children: [
               Text(
-                '- Równość skoków: ',
+                '- Równość: ',
                 style: progressCategoryLabelStyle,
               ),
               Text(

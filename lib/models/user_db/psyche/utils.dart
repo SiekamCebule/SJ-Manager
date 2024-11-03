@@ -1,4 +1,4 @@
-import 'package:sj_manager/models/user_db/psyche/level_of_consciousness_labels.dart';
+import 'package:sj_manager/models/user_db/psyche/level_of_consciousness.dart';
 import 'package:sj_manager/models/user_db/psyche/personalities.dart';
 
 const levelOfConsciousnessWithPersonalities = {
