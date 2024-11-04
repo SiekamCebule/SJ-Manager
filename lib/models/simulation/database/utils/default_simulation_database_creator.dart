@@ -1,6 +1,8 @@
 import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
-import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
+import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
+import 'package:sj_manager/models/simulation/flow/jumper_stats/jumper_attribute_history.dart';
+import 'package:sj_manager/models/simulation/flow/jumper_stats/jumper_stats.dart';
 import 'package:sj_manager/models/simulation/flow/reports/team_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
@@ -51,14 +53,27 @@ class DefaultSimulationDatabaseCreator {
       for (var jumper in _jumpers.last)
         jumper: const JumperReports(
           levelReport: null,
-          trainingProgressReport: null,
+          weeklyTrainingReport: null,
+          monthlyTrainingReport: null,
           moraleRating: null,
           jumpsRating: null,
         ),
     };
+    final jumperStats = {
+      for (var jumper in _jumpers.last)
+        jumper: JumperStats(
+          progressableAttributeHistory: {
+            JumperTrainingProgressCategory.takeoff: JumperAttributeHistory.empty(),
+            JumperTrainingProgressCategory.flight: JumperAttributeHistory.empty(),
+            JumperTrainingProgressCategory.landing: JumperAttributeHistory.empty(),
+            JumperTrainingProgressCategory.consistency: JumperAttributeHistory.empty(),
+            JumperTrainingProgressCategory.form: JumperAttributeHistory.empty(),
+          },
+        ),
+    };
     final subteams = options.gameVariant.last!.subteams;
     final personalCoachTeam = options.mode.last! == SimulationMode.personalCoach
-        ? const PersonalCoachTeam(jumpers: [])
+        ? const PersonalCoachTeam(jumperIds: [])
         : null;
     _idsRepo.register(personalCoachTeam, id: idGenerator.generate());
     const defaultTeamReports = TeamReports(
@@ -81,7 +96,6 @@ class DefaultSimulationDatabaseCreator {
         mode: mode,
         userSubteam: userSubteam,
         personalCoachTeam: personalCoachTeam,
-        trainingPoints: 29, // TODO: make it dependent on other factors
       ),
       startDate: options.startDate.last!.date,
       currentDate: options.startDate.last!.date,
@@ -94,8 +108,9 @@ class DefaultSimulationDatabaseCreator {
       idsRepo: _idsRepo,
       actionDeadlines: options.gameVariant.last!.actionDeadlines,
       actionsRepo: SimulationActionsRepo(initial: {}),
-      jumpersDynamicParameters: jumpersDynamicParameters,
-      jumpersReports: jumperReports,
+      jumperDynamicParams: jumpersDynamicParameters,
+      jumperReports: jumperReports,
+      jumperStats: jumperStats,
       teamReports: teamReports,
     );
   }

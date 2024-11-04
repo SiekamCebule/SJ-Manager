@@ -11,7 +11,8 @@ class SetUpSubteamsCommand {
   final BuildContext context;
   final SimulationDatabase database;
 
-  void execute() {
+  SimulationDatabase execute() {
     database.actionsRepo.complete(SimulationActionType.settingUpSubteams);
+    return database;
   }
 }

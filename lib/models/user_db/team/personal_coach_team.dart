@@ -4,29 +4,30 @@ import 'package:sj_manager/models/user_db/team/team.dart';
 
 class PersonalCoachTeam extends Team {
   const PersonalCoachTeam({
-    required this.jumpers,
+    required this.jumperIds,
   });
 
-  final List<Jumper> jumpers;
+  final List<String> jumperIds;
 
   static PersonalCoachTeam fromJson(
     Json json, {
     required Jumper Function(dynamic data) parseJumper,
   }) {
-    final jumpersJson = json['jumpers'] as List;
-    final jumpers = jumpersJson.map(parseJumper).toList();
-    return PersonalCoachTeam(jumpers: jumpers);
+    final jumperIds = json['jumperIds'] as List;
+    return PersonalCoachTeam(jumperIds: jumperIds.cast());
   }
 
   Json toJson({
     required dynamic Function(Jumper jumper) serializeJumper,
   }) {
-    final jumpersJson = jumpers.map(serializeJumper).toList();
     return {
-      'jumpers': jumpersJson,
+      'jumperIds': jumperIds,
     };
   }
 
   @override
-  List<Object?> get props => [super.props, jumpers];
+  List<Object?> get props => [
+        super.props,
+        jumperIds,
+      ];
 }

@@ -10,7 +10,7 @@ class TrainingProgressReportDisplay extends StatelessWidget {
     required this.report,
   });
 
-  final JumperTrainingProgressReport? report;
+  final TrainingReport? report;
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +94,11 @@ class TrainingProgressReportDisplay extends StatelessWidget {
               ),
               Text(
                 translateTrainingProgress(
-                  getProgress(JumperTrainingProgressCategory.jumpsConsistency),
+                  getProgress(JumperTrainingProgressCategory.consistency),
                   context: context,
                 ),
                 style: progressLabelStyle(
-                    getProgress(JumperTrainingProgressCategory.jumpsConsistency)),
+                    getProgress(JumperTrainingProgressCategory.consistency)),
               ),
             ],
           ),
@@ -123,19 +123,11 @@ class TrainingProgressReportDisplay extends StatelessWidget {
       );
     }
 
-    final emptyStateBody = Column(
-      children: [
-        const Spacer(),
-        Text(
-          'Raport z treningu',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const Text(
-          'Pojawi się za jakiś czas',
-          textAlign: TextAlign.center,
-        ),
-        const Spacer(),
-      ],
+    const emptyStateBody = Center(
+      child: Text(
+        'Pojawi się za jakiś czas',
+        textAlign: TextAlign.center,
+      ),
     );
 
     return reportUnavailable ? emptyStateBody : buildNonEmptyStateBody();

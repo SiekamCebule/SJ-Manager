@@ -248,5 +248,12 @@
     "teamTrainingBelowExpectations": "Zawodnicy trenują nienajlepiej",
     "teamTrainingPoor": "Zawodnicy trenują słabo",
     "teamTrainingVeryPoor": "Zawodnicy trenują bardzo słabo",
-    "teamTrainingNoData": "Brak danych o treningu zawodników"
+    "teamTrainingNoData": "Brak danych o treningu zawodników",
+    "trainingEffectOnConsistencyExcellent": "Rewelacyjny",
+    "trainingEffectOnConsistencyVeryGood": "Bardzo budujący",
+    "trainingEffectOnConsistencyGood": "Budujący",
+    "trainingEffectOnConsistencyCorrect": "Znikomy",
+    "trainingEffectOnConsistencyBelowExpectations": "Negatywny",
+    "trainingEffectOnConsistencyPoor": "Bardzo negatywny",
+    "trainingEffectOnConsistencyVeryPoor": "Fatalny"
 }

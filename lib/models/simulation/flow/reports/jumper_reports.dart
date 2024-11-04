@@ -1,5 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/commands/simulation/simulation_flow/jumper_reports/default_jumper_level_report_creator.dart';
+
+import 'package:sj_manager/algorithms/reports/default_jumper_level_report_creator.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
@@ -54,8 +56,8 @@ enum JumperLevelCharacteristicCategory {
   riskInJumps,
 }
 
-class JumperTrainingProgressReport with EquatableMixin {
-  const JumperTrainingProgressReport({
+class TrainingReport with EquatableMixin {
+  const TrainingReport({
     required this.generalRating,
     required this.ratings,
   });
@@ -63,10 +65,10 @@ class JumperTrainingProgressReport with EquatableMixin {
   final SimpleRating generalRating;
   final Map<JumperTrainingProgressCategory, SimpleRating> ratings;
 
-  static JumperTrainingProgressReport fromJson(Json json) {
+  static TrainingReport fromJson(Json json) {
     final ratings = json['ratings'] as Json;
 
-    return JumperTrainingProgressReport(
+    return TrainingReport(
       generalRating: SimpleRating.fromJson(json['generalRating']),
       ratings: ratings.map(
         (categoryJson, ratingJson) {
@@ -99,43 +101,34 @@ enum JumperTrainingProgressCategory {
   takeoff,
   flight,
   landing,
-  jumpsConsistency,
+  consistency,
   form,
 }
 
 class JumperReports with EquatableMixin {
   const JumperReports({
     required this.levelReport,
-    required this.trainingProgressReport,
+    required this.weeklyTrainingReport,
+    required this.monthlyTrainingReport,
     required this.moraleRating,
     required this.jumpsRating,
   });
 
   final JumperLevelReport? levelReport;
-  final JumperTrainingProgressReport? trainingProgressReport;
+  final TrainingReport? weeklyTrainingReport;
+  final TrainingReport? monthlyTrainingReport;
   final SimpleRating? moraleRating;
   final SimpleRating? jumpsRating;
-
-  JumperReports copyWith({
-    JumperLevelReport? levelReport,
-    JumperTrainingProgressReport? trainingProgressReport,
-    SimpleRating? moraleRating,
-    SimpleRating? jumpsRating,
-  }) {
-    return JumperReports(
-      levelReport: levelReport ?? this.levelReport,
-      trainingProgressReport: trainingProgressReport ?? this.trainingProgressReport,
-      moraleRating: moraleRating ?? this.moraleRating,
-      jumpsRating: jumpsRating ?? this.jumpsRating,
-    );
-  }
 
   static JumperReports fromJson(Json json) {
     final levelReport = json['levelReport'] != null
         ? JumperLevelReport.fromJson(json['levelReport'])
         : null;
-    final trainingProgressReport = json['trainingProgressReport'] != null
-        ? JumperTrainingProgressReport.fromJson(json['trainingProgressReport'])
+    final weeklyTrainingReport = json['weeklyTrainingReport'] != null
+        ? TrainingReport.fromJson(json['weeklyTrainingReport'])
+        : null;
+    final monthlyTrainingReport = json['monthlyTrainingReport'] != null
+        ? TrainingReport.fromJson(json['monthlyTrainingReport'])
         : null;
     final moraleRating =
         json['moraleRating'] != null ? SimpleRating.fromJson(json['moraleRating']) : null;
@@ -144,7 +137,8 @@ class JumperReports with EquatableMixin {
 
     return JumperReports(
       levelReport: levelReport,
-      trainingProgressReport: trainingProgressReport,
+      weeklyTrainingReport: weeklyTrainingReport,
+      monthlyTrainingReport: monthlyTrainingReport,
       moraleRating: moraleRating,
       jumpsRating: jumpsRating,
     );
@@ -153,7 +147,8 @@ class JumperReports with EquatableMixin {
   Json toJson() {
     return {
       'levelReport': levelReport?.toJson(),
-      'trainingProgressReport': trainingProgressReport?.toJson(),
+      'weeklyTrainingReport': weeklyTrainingReport?.toJson(),
+      'monthlyTrainingReport': monthlyTrainingReport?.toJson(),
       'moraleRating': moraleRating?.name,
       'jumpsRating': jumpsRating?.name,
     };
@@ -162,8 +157,25 @@ class JumperReports with EquatableMixin {
   @override
   List<Object?> get props => [
         levelReport,
-        trainingProgressReport,
+        weeklyTrainingReport,
+        monthlyTrainingReport,
         moraleRating,
         jumpsRating,
       ];
+
+  JumperReports copyWith({
+    JumperLevelReport? levelReport,
+    TrainingReport? weeklyTrainingReport,
+    TrainingReport? monthlyTrainingReport,
+    SimpleRating? moraleRating,
+    SimpleRating? jumpsRating,
+  }) {
+    return JumperReports(
+      levelReport: levelReport ?? this.levelReport,
+      weeklyTrainingReport: weeklyTrainingReport ?? this.weeklyTrainingReport,
+      monthlyTrainingReport: monthlyTrainingReport ?? this.monthlyTrainingReport,
+      moraleRating: moraleRating ?? this.moraleRating,
+      jumpsRating: jumpsRating ?? this.jumpsRating,
+    );
+  }
 }

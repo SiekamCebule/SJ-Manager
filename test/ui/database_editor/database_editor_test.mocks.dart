@@ -67,13 +67,13 @@ class MockItemsRepo<T> extends _i1.Mock implements _i4.ItemsRepo<T> {
   }
 
   @override
-  _i2.ValueStream<Iterable<T>> get items => (super.noSuchMethod(
+  _i2.ValueStream<List<T>> get items => (super.noSuchMethod(
         Invocation.getter(#items),
-        returnValue: _FakeValueStream_0<Iterable<T>>(
+        returnValue: _FakeValueStream_0<List<T>>(
           this,
           Invocation.getter(#items),
         ),
-      ) as _i2.ValueStream<Iterable<T>>);
+      ) as _i2.ValueStream<List<T>>);
 
   @override
   Type get itemsType => (super.noSuchMethod(
@@ -85,10 +85,10 @@ class MockItemsRepo<T> extends _i1.Mock implements _i4.ItemsRepo<T> {
       ) as Type);
 
   @override
-  Iterable<T> get last => (super.noSuchMethod(
+  List<T> get last => (super.noSuchMethod(
         Invocation.getter(#last),
         returnValue: <T>[],
-      ) as Iterable<T>);
+      ) as List<T>);
 
   @override
   int get lastLength => (super.noSuchMethod(
@@ -103,7 +103,7 @@ class MockItemsRepo<T> extends _i1.Mock implements _i4.ItemsRepo<T> {
       ) as List<Object?>);
 
   @override
-  void set(Iterable<T>? value) => super.noSuchMethod(
+  void set(List<T>? value) => super.noSuchMethod(
         Invocation.method(
           #set,
           [value],

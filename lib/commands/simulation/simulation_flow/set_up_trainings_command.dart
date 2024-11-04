@@ -20,7 +20,7 @@ class SetUpTrainingsCommand {
   final BuildContext context;
   final SimulationDatabase database;
 
-  Future<void> execute() async {
+  Future<SimulationDatabase> execute() async {
     final dbHelper = context.read<SimulationDatabaseHelper>();
 
     await showSjmDialog(
@@ -38,10 +38,9 @@ class SetUpTrainingsCommand {
             child: SetUpTrainingsDialog(
               simulationMode: database.managerData.mode,
               jumpers: dbHelper.managerJumpers,
-              jumpersSimulationRatings: database.jumpersReports,
-              managerPointsCount: database.managerData.trainingPoints,
+              jumpersSimulationRatings: database.jumperReports,
               onSubmit: (trainingConfig) {
-                final dynamicParams = Map.of(database.jumpersDynamicParameters);
+                final dynamicParams = Map.of(database.jumperDynamicParams);
                 trainingConfig.forEach(
                   (jumper, trainingConfig) {
                     final currentDynamicParams = dynamicParams[jumper];
@@ -49,10 +48,11 @@ class SetUpTrainingsCommand {
                         currentDynamicParams!.copyWith(trainingConfig: trainingConfig);
                   },
                 );
-                print('new dynamic params uuuuuuuu : $dynamicParams');
                 final changedDatabase =
-                    database.copyWith(jumpersDynamicParameters: dynamicParams);
-                context.read<SimulationDatabaseCubit>().update(changedDatabase);
+                    database.copyWith(jumperDynamicParams: dynamicParams);
+                changedDatabase.actionsRepo
+                    .complete(SimulationActionType.settingUpTraining);
+                return changedDatabase;
               },
             ),
           ),
@@ -60,6 +60,6 @@ class SetUpTrainingsCommand {
       ),
     );
 
-    database.actionsRepo.complete(SimulationActionType.settingUpTraining);
+    return database;
   }
 }

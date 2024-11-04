@@ -12,7 +12,8 @@ JumperSkills _$JumperSkillsFromJson(Map<String, dynamic> json) => JumperSkills(
       landingQuality: (json['landingQuality'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$JumperSkillsToJson(JumperSkills instance) => <String, dynamic>{
+Map<String, dynamic> _$JumperSkillsToJson(JumperSkills instance) =>
+    <String, dynamic>{
       'takeoffQuality': instance.takeoffQuality,
       'flightQuality': instance.flightQuality,
       'landingQuality': instance.landingQuality,

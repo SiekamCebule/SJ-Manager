@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/training_analyzer/training_segment.dart';
-import 'package:sj_manager/training_engine/jumper_training_result.dart';
+import 'package:sj_manager/algorithms/training_engine/jumper_training_result.dart';
 
 class TrainingAnalyzerResult with EquatableMixin {
   const TrainingAnalyzerResult({

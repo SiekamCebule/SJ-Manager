@@ -11,6 +11,8 @@ class SimulationDatabaseHelper {
     required SimulationDatabase initial,
   }) : _database = initial {
     _subscription = databaseStream.listen((database) {
+      print('NEW IN HELPER');
+      print('jums in helpers new db: ${database.jumpers.last}');
       _database = database;
     });
   }
@@ -25,9 +27,12 @@ class SimulationDatabaseHelper {
   late SimulationDatabase _database;
 
   List<Jumper> get managerJumpers {
+    final personalCoachTeamJumpers = _database.managerData.personalCoachTeam!.jumperIds
+        .map((id) => _database.idsRepo.get(id) as Jumper)
+        .toList();
     return switch (_database.managerData.mode) {
       SimulationMode.classicCoach => throw UnimplementedError(),
-      SimulationMode.personalCoach => _database.managerData.personalCoachTeam!.jumpers,
+      SimulationMode.personalCoach => personalCoachTeamJumpers,
       SimulationMode.observer => throw UnsupportedError(
           'Prosimy o zgłoszenie nam tego błędu. W trybie obserwatora gracz nie ma żadnych podopiecznych.',
         ),

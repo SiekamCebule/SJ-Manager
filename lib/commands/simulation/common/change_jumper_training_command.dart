@@ -19,12 +19,12 @@ class ChangeJumperTrainingCommand {
   final JumperTrainingConfig trainingConfig;
 
   void execute() {
-    final changedDynamicParams = database.jumpersDynamicParameters;
-    changedDynamicParams[jumper] = database.jumpersDynamicParameters[jumper]!.copyWith(
+    final changedDynamicParams = database.jumperDynamicParams;
+    changedDynamicParams[jumper] = database.jumperDynamicParams[jumper]!.copyWith(
       trainingConfig: trainingConfig,
     );
     final changedDatabase = database.copyWith(
-      jumpersDynamicParameters: changedDynamicParams,
+      jumperDynamicParams: changedDynamicParams,
     );
     context.read<SimulationDatabaseCubit>().update(changedDatabase);
   }

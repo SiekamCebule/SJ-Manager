@@ -1,5 +1,5 @@
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
-import 'package:sj_manager/training_engine/jumper_training_result.dart';
+import 'package:sj_manager/algorithms/training_engine/jumper_training_result.dart';
 
 String formatTrainingDetail(String label, double skill, double? feeling) {
   return '$label(${skill.toStringAsFixed(2)}, ${feeling?.toStringAsFixed(2)})';

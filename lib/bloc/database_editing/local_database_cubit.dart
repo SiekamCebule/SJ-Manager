@@ -48,7 +48,7 @@ class LocalDatabaseCubit extends Cubit<ItemsReposRegistry?> {
     );
     gameVariantsRepo.set(gameVariantsRepo.last.map((variant) {
       return variant.id == newVariant.id ? newVariant : variant;
-    }));
+    }).toList());
     await _saveNewGameVariantToFiles(newVariant: newVariant, context: context);
   }
 
