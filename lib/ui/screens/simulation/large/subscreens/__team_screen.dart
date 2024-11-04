@@ -33,7 +33,7 @@ class _TeamScreenState extends State<_TeamScreen> {
                   curve: Curves.easeIn,
                   child: JumperInTeamOverviewCard(
                     jumper: jumper,
-                    reports: database.jumpersReports[jumper]!,
+                    reports: database.jumperReports[jumper]!,
                   ),
                 ),
             ],
@@ -44,7 +44,7 @@ class _TeamScreenState extends State<_TeamScreen> {
 
     final bottomNavBar = database.managerData.mode == SimulationMode.personalCoach
         ? TeamScreenPersonalCoachBottomBar(
-            chargesCount: database.managerData.personalCoachTeam!.jumpers.length,
+            chargesCount: database.managerData.personalCoachTeam!.jumperIds.length,
             chargesLimit: sjmManagerChargesLimit,
             searchForCandidates: () =>
                 SearchForCandidatesCommand(context: context, database: database)

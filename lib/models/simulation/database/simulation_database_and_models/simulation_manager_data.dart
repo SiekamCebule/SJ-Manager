@@ -9,7 +9,6 @@ class SimulationManagerData with EquatableMixin {
     required this.mode,
     required this.userSubteam,
     required this.personalCoachTeam,
-    required this.trainingPoints,
   });
 
   final SimulationMode mode;
@@ -20,28 +19,22 @@ class SimulationManagerData with EquatableMixin {
   // For personal coach
   final PersonalCoachTeam? personalCoachTeam;
 
-  // For training purposes
-  final int trainingPoints;
-
   @override
   List<Object?> get props => [
         mode,
         userSubteam,
         personalCoachTeam,
-        trainingPoints,
       ];
 
   SimulationManagerData copyWith({
     SimulationMode? mode,
     Subteam? userSubteam,
     PersonalCoachTeam? personalCoachTeam,
-    int? trainingPoints,
   }) {
     return SimulationManagerData(
       mode: mode ?? this.mode,
       userSubteam: userSubteam ?? this.userSubteam,
       personalCoachTeam: personalCoachTeam ?? this.personalCoachTeam,
-      trainingPoints: trainingPoints ?? this.trainingPoints,
     );
   }
 }

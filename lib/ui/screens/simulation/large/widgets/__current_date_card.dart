@@ -21,7 +21,7 @@ class _CurrentDateCard extends StatelessWidget {
           children: [
             const Spacer(),
             Text(
-              DateFormat('d MMMM').format(database.currentDate),
+              DateFormat('EEE, d MMMM').format(database.currentDate),
               style: textStyle.copyWith(fontWeight: FontWeight.w500),
             ),
             Text(

@@ -8,7 +8,7 @@ import 'package:path/path.dart' as path;
 
 import 'package:sj_manager/bloc/training_analyzer/training_test_runner.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
+import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/training_analyzer/actions.dart';
 import 'package:sj_manager/models/training_analyzer/chart_data_category.dart';
@@ -16,7 +16,7 @@ import 'package:sj_manager/models/training_analyzer/training_analyzer_result.dar
 import 'package:sj_manager/models/training_analyzer/training_segment.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
 import 'package:sj_manager/models/user_db/psyche/level_of_consciousness.dart';
-import 'package:sj_manager/training_engine/jumper_training_engine_settings.dart';
+import 'package:sj_manager/algorithms/training_engine/jumper_training_engine_settings.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/training_analyzer_utils.dart';
 
@@ -49,12 +49,6 @@ class TrainingAnalyzerCubit extends Cubit<TrainingAnalyzerNotSimulated> {
     final dynamicParams = JumperDynamicParams(
       trainingConfig: null,
       form: (dynamicParamsJson['form'] as num).toDouble(),
-      trainingFeeling: (dynamicParamsJson['trainingFeeling'] as Map).map(
-        (categoryName, value) => MapEntry(
-          JumperTrainingCategory.values.singleWhere((cat) => cat.name == categoryName),
-          (value as num).toDouble(),
-        ),
-      ),
       jumpsConsistency: (dynamicParamsJson['jumpsConsistency'] as num).toDouble(),
       morale: (dynamicParamsJson['morale'] as num).toDouble(),
       fatigue: (dynamicParamsJson['fatigue'] as num).toDouble(),
@@ -68,7 +62,6 @@ class TrainingAnalyzerCubit extends Cubit<TrainingAnalyzerNotSimulated> {
     final trainingSegments = segmentsJson.map((segmentJson) => TrainingSegment(
           start: segmentJson['start'],
           end: segmentJson['end'],
-          scale: (segmentJson['scale'] as num).toDouble(),
           trainingConfig: JumperTrainingConfig(
             balance: (segmentJson['trainingConfig']['balance'] as Map).map(
               (categoryName, value) => MapEntry(

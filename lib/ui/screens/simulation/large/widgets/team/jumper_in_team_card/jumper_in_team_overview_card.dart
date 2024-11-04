@@ -34,7 +34,7 @@ class JumperInTeamOverviewCard extends StatelessWidget {
     //print('Level report of (${jumper.nameAndSurname()}): ${reports.levelReport}');
     final moraleRating = reports.moraleRating;
     final jumpsRating = reports.jumpsRating;
-    final trainingRating = reports.trainingProgressReport?.generalRating;
+    final trainingRating = reports.weeklyTrainingReport?.generalRating;
 
     final moraleDescription = getJumperMoraleDescription(
       context: context,

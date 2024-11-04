@@ -156,7 +156,7 @@ class _MainMenuContinueButtonState extends State<MainMenuContinueButton> {
         );
       case SimulationMode.personalCoach:
         final chargesCount =
-            lastPlayed.database!.managerData.personalCoachTeam!.jumpers.length;
+            lastPlayed.database!.managerData.personalCoachTeam!.jumperIds.length;
         iconWidget = const Icon(Symbols.group,
             size: UiMainMenuConstants.continueButtonSimulationInfoIconSize);
         final text = chargesCount != 0

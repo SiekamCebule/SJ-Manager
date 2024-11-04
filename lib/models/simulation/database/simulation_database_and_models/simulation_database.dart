@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
-import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
+import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
+import 'package:sj_manager/models/simulation/flow/jumper_stats/jumper_stats.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/flow/reports/team_reports.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
@@ -30,8 +31,9 @@ class SimulationDatabase with EquatableMixin {
     required this.idsRepo,
     required this.actionDeadlines,
     required this.actionsRepo,
-    required this.jumpersDynamicParameters,
-    required this.jumpersReports,
+    required this.jumperDynamicParams,
+    required this.jumperReports,
+    required this.jumperStats,
     required this.teamReports,
   });
 
@@ -50,8 +52,9 @@ class SimulationDatabase with EquatableMixin {
   final Map<SimulationActionType, DateTime> actionDeadlines;
   final SimulationActionsRepo actionsRepo;
 
-  final Map<Jumper, JumperDynamicParams> jumpersDynamicParameters;
-  final Map<Jumper, JumperReports> jumpersReports;
+  final Map<Jumper, JumperDynamicParams> jumperDynamicParams;
+  final Map<Jumper, JumperReports> jumperReports;
+  final Map<Jumper, JumperStats> jumperStats;
 
   final Map<Team, TeamReports> teamReports;
 
@@ -85,8 +88,9 @@ class SimulationDatabase with EquatableMixin {
         idsRepo,
         actionDeadlines,
         actionsRepo,
-        jumpersDynamicParameters,
-        jumpersReports,
+        jumperDynamicParams,
+        jumperReports,
+        jumperStats,
         teamReports
       ];
 
@@ -103,8 +107,9 @@ class SimulationDatabase with EquatableMixin {
     ItemsIdsRepo? idsRepo,
     Map<SimulationActionType, DateTime>? actionDeadlines,
     SimulationActionsRepo? actionsRepo,
-    Map<Jumper, JumperDynamicParams>? jumpersDynamicParameters,
-    Map<Jumper, JumperReports>? jumpersReports,
+    Map<Jumper, JumperDynamicParams>? jumperDynamicParams,
+    Map<Jumper, JumperReports>? jumperReports,
+    Map<Jumper, JumperStats>? jumperStats,
     Map<Team, TeamReports>? teamReports,
   }) {
     return SimulationDatabase(
@@ -120,8 +125,9 @@ class SimulationDatabase with EquatableMixin {
       idsRepo: idsRepo ?? this.idsRepo,
       actionDeadlines: actionDeadlines ?? this.actionDeadlines,
       actionsRepo: actionsRepo ?? this.actionsRepo,
-      jumpersDynamicParameters: jumpersDynamicParameters ?? this.jumpersDynamicParameters,
-      jumpersReports: jumpersReports ?? this.jumpersReports,
+      jumperDynamicParams: jumperDynamicParams ?? this.jumperDynamicParams,
+      jumperReports: jumperReports ?? this.jumperReports,
+      jumperStats: jumperStats ?? this.jumperStats,
       teamReports: teamReports ?? this.teamReports,
     );
   }

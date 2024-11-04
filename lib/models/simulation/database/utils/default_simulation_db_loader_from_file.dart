@@ -28,10 +28,11 @@ import 'package:sj_manager/json/simulation_db_loading/team_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/wind_averager_parser.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
-import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
+import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
+import 'package:sj_manager/models/simulation/flow/jumper_stats/jumper_stats.dart';
 import 'package:sj_manager/models/simulation/flow/reports/team_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
@@ -157,7 +158,6 @@ class DefaultSimulationDbLoaderFromFile {
           .singleWhere((mode) => mode.name == managerDataJson['simulationMode']),
       userSubteam: userSubteam,
       personalCoachTeam: personalCoachTeam,
-      trainingPoints: managerDataJson['trainingPoints'],
     );
 
     final jumperReportsJson = _dynamicStateJson['jumperReports'] as Map;
@@ -165,6 +165,14 @@ class DefaultSimulationDbLoaderFromFile {
       return MapEntry(
         idsRepo.get(id) as Jumper,
         JumperReports.fromJson(reportsJson),
+      );
+    });
+
+    final jumperStatsJson = _dynamicStateJson['jumperStats'] as Map;
+    final jumperStats = jumperStatsJson.map((id, statsJson) {
+      return MapEntry(
+        idsRepo.get(id) as Jumper,
+        JumperStats.fromJson(statsJson),
       );
     });
 
@@ -190,8 +198,9 @@ class DefaultSimulationDbLoaderFromFile {
       idsRepo: idsRepo,
       actionDeadlines: actionDeadlines,
       actionsRepo: SimulationActionsRepo(initial: simulationActionCompletionStatuses),
-      jumpersDynamicParameters: jumpersDynamicParameters,
-      jumpersReports: jumperReports,
+      jumperDynamicParams: jumpersDynamicParameters,
+      jumperReports: jumperReports,
+      jumperStats: jumperStats,
       teamReports: teamReports,
     );
   }

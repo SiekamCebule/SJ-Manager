@@ -8,7 +8,6 @@ class JumperDynamicParams with EquatableMixin {
   const JumperDynamicParams({
     required this.trainingConfig,
     required this.form,
-    required this.trainingFeeling,
     required this.jumpsConsistency,
     required this.morale,
     required this.fatigue,
@@ -19,9 +18,6 @@ class JumperDynamicParams with EquatableMixin {
 
   /// From 1 to 20
   final double form;
-
-  /// from 0 to 1
-  final Map<JumperTrainingCategory, double>? trainingFeeling;
 
   /// From 1 to 20
   final double jumpsConsistency;
@@ -39,7 +35,6 @@ class JumperDynamicParams with EquatableMixin {
       : this(
           trainingConfig: null,
           form: 0,
-          trainingFeeling: const {},
           jumpsConsistency: 0,
           morale: 0,
           fatigue: 0,
@@ -52,9 +47,6 @@ class JumperDynamicParams with EquatableMixin {
     return {
       'trainingConfig': trainingConfig?.toJson(),
       'form': form,
-      'trainingFeeling': trainingFeeling?.map((category, factor) {
-        return MapEntry(category.name, factor);
-      }),
       'jumpsConsistency': jumpsConsistency,
       'morale': morale,
       'fatigue': fatigue,
@@ -64,22 +56,11 @@ class JumperDynamicParams with EquatableMixin {
 
   static JumperDynamicParams fromJson(Json json) {
     final trainingConfigJson = json['trainingConfig'];
-    final trainingFeelingJson = json['trainingFeeling'] as Json?;
-    final trainingFeeling = trainingFeelingJson?.map(
-      (key, value) {
-        return MapEntry(
-          JumperTrainingCategory.values.singleWhere((value) => value.name == key),
-          value as double,
-        );
-      },
-    );
-
     return JumperDynamicParams(
       trainingConfig: trainingConfigJson != null
           ? JumperTrainingConfig.fromJson(trainingConfigJson)
           : null,
       form: json['form'],
-      trainingFeeling: trainingFeeling,
       jumpsConsistency: json['jumpsConsistency'],
       morale: json['morale'],
       fatigue: json['fatigue'],
@@ -91,7 +72,6 @@ class JumperDynamicParams with EquatableMixin {
   List<Object?> get props => [
         trainingConfig,
         form,
-        trainingFeeling,
         jumpsConsistency,
         morale,
         fatigue,
@@ -111,7 +91,6 @@ class JumperDynamicParams with EquatableMixin {
     return JumperDynamicParams(
       trainingConfig: trainingConfig ?? this.trainingConfig,
       form: form ?? this.form,
-      trainingFeeling: trainingFeeling ?? this.trainingFeeling,
       jumpsConsistency: jumpsConsistency ?? this.jumpsConsistency,
       morale: morale ?? this.morale,
       fatigue: fatigue ?? this.fatigue,

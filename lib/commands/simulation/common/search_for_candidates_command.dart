@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/commands/simulation/common/simulation_database_cubit.dart';
+import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -21,10 +22,10 @@ class SearchForCandidatesCommand {
   final SimulationDatabase database;
 
   Future<void> execute() async {
+    final helper = context.read<SimulationDatabaseHelper>();
     final jumpers = database.jumpers.last
         .where(
-          (jumper) =>
-              database.managerData.personalCoachTeam!.jumpers.contains(jumper) == false,
+          (jumper) => helper.managerJumpers.contains(jumper) == false,
         )
         .toList();
 
@@ -42,17 +43,18 @@ class SearchForCandidatesCommand {
             jumpers: jumpers,
             onSubmit: (jumper) {
               final oldUserTeam = database.managerData.personalCoachTeam!;
-              final changedPersonalCoachJumpers = [
-                ...database.managerData.personalCoachTeam!.jumpers,
-                jumper
-              ];
-              final newUserTeam = PersonalCoachTeam(jumpers: changedPersonalCoachJumpers);
+              final changedPersonalCoachJumpers = [...helper.managerJumpers, jumper];
+              final newUserTeam = PersonalCoachTeam(
+                  jumperIds: changedPersonalCoachJumpers
+                      .map((jumper) => database.idsRepo.idOf(jumper))
+                      .toList()
+                      .cast());
               final id = database.idsRepo.removeByItem(item: oldUserTeam);
               database.idsRepo.register(newUserTeam, id: id);
               final changedManagerData = database.managerData.copyWith(
                 personalCoachTeam: newUserTeam,
               );
-              final changedDynamicParams = Map.of(database.jumpersDynamicParameters);
+              final changedDynamicParams = Map.of(database.jumperDynamicParams);
               changedDynamicParams[jumper] = changedDynamicParams[jumper]!.copyWith(
                 trainingConfig: initialJumperTrainingConfig,
               );
@@ -60,7 +62,7 @@ class SearchForCandidatesCommand {
               changedTeamReports[newUserTeam] = changedTeamReports.remove(oldUserTeam)!;
               final changedDatabase = database.copyWith(
                 managerData: changedManagerData,
-                jumpersDynamicParameters: changedDynamicParams,
+                jumperDynamicParams: changedDynamicParams,
                 teamReports: changedTeamReports,
               );
               context.read<SimulationDatabaseCubit>().update(changedDatabase);

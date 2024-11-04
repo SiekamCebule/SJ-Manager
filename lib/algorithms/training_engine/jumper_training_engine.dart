@@ -1,28 +1,26 @@
 import 'dart:math';
 
-import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
+import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
-import 'package:sj_manager/training_engine/jumper_training_engine_settings.dart';
-import 'package:sj_manager/training_engine/jumper_training_result.dart';
+import 'package:sj_manager/algorithms/training_engine/jumper_training_engine_settings.dart';
+import 'package:sj_manager/algorithms/training_engine/jumper_training_result.dart';
 import 'package:sj_manager/utils/random/random.dart';
+import 'package:sj_manager/utils/training.dart';
 
 class JumperTrainingEngine {
   JumperTrainingEngine({
     this.settings = sjmDefaultTrainingEngineSettings,
     required this.jumperSkills,
     required this.dynamicParams,
-    required this.scaleFactor,
   });
 
   final JumperTrainingEngineSettings settings;
   final JumperSkills jumperSkills;
   final JumperDynamicParams dynamicParams;
-  final double scaleFactor;
 
   late JumperTrainingConfig _trainingConfig;
   late double _developmentPotentialFactor;
-  late Map<JumperTrainingCategory, double> _trainingFactor;
   late Map<JumperTrainingCategory, double> _trainingFeeling;
   late JumperTrainingResult _result;
 
@@ -171,12 +169,7 @@ class JumperTrainingEngine {
   }
 
   double _computeConsistencyDelta() {
-    final avgBalance = (_trainingConfig.balance[JumperTrainingCategory.takeoff]! * 27.5 +
-            (_trainingConfig.balance[JumperTrainingCategory.flight]! * 27.5) +
-            (_trainingConfig.balance[JumperTrainingCategory.form]! * 40) +
-            (_trainingConfig.balance[JumperTrainingCategory.landing]! * 5)) /
-        100;
-
+    final avgBalance = sjmCalculateAvgTrainingBalance(_trainingConfig.balance);
     final mean = -avgBalance / settings.consistencyMeanAvgBalanceDivider;
     final scale = settings.consistencyRandomScaleBase;
     final random = dampedCauchyDistributionRandom(
@@ -206,22 +199,4 @@ class JumperTrainingEngine {
   }
 
   void simulateInjuries() {}
-
-  double _computeTrainingFeeling({
-    required JumperTrainingCategory trainingCategory,
-    required double trainingFactorDelta,
-  }) {
-    var percentagePointsDeviation =
-        settings.trainingFeelingPointsDeviationByConsciousness[
-            dynamicParams.levelOfConsciousness.label]!;
-
-    var trainingFeeling = _trainingFactor[trainingCategory]!;
-    var randomMin = -percentagePointsDeviation / 100;
-    var randomMax = percentagePointsDeviation / 100;
-    trainingFeeling += linearRandomDouble(randomMin, randomMax);
-    trainingFeeling -=
-        (trainingFactorDelta / settings.trainingFeelingTrainingFactorDeltaDivider);
-
-    return trainingFeeling;
-  }
 }

@@ -9,6 +9,7 @@ import 'package:sj_manager/commands/main_menu/show_simulation_wizard_command.dar
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
+import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';

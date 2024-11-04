@@ -17,14 +17,12 @@ class SetUpTrainingsDialog extends StatefulWidget {
     required this.simulationMode,
     required this.jumpers,
     required this.jumpersSimulationRatings,
-    required this.managerPointsCount,
     required this.onSubmit,
   });
 
   final SimulationMode simulationMode;
   final List<Jumper> jumpers;
   final Map<Jumper, JumperReports> jumpersSimulationRatings;
-  final int managerPointsCount;
   final Function(Map<Jumper, JumperTrainingConfig>) onSubmit;
 
   @override

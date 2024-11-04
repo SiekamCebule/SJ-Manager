@@ -28,8 +28,7 @@ class _JumperTrainingManagerRowState extends State<JumperTrainingManagerRow> {
     final dbHelper = context.read<SimulationDatabaseHelper>();
     final jumpers = dbHelper.managerJumpers;
 
-    final dynamicParams =
-        database.jumpersDynamicParameters[_selectedJumperInTrainingMode];
+    final dynamicParams = database.jumperDynamicParams[_selectedJumperInTrainingMode];
 
     return jumpers.isNotEmpty
         ? Row(
@@ -45,8 +44,8 @@ class _JumperTrainingManagerRowState extends State<JumperTrainingManagerRow> {
                       return JumperSimpleListTile(
                         jumper: jumper,
                         subtitle: JumperSimpleListTileSubtitle.levelDescription,
-                        levelDescription: database
-                            .jumpersReports[jumper]!.levelReport?.levelDescription,
+                        levelDescription:
+                            database.jumperReports[jumper]!.levelReport?.levelDescription,
                         selected: _selectedJumperInTrainingMode == jumper,
                         leading: JumperSimpleListTileLeading.jumperImage,
                         trailing: JumperSimpleListTileTrailing.countryFlag,
@@ -81,7 +80,12 @@ class _JumperTrainingManagerRowState extends State<JumperTrainingManagerRow> {
                                 trainingConfig: trainingConfig,
                               ).execute();
                             },
-                            managerPointsCount: database.managerData.trainingPoints,
+                            weeklyTrainingReport: database
+                                .jumperReports[_selectedJumperInTrainingMode]!
+                                .weeklyTrainingReport,
+                            monthlyTrainingReport: database
+                                .jumperReports[_selectedJumperInTrainingMode]!
+                                .monthlyTrainingReport,
                           );
                         })
                       : Center(

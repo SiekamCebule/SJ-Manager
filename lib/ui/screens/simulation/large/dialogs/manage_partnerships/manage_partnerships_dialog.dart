@@ -72,7 +72,7 @@ class _ManagePartnershipsDialogState extends State<ManagePartnershipsDialog> {
                   index: index,
                   child: _JumperTile(
                     jumper: jumper,
-                    levelReport: database.jumpersReports[jumper]!.levelReport,
+                    levelReport: database.jumperReports[jumper]!.levelReport,
                     onAction: () {
                       setState(() {
                         _shouldBeRemoved[jumper] = !_shouldBeRemoved[jumper]!;

@@ -23,7 +23,7 @@ class _TeamOverviewCard extends StatelessWidget {
             children: [
               for (var jumper in jumpers)
                 Builder(builder: (context) {
-                  final report = database.jumpersReports[jumper];
+                  final report = database.jumperReports[jumper];
                   if (report == null) {
                     throw StateError(
                       'Prosimy o zgłoszenie nam tego błędu. Skoczek ($jumper) nie posiada swojego JumperReports w bazie danych symulacji',

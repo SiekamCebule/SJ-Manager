@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/commands/simulation/common/simulation_database_cubit.dart';
+import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/personal_coach_team.dart';
@@ -20,7 +21,8 @@ class ManagePartnershipsCommand {
   final SimulationDatabase database;
 
   Future<void> execute() async {
-    final chargeJumpers = database.managerData.personalCoachTeam!.jumpers;
+    final helper = context.read<SimulationDatabaseHelper>();
+    final chargeJumpers = helper.managerJumpers;
 
     await showSjmDialog(
       barrierDismissible: true,
@@ -37,7 +39,11 @@ class ManagePartnershipsCommand {
             onSubmit: (result) {
               final oldUserTeam = database.managerData.personalCoachTeam!;
               final changedPersonalCoachJumpers = result.newOrder;
-              final newUserTeam = PersonalCoachTeam(jumpers: changedPersonalCoachJumpers);
+              final newUserTeam = PersonalCoachTeam(
+                  jumperIds: changedPersonalCoachJumpers
+                      .map((jumper) => database.idsRepo.idOf(jumper))
+                      .toList()
+                      .cast());
               final id = database.idsRepo.removeByItem(item: oldUserTeam);
               database.idsRepo.register(newUserTeam, id: id);
               final changedManagerData = database.managerData.copyWith(

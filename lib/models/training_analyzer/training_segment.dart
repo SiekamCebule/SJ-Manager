@@ -4,12 +4,10 @@ class TrainingSegment {
   const TrainingSegment({
     required this.start,
     required this.end,
-    required this.scale,
     required this.trainingConfig,
   });
 
   final int start;
   final int end;
-  final double scale;
   final JumperTrainingConfig trainingConfig;
 }

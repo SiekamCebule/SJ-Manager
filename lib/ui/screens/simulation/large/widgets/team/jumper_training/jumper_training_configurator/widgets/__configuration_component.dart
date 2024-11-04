@@ -2,12 +2,10 @@ part of '../jumper_training_configurator.dart';
 
 class _ConfigurationComponent extends StatefulWidget {
   const _ConfigurationComponent({
-    required this.managerPointsCount,
     required this.trainingConfig,
     required this.onTrainingChange,
   });
 
-  final int managerPointsCount;
   final JumperTrainingConfig trainingConfig;
   final Function(JumperTrainingConfig trainingConfig) onTrainingChange;
 
@@ -17,6 +15,7 @@ class _ConfigurationComponent extends StatefulWidget {
 
 class _ConfigurationComponentState extends State<_ConfigurationComponent> {
   late final Map<JumperTrainingCategory, double> _trainingBalances;
+  double _effectOnConsistency = 0;
 
   @override
   void initState() {
@@ -33,6 +32,7 @@ class _ConfigurationComponentState extends State<_ConfigurationComponent> {
         onChange: (balance) {
           setState(() {
             _trainingBalances[trainingCategory] = balance;
+            _effectOnConsistency = _calculateEffectOnConsistency();
           });
           widget.onTrainingChange(
               widget.trainingConfig.copyWith(balance: _trainingBalances));
@@ -48,17 +48,27 @@ class _ConfigurationComponentState extends State<_ConfigurationComponent> {
       ),
       child: Column(
         children: [
-          const Gap(30),
+          const Gap(20),
           buildSlider(JumperTrainingCategory.takeoff),
-          const Gap(30),
+          const Gap(20),
           buildSlider(JumperTrainingCategory.flight),
-          const Gap(30),
+          const Gap(20),
           buildSlider(JumperTrainingCategory.landing),
-          const Gap(30),
+          const Gap(20),
           buildSlider(JumperTrainingCategory.form),
-          const Gap(30),
+          const Gap(40),
+          _EffectOnConsistency(
+            rating: SimpleRating.fromImpactValue(_effectOnConsistency.round()),
+          ),
         ],
       ),
     );
+  }
+
+  double _calculateEffectOnConsistency() {
+    var effect = sjmCalculateAvgTrainingBalance(_trainingBalances);
+    effect *= 3.5;
+    effect *= -1;
+    return effect.clamp(-3, 3);
   }
 }

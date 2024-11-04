@@ -107,7 +107,7 @@ class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersD
                   final jumper = _filteredJumpers[index];
                   return _ListTile(
                     jumper: jumper,
-                    levelReport: database.jumpersReports[jumper]!.levelReport,
+                    levelReport: database.jumperReports[jumper]!.levelReport,
                     selected: _currentJumper == jumper,
                     onTap: () {
                       setState(() {

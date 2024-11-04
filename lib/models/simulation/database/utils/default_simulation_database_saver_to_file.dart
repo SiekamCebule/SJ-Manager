@@ -85,11 +85,10 @@ class DefaultSimulationDatabaseSaverToFile {
         'personalCoachTeam': _database.managerData.personalCoachTeam
             ?.toJson(serializeJumper: (jumper) => idsRepo.idOf(jumper)),
         'personalCoachTeamId': idsRepo.maybeIdOf(_database.managerData.personalCoachTeam),
-        'trainingPoints': _database.managerData.trainingPoints,
       },
       'startDate': _database.startDate.toString(),
       'currentDate': _database.currentDate.toString(),
-      'jumpersDynamicParameters': _database.jumpersDynamicParameters.map(
+      'jumpersDynamicParameters': _database.jumperDynamicParams.map(
         (jumper, params) => MapEntry(idsRepo.idOf(jumper), params.toJson()),
       ),
       'actionDeadlines': _database.actionDeadlines.map(
@@ -98,8 +97,11 @@ class DefaultSimulationDatabaseSaverToFile {
       'simulationActionCompletionStatuses': _database.actionsRepo.completedActions
           .map((actionType) => actionType.name)
           .toList(),
-      'jumperReports': _database.jumpersReports.map((jumper, reports) {
+      'jumperReports': _database.jumperReports.map((jumper, reports) {
         return MapEntry(idsRepo.idOf(jumper), reports.toJson());
+      }),
+      'jumperStats': _database.jumperStats.map((jumper, stats) {
+        return MapEntry(idsRepo.idOf(jumper), stats.toJson());
       }),
       'teamReports': _database.teamReports.map((team, reports) {
         return MapEntry(idsRepo.idOf(team), reports.toJson());

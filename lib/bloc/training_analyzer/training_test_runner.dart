@@ -1,9 +1,9 @@
 import 'package:sj_manager/models/training_analyzer/training_analyzer_result.dart';
 import 'package:sj_manager/models/training_analyzer/training_segment.dart';
-import 'package:sj_manager/models/simulation/flow/dynamic_params/jumper_dynamic_params.dart';
+import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
-import 'package:sj_manager/training_engine/jumper_training_engine.dart';
-import 'package:sj_manager/training_engine/jumper_training_engine_settings.dart';
+import 'package:sj_manager/algorithms/training_engine/jumper_training_engine.dart';
+import 'package:sj_manager/algorithms/training_engine/jumper_training_engine_settings.dart';
 
 class TrainingTestRunner {
   const TrainingTestRunner({
@@ -45,7 +45,6 @@ class TrainingTestRunner {
         dynamicParams: currentDynamicParams.copyWith(
           trainingConfig: applicableSegment.trainingConfig,
         ),
-        scaleFactor: applicableSegment.scale,
       );
       final trainingResult = engine.doTraining();
       lastResult = TrainingAnalyzerDaySimulationResult(

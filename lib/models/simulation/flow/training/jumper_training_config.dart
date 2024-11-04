@@ -20,8 +20,8 @@ class JumperTrainingConfig with EquatableMixin {
   }
 
   static JumperTrainingConfig fromJson(Json json) {
-    final pointsJson = json['points'] as Json;
-    final balance = pointsJson.map((categoryName, value) {
+    final balanceJson = json['balance'] as Json;
+    final balance = balanceJson.map((categoryName, value) {
       final category = JumperTrainingCategory.values.singleWhere(
         (value) => value.name == categoryName,
       );

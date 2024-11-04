@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/commands/simulation/simulation_flow/jumper_reports/default_jumper_level_report_creator.dart';
+import 'package:sj_manager/algorithms/reports/default_jumper_level_report_creator.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
 
@@ -17,7 +17,7 @@ class SetUpJumperLevelReportsCommand {
   final void Function(SimulationDatabase changedDatabase) onFinish;
 
   void execute() {
-    final changedJumpersReports = Map.of(database.jumpersReports);
+    final changedJumpersReports = Map.of(database.jumperReports);
     for (var jumper in database.jumpers.last) {
       final report = DefaultJumperLevelReportCreator(requirements: levelRequirements)
           .create(jumper: jumper);
@@ -25,7 +25,7 @@ class SetUpJumperLevelReportsCommand {
           changedJumpersReports[jumper]!.copyWith(levelReport: report);
     }
 
-    final changedDatabase = database.copyWith(jumpersReports: changedJumpersReports);
+    final changedDatabase = database.copyWith(jumperReports: changedJumpersReports);
     onFinish(changedDatabase);
   }
 }
