@@ -60,7 +60,10 @@ class _TeamOverviewCard extends StatelessWidget {
           const Gap(10),
           LinkTextButton(
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/simulation/team');
+              Navigator.of(context).pushReplacementNamed(
+                '/simulation/team',
+                arguments: TeamScreenMode.overview,
+              );
               context
                   .read<SimulationScreenNavigationCubit>()
                   .change(screen: SimulationScreenNavigationTarget.team);

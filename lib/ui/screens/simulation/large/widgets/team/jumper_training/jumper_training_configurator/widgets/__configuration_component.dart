@@ -14,13 +14,26 @@ class _ConfigurationComponent extends StatefulWidget {
 }
 
 class _ConfigurationComponentState extends State<_ConfigurationComponent> {
-  late final Map<JumperTrainingCategory, double> _trainingBalances;
+  late Map<JumperTrainingCategory, double> _trainingBalances;
   double _effectOnConsistency = 0;
 
   @override
   void initState() {
     _trainingBalances = Map.of(widget.trainingConfig.balance);
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant _ConfigurationComponent oldWidget) {
+    if (oldWidget.trainingConfig != widget.trainingConfig) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          _trainingBalances = Map.of(widget.trainingConfig.balance);
+          _effectOnConsistency = _calculateEffectOnConsistency();
+        });
+      });
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override

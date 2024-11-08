@@ -62,7 +62,7 @@ class _TopPanel extends StatelessWidget {
         ],
         if (sortedIncompletedActions.isNotEmpty) const Gap(70),
         const SizedBox(
-          width: 120,
+          width: 165,
           child: _CurrentDateCard(),
         ),
         const Gap(10),
@@ -73,7 +73,11 @@ class _TopPanel extends StatelessWidget {
             labelText: mainButtonText,
             iconData: mainButtonIconData,
             onPressed: homeIsSelected
-                ? ContinueSimulationCommand(context: context, database: database).execute
+                ? ContinueSimulationCommand(
+                    context: context,
+                    database: database,
+                    navigatorKey: navigatorKey,
+                  ).execute
                 : returnToHome,
           ),
         ),

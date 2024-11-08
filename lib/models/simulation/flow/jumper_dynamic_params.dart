@@ -80,6 +80,7 @@ class JumperDynamicParams with EquatableMixin {
 
   JumperDynamicParams copyWith({
     JumperTrainingConfig? trainingConfig,
+    bool forceNullTrainingConfig = false,
     int? jumpingTechniqueChangeTrainingDaysLeft,
     double? form,
     Map<JumperTrainingCategory, double>? trainingFeeling,
@@ -88,8 +89,9 @@ class JumperDynamicParams with EquatableMixin {
     double? fatigue,
     LevelOfConsciousness? levelOfConsciousness,
   }) {
+    final trnConfig = forceNullTrainingConfig ? null : trainingConfig;
     return JumperDynamicParams(
-      trainingConfig: trainingConfig ?? this.trainingConfig,
+      trainingConfig: trnConfig ?? this.trainingConfig,
       form: form ?? this.form,
       jumpsConsistency: jumpsConsistency ?? this.jumpsConsistency,
       morale: morale ?? this.morale,

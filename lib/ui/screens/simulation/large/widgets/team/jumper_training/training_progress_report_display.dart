@@ -22,7 +22,7 @@ class TrainingProgressReportDisplay extends StatelessWidget {
 
     final bool reportUnavailable = report == null;
 
-    SimpleRating getProgress(JumperTrainingProgressCategory category) {
+    SimpleRating getProgress(TrainingProgressCategory category) {
       return report!.ratings[category]!;
     }
 
@@ -43,11 +43,10 @@ class TrainingProgressReportDisplay extends StatelessWidget {
               ),
               Text(
                 translateTrainingProgress(
-                  getProgress(JumperTrainingProgressCategory.takeoff),
+                  getProgress(TrainingProgressCategory.takeoff),
                   context: context,
                 ),
-                style: progressLabelStyle(
-                    getProgress(JumperTrainingProgressCategory.takeoff)),
+                style: progressLabelStyle(getProgress(TrainingProgressCategory.takeoff)),
               ),
             ],
           ),
@@ -60,11 +59,10 @@ class TrainingProgressReportDisplay extends StatelessWidget {
               ),
               Text(
                 translateTrainingProgress(
-                  getProgress(JumperTrainingProgressCategory.flight),
+                  getProgress(TrainingProgressCategory.flight),
                   context: context,
                 ),
-                style: progressLabelStyle(
-                    getProgress(JumperTrainingProgressCategory.flight)),
+                style: progressLabelStyle(getProgress(TrainingProgressCategory.flight)),
               ),
             ],
           ),
@@ -77,11 +75,10 @@ class TrainingProgressReportDisplay extends StatelessWidget {
               ),
               Text(
                 translateTrainingProgress(
-                  getProgress(JumperTrainingProgressCategory.landing),
+                  getProgress(TrainingProgressCategory.landing),
                   context: context,
                 ),
-                style: progressLabelStyle(
-                    getProgress(JumperTrainingProgressCategory.landing)),
+                style: progressLabelStyle(getProgress(TrainingProgressCategory.landing)),
               ),
             ],
           ),
@@ -94,11 +91,11 @@ class TrainingProgressReportDisplay extends StatelessWidget {
               ),
               Text(
                 translateTrainingProgress(
-                  getProgress(JumperTrainingProgressCategory.consistency),
+                  getProgress(TrainingProgressCategory.consistency),
                   context: context,
                 ),
-                style: progressLabelStyle(
-                    getProgress(JumperTrainingProgressCategory.consistency)),
+                style:
+                    progressLabelStyle(getProgress(TrainingProgressCategory.consistency)),
               ),
             ],
           ),
@@ -111,11 +108,10 @@ class TrainingProgressReportDisplay extends StatelessWidget {
               ),
               Text(
                 translateTrainingProgress(
-                  getProgress(JumperTrainingProgressCategory.form),
+                  getProgress(TrainingProgressCategory.form),
                   context: context,
                 ),
-                style:
-                    progressLabelStyle(getProgress(JumperTrainingProgressCategory.form)),
+                style: progressLabelStyle(getProgress(TrainingProgressCategory.form)),
               ),
             ],
           ),

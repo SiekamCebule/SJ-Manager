@@ -63,11 +63,11 @@ class DefaultSimulationDatabaseCreator {
       for (var jumper in _jumpers.last)
         jumper: JumperStats(
           progressableAttributeHistory: {
-            JumperTrainingProgressCategory.takeoff: JumperAttributeHistory.empty(),
-            JumperTrainingProgressCategory.flight: JumperAttributeHistory.empty(),
-            JumperTrainingProgressCategory.landing: JumperAttributeHistory.empty(),
-            JumperTrainingProgressCategory.consistency: JumperAttributeHistory.empty(),
-            JumperTrainingProgressCategory.form: JumperAttributeHistory.empty(),
+            TrainingProgressCategory.takeoff: JumperAttributeHistory.empty(),
+            TrainingProgressCategory.flight: JumperAttributeHistory.empty(),
+            TrainingProgressCategory.landing: JumperAttributeHistory.empty(),
+            TrainingProgressCategory.consistency: JumperAttributeHistory.empty(),
+            TrainingProgressCategory.form: JumperAttributeHistory.empty(),
           },
         ),
     };

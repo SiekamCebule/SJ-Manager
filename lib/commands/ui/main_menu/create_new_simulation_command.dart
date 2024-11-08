@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/commands/simulation/simulation_flow/jumper_reports/set_up_jumper_level_reports_command.dart';
+import 'package:sj_manager/commands/ui/simulation/jumper_reports/set_up_jumper_level_reports_command.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/game_variants/game_variants_io_utils.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';

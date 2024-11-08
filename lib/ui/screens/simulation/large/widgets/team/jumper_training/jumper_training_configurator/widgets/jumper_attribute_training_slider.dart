@@ -36,7 +36,7 @@ class _JumperAttributeTrainingSliderState extends State<JumperAttributeTrainingS
     final categoryText = switch (widget.trainingCategory) {
       JumperTrainingCategory.takeoff => 'Wybicie',
       JumperTrainingCategory.flight => 'Lot',
-      JumperTrainingCategory.landing => 'Lądowania',
+      JumperTrainingCategory.landing => 'Lądowanie',
       JumperTrainingCategory.form => 'Forma',
     };
 

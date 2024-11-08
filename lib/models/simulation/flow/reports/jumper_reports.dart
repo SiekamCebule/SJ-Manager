@@ -63,7 +63,7 @@ class TrainingReport with EquatableMixin {
   });
 
   final SimpleRating generalRating;
-  final Map<JumperTrainingProgressCategory, SimpleRating> ratings;
+  final Map<TrainingProgressCategory, SimpleRating> ratings;
 
   static TrainingReport fromJson(Json json) {
     final ratings = json['ratings'] as Json;
@@ -72,7 +72,7 @@ class TrainingReport with EquatableMixin {
       generalRating: SimpleRating.fromJson(json['generalRating']),
       ratings: ratings.map(
         (categoryJson, ratingJson) {
-          final category = JumperTrainingProgressCategory.values
+          final category = TrainingProgressCategory.values
               .singleWhere((value) => value.name == categoryJson);
           final rating = SimpleRating.fromJson(ratingJson);
           return MapEntry(category, rating);
@@ -97,7 +97,7 @@ class TrainingReport with EquatableMixin {
       ];
 }
 
-enum JumperTrainingProgressCategory {
+enum TrainingProgressCategory {
   takeoff,
   flight,
   landing,
