@@ -1,14 +1,24 @@
 part of '../../simulation_route.dart';
 
 class _TeamScreen extends StatefulWidget {
-  const _TeamScreen();
+  const _TeamScreen({
+    this.initialMode = TeamScreenMode.overview,
+  });
+
+  final TeamScreenMode initialMode;
 
   @override
   State<_TeamScreen> createState() => _TeamScreenState();
 }
 
 class _TeamScreenState extends State<_TeamScreen> {
-  var _selectedMode = TeamScreenMode.overview;
+  late TeamScreenMode _selectedMode;
+
+  @override
+  void initState() {
+    _selectedMode = widget.initialMode;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -49,7 +49,10 @@ class _LargeState extends State<_Large> {
                     onGenerateRoute: (settings) {
                       return switch (settings.name) {
                         '/simulation/home' => buildPageRoute(widget: const _HomeScreen()),
-                        '/simulation/team' => buildPageRoute(widget: const _TeamScreen()),
+                        '/simulation/team' => buildPageRoute(
+                              widget: _TeamScreen(
+                            initialMode: settings.arguments as TeamScreenMode,
+                          )),
                         _ => null,
                       };
                     },

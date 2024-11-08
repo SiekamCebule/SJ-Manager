@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/commands/simulation/common/simulation_database_cubit.dart';
-import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
+import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
+import 'package:sj_manager/commands/simulation_database/simulation_database_commander.dart';
 import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
@@ -15,13 +15,16 @@ class SetUpTrainingsCommand {
   SetUpTrainingsCommand({
     required this.context,
     required this.database,
+    required this.onFinish,
   });
 
   final BuildContext context;
   final SimulationDatabase database;
+  final Function(SetUpTrainingsDialogResult result) onFinish;
 
   Future<SimulationDatabase> execute() async {
     final dbHelper = context.read<SimulationDatabaseHelper>();
+    var database = this.database;
 
     await showSjmDialog(
       barrierDismissible: false,
@@ -39,20 +42,10 @@ class SetUpTrainingsCommand {
               simulationMode: database.managerData.mode,
               jumpers: dbHelper.managerJumpers,
               jumpersSimulationRatings: database.jumperReports,
-              onSubmit: (trainingConfig) {
-                final dynamicParams = Map.of(database.jumperDynamicParams);
-                trainingConfig.forEach(
-                  (jumper, trainingConfig) {
-                    final currentDynamicParams = dynamicParams[jumper];
-                    dynamicParams[jumper] =
-                        currentDynamicParams!.copyWith(trainingConfig: trainingConfig);
-                  },
-                );
-                final changedDatabase =
-                    database.copyWith(jumperDynamicParams: dynamicParams);
-                changedDatabase.actionsRepo
-                    .complete(SimulationActionType.settingUpTraining);
-                return changedDatabase;
+              onSubmit: (result) {
+                onFinish(result);
+                database =
+                    SimulationDatabaseCommander(database: database).setUpTrainings();
               },
             ),
           ),

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:sj_manager/commands/simulation/common/simulation_database_cubit.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
-import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
 import 'package:sj_manager/ui/reusable_widgets/sjm_dialog_ok_pop_button.dart';
-import 'package:sj_manager/ui/screens/simulation/large/dialogs/set_up_trainings/set_up_trainings_are_you_sure_dialog.dart';
-import 'package:sj_manager/utils/show_dialog.dart';
 
-class SetUpTrainingsDialog extends StatefulWidget {
+enum SetUpTrainingsDialogResult {
+  goToTrainingView,
+  doNothing,
+}
+
+class SetUpTrainingsDialog extends StatelessWidget {
   const SetUpTrainingsDialog({
     super.key,
     required this.simulationMode,
@@ -23,26 +23,10 @@ class SetUpTrainingsDialog extends StatefulWidget {
   final SimulationMode simulationMode;
   final List<Jumper> jumpers;
   final Map<Jumper, JumperReports> jumpersSimulationRatings;
-  final Function(Map<Jumper, JumperTrainingConfig>) onSubmit;
-
-  @override
-  State<SetUpTrainingsDialog> createState() => _SetUpTrainingsDialogState();
-}
-
-class _SetUpTrainingsDialogState extends State<SetUpTrainingsDialog> {
-  late Map<Jumper, JumperTrainingConfig> _trainingConfigs;
-
-  @override
-  void initState() {
-    _trainingConfigs = {
-      for (var jumper in widget.jumpers) jumper: initialJumperTrainingConfig,
-    };
-    super.initState();
-  }
+  final Function(SetUpTrainingsDialogResult result) onSubmit;
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabaseCubit>().state;
     final paragraphStyle = Theme.of(context).textTheme.bodyMedium!;
 
     final title = SizedBox(
@@ -60,16 +44,14 @@ class _SetUpTrainingsDialogState extends State<SetUpTrainingsDialog> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (widget.simulationMode == SimulationMode.classicCoach &&
-            widget.jumpers.isEmpty) {
+        if (simulationMode == SimulationMode.classicCoach && jumpers.isEmpty) {
           throw StateError(
             'Strange... You have zero jumpers on the classic coach mode',
           );
         }
 
         final itIsPersonalCoachEmptyState =
-            widget.simulationMode == SimulationMode.personalCoach &&
-                widget.jumpers.isEmpty;
+            simulationMode == SimulationMode.personalCoach && jumpers.isEmpty;
 
         return AlertDialog(
           scrollable: true,
@@ -87,42 +69,26 @@ class _SetUpTrainingsDialogState extends State<SetUpTrainingsDialog> {
                     ),
                   ],
                 )
-              : Column(
-                  children: [
-                    Text(
-                      '''Właśnie startują przygotowania do następnego sezonu! Do rozgrywek zimowych pozostało jeszcze sporo czasu, ale już teraz musimy zadbać o odpowiedni trening naszych podopiecznych. Nad jakimi elementami treningu się skupisz? Czy zamierzasz przygotować formę pod letnie zawody, a może popracować nad lądowaniem? Może celem jest impreza mistrzowska w zimę? Możesz zmieniać konfigurację treningu w dowolnym momencie.\n\nPowodzenia w nadchodzącym sezonie!
+              : Text(
+                  '''Właśnie startują przygotowania do następnego sezonu! Do rozgrywek zimowych pozostało jeszcze sporo czasu, ale już teraz musimy zadbać o odpowiedni trening naszych podopiecznych. Nad jakimi elementami treningu się skupisz? Czy zamierzasz przygotować formę pod letnie zawody, a może popracować nad lądowaniem? Może celem jest impreza mistrzowska w zimę? Możesz zmieniać konfigurację treningu w dowolnym momencie.\n\nPowodzenia w nadchodzącym sezonie!
               ''',
-                      style: paragraphStyle,
-                    ),
-                    SizedBox(
-                      height: 300,
-                      width: constraints.maxWidth,
-                      child: ListView(
-                        children: [
-                          Placeholder(),
-                        ],
-                      ),
-                    ),
-                  ],
+                  style: paragraphStyle,
                 ),
           actions: [
             if (!itIsPersonalCoachEmptyState)
               TextButton(
                 onPressed: () async {
-                  bool? shouldClose = await showSjmDialog<bool>(
-                    barrierDismissible: true,
-                    context: context,
-                    child: const SetUpTrainingsAreYouSureDialog(),
-                  );
-                  if (shouldClose == true) {
-                    if (!context.mounted) return;
-                    Navigator.of(context).pop();
-                    widget.onSubmit(_trainingConfigs);
-                  }
+                  Navigator.of(context).pop();
+                  onSubmit(SetUpTrainingsDialogResult.goToTrainingView);
                 },
-                child: const Text('Zatwierdź'),
+                child: const Text('Ustal trening'),
               ),
-            if (itIsPersonalCoachEmptyState) const SjmDialogOkPopButton(),
+            if (itIsPersonalCoachEmptyState)
+              SjmDialogOkPopButton(
+                customOnPressed: () {
+                  onSubmit(SetUpTrainingsDialogResult.doNothing);
+                },
+              ),
           ],
         );
       },

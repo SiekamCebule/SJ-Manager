@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/commands/simulation/common/simulation_database_cubit.dart';
+import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/simulation_jumper_image.dart';

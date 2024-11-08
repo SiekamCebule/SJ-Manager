@@ -96,9 +96,12 @@ class _NavigationRailState extends State<_NavigationRail> {
             navigationTargetsBySimulationMode[simulationMode]![selecetedIndex];
         switch (navigationTarget) {
           case SimulationScreenNavigationTarget.home:
-            widget.navigatorKey.currentState!.pushNamed('/simulation/home');
+            widget.navigatorKey.currentState!.pushReplacementNamed('/simulation/home');
           case SimulationScreenNavigationTarget.team:
-            widget.navigatorKey.currentState!.pushNamed('/simulation/team');
+            widget.navigatorKey.currentState!.pushReplacementNamed(
+              '/simulation/team',
+              arguments: TeamScreenMode.overview,
+            );
           case SimulationScreenNavigationTarget.exit:
             widget.exit();
           default:

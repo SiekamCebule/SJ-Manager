@@ -1,4 +1,4 @@
-import 'package:sj_manager/algorithms/reports/training_progress_report/jumper_training_progress_report_creator.dart';
+import 'package:sj_manager/algorithms/reports/training_progress_report/training_report_creator.dart';
 import 'package:sj_manager/algorithms/reports/training_progress_report/weekly_jumper_training_progress_report_creator.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 
@@ -7,10 +7,10 @@ class MonthlyJumperTrainingProgressReportCreator {
     required this.deltas,
   });
 
-  final Map<JumperTrainingProgressCategory, List<double>> deltas;
+  final Map<TrainingProgressCategory, List<double>> deltas;
 
-  TrainingReport create() {
-    return JumperTrainingProgressReportCreator(
+  TrainingReport? create() {
+    return TrainingReportCreator(
       deltas: deltas,
       requirements: requirements,
     ).create();

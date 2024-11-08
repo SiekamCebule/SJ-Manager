@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/commands/simulation/common/simulation_screen_navigation_cubit.dart';
+import 'package:sj_manager/commands/ui/simulation/simulation_screen_navigation_cubit.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/ui/reusable_widgets/link_text_button.dart';
+import 'package:sj_manager/ui/screens/simulation/simulation_route.dart';
 
 class TeamOverviewCardNoJumpersInfoWidget extends StatelessWidget {
   const TeamOverviewCardNoJumpersInfoWidget({
@@ -44,7 +45,10 @@ class TeamOverviewCardNoJumpersInfoWidget extends StatelessWidget {
             const Gap(2),
             LinkTextButton(
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/simulation/team');
+                Navigator.of(context).pushReplacementNamed(
+                  '/simulation/team',
+                  arguments: TeamScreenMode.overview,
+                );
                 context
                     .read<SimulationScreenNavigationCubit>()
                     .change(screen: SimulationScreenNavigationTarget.team);

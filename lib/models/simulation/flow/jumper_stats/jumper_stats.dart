@@ -9,7 +9,7 @@ class JumperStats with EquatableMixin {
 
   const JumperStats.empty() : this(progressableAttributeHistory: const {});
 
-  final Map<JumperTrainingProgressCategory, JumperAttributeHistory>
+  final Map<TrainingProgressCategory, JumperAttributeHistory>
       progressableAttributeHistory;
 
   Map<String, dynamic> toJson() {
@@ -24,11 +24,20 @@ class JumperStats with EquatableMixin {
       progressableAttributeHistory:
           (json['progressableAttributeHistory'] as Map<String, dynamic>).map(
         (categoryName, historyJson) => MapEntry(
-          JumperTrainingProgressCategory.values
+          TrainingProgressCategory.values
               .singleWhere((value) => value.name == categoryName),
           JumperAttributeHistory.fromJson(historyJson),
         ),
       ),
+    );
+  }
+
+  JumperStats copyWith({
+    Map<TrainingProgressCategory, JumperAttributeHistory>? progressableAttributeHistory,
+  }) {
+    return JumperStats(
+      progressableAttributeHistory:
+          progressableAttributeHistory ?? this.progressableAttributeHistory,
     );
   }
 

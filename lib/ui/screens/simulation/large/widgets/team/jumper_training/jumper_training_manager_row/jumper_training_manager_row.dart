@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/commands/simulation/common/change_jumper_training_command.dart';
-import 'package:sj_manager/commands/simulation/common/simulation_database_cubit.dart';
+import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
+import 'package:sj_manager/commands/simulation_database/simulation_database_commander.dart';
 import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper/jumper_simple_list_tile.dart';
@@ -73,12 +73,15 @@ class _JumperTrainingManagerRowState extends State<JumperTrainingManagerRow> {
                             trainingConfig: dynamicParams!.trainingConfig!,
                             dynamicParams: dynamicParams,
                             onTrainingChange: (trainingConfig) {
-                              ChangeJumperTrainingCommand(
-                                context: context,
-                                database: database,
+                              final changedDatabase =
+                                  SimulationDatabaseCommander(database: database)
+                                      .changeJumperTraining(
                                 jumper: _selectedJumperInTrainingMode!,
-                                trainingConfig: trainingConfig,
-                              ).execute();
+                                config: trainingConfig,
+                              );
+                              context
+                                  .read<SimulationDatabaseCubit>()
+                                  .update(changedDatabase);
                             },
                             weeklyTrainingReport: database
                                 .jumperReports[_selectedJumperInTrainingMode]!

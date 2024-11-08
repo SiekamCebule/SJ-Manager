@@ -1,8 +1,8 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/commands/simulation/common/simulation_database_cubit.dart';
-import 'package:sj_manager/commands/simulation/common/simulation_screen_navigation_cubit.dart';
+import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
+import 'package:sj_manager/commands/ui/simulation/simulation_screen_navigation_cubit.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';

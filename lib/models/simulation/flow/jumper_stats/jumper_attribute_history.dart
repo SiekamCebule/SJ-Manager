@@ -22,6 +22,20 @@ class JumperAttributeHistory with EquatableMixin {
     values[date] = value;
   }
 
+  List<num> toDeltasList() {
+    final deltas = <num>[];
+    num? previousValue;
+    for (var value in values.values) {
+      if (previousValue == null) {
+        deltas.add(0);
+      } else {
+        deltas.add(value - previousValue);
+      }
+      previousValue = value;
+    }
+    return deltas;
+  }
+
   Json toJson() {
     return {
       'values': values.map((date, value) {
