@@ -32,6 +32,7 @@ class _TeamOverviewCard extends StatelessWidget {
                   return JumperInTeamOverviewCard(
                     reports: report,
                     jumper: jumper,
+                    subteamType: dbHelper.subteamOfJumper(jumper),
                     hideLinks: true,
                   );
                 }),

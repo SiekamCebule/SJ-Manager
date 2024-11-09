@@ -43,6 +43,12 @@ class TeamSerializer implements SimulationDbPartSerializer<Team> {
                 'distance': team.facts.record!.distance,
               }
             : null,
+        'limitInSubteam': team.facts.limitInSubteam.map(
+          (subteamType, limit) => MapEntry(
+            subteamType.name,
+            limit,
+          ),
+        ),
       },
     };
   }

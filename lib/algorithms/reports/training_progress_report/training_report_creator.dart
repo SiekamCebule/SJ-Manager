@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
 
@@ -48,12 +47,13 @@ class TrainingReportCreator {
     };
 
     final averageRatingImpact =
-        (ratings[TrainingProgressCategory.takeoff]!.impactValue * 25 +
-                ratings[TrainingProgressCategory.flight]!.impactValue * 25 +
+        (ratings[TrainingProgressCategory.takeoff]!.impactValue * 30 +
+                ratings[TrainingProgressCategory.flight]!.impactValue * 30 +
                 ratings[TrainingProgressCategory.landing]!.impactValue * 5 +
-                ratings[TrainingProgressCategory.consistency]!.impactValue * 10 +
-                ratings[TrainingProgressCategory.form]!.impactValue * 35) /
-            100;
+                ratings[TrainingProgressCategory.consistency]!.impactValue * 15 +
+                ratings[TrainingProgressCategory.form]!.impactValue * 20) /
+            100 *
+            2.5;
     final generalRating = SimpleRating.fromImpactValue(averageRatingImpact.round());
 
     return TrainingReport(

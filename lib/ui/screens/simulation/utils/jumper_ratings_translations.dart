@@ -3,6 +3,7 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
+import 'package:sj_manager/models/user_db/team/country_team/subteam_type.dart';
 
 String getJumperMoraleDescription({
   required BuildContext context,
@@ -69,6 +70,20 @@ String translateJumperLevelDescription({
     JumperLevelDescription.national => translator.jumperLevelNational,
     JumperLevelDescription.amateur => translator.jumperLevelAmateur,
     _ => translator.jumperLevelNoData,
+  };
+}
+
+String translateJumperSubteamType({
+  required BuildContext context,
+  required SubteamType subteamType,
+}) {
+  final translator = translate(context);
+  return switch (subteamType) {
+    SubteamType.a => translator.subteamA,
+    SubteamType.b => translator.subteamB,
+    SubteamType.c => translator.subteamC,
+    SubteamType.d => translator.subteamD,
+    SubteamType.noSubteam => translator.jumperSubteamNoSubteam,
   };
 }
 

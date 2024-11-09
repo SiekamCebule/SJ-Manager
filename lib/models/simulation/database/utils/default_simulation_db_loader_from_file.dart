@@ -41,6 +41,7 @@ import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
+import 'package:sj_manager/models/user_db/team/country_team/subteam_type.dart';
 import 'package:sj_manager/models/user_db/team/personal_coach_team.dart';
 import 'package:sj_manager/models/user_db/team/subteam.dart';
 import 'package:sj_manager/models/user_db/team/team.dart';
@@ -97,10 +98,6 @@ class DefaultSimulationDbLoaderFromFile {
     final loadedCountryTeamsMap = await _loadItems(itemsType: 'countryTeam');
     _addIdsFromLoadedMap(loadedCountryTeamsMap);
     final loadedCountryTeams = _itemsFromLoadedMap(loadedCountryTeamsMap);
-
-    final loadedSubteamsMap = await _loadItems(itemsType: 'subteam');
-    _addIdsFromLoadedMap(loadedSubteamsMap);
-    final loadedSubteams = _itemsFromLoadedMap(loadedSubteamsMap);
 
     final loadedSeasonMap = await _loadItems(itemsType: 'simulationSeason');
     _addIdsFromLoadedMap(loadedSeasonMap);
@@ -184,11 +181,23 @@ class DefaultSimulationDbLoaderFromFile {
       );
     });
 
+    final subteamJumpersJson = _dynamicStateJson['subteamJumpers'] as Json;
+    final subteamJumpers = subteamJumpersJson.map((subteamKey, jumperIds) {
+      final splitSubteamKey = subteamKey.split('###');
+      return MapEntry(
+        Subteam(
+          type:
+              SubteamType.values.singleWhere((value) => value.name == splitSubteamKey[0]),
+          parentTeam: idsRepo.get(splitSubteamKey[1]),
+        ),
+        (jumperIds as List).cast<String>(),
+      );
+    });
+
     _countriesRepo.dispose();
     return SimulationDatabase(
       managerData: managerData,
       countryTeams: ItemsRepo(initial: loadedCountryTeams.cast()),
-      subteams: ItemsRepo(initial: loadedSubteams.cast()),
       jumpers: ItemsRepo(initial: loadedJumpers),
       hills: ItemsRepo(initial: loadedHills.cast()),
       countries: _countriesRepo,
@@ -202,6 +211,7 @@ class DefaultSimulationDbLoaderFromFile {
       jumperReports: jumperReports,
       jumperStats: jumperStats,
       teamReports: teamReports,
+      subteamJumpers: subteamJumpers,
     );
   }
 

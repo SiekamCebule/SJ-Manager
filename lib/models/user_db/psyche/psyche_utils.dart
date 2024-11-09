@@ -1,7 +1,7 @@
 import 'package:sj_manager/models/user_db/psyche/level_of_consciousness.dart';
 import 'package:sj_manager/models/user_db/psyche/personalities.dart';
 
-const levelOfConsciousnessWithPersonalities = {
+const personalityByLoc = {
   LevelOfConsciousnessLabels.shame: Personalities.compromised, // Wstyd, Skompromitowany
   LevelOfConsciousnessLabels.guilt: Personalities.selfCritical, // Wina, Samokrytyczny
   LevelOfConsciousnessLabels.apathy: Personalities.resigned, // Apatia, Zrezygnowany
@@ -22,3 +22,10 @@ const levelOfConsciousnessWithPersonalities = {
   LevelOfConsciousnessLabels.enlightenment:
       Personalities.enlightened, // Oświecenie, Oświecony
 };
+
+LevelOfConsciousness locByPersonality(Personalities personality) {
+  final locLabel = personalityByLoc.keys.singleWhere(
+    (locLabel) => personalityByLoc[locLabel]! == personality,
+  );
+  return LevelOfConsciousness(levelOfConsciousnessLog[locLabel]!);
+}

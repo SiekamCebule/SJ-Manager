@@ -5,6 +5,7 @@ import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/team/country_team/subteam_type.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
@@ -17,6 +18,7 @@ class JumperInTeamOverviewCard extends StatelessWidget {
   const JumperInTeamOverviewCard({
     super.key,
     required this.jumper,
+    required this.subteamType,
     required this.reports,
     this.hideLinks = false,
     this.goToProfile,
@@ -24,6 +26,7 @@ class JumperInTeamOverviewCard extends StatelessWidget {
   });
 
   final Jumper jumper;
+  final SubteamType? subteamType;
   final JumperReports reports;
   final bool hideLinks;
   final VoidCallback? goToProfile;
@@ -31,7 +34,6 @@ class JumperInTeamOverviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //print('Level report of (${jumper.nameAndSurname()}): ${reports.levelReport}');
     final moraleRating = reports.moraleRating;
     final jumpsRating = reports.jumpsRating;
     final trainingRating = reports.weeklyTrainingReport?.generalRating;
@@ -52,6 +54,7 @@ class JumperInTeamOverviewCard extends StatelessWidget {
     final nameAndSurnameColumn = JumperCardNameAndSurnameColumn(
       jumper: jumper,
       jumperRatings: reports,
+      subteamType: subteamType,
     );
 
     final linksColumn = Column(

@@ -131,25 +131,27 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
       selectedIndexesRepo.setSelection(addIndex - 1, false);
     }
     selectedIndexesRepo.setSelection(addIndex, true);
-    /*idsRepo.register(
-      item,
-      id: idGenerator.generate(),
-    );*/
   }
 
   void remove() {
-    final indexes = [...selectedIndexesRepo.last]..sort((a, b) => b - a);
+    final indexes = List.of(selectedIndexesRepo.last)..sort((a, b) => b.compareTo(a));
     if (indexes.isEmpty) {
       throw StateError(
         'Cannot remove an item from DatabaseItemsCubit because there is no item selected',
       );
-    } else {
-      if (selectedIndexesRepo.last.length > 1 ||
-          itemsRepos.getEditable(state.itemsType).items.value.isEmpty) {
+    }
+    if (indexes.length > 1) {
+      final editableItems = itemsRepos.getEditable(state.itemsType);
+      for (int index in indexes) {
+        editableItems.removeAt(index);
+      }
+      selectedIndexesRepo.clearSelection();
+    } else if (indexes.length == 1) {
+      itemsRepos.getEditable(state.itemsType).removeAt(indexes.single);
+      if (indexes.single != 0) {
+        selectedIndexesRepo.selectOnlyAt(indexes.single - 1);
+      } else {
         selectedIndexesRepo.clearSelection();
-      } else if (selectedIndexesRepo.last.length == 1 &&
-          selectedIndexesRepo.last.single != 0) {
-        selectedIndexesRepo.selectOnlyAt(selectedIndexesRepo.last.single - 1);
       }
     }
   }

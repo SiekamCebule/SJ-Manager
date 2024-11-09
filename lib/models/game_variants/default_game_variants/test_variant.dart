@@ -161,7 +161,6 @@ class _TestGameVariantCreator {
       hills: _hills,
       countries: countries,
       countryTeams: teams,
-      subteams: [],
       jumpers: jumpers,
       season: SimulationSeason(
         eventSeries: [

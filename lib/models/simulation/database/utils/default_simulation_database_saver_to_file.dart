@@ -65,7 +65,6 @@ class DefaultSimulationDatabaseSaverToFile {
     await _serializeItems(items: database.countries.last.toList(), itemsType: 'country');
     await _serializeItems(
         items: database.countryTeams.last.toList(), itemsType: 'countryTeam');
-    await _serializeItems(items: database.subteams.last.toList(), itemsType: 'subteam');
     await _serializeItems(
         items: database.seasons.last.toList(), itemsType: 'simulationSeason');
     await _serializeDynamicState();
@@ -105,6 +104,12 @@ class DefaultSimulationDatabaseSaverToFile {
       }),
       'teamReports': _database.teamReports.map((team, reports) {
         return MapEntry(idsRepo.idOf(team), reports.toJson());
+      }),
+      'subteamJumpers': _database.subteamJumpers.map((subteam, jumperIds) {
+        return MapEntry(
+          '${subteam.type.name}###${idsRepo.idOf(subteam.parentTeam)}',
+          jumperIds.toList(),
+        );
       }),
     };
     await file.writeAsString(jsonEncode(json));

@@ -7,13 +7,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
 import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
-import 'package:sj_manager/ui/screens/simulation/large/widgets/simulation_jumper_image.dart';
-import 'package:sj_manager/ui/screens/simulation/utils/jumper_ratings_translations.dart';
-
-part '__list_tile.dart';
+import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper/jumper_simple_list_tile.dart';
 
 class SearchForChargesJumpersDialog extends StatefulWidget {
   const SearchForChargesJumpersDialog({
@@ -105,15 +100,19 @@ class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersD
                 itemCount: _filteredJumpers.length,
                 itemBuilder: (context, index) {
                   final jumper = _filteredJumpers[index];
-                  return _ListTile(
+                  return JumperSimpleListTile(
                     jumper: jumper,
-                    levelReport: database.jumperReports[jumper]!.levelReport,
-                    selected: _currentJumper == jumper,
                     onTap: () {
                       setState(() {
                         _currentJumper = jumper;
                       });
                     },
+                    selected: _currentJumper == jumper,
+                    leading: JumperSimpleListTileLeading.jumperImage,
+                    trailing: JumperSimpleListTileTrailing.countryFlag,
+                    subtitle: JumperSimpleListTileSubtitle.levelDescription,
+                    levelDescription:
+                        database.jumperReports[jumper]!.levelReport!.levelDescription,
                   );
                 },
               ),

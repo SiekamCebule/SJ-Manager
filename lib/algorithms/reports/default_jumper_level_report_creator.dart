@@ -27,17 +27,29 @@ class DefaultJumperLevelReportCreator {
     });
 
     JumperCharacteristicOthernessStrength findAppropriateOthernessStrength(num delta) {
-      const deviationForOneStrength = 0.9;
-      const minDeviationAbsForFirstStrength = 0.25;
+      const double deviationForOneStrength = 0.9;
+      const double minDeviationAbsForFirstStrength = 0.25;
+
+      // Handle the average case first
       if (delta.abs() < minDeviationAbsForFirstStrength) {
         return JumperCharacteristicOthernessStrength.average;
       }
-      late final int indexInEnum;
+
+      // Calculate the index in the enum
+      int indexInEnum;
       if (delta < 0) {
         indexInEnum = (delta.abs() ~/ deviationForOneStrength) + 1;
       } else {
         indexInEnum = (delta ~/ deviationForOneStrength) + 6;
       }
+
+      // Ensure the index is within the bounds of the enum values
+      if (indexInEnum < 0) {
+        indexInEnum = 0;
+      } else if (indexInEnum >= JumperCharacteristicOthernessStrength.values.length) {
+        indexInEnum = JumperCharacteristicOthernessStrength.values.length - 1;
+      }
+
       return JumperCharacteristicOthernessStrength.values[indexInEnum];
     }
 
