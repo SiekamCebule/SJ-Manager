@@ -25,3 +25,24 @@ List<CountryTeam> teamsByStars(List<CountryTeam> teams, {bool ascending = false}
 
   return copiedTeams;
 }
+
+extension ContainsAll on String {
+  bool containsAllLetters({
+    required String from,
+  }) {
+    Map<String, int> targetLetterCount = {};
+
+    // Count occurrences of each letter in the target (searchText)
+    for (var letter in from.split('')) {
+      targetLetterCount[letter] = (targetLetterCount[letter] ?? 0) + 1;
+    }
+
+    // Check if source contains all letters from target with required frequency
+    for (var letter in targetLetterCount.keys) {
+      if (targetLetterCount[letter]! > RegExp(letter).allMatches(this).length) {
+        return false;
+      }
+    }
+    return true;
+  }
+}

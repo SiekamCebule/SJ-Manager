@@ -53,6 +53,11 @@ class _LargeState extends State<_Large> {
                               widget: _TeamScreen(
                             initialMode: settings.arguments as TeamScreenMode,
                           )),
+                        '/simulation/teams' => buildPageRoute(
+                            widget: const _TeamsScreen(
+                              initialSex: TeamsScreenSelectedSex.both,
+                            ),
+                          ),
                         _ => null,
                       };
                     },

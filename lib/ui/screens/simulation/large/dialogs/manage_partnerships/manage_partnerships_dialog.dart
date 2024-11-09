@@ -39,97 +39,99 @@ class _ManagePartnershipsDialogState extends State<ManagePartnershipsDialog> {
   Widget build(BuildContext context) {
     final database = context.watch<SimulationDatabaseCubit>().state;
 
-    return AlertDialog(
-      title: const Text('Zarządzaj współpracami'),
-      content: Column(
-        children: [
-          ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 650),
-            child: const Text(
-              'Możesz zmieniać kolejność skoczków poprzez przeciąganie poszczególnych "kafelków" (mechanizm przeciągnij i upuść). Masz możliwość zakończenia współpracy z wybranymi podopiecznymi.',
+    return LayoutBuilder(
+      builder: (context, constraints) => AlertDialog(
+        title: const Text('Zarządzaj współpracami'),
+        content: Column(
+          children: [
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 650),
+              child: const Text(
+                'Możesz zmieniać kolejność skoczków poprzez przeciąganie poszczególnych "kafelków" (mechanizm przeciągnij i upuść). Masz możliwość zakończenia współpracy z wybranymi podopiecznymi.',
+              ),
             ),
+            const Gap(20),
+            SizedBox(
+              height: constraints.maxHeight * 0.6,
+              width: 650,
+              child: ReorderableListView.builder(
+                buildDefaultDragHandles: false,
+                itemCount: _orderedJumpers.length,
+                onReorder: (oldIndex, newIndex) {
+                  setState(() {
+                    if (newIndex > oldIndex) {
+                      newIndex -= 1;
+                    }
+                    final Jumper movedJumper = _orderedJumpers.removeAt(oldIndex);
+                    _orderedJumpers.insert(newIndex, movedJumper);
+                  });
+                },
+                itemBuilder: (context, index) {
+                  final jumper = _orderedJumpers[index];
+                  return ReorderableDragStartListener(
+                    key: ValueKey(index),
+                    index: index,
+                    child: _JumperTile(
+                      jumper: jumper,
+                      levelReport: database.jumperReports[jumper]!.levelReport,
+                      onAction: () {
+                        setState(() {
+                          _shouldBeRemoved[jumper] = !_shouldBeRemoved[jumper]!;
+                        });
+                      },
+                      action: _shouldBeRemoved[jumper] == true
+                          ? _JumperTileAction.undoEndingPartnership
+                          : _JumperTileAction.endPartnership,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Anuluj'),
           ),
-          const Gap(20),
-          SizedBox(
-            height: 500,
-            width: 650,
-            child: ReorderableListView.builder(
-              buildDefaultDragHandles: false,
-              itemCount: _orderedJumpers.length,
-              onReorder: (oldIndex, newIndex) {
-                setState(() {
-                  if (newIndex > oldIndex) {
-                    newIndex -= 1;
-                  }
-                  final Jumper movedJumper = _orderedJumpers.removeAt(oldIndex);
-                  _orderedJumpers.insert(newIndex, movedJumper);
-                });
-              },
-              itemBuilder: (context, index) {
-                final jumper = _orderedJumpers[index];
-                return ReorderableDragStartListener(
-                  key: ValueKey(index),
-                  index: index,
-                  child: _JumperTile(
-                    jumper: jumper,
-                    levelReport: database.jumperReports[jumper]!.levelReport,
-                    onAction: () {
-                      setState(() {
-                        _shouldBeRemoved[jumper] = !_shouldBeRemoved[jumper]!;
-                      });
-                    },
-                    action: _shouldBeRemoved[jumper] == true
-                        ? _JumperTileAction.undoEndingPartnership
-                        : _JumperTileAction.endPartnership,
+          TextButton(
+            onPressed: () async {
+              final toRemove = _shouldBeRemoved.keys
+                  .where((jumper) => _shouldBeRemoved[jumper] == true);
+              final endOfPartnershipExists = toRemove.isNotEmpty;
+
+              bool confirm = false;
+              if (!endOfPartnershipExists) {
+                confirm = true;
+              } else {
+                confirm = await showSjmDialog(
+                  barrierDismissible: true,
+                  context: context,
+                  child: _AreYouSureDialog(
+                    partnershipsToEnd: toRemove,
                   ),
                 );
-              },
-            ),
+              }
+
+              if (confirm) {
+                final newOrder = _orderedJumpers.where(
+                  (jumper) => !_shouldBeRemoved[jumper]!,
+                );
+                final dialogResult = ManagePartnershipsDialogResult(
+                  partnershipsToRemove: toRemove,
+                  newOrder: newOrder.toList(),
+                );
+                widget.onSubmit(dialogResult);
+                if (!context.mounted) return;
+                Navigator.of(context).pop();
+              }
+            },
+            child: const Text('Zatwierdź'),
           ),
         ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Anuluj'),
-        ),
-        TextButton(
-          onPressed: () async {
-            final toRemove =
-                _shouldBeRemoved.keys.where((jumper) => _shouldBeRemoved[jumper] == true);
-            final endOfPartnershipExists = toRemove.isNotEmpty;
-
-            bool confirm = false;
-            if (!endOfPartnershipExists) {
-              confirm = true;
-            } else {
-              confirm = await showSjmDialog(
-                barrierDismissible: true,
-                context: context,
-                child: _AreYouSureDialog(
-                  partnershipsToEnd: toRemove,
-                ),
-              );
-            }
-
-            if (confirm) {
-              final newOrder = _orderedJumpers.where(
-                (jumper) => !_shouldBeRemoved[jumper]!,
-              );
-              final dialogResult = ManagePartnershipsDialogResult(
-                partnershipsToRemove: toRemove,
-                newOrder: newOrder.toList(),
-              );
-              widget.onSubmit(dialogResult);
-              if (!context.mounted) return;
-              Navigator.of(context).pop();
-            }
-          },
-          child: const Text('Zatwierdź'),
-        ),
-      ],
     );
   }
 }

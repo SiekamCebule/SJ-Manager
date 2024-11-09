@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/commands/ui/simulation/continue_simulation_command.dart';
 import 'package:sj_manager/commands/ui/simulation/manage_partnerships_command.dart';
 import 'package:sj_manager/commands/ui/simulation/search_for_candidates_command.dart';
@@ -15,7 +18,9 @@ import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
+import 'package:sj_manager/models/user_db/sex.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
+import 'package:sj_manager/ui/database_item_editors/fields/my_search_bar.dart';
 import 'package:sj_manager/ui/responsiveness/responsive_builder.dart';
 import 'package:sj_manager/ui/reusable_widgets/card_with_title.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
@@ -33,6 +38,8 @@ import 'package:sj_manager/ui/screens/simulation/large/widgets/team/team_screen/
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/team_screen/team_screen_no_jumpers_info_widget.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/team_screen/team_screen_personal_coach_bottom_bar.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/team_screen/team_summary_card.dart';
+import 'package:sj_manager/ui/screens/simulation/large/widgets/teams/country_team_overview_list_tile.dart';
+import 'package:sj_manager/utils/filtering.dart';
 import 'package:sj_manager/utils/show_dialog.dart';
 import 'package:sj_manager/utils/translating.dart';
 
@@ -45,6 +52,7 @@ part 'large/subscreens/home/__home_screen.dart';
 part 'large/subscreens/home/__next_competitions_card.dart';
 part 'large/subscreens/home/__team_overview_card.dart';
 part 'large/subscreens/__team_screen.dart';
+part 'large/subscreens/__teams_screen.dart';
 
 class SimulationRoute extends StatelessWidget {
   const SimulationRoute({

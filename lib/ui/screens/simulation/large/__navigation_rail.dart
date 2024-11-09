@@ -36,7 +36,7 @@ class _NavigationRailState extends State<_NavigationRail> {
         NavigationRailDestination(
           icon: const Icon(Symbols.group),
           label: Text(
-            'Drużyna',
+            'Kadra',
             style: regularRailDestinationLabelStyle,
           ),
         ),
@@ -73,6 +73,13 @@ class _NavigationRailState extends State<_NavigationRail> {
           disabled: true,
         ),
         NavigationRailDestination(
+          icon: const Icon(Symbols.groups),
+          label: Text(
+            'Drużyny',
+            style: regularRailDestinationLabelStyle,
+          ),
+        ),
+        NavigationRailDestination(
           icon: const Icon(Symbols.settings),
           label: Text(
             'Ustawienia',
@@ -102,6 +109,10 @@ class _NavigationRailState extends State<_NavigationRail> {
               '/simulation/team',
               arguments: TeamScreenMode.overview,
             );
+          case SimulationScreenNavigationTarget.teams:
+            widget.navigatorKey.currentState!.pushReplacementNamed(
+              '/simulation/teams',
+            );
           case SimulationScreenNavigationTarget.exit:
             widget.exit();
           default:
@@ -109,7 +120,7 @@ class _NavigationRailState extends State<_NavigationRail> {
               'Prosimy o zgłoszenie nam tego błędu. Próbowano przejść do ekranu $navigationTarget (niezaimplementowano)',
             );
         }
-        if (selecetedIndex != 7) {
+        if (navigationTarget != SimulationScreenNavigationTarget.exit) {
           context
               .read<SimulationScreenNavigationCubit>()
               .change(screen: navigationTarget);
