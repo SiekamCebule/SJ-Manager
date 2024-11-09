@@ -159,7 +159,7 @@ class _JumperTile extends StatelessWidget {
     return ListTile(
       leading: SimulationJumperImage(
         jumper: jumper,
-        width: 50,
+        width: 35,
       ),
       trailing: TextButton(
         onPressed: onAction,
@@ -208,6 +208,7 @@ class _AreYouSureDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 30.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 for (var jumper in partnershipsToEnd)
                   RichText(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/team/country_team/subteam_type.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:gap/gap.dart';
 import 'package:sj_manager/ui/screens/simulation/utils/jumper_ratings_translations.dart';
@@ -10,10 +11,12 @@ class JumperCardNameAndSurnameColumn extends StatelessWidget {
     super.key,
     required this.jumper,
     required this.jumperRatings,
+    required this.subteamType,
   });
 
   final Jumper jumper;
   final JumperReports jumperRatings;
+  final SubteamType? subteamType;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,6 @@ class JumperCardNameAndSurnameColumn extends StatelessWidget {
       context: context,
       levelDescription: levelDescription,
     );
-
     return Column(
       children: [
         const Spacer(),
@@ -56,6 +58,19 @@ class JumperCardNameAndSurnameColumn extends StatelessWidget {
               .bodyMedium!
               .copyWith(fontStyle: FontStyle.italic),
         ),
+        if (subteamType != null) ...[
+          const Gap(10),
+          Text(
+            translateJumperSubteamType(
+              context: context,
+              subteamType: subteamType!,
+            ),
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(fontStyle: FontStyle.italic),
+          ),
+        ],
         const Spacer(),
       ],
     );

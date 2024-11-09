@@ -19,10 +19,11 @@ class _ReportComponent extends StatelessWidget {
       ),
       child: DefaultTabController(
         length: 2,
+        animationDuration: Duration.zero,
         child: Column(
           children: [
-            IntrinsicHeight(
-              child: const TabBar.secondary(
+            const IntrinsicHeight(
+              child: TabBar.secondary(
                 tabs: [
                   Tab(
                     text: 'Tygodniowo',

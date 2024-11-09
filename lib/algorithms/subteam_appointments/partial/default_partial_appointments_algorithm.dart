@@ -3,19 +3,18 @@ import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/models/user_db/psyche/personalities.dart';
 import 'package:sj_manager/utils/random/random.dart';
 
-abstract interface class DefaultPartialAppointmentsAlgorithm
-    implements PartialAppointmentsAlgorithm {
+class DefaultPartialAppointmentsAlgorithm implements PartialAppointmentsAlgorithm {
   const DefaultPartialAppointmentsAlgorithm();
 
   @override
-  List<Jumper> chooseBestJumpers({
-    required List<Jumper> source,
+  Iterable<Jumper> chooseBestJumpers({
+    required Iterable<Jumper> source,
     required Map<Jumper, double> form,
     required int limit,
   }) {
     final baseSeed = DateTime.now().millisecondsSinceEpoch;
     final seed = {
-      for (var i = 0; i < source.length; i++) source[i]: baseSeed + i,
+      for (var i = 0; i < source.length; i++) source.elementAt(i): baseSeed + i,
     };
     double calculateRating(Jumper jumper) {
       final personalityBonus = switch (jumper.personality) {
@@ -40,11 +39,13 @@ abstract interface class DefaultPartialAppointmentsAlgorithm
 
       final randomBonus = linearRandomDouble(-2, 2, seed: seed[jumper]!);
 
-      final byTakeoff = (jumper.skills.takeoffQuality / 1.2);
-      final byFlight = (jumper.skills.flightQuality / 1.2);
-      final byPersonality = (personalityBonus / 3.5);
+      final byTakeoff = (jumper.skills.takeoffQuality / 1);
+      final byFlight = (jumper.skills.flightQuality / 1);
+      final byPersonality = (personalityBonus / 3);
       final byForm = (form[jumper]! / 4);
       final byRandom = (randomBonus / 1);
+
+      final rating = byTakeoff + byFlight + byPersonality + byForm + byRandom;
 
       print('--- Rating Calculation for Jumper: ${jumper.nameAndSurname()} ---');
       print('Takeoff: $byTakeoff');
@@ -52,14 +53,15 @@ abstract interface class DefaultPartialAppointmentsAlgorithm
       print('Personality: $byPersonality');
       print('Form: $byForm');
       print('Random: $byRandom');
+      print('Sum: $rating');
       print('-------------------------------------------');
 
-      return byTakeoff + byFlight + byPersonality + byForm + byRandom;
+      return rating;
     }
 
     final sortedByRating = List.of(source)
       ..sort(
           (first, second) => calculateRating(second).compareTo(calculateRating(first)));
-    return sortedByRating.take(limit).toList();
+    return sortedByRating.take(limit);
   }
 }

@@ -59,7 +59,7 @@ class ChooseSimulationDialog extends StatelessWidget {
   }
 }
 
-final lastSaveDateTimeFormat = DateFormat('EEE, MMM d, yyyy');
+final lastSaveDateTimeFormat = DateFormat("MMM d, yyyy (HH:mm)");
 
 String simulationModeName({
   required BuildContext context,

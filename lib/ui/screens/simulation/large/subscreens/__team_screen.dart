@@ -43,6 +43,7 @@ class _TeamScreenState extends State<_TeamScreen> {
                   curve: Curves.easeIn,
                   child: JumperInTeamOverviewCard(
                     jumper: jumper,
+                    subteamType: dbHelper.subteamOfJumper(jumper),
                     reports: database.jumperReports[jumper]!,
                   ),
                 ),

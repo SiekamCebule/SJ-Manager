@@ -15,6 +15,7 @@ import 'package:sj_manager/models/simulation/standings/score/details/jump_score_
 import 'package:sj_manager/models/simulation/standings/score/score.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/user_db/psyche/psyche_utils.dart';
 import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
 import 'package:sj_manager/models/user_db/team/personal_coach_team.dart';
 import 'package:sj_manager/models/user_db/team/subteam.dart';
@@ -47,7 +48,15 @@ class DefaultSimulationDatabaseCreator {
     final mode = options.mode.last!;
     _setUpIdsRepo();
     final jumpersDynamicParameters = {
-      for (var jumper in _jumpers.last) jumper: JumperDynamicParams.empty(),
+      for (var jumper in _jumpers.last)
+        jumper: JumperDynamicParams(
+          trainingConfig: null,
+          morale: 0,
+          fatigue: 0,
+          form: 10,
+          jumpsConsistency: 5,
+          levelOfConsciousness: locByPersonality(jumper.personality),
+        ),
     };
     final jumperReports = {
       for (var jumper in _jumpers.last)
@@ -71,7 +80,6 @@ class DefaultSimulationDatabaseCreator {
           },
         ),
     };
-    final subteams = options.gameVariant.last!.subteams;
     final personalCoachTeam = options.mode.last! == SimulationMode.personalCoach
         ? const PersonalCoachTeam(jumperIds: [])
         : null;
@@ -82,7 +90,6 @@ class DefaultSimulationDatabaseCreator {
       generalTrainingRating: null,
     );
     final teamReports = {
-      for (var subteam in subteams) subteam: defaultTeamReports,
       if (personalCoachTeam != null) personalCoachTeam: defaultTeamReports,
     };
     final userSubteam = mode == SimulationMode.classicCoach
@@ -102,7 +109,7 @@ class DefaultSimulationDatabaseCreator {
       jumpers: _jumpers,
       hills: _hills,
       countryTeams: _countryTeams,
-      subteams: ItemsRepo(initial: subteams),
+      subteamJumpers: const {},
       countries: _countries,
       seasons: _seasons,
       idsRepo: _idsRepo,

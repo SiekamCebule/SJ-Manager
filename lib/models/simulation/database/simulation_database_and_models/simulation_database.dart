@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
+
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
-import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
+import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/flow/jumper_stats/jumper_stats.dart';
 import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/flow/reports/team_reports.dart';
@@ -26,7 +27,7 @@ class SimulationDatabase with EquatableMixin {
     required this.hills,
     required this.countries,
     required this.countryTeams,
-    required this.subteams,
+    required this.subteamJumpers,
     required this.seasons,
     required this.idsRepo,
     required this.actionDeadlines,
@@ -45,7 +46,6 @@ class SimulationDatabase with EquatableMixin {
   final ItemsRepo<Hill> hills;
   final CountriesRepo countries;
   final ItemsRepo<CountryTeam> countryTeams;
-  final ItemsRepo<Subteam> subteams;
   final ItemsRepo<SimulationSeason> seasons;
   final ItemsIdsRepo idsRepo;
 
@@ -57,6 +57,8 @@ class SimulationDatabase with EquatableMixin {
   final Map<Jumper, JumperStats> jumperStats;
 
   final Map<Team, TeamReports> teamReports;
+
+  final Map<Subteam, Iterable<String>> subteamJumpers;
 
   Iterable<MaleJumper> get maleJumpers => jumpers.last.whereType<MaleJumper>();
   Iterable<FemaleJumper> get femaleJumpers => jumpers.last.whereType<FemaleJumper>();
@@ -71,7 +73,6 @@ class SimulationDatabase with EquatableMixin {
     countries.dispose();
     countryTeams.dispose();
     seasons.dispose();
-    subteams.dispose();
   }
 
   @override
@@ -83,7 +84,7 @@ class SimulationDatabase with EquatableMixin {
         hills,
         countries,
         countryTeams,
-        subteams,
+        subteamJumpers,
         seasons,
         idsRepo,
         actionDeadlines,
@@ -102,7 +103,6 @@ class SimulationDatabase with EquatableMixin {
     ItemsRepo<Hill>? hills,
     CountriesRepo? countries,
     ItemsRepo<CountryTeam>? countryTeams,
-    ItemsRepo<Subteam>? subteams,
     ItemsRepo<SimulationSeason>? seasons,
     ItemsIdsRepo? idsRepo,
     Map<SimulationActionType, DateTime>? actionDeadlines,
@@ -111,6 +111,7 @@ class SimulationDatabase with EquatableMixin {
     Map<Jumper, JumperReports>? jumperReports,
     Map<Jumper, JumperStats>? jumperStats,
     Map<Team, TeamReports>? teamReports,
+    Map<Subteam, Iterable<String>>? subteamJumpers,
   }) {
     return SimulationDatabase(
       managerData: managerData ?? this.managerData,
@@ -120,7 +121,6 @@ class SimulationDatabase with EquatableMixin {
       hills: hills ?? this.hills,
       countries: countries ?? this.countries,
       countryTeams: countryTeams ?? this.countryTeams,
-      subteams: subteams ?? this.subteams,
       seasons: seasons ?? this.seasons,
       idsRepo: idsRepo ?? this.idsRepo,
       actionDeadlines: actionDeadlines ?? this.actionDeadlines,
@@ -129,6 +129,7 @@ class SimulationDatabase with EquatableMixin {
       jumperReports: jumperReports ?? this.jumperReports,
       jumperStats: jumperStats ?? this.jumperStats,
       teamReports: teamReports ?? this.teamReports,
+      subteamJumpers: subteamJumpers ?? this.subteamJumpers,
     );
   }
 }

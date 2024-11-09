@@ -30,7 +30,9 @@ class ContinueSimulationCommand {
       today: database.currentDate,
       targetDate: database.actionDeadlines[SimulationActionType.settingUpSubteams]!,
     )) {
-      database = SetUpSubteamsCommand(context: context, database: database).execute();
+      database =
+          await SetUpSubteamsCommand(context: context, database: database).execute();
+      if (!context.mounted) return;
     }
 
     if (isSameDay(

@@ -10,7 +10,8 @@ class _TopPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final database = context.watch<SimulationDatabaseCubit>().state;
-    final availableActions = possibleActionsBySimulationMode[database.managerData.mode]!;
+    /*final availableActions = possibleActionsBySimulationMode[database.managerData.mode]!;*/ // TODO!!
+    const availableActions = SimulationActionType.values;
     final incompletedActions = availableActions.where(database.actionsRepo.isIncompleted);
     final sortedIncompletedActions = incompletedActions.sorted(
       (first, second) {

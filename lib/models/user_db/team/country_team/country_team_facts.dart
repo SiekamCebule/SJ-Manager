@@ -12,18 +12,31 @@ class CountryTeamFacts with EquatableMixin {
     required this.stars,
     this.record,
     required this.subteams,
+    required this.limitInSubteam,
   });
 
-  const CountryTeamFacts.empty() : this(stars: 0, record: null, subteams: const {});
+  const CountryTeamFacts.empty()
+      : this(
+          stars: 0,
+          record: null,
+          subteams: const {},
+          limitInSubteam: const {},
+        );
 
   final int stars;
   final SimpleJump? record;
   final Set<SubteamType> subteams;
+  final Map<SubteamType, int> limitInSubteam;
 
   static CountryTeamFacts fromJson(Json json) => _$CountryTeamFactsFromJson(json);
 
   Json toJson() => _$CountryTeamFactsToJson(this);
 
   @override
-  List<Object?> get props => [stars, record, subteams];
+  List<Object?> get props => [
+        stars,
+        record,
+        subteams,
+        limitInSubteam,
+      ];
 }

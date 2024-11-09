@@ -15,6 +15,10 @@ CountryTeamFacts _$CountryTeamFactsFromJson(Map<String, dynamic> json) =>
       subteams: (json['subteams'] as List<dynamic>)
           .map((e) => $enumDecode(_$SubteamTypeEnumMap, e))
           .toSet(),
+      limitInSubteam: (json['limitInSubteam'] as Map<String, dynamic>).map(
+        (k, e) =>
+            MapEntry($enumDecode(_$SubteamTypeEnumMap, k), (e as num).toInt()),
+      ),
     );
 
 Map<String, dynamic> _$CountryTeamFactsToJson(CountryTeamFacts instance) =>
@@ -23,6 +27,8 @@ Map<String, dynamic> _$CountryTeamFactsToJson(CountryTeamFacts instance) =>
       'record': instance.record,
       'subteams':
           instance.subteams.map((e) => _$SubteamTypeEnumMap[e]!).toList(),
+      'limitInSubteam': instance.limitInSubteam
+          .map((k, e) => MapEntry(_$SubteamTypeEnumMap[k]!, e)),
     };
 
 const _$SubteamTypeEnumMap = {

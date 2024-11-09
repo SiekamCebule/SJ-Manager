@@ -5,6 +5,7 @@ enum SubteamType {
   b,
   c,
   d,
+  noSubteam,
 }
 
 const subteamTypeNames = {

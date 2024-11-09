@@ -42,6 +42,7 @@ class TeamLoader implements SimulationDbPartParser<Team> {
     final subteams = subteamsJson.map((subteamTypeName) {
       return SubteamType.values.singleWhere((type) => type.name == subteamTypeName);
     }).toSet();
+    final limitInSubteamJson = factsJson['limitInSubteam'] as Map;
     return CountryTeam(
       sex: sex,
       country: country,
@@ -54,6 +55,14 @@ class TeamLoader implements SimulationDbPartParser<Team> {
               )
             : null,
         subteams: subteams,
+        limitInSubteam: limitInSubteamJson.map(
+          (subteamTypeName, limit) => MapEntry(
+            SubteamType.values.singleWhere(
+              (value) => value.name == subteamTypeName,
+            ),
+            limit,
+          ),
+        ),
       ),
     );
   }

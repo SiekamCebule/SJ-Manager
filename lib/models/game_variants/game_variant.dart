@@ -18,7 +18,6 @@ class GameVariant {
     required this.hills,
     required this.countries,
     required this.countryTeams,
-    required this.subteams,
     required this.season,
     required this.startDates,
     required this.actionDeadlines,
@@ -32,7 +31,6 @@ class GameVariant {
   final List<Hill> hills;
   final List<Country> countries;
   final List<CountryTeam> countryTeams;
-  final List<Subteam> subteams;
   final SimulationSeason season;
   final List<GameVariantStartDate> startDates;
   final Map<SimulationActionType, DateTime> actionDeadlines;
@@ -60,7 +58,6 @@ class GameVariant {
       hills: hills ?? List<Hill>.from(this.hills),
       countries: countries ?? List<Country>.from(this.countries),
       countryTeams: countryTeams ?? List<CountryTeam>.from(this.countryTeams),
-      subteams: subteams ?? List<Subteam>.from(this.subteams),
       season: season ?? this.season,
       startDates: startDates ?? List<GameVariantStartDate>.from(this.startDates),
       actionDeadlines: actionDeadlines ??
