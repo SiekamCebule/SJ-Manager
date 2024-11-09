@@ -152,16 +152,30 @@ class _ListView extends StatelessWidget {
         return CountryTeamOverviewListTile(
           team: teams.elementAt(index),
           onTap: () async {
+            final team = teams.elementAt(index);
+            final flagsRepo = context.read<CountryFlagsRepo>();
             await showDialog(
               context: context,
               builder: (context) {
-                return SizedBox(
-                  child: AlertDialog(
-                    title: Text('Profil drużyny'),
-                    content: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      height: MediaQuery.of(context).size.height * 0.8,
-                      child: Placeholder(),
+                return MultiProvider(
+                  providers: [
+                    Provider.value(value: flagsRepo),
+                  ],
+                  child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: CountryTeamProfileWidget(
+                          team: team,
+                        ),
+                      ),
                     ),
                   ),
                 );
