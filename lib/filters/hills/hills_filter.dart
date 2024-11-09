@@ -1,4 +1,4 @@
-import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
+import 'package:sj_manager/filters/matching_algorithms/matching_by_text_algorithm.dart';
 import 'package:sj_manager/filters/mixins.dart';
 import 'package:sj_manager/models/user_db/hill/hill_type_by_size.dart';
 import 'package:sj_manager/filters/filter.dart';
@@ -41,7 +41,7 @@ final class HillsFilterBySearch extends HillsFilter with SearchFilter {
     required this.searchAlgorithm,
   });
 
-  final DbItemMatchingByTextAlgorithm<Hill> searchAlgorithm;
+  final MatchingByTextAlgorithm<Hill> searchAlgorithm;
 
   @override
   bool get isValid => searchAlgorithm.text.isNotEmpty;

@@ -1,7 +1,8 @@
-import 'package:sj_manager/filters/matching_algorithms/db_item_matching_by_text_algorithm.dart';
+import 'package:sj_manager/filters/matching_algorithms/matching_by_text_algorithm.dart';
 import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/utils/filtering.dart';
 
-class DefaultHillMatchingByTextAlgorithm extends DbItemMatchingByTextAlgorithm<Hill> {
+class DefaultHillMatchingByTextAlgorithm extends MatchingByTextAlgorithm<Hill> {
   const DefaultHillMatchingByTextAlgorithm({required super.text});
 
   @override
@@ -10,22 +11,7 @@ class DefaultHillMatchingByTextAlgorithm extends DbItemMatchingByTextAlgorithm<H
     String hillName = item.name.toLowerCase();
     String hillLocality = item.locality.toLowerCase();
 
-    bool containsAllLetters(String source, String target) {
-      Map<String, int> targetLetterCount = {};
-
-      for (var letter in target.split('')) {
-        targetLetterCount[letter] = (targetLetterCount[letter] ?? 0) + 1;
-      }
-
-      for (var letter in targetLetterCount.keys) {
-        if (targetLetterCount[letter]! > RegExp(letter).allMatches(source).length) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    return containsAllLetters(hillName, searchText) ||
-        containsAllLetters(hillLocality, searchText);
+    return hillName.containsAllLetters(from: searchText) ||
+        hillLocality.containsAllLetters(from: searchText);
   }
 }

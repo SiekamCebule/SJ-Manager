@@ -8,6 +8,7 @@ import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
 import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
 import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
 import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/ui/database_item_editors/fields/my_search_bar.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper/jumper_simple_list_tile.dart';
 
 class SearchForChargesJumpersDialog extends StatefulWidget {
@@ -76,21 +77,9 @@ class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersD
         title: const Text('Nawiąż współpracę'),
         content: Column(
           children: [
-            SearchBar(
-              backgroundColor: WidgetStatePropertyAll(
-                Theme.of(context).colorScheme.surfaceContainer,
-              ),
-              overlayColor: WidgetStateColor.resolveWith((states) {
-                if (states.contains(WidgetState.hovered)) {
-                  return Theme.of(context).colorScheme.surfaceContainerLowest;
-                } else {
-                  return Colors.transparent;
-                }
-              }),
+            MySearchBar(
               controller: _searchController,
-              autoFocus: true,
               hintText: 'Wyszukaj skoczków/skoczkinie',
-              elevation: const WidgetStatePropertyAll(0),
             ),
             const Gap(10),
             SizedBox(
