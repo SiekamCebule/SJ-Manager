@@ -154,14 +154,19 @@ class _ListView extends StatelessWidget {
           onTap: () async {
             final team = teams.elementAt(index);
             final flagsRepo = context.read<CountryFlagsRepo>();
+            final jumperImagesRepo = context.read<DbItemImageGeneratingSetup<Jumper>>();
+            final databaseCubit = context.read<SimulationDatabaseCubit>();
+            final dbHelper = context.read<SimulationDatabaseHelper>();
             await showDialog(
               context: context,
               builder: (context) {
                 return BlocProvider.value(
-                  value: context.read<SimulationDatabaseCubit>(),
+                  value: databaseCubit,
                   child: MultiProvider(
                     providers: [
                       Provider.value(value: flagsRepo),
+                      Provider.value(value: jumperImagesRepo),
+                      Provider.value(value: dbHelper),
                     ],
                     child: Center(
                       child: ClipRRect(
