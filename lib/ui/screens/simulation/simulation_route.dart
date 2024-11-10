@@ -40,7 +40,7 @@ import 'package:sj_manager/ui/screens/simulation/large/widgets/team/team_screen/
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/team_screen/team_screen_personal_coach_bottom_bar.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/team_screen/team_summary_card.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/teams/country_team_overview_list_tile.dart';
-import 'package:sj_manager/ui/screens/simulation/large/widgets/teams/country_team_profile_widget.dart';
+import 'package:sj_manager/ui/screens/simulation/large/widgets/teams/country_team_profile/country_team_profile_widget.dart';
 import 'package:sj_manager/utils/filtering.dart';
 import 'package:sj_manager/utils/show_dialog.dart';
 import 'package:sj_manager/utils/translating.dart';

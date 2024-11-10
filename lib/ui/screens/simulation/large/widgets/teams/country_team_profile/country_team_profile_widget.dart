@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
+import 'package:sj_manager/ui/screens/simulation/large/widgets/teams/country_team_profile/overview/country_team_profile_overview.dart';
 import 'package:sj_manager/utils/icons.dart';
 
 class CountryTeamProfileWidget extends StatefulWidget {
@@ -42,7 +43,7 @@ class _CountryTeamProfileWidgetState extends State<CountryTeamProfileWidget> {
         length: 3,
         child: Column(
           children: [
-            TabBar(
+            const TabBar(
               tabs: [
                 Tab(
                   text: 'Przegląd',
@@ -57,7 +58,22 @@ class _CountryTeamProfileWidgetState extends State<CountryTeamProfileWidget> {
                   icon: Icon(Symbols.analytics),
                 ),
               ],
-            )
+            ),
+            const Gap(10),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: TabBarView(
+                  children: [
+                    CountryTeamProfileOverview(
+                      countryTeam: widget.team,
+                    ),
+                    const Placeholder(),
+                    const Placeholder(),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

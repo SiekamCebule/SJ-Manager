@@ -157,23 +157,26 @@ class _ListView extends StatelessWidget {
             await showDialog(
               context: context,
               builder: (context) {
-                return MultiProvider(
-                  providers: [
-                    Provider.value(value: flagsRepo),
-                  ],
-                  child: Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        height: MediaQuery.of(context).size.height * 0.8,
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: CountryTeamProfileWidget(
-                          team: team,
+                return BlocProvider.value(
+                  value: context.read<SimulationDatabaseCubit>(),
+                  child: MultiProvider(
+                    providers: [
+                      Provider.value(value: flagsRepo),
+                    ],
+                    child: Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: CountryTeamProfileWidget(
+                            team: team,
+                          ),
                         ),
                       ),
                     ),
@@ -187,7 +190,3 @@ class _ListView extends StatelessWidget {
     );
   }
 }
-
-// francja
-// musi zawierac f i r
-// fr
