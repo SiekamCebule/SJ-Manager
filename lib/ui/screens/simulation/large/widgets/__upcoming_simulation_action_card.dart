@@ -19,8 +19,6 @@ class _UpcomingSimulationActionCard extends StatelessWidget {
       SimulationActionType.settingUpTraining => translator.settingUpTraining,
       SimulationActionType.settingUpSubteams => translator.settingUpSubteams,
     };
-    print('current date: ${database.currentDate}');
-    print('deadlines: ${database.actionDeadlines}');
     final dateText = sjmFutureDateDescription(
       context: context,
       currentDate: database.currentDate,

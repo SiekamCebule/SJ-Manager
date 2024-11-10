@@ -28,7 +28,7 @@ class SimulationActionsRepo with EquatableMixin {
     return _completedActions.contains(action);
   }
 
-  bool isIncompleted(SimulationActionType action) => !isCompleted(action);
+  bool isNotCompleted(SimulationActionType action) => !isCompleted(action);
 
   @override
   List<Object?> get props => [

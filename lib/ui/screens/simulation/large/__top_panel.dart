@@ -12,7 +12,8 @@ class _TopPanel extends StatelessWidget {
     final database = context.watch<SimulationDatabaseCubit>().state;
     /*final availableActions = possibleActionsBySimulationMode[database.managerData.mode]!;*/ // TODO!!
     const availableActions = SimulationActionType.values;
-    final incompletedActions = availableActions.where(database.actionsRepo.isIncompleted);
+    final incompletedActions =
+        availableActions.where(database.actionsRepo.isNotCompleted);
     final sortedIncompletedActions = incompletedActions.sorted(
       (first, second) {
         return database.actionDeadlines[second]!
