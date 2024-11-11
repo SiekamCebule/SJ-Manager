@@ -8,7 +8,7 @@ class TrainingReportCreator {
   });
 
   final Map<TrainingProgressCategory, List<double>> deltas;
-  final Map<TrainingProgressCategory, Map<SimpleRating, double>> requirements;
+  final Map<TrainingProgressCategory, Map<SimpleRating, num>> requirements;
 
   TrainingReport? create() {
     final categories = deltas.keys;

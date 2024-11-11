@@ -19,7 +19,7 @@ import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
 
 class SimulationDatabase with EquatableMixin {
-  const SimulationDatabase({
+  SimulationDatabase({
     required this.managerData,
     required this.startDate,
     required this.currentDate,
@@ -36,7 +36,17 @@ class SimulationDatabase with EquatableMixin {
     required this.jumperReports,
     required this.jumperStats,
     required this.teamReports,
+    required this.isDisposed,
   });
+
+  factory SimulationDatabase.recreateRepos(SimulationDatabase db) {
+    return db.copyWith(
+      jumpers: ItemsRepo(initial: db.jumpers.last),
+      hills: ItemsRepo(initial: db.hills.last),
+      countryTeams: ItemsRepo(initial: db.countryTeams.last),
+      seasons: ItemsRepo(initial: db.seasons.last),
+    );
+  }
 
   final SimulationManagerData managerData;
 
@@ -60,6 +70,8 @@ class SimulationDatabase with EquatableMixin {
 
   final Map<Subteam, Iterable<String>> subteamJumpers;
 
+  bool isDisposed;
+
   Iterable<MaleJumper> get maleJumpers => jumpers.last.whereType<MaleJumper>();
   Iterable<FemaleJumper> get femaleJumpers => jumpers.last.whereType<FemaleJumper>();
   Iterable<CountryTeam> get maleJumperTeams =>
@@ -73,6 +85,7 @@ class SimulationDatabase with EquatableMixin {
     countries.dispose();
     countryTeams.dispose();
     seasons.dispose();
+    isDisposed = true;
   }
 
   @override
@@ -112,6 +125,7 @@ class SimulationDatabase with EquatableMixin {
     Map<Jumper, JumperStats>? jumperStats,
     Map<Team, TeamReports>? teamReports,
     Map<Subteam, Iterable<String>>? subteamJumpers,
+    bool? isDisposed,
   }) {
     return SimulationDatabase(
       managerData: managerData ?? this.managerData,
@@ -130,6 +144,7 @@ class SimulationDatabase with EquatableMixin {
       jumperStats: jumperStats ?? this.jumperStats,
       teamReports: teamReports ?? this.teamReports,
       subteamJumpers: subteamJumpers ?? this.subteamJumpers,
+      isDisposed: isDisposed ?? this.isDisposed,
     );
   }
 }
