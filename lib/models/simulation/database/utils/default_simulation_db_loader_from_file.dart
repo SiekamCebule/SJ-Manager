@@ -212,6 +212,7 @@ class DefaultSimulationDbLoaderFromFile {
       jumperStats: jumperStats,
       teamReports: teamReports,
       subteamJumpers: subteamJumpers,
+      isDisposed: false,
     );
   }
 

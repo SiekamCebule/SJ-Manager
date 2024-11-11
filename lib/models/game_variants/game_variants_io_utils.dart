@@ -12,12 +12,17 @@ Future<List<T>> loadGameVariantItems<T>({
   required FromJson<T> fromJson,
   required String gameVariantId,
 }) async {
-  return await loadItemsListFromJsonFile<T>(
-    file: getFileForGameVariantItems<T>(
-      pathsCache: pathsCache,
-      pathsRegistry: pathsRegistry,
-      gameVariantId: gameVariantId,
-    ),
+  final file = getFileForGameVariantItems<T>(
+    pathsCache: pathsCache,
+    pathsRegistry: pathsRegistry,
+    gameVariantId: gameVariantId,
+  );
+  if (!await file.exists()) {
+    await file.create(recursive: true);
+    await file.writeAsString('[]');
+  }
+  return await loadItemsListFromJsonFile(
+    file: file,
     fromJson: fromJson,
   );
 }

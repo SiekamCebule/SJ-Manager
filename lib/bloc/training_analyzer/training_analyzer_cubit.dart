@@ -29,9 +29,14 @@ class TrainingAnalyzerCubit extends Cubit<TrainingAnalyzerNotSimulated> {
       {required PlarformSpecificPathsCache pathsCache,
       Set<TrainingAnalyzerActions> additionalActions = const {}}) {
     late final Json configJson;
+    File getAnalyzerFileOrCreate(String name) {
+      final file = userDataFile(pathsCache, path.join('training_analyzer', name));
+      file.createSync(recursive: true);
+      return file;
+    }
+
     try {
-      final configFile =
-          userDataFile(pathsCache, path.join('training_analyzer', 'config.json'));
+      final configFile = getAnalyzerFileOrCreate('config.json');
       configJson = jsonDecode(configFile.readAsStringSync()) as Json;
     } catch (e) {
       debugPrint(
@@ -90,13 +95,11 @@ class TrainingAnalyzerCubit extends Cubit<TrainingAnalyzerNotSimulated> {
         buffer.writeln(
             'Dzień $day: ${formatJumperTrainingResultResultForAnalyzer(dayResult.trainingResult)}');
       }
-      final resultsFile = userDataFile(
-          pathsCache, path.join('training_analyzer', 'formatted_results.txt'));
+      final resultsFile = getAnalyzerFileOrCreate('formatted_results.txt');
       resultsFile.writeAsStringSync(buffer.toString());
     }
     if (additionalActions.contains(TrainingAnalyzerActions.saveCsv)) {
-      final resultsFile =
-          userDataFile(pathsCache, path.join('training_analyzer', 'results.csv'));
+      final resultsFile = getAnalyzerFileOrCreate('results.csv');
       final csv = TrainingAnalyzerDaySimulationResult.listToCsv(result.dayResults,
           delimiter: ';');
       resultsFile.writeAsStringSync(csv);
@@ -106,23 +109,23 @@ class TrainingAnalyzerCubit extends Cubit<TrainingAnalyzerNotSimulated> {
         result.dayResults
             .map((result) => result.trainingResult.skills.takeoffQuality)
             .toList(),
-        userDataFile(pathsCache, path.join('training_analyzer', 'takeoff_stats.txt')),
+        getAnalyzerFileOrCreate('takeoff_stats.txt'),
       );
       _writeAttributeStats(
         result.dayResults
             .map((result) => result.trainingResult.skills.flightQuality)
             .toList(),
-        userDataFile(pathsCache, path.join('training_analyzer', 'flight_stats.txt')),
+        getAnalyzerFileOrCreate('flight_stats.txt'),
       );
       _writeAttributeStats(
         result.dayResults
             .map((result) => result.trainingResult.skills.landingQuality)
             .toList(),
-        userDataFile(pathsCache, path.join('training_analyzer', 'landing_stats.txt')),
+        getAnalyzerFileOrCreate('landing_stats.txt'),
       );
       _writeAttributeStats(
         result.dayResults.map((result) => result.trainingResult.form).toList(),
-        userDataFile(pathsCache, path.join('training_analyzer', 'form_stats.txt')),
+        getAnalyzerFileOrCreate('form_stats.txt'),
       );
     }
 

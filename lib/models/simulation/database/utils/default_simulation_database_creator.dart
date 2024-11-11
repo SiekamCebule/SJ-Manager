@@ -119,6 +119,7 @@ class DefaultSimulationDatabaseCreator {
       jumperReports: jumperReports,
       jumperStats: jumperStats,
       teamReports: teamReports,
+      isDisposed: false,
     );
   }
 
