@@ -1,23 +1,23 @@
 import 'package:equatable/equatable.dart';
 
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
-import 'package:sj_manager/models/user_db/team/personal_coach_team.dart';
-import 'package:sj_manager/models/user_db/team/subteam.dart';
+import 'package:sj_manager/models/database/team/personal_coach_team.dart';
+import 'package:sj_manager/models/database/team/subteam.dart';
 
 class SimulationManagerData with EquatableMixin {
-  const SimulationManagerData({
+  SimulationManagerData({
     required this.mode,
     required this.userSubteam,
     required this.personalCoachTeam,
   });
 
-  final SimulationMode mode;
+  SimulationMode mode;
 
   // For classic coach
-  final Subteam? userSubteam;
+  Subteam? userSubteam;
 
   // For personal coach
-  final PersonalCoachTeam? personalCoachTeam;
+  PersonalCoachTeam? personalCoachTeam;
 
   @override
   List<Object?> get props => [

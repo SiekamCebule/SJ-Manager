@@ -14,8 +14,8 @@ import 'package:sj_manager/models/simulation/standings/score/details/competition
 import 'package:sj_manager/models/simulation/standings/score/score.dart';
 import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 
 import 'classification_rules_utilities_test.mocks.dart';
 
@@ -36,18 +36,18 @@ void main() {
         final creator = DefaultIndividualClassificationScoreCreator();
         final context = MockDefaultIndividualClassificationScoreCreatingContext();
         const country = Country.emptyNone();
-        final jumper =
-            Jumper.empty(country: country).copyWith(name: 'Jakub', surname: 'Wolny');
-        final classification = MockDefaultClassification<Jumper,
-            Standings<Jumper, ClassificationScoreDetails>>();
+        final jumper = JumperDbRecord.empty(country: country)
+            .copyWith(name: 'Jakub', surname: 'Wolny');
+        final classification = MockDefaultClassification<JumperDbRecord,
+            Standings<JumperDbRecord, ClassificationScoreDetails>>();
         final scores = [
-          MockScore<Jumper, CompetitionJumperScoreDetails>(),
-          MockScore<Jumper, CompetitionJumperScoreDetails>(),
-          MockScore<Jumper, CompetitionJumperScoreDetails>(),
-          MockScore<Jumper, CompetitionJumperScoreDetails>(),
-        ].cast<Score<Jumper, CompetitionJumperScoreDetails>>();
+          MockScore<JumperDbRecord, CompetitionJumperScoreDetails>(),
+          MockScore<JumperDbRecord, CompetitionJumperScoreDetails>(),
+          MockScore<JumperDbRecord, CompetitionJumperScoreDetails>(),
+          MockScore<JumperDbRecord, CompetitionJumperScoreDetails>(),
+        ].cast<Score<JumperDbRecord, CompetitionJumperScoreDetails>>();
 
-        List<Competition<Jumper, IndividualCompetitionStandings>> competitions = [
+        List<Competition<JumperDbRecord, IndividualCompetitionStandings>> competitions = [
           setupCompetition(jumper, scores[0], 2),
           setupCompetition(jumper, scores[1], 7),
           setupCompetition(jumper, scores[2], 5),
@@ -76,7 +76,7 @@ void main() {
 
         expect(
           score,
-          ClassificationScore<Jumper>(
+          ClassificationScore<JumperDbRecord>(
             entity: jumper,
             points: 105.0,
             details: ClassificationScoreDetails(
@@ -89,13 +89,13 @@ void main() {
   });
 }
 
-MockCompetition<Jumper, IndividualCompetitionStandings> setupCompetition(
-  Jumper jumper,
-  Score<Jumper, CompetitionJumperScoreDetails> score,
+MockCompetition<JumperDbRecord, IndividualCompetitionStandings> setupCompetition(
+  JumperDbRecord jumper,
+  Score<JumperDbRecord, CompetitionJumperScoreDetails> score,
   int position,
 ) {
-  final competition = MockCompetition<Jumper, IndividualCompetitionStandings>();
-  final standings = MockStandings<Jumper, CompetitionJumperScoreDetails>();
+  final competition = MockCompetition<JumperDbRecord, IndividualCompetitionStandings>();
+  final standings = MockStandings<JumperDbRecord, CompetitionJumperScoreDetails>();
   when(standings.scoreOf(jumper)).thenReturn(score);
   when(standings.positionOf(jumper)).thenReturn(position);
   when(competition.standings).thenReturn(standings);

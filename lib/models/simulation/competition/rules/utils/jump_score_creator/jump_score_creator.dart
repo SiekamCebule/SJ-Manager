@@ -6,7 +6,7 @@ import 'package:sj_manager/models/simulation/competition/rules/utils/general/ent
 import 'package:sj_manager/models/simulation/competition/rules/user_algorithms/unary_algorithm.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/jump_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/score/score.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
 
 class JumpScoreCreatingContext<E> extends EntityRelatedAlgorithmContext<E> {
   const JumpScoreCreatingContext(

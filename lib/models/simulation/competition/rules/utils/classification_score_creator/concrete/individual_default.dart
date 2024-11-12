@@ -6,18 +6,18 @@ import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/models/simulation/standings/utils/standings_utils.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/competition_team.dart';
 
 class DefaultIndividualClassificationScoreCreator
-    extends DefaultClassificationScoreCreator<Jumper,
+    extends DefaultClassificationScoreCreator<JumperDbRecord,
         DefaultIndividualClassificationScoreCreatingContext> {
   @override
   void setUpCompetitionScores() {
     final classificationRules =
         context.classification.rules as DefaultIndividualClassificationRules;
     for (var competition in significantCompetitions) {
-      if (competition is Competition<Jumper, IndividualCompetitionStandings>) {
+      if (competition is Competition<JumperDbRecord, IndividualCompetitionStandings>) {
         final maybeScore = competition.standings!.scoreOf(context.entity);
         if (maybeScore != null) {
           competitionScores.add(maybeScore);
@@ -36,7 +36,7 @@ class DefaultIndividualClassificationScoreCreator
   @override
   void calculatePoints() {
     for (var competition in significantCompetitions) {
-      if (competition is Competition<Jumper, IndividualCompetitionStandings>) {
+      if (competition is Competition<JumperDbRecord, IndividualCompetitionStandings>) {
         _addPointsForIndividual(competition);
       } else if (competition is Competition<CompetitionTeam, TeamCompetitionStandings>) {
         _addPointsForTeam(competition);
@@ -45,7 +45,7 @@ class DefaultIndividualClassificationScoreCreator
   }
 
   void _addPointsForIndividual(
-      Competition<Jumper, IndividualCompetitionStandings> competition) {
+      Competition<JumperDbRecord, IndividualCompetitionStandings> competition) {
     final rules = context.classification.rules;
     switch (rules.scoringType) {
       case DefaultClassificationScoringType.pointsFromCompetitions:
@@ -58,7 +58,7 @@ class DefaultIndividualClassificationScoreCreator
   }
 
   CompetitionJumperScore? _jumperScoreFromIndividual(
-      Competition<Jumper, Standings> competition) {
+      Competition<JumperDbRecord, Standings> competition) {
     return competition.standings!.scoreOf(context.entity) as CompetitionJumperScore?;
   }
 

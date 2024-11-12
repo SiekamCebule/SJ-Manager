@@ -19,8 +19,8 @@ class AppropriateItemEditorState extends State<AppropriateItemEditor> {
 
   @override
   Widget build(BuildContext context) {
-    final filtersRepo = context.watch<DbFiltersRepo>();
-    final type = context.watch<DatabaseItemsCubit>().state.itemsType;
+    final itemsState = context.watch<DatabaseItemsCubit>().state;
+    final type = itemsState.itemsType;
     context.watch<ValueRepo<_SelectedTabIndex>>();
     final initialItem = type == EventSeriesCalendarPreset
         ? context.watch<DefaultItemsRepo>().get<SimpleEventSeriesCalendarPreset>()
@@ -32,7 +32,7 @@ class AppropriateItemEditorState extends State<AppropriateItemEditor> {
       context: context,
       type: type,
       onChange: widget.onChange,
-      dynamicFilters: filtersRepo.streamByTypeArgument(type).value,
+      enableEditing: !itemsState.hasValidFilters,
     );
   }
 
@@ -48,55 +48,33 @@ abstract class _DbItemEditorFactory {
     required BuildContext context,
     required Type type,
     required dynamic Function(dynamic value) onChange,
-    required List<Filter> dynamicFilters,
+    required bool enableEditing,
   }) {
-    if (type == MaleJumper) {
-      final filters = dynamicFilters.cast<Filter<MaleJumper>>();
-      final searchActive = filters
-              .singleWhereTypeOrNull<
-                  ConcreteJumpersFilterWrapper<MaleJumper, JumpersFilterBySearch>>()
-              ?.isValid ??
-          false;
-      final countryFilterActive = filters
-              .singleWhereTypeOrNull<
-                  ConcreteJumpersFilterWrapper<MaleJumper, JumpersFilterByCountry>>()
-              ?.isValid ??
-          false;
+    if (type == MaleJumperDbRecord) {
       final countriesRepo = (context.read<DatabaseEditorCountriesCubit>().state
               as DatabaseEditorCountriesReady)
           .maleJumpersCountries;
       return JumperEditor(
         key: key,
         onChange: onChange,
-        enableEditingName: !searchActive,
-        enableEditingSurname: !searchActive,
-        enableEditingCountry: !countryFilterActive,
+        enableEditingName: enableEditing,
+        enableEditingSurname: enableEditing,
+        enableEditingCountry: enableEditing,
         countriesRepo: countriesRepo,
       );
-    } else if (type == FemaleJumper) {
-      final filters = dynamicFilters.cast<Filter<FemaleJumper>>();
-      final searchActive = filters
-              .singleWhereTypeOrNull<
-                  ConcreteJumpersFilterWrapper<FemaleJumper, JumpersFilterBySearch>>()
-              ?.isValid ??
-          false;
-      final countryFilterActive = filters
-              .singleWhereTypeOrNull<
-                  ConcreteJumpersFilterWrapper<FemaleJumper, JumpersFilterByCountry>>()
-              ?.isValid ??
-          false;
+    } else if (type == FemaleJumperDbRecord) {
       final countriesRepo = (context.read<DatabaseEditorCountriesCubit>().state
               as DatabaseEditorCountriesReady)
           .femaleJumpersCountries;
       return JumperEditor(
         key: key,
         onChange: onChange,
-        enableEditingName: !searchActive,
-        enableEditingSurname: !searchActive,
-        enableEditingCountry: !countryFilterActive,
+        enableEditingName: enableEditing,
+        enableEditingSurname: enableEditing,
+        enableEditingCountry: enableEditing,
         countriesRepo: countriesRepo,
       );
-    } else if (type == Hill) {
+    } /*else if (type == Hill) {
       final filters = dynamicFilters.cast<Filter<Hill>>();
       final searchActive =
           filters.singleWhereTypeOrNull<HillsFilterBySearch>()?.isValid ?? false;
@@ -116,26 +94,8 @@ abstract class _DbItemEditorFactory {
         enableEditingCountry: !countryFilterActive,
         countriesRepo: countriesRepo,
       );
-    } else if (type == EventSeriesSetup) {
-      return EventSeriesSetupEditor(
-        key: key,
-        onChange: onChange,
-      );
-    } else if (type == EventSeriesCalendarPreset) {
-      return EventSeriesCalendarPresetThumbnail(
-        key: key,
-        onChange: onChange,
-      );
-    } else if (type == DefaultCompetitionRulesPreset) {
-      return DefaultCompetitionRulesPresetEditor(
-        key: key,
-        initial: initial,
-        onChange: onChange,
-        onAdvancedEditorChosen: () {
-          throw UnimplementedError();
-        },
-      );
-    } else {
+    }*/
+    else {
       throw TypeError();
     }
   }

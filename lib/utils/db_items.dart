@@ -1,6 +1,6 @@
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 
 extension CountriesWithoutNone on Iterable<Country> {
   Iterable<Country> get withoutNoneCountry {
@@ -8,7 +8,7 @@ extension CountriesWithoutNone on Iterable<Country> {
   }
 }
 
-extension JumpersByCountry<T extends Jumper> on Iterable<T> {
+extension JumpersByCountry<T extends JumperDbRecord> on Iterable<T> {
   Iterable<T> fromCountry(Country country) {
     return where((jumper) => jumper.country == country);
   }
@@ -28,10 +28,10 @@ extension HillByCountry on Iterable<Hill> {
   }
 }
 
-Map<Country, List<Jumper>> jumpersByCountry(
-    Iterable<Jumper> jumpers, Iterable<Country> countries,
+Map<Country, List<JumperDbRecord>> jumpersByCountry(
+    Iterable<JumperDbRecord> jumpers, Iterable<Country> countries,
     {bool excludeEmpty = false}) {
-  final map = <Country, List<Jumper>>{};
+  final map = <Country, List<JumperDbRecord>>{};
   for (var country in countries) {
     map[country] = [];
   }

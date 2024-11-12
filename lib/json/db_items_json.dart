@@ -95,7 +95,7 @@ Future<void> saveItemsListToJsonFile<T>({
 
 Future<void> saveItemsMapToJsonFile<T>({
   required File file,
-  required List<T> items,
+  required Iterable<T> items,
   required ToJson<T> toJson,
   required ItemsIdsRepo idsRepo,
   bool createDirectoriesAndFilesIfNeeded = false,

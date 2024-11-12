@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sj_manager/algorithms/jumpers_ranking/country_team_ranking_creator.dart';
-import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
+import 'package:sj_manager/l10n/helpers.dart';
+import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
+import 'package:sj_manager/models/database/sex.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/ui/reusable_widgets/card_with_title.dart';
 import 'package:sj_manager/ui/reusable_widgets/jumpers_ranking/team_jumpers_ranking_list.dart';
 
@@ -17,14 +20,30 @@ class CountryTeamProfileOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabaseCubit>().state;
-    final unorderedJumpers = database.jumpers.last.where((jumper) =>
+    final database = context.watch<SimulationDatabase>();
+    final unorderedJumpers = database.jumpers.where((jumper) =>
         jumper.country == countryTeam.country && jumper.sex == countryTeam.sex);
 
-    final ranking = CountryTeamRankingCreator(
-            jumpers: unorderedJumpers.toList(),
-            dynamicParams: database.jumperDynamicParams)
-        .create();
+    final ranking =
+        CountryTeamRankingCreator(jumpers: unorderedJumpers.toList()).create();
+    late Widget rankingWidget;
+    if (database.actionsRepo.isCompleted(SimulationActionType.settingUpTraining)) {
+      rankingWidget = ranking.isNotEmpty
+          ? TeamJumpersRankingList(
+              jumpers: ranking,
+            )
+          : Center(
+              child: Text(
+                countryTeam.sex == Sex.male
+                    ? translate(context).noMaleJumpers
+                    : translate(context).noFemaleJumpers,
+              ),
+            );
+    } else {
+      rankingWidget = Center(
+        child: Text(translate(context).rankingWillShowUpAfterTrainingsStart),
+      );
+    }
 
     return Row(
       children: [
@@ -41,13 +60,7 @@ class CountryTeamProfileOverview extends StatelessWidget {
                     'Ranking',
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                  child: ranking.isNotEmpty
-                      ? TeamJumpersRankingList(
-                          jumpers: ranking,
-                        )
-                      : const Center(
-                          child: Text('Brak zawodników'),
-                        ),
+                  child: rankingWidget,
                 ),
               ),
               const Gap(10),

@@ -13,7 +13,7 @@ class _UpcomingSimulationActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabaseCubit>().state;
+    final database = context.watch<SimulationDatabase>();
     final translator = translate(context);
     final actionText = switch (actionType) {
       SimulationActionType.settingUpTraining => translator.settingUpTraining,

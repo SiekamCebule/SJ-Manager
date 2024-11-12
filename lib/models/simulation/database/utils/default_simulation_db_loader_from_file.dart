@@ -28,26 +28,25 @@ import 'package:sj_manager/json/simulation_db_loading/team_loader.dart';
 import 'package:sj_manager/json/simulation_db_loading/wind_averager_parser.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
-import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
-import 'package:sj_manager/models/simulation/flow/jumper_stats/jumper_stats.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/models/simulation/jumper/stats/jumper_stats.dart';
 import 'package:sj_manager/models/simulation/flow/reports/team_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
-import 'package:sj_manager/models/user_db/team/country_team/subteam_type.dart';
-import 'package:sj_manager/models/user_db/team/personal_coach_team.dart';
-import 'package:sj_manager/models/user_db/team/subteam.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/db_items_file_system_paths.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/team/country_team/subteam_type.dart';
+import 'package:sj_manager/models/database/team/personal_coach_team.dart';
+import 'package:sj_manager/models/database/team/subteam.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
-import 'package:sj_manager/repositories/generic/items_repo.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
@@ -76,7 +75,7 @@ class DefaultSimulationDbLoaderFromFile {
     final loadedCountriesMap = await _loadItems(itemsType: 'country');
     _addIdsFromLoadedMap(loadedCountriesMap);
     final loadedCountries = _itemsFromLoadedMap(loadedCountriesMap);
-    _countriesRepo = CountriesRepo(initial: loadedCountries.cast());
+    _countriesRepo = CountriesRepo(countries: loadedCountries.cast());
 
     final loadedMaleJumpersMap = await _loadItems(itemsType: 'maleJumper');
     _addIdsFromLoadedMap(loadedMaleJumpersMap);
@@ -89,7 +88,7 @@ class DefaultSimulationDbLoaderFromFile {
     final loadedJumpers = [
       ...loadedMaleJumpers,
       ...loadedFemaleJumpers,
-    ].cast<Jumper>();
+    ].cast<JumperDbRecord>();
 
     final loadedHillsMap = await _loadItems(itemsType: 'hill');
     _addIdsFromLoadedMap(loadedHillsMap);
@@ -104,17 +103,6 @@ class DefaultSimulationDbLoaderFromFile {
     final loadedSeasons = _itemsFromLoadedMap(loadedSeasonMap);
 
     _dynamicStateJson = await _loadDynamicStateJson();
-
-    final jumpersDynamicParametersJson =
-        _dynamicStateJson['jumpersDynamicParameters'] as Map;
-    final jumpersDynamicParameters = jumpersDynamicParametersJson.map(
-      (jumperId, paramsJson) {
-        return MapEntry(
-          idsRepo.get(jumperId) as Jumper,
-          JumperDynamicParams.fromJson(paramsJson),
-        );
-      },
-    );
 
     final actionDeadlinesJson = _dynamicStateJson['actionDeadlines'] as Map;
     final actionDeadlines = actionDeadlinesJson.map((actionTypeName, dateTimeJson) {
@@ -160,7 +148,7 @@ class DefaultSimulationDbLoaderFromFile {
     final jumperReportsJson = _dynamicStateJson['jumperReports'] as Map;
     final jumperReports = jumperReportsJson.map((id, reportsJson) {
       return MapEntry(
-        idsRepo.get(id) as Jumper,
+        idsRepo.get(id) as SimulationJumper,
         JumperReports.fromJson(reportsJson),
       );
     });
@@ -168,7 +156,7 @@ class DefaultSimulationDbLoaderFromFile {
     final jumperStatsJson = _dynamicStateJson['jumperStats'] as Map;
     final jumperStats = jumperStatsJson.map((id, statsJson) {
       return MapEntry(
-        idsRepo.get(id) as Jumper,
+        idsRepo.get(id) as SimulationJumper,
         JumperStats.fromJson(statsJson),
       );
     });
@@ -190,29 +178,26 @@ class DefaultSimulationDbLoaderFromFile {
               SubteamType.values.singleWhere((value) => value.name == splitSubteamKey[0]),
           parentTeam: idsRepo.get(splitSubteamKey[1]),
         ),
-        (jumperIds as List).cast<String>(),
+        (jumperIds as List).map((id) => idsRepo.get(id) as SimulationJumper),
       );
     });
 
-    _countriesRepo.dispose();
     return SimulationDatabase(
       managerData: managerData,
-      countryTeams: ItemsRepo(initial: loadedCountryTeams.cast()),
-      jumpers: ItemsRepo(initial: loadedJumpers),
-      hills: ItemsRepo(initial: loadedHills.cast()),
+      countryTeams: loadedCountryTeams.cast(),
+      jumpers: loadedJumpers.cast(),
+      hills: loadedHills.cast(),
       countries: _countriesRepo,
-      seasons: ItemsRepo(initial: loadedSeasons.cast()),
+      seasons: loadedSeasons.cast(),
       startDate: DateTime.parse(_dynamicStateJson['startDate']!),
       currentDate: DateTime.parse(_dynamicStateJson['currentDate']!),
       idsRepo: idsRepo,
       actionDeadlines: actionDeadlines,
       actionsRepo: SimulationActionsRepo(initial: simulationActionCompletionStatuses),
-      jumperDynamicParams: jumpersDynamicParameters,
       jumperReports: jumperReports,
       jumperStats: jumperStats,
       teamReports: teamReports,
       subteamJumpers: subteamJumpers,
-      isDisposed: false,
     );
   }
 
@@ -251,10 +236,10 @@ class DefaultSimulationDbLoaderFromFile {
   }
 
   String _getFilePath({required Type type}) {
-    if (type == MaleJumper) {
-      return pathsRegistry.get<MaleJumper>();
-    } else if (type == FemaleJumper) {
-      return pathsRegistry.get<FemaleJumper>();
+    if (type == MaleJumperDbRecord) {
+      return pathsRegistry.get<MaleJumperDbRecord>();
+    } else if (type == FemaleJumperDbRecord) {
+      return pathsRegistry.get<FemaleJumperDbRecord>();
     } else if (type == Hill) {
       return pathsRegistry.get<Hill>();
     } else if (type == Country) {
@@ -271,8 +256,8 @@ class DefaultSimulationDbLoaderFromFile {
   }
 
   static const _itemsTypeStringToType = {
-    'maleJumper': MaleJumper,
-    'femaleJumper': FemaleJumper,
+    'maleJumper': MaleJumperDbRecord,
+    'femaleJumper': FemaleJumperDbRecord,
     'hill': Hill,
     'country': Country,
     'countryTeam': CountryTeam,
@@ -284,9 +269,9 @@ class DefaultSimulationDbLoaderFromFile {
     required Json json,
     required Type type,
   }) {
-    if (type == MaleJumper) {
+    if (type == MaleJumperDbRecord) {
       return _parseJumper;
-    } else if (type == FemaleJumper) {
+    } else if (type == FemaleJumperDbRecord) {
       return _parseJumper;
     } else if (type == Hill) {
       return _parseHill;
@@ -301,8 +286,8 @@ class DefaultSimulationDbLoaderFromFile {
     }
   }
 
-  Jumper _parseJumper(Json json) {
-    return Jumper.fromJson(json,
+  JumperDbRecord _parseJumper(Json json) {
+    return JumperDbRecord.fromJson(json,
         countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo));
   }
 

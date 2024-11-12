@@ -3,15 +3,16 @@ import 'package:sj_manager/models/simulation/standings/score/details/competition
 import 'package:sj_manager/models/simulation/standings/score/details/jump_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/score/score.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/competition_team.dart';
 
-typedef CompetitionJumperScore = Score<Jumper, CompetitionJumperScoreDetails>;
+typedef CompetitionJumperScore = Score<JumperDbRecord, CompetitionJumperScoreDetails>;
 typedef CompetitionTeamScore = Score<CompetitionTeam, CompetitionTeamScoreDetails>;
 typedef CompetitionScore<E> = Score<E, CompetitionScoreDetails<E>>;
 typedef ClassificationScore<E> = Score<E, ClassificationScoreDetails>;
-typedef CompetitionJumpScore = Score<Jumper, CompetitionJumpScoreDetails>;
+typedef CompetitionJumpScore = Score<JumperDbRecord, CompetitionJumpScoreDetails>;
 
-typedef IndividualCompetitionStandings = Standings<Jumper, CompetitionJumperScoreDetails>;
+typedef IndividualCompetitionStandings
+    = Standings<JumperDbRecord, CompetitionJumperScoreDetails>;
 typedef TeamCompetitionStandings
     = Standings<CompetitionTeam, CompetitionTeamScoreDetails>;

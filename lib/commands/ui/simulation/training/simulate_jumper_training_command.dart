@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/commands/simulation_database/simulation_database_commander.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
 import 'package:sj_manager/algorithms/training_engine/jumper_training_engine.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 
 class SimulateJumperTrainingCommand {
   SimulateJumperTrainingCommand({
@@ -13,21 +13,19 @@ class SimulateJumperTrainingCommand {
 
   final BuildContext context;
   final SimulationDatabase database;
-  final Jumper jumper;
+  final SimulationJumper jumper;
 
-  SimulationDatabase execute() {
-    final dynamicParams = database.jumperDynamicParams[jumper];
-    if (dynamicParams == null) {
+  void execute() {
+    if (jumper.trainingConfig == null) {
       throw StateError(
-        'Cannot simulate the training for particular jumper ($jumper) because it doesn\'t have JumperDynamicParams record in database',
+        'Cannot simulate the training for particular jumper ($jumper) because it did not get the training configurated',
       );
     }
     final trainingResult = JumperTrainingEngine(
-      jumperSkills: jumper.skills,
-      dynamicParams: database.jumperDynamicParams[jumper]!,
+      jumper: jumper,
     ).doTraining();
 
-    return SimulationDatabaseCommander(database: database).registerJumperTraining(
+    SimulationDatabaseCommander(database: database).registerJumperTraining(
       jumper: jumper,
       result: trainingResult,
       date: database.currentDate,

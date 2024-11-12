@@ -7,15 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart' as path;
 
 import 'package:sj_manager/bloc/training_analyzer/training_test_runner.dart';
+import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/models/training_analyzer/actions.dart';
 import 'package:sj_manager/models/training_analyzer/chart_data_category.dart';
 import 'package:sj_manager/models/training_analyzer/training_analyzer_result.dart';
 import 'package:sj_manager/models/training_analyzer/training_segment.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
-import 'package:sj_manager/models/user_db/psyche/level_of_consciousness.dart';
 import 'package:sj_manager/algorithms/training_engine/jumper_training_engine_settings.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/training_analyzer_utils.dart';
@@ -43,27 +42,13 @@ class TrainingAnalyzerCubit extends Cubit<TrainingAnalyzerNotSimulated> {
           'Błąd podczas wczytywania konfiguracji (config.json). Oryginalna treść błędu: $e');
       rethrow;
     }
-    final engineSettingsJson = configJson['engineSettings'] as Json;
-    final dynamicParamsJson = configJson['dynamicParams'] as Json;
-    final skillsJson = configJson['jumperSkills'] as Json;
+
+    final engineSettings =
+        JumperTrainingEngineSettings.fromJson(configJson['engineSettings']);
+    final jumper = SimulationJumper.fromJson(configJson['jumper'],
+        countryLoader: const JsonCountryLoaderNone());
+
     final segmentsJson = (configJson['trainingSegments'] as List).cast<Json>();
-
-    final engineSettings = JumperTrainingEngineSettings.fromJson(engineSettingsJson);
-    final jumperSkills = JumperSkills.fromJson(skillsJson);
-
-    final dynamicParams = JumperDynamicParams(
-      trainingConfig: null,
-      form: (dynamicParamsJson['form'] as num).toDouble(),
-      jumpsConsistency: (dynamicParamsJson['jumpsConsistency'] as num).toDouble(),
-      morale: (dynamicParamsJson['morale'] as num).toDouble(),
-      fatigue: (dynamicParamsJson['fatigue'] as num).toDouble(),
-      levelOfConsciousness: LevelOfConsciousness.fromMapOfConsciousness(
-        LevelOfConsciousnessLabels.values.singleWhere(
-          (lbl) => lbl.name == dynamicParamsJson['levelOfConsciousness'],
-        ),
-      ),
-    );
-
     final trainingSegments = segmentsJson.map((segmentJson) => TrainingSegment(
           start: segmentJson['start'],
           end: segmentJson['end'],
@@ -80,10 +65,9 @@ class TrainingAnalyzerCubit extends Cubit<TrainingAnalyzerNotSimulated> {
 
     final runner = TrainingTestRunner(
       segments: trainingSegments.toList(),
-      dynamicParams: dynamicParams,
-      jumperSkills: jumperSkills,
       engineSettings: engineSettings,
       daysToSimulate: configJson['daysToSimulate'],
+      jumper: jumper,
     );
 
     final result = runner.run();
@@ -106,21 +90,15 @@ class TrainingAnalyzerCubit extends Cubit<TrainingAnalyzerNotSimulated> {
     }
     if (additionalActions.contains(TrainingAnalyzerActions.saveAttributeStats)) {
       _writeAttributeStats(
-        result.dayResults
-            .map((result) => result.trainingResult.skills.takeoffQuality)
-            .toList(),
+        result.dayResults.map((result) => result.trainingResult.takeoffQuality).toList(),
         getAnalyzerFileOrCreate('takeoff_stats.txt'),
       );
       _writeAttributeStats(
-        result.dayResults
-            .map((result) => result.trainingResult.skills.flightQuality)
-            .toList(),
+        result.dayResults.map((result) => result.trainingResult.flightQuality).toList(),
         getAnalyzerFileOrCreate('flight_stats.txt'),
       );
       _writeAttributeStats(
-        result.dayResults
-            .map((result) => result.trainingResult.skills.landingQuality)
-            .toList(),
+        result.dayResults.map((result) => result.trainingResult.landingQuality).toList(),
         getAnalyzerFileOrCreate('landing_stats.txt'),
       );
       _writeAttributeStats(
@@ -146,7 +124,7 @@ class TrainingAnalyzerCubit extends Cubit<TrainingAnalyzerNotSimulated> {
     }
     deltas.sort((a, b) => b.abs().compareTo(a.abs()));
 
-    final deltasMaxRange = 25.clamp(0, values.length);
+    final deltasMaxRange = 25.clamp(0, values.length - 1);
     buffer.writeln('TOP $deltasMaxRange zmian wartości:');
     for (var i = 0; i < deltasMaxRange; i++) {
       final delta = deltas[i];

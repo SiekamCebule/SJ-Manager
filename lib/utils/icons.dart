@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:sj_manager/models/user_db/sex.dart';
+import 'package:sj_manager/models/database/sex.dart';
 
 IconData sexIconData(Sex sex) {
   return switch (sex) {

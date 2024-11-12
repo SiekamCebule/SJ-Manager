@@ -6,7 +6,7 @@ import 'package:sj_manager/models/simulation/competition/competition.dart';
 import 'package:sj_manager/models/simulation/competition/competition_labels.dart';
 import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_provider.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class CompetitionParser implements SimulationDbPartParser<Competition> {

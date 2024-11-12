@@ -1,8 +1,8 @@
 import 'package:async/async.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/game_variants/game_variant_start_date.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
-import 'package:sj_manager/models/user_db/team/country_team/subteam_type.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/team/country_team/subteam_type.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
 

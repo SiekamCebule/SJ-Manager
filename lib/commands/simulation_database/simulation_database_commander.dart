@@ -1,10 +1,12 @@
+import 'package:sj_manager/algorithms/start_form/default_start_form_algorithm.dart';
 import 'package:sj_manager/algorithms/training_engine/jumper_training_result.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/models/simulation/jumper/stats/jumper_stats.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/personal_coach_team.dart';
+import 'package:sj_manager/models/database/team/subteam.dart';
 
 class SimulationDatabaseCommander {
   const SimulationDatabaseCommander({
@@ -13,139 +15,105 @@ class SimulationDatabaseCommander {
 
   final SimulationDatabase database;
 
-  SimulationDatabase replaceJumper({
-    required Jumper oldJumper,
-    required Jumper newJumper,
+  /*SimulationDatabase setIdsRepo({
+    required ItemsIdsRepo idsRepo,
   }) {
-    var database = this.database;
-    final changedJumpers = List.of(database.jumpers.last);
-    changedJumpers[database.jumpers.last.indexOf(oldJumper)] = newJumper;
-    database.jumpers.set(changedJumpers); // Maybe it doesn't work correctly
-
-    database.idsRepo.update(
-      id: database.idsRepo.idOf(oldJumper),
-      newItem: newJumper,
+    return database.copyWith(
+      idsRepo: ItemsIdsRepo.copyFrom(idsRepo),
     );
+  }*/
 
-    database.jumperReports[newJumper] = database.jumperReports.remove(oldJumper)!;
-    database.jumperDynamicParams[newJumper] =
-        database.jumperDynamicParams.remove(oldJumper)!;
-    database.jumperStats[newJumper] = database.jumperStats.remove(oldJumper)!;
-
-    return database.copyWith();
-  }
-
-  SimulationDatabase changeJumperTraining({
-    required Jumper jumper,
+  void changeJumperTraining({
+    required SimulationJumper jumper,
     required JumperTrainingConfig? config,
     bool forceNullTrainingConfig = false,
   }) {
-    final changedDynamicParams = database.jumperDynamicParams;
-    changedDynamicParams[jumper] = database.jumperDynamicParams[jumper]!.copyWith(
-      trainingConfig: forceNullTrainingConfig ? null : config,
-    );
-    return database.copyWith(
-      jumperDynamicParams: changedDynamicParams,
-    );
+    jumper.trainingConfig = config;
+    database.notify();
   }
 
-  SimulationDatabase setUpTrainings() {
+  void setUpTrainings() {
     var database = this.database;
-    for (final jumper in database.jumpers.last) {
-      database =
-          changeJumperTraining(jumper: jumper, config: initialJumperTrainingConfig);
+    for (final jumper in database.jumpers) {
+      changeJumperTraining(jumper: jumper, config: initialJumperTrainingConfig);
+      jumper.form = DefaultStartFormAlgorithm(baseForm: jumper.form).computeStartForm();
+      print('jumper\'s form: ${jumper.form}');
     }
     database.actionsRepo.complete(SimulationActionType.settingUpTraining);
-    return database;
+    database.notify();
   }
 
-  SimulationDatabase setPartnerships({
-    required List<Jumper> partnerships,
+  void setPartnerships({
+    required List<SimulationJumper> partnerships,
   }) {
-    final oldUserTeam = database.managerData.personalCoachTeam!;
-    final jumperIds = partnerships.map((jumper) => database.idsRepo.idOf(jumper));
-    final newUserTeam = PersonalCoachTeam(jumperIds: jumperIds.toList().cast());
-    final id = database.idsRepo.removeByItem(item: oldUserTeam);
-    database.idsRepo.register(newUserTeam, id: id);
-    final changedManagerData = database.managerData.copyWith(
-      personalCoachTeam: newUserTeam,
-    );
-    final changedTeamReports = Map.of(database.teamReports);
-    changedTeamReports[newUserTeam] = changedTeamReports.remove(oldUserTeam)!;
-    final changedDynamicParams = Map.of(database.jumperDynamicParams);
-
-    for (final jumper in partnerships) {
-      if (changedDynamicParams.containsKey(jumper)) continue;
-      changedDynamicParams[jumper] = changedDynamicParams[jumper]!.copyWith(
-        trainingConfig: initialJumperTrainingConfig,
-      );
-    }
-
-    return database.copyWith(
-      managerData: changedManagerData,
-      teamReports: changedTeamReports,
-      jumperDynamicParams: changedDynamicParams,
-    );
+    database.managerData.personalCoachTeam?.jumpers = partnerships;
+    database.notify();
   }
 
-  SimulationDatabase registerJumperTraining({
-    required Jumper jumper,
+  void clearSubteams() {
+    database.subteamJumpers = {};
+    database.notify();
+  }
+
+  void setSubteam({
+    required Subteam subteam,
+    required Iterable<SimulationJumper> jumpers,
+    required Object subteamNewId,
+  }) {
+    database.idsRepo.removeById(id: subteamNewId);
+    database.idsRepo.register(subteam, id: subteamNewId);
+    database.subteamJumpers[subteam] = jumpers;
+    database.notify();
+  }
+
+  void registerJumperTraining({
+    required SimulationJumper jumper,
     required JumperTrainingResult result,
     required DateTime date,
   }) {
     var database = this.database;
-    final newJumper = jumper.copyWith(skills: result.skills);
-    database = replaceJumper(
-      oldJumper: jumper,
-      newJumper: newJumper,
-    );
-    final stats = Map.of(database.jumperStats);
-    final attributeHistory = Map.of(stats[newJumper]!.progressableAttributeHistory);
+    jumper.takeoffQuality = result.takeoffQuality;
+    jumper.flightQuality = result.flightQuality;
+    jumper.landingQuality = result.landingQuality;
+    jumper.form = result.form;
+    jumper.jumpsConsistency = result.jumpsConsistency;
+    jumper.fatigue = result.fatigue;
+
+    final attributeHistory = database.jumperStats[jumper]!.progressableAttributeHistory;
+
     attributeHistory[TrainingProgressCategory.takeoff]!
-        .register(result.skills.takeoffQuality, date: date);
+        .register(result.takeoffQuality, date: date);
     attributeHistory[TrainingProgressCategory.flight]!
-        .register(result.skills.flightQuality, date: date);
+        .register(result.flightQuality, date: date);
     attributeHistory[TrainingProgressCategory.landing]!
-        .register(result.skills.landingQuality, date: date);
+        .register(result.landingQuality, date: date);
     attributeHistory[TrainingProgressCategory.form]!.register(result.form, date: date);
     attributeHistory[TrainingProgressCategory.consistency]!
         .register(result.jumpsConsistency, date: date);
-
-    stats[newJumper] =
-        stats[newJumper]!.copyWith(progressableAttributeHistory: attributeHistory);
-    final dynamicParams = Map.of(database.jumperDynamicParams);
-    dynamicParams[newJumper] = dynamicParams[newJumper]!.copyWith(
-      form: result.form,
-      jumpsConsistency: result.jumpsConsistency,
-      fatigue: result.fatigue,
-    );
-    return database.copyWith(
-      jumperDynamicParams: dynamicParams,
-      jumperStats: stats,
-    );
+    database.notify();
   }
 
-  SimulationDatabase setMonthlyReport({
-    required Jumper jumper,
-    required TrainingReport? report,
+  void setStats({
+    required SimulationJumper jumper,
+    required JumperStats stats,
   }) {
-    final changedJumperReports = Map.of(database.jumperReports);
-    changedJumperReports[jumper] =
-        changedJumperReports[jumper]!.copyWith(monthlyTrainingReport: report);
-    return database.copyWith(
-      jumperReports: changedJumperReports,
-    );
+    database.jumperStats[jumper] = stats;
+    database.notify();
   }
 
-  SimulationDatabase setWeeklyReport({
-    required Jumper jumper,
+  void setMonthlyReport({
+    required SimulationJumper jumper,
     required TrainingReport? report,
   }) {
-    final changedJumperReports = Map.of(database.jumperReports);
-    changedJumperReports[jumper] =
-        changedJumperReports[jumper]!.copyWith(weeklyTrainingReport: report);
-    return database.copyWith(
-      jumperReports: changedJumperReports,
-    );
+    database.jumperReports[jumper]!.monthlyTrainingReport = report;
+    database.notify();
+  }
+
+  void setWeeklyReport({
+    required SimulationJumper jumper,
+    required TrainingReport? report,
+  }) {
+    database.jumperReports[jumper]!.weeklyTrainingReport = report;
+    database.notify();
   }
 }

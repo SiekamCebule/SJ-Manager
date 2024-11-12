@@ -4,8 +4,8 @@ import 'package:sj_manager/models/simulation/competition/competition.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/classification_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 
 abstract class ClassificationRules<E> {
   const ClassificationRules({
@@ -44,7 +44,8 @@ abstract class DefaultClassificationRules<E> extends ClassificationRules<E>
       ];
 }
 
-class DefaultIndividualClassificationRules extends DefaultClassificationRules<Jumper> {
+class DefaultIndividualClassificationRules
+    extends DefaultClassificationRules<JumperDbRecord> {
   const DefaultIndividualClassificationRules({
     required super.classificationScoreCreator,
     required super.scoringType,

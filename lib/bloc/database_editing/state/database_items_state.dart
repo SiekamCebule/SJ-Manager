@@ -1,30 +1,29 @@
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/filters/filter.dart';
 
 abstract class DatabaseItemsState with EquatableMixin {
   const DatabaseItemsState({
     required this.itemsType,
+    required this.hasValidFilters,
   });
 
   final Type itemsType;
+  final bool hasValidFilters;
 
   @override
   List<Object?> get props => [
         itemsType,
+        hasValidFilters,
       ];
 }
 
 class DatabaseItemsNonEmpty extends DatabaseItemsState {
   const DatabaseItemsNonEmpty({
     required super.itemsType,
+    required super.hasValidFilters,
     required this.filteredItems,
-    required this.validFilters,
   });
 
   final List<dynamic> filteredItems;
-  final List<Filter> validFilters;
-
-  bool get hasValidFilters => validFilters.isNotEmpty;
 
   @override
   List<Object?> get props => [
@@ -36,18 +35,11 @@ class DatabaseItemsNonEmpty extends DatabaseItemsState {
 class DatabaseItemsEmpty extends DatabaseItemsState {
   const DatabaseItemsEmpty({
     required super.itemsType,
-    required this.nonSearchingFiltersActive,
-    required this.searchingActive,
+    required super.hasValidFilters,
   });
-
-  final bool nonSearchingFiltersActive;
-  final bool searchingActive;
-  bool get hasValidFilters => nonSearchingFiltersActive || searchingActive;
 
   @override
   List<Object?> get props => [
         super.props,
-        nonSearchingFiltersActive,
-        searchingActive,
       ];
 }

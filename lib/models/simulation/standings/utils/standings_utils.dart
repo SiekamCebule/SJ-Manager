@@ -3,16 +3,16 @@ import 'package:sj_manager/models/simulation/standings/score/details/competition
 import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_creator.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/competition_team.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 
-Standings<Jumper, CompetitionJumperScoreDetails>
+Standings<JumperDbRecord, CompetitionJumperScoreDetails>
     createIndividualStandingsForTeamCompetition({
   required Standings<Team, CompetitionTeamScoreDetails> teamStandings,
   required StandingsPositionsCreator<CompetitionJumperScore> positionsCreator,
 }) {
-  final individualStandings = Standings<Jumper, CompetitionJumperScoreDetails>(
+  final individualStandings = Standings<JumperDbRecord, CompetitionJumperScoreDetails>(
       positionsCreator: positionsCreator);
   for (final score in teamStandings.scores) {
     final teamScore = score as CompetitionTeamScore;
@@ -25,7 +25,7 @@ Standings<Jumper, CompetitionJumperScoreDetails>
 
 Standings<CompetitionTeam, CompetitionTeamScoreDetails>
     createTeamStandingsForIndividualCompetition({
-  required Standings<Jumper, CompetitionJumperScoreDetails> individualStandings,
+  required Standings<JumperDbRecord, CompetitionJumperScoreDetails> individualStandings,
   required StandingsPositionsCreator<CompetitionTeamScore> positionsCreator,
   required List<CompetitionTeam> teams,
 }) {
@@ -64,7 +64,7 @@ Standings<CompetitionTeam, CompetitionTeamScoreDetails>
 }
 
 E? teamOfJumperInStandings<E extends CompetitionTeam>(
-    {required Jumper jumper,
+    {required JumperDbRecord jumper,
     required Standings<E, CompetitionTeamScoreDetails> standings}) {
   for (var teamScore in standings.scores) {
     if (teamScore.entity.jumpers.contains(jumper)) {

@@ -8,8 +8,8 @@ import 'package:sj_manager/models/simulation/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/classification_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/competition_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
 
 abstract class ClassificationScoreCreatingContext<
@@ -54,11 +54,11 @@ class DefaultTeamClassificationScoreCreatingContext
     required this.teamJumpersForIndividualCompetitions,
   });
 
-  final List<Jumper> teamJumpersForIndividualCompetitions;
+  final List<JumperDbRecord> teamJumpersForIndividualCompetitions;
 }
 
 class DefaultIndividualClassificationScoreCreatingContext
-    extends DefaultClassificationScoreCreatingContext<Jumper> {
+    extends DefaultClassificationScoreCreatingContext<JumperDbRecord> {
   const DefaultIndividualClassificationScoreCreatingContext({
     required super.entity,
     required super.eventSeries,

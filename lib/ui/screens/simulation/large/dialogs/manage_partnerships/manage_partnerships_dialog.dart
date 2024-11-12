@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/simulation_jumper_image.dart';
 import 'package:sj_manager/ui/screens/simulation/utils/jumper_ratings_translations.dart';
 import 'package:sj_manager/utils/show_dialog.dart';
@@ -15,7 +15,7 @@ class ManagePartnershipsDialog extends StatefulWidget {
     required this.onSubmit,
   });
 
-  final List<Jumper> jumpers;
+  final List<SimulationJumper> jumpers;
   final Function(ManagePartnershipsDialogResult result) onSubmit;
 
   @override
@@ -23,8 +23,8 @@ class ManagePartnershipsDialog extends StatefulWidget {
 }
 
 class _ManagePartnershipsDialogState extends State<ManagePartnershipsDialog> {
-  late final List<Jumper> _orderedJumpers;
-  late final Map<Jumper, bool> _shouldBeRemoved;
+  late final List<SimulationJumper> _orderedJumpers;
+  late final Map<SimulationJumper, bool> _shouldBeRemoved;
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _ManagePartnershipsDialogState extends State<ManagePartnershipsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabaseCubit>().state;
+    final database = context.watch<SimulationDatabase>();
 
     return LayoutBuilder(
       builder: (context, constraints) => AlertDialog(
@@ -62,7 +62,7 @@ class _ManagePartnershipsDialogState extends State<ManagePartnershipsDialog> {
                     if (newIndex > oldIndex) {
                       newIndex -= 1;
                     }
-                    final Jumper movedJumper = _orderedJumpers.removeAt(oldIndex);
+                    final movedJumper = _orderedJumpers.removeAt(oldIndex);
                     _orderedJumpers.insert(newIndex, movedJumper);
                   });
                 },
@@ -144,7 +144,7 @@ class _JumperTile extends StatelessWidget {
     required this.action,
   });
 
-  final Jumper jumper;
+  final SimulationJumper jumper;
   final JumperLevelReport? levelReport;
   final VoidCallback onAction;
   final _JumperTileAction action;
@@ -191,7 +191,7 @@ class _AreYouSureDialog extends StatelessWidget {
     required this.partnershipsToEnd,
   });
 
-  final Iterable<Jumper> partnershipsToEnd;
+  final Iterable<SimulationJumper> partnershipsToEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -248,6 +248,6 @@ class ManagePartnershipsDialogResult {
     required this.newOrder,
   });
 
-  final Iterable<Jumper> partnershipsToRemove;
-  final List<Jumper> newOrder;
+  final Iterable<SimulationJumper> partnershipsToRemove;
+  final List<SimulationJumper> newOrder;
 }

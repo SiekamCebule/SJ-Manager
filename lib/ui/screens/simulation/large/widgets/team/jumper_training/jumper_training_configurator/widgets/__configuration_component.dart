@@ -25,14 +25,10 @@ class _ConfigurationComponentState extends State<_ConfigurationComponent> {
 
   @override
   void didUpdateWidget(covariant _ConfigurationComponent oldWidget) {
-    if (oldWidget.trainingConfig != widget.trainingConfig) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        setState(() {
-          _trainingBalances = Map.of(widget.trainingConfig.balance);
-          _effectOnConsistency = _calculateEffectOnConsistency();
-        });
-      });
-    }
+    setState(() {
+      _trainingBalances = Map.of(widget.trainingConfig.balance);
+      _effectOnConsistency = _calculateEffectOnConsistency();
+    });
     super.didUpdateWidget(oldWidget);
   }
 

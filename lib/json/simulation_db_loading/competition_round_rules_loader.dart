@@ -14,8 +14,8 @@ import 'package:sj_manager/models/simulation/competition/rules/utils/judges_crea
 import 'package:sj_manager/models/simulation/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class CompetitionRoundRulesParser
@@ -54,7 +54,8 @@ class CompetitionRoundRulesParser
     };
   }
 
-  FutureOr<DefaultCompetitionRoundRules<Jumper>> _loadIndividual(Json json) async {
+  FutureOr<DefaultCompetitionRoundRules<JumperDbRecord>> _loadIndividual(
+      Json json) async {
     final entitiesLimitJson = json['limit'];
     EntitiesLimit? entitiesLimit;
     if (entitiesLimitJson != null) {
@@ -62,7 +63,8 @@ class CompetitionRoundRulesParser
     }
     final competitionScoreCreator =
         competitionScoreCreatorParser.parse(json['competitionScoreCreator']);
-    if (competitionScoreCreator is CompetitionScoreCreator<CompetitionScore<Jumper>> ==
+    if (competitionScoreCreator
+            is CompetitionScoreCreator<CompetitionScore<JumperDbRecord>> ==
         false) {
       throw ArgumentError(
         '(Parsing) The loaded competition score creator type is not a valid one for individual competition rules (${competitionScoreCreator.runtimeType})',

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
 import 'package:sj_manager/ui/reusable_widgets/sjm_dialog_ok_pop_button.dart';
 
@@ -21,8 +21,8 @@ class SetUpTrainingsDialog extends StatelessWidget {
   });
 
   final SimulationMode simulationMode;
-  final List<Jumper> jumpers;
-  final Map<Jumper, JumperReports> jumpersSimulationRatings;
+  final List<SimulationJumper> jumpers;
+  final Map<SimulationJumper, JumperReports> jumpersSimulationRatings;
   final Function(SetUpTrainingsDialogResult result) onSubmit;
 
   @override
@@ -86,6 +86,7 @@ class SetUpTrainingsDialog extends StatelessWidget {
             if (itIsPersonalCoachEmptyState)
               SjmDialogOkPopButton(
                 customOnPressed: () {
+                  Navigator.of(context).pop();
                   onSubmit(SetUpTrainingsDialogResult.doNothing);
                 },
               ),

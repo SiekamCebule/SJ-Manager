@@ -32,17 +32,17 @@ import 'package:sj_manager/models/simulation/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_calendar.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_level_description.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/hill/hill_profile_type.dart';
-import 'package:sj_manager/models/user_db/hill/jumps_variability.dart';
-import 'package:sj_manager/models/user_db/hill/landing_ease.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/hill/hill_profile_type.dart';
+import 'package:sj_manager/models/database/hill/jumps_variability.dart';
+import 'package:sj_manager/models/database/hill/landing_ease.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
@@ -72,7 +72,7 @@ class _TestGameVariantCreator {
       gameVariantId: 'test',
       fromJson: context.read<DbItemsJsonConfiguration<Country>>().fromJson,
     );
-    _countriesRepo = CountriesRepo(initial: countries);
+    _countriesRepo = CountriesRepo(countries: countries);
     if (!context.mounted) throw _contextIsNotMountedError;
     final teams = await loadGameVariantItems<CountryTeam>(
       pathsCache: context.read(),
@@ -86,22 +86,22 @@ class _TestGameVariantCreator {
       },
     );
     if (!context.mounted) throw _contextIsNotMountedError;
-    final males = await loadGameVariantItems<MaleJumper>(
+    final males = await loadGameVariantItems<MaleJumperDbRecord>(
       pathsCache: context.read(),
       pathsRegistry: context.read(),
       gameVariantId: 'test',
       fromJson: (json) {
-        return MaleJumper.fromJson(json,
+        return MaleJumperDbRecord.fromJson(json,
             countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo));
       },
     );
     if (!context.mounted) throw _contextIsNotMountedError;
-    final females = await loadGameVariantItems<FemaleJumper>(
+    final females = await loadGameVariantItems<FemaleJumperDbRecord>(
       pathsCache: context.read(),
       pathsRegistry: context.read(),
       gameVariantId: 'test',
       fromJson: (json) {
-        return FemaleJumper.fromJson(json,
+        return FemaleJumperDbRecord.fromJson(json,
             countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo));
       },
     );
@@ -366,7 +366,7 @@ class _TestGameVariantCreator {
             competition.labels.contains(
               DefaultCompetitionType.competition,
             ) &&
-            competition is Competition<Jumper, Standings>);
+            competition is Competition<JumperDbRecord, Standings>);
         final ncCompetitions = competitions.where((competition) =>
             competition.labels.contains(DefaultCompetitionType.competition));
         final ncModifiers = {

@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
-import 'package:sj_manager/models/user_db/psyche/personalities.dart';
-import 'package:sj_manager/models/user_db/psyche/translations.dart';
-import 'package:sj_manager/models/user_db/sex.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/jumper/jumper_skills_db_record.dart';
+import 'package:sj_manager/models/database/psyche/personalities.dart';
+import 'package:sj_manager/models/database/psyche/translations.dart';
+import 'package:sj_manager/models/database/sex.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_date_form_field.dart';
@@ -43,7 +43,7 @@ class JumperEditor extends StatefulWidget {
   final bool enableEditingName;
   final CountriesRepo countriesRepo;
 
-  final Function(Jumper current) onChange;
+  final Function(JumperDbRecord current) onChange;
 
   @override
   State<JumperEditor> createState() => JumperEditorState();
@@ -66,7 +66,7 @@ class JumperEditorState extends State<JumperEditor> {
   var _personality = Personalities.resourceful;
   Country? _country;
 
-  Jumper? _cachedJumper;
+  JumperDbRecord? _cachedJumper;
   late final ScrollController _scrollController;
 
   @override
@@ -101,7 +101,7 @@ class JumperEditorState extends State<JumperEditor> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final shouldShowImage = _cachedJumper != null &&
-            context.maybeRead<DbItemImageGeneratingSetup<Jumper>>() != null;
+            context.maybeRead<DbItemImageGeneratingSetup<JumperDbRecord>>() != null;
         return Scrollbar(
           thumbVisibility: platformIsDesktop,
           controller: _scrollController,
@@ -165,7 +165,7 @@ class JumperEditorState extends State<JumperEditor> {
                     if (shouldShowImage)
                       Expanded(
                         flex: 4,
-                        child: DbItemImage<Jumper>(
+                        child: DbItemImage<JumperDbRecord>(
                           item: _cachedJumper!,
                           setup: context.read(),
                           height: UiItemEditorsConstants.jumperImageHeight,
@@ -305,20 +305,20 @@ class JumperEditorState extends State<JumperEditor> {
     widget.onChange(_constructAndCacheJumper());
   }
 
-  Jumper _constructAndCacheJumper() {
+  JumperDbRecord _constructAndCacheJumper() {
     final name = _nameController.text;
     final surname = _surnameController.text;
     final country = _country!;
 
     final dateOfBirth = _dateFormat.parse(_dateOfBirthController.text);
 
-    final skills = JumperSkills(
+    final skills = JumperSkillsDbRecord(
       takeoffQuality: double.parse(_takeoffQualityController.text),
       flightQuality: double.parse(_flightQualityController.text),
       landingQuality: double.parse(_landingQualityController.text),
     );
     final jumper = _sex == Sex.male
-        ? MaleJumper(
+        ? MaleJumperDbRecord(
             name: name,
             surname: surname,
             country: country,
@@ -326,7 +326,7 @@ class JumperEditorState extends State<JumperEditor> {
             personality: _personality,
             skills: skills,
           )
-        : FemaleJumper(
+        : FemaleJumperDbRecord(
             name: name,
             surname: surname,
             country: country,
@@ -338,7 +338,7 @@ class JumperEditorState extends State<JumperEditor> {
     return jumper;
   }
 
-  void setUp(Jumper jumper) {
+  void setUp(JumperDbRecord jumper) {
     setState(() {
       _cachedJumper = jumper;
     });
@@ -346,7 +346,7 @@ class JumperEditorState extends State<JumperEditor> {
     FocusScope.of(context).unfocus();
   }
 
-  void _fillFields(Jumper jumper) {
+  void _fillFields(JumperDbRecord jumper) {
     _nameController.text = jumper.name;
     _surnameController.text = jumper.surname;
     _dateOfBirthController.text = _dateFormat.format(jumper.dateOfBirth);

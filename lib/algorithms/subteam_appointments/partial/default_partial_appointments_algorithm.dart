@@ -1,48 +1,47 @@
 import 'package:sj_manager/algorithms/subteam_appointments/partial/partial_appointments_algorithm.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/psyche/personalities.dart';
+import 'package:sj_manager/models/database/psyche/level_of_consciousness.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/utils/random/random.dart';
 
 class DefaultPartialAppointmentsAlgorithm implements PartialAppointmentsAlgorithm {
   const DefaultPartialAppointmentsAlgorithm();
 
   @override
-  Iterable<Jumper> chooseBestJumpers({
-    required Iterable<Jumper> source,
-    required Map<Jumper, double> form,
+  Iterable<SimulationJumper> chooseBestJumpers({
+    required Iterable<SimulationJumper> source,
     required int limit,
   }) {
     final baseSeed = DateTime.now().millisecondsSinceEpoch;
     final seed = {
       for (var i = 0; i < source.length; i++) source.elementAt(i): baseSeed + i,
     };
-    double calculateRating(Jumper jumper) {
-      final personalityBonus = switch (jumper.personality) {
-        Personalities.compromised => 3,
-        Personalities.selfCritical => 3,
-        Personalities.resigned => 4,
-        Personalities.nostalgic => 4,
-        Personalities.insecure => 4.5,
-        Personalities.yearning => 5,
-        Personalities.stubborn => 5,
-        Personalities.arrogant => 6,
-        Personalities.resourceful => 8,
-        Personalities.balanced => 9.5,
-        Personalities.optimistic => 11,
-        Personalities.open => 12,
-        Personalities.rational => 12,
-        Personalities.devoted => 15,
-        Personalities.spiritualJoy => 15,
-        Personalities.spiritualPeace => 15,
-        Personalities.enlightened => 15,
+    double calculateRating(SimulationJumper jumper) {
+      final consciouenssBonus = switch (jumper.levelOfConsciousness.label) {
+        LevelOfConsciousnessLabels.shame => 3,
+        LevelOfConsciousnessLabels.guilt => 3,
+        LevelOfConsciousnessLabels.apathy => 4,
+        LevelOfConsciousnessLabels.grief => 4,
+        LevelOfConsciousnessLabels.fear => 4.5,
+        LevelOfConsciousnessLabels.desire => 5,
+        LevelOfConsciousnessLabels.anger => 5,
+        LevelOfConsciousnessLabels.pride => 6,
+        LevelOfConsciousnessLabels.courage => 8,
+        LevelOfConsciousnessLabels.neutrality => 9.5,
+        LevelOfConsciousnessLabels.willingness => 11,
+        LevelOfConsciousnessLabels.acceptance => 12,
+        LevelOfConsciousnessLabels.reason => 12,
+        LevelOfConsciousnessLabels.love => 15,
+        LevelOfConsciousnessLabels.joy => 15,
+        LevelOfConsciousnessLabels.peace => 15,
+        LevelOfConsciousnessLabels.enlightenment => 15,
       };
 
       final randomBonus = linearRandomDouble(-2, 2, seed: seed[jumper]!);
 
-      final byTakeoff = (jumper.skills.takeoffQuality / 1);
-      final byFlight = (jumper.skills.flightQuality / 1);
-      final byPersonality = (personalityBonus / 3);
-      final byForm = (form[jumper]! / 4);
+      final byTakeoff = (jumper.takeoffQuality / 1);
+      final byFlight = (jumper.flightQuality / 1);
+      final byPersonality = (consciouenssBonus / 3);
+      final byForm = (jumper.form / 4);
       final byRandom = (randomBonus / 1);
 
       final rating = byTakeoff + byFlight + byPersonality + byForm + byRandom;

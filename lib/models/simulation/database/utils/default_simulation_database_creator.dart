@@ -1,27 +1,25 @@
 import 'package:sj_manager/models/simulation/database/actions/simulation_actions_repo.dart';
-import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
-import 'package:sj_manager/models/simulation/flow/jumper_stats/jumper_attribute_history.dart';
-import 'package:sj_manager/models/simulation/flow/jumper_stats/jumper_stats.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/models/simulation/jumper/stats/jumper_attribute_history.dart';
+import 'package:sj_manager/models/simulation/jumper/stats/jumper_stats.dart';
 import 'package:sj_manager/models/simulation/flow/reports/team_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
 import 'package:sj_manager/models/simulation/database/simulation_wizard_options_repo.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/classification_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/competition_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/jump_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/score/score.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/psyche/psyche_utils.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
-import 'package:sj_manager/models/user_db/team/personal_coach_team.dart';
-import 'package:sj_manager/models/user_db/team/subteam.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/psyche/psyche_utils.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/team/personal_coach_team.dart';
+import 'package:sj_manager/models/database/team/subteam.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
-import 'package:sj_manager/repositories/generic/items_repo.dart';
 import 'package:sj_manager/utils/id_generator.dart';
 
 class DefaultSimulationDatabaseCreator {
@@ -32,35 +30,44 @@ class DefaultSimulationDatabaseCreator {
   final IdGenerator idGenerator;
 
   late ItemsIdsRepo _idsRepo;
-  late ItemsRepo<Jumper> _jumpers;
-  late ItemsRepo<Hill> _hills;
-  late ItemsRepo<CountryTeam> _countryTeams;
+  late List<SimulationJumper> _jumpers;
+  late List<Hill> _hills;
+  late List<CountryTeam> _countryTeams;
   late CountriesRepo _countries;
-  late ItemsRepo<SimulationSeason> _seasons;
+  late List<SimulationSeason> _seasons;
 
   SimulationDatabase create(SimulationWizardOptionsRepo options) {
-    _idsRepo = ItemsIdsRepo();
-    _jumpers = ItemsRepo(initial: options.gameVariant.last!.jumpers);
-    _hills = ItemsRepo(initial: options.gameVariant.last!.hills);
-    _countryTeams = ItemsRepo(initial: options.gameVariant.last!.countryTeams);
-    _countries = CountriesRepo(initial: options.gameVariant.last!.countries);
-    _seasons = ItemsRepo(initial: [options.gameVariant.last!.season]);
     final mode = options.mode.last!;
-    _setUpIdsRepo();
-    final jumpersDynamicParameters = {
-      for (var jumper in _jumpers.last)
-        jumper: JumperDynamicParams(
+    _idsRepo = ItemsIdsRepo();
+    _hills = List.of(options.gameVariant.last!.hills);
+    _countryTeams = List.of(options.gameVariant.last!.countryTeams);
+    _countries = CountriesRepo(countries: options.gameVariant.last!.countries);
+    _seasons = List.of([options.gameVariant.last!.season]);
+    final jumperRecords = List.of(options.gameVariant.last!.jumpers);
+    _jumpers = jumperRecords.map(
+      (dbRecord) {
+        return SimulationJumper(
+          dateOfBirth: dbRecord.dateOfBirth,
+          name: dbRecord.name,
+          surname: dbRecord.surname,
+          country: dbRecord.country,
+          sex: dbRecord.sex,
+          takeoffQuality: dbRecord.skills.takeoffQuality,
+          flightQuality: dbRecord.skills.flightQuality,
+          landingQuality: dbRecord.skills.landingQuality,
           trainingConfig: null,
-          morale: 0,
-          fatigue: 0,
           form: 10,
           jumpsConsistency: 5,
-          levelOfConsciousness: locByPersonality(jumper.personality),
-        ),
-    };
+          morale: 0,
+          fatigue: 0,
+          levelOfConsciousness: locByPersonality(dbRecord.personality),
+        );
+      },
+    ).toList();
+    _setUpIdsRepo();
     final jumperReports = {
-      for (var jumper in _jumpers.last)
-        jumper: const JumperReports(
+      for (var jumper in _jumpers)
+        jumper: JumperReports(
           levelReport: null,
           weeklyTrainingReport: null,
           monthlyTrainingReport: null,
@@ -68,20 +75,27 @@ class DefaultSimulationDatabaseCreator {
           jumpsRating: null,
         ),
     };
+    const attributeHistoryLimit =
+        31; // Max number of days in a month. The biggest need is when we create a monthly training report.
     final jumperStats = {
-      for (var jumper in _jumpers.last)
+      for (var jumper in _jumpers)
         jumper: JumperStats(
           progressableAttributeHistory: {
-            TrainingProgressCategory.takeoff: JumperAttributeHistory.empty(),
-            TrainingProgressCategory.flight: JumperAttributeHistory.empty(),
-            TrainingProgressCategory.landing: JumperAttributeHistory.empty(),
-            TrainingProgressCategory.consistency: JumperAttributeHistory.empty(),
-            TrainingProgressCategory.form: JumperAttributeHistory.empty(),
+            TrainingProgressCategory.takeoff:
+                JumperAttributeHistory.empty(limit: attributeHistoryLimit),
+            TrainingProgressCategory.flight:
+                JumperAttributeHistory.empty(limit: attributeHistoryLimit),
+            TrainingProgressCategory.landing:
+                JumperAttributeHistory.empty(limit: attributeHistoryLimit),
+            TrainingProgressCategory.consistency:
+                JumperAttributeHistory.empty(limit: attributeHistoryLimit),
+            TrainingProgressCategory.form:
+                JumperAttributeHistory.empty(limit: attributeHistoryLimit),
           },
         ),
     };
     final personalCoachTeam = options.mode.last! == SimulationMode.personalCoach
-        ? const PersonalCoachTeam(jumperIds: [])
+        ? PersonalCoachTeam(jumpers: [])
         : null;
     _idsRepo.register(personalCoachTeam, id: idGenerator.generate());
     const defaultTeamReports = TeamReports(
@@ -115,11 +129,9 @@ class DefaultSimulationDatabaseCreator {
       idsRepo: _idsRepo,
       actionDeadlines: options.gameVariant.last!.actionDeadlines,
       actionsRepo: SimulationActionsRepo(initial: {}),
-      jumperDynamicParams: jumpersDynamicParameters,
       jumperReports: jumperReports,
       jumperStats: jumperStats,
       teamReports: teamReports,
-      isDisposed: false,
     );
   }
 
@@ -129,12 +141,12 @@ class DefaultSimulationDatabaseCreator {
     }
 
     final items = [
-      ..._jumpers.last,
-      ..._hills.last,
-      ..._countryTeams.last,
-      ..._countries.last,
-      ..._seasons.last,
-      for (var season in _seasons.last) ...[
+      ..._jumpers,
+      ..._hills,
+      ..._countryTeams,
+      ..._countries.countries,
+      ..._seasons,
+      for (var season in _seasons) ...[
         for (var eventSeries in season.eventSeries) ...[
           eventSeries,
           for (var competition in eventSeries.calendar.competitions) ...[

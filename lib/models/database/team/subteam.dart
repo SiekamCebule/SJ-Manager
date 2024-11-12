@@ -1,6 +1,6 @@
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/user_db/team/country_team/subteam_type.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/team/country_team/subteam_type.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 
 class Subteam extends Team {
   const Subteam({

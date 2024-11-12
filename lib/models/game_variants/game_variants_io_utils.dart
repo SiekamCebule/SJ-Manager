@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:sj_manager/json/db_items_json.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
+import 'package:sj_manager/models/database/db_items_file_system_paths.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:path/path.dart' as path;
 

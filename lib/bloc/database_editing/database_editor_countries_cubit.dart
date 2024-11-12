@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/bloc/database_editing/state/database_editor_countries_state.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/sex.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/sex.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
 
@@ -41,9 +41,9 @@ class DatabaseEditorCountriesCubit extends Cubit<DatabaseEditorCountriesState> {
     ];
     emit(
       DatabaseEditorCountriesReady(
-        maleJumpersCountries: CountriesRepo(initial: maleJumpersCountries),
-        femaleJumpersCountries: CountriesRepo(initial: femaleJumpersCountries),
-        universalCountries: CountriesRepo(initial: universalCountries),
+        maleJumpersCountries: CountriesRepo(countries: maleJumpersCountries),
+        femaleJumpersCountries: CountriesRepo(countries: femaleJumpersCountries),
+        universalCountries: CountriesRepo(countries: universalCountries),
       ),
     );
   }
@@ -97,16 +97,5 @@ class DatabaseEditorCountriesCubit extends Cubit<DatabaseEditorCountriesState> {
       ..sort((a, b) => averageStarsByCountry[b]!.compareTo(averageStarsByCountry[a]!));
 
     return sortedCountries;
-  }
-
-  void dispose() {
-    if (state is DatabaseEditorCountriesInitial) {
-      throw StateError(
-          'Cannot dispose DatabaseEditorCountriesCubit when its state is initial');
-    }
-    final readyState = state as DatabaseEditorCountriesReady;
-    readyState.maleJumpersCountries.dispose();
-    readyState.femaleJumpersCountries.dispose();
-    readyState.universalCountries.dispose();
   }
 }

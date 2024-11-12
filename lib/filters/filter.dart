@@ -1,17 +1,26 @@
 import 'package:equatable/equatable.dart';
 
-abstract class Filter<T> extends Equatable {
-  const Filter();
+class Filter<T> with EquatableMixin {
+  const Filter({
+    required this.shouldPass,
+  });
 
-  List<T> call(List<T> source);
+  final bool Function(T item) shouldPass;
 
-  bool get isValid;
+  Iterable<T> call(Iterable<T> source) {
+    return source.where(shouldPass);
+  }
 
-  static List<T> filterAll<T>(List<T> source, List<Filter<T>> filters) {
+  static Iterable<T> filterAll<T>(Iterable<T> source, Iterable<Filter<T>> filters) {
     var filtered = List<T>.of(source);
     for (var filter in filters) {
-      filtered = filter(filtered);
+      filtered = filter(filtered).toList();
     }
     return filtered;
   }
+
+  @override
+  List<Object?> get props => [
+        shouldPass,
+      ];
 }

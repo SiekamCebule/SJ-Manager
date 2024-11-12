@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/competition_rules_preset_info_list_tile.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/event_series_calendar_preset_info_list_tile.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_tiles/event_series_setup_info_list_tile.dart';
@@ -50,7 +50,7 @@ abstract class DbItemInfoTileFactory {
     required bool selected,
     required bool reorderable,
   }) {
-    if (itemType == MaleJumper || itemType == FemaleJumper) {
+    if (itemType == MaleJumperDbRecord || itemType == FemaleJumperDbRecord) {
       return JumperInfoListTile(
         reorderable: reorderable,
         indexInList: indexInList,

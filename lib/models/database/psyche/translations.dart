@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/models/user_db/psyche/level_of_consciousness.dart';
-import 'package:sj_manager/models/user_db/psyche/personalities.dart';
+import 'package:sj_manager/models/database/psyche/level_of_consciousness.dart';
+import 'package:sj_manager/models/database/psyche/personalities.dart';
 
 String levelOfConsciousnessName({
   required BuildContext context,

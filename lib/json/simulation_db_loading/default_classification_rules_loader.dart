@@ -3,8 +3,8 @@ import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/simulation/classification/default_classification_rules.dart';
 import 'package:sj_manager/models/simulation/competition/competition.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class DefaultClassificationRulesParser
@@ -46,8 +46,8 @@ class DefaultClassificationRulesParser
     );
 
     DefaultIndividualClassificationRules createIndividual() {
-      if (classificationScoreCreator is ClassificationScoreCreator<Jumper,
-          DefaultClassificationScoreCreatingContext<Jumper>>) {
+      if (classificationScoreCreator is ClassificationScoreCreator<JumperDbRecord,
+          DefaultClassificationScoreCreatingContext<JumperDbRecord>>) {
         return DefaultIndividualClassificationRules(
           classificationScoreCreator: classificationScoreCreator,
           scoringType: scoringType,

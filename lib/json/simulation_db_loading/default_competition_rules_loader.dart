@@ -6,8 +6,8 @@ import 'package:sj_manager/models/simulation/competition/rules/competition_round
 import 'package:sj_manager/models/simulation/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
 import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/competition_team.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class DefaultCompetitionRulesParser
@@ -32,7 +32,7 @@ class DefaultCompetitionRulesParser
     };
   }
 
-  FutureOr<DefaultCompetitionRules<Jumper>> _loadIndividual(Json json) async {
+  FutureOr<DefaultCompetitionRules<JumperDbRecord>> _loadIndividual(Json json) async {
     final rounds =
         (await _loadRoundsDynamic(json)).cast<DefaultIndividualCompetitionRoundRules>();
     return DefaultCompetitionRules(

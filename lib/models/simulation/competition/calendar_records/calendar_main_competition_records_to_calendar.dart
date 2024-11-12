@@ -6,9 +6,9 @@ import 'package:sj_manager/models/simulation/competition/competition_labels.dart
 import 'package:sj_manager/models/simulation/competition/high_level_calendar.dart';
 import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_calendar.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/competition_team.dart';
 import 'package:sj_manager/utils/iterable.dart';
 
 class CalendarMainCompetitionRecordsToCalendarConverter
@@ -66,7 +66,7 @@ class CalendarMainCompetitionRecordsToCalendarConverter
   void _maybeMarkCompetitionItShouldMoveBehindTeamComp(
       {required CalendarMainCompetitionRecord highLevelComp,
       required List<Competition> rawComps}) {
-    if (highLevelComp.setup.mainCompRules is DefaultCompetitionRules<Jumper>) {
+    if (highLevelComp.setup.mainCompRules is DefaultCompetitionRules<JumperDbRecord>) {
       final trainings = highLevelComp.setup.trainingsRules != null
           ? rawComps.sublist(0, highLevelComp.setup.trainingsCount)
           : null;

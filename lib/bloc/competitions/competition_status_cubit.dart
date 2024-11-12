@@ -3,8 +3,8 @@ import 'package:sj_manager/bloc/competitions/states/competition_status_state.dar
 
 import 'package:sj_manager/models/running/competition_flow_controller.dart';
 import 'package:sj_manager/models/running/competition_status.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 
 class CompetitionStatusCubit<E> extends Cubit<CompetitionStatusState> {
   CompetitionStatusCubit({
@@ -14,7 +14,7 @@ class CompetitionStatusCubit<E> extends Cubit<CompetitionStatusState> {
   CompetitionFlowController<E> flowController;
 
   static CompetitionStatusState _resolveInitial<E>() {
-    if (E == Jumper) {
+    if (E == JumperDbRecord) {
       return const IndividualCompetitionStatusState(
           status: CompetitionStatus.nonStarted, roundIndex: 0);
     } else if (E == Team) {

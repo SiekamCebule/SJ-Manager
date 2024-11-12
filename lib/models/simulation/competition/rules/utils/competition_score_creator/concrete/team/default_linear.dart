@@ -1,10 +1,10 @@
 import 'package:sj_manager/models/simulation/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/competition_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/score/score.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/competition_team.dart';
 import 'package:collection/collection.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 
 class DefaultLinearTeamCompetitionScoreCreator extends CompetitionScoreCreator<
     Score<CompetitionTeam<Team>, CompetitionTeamScoreDetails>> {
@@ -17,7 +17,7 @@ class DefaultLinearTeamCompetitionScoreCreator extends CompetitionScoreCreator<
         points: context.lastJumpScore.points,
         details: CompetitionTeamScoreDetails(
           jumperScores: [
-            Score<Jumper, CompetitionJumperScoreDetails>(
+            Score<JumperDbRecord, CompetitionJumperScoreDetails>(
               entity: context.lastJumpScore.entity,
               points: context.lastJumpScore.points,
               details: CompetitionJumperScoreDetails(
@@ -33,7 +33,7 @@ class DefaultLinearTeamCompetitionScoreCreator extends CompetitionScoreCreator<
       final currentJumperScores = currentScore.details.jumperScores;
       final updatedJumperScores = currentJumperScores.map((jumperScore) {
         if (jumperScore.entity == context.lastJumpScore.entity) {
-          return Score<Jumper, CompetitionJumperScoreDetails>(
+          return Score<JumperDbRecord, CompetitionJumperScoreDetails>(
             entity: jumperScore.entity,
             points: jumperScore.points + context.lastJumpScore.points,
             details: CompetitionJumperScoreDetails(
@@ -52,7 +52,7 @@ class DefaultLinearTeamCompetitionScoreCreator extends CompetitionScoreCreator<
           null;
       if (!jumperHaveScore) {
         updatedJumperScores.add(
-          Score<Jumper, CompetitionJumperScoreDetails>(
+          Score<JumperDbRecord, CompetitionJumperScoreDetails>(
             entity: context.lastJumpScore.entity,
             points: context.lastJumpScore.points,
             details: CompetitionJumperScoreDetails(

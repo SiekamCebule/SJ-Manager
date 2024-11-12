@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image.dart';
 
 class SimulationJumperImage extends StatelessWidget {
@@ -12,7 +12,7 @@ class SimulationJumperImage extends StatelessWidget {
     this.height,
   }) : assert((width != null || height != null) && !(width != null && height != null));
 
-  final Jumper jumper;
+  final SimulationJumper jumper;
   final ImageProvider? customImage;
   final double? width;
   final double? height;
@@ -30,7 +30,7 @@ class SimulationJumperImage extends StatelessWidget {
         fit: imageFit,
       );
     } else {
-      child = DbItemImage<Jumper>(
+      child = DbItemImage<SimulationJumper>(
         item: jumper,
         setup: context.read(),
         width: width,

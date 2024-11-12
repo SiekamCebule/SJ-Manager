@@ -34,7 +34,8 @@ class JumperTrainingConfig with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        balance,
+        balance.keys,
+        balance.values,
       ];
 
   JumperTrainingConfig copyWith({

@@ -9,8 +9,7 @@ class _TopPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabaseCubit>().state;
-    /*final availableActions = possibleActionsBySimulationMode[database.managerData.mode]!;*/ // TODO!!
+    final database = context.watch<SimulationDatabase>();
     const availableActions = SimulationActionType.values;
     final incompletedActions =
         availableActions.where(database.actionsRepo.isNotCompleted);
@@ -75,11 +74,13 @@ class _TopPanel extends StatelessWidget {
             labelText: mainButtonText,
             iconData: mainButtonIconData,
             onPressed: homeIsSelected
-                ? ContinueSimulationCommand(
-                    context: context,
-                    database: database,
-                    navigatorKey: navigatorKey,
-                  ).execute
+                ? () async {
+                    await ContinueSimulationCommand(
+                      context: context,
+                      database: database,
+                      navigatorKey: navigatorKey,
+                    ).execute();
+                  }
                 : returnToHome,
           ),
         ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:sj_manager/l10n/training_progress_translations.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
 
 class TrainingProgressReportDisplay extends StatelessWidget {
   const TrainingProgressReportDisplay({

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sj_manager/json/db_items_json.dart';
 import 'package:sj_manager/models/simulation/database/utils/default_simulation_db_loader_from_file.dart';
 import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
-import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
+import 'package:sj_manager/models/database/db_items_file_system_paths.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/setup/db_items_list_loader.dart';

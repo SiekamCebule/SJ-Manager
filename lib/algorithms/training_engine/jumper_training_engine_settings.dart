@@ -1,5 +1,5 @@
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/user_db/psyche/level_of_consciousness.dart';
+import 'package:sj_manager/models/database/psyche/level_of_consciousness.dart';
 
 class JumperTrainingEngineSettings {
   const JumperTrainingEngineSettings({
@@ -197,34 +197,34 @@ const sjmDefaultTrainingEngineSettings = JumperTrainingEngineSettings(
   fatigueFactorMultiplier: 0.7,
 
   // Takeoff parameters
-  takeoffBalanceEffectDivider: 50,
-  takeoffRandomScaleBase: 0.15,
-  takeoffRandomScaleBalanceDivider: 8.5,
-  takeoffRandomCauchyDampingFactor: 0.0008,
+  takeoffBalanceEffectDivider: 30,
+  takeoffRandomScaleBase: 0.10,
+  takeoffRandomScaleBalanceDivider: 10.75,
+  takeoffRandomCauchyDampingFactor: 0.0025,
   takeoffDirectionalMultiplierDivider: 10.0,
   takeoffDeltaDampingExponent: 2,
-  takeoffDeltaDampingBaseDivider: 9,
+  takeoffDeltaDampingBaseDivider: 70,
 
   // Flight parameters
-  flightBalanceEffectDivider: 50,
-  flightRandomScaleBase: 0.15,
-  flightRandomScaleBalanceDivider: 8.5,
-  flightRandomCauchyDampingFactor: 0.0008,
-  flightDirectionalMultiplierDivider: 10.0,
-  flightDeltaDampingExponent: 2,
-  flightDeltaDampingBaseDivider: 9,
+  flightBalanceEffectDivider: 30,
+  flightRandomScaleBase: 0.10,
+  flightRandomScaleBalanceDivider: 10.75,
+  flightRandomCauchyDampingFactor: 0.0022,
+  flightDirectionalMultiplierDivider: 1000,
+  flightDeltaDampingExponent: 1,
+  flightDeltaDampingBaseDivider: 70,
 
   // Landing parameters
-  landingBalanceEffectDivider: 60,
-  landingRandomScaleBase: 0.15,
-  landingRandomScaleBalanceDivider: 8.5,
-  landingRandomCauchyDampingFactor: 0.0012,
-  landingDirectionalMultiplierDivider: 10.0,
-  landingDeltaDampingExponent: 2,
-  landingDeltaDampingBaseDivider: 9,
+  landingBalanceEffectDivider: 75,
+  landingRandomScaleBase: 0.10,
+  landingRandomScaleBalanceDivider: 10.75,
+  landingRandomCauchyDampingFactor: 0.003,
+  landingDirectionalMultiplierDivider: 1000.0,
+  landingDeltaDampingExponent: 1,
+  landingDeltaDampingBaseDivider: 5000,
 
   // Form parameters
-  formBalanceDivider: 2.5,
+  formBalanceDivider: 3.8,
   formRandomScaleBase: 0.15,
   formRandomScaleBalanceDivider: 8.5,
   formRandomCauchyDampingFactor: 0.0008,
@@ -233,13 +233,13 @@ const sjmDefaultTrainingEngineSettings = JumperTrainingEngineSettings(
   formDeltaDampingBaseDivider: 9,
 
   // Consistency parameters
-  consistencyMeanAvgBalanceDivider: 1.0,
-  consistencyRandomScaleBase: 0.15,
-  consistencyRandomCauchyDampingFactor: 0.0008,
-  consistencyBalanceDivider: 10.0,
+  consistencyBalanceDivider: 30,
+  consistencyMeanAvgBalanceDivider: 0.12,
+  consistencyRandomScaleBase: 0.3,
+  consistencyRandomCauchyDampingFactor: 0.0001,
   consistencyDirectionalMultiplierDivider: 10.0,
-  consistencyDeltaDampingExponent: 2,
-  consistencyDeltaDampingBaseDivider: 9,
+  consistencyDeltaDampingExponent: 7,
+  consistencyDeltaDampingBaseDivider: 20,
 
   trainingFeelingTrainingFactorDeltaDivider: 6,
   trainingFeelingPointsDeviationByConsciousness: {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/jumpers_ranking/jumper_in_ranking_tile.dart';
 
 class TeamJumpersRankingList extends StatelessWidget {
@@ -8,7 +8,7 @@ class TeamJumpersRankingList extends StatelessWidget {
     required this.jumpers,
   });
 
-  final List<Jumper> jumpers;
+  final List<SimulationJumper> jumpers;
 
   @override
   Widget build(BuildContext context) {

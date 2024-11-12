@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/user_db/hill/hill_type_by_size.dart';
-import 'package:sj_manager/models/user_db/hill/typical_wind_direction.dart';
+import 'package:sj_manager/models/database/hill/hill_type_by_size.dart';
+import 'package:sj_manager/models/database/hill/typical_wind_direction.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/models/user_db/hill/hill_profile_type.dart';
-import 'package:sj_manager/models/user_db/hill/jumps_variability.dart';
-import 'package:sj_manager/models/user_db/hill/landing_ease.dart';
+import 'package:sj_manager/models/database/hill/hill_profile_type.dart';
+import 'package:sj_manager/models/database/hill/jumps_variability.dart';
+import 'package:sj_manager/models/database/hill/landing_ease.dart';
 
 String translatedLandingEaseDescription(BuildContext context, LandingEase ease) {
   return switch (ease) {

@@ -13,7 +13,7 @@ import 'package:sj_manager/models/running/competition_status.dart';
 import 'package:sj_manager/models/running/default_competition_flow_controllers.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/judges_creator/concrete/default.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/judges_creator/judges_creator.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 
 import 'competition_bloc_test.mocks.dart';
 
@@ -191,8 +191,8 @@ void main() {
   });
 
   group('CompetitionStatusCubit', () {
-    late CompetitionStatusCubit<Jumper> competitionStatusCubit;
-    late CompetitionFlowController<Jumper> flowController;
+    late CompetitionStatusCubit<JumperDbRecord> competitionStatusCubit;
+    late CompetitionFlowController<JumperDbRecord> flowController;
 
     setUp(() {
       flowController = MockDefaultIndividualCompetitionFlowController();

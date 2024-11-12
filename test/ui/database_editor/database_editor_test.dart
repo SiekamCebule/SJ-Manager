@@ -6,26 +6,23 @@ import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/bloc/database_editing/database_items_cubit.dart';
 import 'package:sj_manager/bloc/database_editing/state/database_items_state.dart';
+import 'package:sj_manager/filters/filter.dart';
 import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
-import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
-import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
-import 'package:sj_manager/models/simulation/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team_facts.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/hill/hill_profile_type.dart';
-import 'package:sj_manager/models/user_db/hill/jumps_variability.dart';
-import 'package:sj_manager/models/user_db/hill/landing_ease.dart';
-import 'package:sj_manager/models/user_db/hill/typical_wind_direction.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
-import 'package:sj_manager/models/user_db/items_repos_registry.dart';
-import 'package:sj_manager/models/user_db/psyche/personalities.dart';
-import 'package:sj_manager/models/user_db/sex.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
-import 'package:sj_manager/repositories/countries/countries_repo.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team_facts.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/hill/hill_profile_type.dart';
+import 'package:sj_manager/models/database/hill/jumps_variability.dart';
+import 'package:sj_manager/models/database/hill/landing_ease.dart';
+import 'package:sj_manager/models/database/hill/typical_wind_direction.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/jumper/jumper_skills_db_record.dart';
+import 'package:sj_manager/models/database/items_repos_registry.dart';
+import 'package:sj_manager/models/database/psyche/personalities.dart';
+import 'package:sj_manager/models/database/sex.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
@@ -64,39 +61,39 @@ void main() {
   final countries = [noneCountry, slovenia, switzerland, germany];
 
   final maleJumpers = [
-    MaleJumper(
+    MaleJumperDbRecord(
       name: 'Adrian',
       surname: 'Nowak',
       country: slovenia,
       dateOfBirth: DateTime.now(),
       personality: Personalities.balanced,
-      skills: JumperSkills.empty.copyWith(
+      skills: JumperSkillsDbRecord.empty.copyWith(
         takeoffQuality: 14,
         flightQuality: 14,
       ),
     ),
-    MaleJumper(
+    MaleJumperDbRecord(
       name: 'Maciej',
       surname: 'Bąk',
       country: switzerland,
       dateOfBirth: DateTime.now(),
       personality: Personalities.balanced,
-      skills: JumperSkills.empty,
+      skills: JumperSkillsDbRecord.empty,
     ),
-    MaleJumper(
+    MaleJumperDbRecord(
       name: 'Caroll',
       surname: 'King',
       country: switzerland,
       dateOfBirth: DateTime.now(),
       personality: Personalities.balanced,
-      skills: JumperSkills.empty,
+      skills: JumperSkillsDbRecord.empty,
     ),
   ];
   final femaleJumpers = [
-    FemaleJumper.empty(country: germany).copyWith(name: 'Angelica'),
-    FemaleJumper.empty(country: germany).copyWith(name: 'Jasmina'),
-    FemaleJumper.empty(country: switzerland).copyWith(name: 'Lisa'),
-    FemaleJumper.empty(country: slovenia).copyWith(name: 'Nika'),
+    FemaleJumperDbRecord.empty(country: germany).copyWith(name: 'Angelica'),
+    FemaleJumperDbRecord.empty(country: germany).copyWith(name: 'Jasmina'),
+    FemaleJumperDbRecord.empty(country: switzerland).copyWith(name: 'Lisa'),
+    FemaleJumperDbRecord.empty(country: slovenia).copyWith(name: 'Nika'),
   ];
   final hills = [
     Hill(
@@ -221,13 +218,9 @@ void main() {
                 RepositoryProvider(
                   create: (context) => ItemsReposRegistry(
                     initial: {
-                      EditableItemsRepo<MaleJumper>(initial: maleJumpers),
-                      EditableItemsRepo<FemaleJumper>(initial: femaleJumpers),
-                      EditableItemsRepo<Hill>(initial: hills),
-                      EditableItemsRepo<EventSeriesSetup>(initial: []),
-                      EditableItemsRepo<EventSeriesCalendarPreset>(initial: []),
-                      EditableItemsRepo<DefaultCompetitionRulesPreset>(initial: []),
-                      CountriesRepo(initial: countries),
+                      EditableItemsRepo<MaleJumperDbRecord>(initial: maleJumpers),
+                      EditableItemsRepo<FemaleJumperDbRecord>(initial: femaleJumpers),
+                      //CountriesRepo(countries: countries), // TODO
                       teamsRepo,
                     },
                   ),
@@ -265,7 +258,7 @@ void main() {
 
         final itemsCubit = context.read<DatabaseItemsCubit>();
         final itemsList = find.byType(DatabaseItemsList);
-        expect(itemsCubit.state.itemsType, MaleJumper);
+        expect(itemsCubit.state.itemsType, MaleJumperDbRecord);
         expect(tester.widget<DatabaseItemsList>(itemsList).length, maleJumpers.length);
         expect(find.byType(FloatingActionButton), findsNWidgets(2));
         final addFabVisibility = find
@@ -290,7 +283,7 @@ void main() {
         final femaleJumpersTab = tester.widget<TabBar>(tabBar).tabs[1];
         await tester.tap(find.byWidget(femaleJumpersTab));
         await tester.pumpAndSettle();
-        expect(itemsCubit.state.itemsType, FemaleJumper);
+        expect(itemsCubit.state.itemsType, FemaleJumperDbRecord);
         expect(tester.widget<DatabaseItemsList>(itemsList).length, femaleJumpers.length);
 
         final secondTile = find.descendant(
@@ -346,7 +339,7 @@ void main() {
           await tester.pumpAndSettle();
         }
 
-        expect(itemsCubit.state.itemsType, MaleJumper);
+        expect(itemsCubit.state.itemsType, MaleJumperDbRecord);
         await selectTab(2);
         expect(itemsCubit.state.itemsType, Hill);
         expect(tester.widget<DatabaseItemsList>(itemsList).length, 3);
@@ -444,17 +437,17 @@ void main() {
       final itemsCubit = context.read<DatabaseItemsCubit>();
       itemsCubit.selectTab(1);
       await tester.pumpAndSettle();
-      itemsCubit.itemsRepos.get<FemaleJumper>().set([
+      itemsCubit.itemsRepos.get<FemaleJumperDbRecord>().set([
         ...femaleJumpers,
-        FemaleJumper.empty(country: switzerland)
+        FemaleJumperDbRecord.empty(country: switzerland)
             .copyWith(name: 'Daniela', surname: 'Iraschko-Stolz'),
-        FemaleJumper.empty(country: slovenia)
+        FemaleJumperDbRecord.empty(country: slovenia)
             .copyWith(name: 'Kamila', surname: 'Karpiel'),
       ]);
 
       await tester.pumpAndSettle();
       expect(tester.widget<DatabaseItemsList>(find.byType(DatabaseItemsList)).length, 6);
-      expect(itemsCubit.state.itemsType, FemaleJumper);
+      expect(itemsCubit.state.itemsType, FemaleJumperDbRecord);
       final searchField = find.byType(SearchTextField);
       await tester.enterText(searchField, 'kk');
       await tester.pumpAndSettle();
@@ -479,18 +472,14 @@ void main() {
       );
 
       // I couldn't do a tap on countries dropdown...
-      itemsCubit.filtersRepo.setByGenericAndArgumentType(type: FemaleJumper, filters: [
-        const ConcreteJumpersFilterWrapper<FemaleJumper, JumpersFilterBySearch>(
-          filter: JumpersFilterBySearch(
-            searchAlgorithm: DefaultJumperMatchingByTextAlgorithm(text: ''),
-          ),
-        ),
-        ConcreteJumpersFilterWrapper<FemaleJumper, JumpersFilterByCountry>(
-          filter: JumpersFilterByCountry(
-            countries: {switzerland},
-          ),
-        ),
-      ]);
+      itemsCubit.filtersRepo.femaleJumpersSearchFilter = Filter(shouldPass: (jumper) {
+        return DefaultJumperMatchingByTextAlgorithm(
+                fullName: jumper.nameAndSurname(), text: '')
+            .matches();
+      });
+      itemsCubit.filtersRepo.femaleJumpersCountryFilter = Filter(shouldPass: (jumper) {
+        return jumper.country == switzerland;
+      });
       await tester.pumpAndSettle();
 
       expect(tester.widget<DatabaseItemsList>(find.byType(DatabaseItemsList)).length, 2);

@@ -28,9 +28,9 @@ import 'package:sj_manager/models/simulation/competition/rules/utils/wind_averag
 import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_creator.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/competition_team.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_avaiable_objects_repo.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/dropdown_menu_form_field.dart';
@@ -1164,7 +1164,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
   }
 
   void _fillFields(DefaultCompetitionRules rules) {
-    _competitionType = rules.competitionRules is DefaultCompetitionRules<Jumper>
+    _competitionType = rules.competitionRules is DefaultCompetitionRules<JumperDbRecord>
         ? CompetitionTypeByEntity.individual
         : CompetitionTypeByEntity.team;
     _roundsCount = rules.roundsCount;
@@ -1246,9 +1246,10 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
     final rounds = List.of(_roundRules);
     rounds[_selectedRoundIndex] = _constructCurrentRound();
     final rules = _competitionType == CompetitionTypeByEntity.individual
-        ? DefaultCompetitionRules<Jumper>(
+        ? DefaultCompetitionRules<JumperDbRecord>(
             rounds:
-                _ensureCorrectRoundTypes<DefaultCompetitionRoundRules<Jumper>>(rounds),
+                _ensureCorrectRoundTypes<DefaultCompetitionRoundRules<JumperDbRecord>>(
+                    rounds),
           )
         : DefaultCompetitionRules<CompetitionTeam>(
             rounds:
@@ -1358,7 +1359,7 @@ class DefaultCompetitionRulesEditorState extends State<DefaultCompetitionRulesEd
           })
           .toList()
           .cast();
-    } else if (T == DefaultCompetitionRoundRules<Jumper>) {
+    } else if (T == DefaultCompetitionRoundRules<JumperDbRecord>) {
       return rounds
           .map((roundRules) {
             if (roundRules is DefaultTeamCompetitionRoundRules) {
@@ -1444,6 +1445,6 @@ enum CompetitionTypeByEntity {
   team;
 
   Type toEntityType() {
-    return this == CompetitionTypeByEntity.individual ? Jumper : Team;
+    return this == CompetitionTypeByEntity.individual ? JumperDbRecord : Team;
   }
 }

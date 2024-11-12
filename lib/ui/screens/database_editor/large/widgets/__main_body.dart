@@ -30,7 +30,6 @@ class _MainBodyState extends State<_MainBody> with SingleTickerProviderStateMixi
   @override
   Widget build(BuildContext context) {
     final selectedIndexes = context.read<SelectedIndexesRepo>();
-    final filters = context.read<DbFiltersRepo>();
     final items = context.watch<DatabaseItemsCubit>();
     return Provider.value(
       value: ValueRepo(initial: _currentTabIndex),
@@ -39,12 +38,13 @@ class _MainBodyState extends State<_MainBody> with SingleTickerProviderStateMixi
             selectedIndexes.stream,
           ]),
           builder: (context, snapshot) {
-            final shouldShowFabs = !filters.hasValidFilter;
+            final shouldShowFabs = !items.state.hasValidFilters;
             final shouldShowAddFab = selectedIndexes.last.length <= 1;
             final shouldShowRemoveFab = selectedIndexes.last.isNotEmpty;
             final itemsType = items.state.itemsType;
-            final shouldShowBottomAppBar =
-                itemsType == MaleJumper || itemsType == FemaleJumper || itemsType == Hill;
+            final shouldShowBottomAppBar = itemsType == MaleJumperDbRecord ||
+                itemsType == FemaleJumperDbRecord ||
+                itemsType == Hill;
 
             const fabsGap = Gap(UiDatabaseEditorConstants.verticalSpaceBetweenFabs);
 

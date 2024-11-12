@@ -3,7 +3,7 @@ import 'package:sj_manager/models/simulation/competition/competition.dart';
 import 'package:sj_manager/models/simulation/competition/rules/user_algorithms/unary_algorithm.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
 
 abstract class KoRoundAdvancementDeterminingContext<E, S extends Standings> {
   const KoRoundAdvancementDeterminingContext({

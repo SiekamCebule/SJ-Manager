@@ -55,10 +55,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   }
 
   void _initializeRepos() {
-    _filters = DbFiltersRepo(initial: {
-      MaleJumper: BehaviorSubject.seeded([]),
-      FemaleJumper: BehaviorSubject.seeded([]),
-    });
+    _filters = DbFiltersRepo();
     _selectedIndexes = SelectedIndexesRepo();
     _eventSeriesSetupIds = EventSeriesSetupIdsRepo();
   }
@@ -73,17 +70,23 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     if (!mounted) return;
     _items = DatabaseItemsCubit(
       filtersRepo: _filters,
-      itemsRepos: _localDbCopy.state!,
+      itemsRepos: ItemsReposRegistry(initial: {
+        _localDbCopy.state!.maleJumpersRepo,
+        _localDbCopy.state!.femaleJumpersRepo,
+      }),
       selectedIndexesRepo: _selectedIndexes,
-      idGenerator: context.read(),
     );
     _localDbCopyChangesSubscription = _localDbCopy.stream.listen((state) {
-      _items.updateItemsRepo(state!);
+      _items.updateItemsRepo(ItemsReposRegistry(initial: {
+        _localDbCopy.state!.maleJumpersRepo,
+        _localDbCopy.state!.femaleJumpersRepo,
+      }));
     });
     final teamsRepo = ItemsRepo<CountryTeam>(
-        initial: _localDbCopy.state!.get<CountryTeam>().last.cast());
+      initial: _localDbCopy.state!.countriesRepo.countries.toList().cast(),
+    );
     _countries = DatabaseEditorCountriesCubit(
-      countriesRepo: _localDbCopy.state!.get<Country>() as CountriesRepo,
+      countriesRepo: _localDbCopy.state!.countriesRepo,
       teamsRepo: teamsRepo,
     );
     _countries.setUp();
@@ -95,6 +98,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       _cleanResources();
     }
     FlutterWindowClose.setWindowShouldCloseHandler(null);
+
     super.dispose();
   }
 
@@ -102,12 +106,10 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     debugPrint('_Large(): _cleanResources()');
     _localDbCopyChangesSubscription.cancel();
     _localDbCopy.close();
-    _localDbCopy.dispose();
+    _filters.dispose();
     _dbChangeStatus.close();
-    _countries.dispose();
     _countries.close();
     _selectedIndexes.close();
-    _filters.close();
   }
 
   Future<String?> _showSaveChangesDialog() async {

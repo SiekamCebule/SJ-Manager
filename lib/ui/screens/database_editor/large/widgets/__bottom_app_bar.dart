@@ -7,14 +7,12 @@ class _BottomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final itemsType = context.watch<DatabaseItemsCubit>().state.itemsType;
     late final Widget body;
-    if (itemsType == MaleJumper) {
-      body = const _ForJumpersTyped<MaleJumper>();
-    } else if (itemsType == FemaleJumper) {
-      body = const _ForJumpersTyped<FemaleJumper>(
+    if (itemsType == MaleJumperDbRecord) {
+      body = const _ForJumpers<MaleJumperDbRecord>();
+    } else if (itemsType == FemaleJumperDbRecord) {
+      body = const _ForJumpers<FemaleJumperDbRecord>(
         key: Key('femaleJumpersFilters'),
       );
-    } else if (itemsType == Hill) {
-      body = const _ForHills();
     } else {
       throw StateError(
         'A db editor bottom app bar for items of type $itemsType does not exist',

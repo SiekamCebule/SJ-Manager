@@ -6,17 +6,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
 import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/items_repos_registry.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
-import 'package:sj_manager/models/user_db/team/subteam.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/db_items_file_system_paths.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/items_repos_registry.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/team/subteam.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
@@ -73,8 +73,8 @@ void main() async {
               ...constructSimulationDbIoProvidersList(),
               Provider(
                 create: (context) => DbItemsFilePathsRegistry(initial: {
-                  MaleJumper: 'jumpers_male.json',
-                  FemaleJumper: 'jumpers_female.json',
+                  MaleJumperDbRecord: 'jumpers_male.json',
+                  FemaleJumperDbRecord: 'jumpers_female.json',
                   Hill: 'hills.json',
                   Country: path.join('countries', 'countries.json'),
                   CountryTeam: path.join('teams', 'country_teams.json'),
@@ -142,15 +142,15 @@ List constructSimulationDbIoProvidersList() {
   CountriesRepo countriesRepo(BuildContext context) =>
       context.read<ItemsReposRegistry>().get<Country>() as CountriesRepo;
 
-  MaleJumper maleJumperFromJson(Json json, BuildContext context) {
-    return MaleJumper.fromJson(
+  MaleJumperDbRecord maleJumperFromJson(Json json, BuildContext context) {
+    return MaleJumperDbRecord.fromJson(
       json,
       countryLoader: JsonCountryLoaderByCode(repo: countriesRepo(context)),
     );
   }
 
-  FemaleJumper femaleJumperFromJson(Json json, BuildContext context) {
-    return FemaleJumper.fromJson(
+  FemaleJumperDbRecord femaleJumperFromJson(Json json, BuildContext context) {
+    return FemaleJumperDbRecord.fromJson(
       json,
       countryLoader: JsonCountryLoaderByCode(repo: countriesRepo(context)),
     );
@@ -165,7 +165,7 @@ List constructSimulationDbIoProvidersList() {
 
   return [
     Provider(create: (context) {
-      return DbItemsJsonConfiguration<MaleJumper>(
+      return DbItemsJsonConfiguration<MaleJumperDbRecord>(
         fromJson: (json) => maleJumperFromJson(json, context),
         toJson: (jumper) => jumper.toJson(
           countrySaver: const JsonCountryCodeSaver(),
@@ -173,7 +173,7 @@ List constructSimulationDbIoProvidersList() {
       );
     }),
     Provider(create: (context) {
-      return DbItemsJsonConfiguration<FemaleJumper>(
+      return DbItemsJsonConfiguration<FemaleJumperDbRecord>(
         fromJson: (json) => femaleJumperFromJson(json, context),
         toJson: (jumper) => jumper.toJson(
           countrySaver: const JsonCountryCodeSaver(),

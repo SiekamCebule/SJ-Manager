@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_level_description.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/simulation_jumper_image.dart';
 import 'package:sj_manager/ui/screens/simulation/utils/jumper_ratings_translations.dart';
@@ -18,7 +18,7 @@ class JumperSimpleListTile extends StatelessWidget {
   }) : assert(!(subtitle == JumperSimpleListTileSubtitle.levelDescription &&
             levelDescription == null));
 
-  final Jumper jumper;
+  final SimulationJumper jumper;
   final JumperSimpleListTileSubtitle subtitle;
   final JumperLevelDescription? levelDescription;
   final bool selected;

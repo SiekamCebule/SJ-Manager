@@ -17,12 +17,11 @@ import 'package:sj_manager/bloc/database_editing/local_database_cubit.dart';
 import 'package:sj_manager/bloc/database_editing/change_status_cubit.dart';
 import 'package:sj_manager/bloc/database_editing/database_items_cubit.dart';
 import 'package:sj_manager/filters/filter.dart';
-import 'package:sj_manager/filters/hills/hill_matching_algorithms.dart';
 import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/main.dart';
+import 'package:sj_manager/models/database/items_repos_registry.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
-import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/competition_score_creator/concrete/individual/default_linear.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/competition_score_creator/concrete/team/default_linear.dart';
@@ -39,34 +38,24 @@ import 'package:sj_manager/models/simulation/competition/rules/utils/wind_averag
 import 'package:sj_manager/models/simulation/competition/rules/utils/wind_averager/concrete/default_weighted.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_calendar_preset.dart';
-import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
 import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_creator.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_with_no_ex_aequo_creator.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_with_shuffle_on_equal_positions_creator.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/hill/hill_type_by_size.dart';
-import 'package:sj_manager/filters/hills/hills_filter.dart';
-import 'package:sj_manager/l10n/hill_parameters_translations.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_avaiable_objects_repo.dart';
-import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
+import 'package:sj_manager/repositories/database_editing/db_filters_repo.dart';
 import 'package:sj_manager/repositories/database_editing/default_items_repository.dart';
 import 'package:sj_manager/repositories/database_editing/event_series_setup_ids_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
 import 'package:sj_manager/repositories/generic/value_repo.dart';
-import 'package:sj_manager/ui/database_item_editors/default_competition_rules_preset_editor/default_competition_rules_preset_editor.dart';
-import 'package:sj_manager/ui/database_item_editors/calendar_editor/event_series_calendar_preset_thumbnail.dart';
-import 'package:sj_manager/ui/database_item_editors/event_series_setup_editor.dart';
-import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
-import 'package:sj_manager/ui/database_item_editors/hill_editor.dart';
 import 'package:sj_manager/ui/database_item_editors/jumper_editor.dart';
 import 'package:sj_manager/ui/responsiveness/responsive_builder.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
@@ -74,7 +63,6 @@ import 'package:sj_manager/ui/reusable_widgets/animations/animated_visibility.da
 import 'package:sj_manager/ui/reusable_widgets/countries/countries_dropdown.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
 import 'package:sj_manager/ui/reusable_widgets/filtering/search_text_field.dart';
-import 'package:sj_manager/ui/reusable_widgets/menu_entries/predefined_reusable_entries.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/dialogs/database_editor_unsaved_changes_dialog.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/appropriate_db_item_list_tile.dart';
 import 'package:sj_manager/ui/screens/database_editor/large/widgets/database_items_list.dart';
@@ -82,15 +70,13 @@ import 'package:sj_manager/utils/colors.dart';
 import 'package:sj_manager/utils/db_item_images.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:sj_manager/utils/show_dialog.dart';
-import 'package:sj_manager/utils/single_where_type.dart';
 
 part 'large/__large.dart';
 part 'large/widgets/__items_and_editor_row.dart';
 part 'large/widgets/appropriate_item_editor.dart';
 part 'large/widgets/__app_bar.dart';
 part 'large/widgets/__bottom_app_bar.dart';
-part 'large/widgets/filters/__for_jumpers_typed.dart';
-part 'large/widgets/filters/__for_hills.dart';
+part 'large/widgets/filters/__for_jumpers.dart';
 part 'large/widgets/__add_fab.dart';
 part 'large/widgets/__remove_fab.dart';
 part 'large/widgets/__items_list.dart';
@@ -105,7 +91,7 @@ List<Provider> defaultDbEditorProviders(BuildContext context) {
   final gameVariant = context.read<GameVariant>();
   return [
     Provider(create: (context) {
-      return DbItemImageGeneratingSetup<Jumper>(
+      return DbItemImageGeneratingSetup<JumperDbRecord>(
         imagesDirectory: simulationDirectory(
           pathsCache: context.read(),
           simulationId: gameVariant.id,
@@ -257,12 +243,12 @@ List<Provider> defaultDbEditorProviders(BuildContext context) {
     ),
     RepositoryProvider<DefaultItemsRepo>(create: (context) {
       final tempCountriesRepo =
-          CountriesRepo(initial: context.read<GameVariant>().countries);
+          CountriesRepo(countries: context.read<GameVariant>().countries);
       final noneCountry = tempCountriesRepo.none;
       return DefaultItemsRepo(
         initial: {
-          FemaleJumper.empty(country: noneCountry),
-          MaleJumper.empty(country: noneCountry),
+          FemaleJumperDbRecord.empty(country: noneCountry),
+          MaleJumperDbRecord.empty(country: noneCountry),
         },
       );
     }),

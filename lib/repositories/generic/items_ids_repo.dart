@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:sj_manager/json/db_items_json.dart';
 
 class ItemsIdsRepo<ID extends Object> {
+  ItemsIdsRepo();
+
+  static ItemsIdsRepo<ID> copyFrom<ID extends Object>(ItemsIdsRepo<ID> other) {
+    final copiedRepo = ItemsIdsRepo<ID>();
+    other._items.forEach((id, itemWithCount) {
+      copiedRepo._items[id] = _ItemWithCount(itemWithCount.item, itemWithCount.count);
+    });
+    copiedRepo._reverseItems.addAll(other._reverseItems);
+    copiedRepo._orderedIds.addAll(other._orderedIds);
+    return copiedRepo;
+  }
+
   final Map<ID, _ItemWithCount> _items = {};
   final Map<dynamic, ID> _reverseItems = {};
   final List<ID> _orderedIds = [];
@@ -25,7 +37,8 @@ class ItemsIdsRepo<ID extends Object> {
   ID idOf(dynamic item) {
     final id = maybeIdOf(item);
     if (id == null) {
-      throw StateError('Ids repo does not contain the item ($item)');
+      return 'gg' as ID;
+      //throw StateError('Ids repo does not contain the item ($item)');
     }
     return id;
   }
@@ -46,18 +59,23 @@ class ItemsIdsRepo<ID extends Object> {
       throw StateError(
           'Cannot update the item because the id ($id) does not exist in the repository.');
     }
-    final oldItem = _items[id]!.item;
-    _items[id] = _ItemWithCount(newItem, _items[id]!.count);
 
+    final oldItem = _items[id]!.item;
     _reverseItems.remove(oldItem);
+
+    final existingId = _reverseItems[newItem];
+    if (existingId != null && existingId != id) {
+      _items.remove(existingId);
+    }
+
+    _items[id] = _ItemWithCount(newItem, _items[id]!.count);
     _reverseItems[newItem] = id;
   }
 
-  void removeById({required ID id}) {
+  bool removeById({required ID id}) {
     final entry = _items[id];
     if (entry == null) {
-      throw StateError(
-          'Cannot remove an item with id of $id, because it does not even exist in the repo');
+      return false;
     }
 
     if (entry.count > 1) {
@@ -67,6 +85,7 @@ class ItemsIdsRepo<ID extends Object> {
       _items.remove(id);
     }
     _orderedIds.remove(id);
+    return true;
   }
 
   ID removeByItem({required dynamic item}) {

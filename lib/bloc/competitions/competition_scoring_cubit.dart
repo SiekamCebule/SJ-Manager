@@ -4,7 +4,7 @@ import 'package:osje_sim/osje_sim.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
 import 'package:sj_manager/models/simulation/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
 import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 
 class CompetitionScoringCubit<E> extends Cubit<CompetitionScoringState> {
   CompetitionScoringCubit({
@@ -12,12 +12,12 @@ class CompetitionScoringCubit<E> extends Cubit<CompetitionScoringState> {
     required this.competitionScoreCreator,
   }) : super(const CompetitionScoringEmpty());
 
-  final JumpScoreCreator<Jumper> jumpScoreCreator;
+  final JumpScoreCreator<JumperDbRecord> jumpScoreCreator;
   final CompetitionScoreCreator<CompetitionScore<E>> competitionScoreCreator;
 
   void calculateScore({
     required JumpSimulationRecord jumpSimulationRecord,
-    required JumpScoreCreatingContext<Jumper> jumpScoreCreatingContext,
+    required JumpScoreCreatingContext<JumperDbRecord> jumpScoreCreatingContext,
     required CompetitionScoreCreatingContext<E> competitionScoreCreatingContext,
   }) {
     final jumpScore = jumpScoreCreator.compute(jumpScoreCreatingContext);

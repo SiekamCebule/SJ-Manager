@@ -5,7 +5,7 @@ class _CurrentDateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabaseCubit>().state;
+    final database = context.watch<SimulationDatabase>();
     final textStyle = Theme.of(context).textTheme.bodyMedium!;
 
     return DecoratedBox(

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
@@ -11,15 +10,15 @@ import 'package:sj_manager/commands/ui/simulation/continue_simulation_command.da
 import 'package:sj_manager/commands/ui/simulation/manage_partnerships_command.dart';
 import 'package:sj_manager/commands/ui/simulation/search_for_candidates_command.dart';
 import 'package:sj_manager/commands/ui/simulation/simulation_exit_command.dart';
-import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
 import 'package:sj_manager/constants/simulation_mode_constants.dart';
 import 'package:sj_manager/commands/ui/simulation/simulation_screen_navigation_cubit.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/sex.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/sex.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_flags/country_flags_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_search_bar.dart';

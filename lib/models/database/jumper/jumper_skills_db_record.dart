@@ -6,24 +6,24 @@ import 'package:sj_manager/json/json_types.dart';
 part 'jumper_skills.g.dart';
 
 @JsonSerializable()
-class JumperSkills with EquatableMixin {
-  const JumperSkills({
+class JumperSkillsDbRecord with EquatableMixin {
+  JumperSkillsDbRecord({
     required this.takeoffQuality,
     required this.flightQuality,
     required this.landingQuality,
   });
 
-  static const empty = JumperSkills(
+  static final empty = JumperSkillsDbRecord(
     takeoffQuality: 0,
     flightQuality: 0,
     landingQuality: 0,
   );
 
-  final double takeoffQuality;
-  final double flightQuality;
-  final double landingQuality;
+  double takeoffQuality;
+  double flightQuality;
+  double landingQuality;
 
-  factory JumperSkills.fromJson(Json json) => _$JumperSkillsFromJson(json);
+  factory JumperSkillsDbRecord.fromJson(Json json) => _$JumperSkillsFromJson(json);
 
   Json toJson() => _$JumperSkillsToJson(this);
 
@@ -34,12 +34,12 @@ class JumperSkills with EquatableMixin {
         landingQuality,
       ];
 
-  JumperSkills copyWith({
+  JumperSkillsDbRecord copyWith({
     double? takeoffQuality,
     double? flightQuality,
     double? landingQuality,
   }) {
-    return JumperSkills(
+    return JumperSkillsDbRecord(
       takeoffQuality: takeoffQuality ?? this.takeoffQuality,
       flightQuality: flightQuality ?? this.flightQuality,
       landingQuality: landingQuality ?? this.landingQuality,

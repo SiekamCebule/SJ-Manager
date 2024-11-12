@@ -1,10 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
+import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/sex.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/teams/country_team_profile/subteams/country_team_profile_subteams_not_available.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/teams/country_team_profile/subteams/country_team_profile_subteams_non_empty.dart';
 
@@ -18,7 +20,7 @@ class CountryTeamProfileSubteams extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabaseCubit>().state;
+    final database = context.watch<SimulationDatabase>();
     final subteams = database.subteamJumpers.keys
         .where((subteam) => subteam.parentTeam == countryTeam)
       ..sorted((first, second) => first.type.index.compareTo(second.type.index));
@@ -33,7 +35,9 @@ class CountryTeamProfileSubteams extends StatelessWidget {
         database.actionsRepo.isCompleted(SimulationActionType.settingUpSubteams)) {
       return Center(
         child: Text(
-          'Brak zawodników w drużynie',
+          countryTeam.sex == Sex.male
+              ? translate(context).noMaleJumpersInTeam
+              : translate(context).noFemaleJumpersInTeam,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       );
@@ -43,7 +47,7 @@ class CountryTeamProfileSubteams extends StatelessWidget {
         jumpers: database.subteamJumpers.map(
           (subteam, ids) => MapEntry(
             subteam,
-            ids.map((id) => database.idsRepo.get(id) as Jumper).toList(),
+            ids.map((id) => database.idsRepo.get(id) as SimulationJumper).toList(),
           ),
         ),
       );

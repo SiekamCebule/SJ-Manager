@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_provider.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 import 'package:sj_manager/ui/database_item_editors/default_competition_rules_preset_editor/default_competition_rules_editor.dart';
 
 class CalendarMainCompetitionRecordSetup with EquatableMixin {
@@ -24,7 +24,7 @@ class CalendarMainCompetitionRecordSetup with EquatableMixin {
   final bool moveQualificationsBeforeTeamCompetition;
 
   CompetitionTypeByEntity get typeByEntity {
-    return mainCompRules.competitionRules is DefaultCompetitionRules<Jumper>
+    return mainCompRules.competitionRules is DefaultCompetitionRules<JumperDbRecord>
         ? CompetitionTypeByEntity.individual
         : CompetitionTypeByEntity.team;
   }

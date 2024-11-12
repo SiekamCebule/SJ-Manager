@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
 import 'package:sj_manager/main.dart';
-import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/database/utils/default_simulation_database_saver_to_file.dart';
 import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
 import 'package:sj_manager/models/simulation/user_simulation/user_simulations_registry_saver_to_file.dart';
-import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
+import 'package:sj_manager/models/database/db_items_file_system_paths.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/ui/screens/simulation/large/dialogs/simulation_exit_are_you_sure_dialog.dart';
 import 'package:sj_manager/utils/file_system.dart';
@@ -63,8 +61,7 @@ class SimulationExitCommand {
   }
 
   void _cleanUpAndPop() {
-    context.read<SimulationDatabaseCubit>().state.dispose();
-    context.read<SimulationDatabaseHelper>().dispose();
+    context.read<SimulationDatabase>().dispose();
     router.pop(context);
   }
 }

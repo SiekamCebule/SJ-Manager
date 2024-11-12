@@ -12,7 +12,7 @@ class _LargeState extends State<_Large> {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabaseCubit>().state;
+    final database = context.watch<SimulationDatabase>();
 
     PageRouteBuilder buildPageRoute({required Widget widget}) {
       return PageRouteBuilder(

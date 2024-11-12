@@ -1,14 +1,13 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
 import 'package:sj_manager/commands/ui/simulation/simulation_screen_navigation_cubit.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 import 'package:sj_manager/repositories/countries/country_flags/country_flags_repo.dart';
 import 'package:sj_manager/repositories/countries/country_flags/local_storage_country_flags_repo.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
@@ -133,9 +132,8 @@ void configureRoutes(FluroRouter router) {
     final simulationIndexInRepo = simulationsRepo.last.indexOf(simulation);
     final imagesDir = userDataDirectory(context.read(),
         path.join('simulations', simulationId, 'countries', 'country_flags'));
-    final simulationDatabase = simulation.database!.isDisposed
-        ? SimulationDatabase.recreateRepos(simulation.database!)
-        : simulation.database!;
+
+    print('routes, initial jumpers: ${simulation.database!.jumpers}');
 
     return MultiProvider(
       providers: [
@@ -148,7 +146,7 @@ void configureRoutes(FluroRouter router) {
           ),
         ),
         Provider(
-          create: (context) => DbItemImageGeneratingSetup<Jumper>(
+          create: (context) => DbItemImageGeneratingSetup<JumperDbRecord>(
             imagesDirectory: simulationDirectory(
               pathsCache: context.read(),
               simulationId: simulationId,
@@ -173,19 +171,19 @@ void configureRoutes(FluroRouter router) {
           BlocProvider(
             create: (context) => SimulationScreenNavigationCubit(),
           ),
-          BlocProvider(
-            create: (context) => SimulationDatabaseCubit(initial: simulationDatabase),
-          ),
         ],
-        child: Provider(
-          create: (context) => SimulationDatabaseHelper(
-            databaseStream: context.read<SimulationDatabaseCubit>().stream,
-            initial: context.read<SimulationDatabaseCubit>().state,
-          ),
+        child: MultiProvider(
+          providers: [
+            Provider(
+              create: (context) =>
+                  SimulationDatabaseHelper(database: simulation.database!),
+            ),
+            ChangeNotifierProvider(create: (context) => simulation.database!),
+          ],
           child: Builder(builder: (context) {
             return PopScope(
               onPopInvokedWithResult: (didPop, result) {
-                final database = context.read<SimulationDatabaseCubit>().state;
+                final database = context.read<SimulationDatabase>();
                 context.read<EditableItemsRepo<UserSimulation>>().replace(
                       oldIndex: simulationIndexInRepo,
                       newItem: simulation.copyWith(database: database),

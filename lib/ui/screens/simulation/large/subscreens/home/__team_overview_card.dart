@@ -5,9 +5,11 @@ class _TeamOverviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabaseCubit>().state;
+    final database = context.watch<SimulationDatabase>();
     final dbHelper = context.read<SimulationDatabaseHelper>();
     final jumpers = dbHelper.managerJumpers;
+
+    print('Before TeamOverviewCard build: ${database.subteamJumpers}');
 
     final jumpersNonEmptyContent = Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -23,6 +25,8 @@ class _TeamOverviewCard extends StatelessWidget {
             children: [
               for (var jumper in jumpers)
                 Builder(builder: (context) {
+                  print('_TeamOverviewCard jumper: ${jumper.nameAndSurname()}');
+                  print('_TeamOverviewCard jumpers length: ${jumpers.length}');
                   final report = database.jumperReports[jumper];
                   if (report == null) {
                     throw StateError(

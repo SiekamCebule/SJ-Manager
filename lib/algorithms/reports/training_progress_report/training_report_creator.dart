@@ -1,4 +1,4 @@
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
 
 class TrainingReportCreator {
@@ -8,7 +8,7 @@ class TrainingReportCreator {
   });
 
   final Map<TrainingProgressCategory, List<double>> deltas;
-  final Map<TrainingProgressCategory, Map<SimpleRating, num>> requirements;
+  final Map<TrainingProgressCategory, Map<SimpleRating, double>> requirements;
 
   TrainingReport? create() {
     final categories = deltas.keys;
@@ -47,11 +47,11 @@ class TrainingReportCreator {
     };
 
     final averageRatingImpact =
-        (ratings[TrainingProgressCategory.takeoff]!.impactValue * 30 +
-                ratings[TrainingProgressCategory.flight]!.impactValue * 30 +
+        (ratings[TrainingProgressCategory.takeoff]!.impactValue * 35 +
+                ratings[TrainingProgressCategory.flight]!.impactValue * 35 +
                 ratings[TrainingProgressCategory.landing]!.impactValue * 5 +
-                ratings[TrainingProgressCategory.consistency]!.impactValue * 15 +
-                ratings[TrainingProgressCategory.form]!.impactValue * 20) /
+                ratings[TrainingProgressCategory.consistency]!.impactValue * 10 +
+                ratings[TrainingProgressCategory.form]!.impactValue * 15) /
             100 *
             2.5;
     final generalRating = SimpleRating.fromImpactValue(averageRatingImpact.round());
