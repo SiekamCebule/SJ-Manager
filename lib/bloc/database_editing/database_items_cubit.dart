@@ -4,43 +4,36 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/bloc/database_editing/state/database_items_state.dart';
 import 'package:sj_manager/filters/filter.dart';
-import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
-import 'package:sj_manager/filters/mixins.dart';
-import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
-import 'package:sj_manager/models/simulation/event_series/event_series_calendar_preset.dart';
-import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/items_repos_registry.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/repositories/database_editing/db_filters_repository.dart';
+import 'package:sj_manager/models/database/items_repos_registry.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/repositories/database_editing/db_filters_repo.dart';
 import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
-import 'package:sj_manager/utils/id_generator.dart';
 
 class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
   DatabaseItemsCubit({
     required this.filtersRepo,
     required this.selectedIndexesRepo,
-    //required this.idsRepo,
-    required this.idGenerator,
     required ItemsReposRegistry itemsRepos,
   })  : _itemsRepos = itemsRepos,
         super(_initial) {
+    filtersRepo.addListener(() {
+      _filtersStreamController.add(null);
+    });
     changeType(state.itemsType);
   }
 
   final DbFiltersRepo filtersRepo;
   final SelectedIndexesRepo selectedIndexesRepo;
-  //final ItemsIdsRepo idsRepo;
-  final IdGenerator idGenerator;
   ItemsReposRegistry _itemsRepos;
   ItemsReposRegistry get itemsRepos => _itemsRepos;
 
   final Set<StreamSubscription> _subscriptions = {};
 
   StreamSubscription? _itemsSubscription;
+  final _filtersStreamController = StreamController<void>();
 
   List<T> _filter<T>(List<dynamic> items, List<Filter<dynamic>> filters) {
-    return Filter.filterAll(items.cast<T>(), filters.cast<Filter<T>>());
+    return Filter.filterAll(items.cast<T>(), filters.cast<Filter<T>>()).toList();
   }
 
   List _filterByTypeArgument(
@@ -48,20 +41,12 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
     required List items,
     required List<Filter> filters,
   }) {
-    if (type == MaleJumper) {
-      return _filter<MaleJumper>(items, filters);
-    } else if (type == FemaleJumper) {
-      return _filter<FemaleJumper>(items, filters);
-    } else if (type == Hill) {
-      return _filter<Hill>(items, filters);
-    } else if (type == EventSeriesSetup) {
-      return _filter<EventSeriesSetup>(items, filters);
-    } else if (type == EventSeriesCalendarPreset) {
-      return _filter<EventSeriesCalendarPreset>(items, filters);
-    } else if (type == DefaultCompetitionRulesPreset) {
-      return _filter<DefaultCompetitionRulesPreset>(items, filters);
+    if (type == MaleJumperDbRecord) {
+      return _filter<MaleJumperDbRecord>(items, filters);
+    } else if (type == FemaleJumperDbRecord) {
+      return _filter<FemaleJumperDbRecord>(items, filters);
     } else {
-      throw UnsupportedError('(LocalDbFilteredItemsCubit) Unsupported item type: $type');
+      throw UnsupportedError('(DatabaseItemsCubit) Unsupported item type: $type');
     }
   }
 
@@ -72,42 +57,42 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
 
   void changeType(Type type) {
     _itemsSubscription?.cancel();
-    final filtersStream = filtersRepo.streamByTypeArgument(type);
     final itemsStream = _itemsRepos.byTypeArgument(type);
     _itemsSubscription = Rx.combineLatest2(
-      itemsStream.items,
-      filtersStream,
-      (items, filters) => (items, filters),
-    ).listen((tuple) {
-      final items = tuple.$1.toList();
-      final filters = tuple.$2;
-      final filtered = _filterByTypeArgument(type, items: items, filters: filters);
-      if (filtered.isNotEmpty) {
-        final validFilters = filters.where(
-          (filter) => filter.isValid,
-        );
-        emit(DatabaseItemsNonEmpty(
-          itemsType: type,
-          filteredItems: filtered,
-          validFilters: validFilters.toList(),
-        ));
-      } else {
-        final preparedFilters = filters.map(
-            (filter) => filter is ConcreteJumpersFilterWrapper ? filter.filter : filter);
-        final nonSearchingFiltersActive = preparedFilters.any(
-          (filter) => filter is SearchFilter == false && filter.isValid,
-        );
-        final searchingActive =
-            preparedFilters.any((filter) => filter is SearchFilter && filter.isValid);
-        emit(
-          DatabaseItemsEmpty(
-            itemsType: type,
-            nonSearchingFiltersActive: nonSearchingFiltersActive,
-            searchingActive: searchingActive,
-          ),
-        );
-      }
-    });
+        itemsStream.items, _filtersStreamController.stream, (items, _) => items).listen(
+      (items) {
+        late Iterable<Filter> filters;
+        if (type == MaleJumperDbRecord) {
+          filters = [
+            filtersRepo.maleJumpersCountryFilter,
+            filtersRepo.maleJumpersSearchFilter
+          ].nonNulls;
+        } else if (type == FemaleJumperDbRecord) {
+          filters = [
+            filtersRepo.femaleJumpersCountryFilter,
+            filtersRepo.femaleJumpersSearchFilter
+          ].nonNulls;
+        }
+        final filtered =
+            _filterByTypeArgument(type, items: items, filters: filters.toList());
+        if (filtered.isNotEmpty) {
+          emit(
+            DatabaseItemsNonEmpty(
+              itemsType: type,
+              filteredItems: filtered,
+              hasValidFilters: filters.isNotEmpty,
+            ),
+          );
+        } else {
+          emit(
+            DatabaseItemsEmpty(
+              itemsType: type,
+              hasValidFilters: filters.isNotEmpty,
+            ),
+          );
+        }
+      },
+    );
   }
 
   void add({required dynamic item}) {
@@ -185,12 +170,11 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
 
   void selectTab(int index) {
     final type = switch (index) {
-      0 => MaleJumper,
-      1 => FemaleJumper,
+      0 => MaleJumperDbRecord,
+      1 => FemaleJumperDbRecord,
       _ => throw TypeError(),
     };
     selectedIndexesRepo.clearSelection();
-    filtersRepo.clear();
     changeType(type);
   }
 
@@ -198,13 +182,12 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
     for (final subscription in _subscriptions) {
       subscription.cancel();
     }
-    filtersRepo.close();
+    _filtersStreamController.close();
     _itemsRepos.dispose();
   }
 
   static const DatabaseItemsState _initial = DatabaseItemsEmpty(
-    itemsType: MaleJumper,
-    nonSearchingFiltersActive: false,
-    searchingActive: false,
+    itemsType: MaleJumperDbRecord,
+    hasValidFilters: false,
   );
 }

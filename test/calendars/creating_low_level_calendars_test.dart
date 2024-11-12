@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
+import 'package:sj_manager/models/database/country/country.dart';
 import 'package:sj_manager/models/simulation/competition/calendar_records/calendar_main_competition_record.dart';
 import 'package:sj_manager/models/simulation/competition/calendar_records/calendar_main_competition_record_setup.dart';
 import 'package:sj_manager/models/simulation/competition/calendar_records/calendar_main_competition_records_to_calendar.dart';
@@ -8,22 +8,22 @@ import 'package:sj_manager/models/simulation/competition/competition.dart';
 import 'package:sj_manager/models/simulation/competition/competition_labels.dart';
 import 'package:sj_manager/models/simulation/competition/high_level_calendar.dart';
 import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/competition_team.dart';
 
 import 'creating_low_level_calendars_test.mocks.dart';
 
 @GenerateMocks([DefaultCompetitionRules])
 void main() {
   group(CalendarMainCompetitionRecordsToCalendarConverter, () {
-    final zakopane = const Hill.empty(country: Country.emptyNone())
+    final zakopane = Hill.empty(country: const Country.emptyNone())
         .copyWith(locality: 'Zakopane', hs: 140);
-    final sapporo = const Hill.empty(country: Country.emptyNone())
+    final sapporo = Hill.empty(country: const Country.emptyNone())
         .copyWith(locality: 'Sapporo', hs: 137);
-    final vikersund = const Hill.empty(country: Country.emptyNone())
+    final vikersund = Hill.empty(country: const Country.emptyNone())
         .copyWith(locality: 'Vikersund', hs: 240);
-    final ind = MockDefaultCompetitionRules<Jumper>();
+    final ind = MockDefaultCompetitionRules<JumperDbRecord>();
     final team = MockDefaultCompetitionRules<CompetitionTeam>();
 
     const week = Duration(days: 7);

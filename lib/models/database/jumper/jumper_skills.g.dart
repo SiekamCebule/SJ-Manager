@@ -1,18 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'jumper_skills.dart';
+part of 'jumper_skills_db_record.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-JumperSkills _$JumperSkillsFromJson(Map<String, dynamic> json) => JumperSkills(
+JumperSkillsDbRecord _$JumperSkillsFromJson(Map<String, dynamic> json) =>
+    JumperSkillsDbRecord(
       takeoffQuality: (json['takeoffQuality'] as num).toDouble(),
       flightQuality: (json['flightQuality'] as num).toDouble(),
       landingQuality: (json['landingQuality'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$JumperSkillsToJson(JumperSkills instance) =>
+Map<String, dynamic> _$JumperSkillsToJson(JumperSkillsDbRecord instance) =>
     <String, dynamic>{
       'takeoffQuality': instance.takeoffQuality,
       'flightQuality': instance.flightQuality,

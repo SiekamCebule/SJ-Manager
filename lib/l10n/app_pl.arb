@@ -260,5 +260,10 @@
     "subteamB": "Kadra B",
     "subteamC": "Kadra C",
     "subteamD": "Kadra D",
-    "jumperSubteamNoSubteam": "Bez kadry"
+    "jumperSubteamNoSubteam": "Bez kadry",
+    "noMaleJumpers": "Brak zawodników",
+    "noFemaleJumpers": "Brak zawodniczek",
+    "noMaleJumpersInTeam": "Brak zawodników w drużynie",
+    "noFemaleJumpersInTeam": "Brak zawodniczek w drużynie",
+    "rankingWillShowUpAfterTrainingsStart": "Ranking pojawi się po rozpoczęciu treningów"
 }

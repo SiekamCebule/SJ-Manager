@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
+import 'package:sj_manager/filters/filter.dart';
 import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
-import 'package:sj_manager/filters/jumpers/jumpers_filter.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_search_bar.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper/jumper_simple_list_tile.dart';
 
@@ -18,8 +18,8 @@ class SearchForChargesJumpersDialog extends StatefulWidget {
     required this.onSubmit,
   });
 
-  final List<Jumper> jumpers;
-  final Function(Jumper jumper) onSubmit;
+  final List<SimulationJumper> jumpers;
+  final Function(SimulationJumper jumper) onSubmit;
 
   @override
   State<SearchForChargesJumpersDialog> createState() =>
@@ -27,8 +27,8 @@ class SearchForChargesJumpersDialog extends StatefulWidget {
 }
 
 class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersDialog> {
-  Jumper? _currentJumper;
-  late List<Jumper> _filteredJumpers;
+  SimulationJumper? _currentJumper;
+  late Iterable<SimulationJumper> _filteredJumpers;
   late TextEditingController _searchController;
   late StreamController<String> _searchTextStreamController;
   late StreamSubscription<String> _filterTextSubscription;
@@ -45,8 +45,11 @@ class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersD
         .debounceTime(const Duration(milliseconds: 100))
         .listen(null);
     _filterTextSubscription.onData((searchData) {
-      final filter = JumpersFilterBySearch(
-          searchAlgorithm: DefaultJumperMatchingByTextAlgorithm(text: searchData));
+      final filter = Filter<SimulationJumper>(
+        shouldPass: (jumper) => DefaultJumperMatchingByTextAlgorithm(
+                fullName: jumper.nameAndSurname(), text: searchData)
+            .matches(),
+      );
       setState(() {
         _filteredJumpers = filter(widget.jumpers);
       });
@@ -56,7 +59,7 @@ class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersD
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabaseCubit>().state;
+    final database = context.watch<SimulationDatabase>();
 
     Future<void> onConfirm() async {
       final ok = await showDialog<bool>(
@@ -78,6 +81,7 @@ class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersD
         content: Column(
           children: [
             MySearchBar(
+              backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
               controller: _searchController,
               hintText: 'Wyszukaj skoczków/skoczkinie',
             ),
@@ -88,7 +92,7 @@ class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersD
               child: ListView.builder(
                 itemCount: _filteredJumpers.length,
                 itemBuilder: (context, index) {
-                  final jumper = _filteredJumpers[index];
+                  final jumper = _filteredJumpers.elementAt(index);
                   return JumperSimpleListTile(
                     jumper: jumper,
                     onTap: () {
@@ -130,7 +134,7 @@ class _AreYouSureDialog extends StatelessWidget {
     required this.jumper,
   });
 
-  final Jumper jumper;
+  final SimulationJumper jumper;
 
   @override
   Widget build(BuildContext context) {

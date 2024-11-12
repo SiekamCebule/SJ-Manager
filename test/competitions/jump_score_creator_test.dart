@@ -9,19 +9,19 @@ import 'package:sj_manager/models/simulation/competition/rules/utils/jump_score_
 import 'package:sj_manager/models/simulation/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/jump_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/score/score.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 
 import 'jump_score_creator_test.mocks.dart';
 
 @GenerateMocks([
-  JumpScoreCreatingContext<Jumper>,
+  JumpScoreCreatingContext<JumperDbRecord>,
   DefaultIndividualCompetitionRoundRules,
 ])
 void main() {
   group(DefaultClassicJumpScoreCreator, () {
-    late DefaultClassicJumpScoreCreator<Jumper> creator;
+    late DefaultClassicJumpScoreCreator<JumperDbRecord> creator;
 
     setUp(() {
       creator = DefaultClassicJumpScoreCreator();
@@ -29,10 +29,10 @@ void main() {
 
     test('Normal jump', () {
       final germany = Country.monolingual(code: 'de', language: 'en', name: 'Germany');
-      final jumper =
-          Jumper.empty(country: germany).copyWith(name: 'David', surname: 'Siegel');
+      final jumper = JumperDbRecord.empty(country: germany)
+          .copyWith(name: 'David', surname: 'Siegel');
       provideDummy(jumper);
-      final context = MockJumpScoreCreatingContext<Jumper>();
+      final context = MockJumpScoreCreatingContext<JumperDbRecord>();
 
       when(context.entity).thenReturn(jumper);
       final hill = Hill.empty(country: germany).copyWith(
@@ -83,10 +83,10 @@ void main() {
 
     test('Without gate points and only 2 significant judges', () {
       final germany = Country.monolingual(code: 'de', language: 'en', name: 'Germany');
-      final jumper =
-          Jumper.empty(country: germany).copyWith(name: 'David', surname: 'Siegel');
+      final jumper = JumperDbRecord.empty(country: germany)
+          .copyWith(name: 'David', surname: 'Siegel');
       provideDummy(jumper);
-      final context = MockJumpScoreCreatingContext<Jumper>();
+      final context = MockJumpScoreCreatingContext<JumperDbRecord>();
 
       when(context.entity).thenReturn(jumper);
       final hill = Hill.empty(country: germany).copyWith(
@@ -147,10 +147,10 @@ void main() {
 
     test('Negative points (small distance)', () {
       final germany = Country.monolingual(code: 'de', language: 'en', name: 'Germany');
-      final jumper =
-          Jumper.empty(country: germany).copyWith(name: 'David', surname: 'Siegel');
+      final jumper = JumperDbRecord.empty(country: germany)
+          .copyWith(name: 'David', surname: 'Siegel');
       provideDummy(jumper);
-      final context = MockJumpScoreCreatingContext<Jumper>();
+      final context = MockJumpScoreCreatingContext<JumperDbRecord>();
 
       when(context.entity).thenReturn(jumper);
       final hill = Hill.empty(country: germany).copyWith(

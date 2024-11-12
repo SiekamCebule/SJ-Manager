@@ -1,5 +1,5 @@
 import 'package:sj_manager/algorithms/reports/training_progress_report/training_report_creator.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
 
 class MonthlyJumperTrainingProgressReportCreator {
@@ -18,51 +18,51 @@ class MonthlyJumperTrainingProgressReportCreator {
 
   static const double weekToMonthMultiplier = 2;
 
-  static const requirements = {
+  static const Map<TrainingProgressCategory, Map<SimpleRating, double>> requirements = {
     TrainingProgressCategory.takeoff: {
-      SimpleRating.excellent: 1,
-      SimpleRating.veryGood: 0.66,
-      SimpleRating.good: 0.33,
+      SimpleRating.excellent: 0.4,
+      SimpleRating.veryGood: 0.266,
+      SimpleRating.good: 0.133,
       SimpleRating.correct: 0.0,
-      SimpleRating.belowExpectations: -0.33,
-      SimpleRating.poor: -0.66,
-      SimpleRating.veryPoor: -1,
+      SimpleRating.belowExpectations: -0.133,
+      SimpleRating.poor: -0.266,
+      SimpleRating.veryPoor: -0.4,
     },
     TrainingProgressCategory.flight: {
-      SimpleRating.excellent: 1,
-      SimpleRating.veryGood: 0.66,
-      SimpleRating.good: 0.33,
+      SimpleRating.excellent: 0.4,
+      SimpleRating.veryGood: 0.266,
+      SimpleRating.good: 0.133,
       SimpleRating.correct: 0.0,
-      SimpleRating.belowExpectations: -0.33,
-      SimpleRating.poor: -0.66,
-      SimpleRating.veryPoor: -1,
+      SimpleRating.belowExpectations: -0.133,
+      SimpleRating.poor: -0.266,
+      SimpleRating.veryPoor: -0.4,
     },
     TrainingProgressCategory.landing: {
-      SimpleRating.excellent: 0.25,
-      SimpleRating.veryGood: 0.15,
-      SimpleRating.good: 0.075,
+      SimpleRating.excellent: 0.2,
+      SimpleRating.veryGood: 0.133,
+      SimpleRating.good: 0.066,
       SimpleRating.correct: 0.0,
-      SimpleRating.belowExpectations: -0.075,
-      SimpleRating.poor: -0.15,
-      SimpleRating.veryPoor: -0.25,
+      SimpleRating.belowExpectations: -0.066,
+      SimpleRating.poor: -0.133,
+      SimpleRating.veryPoor: -0.2,
     },
     TrainingProgressCategory.consistency: {
-      SimpleRating.excellent: 2,
-      SimpleRating.veryGood: 1.33,
-      SimpleRating.good: 0.66,
+      SimpleRating.excellent: 5,
+      SimpleRating.veryGood: 3,
+      SimpleRating.good: 1.25,
       SimpleRating.correct: 0.0,
-      SimpleRating.belowExpectations: -0.66,
-      SimpleRating.poor: -1.33,
-      SimpleRating.veryPoor: -2,
+      SimpleRating.belowExpectations: -1.25,
+      SimpleRating.poor: -3,
+      SimpleRating.veryPoor: -5,
     },
     TrainingProgressCategory.form: {
-      SimpleRating.excellent: 2.5,
-      SimpleRating.veryGood: 1.666,
-      SimpleRating.good: 0.833,
+      SimpleRating.excellent: 3,
+      SimpleRating.veryGood: 2,
+      SimpleRating.good: 1,
       SimpleRating.correct: 0.0,
-      SimpleRating.belowExpectations: -0.833,
-      SimpleRating.poor: -1.666,
-      SimpleRating.veryPoor: -2.5,
+      SimpleRating.belowExpectations: -1,
+      SimpleRating.poor: -2,
+      SimpleRating.veryPoor: -3,
     },
   };
 }

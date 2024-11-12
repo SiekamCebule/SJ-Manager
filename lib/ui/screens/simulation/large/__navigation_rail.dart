@@ -20,7 +20,7 @@ class _NavigationRailState extends State<_NavigationRail> {
     final exitButtonStyle = Theme.of(context).textTheme.bodySmall!.copyWith(
           color: Theme.of(context).colorScheme.onErrorContainer,
         );
-    final database = context.watch<SimulationDatabaseCubit>().state;
+    final database = context.watch<SimulationDatabase>();
     final simulationMode = database.managerData.mode;
 
     return NavigationRail(

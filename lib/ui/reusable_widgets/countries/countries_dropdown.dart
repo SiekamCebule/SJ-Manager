@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
+import 'package:sj_manager/models/database/country/country.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
@@ -49,7 +49,7 @@ class CountriesDropdownState extends State<CountriesDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    final countries = widget.countriesRepo.last;
+    final countries = widget.countriesRepo.countries;
     final entries = [
       ...countries.map((country) {
         return DropdownMenuEntry(

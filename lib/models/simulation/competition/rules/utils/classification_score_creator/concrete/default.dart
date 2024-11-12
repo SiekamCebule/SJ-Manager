@@ -3,7 +3,7 @@ import 'package:sj_manager/models/simulation/competition/competition_labels.dart
 import 'package:sj_manager/models/simulation/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/classification_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 
 abstract class DefaultClassificationScoreCreator<E,
         C extends DefaultClassificationScoreCreatingContext<E>>
@@ -37,7 +37,7 @@ abstract class DefaultClassificationScoreCreator<E,
   void setUpSignificantCompetitions() {
     significantCompetitions.clear();
     for (final competition in context.classification.rules.competitions) {
-      if (competition is Competition<Jumper, IndividualCompetitionStandings>) {
+      if (competition is Competition<JumperDbRecord, IndividualCompetitionStandings>) {
         if (competition.labels.contains(CompetitionPlayedStatus.played)) {
           significantCompetitions.add(competition);
         }

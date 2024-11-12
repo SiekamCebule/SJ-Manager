@@ -3,9 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/country_team/subteam_type.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
+import 'package:sj_manager/models/database/team/country_team/subteam_type.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
@@ -25,7 +25,7 @@ class JumperInTeamOverviewCard extends StatelessWidget {
     this.showStats,
   });
 
-  final Jumper jumper;
+  final SimulationJumper jumper;
   final SubteamType? subteamType;
   final JumperReports reports;
   final bool hideLinks;
@@ -124,7 +124,7 @@ class JumperInTeamOverviewCard extends StatelessWidget {
       ),
     );
 
-    final imageWidget = DbItemImage<Jumper>(
+    final imageWidget = DbItemImage<SimulationJumper>(
       item: jumper,
       setup: context.read(),
       errorBuilder: (_, __, ___) => ItemImageNotFoundPlaceholder(

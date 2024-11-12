@@ -1,6 +1,6 @@
-import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_level_description.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 
 class DefaultJumperLevelReportCreator {
   DefaultJumperLevelReportCreator({
@@ -10,13 +10,9 @@ class DefaultJumperLevelReportCreator {
   final Map<JumperLevelDescription, double> requirements;
 
   JumperLevelReport create({
-    required Jumper jumper,
+    required SimulationJumper jumper,
   }) {
-    print(
-      'Create a raport for: ${jumper.nameAndSurname(capitalizeSurname: true, reverse: true)}',
-    );
-    final takeoffAndFlightAvg =
-        ((jumper.skills.takeoffQuality) + (jumper.skills.flightQuality)) / 2;
+    final takeoffAndFlightAvg = ((jumper.takeoffQuality) + (jumper.flightQuality)) / 2;
     var levelDescription = JumperLevelDescription.values.last;
     requirements.forEach((description, requirement) {
       if (takeoffAndFlightAvg > requirement) {
@@ -53,26 +49,26 @@ class DefaultJumperLevelReportCreator {
       return JumperCharacteristicOthernessStrength.values[indexInEnum];
     }
 
-    final averageSkillRating = (jumper.skills.takeoffQuality * 0.425) +
-        (jumper.skills.flightQuality * 0.425) +
-        (jumper.skills.landingQuality * 0.15);
+    final averageSkillRating = (jumper.takeoffQuality * 0.425) +
+        (jumper.flightQuality * 0.425) +
+        (jumper.landingQuality * 0.15);
 
     print('average skill rating: $averageSkillRating');
-    print('jumper.skills.takeoffQuality: ${jumper.skills.takeoffQuality}');
-    print('jumper.skills.flightQuality: ${jumper.skills.flightQuality}');
-    print('jumper.skills.landingQuality: ${jumper.skills.landingQuality}');
+    print('jumper.skills.takeoffQuality: ${jumper.takeoffQuality}');
+    print('jumper.skills.flightQuality: ${jumper.flightQuality}');
+    print('jumper.skills.landingQuality: ${jumper.landingQuality}');
 
     return JumperLevelReport(
       levelDescription: levelDescription,
       characteristics: {
         JumperLevelCharacteristicCategory.takeoff: findAppropriateOthernessStrength(
-          jumper.skills.takeoffQuality - averageSkillRating,
+          jumper.takeoffQuality - averageSkillRating,
         ),
         JumperLevelCharacteristicCategory.flight: findAppropriateOthernessStrength(
-          jumper.skills.flightQuality - averageSkillRating,
+          jumper.flightQuality - averageSkillRating,
         ),
         JumperLevelCharacteristicCategory.landing: findAppropriateOthernessStrength(
-          jumper.skills.landingQuality - averageSkillRating,
+          jumper.landingQuality - averageSkillRating,
         ),
       },
     );

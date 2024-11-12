@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/country_team/subteam_type.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
+import 'package:sj_manager/models/database/team/country_team/subteam_type.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:gap/gap.dart';
 import 'package:sj_manager/ui/screens/simulation/utils/jumper_ratings_translations.dart';
@@ -14,7 +14,7 @@ class JumperCardNameAndSurnameColumn extends StatelessWidget {
     required this.subteamType,
   });
 
-  final Jumper jumper;
+  final SimulationJumper jumper;
   final JumperReports jumperRatings;
   final SubteamType? subteamType;
 

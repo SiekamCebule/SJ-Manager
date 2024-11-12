@@ -11,10 +11,10 @@ import 'package:sj_manager/models/simulation/standings/score/details/competition
 import 'package:sj_manager/models/simulation/standings/score/score.dart';
 import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_creator.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 
 class DefaultIndividualCompetitionRoundRules
-    extends DefaultCompetitionRoundRules<Jumper> {
+    extends DefaultCompetitionRoundRules<JumperDbRecord> {
   const DefaultIndividualCompetitionRoundRules({
     required super.limit,
     required super.bibsAreReassigned,
@@ -51,7 +51,7 @@ class DefaultIndividualCompetitionRoundRules
     JudgesCreator? judgesCreator,
     int? significantJudgesCount,
     JumpScoreCreator? jumpScoreCreator,
-    CompetitionScoreCreator<Score<Jumper, CompetitionScoreDetails>>?
+    CompetitionScoreCreator<Score<JumperDbRecord, CompetitionScoreDetails>>?
         competitionScoreCreator,
     KoRoundRules? koRules,
   }) {

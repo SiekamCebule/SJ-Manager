@@ -29,13 +29,13 @@ import 'package:sj_manager/json/simulation_db_saving/team_serializer.dart';
 import 'package:sj_manager/json/simulation_db_saving/wind_averager_serializer.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
-import 'package:sj_manager/models/user_db/team/subteam.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/db_items_file_system_paths.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/team/subteam.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
@@ -58,15 +58,12 @@ class DefaultSimulationDatabaseSaverToFile {
     required SimulationDatabase database,
   }) async {
     _database = database;
-    await _serializeItems(items: database.maleJumpers.toList(), itemsType: 'maleJumper');
-    await _serializeItems(
-        items: database.femaleJumpers.toList(), itemsType: 'femaleJumper');
-    await _serializeItems(items: database.hills.last.toList(), itemsType: 'hill');
-    await _serializeItems(items: database.countries.last.toList(), itemsType: 'country');
-    await _serializeItems(
-        items: database.countryTeams.last.toList(), itemsType: 'countryTeam');
-    await _serializeItems(
-        items: database.seasons.last.toList(), itemsType: 'simulationSeason');
+    await _serializeItems(items: database.maleJumpers, itemsType: 'maleJumper');
+    await _serializeItems(items: database.femaleJumpers, itemsType: 'femaleJumper');
+    await _serializeItems(items: database.hills, itemsType: 'hill');
+    await _serializeItems(items: database.countries.countries, itemsType: 'country');
+    await _serializeItems(items: database.countryTeams, itemsType: 'countryTeam');
+    await _serializeItems(items: database.seasons, itemsType: 'simulationSeason');
     await _serializeDynamicState();
   }
 
@@ -77,6 +74,12 @@ class DefaultSimulationDatabaseSaverToFile {
       fileName: 'dynamic_state.json',
     );
     await file.create(recursive: true);
+    final subteamJumpersJson = _database.subteamJumpers.map((subteam, jumperIds) {
+      return MapEntry(
+        '${subteam.type.name}###${idsRepo.idOf(subteam.parentTeam)}',
+        jumperIds.toList(),
+      );
+    });
     final json = {
       'managerData': {
         'simulationMode': _database.managerData.mode.name,
@@ -87,9 +90,6 @@ class DefaultSimulationDatabaseSaverToFile {
       },
       'startDate': _database.startDate.toString(),
       'currentDate': _database.currentDate.toString(),
-      'jumpersDynamicParameters': _database.jumperDynamicParams.map(
-        (jumper, params) => MapEntry(idsRepo.idOf(jumper), params.toJson()),
-      ),
       'actionDeadlines': _database.actionDeadlines.map(
         (actionType, dateTime) => MapEntry(actionType.name, dateTime.toString()),
       ),
@@ -105,18 +105,13 @@ class DefaultSimulationDatabaseSaverToFile {
       'teamReports': _database.teamReports.map((team, reports) {
         return MapEntry(idsRepo.idOf(team), reports.toJson());
       }),
-      'subteamJumpers': _database.subteamJumpers.map((subteam, jumperIds) {
-        return MapEntry(
-          '${subteam.type.name}###${idsRepo.idOf(subteam.parentTeam)}',
-          jumperIds.toList(),
-        );
-      }),
+      'subteamJumpers': subteamJumpersJson,
     };
     await file.writeAsString(jsonEncode(json));
   }
 
   Future<void> _serializeItems<T>({
-    required List<T> items,
+    required Iterable<T> items,
     required String itemsType,
   }) async {
     final mappedType = _itemsTypeStringToType[itemsType]!;
@@ -134,10 +129,10 @@ class DefaultSimulationDatabaseSaverToFile {
   }
 
   String _getFilePath({required Type type}) {
-    if (type == MaleJumper) {
-      return pathsRegistry.get<MaleJumper>();
-    } else if (type == FemaleJumper) {
-      return pathsRegistry.get<FemaleJumper>();
+    if (type == MaleJumperDbRecord) {
+      return pathsRegistry.get<MaleJumperDbRecord>();
+    } else if (type == FemaleJumperDbRecord) {
+      return pathsRegistry.get<FemaleJumperDbRecord>();
     } else if (type == Hill) {
       return pathsRegistry.get<Hill>();
     } else if (type == Country) {
@@ -154,8 +149,8 @@ class DefaultSimulationDatabaseSaverToFile {
   }
 
   static const _itemsTypeStringToType = {
-    'maleJumper': MaleJumper,
-    'femaleJumper': FemaleJumper,
+    'maleJumper': MaleJumperDbRecord,
+    'femaleJumper': FemaleJumperDbRecord,
     'hill': Hill,
     'country': Country,
     'countryTeam': CountryTeam,
@@ -166,9 +161,9 @@ class DefaultSimulationDatabaseSaverToFile {
   FutureOr<Json> Function(dynamic json) _appropriateSerializeFunction({
     required Type type,
   }) {
-    if (type == MaleJumper) {
+    if (type == MaleJumperDbRecord) {
       return (item) => _serializeJumper(item);
-    } else if (type == FemaleJumper) {
+    } else if (type == FemaleJumperDbRecord) {
       return (item) => _serializeJumper(item);
     } else if (type == Hill) {
       return (item) => _serializeHill(item);
@@ -183,7 +178,7 @@ class DefaultSimulationDatabaseSaverToFile {
     }
   }
 
-  Json _serializeJumper(Jumper item) {
+  Json _serializeJumper(JumperDbRecord item) {
     return item.toJson(countrySaver: const JsonCountryCodeSaver());
   }
 

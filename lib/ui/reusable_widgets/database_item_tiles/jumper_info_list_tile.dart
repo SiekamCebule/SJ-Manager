@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 import 'package:sj_manager/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 
@@ -18,7 +18,7 @@ class JumperInfoListTile extends StatelessWidget {
   final int? indexInList;
   final VoidCallback? onTapWithCtrl;
   final VoidCallback? onTap;
-  final Jumper jumper;
+  final JumperDbRecord jumper;
   final bool selected;
 
   @override

@@ -1,7 +1,7 @@
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/sex.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team_facts.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/sex.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team_facts.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 
 class CountryTeam extends Team {
   const CountryTeam({

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/bloc/simulation/simulation_database_cubit.dart';
 import 'package:sj_manager/commands/simulation_database/simulation_database_commander.dart';
 import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper/jumper_simple_list_tile.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_training/jumper_training_configurator/jumper_training_configurator.dart';
 
@@ -20,15 +20,13 @@ class JumperTrainingManagerRow extends StatefulWidget {
 }
 
 class _JumperTrainingManagerRowState extends State<JumperTrainingManagerRow> {
-  Jumper? _selectedJumperInTrainingMode;
+  SimulationJumper? _selectedJumper;
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabaseCubit>().state;
+    final database = context.watch<SimulationDatabase>();
     final dbHelper = context.read<SimulationDatabaseHelper>();
     final jumpers = dbHelper.managerJumpers;
-
-    final dynamicParams = database.jumperDynamicParams[_selectedJumperInTrainingMode];
 
     return jumpers.isNotEmpty
         ? Row(
@@ -46,15 +44,15 @@ class _JumperTrainingManagerRowState extends State<JumperTrainingManagerRow> {
                         subtitle: JumperSimpleListTileSubtitle.levelDescription,
                         levelDescription:
                             database.jumperReports[jumper]!.levelReport?.levelDescription,
-                        selected: _selectedJumperInTrainingMode == jumper,
+                        selected: _selectedJumper == jumper,
                         leading: JumperSimpleListTileLeading.jumperImage,
                         trailing: JumperSimpleListTileTrailing.countryFlag,
                         onTap: () {
                           setState(() {
-                            if (_selectedJumperInTrainingMode == jumper) {
-                              _selectedJumperInTrainingMode = null;
+                            if (_selectedJumper == jumper) {
+                              _selectedJumper = null;
                             } else {
-                              _selectedJumperInTrainingMode = jumper;
+                              _selectedJumper = jumper;
                             }
                           });
                         },
@@ -66,29 +64,22 @@ class _JumperTrainingManagerRowState extends State<JumperTrainingManagerRow> {
               Expanded(
                 child: Card(
                   color: Theme.of(context).colorScheme.surfaceContainer,
-                  child: _selectedJumperInTrainingMode != null
+                  child: _selectedJumper != null
                       ? Builder(builder: (context) {
                           return JumperTrainingConfigurator(
-                            jumper: _selectedJumperInTrainingMode!,
-                            trainingConfig: dynamicParams!.trainingConfig!,
-                            dynamicParams: dynamicParams,
+                            jumper: _selectedJumper!,
+                            trainingConfig: _selectedJumper!.trainingConfig!,
                             onTrainingChange: (trainingConfig) {
-                              final changedDatabase =
-                                  SimulationDatabaseCommander(database: database)
-                                      .changeJumperTraining(
-                                jumper: _selectedJumperInTrainingMode!,
+                              SimulationDatabaseCommander(database: database)
+                                  .changeJumperTraining(
+                                jumper: _selectedJumper!,
                                 config: trainingConfig,
                               );
-                              context
-                                  .read<SimulationDatabaseCubit>()
-                                  .update(changedDatabase);
                             },
                             weeklyTrainingReport: database
-                                .jumperReports[_selectedJumperInTrainingMode]!
-                                .weeklyTrainingReport,
+                                .jumperReports[_selectedJumper]!.weeklyTrainingReport,
                             monthlyTrainingReport: database
-                                .jumperReports[_selectedJumperInTrainingMode]!
-                                .monthlyTrainingReport,
+                                .jumperReports[_selectedJumper]!.monthlyTrainingReport,
                           );
                         })
                       : Center(
@@ -96,7 +87,7 @@ class _JumperTrainingManagerRowState extends State<JumperTrainingManagerRow> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'Aby zaarządzać treningiem, zaznacz zawodnika/zawodniczkę po lewej stronie',
+                                'Aby zarządzać treningiem, zaznacz zawodnika/zawodniczkę po lewej stronie',
                                 style: Theme.of(context).textTheme.bodyMedium,
                               )
                             ],

@@ -3,7 +3,7 @@ import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 Future<Json> serializeItemsMap<T>({
-  required List<T> items,
+  required Iterable<T> items,
   required ItemsIdsRepo idsRepo,
   required ToJson<T> toJson,
 }) async {

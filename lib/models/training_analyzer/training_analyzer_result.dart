@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/models/training_analyzer/training_segment.dart';
 import 'package:sj_manager/algorithms/training_engine/jumper_training_result.dart';
 
@@ -39,12 +38,9 @@ class TrainingAnalyzerDaySimulationResult with EquatableMixin {
   }) {
     return [
       day.toString(),
-      trainingResult.skills.takeoffQuality.toStringAsFixed(2),
-      trainingResult.trainingFeeling[JumperTrainingCategory.takeoff]?.toStringAsFixed(2),
-      trainingResult.skills.flightQuality.toStringAsFixed(2),
-      trainingResult.trainingFeeling[JumperTrainingCategory.flight]?.toStringAsFixed(2),
-      trainingResult.skills.landingQuality.toStringAsFixed(2),
-      trainingResult.trainingFeeling[JumperTrainingCategory.landing]?.toStringAsFixed(2),
+      trainingResult.takeoffQuality.toStringAsFixed(2),
+      trainingResult.flightQuality.toStringAsFixed(2),
+      trainingResult.landingQuality.toStringAsFixed(2),
       trainingResult.form.toStringAsFixed(2),
       trainingResult.jumpsConsistency.toStringAsFixed(2),
       trainingResult.fatigue.toStringAsFixed(2)

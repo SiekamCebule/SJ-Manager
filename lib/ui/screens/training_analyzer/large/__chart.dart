@@ -50,7 +50,7 @@ class _Chart extends StatelessWidget {
             name: 'Wybicie',
             dataSource: result.dayResults,
             xValueMapper: (result, _) => result.day,
-            yValueMapper: (result, _) => result.trainingResult.skills.takeoffQuality,
+            yValueMapper: (result, _) => result.trainingResult.takeoffQuality,
           ),
         if (categories.contains(TrainingAnalyzerDataCategory.flightQuality))
           LineSeries<TrainingAnalyzerDaySimulationResult, int>(
@@ -58,7 +58,7 @@ class _Chart extends StatelessWidget {
             name: 'Lot',
             dataSource: result.dayResults,
             xValueMapper: (result, _) => result.day,
-            yValueMapper: (result, _) => result.trainingResult.skills.flightQuality,
+            yValueMapper: (result, _) => result.trainingResult.flightQuality,
           ),
         if (categories.contains(TrainingAnalyzerDataCategory.landingQuality))
           LineSeries<TrainingAnalyzerDaySimulationResult, int>(
@@ -66,7 +66,7 @@ class _Chart extends StatelessWidget {
             name: 'Lądowanie',
             dataSource: result.dayResults,
             xValueMapper: (result, _) => result.day,
-            yValueMapper: (result, _) => result.trainingResult.skills.landingQuality,
+            yValueMapper: (result, _) => result.trainingResult.landingQuality,
           ),
         if (categories.contains(TrainingAnalyzerDataCategory.form))
           LineSeries<TrainingAnalyzerDaySimulationResult, int>(

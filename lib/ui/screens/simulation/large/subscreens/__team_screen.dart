@@ -22,7 +22,7 @@ class _TeamScreenState extends State<_TeamScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabaseCubit>().state;
+    final database = context.watch<SimulationDatabase>();
     final dbHelper = context.read<SimulationDatabaseHelper>();
     final trainingsAreSetUp =
         database.actionsRepo.isCompleted(SimulationActionType.settingUpTraining);
@@ -55,7 +55,7 @@ class _TeamScreenState extends State<_TeamScreen> {
 
     final bottomNavBar = database.managerData.mode == SimulationMode.personalCoach
         ? TeamScreenPersonalCoachBottomBar(
-            chargesCount: database.managerData.personalCoachTeam!.jumperIds.length,
+            chargesCount: database.managerData.personalCoachTeam!.jumpers.length,
             chargesLimit: sjmManagerChargesLimit,
             searchForCandidates: () =>
                 SearchForCandidatesCommand(context: context, database: database)

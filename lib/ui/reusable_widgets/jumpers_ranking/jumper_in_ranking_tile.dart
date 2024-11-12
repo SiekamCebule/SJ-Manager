@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/simulation_jumper_image.dart';
 
 class JumperInRankingTile extends StatelessWidget {
@@ -10,7 +10,7 @@ class JumperInRankingTile extends StatelessWidget {
     this.onTap,
   });
 
-  final Jumper jumper;
+  final SimulationJumper jumper;
   final int position;
   final VoidCallback? onTap;
 

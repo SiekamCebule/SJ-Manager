@@ -1,9 +1,9 @@
 import 'package:sj_manager/models/game_variants/game_variant.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/jumps/simple_jump.dart';
-import 'package:sj_manager/models/user_db/sex.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/jumps/simple_jump.dart';
+import 'package:sj_manager/models/database/sex.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
 import 'package:sj_manager/utils/db_items.dart';
 import 'package:sj_manager/utils/team_preview_creator/team_preview_creator.dart';
 
@@ -36,7 +36,7 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
   }
 
   @override
-  Jumper? bestJumper(CountryTeam team) {
+  JumperDbRecord? bestJumper(CountryTeam team) {
     final jumpers = _jumpersBySex(team.sex);
     final jumpersFromCountry = jumpers.fromCountryByCode(team.country.code);
     if (jumpersFromCountry.isEmpty) return null;
@@ -47,7 +47,7 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
   }
 
   @override
-  Jumper? risingStar(CountryTeam team) {
+  JumperDbRecord? risingStar(CountryTeam team) {
     final jumpers = _jumpersBySex(team.sex);
     final jumpersFromCountry = jumpers.fromCountryByCode(team.country.code);
     if (jumpersFromCountry.isEmpty) return null;
@@ -68,13 +68,13 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
     }
   }
 
-  Iterable<Jumper> _jumpersBySex(Sex sex) {
+  Iterable<JumperDbRecord> _jumpersBySex(Sex sex) {
     return sex == Sex.male
-        ? gameVariant.jumpers.whereType<MaleJumper>()
-        : gameVariant.jumpers.whereType<FemaleJumper>();
+        ? gameVariant.jumpers.whereType<MaleJumperDbRecord>()
+        : gameVariant.jumpers.whereType<FemaleJumperDbRecord>();
   }
 
-  double _calculateRatingForRisingStar(Jumper jumper) {
+  double _calculateRatingForRisingStar(JumperDbRecord jumper) {
     final base = _calculateRating(jumper);
     final age = jumper.age(date: currentDate);
     final multiplierByAge = _multiplierByAge(age);
@@ -102,7 +102,7 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
     };
   }
 
-  double _calculateRating(Jumper jumper) {
+  double _calculateRating(JumperDbRecord jumper) {
     final skills = jumper.skills;
     final byTakeoffQuality = skills.takeoffQuality * 1.0;
     final byFlightQuality = skills.takeoffQuality * 1.0;
@@ -111,12 +111,12 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
     return rating;
   }
 
-  Jumper _atPositionFromRatings(Map<Jumper, double> jumperRatings,
+  JumperDbRecord _atPositionFromRatings(Map<JumperDbRecord, double> jumperRatings,
       {required int position}) {
     if (position < 1 || position > jumperRatings.length) {
       throw ArgumentError('Position out of range');
     }
-    List<MapEntry<Jumper, double>> sortedEntries = jumperRatings.entries.toList()
+    List<MapEntry<JumperDbRecord, double>> sortedEntries = jumperRatings.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
 
     return sortedEntries[position - 1].key;

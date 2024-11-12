@@ -1,8 +1,8 @@
 import 'package:sj_manager/algorithms/reports/training_progress_report/weekly_jumper_training_progress_report_creator.dart';
 import 'package:sj_manager/commands/simulation_database/simulation_database_commander.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 
 class CreateWeeklyTrainingProgressReportsCommand {
   const CreateWeeklyTrainingProgressReportsCommand({
@@ -10,14 +10,9 @@ class CreateWeeklyTrainingProgressReportsCommand {
   });
   final SimulationDatabase database;
 
-  SimulationDatabase execute() {
-    var database = this.database;
-    final reports = <Jumper, TrainingReport?>{};
-    for (var jumper in database.jumpers.last) {
-      if (!database.managerData.personalCoachTeam!.jumperIds
-          .contains(database.idsRepo.idOf(jumper))) {
-        continue;
-      } // TODO
+  void execute() {
+    final reports = <SimulationJumper, TrainingReport?>{};
+    for (var jumper in database.jumpers) {
       final attributeHistrory =
           database.jumperStats[jumper]!.progressableAttributeHistory;
       List<double> getDeltas(TrainingProgressCategory category) {
@@ -38,9 +33,8 @@ class CreateWeeklyTrainingProgressReportsCommand {
       reports[jumper] = report;
     }
     reports.forEach((jumper, report) {
-      database = SimulationDatabaseCommander(database: database)
+      SimulationDatabaseCommander(database: database)
           .setWeeklyReport(jumper: jumper, report: report);
     });
-    return database;
   }
 }

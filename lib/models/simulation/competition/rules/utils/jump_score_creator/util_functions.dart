@@ -1,4 +1,4 @@
-import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
 
 double defaultHillPointsForMeter(Hill hill) {
   return switch (hill.k) {

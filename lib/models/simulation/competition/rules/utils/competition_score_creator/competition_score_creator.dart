@@ -7,9 +7,9 @@ import 'package:sj_manager/models/simulation/standings/score/details/competition
 import 'package:sj_manager/models/simulation/standings/score/details/jump_score_details.dart';
 import 'package:sj_manager/models/simulation/standings/score/score.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/competition_team.dart';
 
 abstract class CompetitionScoreCreatingContext<T>
     extends EntityRelatedAlgorithmContext<T> {
@@ -32,7 +32,7 @@ abstract class CompetitionScoreCreatingContext<T>
 }
 
 class IndividualCompetitionScoreCreatingContext
-    extends CompetitionScoreCreatingContext<Jumper> {
+    extends CompetitionScoreCreatingContext<JumperDbRecord> {
   const IndividualCompetitionScoreCreatingContext({
     required super.entity,
     required super.eventSeries,
@@ -43,7 +43,7 @@ class IndividualCompetitionScoreCreatingContext
     required this.lastJumpScore,
   });
 
-  final Score<Jumper, JumpScoreDetails> lastJumpScore;
+  final Score<JumperDbRecord, JumpScoreDetails> lastJumpScore;
 }
 
 class TeamCompetitionScoreCreatingContext
@@ -60,7 +60,7 @@ class TeamCompetitionScoreCreatingContext
   });
 
   final int? currentGroup;
-  final Score<Jumper, JumpScoreDetails> lastJumpScore;
+  final Score<JumperDbRecord, JumpScoreDetails> lastJumpScore;
 }
 
 abstract class CompetitionScoreCreator<S extends Score<dynamic, CompetitionScoreDetails>>

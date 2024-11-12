@@ -130,9 +130,9 @@ class _ListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabaseCubit>().state;
+    final database = context.watch<SimulationDatabase>();
     var teams = switch (sex) {
-      TeamsScreenSelectedSex.both => database.countryTeams.last,
+      TeamsScreenSelectedSex.both => database.countryTeams,
       TeamsScreenSelectedSex.male => database.maleJumperTeams,
       TeamsScreenSelectedSex.female => database.femaleJumperTeams,
     };
@@ -154,34 +154,32 @@ class _ListView extends StatelessWidget {
           onTap: () async {
             final team = teams.elementAt(index);
             final flagsRepo = context.read<CountryFlagsRepo>();
-            final jumperImagesRepo = context.read<DbItemImageGeneratingSetup<Jumper>>();
-            final databaseCubit = context.read<SimulationDatabaseCubit>();
+            final jumperImagesRepo =
+                context.read<DbItemImageGeneratingSetup<JumperDbRecord>>();
             final dbHelper = context.read<SimulationDatabaseHelper>();
             await showDialog(
               context: context,
               builder: (context) {
-                return BlocProvider.value(
-                  value: databaseCubit,
-                  child: MultiProvider(
-                    providers: [
-                      Provider.value(value: flagsRepo),
-                      Provider.value(value: jumperImagesRepo),
-                      Provider.value(value: dbHelper),
-                    ],
-                    child: Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          height: MediaQuery.of(context).size.height * 0.8,
-                          padding: const EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: CountryTeamProfileWidget(
-                            team: team,
-                          ),
+                return MultiProvider(
+                  providers: [
+                    Provider.value(value: flagsRepo),
+                    Provider.value(value: jumperImagesRepo),
+                    Provider.value(value: dbHelper),
+                    ChangeNotifierProvider.value(value: database),
+                  ],
+                  child: Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        height: MediaQuery.of(context).size.height * 0.8,
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: CountryTeamProfileWidget(
+                          team: team,
                         ),
                       ),
                     ),

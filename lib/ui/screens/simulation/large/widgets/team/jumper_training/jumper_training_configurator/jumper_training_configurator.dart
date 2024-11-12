@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_reports.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/reusable_widgets/card_with_title.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_training/jumper_training_configurator/widgets/jumper_attribute_training_slider.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper_training/training_progress_report_display.dart';
@@ -21,15 +20,13 @@ class JumperTrainingConfigurator extends StatefulWidget {
     super.key,
     required this.jumper,
     required this.trainingConfig,
-    required this.dynamicParams,
     required this.onTrainingChange,
     required this.weeklyTrainingReport,
     required this.monthlyTrainingReport,
   });
 
-  final Jumper jumper;
+  final SimulationJumper jumper;
   final JumperTrainingConfig trainingConfig;
-  final JumperDynamicParams dynamicParams;
   final Function(JumperTrainingConfig config) onTrainingChange;
   final TrainingReport? weeklyTrainingReport;
   final TrainingReport? monthlyTrainingReport;

@@ -2,7 +2,7 @@ import 'package:sj_manager/models/simulation/standings/score/details/jump_score_
 import 'package:sj_manager/models/simulation/standings/score/details/score_details.dart';
 import 'package:sj_manager/models/simulation/standings/score/score.dart';
 import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 import 'package:collection/collection.dart';
 
 abstract class CompetitionScoreDetails<E> extends ScoreDetails {
@@ -14,30 +14,30 @@ abstract class CompetitionScoreDetails<E> extends ScoreDetails {
   List<Object?> get props => [super.props, jumpScores];
 }
 
-class CompetitionJumperScoreDetails extends CompetitionScoreDetails<Jumper> {
+class CompetitionJumperScoreDetails extends CompetitionScoreDetails<JumperDbRecord> {
   const CompetitionJumperScoreDetails({
-    required List<Score<Jumper, JumpScoreDetails>> jumpScores,
+    required List<Score<JumperDbRecord, JumpScoreDetails>> jumpScores,
   }) : _jumpScores = jumpScores;
 
-  final List<Score<Jumper, JumpScoreDetails>> _jumpScores;
+  final List<Score<JumperDbRecord, JumpScoreDetails>> _jumpScores;
 
   @override
-  List<Score<Jumper, JumpScoreDetails>> get jumpScores => _jumpScores;
+  List<Score<JumperDbRecord, JumpScoreDetails>> get jumpScores => _jumpScores;
 }
 
-class CompetitionTeamScoreDetails extends CompetitionScoreDetails<Jumper> {
+class CompetitionTeamScoreDetails extends CompetitionScoreDetails<JumperDbRecord> {
   CompetitionTeamScoreDetails({
     required this.jumperScores,
   });
 
-  final List<Score<Jumper, CompetitionJumperScoreDetails>> jumperScores;
+  final List<Score<JumperDbRecord, CompetitionJumperScoreDetails>> jumperScores;
 
   @override
-  List<Score<Jumper, JumpScoreDetails>> get jumpScores {
+  List<Score<JumperDbRecord, JumpScoreDetails>> get jumpScores {
     return jumperScores.expand((score) => score.details.jumpScores).toList();
   }
 
-  CompetitionJumperScore? jumperScore(Jumper jumper) {
+  CompetitionJumperScore? jumperScore(JumperDbRecord jumper) {
     return jumperScores.singleWhereOrNull((score) => score.entity == jumper);
   }
 

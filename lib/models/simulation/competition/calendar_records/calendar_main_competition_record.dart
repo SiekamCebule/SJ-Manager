@@ -5,9 +5,9 @@ import 'package:sj_manager/models/simulation/competition/competition_labels.dart
 import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_provider.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/competition_team.dart';
 import 'package:equatable/equatable.dart';
 
 class CalendarMainCompetitionRecord
@@ -94,11 +94,11 @@ class _Converter {
     required DefaultCompetitionRulesProvider<T> rules,
     List<Object> labels = const [],
   }) {
-    if (rules is DefaultCompetitionRules<Jumper>) {
-      return Competition<Jumper, Standings>(
+    if (rules is DefaultCompetitionRules<JumperDbRecord>) {
+      return Competition<JumperDbRecord, Standings>(
         hill: hill,
         date: date,
-        rules: rules as DefaultCompetitionRules<Jumper>,
+        rules: rules as DefaultCompetitionRules<JumperDbRecord>,
         labels: labels,
       ) as Competition<T, Standings>;
     } else if (rules is DefaultCompetitionRules<CompetitionTeam>) {

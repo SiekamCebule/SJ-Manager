@@ -1,27 +1,23 @@
 import 'dart:math';
 
-import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
 import 'package:sj_manager/algorithms/training_engine/jumper_training_engine_settings.dart';
 import 'package:sj_manager/algorithms/training_engine/jumper_training_result.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/utils/random/random.dart';
 import 'package:sj_manager/utils/training.dart';
 
 class JumperTrainingEngine {
   JumperTrainingEngine({
     this.settings = sjmDefaultTrainingEngineSettings,
-    required this.jumperSkills,
-    required this.dynamicParams,
+    required this.jumper,
   });
 
   final JumperTrainingEngineSettings settings;
-  final JumperSkills jumperSkills;
-  final JumperDynamicParams dynamicParams;
+  final SimulationJumper jumper;
 
   late JumperTrainingConfig _trainingConfig;
   late double _developmentPotentialFactor;
-  late Map<JumperTrainingCategory, double> _trainingFeeling;
   late JumperTrainingResult _result;
 
   JumperTrainingResult doTraining() {
@@ -33,20 +29,19 @@ class JumperTrainingEngine {
   }
 
   void _setUp() {
-    if (dynamicParams.trainingConfig == null) {
+    if (jumper.trainingConfig == null) {
       throw ArgumentError(
-        'Jumper\'s ($jumperSkills) training config is null so cannot simulate the training',
+        'Jumper\'s (${jumper.nameAndSurname()}) training config is null so cannot simulate the training',
       );
     }
-    _trainingConfig = dynamicParams.trainingConfig!;
-    _trainingFeeling = {};
+    _trainingConfig = jumper.trainingConfig!;
   }
 
   void _calculateDevelopmentPotentialFactor() {
-    final fromMorale = dynamicParams.morale < settings.moraleFactorThreshold
-        ? dynamicParams.morale * settings.moraleFactorMultiplier
+    final fromMorale = jumper.morale < settings.moraleFactorThreshold
+        ? jumper.morale * settings.moraleFactorMultiplier
         : 0;
-    final fromFatigue = -dynamicParams.fatigue * settings.fatigueFactorMultiplier;
+    final fromFatigue = -jumper.fatigue * settings.fatigueFactorMultiplier;
 
     _developmentPotentialFactor = settings.developmentPotentialFactorBase +
         ((fromMorale + fromFatigue) / settings.developmentPotentialDivider);
@@ -54,15 +49,12 @@ class JumperTrainingEngine {
 
   void _createResultObject() {
     _result = JumperTrainingResult(
-      skills: jumperSkills.copyWith(
-        takeoffQuality: jumperSkills.takeoffQuality + _computeTakeoffDelta(),
-        flightQuality: jumperSkills.flightQuality + _computeFlightDelta(),
-        landingQuality: jumperSkills.landingQuality + _computeLandingDelta(),
-      ),
-      form: dynamicParams.form + _computeFormDelta(),
-      jumpsConsistency: dynamicParams.jumpsConsistency + _computeConsistencyDelta(),
-      fatigue: dynamicParams.fatigue + _computeFatigueDelta(),
-      trainingFeeling: _trainingFeeling,
+      takeoffQuality: jumper.takeoffQuality + _computeTakeoffDelta(),
+      flightQuality: jumper.flightQuality + _computeFlightDelta(),
+      landingQuality: jumper.landingQuality + _computeLandingDelta(),
+      form: jumper.form + _computeFormDelta(),
+      jumpsConsistency: jumper.jumpsConsistency + _computeConsistencyDelta(),
+      fatigue: jumper.fatigue + _computeFatigueDelta(),
     );
   }
 
@@ -77,9 +69,9 @@ class JumperTrainingEngine {
       settings.takeoffRandomCauchyDampingFactor,
     );
 
-    final distanceFromCenter = (jumperSkills.takeoffQuality - 10).abs();
+    final distanceFromCenter = (jumper.takeoffQuality - 10).abs();
     var delta = random / settings.takeoffBalanceEffectDivider;
-    final directionalMultiplier = (jumperSkills.takeoffQuality - 10) *
+    final directionalMultiplier = (jumper.takeoffQuality - 10) *
         delta.sign /
         settings.takeoffDirectionalMultiplierDivider;
     final exponentiationBase = 1 +
@@ -102,9 +94,9 @@ class JumperTrainingEngine {
       settings.flightRandomCauchyDampingFactor,
     );
 
-    final distanceFromCenter = (jumperSkills.flightQuality - 10).abs();
+    final distanceFromCenter = (jumper.flightQuality - 10).abs();
     var delta = random / settings.flightBalanceEffectDivider;
-    final directionalMultiplier = (jumperSkills.flightQuality - 10) *
+    final directionalMultiplier = (jumper.flightQuality - 10) *
         delta.sign /
         settings.flightDirectionalMultiplierDivider;
     final exponentiationBase = 1 +
@@ -127,9 +119,9 @@ class JumperTrainingEngine {
       settings.landingRandomCauchyDampingFactor,
     );
 
-    final distanceFromCenter = (jumperSkills.landingQuality - 10).abs();
+    final distanceFromCenter = (jumper.landingQuality - 10).abs();
     var delta = random / settings.landingBalanceEffectDivider;
-    final directionalMultiplier = (jumperSkills.landingQuality - 10) *
+    final directionalMultiplier = (jumper.landingQuality - 10) *
         delta.sign /
         settings.landingDirectionalMultiplierDivider;
     final exponentiationBase = 1 +
@@ -153,11 +145,10 @@ class JumperTrainingEngine {
     );
 
     // Tłumienie delty
-    final distanceFromCenter = (dynamicParams.form - 10).abs();
+    final distanceFromCenter = (jumper.form - 10).abs();
     var delta = random / settings.formBalanceDivider;
-    final directionalMultiplier = (dynamicParams.form - 10) *
-        delta.sign /
-        settings.formDirectionalMultiplierDivider;
+    final directionalMultiplier =
+        (jumper.form - 10) * delta.sign / settings.formDirectionalMultiplierDivider;
     final exponentiationBase = 1 +
         (distanceFromCenter / settings.formDeltaDampingBaseDivider) *
             (1 + directionalMultiplier);
@@ -178,9 +169,9 @@ class JumperTrainingEngine {
       settings.consistencyRandomCauchyDampingFactor,
     );
     // Tłumienie delty
-    final distanceFromCenter = (dynamicParams.jumpsConsistency - 10).abs();
+    final distanceFromCenter = (jumper.jumpsConsistency - 10).abs();
     var delta = random / settings.consistencyBalanceDivider;
-    final directionalMultiplier = (dynamicParams.jumpsConsistency - 10) *
+    final directionalMultiplier = (jumper.jumpsConsistency - 10) *
         delta.sign /
         settings.consistencyDirectionalMultiplierDivider;
     final exponentiationBase = 1 +

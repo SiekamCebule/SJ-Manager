@@ -3,18 +3,18 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/hill/hill_profile_type.dart';
-import 'package:sj_manager/models/user_db/hill/hill_type_by_size.dart';
-import 'package:sj_manager/models/user_db/hill/jumps_variability.dart';
-import 'package:sj_manager/models/user_db/hill/landing_ease.dart';
-import 'package:sj_manager/models/user_db/hill/typical_wind_direction.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/hill/hill_profile_type.dart';
+import 'package:sj_manager/models/database/hill/hill_type_by_size.dart';
+import 'package:sj_manager/models/database/hill/jumps_variability.dart';
+import 'package:sj_manager/models/database/hill/landing_ease.dart';
+import 'package:sj_manager/models/database/hill/typical_wind_direction.dart';
 import 'package:sj_manager/utils/doubles.dart';
 
 part '../../../json/manual_json/hill_json.dart';
 
 class Hill with EquatableMixin {
-  const Hill({
+  Hill({
     required this.name,
     required this.locality,
     required this.country,
@@ -30,7 +30,7 @@ class Hill with EquatableMixin {
     required this.pointsForTailwind,
   });
 
-  const Hill.empty({required Country country})
+  Hill.empty({required Country country})
       : this(
           name: '',
           locality: '',
@@ -45,22 +45,22 @@ class Hill with EquatableMixin {
           pointsForTailwind: 0,
         );
 
-  final String name;
-  final String locality;
-  final Country country;
+  String name;
+  String locality;
+  Country country;
 
-  final double k;
-  final double hs;
-  final LandingEase landingEase;
-  final HillProfileType profileType;
-  final JumpsVariability jumpsVariability;
+  double k;
+  double hs;
+  LandingEase landingEase;
+  HillProfileType profileType;
+  JumpsVariability jumpsVariability;
 
-  final TypicalWindDirection? typicalWindDirection;
-  final double? typicalWindStrength;
+  TypicalWindDirection? typicalWindDirection;
+  double? typicalWindStrength;
 
-  final double pointsForGate;
-  final double pointsForHeadwind;
-  final double pointsForTailwind;
+  double pointsForGate;
+  double pointsForHeadwind;
+  double pointsForTailwind;
 
   HillTypeBySize get typeBySize => HillTypeBySize.fromHsPoint(hs);
 

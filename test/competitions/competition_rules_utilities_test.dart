@@ -10,12 +10,12 @@ import 'package:sj_manager/models/simulation/standings/score/details/jump_score_
 import 'package:sj_manager/models/simulation/standings/score/score.dart';
 import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
 
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team_facts.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/sex.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team_facts.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/sex.dart';
+import 'package:sj_manager/models/database/team/competition_team.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
 
 import 'competition_rules_utilities_test.mocks.dart';
 
@@ -28,10 +28,10 @@ void main() {
   test(DefaultLinearIndividualCompetitionScoreCreator, () {
     final creator = DefaultLinearIndividualCompetitionScoreCreator();
     final context = MockIndividualCompetitionScoreCreatingContext();
-    final jumper = MaleJumper.empty(country: MockCountry())
+    final jumper = MaleJumperDbRecord.empty(country: MockCountry())
         .copyWith(name: 'Kamil', surname: 'Stoch');
     final jumps = [
-      Score<Jumper, SimpleJumpScoreDetails>(
+      Score<JumperDbRecord, SimpleJumpScoreDetails>(
         entity: jumper,
         details: const SimpleJumpScoreDetails(
           jumpRecord: JumpSimulationRecord(
@@ -41,7 +41,7 @@ void main() {
         ),
         points: 130.4,
       ),
-      Score<Jumper, SimpleJumpScoreDetails>(
+      Score<JumperDbRecord, SimpleJumpScoreDetails>(
         entity: jumper,
         details: const SimpleJumpScoreDetails(
           jumpRecord: JumpSimulationRecord(
@@ -90,10 +90,12 @@ void main() {
         country: germany,
       ),
       jumpers: [
-        Jumper.empty(country: germany).copyWith(name: 'Markus', surname: 'Eisenbichler'),
-        Jumper.empty(country: germany).copyWith(name: 'Karl', surname: 'Geiger'),
-        Jumper.empty(country: germany).copyWith(name: 'Luca', surname: 'Roth'),
-        Jumper.empty(country: germany).copyWith(name: 'Andreas', surname: 'Wellinger'),
+        JumperDbRecord.empty(country: germany)
+            .copyWith(name: 'Markus', surname: 'Eisenbichler'),
+        JumperDbRecord.empty(country: germany).copyWith(name: 'Karl', surname: 'Geiger'),
+        JumperDbRecord.empty(country: germany).copyWith(name: 'Luca', surname: 'Roth'),
+        JumperDbRecord.empty(country: germany)
+            .copyWith(name: 'Andreas', surname: 'Wellinger'),
       ],
     );
     final jumperScores = [
@@ -102,7 +104,7 @@ void main() {
         points: 120.1,
         details: CompetitionJumperScoreDetails(
           jumpScores: [
-            Score<Jumper, SimpleJumpScoreDetails>(
+            Score<JumperDbRecord, SimpleJumpScoreDetails>(
               entity: team.jumpers[0],
               details: const SimpleJumpScoreDetails(
                 jumpRecord: JumpSimulationRecord(
@@ -120,7 +122,7 @@ void main() {
         points: 134.5,
         details: CompetitionJumperScoreDetails(
           jumpScores: [
-            Score<Jumper, SimpleJumpScoreDetails>(
+            Score<JumperDbRecord, SimpleJumpScoreDetails>(
               entity: team.jumpers[0],
               details: const SimpleJumpScoreDetails(
                 jumpRecord: JumpSimulationRecord(
@@ -143,7 +145,7 @@ void main() {
       details: CompetitionTeamScoreDetails(jumperScores: jumperScores),
     );
     when(context.currentScore).thenReturn(currentScore);
-    final lastJumpScore = Score<Jumper, SimpleJumpScoreDetails>(
+    final lastJumpScore = Score<JumperDbRecord, SimpleJumpScoreDetails>(
       entity: team.jumpers[2],
       details: const SimpleJumpScoreDetails(
         jumpRecord: JumpSimulationRecord(

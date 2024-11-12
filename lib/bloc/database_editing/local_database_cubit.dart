@@ -3,17 +3,25 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/game_variants/game_variants_io_utils.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/items_repos_registry.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/repositories/generic/items_repo.dart';
 
-class LocalDatabaseCubit extends Cubit<ItemsReposRegistry?> {
+class LocalDatabaseState {
+  const LocalDatabaseState({
+    required this.maleJumpersRepo,
+    required this.femaleJumpersRepo,
+    required this.countriesRepo,
+  });
+
+  final EditableItemsRepo<MaleJumperDbRecord> maleJumpersRepo;
+  final EditableItemsRepo<FemaleJumperDbRecord> femaleJumpersRepo;
+  final CountriesRepo countriesRepo;
+}
+
+class LocalDatabaseCubit extends Cubit<LocalDatabaseState?> {
   LocalDatabaseCubit({
     required this.gameVariant,
     required this.gameVariantsRepo,
@@ -24,27 +32,22 @@ class LocalDatabaseCubit extends Cubit<ItemsReposRegistry?> {
 
   Future<void> setUp() async {
     emit(
-      ItemsReposRegistry(initial: {
-        CountriesRepo(initial: gameVariant.countries.toList()),
-        ItemsRepo<CountryTeam>(initial: gameVariant.countryTeams.toList()),
-        EditableItemsRepo<MaleJumper>(
-            initial: gameVariant.jumpers.whereType<MaleJumper>().toList()),
-        EditableItemsRepo<FemaleJumper>(
-            initial: gameVariant.jumpers.whereType<FemaleJumper>().toList()),
-        ItemsRepo<Hill>(initial: gameVariant.hills.toList()),
-      }),
+      LocalDatabaseState(
+        countriesRepo: CountriesRepo(countries: gameVariant.countries.toList()),
+        maleJumpersRepo: EditableItemsRepo<MaleJumperDbRecord>(
+            initial: gameVariant.jumpers.whereType<MaleJumperDbRecord>().toList()),
+        femaleJumpersRepo: EditableItemsRepo<FemaleJumperDbRecord>(
+            initial: gameVariant.jumpers.whereType<FemaleJumperDbRecord>().toList()),
+      ),
     );
   }
 
   Future<void> saveChangesToGameVariant(BuildContext context) async {
     final newVariant = gameVariant.copyWith(
       jumpers: [
-        ...state!.get<MaleJumper>().last,
-        ...state!.get<FemaleJumper>().last,
+        ...state!.maleJumpersRepo.last,
+        ...state!.femaleJumpersRepo.last,
       ],
-      countries: state!.get<Country>().last.toList(),
-      countryTeams: state!.get<CountryTeam>().last.toList(),
-      hills: state!.get<Hill>().last.toList(),
     );
     gameVariantsRepo.set(gameVariantsRepo.last.map((variant) {
       return variant.id == newVariant.id ? newVariant : variant;
@@ -56,24 +59,20 @@ class LocalDatabaseCubit extends Cubit<ItemsReposRegistry?> {
     required GameVariant newVariant,
     required BuildContext context,
   }) async {
-    await saveGameVariantItems<MaleJumper>(
-      items: newVariant.jumpers.whereType<MaleJumper>().toList(),
+    await saveGameVariantItems<MaleJumperDbRecord>(
+      items: newVariant.jumpers.whereType<MaleJumperDbRecord>().toList(),
       pathsCache: context.read(),
       pathsRegistry: context.read(),
-      toJson: context.read<DbItemsJsonConfiguration<MaleJumper>>().toJson,
+      toJson: context.read<DbItemsJsonConfiguration<MaleJumperDbRecord>>().toJson,
       gameVariantId: newVariant.id,
     );
     if (!context.mounted) return;
-    await saveGameVariantItems<FemaleJumper>(
-      items: newVariant.jumpers.whereType<FemaleJumper>().toList(),
+    await saveGameVariantItems<FemaleJumperDbRecord>(
+      items: newVariant.jumpers.whereType<FemaleJumperDbRecord>().toList(),
       pathsCache: context.read(),
       pathsRegistry: context.read(),
-      toJson: context.read<DbItemsJsonConfiguration<FemaleJumper>>().toJson,
+      toJson: context.read<DbItemsJsonConfiguration<FemaleJumperDbRecord>>().toJson,
       gameVariantId: newVariant.id,
     );
-  }
-
-  void dispose() {
-    state?.dispose();
   }
 }

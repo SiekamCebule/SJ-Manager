@@ -31,10 +31,7 @@ class _ItemsList extends StatelessWidget {
             showNothing: itemsState is DatabaseItemsNonEmpty,
             contentType: contentType,
             removeFilters: () {
-              context.read<DbFiltersRepo>().setByGenericAndArgumentType(
-                type: itemsState.itemsType,
-                filters: [],
-              );
+              context.read<DbFiltersRepo>().clear();
             },
           ),
         ),

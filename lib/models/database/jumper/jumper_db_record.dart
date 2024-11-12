@@ -4,15 +4,15 @@ import 'package:json_annotation/json_annotation.dart';
 
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
-import 'package:sj_manager/models/user_db/psyche/personalities.dart';
-import 'package:sj_manager/models/user_db/sex.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/jumper/jumper_skills_db_record.dart';
+import 'package:sj_manager/models/database/psyche/personalities.dart';
+import 'package:sj_manager/models/database/sex.dart';
 
 part '../../../json/manual_json/jumper_json.dart';
 
-class Jumper with EquatableMixin {
-  const Jumper({
+class JumperDbRecord with EquatableMixin {
+  JumperDbRecord({
     required this.name,
     required this.surname,
     required this.country,
@@ -22,25 +22,25 @@ class Jumper with EquatableMixin {
     required this.skills,
   });
 
-  factory Jumper.empty({required Country country}) {
-    return Jumper(
+  factory JumperDbRecord.empty({required Country country}) {
+    return JumperDbRecord(
       name: '',
       surname: '',
       country: country,
       sex: Sex.male,
       dateOfBirth: DateTime.now(),
       personality: Personalities.resourceful,
-      skills: JumperSkills.empty,
+      skills: JumperSkillsDbRecord.empty,
     );
   }
 
-  final DateTime dateOfBirth;
-  final String name;
-  final String surname;
-  final Country country;
-  final Sex sex;
-  final Personalities personality;
-  final JumperSkills skills;
+  DateTime dateOfBirth;
+  String name;
+  String surname;
+  Country country;
+  Sex sex;
+  Personalities personality;
+  JumperSkillsDbRecord skills;
 
   int age({required DateTime date}) {
     int age = date.year - dateOfBirth.year;
@@ -72,7 +72,7 @@ class Jumper with EquatableMixin {
     return reverse ? '$appropriateSurname $name ' : '$name $appropriateSurname';
   }
 
-  static Jumper fromJson(Json json, {required JsonCountryLoader countryLoader}) {
+  static JumperDbRecord fromJson(Json json, {required JsonCountryLoader countryLoader}) {
     return _jumperFromJson(json, countryLoader: countryLoader);
   }
 
@@ -92,16 +92,16 @@ class Jumper with EquatableMixin {
         skills,
       ];
 
-  Jumper copyWith({
+  JumperDbRecord copyWith({
     DateTime? dateOfBirth,
     String? name,
     String? surname,
     Country? country,
     Sex? sex,
     Personalities? personality,
-    JumperSkills? skills,
+    JumperSkillsDbRecord? skills,
   }) {
-    return Jumper(
+    return JumperDbRecord(
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       name: name ?? this.name,
       surname: surname ?? this.surname,
@@ -113,8 +113,8 @@ class Jumper with EquatableMixin {
   }
 }
 
-class MaleJumper extends Jumper {
-  const MaleJumper({
+class MaleJumperDbRecord extends JumperDbRecord {
+  MaleJumperDbRecord({
     required super.name,
     required super.surname,
     required super.country,
@@ -123,9 +123,10 @@ class MaleJumper extends Jumper {
     required super.skills,
   }) : super(sex: Sex.male);
 
-  static MaleJumper fromJson(Json json, {required JsonCountryLoader countryLoader}) {
-    final jumper = Jumper.fromJson(json, countryLoader: countryLoader);
-    return MaleJumper(
+  static MaleJumperDbRecord fromJson(Json json,
+      {required JsonCountryLoader countryLoader}) {
+    final jumper = JumperDbRecord.fromJson(json, countryLoader: countryLoader);
+    return MaleJumperDbRecord(
       name: jumper.name,
       surname: jumper.surname,
       country: jumper.country,
@@ -135,28 +136,28 @@ class MaleJumper extends Jumper {
     );
   }
 
-  static MaleJumper empty({required Country country}) {
-    return MaleJumper(
+  static MaleJumperDbRecord empty({required Country country}) {
+    return MaleJumperDbRecord(
       name: '',
       surname: '',
       country: country,
       dateOfBirth: DateTime.now(),
       personality: Personalities.resourceful,
-      skills: JumperSkills.empty,
+      skills: JumperSkillsDbRecord.empty,
     );
   }
 
   @override
-  MaleJumper copyWith({
+  MaleJumperDbRecord copyWith({
     DateTime? dateOfBirth,
     String? name,
     String? surname,
     Country? country,
     Sex? sex,
     Personalities? personality,
-    JumperSkills? skills,
+    JumperSkillsDbRecord? skills,
   }) {
-    return MaleJumper(
+    return MaleJumperDbRecord(
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       personality: personality ?? this.personality,
       name: name ?? this.name,
@@ -167,8 +168,8 @@ class MaleJumper extends Jumper {
   }
 }
 
-class FemaleJumper extends Jumper {
-  const FemaleJumper({
+class FemaleJumperDbRecord extends JumperDbRecord {
+  FemaleJumperDbRecord({
     required super.name,
     required super.surname,
     required super.country,
@@ -177,9 +178,10 @@ class FemaleJumper extends Jumper {
     required super.skills,
   }) : super(sex: Sex.female);
 
-  static FemaleJumper fromJson(Json json, {required JsonCountryLoader countryLoader}) {
-    final jumper = Jumper.fromJson(json, countryLoader: countryLoader);
-    return FemaleJumper(
+  static FemaleJumperDbRecord fromJson(Json json,
+      {required JsonCountryLoader countryLoader}) {
+    final jumper = JumperDbRecord.fromJson(json, countryLoader: countryLoader);
+    return FemaleJumperDbRecord(
       name: jumper.name,
       surname: jumper.surname,
       country: jumper.country,
@@ -189,28 +191,28 @@ class FemaleJumper extends Jumper {
     );
   }
 
-  static FemaleJumper empty({required Country country}) {
-    return FemaleJumper(
+  static FemaleJumperDbRecord empty({required Country country}) {
+    return FemaleJumperDbRecord(
       name: '',
       surname: '',
       country: country,
       dateOfBirth: DateTime.now(),
       personality: Personalities.resourceful,
-      skills: JumperSkills.empty,
+      skills: JumperSkillsDbRecord.empty,
     );
   }
 
   @override
-  FemaleJumper copyWith({
+  FemaleJumperDbRecord copyWith({
     DateTime? dateOfBirth,
     String? name,
     String? surname,
     Country? country,
     Sex? sex,
     Personalities? personality,
-    JumperSkills? skills,
+    JumperSkillsDbRecord? skills,
   }) {
-    return FemaleJumper(
+    return FemaleJumperDbRecord(
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       personality: personality ?? this.personality,
       name: name ?? this.name,

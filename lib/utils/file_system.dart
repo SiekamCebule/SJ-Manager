@@ -10,11 +10,11 @@ import 'package:path/path.dart' as path;
 import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/db_items_file_system_paths.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/db_items_file_system_paths.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 
 class PlarformSpecificPathsCache {
   PlarformSpecificPathsCache();
@@ -112,8 +112,8 @@ bool directoryIsValidForDatabase(BuildContext context, Directory directory) {
   final dbRegistry = context.read<DbItemsFilePathsRegistry>();
 
   final correctFolderStructure = {
-    fileInDirectory(directory, dbRegistry.get<MaleJumper>()).path,
-    fileInDirectory(directory, dbRegistry.get<FemaleJumper>()).path,
+    fileInDirectory(directory, dbRegistry.get<MaleJumperDbRecord>()).path,
+    fileInDirectory(directory, dbRegistry.get<FemaleJumperDbRecord>()).path,
     fileInDirectory(directory, dbRegistry.get<Hill>()).path,
     fileInDirectory(directory, dbRegistry.get<EventSeriesSetup>()).path,
     fileInDirectory(directory, dbRegistry.get<EventSeriesCalendarPreset>()).path,

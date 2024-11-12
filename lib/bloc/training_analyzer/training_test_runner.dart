@@ -1,29 +1,25 @@
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/models/training_analyzer/training_analyzer_result.dart';
 import 'package:sj_manager/models/training_analyzer/training_segment.dart';
-import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper_skills.dart';
 import 'package:sj_manager/algorithms/training_engine/jumper_training_engine.dart';
 import 'package:sj_manager/algorithms/training_engine/jumper_training_engine_settings.dart';
 
 class TrainingTestRunner {
   const TrainingTestRunner({
     required this.segments,
-    required this.dynamicParams,
-    required this.jumperSkills,
+    required this.jumper,
     required this.engineSettings,
     required this.daysToSimulate,
   });
 
   final List<TrainingSegment> segments;
-  final JumperDynamicParams dynamicParams;
-  final JumperSkills jumperSkills;
+  final SimulationJumper jumper;
   final JumperTrainingEngineSettings engineSettings;
   final int daysToSimulate;
 
   TrainingAnalyzerResult run() {
     final dayResults = <TrainingAnalyzerDaySimulationResult>[];
-    var currentDynamicParams = dynamicParams;
-    var currentJumperSkills = jumperSkills;
+    var currentJumper = jumper;
     TrainingAnalyzerDaySimulationResult? lastResult;
 
     for (var day = 1; day < daysToSimulate + 1; day++) {
@@ -41,23 +37,21 @@ class TrainingTestRunner {
       }
       final engine = JumperTrainingEngine(
         settings: engineSettings,
-        jumperSkills: currentJumperSkills,
-        dynamicParams: currentDynamicParams.copyWith(
-          trainingConfig: applicableSegment.trainingConfig,
-        ),
+        jumper: jumper,
       );
       final trainingResult = engine.doTraining();
       lastResult = TrainingAnalyzerDaySimulationResult(
         day: day,
         trainingResult: trainingResult,
       );
-      currentDynamicParams = currentDynamicParams.copyWith(
+      currentJumper = currentJumper.copyWith(
         form: trainingResult.form,
-        trainingFeeling: trainingResult.trainingFeeling,
         jumpsConsistency: trainingResult.jumpsConsistency,
         fatigue: trainingResult.fatigue,
+        takeoffQuality: trainingResult.takeoffQuality,
+        flightQuality: trainingResult.flightQuality,
+        landingQuality: trainingResult.landingQuality,
       );
-      currentJumperSkills = trainingResult.skills;
       dayResults.add(lastResult);
     }
     return TrainingAnalyzerResult(

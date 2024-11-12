@@ -15,8 +15,8 @@ import 'package:sj_manager/models/simulation/standings/standings.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_with_no_ex_aequo_creator.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_with_shuffle_on_equal_positions_creator.dart';
-import 'package:sj_manager/models/user_db/country/country.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/database/country/country.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 
 import 'ko_competition_utilities_test.mocks.dart';
 
@@ -34,18 +34,23 @@ void main() {
       test(
           'Creates groups for 8 jumpers in good order (groups\'s order and the order wihin group). Checks if passing uneven number causes an error',
           () {
-        final context = MockClassicKoGroupsCreatingContext<Jumper>();
+        final context = MockClassicKoGroupsCreatingContext<JumperDbRecord>();
         final jumpers = [
-          Jumper.empty(country: country).copyWith(name: 'Dawid', surname: 'Kubacki'),
-          Jumper.empty(country: country).copyWith(name: 'Piotr', surname: 'Żyła'),
-          Jumper.empty(country: country).copyWith(name: 'David', surname: 'Siegel'),
-          Jumper.empty(country: country)
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Dawid', surname: 'Kubacki'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Piotr', surname: 'Żyła'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'David', surname: 'Siegel'),
+          JumperDbRecord.empty(country: country)
               .copyWith(name: 'Tymoteusz', surname: 'Amilkiewicz'),
-          Jumper.empty(country: country).copyWith(name: 'Yevhen', surname: 'Marusiak'),
-          Jumper.empty(country: country).copyWith(name: 'Evgeniy', surname: 'Klimov'),
-          Jumper.empty(country: country).copyWith(name: 'Robert', surname: 'Johansson'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Yevhen', surname: 'Marusiak'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Evgeniy', surname: 'Klimov'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Robert', surname: 'Johansson'),
         ];
-        final creator = DefaultClassicKoGroupsCreator<Jumper>();
+        final creator = DefaultClassicKoGroupsCreator<JumperDbRecord>();
         when(context.entities).thenReturn(jumpers);
         when(context.entitiesCount).thenReturn(jumpers.length);
         expect(
@@ -55,7 +60,7 @@ void main() {
           throwsA(isA<ArgumentError>()),
         );
         jumpers.add(
-          Jumper.empty(country: country)
+          JumperDbRecord.empty(country: country)
               .copyWith(name: 'Halvor Egner', surname: 'Granerud'),
         );
         when(context.entities).thenReturn(jumpers);
@@ -72,19 +77,19 @@ void main() {
 
     group('DefaultRandomKoGroupsCreator', () {
       test('Even groups', () {
-        final context = MockRandomKoGroupsCreatingContext<Jumper>();
+        final context = MockRandomKoGroupsCreatingContext<JumperDbRecord>();
         final jumpers = [
-          Jumper.empty(country: country).copyWith(name: 'Jumper 1'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 2'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 3'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 4'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 5'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 6'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 7'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 8'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 9'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
         ];
-        final creator = DefaultRandomKoGroupsCreator<Jumper>();
+        final creator = DefaultRandomKoGroupsCreator<JumperDbRecord>();
 
         when(context.entities).thenReturn(jumpers);
         when(context.entitiesCount).thenReturn(jumpers.length);
@@ -101,20 +106,20 @@ void main() {
       });
 
       test('Uneven groups, remainingEntitiesAction - placeInSmallestGroup', () {
-        final context = MockRandomKoGroupsCreatingContext<Jumper>();
+        final context = MockRandomKoGroupsCreatingContext<JumperDbRecord>();
         final jumpers = [
-          Jumper.empty(country: country).copyWith(name: 'Jumper 1'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 2'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 3'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 4'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 5'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 6'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 7'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 8'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 9'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 10'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 10'),
         ];
-        final creator = DefaultRandomKoGroupsCreator<Jumper>();
+        final creator = DefaultRandomKoGroupsCreator<JumperDbRecord>();
 
         when(context.entities).thenReturn(jumpers);
         when(context.entitiesCount).thenReturn(jumpers.length);
@@ -131,21 +136,21 @@ void main() {
       });
 
       test('Uneven groups, remainingEntitiesAction - placeRandomly', () {
-        final context = MockRandomKoGroupsCreatingContext<Jumper>();
+        final context = MockRandomKoGroupsCreatingContext<JumperDbRecord>();
         final jumpers = [
-          Jumper.empty(country: country).copyWith(name: 'Jumper 1'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 2'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 3'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 4'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 5'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 6'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 7'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 8'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 9'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 10'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 11'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 10'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 11'),
         ];
-        final creator = DefaultRandomKoGroupsCreator<Jumper>();
+        final creator = DefaultRandomKoGroupsCreator<JumperDbRecord>();
 
         when(context.entities).thenReturn(jumpers);
         when(context.entitiesCount).thenReturn(jumpers.length);
@@ -163,19 +168,19 @@ void main() {
       });
 
       test('Uneven groups, remainingEntitiesAction - placeAtBegin', () {
-        final context = MockRandomKoGroupsCreatingContext<Jumper>();
+        final context = MockRandomKoGroupsCreatingContext<JumperDbRecord>();
         final jumpers = [
-          Jumper.empty(country: country).copyWith(name: 'Jumper 1'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 2'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 3'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 4'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 5'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 6'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 7'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 8'),
-          Jumper.empty(country: country).copyWith(name: 'Jumper 9'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
+          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
         ];
-        final creator = DefaultRandomKoGroupsCreator<Jumper>();
+        final creator = DefaultRandomKoGroupsCreator<JumperDbRecord>();
 
         when(context.entities).thenReturn(jumpers);
         when(context.entitiesCount).thenReturn(jumpers.length);
@@ -197,24 +202,24 @@ void main() {
         final context = MockKoGroupsPotsCreatingContext();
         final pots = [
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 1'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 2'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 3'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
           ],
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 4'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 5'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 6'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
           ],
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 7'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 8'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 9'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
           ],
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 10'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 11'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 12'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 10'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 11'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 12'),
           ],
         ];
         final creator = DefaultPotsKoGroupsCreator();
@@ -234,28 +239,28 @@ void main() {
       test('Uneven groups, remainingEntitiesAction - placeRandomly', () {
         final context = MockKoGroupsPotsCreatingContext();
         final additionalJumper =
-            Jumper.empty(country: country).copyWith(name: 'Jumper 3.5');
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3.5');
         final pots = [
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 1'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 2'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 3'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
             additionalJumper,
           ],
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 4'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 5'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 6'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
           ],
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 7'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 8'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 9'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
           ],
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 10'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 11'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 12'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 10'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 11'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 12'),
           ],
         ];
         final creator = DefaultPotsKoGroupsCreator();
@@ -283,27 +288,27 @@ void main() {
         final context = MockKoGroupsPotsCreatingContext();
         final pots = [
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 1'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 2'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 3'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 4'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 5'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 6'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
           ],
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 7'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 8'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 9'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
           ],
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 10'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 11'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 12'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 10'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 11'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 12'),
           ],
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 13'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 14'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 15'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 13'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 14'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 15'),
           ],
         ];
         final creator = DefaultPotsKoGroupsCreator();
@@ -323,27 +328,27 @@ void main() {
         final context = MockKoGroupsPotsCreatingContext();
         final pots = [
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 1'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 2'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 3'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
           ],
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 4'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 5'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 6'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
           ],
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 7'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 8'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 9'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
           ],
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 10'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 11'),
-            Jumper.empty(country: country).copyWith(name: 'Jumper 12'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 10'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 11'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 12'),
           ],
           [
-            Jumper.empty(country: country).copyWith(name: 'Jumper 13'),
+            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 13'),
           ],
         ];
         final creator = DefaultPotsKoGroupsCreator();
@@ -365,29 +370,32 @@ void main() {
   group('KoRoundAdvancementDeterminator', () {
     group('NBestKoRoundAdvancementDeterminator', () {
       test('Typical without ex aequo conflicts', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
         final jumpers = [
-          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
-          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Kamil', surname: 'Stoch'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Martin', surname: 'Hamann'),
         ];
-        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
           positionsCreator: StandingsPositionsWithExAequosCreator(),
-          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
-            Score<Jumper, SimplePointsScoreDetails>(
+          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[0],
               points: 127.7,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[1],
               points: 134.5,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[2],
               points: 105.4,
               details: const SimplePointsScoreDetails(),
@@ -405,29 +413,32 @@ void main() {
       });
 
       test('Ex aequo on first place, but limit is exact(1)', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
         final jumpers = [
-          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
-          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Kamil', surname: 'Stoch'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Martin', surname: 'Hamann'),
         ];
-        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
           positionsCreator: StandingsPositionsWithExAequosCreator(),
-          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
-            Score<Jumper, SimplePointsScoreDetails>(
+          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[0],
               points: 127.7,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[1],
               points: 127.7,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[2],
               points: 105.4,
               details: const SimplePointsScoreDetails(),
@@ -445,29 +456,32 @@ void main() {
       });
 
       test('No ex aequos, but same points count', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
         final jumpers = [
-          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
-          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Kamil', surname: 'Stoch'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Martin', surname: 'Hamann'),
         ];
-        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
           positionsCreator: StandingsPositionsWithNoExAequoCreator(),
-          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
-            Score<Jumper, SimplePointsScoreDetails>(
+          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[0],
               points: 127.7,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[1],
               points: 127.7,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[2],
               points: 105.4,
               details: const SimplePointsScoreDetails(),
@@ -485,29 +499,32 @@ void main() {
       });
 
       test('Shuffle on same points count', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
         final jumpers = [
-          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
-          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Kamil', surname: 'Stoch'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Martin', surname: 'Hamann'),
         ];
-        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
           positionsCreator: StandingsPositionsWithShuffleOnEqualPositionsCreator(),
-          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
-            Score<Jumper, SimplePointsScoreDetails>(
+          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[0],
               points: 127.7,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[1],
               points: 127.7,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[2],
               points: 105.4,
               details: const SimplePointsScoreDetails(),
@@ -525,29 +542,32 @@ void main() {
       });
 
       test('Soft limit + ex aequo', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
         final jumpers = [
-          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
-          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Kamil', surname: 'Stoch'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Martin', surname: 'Hamann'),
         ];
-        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
           positionsCreator: StandingsPositionsWithExAequosCreator(),
-          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
-            Score<Jumper, SimplePointsScoreDetails>(
+          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[0],
               points: 127.7,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[1],
               points: 127.7,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[2],
               points: 105.4,
               details: const SimplePointsScoreDetails(),
@@ -565,29 +585,32 @@ void main() {
       });
 
       test('Soft limit (count: 2) + ex aequo on first place', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
         final jumpers = [
-          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
-          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Kamil', surname: 'Stoch'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Martin', surname: 'Hamann'),
         ];
-        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
           positionsCreator: StandingsPositionsWithExAequosCreator(),
-          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
-            Score<Jumper, SimplePointsScoreDetails>(
+          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[0],
               points: 127.7,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[1],
               points: 127.7,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[2],
               points: 105.4,
               details: const SimplePointsScoreDetails(),
@@ -605,29 +628,32 @@ void main() {
       });
 
       test('No limit', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<Jumper,
-            Standings<Jumper, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
+            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
         final jumpers = [
-          Jumper.empty(country: country).copyWith(name: 'Kamil', surname: 'Stoch'),
-          Jumper.empty(country: country).copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          Jumper.empty(country: country).copyWith(name: 'Martin', surname: 'Hamann'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Kamil', surname: 'Stoch'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
+          JumperDbRecord.empty(country: country)
+              .copyWith(name: 'Martin', surname: 'Hamann'),
         ];
-        final standings = Standings<Jumper, SimplePointsScoreDetails>(
+        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
           positionsCreator: StandingsPositionsWithShuffleOnEqualPositionsCreator(),
-          initialScores: <Score<Jumper, SimplePointsScoreDetails>>[
-            Score<Jumper, SimplePointsScoreDetails>(
+          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[0],
               points: 127.7,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[1],
               points: 127.7,
               details: const SimplePointsScoreDetails(),
             ),
-            Score<Jumper, SimplePointsScoreDetails>(
+            Score<JumperDbRecord, SimplePointsScoreDetails>(
               entity: jumpers[2],
               points: 105.4,
               details: const SimplePointsScoreDetails(),

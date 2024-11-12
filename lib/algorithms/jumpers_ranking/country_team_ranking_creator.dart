@@ -1,16 +1,13 @@
-import 'package:sj_manager/models/simulation/flow/jumper_dynamic_params.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 
 class CountryTeamRankingCreator {
   const CountryTeamRankingCreator({
     required this.jumpers,
-    required this.dynamicParams,
   });
 
-  final List<Jumper> jumpers;
-  final Map<Jumper, JumperDynamicParams> dynamicParams;
+  final List<SimulationJumper> jumpers;
 
-  List<Jumper> create() {
+  List<SimulationJumper> create() {
     final ratings = {
       for (final jumper in jumpers) jumper: _calculateRating(jumper),
     };
@@ -21,12 +18,12 @@ class CountryTeamRankingCreator {
     return sorted;
   }
 
-  double _calculateRating(Jumper jumper) {
-    return (jumper.skills.takeoffQuality / 1) +
-        (jumper.skills.flightQuality / 1) +
-        (jumper.skills.landingQuality / 10) +
-        (dynamicParams[jumper]!.jumpsConsistency / 1.5) +
-        (dynamicParams[jumper]!.form * 2);
+  double _calculateRating(SimulationJumper jumper) {
+    return (jumper.takeoffQuality / 1) +
+        (jumper.flightQuality / 1) +
+        (jumper.landingQuality / 10) +
+        (jumper.jumpsConsistency / 1.5) +
+        (jumper.form * 2);
   }
 }
 

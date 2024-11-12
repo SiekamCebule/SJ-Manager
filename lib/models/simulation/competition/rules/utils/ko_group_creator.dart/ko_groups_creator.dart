@@ -5,7 +5,7 @@ import 'package:sj_manager/models/simulation/competition/rules/user_algorithms/u
 import 'package:sj_manager/models/simulation/competition/rules/utils/ko_group_creator.dart/concrete/default.dart';
 import 'package:sj_manager/models/simulation/event_series/event_series.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
 
 abstract class KoGroupsCreatingContext<T> {
   const KoGroupsCreatingContext({

@@ -1,4 +1,4 @@
-import 'package:sj_manager/models/user_db/sex.dart';
+import 'package:sj_manager/models/database/sex.dart';
 
 const sexEnumMap = {
   Sex.male: 'male',

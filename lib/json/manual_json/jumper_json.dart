@@ -1,29 +1,29 @@
-part of '../../models/user_db/jumper/jumper.dart';
+part of '../../models/database/jumper/jumper_db_record.dart';
 
-Jumper _jumperFromJson(Json json, {required JsonCountryLoader countryLoader}) {
+JumperDbRecord _jumperFromJson(Json json, {required JsonCountryLoader countryLoader}) {
   final country = countryLoader.load(json['country']);
   final sex = $enumDecode(_sexEnumJsonMap, json['sex']);
   final personality = $enumDecode(_personalitiesEnumJsonMap, json['personality']);
   return sex == Sex.male
-      ? MaleJumper(
+      ? MaleJumperDbRecord(
           name: json['name'] as String,
           surname: json['surname'] as String,
           country: country,
           dateOfBirth: DateTime.parse(json['dateOfBirth']),
           personality: personality,
-          skills: JumperSkills.fromJson(json['skills'] as Map<String, dynamic>),
+          skills: JumperSkillsDbRecord.fromJson(json['skills'] as Map<String, dynamic>),
         )
-      : FemaleJumper(
+      : FemaleJumperDbRecord(
           name: json['name'] as String,
           surname: json['surname'] as String,
           country: country,
           dateOfBirth: DateTime.parse(json['dateOfBirth']),
           personality: personality,
-          skills: JumperSkills.fromJson(json['skills'] as Map<String, dynamic>),
+          skills: JumperSkillsDbRecord.fromJson(json['skills'] as Map<String, dynamic>),
         );
 }
 
-Map<String, dynamic> _jumperToJson(Jumper jumper,
+Map<String, dynamic> _jumperToJson(JumperDbRecord jumper,
     {required JsonCountrySaver countrySaver}) {
   final countryJson = countrySaver.save(jumper.country);
   return <String, dynamic>{

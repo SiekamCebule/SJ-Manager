@@ -1,19 +1,18 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 
 import 'package:sj_manager/algorithms/reports/default_jumper_level_report_creator.dart';
 import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/simulation/flow/reports/jumper_level_description.dart';
+import 'package:sj_manager/models/simulation/jumper/reports/jumper_level_description.dart';
 import 'package:sj_manager/models/simulation/flow/simple_rating.dart';
 
 class JumperLevelReport with EquatableMixin {
-  const JumperLevelReport({
+  JumperLevelReport({
     required this.levelDescription,
     required this.characteristics,
   });
 
-  final JumperLevelDescription levelDescription;
-  final Map<JumperLevelCharacteristicCategory, JumperCharacteristicOthernessStrength>
+  JumperLevelDescription levelDescription;
+  Map<JumperLevelCharacteristicCategory, JumperCharacteristicOthernessStrength>
       characteristics;
 
   static JumperLevelReport fromJson(Json json) {
@@ -57,13 +56,13 @@ enum JumperLevelCharacteristicCategory {
 }
 
 class TrainingReport with EquatableMixin {
-  const TrainingReport({
+  TrainingReport({
     required this.generalRating,
     required this.ratings,
   });
 
-  final SimpleRating generalRating;
-  final Map<TrainingProgressCategory, SimpleRating> ratings;
+  SimpleRating generalRating;
+  Map<TrainingProgressCategory, SimpleRating> ratings;
 
   static TrainingReport fromJson(Json json) {
     final ratings = json['ratings'] as Json;
@@ -106,7 +105,7 @@ enum TrainingProgressCategory {
 }
 
 class JumperReports with EquatableMixin {
-  const JumperReports({
+  JumperReports({
     required this.levelReport,
     required this.weeklyTrainingReport,
     required this.monthlyTrainingReport,
@@ -114,11 +113,11 @@ class JumperReports with EquatableMixin {
     required this.jumpsRating,
   });
 
-  final JumperLevelReport? levelReport;
-  final TrainingReport? weeklyTrainingReport;
-  final TrainingReport? monthlyTrainingReport;
-  final SimpleRating? moraleRating;
-  final SimpleRating? jumpsRating;
+  JumperLevelReport? levelReport;
+  TrainingReport? weeklyTrainingReport;
+  TrainingReport? monthlyTrainingReport;
+  SimpleRating? moraleRating;
+  SimpleRating? jumpsRating;
 
   static JumperReports fromJson(Json json) {
     final levelReport = json['levelReport'] != null

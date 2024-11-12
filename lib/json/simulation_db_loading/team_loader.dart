@@ -3,14 +3,14 @@ import 'package:sj_manager/json/simulation_db_loading/simulation_db_part_loader.
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/json/utils/enums.dart';
 
-import 'package:sj_manager/models/user_db/team/country_team/country_team_facts.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/jumps/simple_jump.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
-import 'package:sj_manager/models/user_db/team/country_team/country_team.dart';
-import 'package:sj_manager/models/user_db/team/country_team/subteam_type.dart';
-import 'package:sj_manager/models/user_db/team/subteam.dart';
-import 'package:sj_manager/models/user_db/team/team.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team_facts.dart';
+import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/models/database/jumps/simple_jump.dart';
+import 'package:sj_manager/models/database/team/competition_team.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
+import 'package:sj_manager/models/database/team/country_team/subteam_type.dart';
+import 'package:sj_manager/models/database/team/subteam.dart';
+import 'package:sj_manager/models/database/team/team.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
 class TeamLoader implements SimulationDbPartParser<Team> {
@@ -72,7 +72,7 @@ class TeamLoader implements SimulationDbPartParser<Team> {
     final parentTeam = parse(parentTeamJson);
     final jumperIds = json['jumperIds'] as List;
     final jumpers = jumperIds.map((id) {
-      return idsRepo.get(id) as Jumper;
+      return idsRepo.get(id) as JumperDbRecord;
     }).toList();
 
     return CompetitionTeam(

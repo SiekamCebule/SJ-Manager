@@ -4,7 +4,7 @@ import 'package:sj_manager/models/simulation/competition/rules/competition_rules
 import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_provider.dart';
 import 'package:sj_manager/models/simulation/standings/score/details/score_details.dart';
 import 'package:sj_manager/models/simulation/standings/standings.dart';
-import 'package:sj_manager/models/user_db/hill/hill.dart';
+import 'package:sj_manager/models/database/hill/hill.dart';
 
 class Competition<E, S extends Standings<dynamic, ScoreDetails>> with EquatableMixin {
   const Competition({

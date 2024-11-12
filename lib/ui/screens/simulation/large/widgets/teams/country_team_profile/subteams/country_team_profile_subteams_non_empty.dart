@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:sj_manager/models/user_db/jumper/jumper.dart';
-import 'package:sj_manager/models/user_db/team/subteam.dart';
+import 'package:sj_manager/models/database/team/subteam.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/team/jumper/jumper_simple_list_tile.dart';
 import 'package:sj_manager/ui/screens/simulation/utils/jumper_ratings_translations.dart';
 
@@ -13,7 +13,7 @@ class CountryTeamProfileSubteamsNonEmpty extends StatelessWidget {
   });
 
   final List<Subteam> subteams;
-  final Map<Subteam, List<Jumper>> jumpers;
+  final Map<Subteam, List<SimulationJumper>> jumpers;
 
   @override
   Widget build(BuildContext context) {

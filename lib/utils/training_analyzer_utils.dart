@@ -1,19 +1,24 @@
-import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/algorithms/training_engine/jumper_training_result.dart';
 
-String formatTrainingDetail(String label, double skill, double? feeling) {
-  return '$label(${skill.toStringAsFixed(2)}, ${feeling?.toStringAsFixed(2)})';
+String formatTrainingDetail(String label, double skill) {
+  return '$label(${skill.toStringAsFixed(2)}})';
 }
 
 String formatJumperTrainingResultResultForAnalyzer(JumperTrainingResult result) {
-  final takeoff = formatTrainingDetail('wyb', result.skills.takeoffQuality,
-      result.trainingFeeling[JumperTrainingCategory.takeoff]);
+  final takeoff = formatTrainingDetail(
+    'wyb',
+    result.takeoffQuality,
+  );
 
-  final flight = formatTrainingDetail('lot', result.skills.flightQuality,
-      result.trainingFeeling[JumperTrainingCategory.flight]);
+  final flight = formatTrainingDetail(
+    'lot',
+    result.flightQuality,
+  );
 
-  final landing = formatTrainingDetail('ląd', result.skills.landingQuality,
-      result.trainingFeeling[JumperTrainingCategory.landing]);
+  final landing = formatTrainingDetail(
+    'ląd',
+    result.landingQuality,
+  );
 
   final form = 'form(${result.form.toStringAsFixed(2)})';
 

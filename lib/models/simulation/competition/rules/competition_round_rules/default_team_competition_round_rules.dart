@@ -9,7 +9,7 @@ import 'package:sj_manager/models/simulation/competition/rules/utils/jump_score_
 import 'package:sj_manager/models/simulation/competition/rules/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/models/simulation/standings/score/typedefs.dart';
 import 'package:sj_manager/models/simulation/standings/standings_positions_map_creator/standings_positions_creator.dart';
-import 'package:sj_manager/models/user_db/team/competition_team.dart';
+import 'package:sj_manager/models/database/team/competition_team.dart';
 
 class DefaultTeamCompetitionRoundRules
     extends DefaultCompetitionRoundRules<CompetitionTeam> {
