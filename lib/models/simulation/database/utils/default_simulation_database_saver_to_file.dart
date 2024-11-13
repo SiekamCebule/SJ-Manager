@@ -32,10 +32,10 @@ import 'package:sj_manager/models/simulation/database/simulation_database_and_mo
 import 'package:sj_manager/models/database/country/country.dart';
 import 'package:sj_manager/models/database/db_items_file_system_paths.dart';
 import 'package:sj_manager/models/database/hill/hill.dart';
-import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 import 'package:sj_manager/models/database/team/country_team/country_team.dart';
 import 'package:sj_manager/models/database/team/subteam.dart';
 import 'package:sj_manager/models/database/team/team.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 import 'package:sj_manager/utils/file_system.dart';
 
@@ -76,7 +76,7 @@ class DefaultSimulationDatabaseSaverToFile {
     await file.create(recursive: true);
     final subteamJumpersJson = _database.subteamJumpers.map((subteam, jumperIds) {
       return MapEntry(
-        '${subteam.type.name}###${idsRepo.idOf(subteam.parentTeam)}',
+        '${subteam.type.name}###${idsRepo.id(subteam.parentTeam)}',
         jumperIds.toList(),
       );
     });
@@ -85,7 +85,7 @@ class DefaultSimulationDatabaseSaverToFile {
         'simulationMode': _database.managerData.mode.name,
         'userSubteamId': idsRepo.maybeIdOf(_database.managerData.userSubteam),
         'personalCoachTeam': _database.managerData.personalCoachTeam
-            ?.toJson(serializeJumper: (jumper) => idsRepo.idOf(jumper)),
+            ?.toJson(serializeJumper: (jumper) => idsRepo.id(jumper)),
         'personalCoachTeamId': idsRepo.maybeIdOf(_database.managerData.personalCoachTeam),
       },
       'startDate': _database.startDate.toString(),
@@ -96,14 +96,14 @@ class DefaultSimulationDatabaseSaverToFile {
       'simulationActionCompletionStatuses': _database.actionsRepo.completedActions
           .map((actionType) => actionType.name)
           .toList(),
-      'jumperReports': _database.jumperReports.map((jumper, reports) {
-        return MapEntry(idsRepo.idOf(jumper), reports.toJson());
+      'jumperReports': _database.jumperReports.map((id, reports) {
+        return MapEntry(id, reports.toJson());
       }),
-      'jumperStats': _database.jumperStats.map((jumper, stats) {
-        return MapEntry(idsRepo.idOf(jumper), stats.toJson());
+      'jumperStats': _database.jumperStats.map((id, stats) {
+        return MapEntry(id, stats.toJson());
       }),
-      'teamReports': _database.teamReports.map((team, reports) {
-        return MapEntry(idsRepo.idOf(team), reports.toJson());
+      'teamReports': _database.teamReports.map((id, reports) {
+        return MapEntry(id, reports.toJson());
       }),
       'subteamJumpers': subteamJumpersJson,
     };
@@ -129,10 +129,10 @@ class DefaultSimulationDatabaseSaverToFile {
   }
 
   String _getFilePath({required Type type}) {
-    if (type == MaleJumperDbRecord) {
-      return pathsRegistry.get<MaleJumperDbRecord>();
-    } else if (type == FemaleJumperDbRecord) {
-      return pathsRegistry.get<FemaleJumperDbRecord>();
+    if (type == SimulationMaleJumper) {
+      return pathsRegistry.get<SimulationMaleJumper>();
+    } else if (type == SimulationFemaleJumper) {
+      return pathsRegistry.get<SimulationFemaleJumper>();
     } else if (type == Hill) {
       return pathsRegistry.get<Hill>();
     } else if (type == Country) {
@@ -149,8 +149,8 @@ class DefaultSimulationDatabaseSaverToFile {
   }
 
   static const _itemsTypeStringToType = {
-    'maleJumper': MaleJumperDbRecord,
-    'femaleJumper': FemaleJumperDbRecord,
+    'maleJumper': SimulationMaleJumper,
+    'femaleJumper': SimulationFemaleJumper,
     'hill': Hill,
     'country': Country,
     'countryTeam': CountryTeam,
@@ -161,9 +161,9 @@ class DefaultSimulationDatabaseSaverToFile {
   FutureOr<Json> Function(dynamic json) _appropriateSerializeFunction({
     required Type type,
   }) {
-    if (type == MaleJumperDbRecord) {
+    if (type == SimulationMaleJumper) {
       return (item) => _serializeJumper(item);
-    } else if (type == FemaleJumperDbRecord) {
+    } else if (type == SimulationFemaleJumper) {
       return (item) => _serializeJumper(item);
     } else if (type == Hill) {
       return (item) => _serializeHill(item);
@@ -178,7 +178,7 @@ class DefaultSimulationDatabaseSaverToFile {
     }
   }
 
-  Json _serializeJumper(JumperDbRecord item) {
+  Json _serializeJumper(SimulationJumper item) {
     return item.toJson(countrySaver: const JsonCountryCodeSaver());
   }
 

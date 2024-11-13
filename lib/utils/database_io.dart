@@ -11,7 +11,7 @@ Future<Json> serializeItemsMap<T>({
   var itemsJson = <Object, dynamic>{};
 
   for (var item in items) {
-    final id = idsRepo.idOf(item);
+    final id = idsRepo.id(item);
     orderedIdsJson.add(id);
     if (!itemsJson.containsKey(id)) {
       final itemJson = await toJson(item);

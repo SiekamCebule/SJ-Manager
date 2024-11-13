@@ -12,6 +12,7 @@ class DbFiltersRepo with EquatableMixin, ChangeNotifier {
     this.femaleJumpersSearchFilter,
     this.femaleJumpersCountryFilter,
   }) {
+    _changesController = StreamController();
     addListener(() {
       _changesController.add(null);
     });

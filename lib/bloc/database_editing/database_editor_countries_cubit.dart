@@ -8,18 +8,18 @@ import 'package:sj_manager/repositories/generic/items_repo.dart';
 
 class DatabaseEditorCountriesCubit extends Cubit<DatabaseEditorCountriesState> {
   DatabaseEditorCountriesCubit({
-    required this.countriesRepo,
+    required this.countries,
     required this.teamsRepo,
   }) : super(
           const DatabaseEditorCountriesInitial(),
         );
 
-  final CountriesRepo countriesRepo;
+  final CountriesRepo countries;
   final ItemsRepo<CountryTeam> teamsRepo;
 
   void setUp() {
     final rawTeams = teamsRepo.last.toList();
-    final noneCountry = countriesRepo.none;
+    final noneCountry = countries.none;
 
     final maleTeamsByStars = _teamsBySex(_teamsByStars(rawTeams), Sex.male);
     final femaleTeamsByStars = _teamsBySex(_teamsByStars(rawTeams), Sex.female);

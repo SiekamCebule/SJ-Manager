@@ -58,6 +58,6 @@ class EventSeriesCalendarSerializer
 
   FutureOr<MapEntry<Object, Object>> _serializeQualification(
       MapEntry<Competition, Competition> entry) async {
-    return MapEntry(idsRepo.idOf(entry.key), idsRepo.idOf(entry.value));
+    return MapEntry(idsRepo.id(entry.key), idsRepo.id(entry.value));
   }
 }

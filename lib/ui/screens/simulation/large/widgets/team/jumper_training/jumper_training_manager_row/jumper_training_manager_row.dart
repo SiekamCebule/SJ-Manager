@@ -43,7 +43,7 @@ class _JumperTrainingManagerRowState extends State<JumperTrainingManagerRow> {
                         jumper: jumper,
                         subtitle: JumperSimpleListTileSubtitle.levelDescription,
                         levelDescription:
-                            database.jumperReports[jumper]!.levelReport?.levelDescription,
+                            dbHelper.jumperReports(jumper)!.levelReport?.levelDescription,
                         selected: _selectedJumper == jumper,
                         leading: JumperSimpleListTileLeading.jumperImage,
                         trailing: JumperSimpleListTileTrailing.countryFlag,
@@ -76,10 +76,12 @@ class _JumperTrainingManagerRowState extends State<JumperTrainingManagerRow> {
                                 config: trainingConfig,
                               );
                             },
-                            weeklyTrainingReport: database
-                                .jumperReports[_selectedJumper]!.weeklyTrainingReport,
-                            monthlyTrainingReport: database
-                                .jumperReports[_selectedJumper]!.monthlyTrainingReport,
+                            weeklyTrainingReport: dbHelper
+                                .jumperReports(_selectedJumper!)!
+                                .weeklyTrainingReport,
+                            monthlyTrainingReport: dbHelper
+                                .jumperReports(_selectedJumper!)!
+                                .monthlyTrainingReport,
                           );
                         })
                       : Center(

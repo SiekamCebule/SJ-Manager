@@ -5,9 +5,9 @@ import 'package:sj_manager/commands/ui/simulation/simulation_screen_navigation_c
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
 import 'package:sj_manager/models/database/hill/hill.dart';
-import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 import 'package:sj_manager/repositories/countries/country_flags/country_flags_repo.dart';
 import 'package:sj_manager/repositories/countries/country_flags/local_storage_country_flags_repo.dart';
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
@@ -132,6 +132,7 @@ void configureRoutes(FluroRouter router) {
     final simulationIndexInRepo = simulationsRepo.last.indexOf(simulation);
     final imagesDir = userDataDirectory(context.read(),
         path.join('simulations', simulationId, 'countries', 'country_flags'));
+    final simulationDatabase = simulation.database!.copyWith();
 
     print('routes, initial jumpers: ${simulation.database!.jumpers}');
 
@@ -146,13 +147,13 @@ void configureRoutes(FluroRouter router) {
           ),
         ),
         Provider(
-          create: (context) => DbItemImageGeneratingSetup<JumperDbRecord>(
+          create: (context) => DbItemImageGeneratingSetup<SimulationJumper>(
             imagesDirectory: simulationDirectory(
               pathsCache: context.read(),
               simulationId: simulationId,
               directoryName: path.join('jumper_images'),
             ),
-            toFileName: jumperImageName,
+            toFileName: simulationJumperImageName,
           ),
         ),
         Provider(
@@ -175,10 +176,9 @@ void configureRoutes(FluroRouter router) {
         child: MultiProvider(
           providers: [
             Provider(
-              create: (context) =>
-                  SimulationDatabaseHelper(database: simulation.database!),
+              create: (context) => SimulationDatabaseHelper(database: simulationDatabase),
             ),
-            ChangeNotifierProvider(create: (context) => simulation.database!),
+            ChangeNotifierProvider(create: (context) => simulationDatabase),
           ],
           child: Builder(builder: (context) {
             return PopScope(

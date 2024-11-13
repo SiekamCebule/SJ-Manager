@@ -54,7 +54,8 @@ class TrainingReportCreator {
                 ratings[TrainingProgressCategory.form]!.impactValue * 15) /
             100 *
             2.5;
-    final generalRating = SimpleRating.fromImpactValue(averageRatingImpact.round());
+    final generalRating =
+        SimpleRating.fromImpactValue(averageRatingImpact.round().clamp(-3, 3));
 
     return TrainingReport(
       generalRating: generalRating,

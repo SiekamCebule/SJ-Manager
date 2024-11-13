@@ -22,24 +22,22 @@ class _ForJumpersState<T extends JumperDbRecord> extends State<_ForJumpers<T>> {
           .matches();
     },
   );
-  late final StreamSubscription _subscription;
 
   @override
   void initState() {
     _searchingController = TextEditingController();
     scheduleMicrotask(() {
       final filtersRepo = context.read<DbFiltersRepo>();
-      filtersRepo.changesStream.listen((_) {
+      /*filtersRepo.changesStream.listen((_) {
         _searchingController.text = '';
         _countriesDropdownKey.currentState!.setManually(null);
-      });
+      });*/
     });
     super.initState();
   }
 
   @override
   void dispose() {
-    _subscription.cancel();
     super.dispose();
   }
 
@@ -105,6 +103,7 @@ class _ForJumpersState<T extends JumperDbRecord> extends State<_ForJumpers<T>> {
       filtersRepo.femaleJumpersCountryFilter = _byCountry;
       filtersRepo.femaleJumpersSearchFilter = _bySearch;
     }
+    filtersRepo.notify();
   }
 
   void _clearSelection() {

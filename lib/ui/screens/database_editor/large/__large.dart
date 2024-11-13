@@ -83,10 +83,10 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       }));
     });
     final teamsRepo = ItemsRepo<CountryTeam>(
-      initial: _localDbCopy.state!.countriesRepo.countries.toList().cast(),
+      initial: _localDbCopy.state!.countryTeamsRepo.last.toList().cast(),
     );
     _countries = DatabaseEditorCountriesCubit(
-      countriesRepo: _localDbCopy.state!.countriesRepo,
+      countries: _localDbCopy.state!.countriesRepo,
       teamsRepo: teamsRepo,
     );
     _countries.setUp();
@@ -142,7 +142,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
         final child = prepared
             ? MultiRepositoryProvider(
                 providers: [
-                  RepositoryProvider.value(value: _filters),
+                  ChangeNotifierProvider.value(value: _filters),
                   RepositoryProvider.value(value: _selectedIndexes),
                   RepositoryProvider.value(value: _eventSeriesSetupIds),
                 ],

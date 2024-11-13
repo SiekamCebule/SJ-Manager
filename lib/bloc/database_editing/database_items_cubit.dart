@@ -30,7 +30,7 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
   final Set<StreamSubscription> _subscriptions = {};
 
   StreamSubscription? _itemsSubscription;
-  final _filtersStreamController = StreamController<void>();
+  final _filtersStreamController = BehaviorSubject.seeded(null);
 
   List<T> _filter<T>(List<dynamic> items, List<Filter<dynamic>> filters) {
     return Filter.filterAll(items.cast<T>(), filters.cast<Filter<T>>()).toList();
@@ -42,9 +42,9 @@ class DatabaseItemsCubit extends Cubit<DatabaseItemsState> {
     required List<Filter> filters,
   }) {
     if (type == MaleJumperDbRecord) {
-      return _filter<MaleJumperDbRecord>(items, filters);
+      return _filter<JumperDbRecord>(items, filters);
     } else if (type == FemaleJumperDbRecord) {
-      return _filter<FemaleJumperDbRecord>(items, filters);
+      return _filter<JumperDbRecord>(items, filters);
     } else {
       throw UnsupportedError('(DatabaseItemsCubit) Unsupported item type: $type');
     }

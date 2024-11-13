@@ -13,7 +13,6 @@ import 'package:sj_manager/models/database/hill/hill.dart';
 import 'package:sj_manager/models/database/sex.dart';
 import 'package:sj_manager/models/database/team/country_team/country_team.dart';
 import 'package:sj_manager/models/database/team/subteam.dart';
-import 'package:sj_manager/models/database/team/team.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/generic/items_ids_repo.dart';
 
@@ -45,24 +44,22 @@ class SimulationDatabase with EquatableMixin, ChangeNotifier {
   CountriesRepo countries;
   List<CountryTeam> countryTeams;
   List<SimulationSeason> seasons;
-  ItemsIdsRepo idsRepo;
+  ItemsIdsRepo<String> idsRepo;
 
   Map<SimulationActionType, DateTime> actionDeadlines;
   SimulationActionsRepo actionsRepo;
 
-  Map<SimulationJumper, JumperReports> jumperReports;
-  Map<SimulationJumper, JumperStats> jumperStats;
-
-  Map<Team, TeamReports> teamReports;
-
-  Map<Subteam, Iterable<SimulationJumper>> subteamJumpers;
+  Map<String, JumperReports> jumperReports;
+  Map<String, JumperStats> jumperStats;
+  Map<String, TeamReports> teamReports;
+  Map<Subteam, Iterable<String>> subteamJumpers;
 
   void notify() => notifyListeners();
 
-  Iterable<SimulationMaleJumper> get maleJumpers =>
-      jumpers.whereType<SimulationMaleJumper>();
-  Iterable<SimulationFemaleJumper> get femaleJumpers =>
-      jumpers.whereType<SimulationFemaleJumper>();
+  Iterable<SimulationJumper> get maleJumpers =>
+      jumpers.where((jumper) => jumper.sex == Sex.male);
+  Iterable<SimulationJumper> get femaleJumpers =>
+      jumpers.where((jumper) => jumper.sex == Sex.female);
   Iterable<CountryTeam> get maleJumperTeams =>
       countryTeams.where((team) => team.sex == Sex.male).cast();
   Iterable<CountryTeam> get femaleJumperTeams =>
@@ -76,14 +73,14 @@ class SimulationDatabase with EquatableMixin, ChangeNotifier {
     List<Hill>? hills,
     CountriesRepo? countries,
     List<CountryTeam>? countryTeams,
-    Map<Subteam, Iterable<SimulationJumper>>? subteamJumpers,
+    Map<Subteam, Iterable<String>>? subteamJumpers,
     List<SimulationSeason>? seasons,
-    ItemsIdsRepo? idsRepo,
+    ItemsIdsRepo<String>? idsRepo,
     Map<SimulationActionType, DateTime>? actionDeadlines,
     SimulationActionsRepo? actionsRepo,
-    Map<SimulationJumper, JumperReports>? jumperReports,
-    Map<SimulationJumper, JumperStats>? jumperStats,
-    Map<Team, TeamReports>? teamReports,
+    Map<String, JumperReports>? jumperReports,
+    Map<String, JumperStats>? jumperStats,
+    Map<String, TeamReports>? teamReports,
   }) {
     return SimulationDatabase(
       managerData: managerData ?? this.managerData,

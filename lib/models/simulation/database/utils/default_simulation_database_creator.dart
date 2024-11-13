@@ -29,7 +29,7 @@ class DefaultSimulationDatabaseCreator {
 
   final IdGenerator idGenerator;
 
-  late ItemsIdsRepo _idsRepo;
+  late ItemsIdsRepo<String> _idsRepo;
   late List<SimulationJumper> _jumpers;
   late List<Hill> _hills;
   late List<CountryTeam> _countryTeams;
@@ -67,7 +67,7 @@ class DefaultSimulationDatabaseCreator {
     _setUpIdsRepo();
     final jumperReports = {
       for (var jumper in _jumpers)
-        jumper: JumperReports(
+        _idsRepo.id(jumper): JumperReports(
           levelReport: null,
           weeklyTrainingReport: null,
           monthlyTrainingReport: null,
@@ -79,7 +79,7 @@ class DefaultSimulationDatabaseCreator {
         31; // Max number of days in a month. The biggest need is when we create a monthly training report.
     final jumperStats = {
       for (var jumper in _jumpers)
-        jumper: JumperStats(
+        _idsRepo.id(jumper): JumperStats(
           progressableAttributeHistory: {
             TrainingProgressCategory.takeoff:
                 JumperAttributeHistory.empty(limit: attributeHistoryLimit),
@@ -104,7 +104,7 @@ class DefaultSimulationDatabaseCreator {
       generalTrainingRating: null,
     );
     final teamReports = {
-      if (personalCoachTeam != null) personalCoachTeam: defaultTeamReports,
+      if (personalCoachTeam != null) _idsRepo.id(personalCoachTeam): defaultTeamReports,
     };
     final userSubteam = mode == SimulationMode.classicCoach
         ? Subteam(
@@ -123,7 +123,7 @@ class DefaultSimulationDatabaseCreator {
       jumpers: _jumpers,
       hills: _hills,
       countryTeams: _countryTeams,
-      subteamJumpers: const {},
+      subteamJumpers: {},
       countries: _countries,
       seasons: _seasons,
       idsRepo: _idsRepo,

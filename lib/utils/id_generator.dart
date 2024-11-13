@@ -1,13 +1,13 @@
 import 'package:uuid/v4.dart';
 import 'package:nanoid/nanoid.dart' as nanoid;
 
-abstract interface class IdGenerator<T extends Object> {
+abstract interface class IdGenerator {
   const IdGenerator();
 
-  T generate();
+  String generate();
 }
 
-class UuidV4Generator implements IdGenerator<String> {
+class UuidV4Generator implements IdGenerator {
   const UuidV4Generator();
 
   static const _uuid = UuidV4();
@@ -18,7 +18,7 @@ class UuidV4Generator implements IdGenerator<String> {
   }
 }
 
-class NanoIdGenerator implements IdGenerator<String> {
+class NanoIdGenerator implements IdGenerator {
   const NanoIdGenerator({
     required this.size,
   });

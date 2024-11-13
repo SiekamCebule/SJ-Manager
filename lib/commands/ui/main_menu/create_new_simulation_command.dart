@@ -117,9 +117,6 @@ class CreateNewSimulationCommand {
       context: context,
       database: _database,
       levelRequirements: simulationOptions.gameVariant.last!.jumperLevelRequirements,
-      onFinish: (changedDatabase) {
-        _database = changedDatabase;
-      },
     ).execute();
   }
 
