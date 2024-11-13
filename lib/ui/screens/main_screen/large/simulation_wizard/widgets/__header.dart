@@ -5,6 +5,8 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navCubit = context.watch<SimulationWizardNavigationCubit>();
+
     return SizedBox(
       height: 70,
       child: MainMenuCard(
@@ -14,9 +16,23 @@ class _Header extends StatelessWidget {
               child: BlocBuilder<SimulationWizardNavigationCubit,
                   SimulationWizardNavigationState>(
                 builder: (context, state) {
-                  return Text(
-                    _appropriateTitleText(context, state.screen),
-                    style: Theme.of(context).textTheme.titleLarge,
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _appropriateTitleText(context, state.screen),
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      if (navCubit.state.screen == SimulationWizardScreenType.gameVariant)
+                        HelpIconButton(
+                          onPressed: () => showSimpleHelpDialog(
+                            context: context,
+                            title: 'Warianty gry',
+                            content:
+                                'Różne warianty gry oferują różne wrażenia - każdy wariant ma inne kalendarze, inne skocznie i zasady rozgrywki. Dzięki temu możesz m.in. symulować legendarne sezony z uwzględnieniem realnych kalendarzy. Chcesz zagrać realistyczną karierę w czasie teraźniejszym, a może karierę opartą na fikcyjnym uniwersum przyszłości?\nWciąż trwają prace nad dodawaniem kolejnych wariantów.',
+                          ),
+                        )
+                    ],
                   );
                 },
               ),

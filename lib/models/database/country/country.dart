@@ -19,7 +19,7 @@ class Country with EquatableMixin {
       : this(
           code: code,
           multilingualName: MultilingualString(
-            valuesByLanguage: {language: name},
+            {language: name},
           ),
         );
 

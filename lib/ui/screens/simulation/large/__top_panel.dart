@@ -76,9 +76,89 @@ class _TopPanel extends StatelessWidget {
             onPressed: homeIsSelected
                 ? () async {
                     await ContinueSimulationCommand(
-                      context: context,
                       database: database,
-                      navigatorKey: navigatorKey,
+                      chooseSubteamId: (subteam) =>
+                          context.read<IdGenerator>().generate(),
+                      afterSettingUpTrainings: () async {
+                        await SetUpTrainingsCommand(
+                          database: database,
+                          onFinish: () async {
+                            final dbHelper = context.read<SimulationDatabaseHelper>();
+                            await showSjmDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              child: SizedBox(
+                                height: MediaQuery.of(context).size.height * 0.8,
+                                child: MultiProvider(
+                                  providers: [
+                                    Provider.value(
+                                        value: context.read<CountryFlagsRepo>()),
+                                    Provider.value(
+                                        value: context.read<
+                                            DbItemImageGeneratingSetup<
+                                                SimulationJumper>>()),
+                                    ChangeNotifierProvider.value(value: database),
+                                  ],
+                                  child: SetUpTrainingsDialog(
+                                    simulationMode: database.managerData.mode,
+                                    jumpers: dbHelper.managerJumpers,
+                                    jumpersSimulationRatings: dbHelper.jumperReportsMap,
+                                    onSubmit: (result) {
+                                      if (result ==
+                                          SetUpTrainingsDialogResult.goToTrainingView) {
+                                        navigatorKey.currentState!.pushReplacementNamed(
+                                          '/simulation/team',
+                                          arguments: TeamScreenMode.training,
+                                        );
+                                        context
+                                            .read<SimulationScreenNavigationCubit>()
+                                            .change(
+                                              screen:
+                                                  SimulationScreenNavigationTarget.team,
+                                            );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ).execute();
+                      },
+                      afterSettingUpSubteams: () async {
+                        final dbHelper = context.read<SimulationDatabaseHelper>();
+                        final charges = dbHelper.managerJumpers;
+                        await SetUpSubteamsCommand(
+                          database: database,
+                          chooseSubteamId: (subteam) =>
+                              context.read<IdGenerator>().generate(),
+                          onFinish: () async {
+                            await showSjmDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              child: MultiProvider(
+                                providers: [
+                                  Provider.value(
+                                      value: context.read<
+                                          DbItemImageGeneratingSetup<
+                                              SimulationJumper>>()),
+                                  Provider.value(value: context.read<CountryFlagsRepo>()),
+                                ],
+                                child: SizedBox(
+                                  height: MediaQuery.of(context).size.height * 0.8,
+                                  child: SubteamsSettingUpPersonalCoachDialog(
+                                    jumpers: charges,
+                                    subteamType: {
+                                      for (final charge in charges)
+                                        charge: dbHelper.subteamOfJumper(charge)!,
+                                    },
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ).execute();
+                      },
                     ).execute();
                   }
                 : returnToHome,

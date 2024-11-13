@@ -114,31 +114,36 @@ class _TestGameVariantCreator {
     final wcCalendar = _constructWcCalendar();
     return GameVariant(
       id: 'test',
-      name: const MultilingualString(valuesByLanguage: {
+      name: const MultilingualString({
         'pl': 'Testowe 24/25',
         'en': 'Test 24/25',
       }),
-      description: const MultilingualString(valuesByLanguage: {
+      shortDescription: const MultilingualString({
         'pl': 'Essa rigcz imo sigma',
         'en': 'Essa rigcz imo sigma',
       }),
+      longDescription: const MultilingualString({
+        'pl':
+            'Nadchodzi długo wyczekiwany sezon 2023/24! Kto okaże się najlepszy? Kobayashi? Kraft? Wellinger? Czy Polacy odmienią swoje skoki? Czy Tschofenig wygra po raz pierwszy? Czy Maciej Kot wejdzie do TOP10 pierwszy raz od 2018 roku? Kto okaże się objawieniem? Kto zostanie mistrzem świata juniorów? Możesz wziąć sprawy w swoje ręce lub obserwować ekscytującą batalię na skoczniach świata.\n\nWariant testowy. Bardziej dopracowany wariant dla sezonu 2023/24 ukaże się w przyszłości.',
+        'en': 'Siekam cebulę',
+      }),
       startDates: [
         GameVariantStartDate(
-          label: const MultilingualString(valuesByLanguage: {
+          label: const MultilingualString({
             'pl': 'Początek okresu przygotowawczego',
             'en': 'Start of the preparation period',
           }),
           date: DateTime(2024, 5, 1),
         ),
         GameVariantStartDate(
-          label: const MultilingualString(valuesByLanguage: {
+          label: const MultilingualString({
             'pl': 'Przed startem sezonu letniego',
             'en': 'Before the summer season start',
           }),
           date: DateTime(2024, 7, 10),
         ),
         GameVariantStartDate(
-          label: const MultilingualString(valuesByLanguage: {
+          label: const MultilingualString({
             'pl': 'Przed startem sezonu zimowego',
             'en': 'Before the winter season start',
           }),
@@ -169,13 +174,13 @@ class _TestGameVariantCreator {
             setup: const EventSeriesSetup(
               id: 'wc',
               multilingualName: MultilingualString(
-                valuesByLanguage: {
+                {
                   'pl': 'Puchar Świata',
                   'en': 'World Cup',
                 },
               ),
               multilingualDescription: MultilingualString(
-                valuesByLanguage: {
+                {
                   'pl': 'Najważniejsze rozgrywki zimowe i walka o krzyształową kulę',
                   'en':
                       'The most important winter series and a fight for a crystal globe',

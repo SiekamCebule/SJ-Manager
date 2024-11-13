@@ -6,9 +6,7 @@ import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/ui/providers/locale_cubit.dart';
 
 class MultilingualString with EquatableMixin {
-  const MultilingualString({
-    required this.valuesByLanguage,
-  });
+  const MultilingualString(this.valuesByLanguage);
 
   const MultilingualString.empty() : valuesByLanguage = const {};
 
@@ -35,7 +33,7 @@ class MultilingualString with EquatableMixin {
   }) {
     final newNames = Map.of(valuesByLanguage);
     newNames[languageCode] = value;
-    return MultilingualString(valuesByLanguage: newNames);
+    return MultilingualString(newNames);
   }
 
   @override
@@ -46,7 +44,7 @@ class MultilingualString with EquatableMixin {
   Json toJson() => valuesByLanguage;
 
   static MultilingualString fromJson(Json json) => MultilingualString(
-        valuesByLanguage: json.cast(),
+        json.cast(),
       );
 
   @override

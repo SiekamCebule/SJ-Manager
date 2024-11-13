@@ -138,6 +138,12 @@ void main() async {
     ),
   );
   FlutterError.onError = (FlutterErrorDetails details) async {
+    if (details.exception is AssertionError ||
+        details.exception.toString().contains('A RenderFlex overflowed')) {
+      FlutterError.dumpErrorToConsole(details);
+      return;
+    }
+
     FlutterError.dumpErrorToConsole(details);
     await showSjmDialog(
       barrierDismissible: false,
@@ -152,6 +158,10 @@ void main() async {
   runZonedGuarded<Future<void>>(() async {
     runApp(app);
   }, (error, stackTrace) async {
+    if (error is AssertionError || error.toString().contains('A RenderFlex overflowed')) {
+      return;
+    }
+
     await showSjmDialog(
       barrierDismissible: false,
       context: mainNavigatorKey.currentContext!,

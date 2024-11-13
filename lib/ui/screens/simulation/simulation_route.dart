@@ -9,6 +9,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/commands/ui/simulation/continue_simulation_command.dart';
 import 'package:sj_manager/commands/ui/simulation/manage_partnerships_command.dart';
 import 'package:sj_manager/commands/ui/simulation/search_for_candidates_command.dart';
+import 'package:sj_manager/commands/ui/simulation/set_up_subteams_command.dart';
+import 'package:sj_manager/commands/ui/simulation/set_up_trainings_command.dart';
 import 'package:sj_manager/commands/ui/simulation/simulation_exit_command.dart';
 import 'package:sj_manager/constants/simulation_mode_constants.dart';
 import 'package:sj_manager/commands/ui/simulation/simulation_screen_navigation_cubit.dart';
@@ -17,7 +19,6 @@ import 'package:sj_manager/models/simulation/database/actions/simulation_action_
 import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
-import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 import 'package:sj_manager/models/database/sex.dart';
 import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
@@ -29,6 +30,8 @@ import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
 import 'package:sj_manager/ui/reusable_widgets/link_text_button.dart';
+import 'package:sj_manager/ui/screens/simulation/large/dialogs/set_up_subteams/subteams_setting_up_personal_coach_dialog.dart';
+import 'package:sj_manager/ui/screens/simulation/large/dialogs/set_up_trainings/set_up_trainings_dialog.dart';
 import 'package:sj_manager/ui/screens/simulation/large/dialogs/subteams_setting_up_help_dialog.dart';
 import 'package:sj_manager/ui/screens/simulation/large/dialogs/training_tutorial_dialog.dart';
 import 'package:sj_manager/ui/screens/simulation/large/dialogs/trainings_are_not_set_up_dialog.dart';
@@ -44,6 +47,7 @@ import 'package:sj_manager/ui/screens/simulation/large/widgets/team/team_screen/
 import 'package:sj_manager/ui/screens/simulation/large/widgets/teams/country_team_overview_list_tile.dart';
 import 'package:sj_manager/ui/screens/simulation/large/widgets/teams/country_team_profile/country_team_profile_widget.dart';
 import 'package:sj_manager/utils/filtering.dart';
+import 'package:sj_manager/utils/id_generator.dart';
 import 'package:sj_manager/utils/show_dialog.dart';
 import 'package:sj_manager/utils/translating.dart';
 
