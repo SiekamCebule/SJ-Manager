@@ -6,7 +6,6 @@ import 'package:sj_manager/models/simulation/database/actions/simulation_action_
 import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
-import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 import 'package:sj_manager/models/database/team/country_team/country_team.dart';
 import 'package:sj_manager/models/database/team/country_team/subteam_type.dart';
 import 'package:sj_manager/models/database/team/subteam.dart';
@@ -41,8 +40,10 @@ class SetUpSubteamsCommand {
           );
         });
       }
-      if (database.managerData.mode == SimulationMode.personalCoach) {
-        final dbHelper = context.read<SimulationDatabaseHelper>();
+      final dbHelper = context.read<SimulationDatabaseHelper>();
+
+      if (database.managerData.mode == SimulationMode.personalCoach &&
+          dbHelper.managerJumpers.isNotEmpty) {
         final charges = dbHelper.managerJumpers;
         await showSjmDialog(
           context: context,
@@ -50,7 +51,7 @@ class SetUpSubteamsCommand {
           child: MultiProvider(
             providers: [
               Provider.value(
-                  value: context.read<DbItemImageGeneratingSetup<JumperDbRecord>>()),
+                  value: context.read<DbItemImageGeneratingSetup<SimulationJumper>>()),
               Provider.value(value: context.read<CountryFlagsRepo>()),
             ],
             child: SizedBox(

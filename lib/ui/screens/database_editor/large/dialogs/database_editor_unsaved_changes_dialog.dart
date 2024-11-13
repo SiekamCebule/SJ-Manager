@@ -10,12 +10,12 @@ class DatabaseEditorUnsavedChangesDialog extends StatelessWidget {
       title: Text(translate(context).saveChangesQuestion),
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context).pop('yes'),
-          child: Text(translate(context).yes),
-        ),
-        TextButton(
           onPressed: () => Navigator.of(context).pop('no'),
           child: Text(translate(context).no),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop('yes'),
+          child: Text(translate(context).yes),
         ),
       ],
     );

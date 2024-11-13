@@ -39,7 +39,6 @@ import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart'
 import 'package:sj_manager/models/database/country/country.dart';
 import 'package:sj_manager/models/database/db_items_file_system_paths.dart';
 import 'package:sj_manager/models/database/hill/hill.dart';
-import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 import 'package:sj_manager/models/database/team/country_team/country_team.dart';
 import 'package:sj_manager/models/database/team/country_team/subteam_type.dart';
 import 'package:sj_manager/models/database/team/personal_coach_team.dart';
@@ -62,7 +61,7 @@ class DefaultSimulationDbLoaderFromFile {
   late CountriesRepo _countriesRepo;
   late Json _dynamicStateJson;
 
-  final ItemsIdsRepo idsRepo;
+  final ItemsIdsRepo<String> idsRepo;
   final IdGenerator idGenerator;
   final DbItemsFilePathsRegistry pathsRegistry;
   final PlarformSpecificPathsCache pathsCache;
@@ -88,7 +87,7 @@ class DefaultSimulationDbLoaderFromFile {
     final loadedJumpers = [
       ...loadedMaleJumpers,
       ...loadedFemaleJumpers,
-    ].cast<JumperDbRecord>();
+    ].cast<SimulationJumper>();
 
     final loadedHillsMap = await _loadItems(itemsType: 'hill');
     _addIdsFromLoadedMap(loadedHillsMap);
@@ -148,7 +147,7 @@ class DefaultSimulationDbLoaderFromFile {
     final jumperReportsJson = _dynamicStateJson['jumperReports'] as Map;
     final jumperReports = jumperReportsJson.map((id, reportsJson) {
       return MapEntry(
-        idsRepo.get(id) as SimulationJumper,
+        id,
         JumperReports.fromJson(reportsJson),
       );
     });
@@ -156,7 +155,7 @@ class DefaultSimulationDbLoaderFromFile {
     final jumperStatsJson = _dynamicStateJson['jumperStats'] as Map;
     final jumperStats = jumperStatsJson.map((id, statsJson) {
       return MapEntry(
-        idsRepo.get(id) as SimulationJumper,
+        id,
         JumperStats.fromJson(statsJson),
       );
     });
@@ -164,7 +163,7 @@ class DefaultSimulationDbLoaderFromFile {
     final teamReportsJson = _dynamicStateJson['teamReports'] as Map;
     final teamReports = teamReportsJson.map((id, reportsJson) {
       return MapEntry(
-        idsRepo.get(id) as Team,
+        id,
         TeamReports.fromJson(reportsJson),
       );
     });
@@ -178,7 +177,7 @@ class DefaultSimulationDbLoaderFromFile {
               SubteamType.values.singleWhere((value) => value.name == splitSubteamKey[0]),
           parentTeam: idsRepo.get(splitSubteamKey[1]),
         ),
-        (jumperIds as List).map((id) => idsRepo.get(id) as SimulationJumper),
+        (jumperIds as List).toList().cast<String>(),
       );
     });
 
@@ -194,10 +193,10 @@ class DefaultSimulationDbLoaderFromFile {
       idsRepo: idsRepo,
       actionDeadlines: actionDeadlines,
       actionsRepo: SimulationActionsRepo(initial: simulationActionCompletionStatuses),
-      jumperReports: jumperReports,
-      jumperStats: jumperStats,
-      teamReports: teamReports,
-      subteamJumpers: subteamJumpers,
+      jumperReports: jumperReports.cast(),
+      jumperStats: jumperStats.cast(),
+      teamReports: teamReports.cast(),
+      subteamJumpers: subteamJumpers.cast(),
     );
   }
 
@@ -236,10 +235,10 @@ class DefaultSimulationDbLoaderFromFile {
   }
 
   String _getFilePath({required Type type}) {
-    if (type == MaleJumperDbRecord) {
-      return pathsRegistry.get<MaleJumperDbRecord>();
-    } else if (type == FemaleJumperDbRecord) {
-      return pathsRegistry.get<FemaleJumperDbRecord>();
+    if (type == SimulationMaleJumper) {
+      return pathsRegistry.get<SimulationMaleJumper>();
+    } else if (type == SimulationFemaleJumper) {
+      return pathsRegistry.get<SimulationFemaleJumper>();
     } else if (type == Hill) {
       return pathsRegistry.get<Hill>();
     } else if (type == Country) {
@@ -256,8 +255,8 @@ class DefaultSimulationDbLoaderFromFile {
   }
 
   static const _itemsTypeStringToType = {
-    'maleJumper': MaleJumperDbRecord,
-    'femaleJumper': FemaleJumperDbRecord,
+    'maleJumper': SimulationMaleJumper,
+    'femaleJumper': SimulationFemaleJumper,
     'hill': Hill,
     'country': Country,
     'countryTeam': CountryTeam,
@@ -269,9 +268,9 @@ class DefaultSimulationDbLoaderFromFile {
     required Json json,
     required Type type,
   }) {
-    if (type == MaleJumperDbRecord) {
+    if (type == SimulationMaleJumper) {
       return _parseJumper;
-    } else if (type == FemaleJumperDbRecord) {
+    } else if (type == SimulationFemaleJumper) {
       return _parseJumper;
     } else if (type == Hill) {
       return _parseHill;
@@ -286,8 +285,8 @@ class DefaultSimulationDbLoaderFromFile {
     }
   }
 
-  JumperDbRecord _parseJumper(Json json) {
-    return JumperDbRecord.fromJson(json,
+  SimulationJumper _parseJumper(Json json) {
+    return SimulationJumper.fromJson(json,
         countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo));
   }
 

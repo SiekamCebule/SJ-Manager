@@ -9,6 +9,7 @@ import 'package:sj_manager/models/database/jumper/jumper_skills_db_record.dart';
 import 'package:sj_manager/models/database/psyche/personalities.dart';
 import 'package:sj_manager/models/database/psyche/translations.dart';
 import 'package:sj_manager/models/database/sex.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_date_form_field.dart';
@@ -101,7 +102,7 @@ class JumperEditorState extends State<JumperEditor> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final shouldShowImage = _cachedJumper != null &&
-            context.maybeRead<DbItemImageGeneratingSetup<JumperDbRecord>>() != null;
+            context.maybeRead<DbItemImageGeneratingSetup<SimulationJumper>>() != null;
         return Scrollbar(
           thumbVisibility: platformIsDesktop,
           controller: _scrollController,
@@ -241,7 +242,7 @@ class JumperEditorState extends State<JumperEditor> {
                   onChange: _onChange,
                   formatters: doubleTextInputFormatters,
                   labelText: translate(context).takeoffQuality,
-                  step: 0.1,
+                  step: 0.5,
                   min: 0.0,
                   max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
                   maxDecimalPlaces: 2,
@@ -260,7 +261,7 @@ class JumperEditorState extends State<JumperEditor> {
                   onChange: _onChange,
                   formatters: doubleTextInputFormatters,
                   labelText: translate(context).flightQuality,
-                  step: 0.1,
+                  step: 0.5,
                   min: 0.0,
                   max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
                   maxDecimalPlaces: 2,
@@ -279,7 +280,7 @@ class JumperEditorState extends State<JumperEditor> {
                   onChange: _onChange,
                   formatters: doubleTextInputFormatters,
                   labelText: translate(context).landing,
-                  step: 0.1,
+                  step: 0.5,
                   min: 0.0,
                   max: context.read<DbEditingDefaultsRepo>().maxJumperQualitySkill,
                   maxDecimalPlaces: 2,

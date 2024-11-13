@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/filters/filter.dart';
 import 'package:sj_manager/filters/jumpers/jumper_matching_algorithms.dart';
+import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_search_bar.dart';
@@ -60,6 +61,7 @@ class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersD
   @override
   Widget build(BuildContext context) {
     final database = context.watch<SimulationDatabase>();
+    final dbHelper = context.read<SimulationDatabaseHelper>();
 
     Future<void> onConfirm() async {
       final ok = await showDialog<bool>(
@@ -105,7 +107,7 @@ class _SearchForChargesJumpersDialogState extends State<SearchForChargesJumpersD
                     trailing: JumperSimpleListTileTrailing.countryFlag,
                     subtitle: JumperSimpleListTileSubtitle.levelDescription,
                     levelDescription:
-                        database.jumperReports[jumper]!.levelReport!.levelDescription,
+                        dbHelper.jumperReports(jumper)!.levelReport!.levelDescription,
                   );
                 },
               ),

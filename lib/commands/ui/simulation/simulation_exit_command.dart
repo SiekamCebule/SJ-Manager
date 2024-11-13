@@ -61,7 +61,6 @@ class SimulationExitCommand {
   }
 
   void _cleanUpAndPop() {
-    context.read<SimulationDatabase>().dispose();
     router.pop(context);
   }
 }

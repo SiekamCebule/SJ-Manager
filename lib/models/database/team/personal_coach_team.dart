@@ -13,7 +13,7 @@ class PersonalCoachTeam extends Team {
     Json json, {
     required SimulationJumper Function(dynamic data) parseJumper,
   }) {
-    final jumpersList = json['jumperIds'] as List;
+    final jumpersList = json['jumpers'] as List;
     final jumpers = jumpersList.map(parseJumper).toList();
     return PersonalCoachTeam(jumpers: jumpers);
   }
@@ -22,13 +22,13 @@ class PersonalCoachTeam extends Team {
     required dynamic Function(SimulationJumper jumper) serializeJumper,
   }) {
     return {
-      'jumpers': jumpers.map(serializeJumper),
+      'jumpers': jumpers.map(serializeJumper).toList(),
     };
   }
 
   @override
   List<Object?> get props => [
-        super.props,
+        ...super.props,
         jumpers,
       ];
 }

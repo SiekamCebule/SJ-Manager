@@ -18,7 +18,7 @@ class MainCompetitionRecordSerializer
   @override
   Json serialize(CalendarMainCompetitionRecord record) {
     return {
-      'hillId': idsRepo.idOf(record.hill),
+      'hillId': idsRepo.id(record.hill),
       //'date': record.date.toString(),
       'mainCompetitionRules':
           rulesProviderSerializer.serialize(record.setup.mainCompRules),

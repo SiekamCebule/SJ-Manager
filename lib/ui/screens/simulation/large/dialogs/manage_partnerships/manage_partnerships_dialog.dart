@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
+import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/jumper/reports/jumper_reports.dart';
 import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
@@ -38,6 +39,7 @@ class _ManagePartnershipsDialogState extends State<ManagePartnershipsDialog> {
   @override
   Widget build(BuildContext context) {
     final database = context.watch<SimulationDatabase>();
+    final dbHelper = context.read<SimulationDatabaseHelper>();
 
     return LayoutBuilder(
       builder: (context, constraints) => AlertDialog(
@@ -73,7 +75,7 @@ class _ManagePartnershipsDialogState extends State<ManagePartnershipsDialog> {
                     index: index,
                     child: _JumperTile(
                       jumper: jumper,
-                      levelReport: database.jumperReports[jumper]!.levelReport,
+                      levelReport: dbHelper.jumperReports(jumper)!.levelReport,
                       onAction: () {
                         setState(() {
                           _shouldBeRemoved[jumper] = !_shouldBeRemoved[jumper]!;

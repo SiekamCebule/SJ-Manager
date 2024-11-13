@@ -23,7 +23,7 @@ class CompetitionSerializer implements SimulationDbPartSerializer<Competition> {
     final labelsJson =
         competition.labels.map((label) => _labelJsonString(label)).toList();
     return {
-      'hillId': idsRepo.idOf(competition.hill),
+      'hillId': idsRepo.id(competition.hill),
       'labels': labelsJson,
       'date': competition.date.toIso8601String(),
       'rules': competitionRulesSerializer.serialize(competition.rules),

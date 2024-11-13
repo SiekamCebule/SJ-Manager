@@ -19,6 +19,7 @@ import 'package:sj_manager/models/simulation/database/simulation_database_and_mo
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
 import 'package:sj_manager/models/database/sex.dart';
+import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/repositories/countries/countries_repo.dart';
 import 'package:sj_manager/repositories/countries/country_flags/country_flags_repo.dart';
 import 'package:sj_manager/ui/database_item_editors/fields/my_search_bar.dart';

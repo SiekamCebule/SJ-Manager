@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:sj_manager/json/countries.dart';
 import 'package:sj_manager/json/json_types.dart';
 import 'package:sj_manager/models/database/country/country.dart';
@@ -5,7 +6,7 @@ import 'package:sj_manager/models/database/psyche/level_of_consciousness.dart';
 import 'package:sj_manager/models/database/sex.dart';
 import 'package:sj_manager/models/simulation/flow/training/jumper_training_config.dart';
 
-class SimulationJumper {
+class SimulationJumper with EquatableMixin {
   SimulationJumper({
     required this.dateOfBirth,
     required this.name,
@@ -117,7 +118,7 @@ class SimulationJumper {
       dateOfBirth: DateTime.parse(json['dateOfBirth']),
       name: json['name'],
       surname: json['surname'],
-      country: countryLoader.load(json['name']),
+      country: countryLoader.load(json['country']),
       sex: Sex.values.singleWhere((value) => value.name == json['sex']),
       takeoffQuality: json['takeoffQuality'],
       flightQuality: json['flightQuality'],
@@ -166,6 +167,24 @@ class SimulationJumper {
       levelOfConsciousness: levelOfConsciousness ?? this.levelOfConsciousness,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        dateOfBirth,
+        name,
+        surname,
+        country,
+        sex,
+        takeoffQuality,
+        flightQuality,
+        landingQuality,
+        trainingConfig,
+        form,
+        jumpsConsistency,
+        morale,
+        fatigue,
+        levelOfConsciousness,
+      ];
 }
 
 class SimulationMaleJumper extends SimulationJumper {

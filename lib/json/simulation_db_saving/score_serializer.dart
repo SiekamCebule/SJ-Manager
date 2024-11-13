@@ -38,19 +38,19 @@ class ScoreSerializer implements SimulationDbPartSerializer<Score> {
     if (score is CompetitionJumpScore) {
       return {
         'type': 'competition_jump_score',
-        'entityId': idsRepo.idOf(score.entity),
+        'entityId': idsRepo.id(score.entity),
         'distancePoints': score.details.distancePoints,
         'judgesPoints': score.details.judgesPoints,
         'gatePoints': score.details.gatePoints,
         'windPoints': score.details.windPoints,
-        'jumpRecordId': idsRepo.idOf(score.details.jumpRecord),
+        'jumpRecordId': idsRepo.id(score.details.jumpRecord),
       };
     } else if (score is Score<dynamic, SimpleJumpScoreDetails>) {
       return {
         'type': 'simple_jump_score',
-        'entityId': idsRepo.idOf(score.entity),
+        'entityId': idsRepo.id(score.entity),
         'points': score.points,
-        'jumpRecordId': idsRepo.idOf(score.details.jumpRecord),
+        'jumpRecordId': idsRepo.id(score.details.jumpRecord),
       };
     } else {
       throw ArgumentError(
@@ -65,7 +65,7 @@ class ScoreSerializer implements SimulationDbPartSerializer<Score> {
     }).toList();
     return {
       'type': 'jumper_competition_score',
-      'entityId': idsRepo.idOf(score.entity),
+      'entityId': idsRepo.id(score.entity),
       'jumpScores': jumpScoreJson,
       'points': score.points,
     };
@@ -77,7 +77,7 @@ class ScoreSerializer implements SimulationDbPartSerializer<Score> {
     }).toList();
     return {
       'type': 'team_competition_score',
-      'entityId': idsRepo.idOf(score.entity),
+      'entityId': idsRepo.id(score.entity),
       'entityScores': entityScoresJson,
       'points': score.points,
     };
@@ -86,7 +86,7 @@ class ScoreSerializer implements SimulationDbPartSerializer<Score> {
   Json _serializeSimplePointsScore(Score<dynamic, SimplePointsScoreDetails> score) {
     return {
       'type': 'simple_points_score',
-      'entityId': idsRepo.idOf(score.entity),
+      'entityId': idsRepo.id(score.entity),
       'points': score.points,
     };
   }
@@ -97,7 +97,7 @@ class ScoreSerializer implements SimulationDbPartSerializer<Score> {
     }).toList();
     return {
       'type': 'classification_score',
-      'entityId': idsRepo.idOf(score.entity),
+      'entityId': idsRepo.id(score.entity),
       'competitionScores': competitionScoresJson,
       'points': score.points,
     };

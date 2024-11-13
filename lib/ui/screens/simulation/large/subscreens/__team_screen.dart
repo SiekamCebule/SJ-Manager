@@ -44,7 +44,7 @@ class _TeamScreenState extends State<_TeamScreen> {
                   child: JumperInTeamOverviewCard(
                     jumper: jumper,
                     subteamType: dbHelper.subteamOfJumper(jumper),
-                    reports: database.jumperReports[jumper]!,
+                    reports: dbHelper.jumperReports(jumper)!,
                   ),
                 ),
             ],
@@ -65,6 +65,18 @@ class _TeamScreenState extends State<_TeamScreen> {
           )
         : null;
 
+    /*database.teamReports.forEach(
+      (team, report) {
+        print('TEAM1: $team');
+        print('manager team: ${dbHelper.managerTeam}');
+        print('equal: ${team == dbHelper.managerTeam}');
+        print('report of team: ${database.teamReports[team]}');
+        print('KAKA: ${database.teamReports.containsKey(team)}');
+        print('KAKA2: ${database.teamReports.containsKey(dbHelper.managerTeam)}');
+        print('TEAMR EPORTS: ${database.teamReports}');
+      },
+    );*/ // TODO
+
     return Scaffold(
       bottomNavigationBar: bottomNavBar,
       body: Column(
@@ -77,7 +89,7 @@ class _TeamScreenState extends State<_TeamScreen> {
                   flex: 1,
                   child: Card(
                     child: TeamSummaryCard(
-                      reports: database.teamReports[dbHelper.managerTeam]!,
+                      reports: dbHelper.teamReports(dbHelper.managerTeam)!,
                     ),
                   ),
                 ),

@@ -9,7 +9,7 @@ class _TeamOverviewCard extends StatelessWidget {
     final dbHelper = context.read<SimulationDatabaseHelper>();
     final jumpers = dbHelper.managerJumpers;
 
-    print('Before TeamOverviewCard build: ${database.subteamJumpers}');
+    //print('Before TeamOverviewCard build: ${database.subteamJumpers}');
 
     final jumpersNonEmptyContent = Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -17,7 +17,7 @@ class _TeamOverviewCard extends StatelessWidget {
       children: [
         TeamSummaryCard(
           excludeTitle: true,
-          reports: database.teamReports[dbHelper.managerTeam]!,
+          reports: dbHelper.teamReports(dbHelper.managerTeam)!,
         ),
         const Gap(15),
         Expanded(
@@ -27,7 +27,7 @@ class _TeamOverviewCard extends StatelessWidget {
                 Builder(builder: (context) {
                   print('_TeamOverviewCard jumper: ${jumper.nameAndSurname()}');
                   print('_TeamOverviewCard jumpers length: ${jumpers.length}');
-                  final report = database.jumperReports[jumper];
+                  final report = dbHelper.jumperReports(jumper);
                   if (report == null) {
                     throw StateError(
                       'Prosimy o zgłoszenie nam tego błędu. Skoczek ($jumper) nie posiada swojego JumperReports w bazie danych symulacji',

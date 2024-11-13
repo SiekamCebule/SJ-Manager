@@ -97,7 +97,7 @@ List<Provider> defaultDbEditorProviders(BuildContext context) {
           simulationId: gameVariant.id,
           directoryName: 'jumper_images',
         ),
-        toFileName: jumperImageName,
+        toFileName: jumperDbRecordImageName,
       );
     }),
     Provider(create: (context) {

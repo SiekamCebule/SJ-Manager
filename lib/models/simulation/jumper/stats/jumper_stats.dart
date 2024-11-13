@@ -7,7 +7,7 @@ class JumperStats with EquatableMixin {
     required this.progressableAttributeHistory,
   });
 
-  JumperStats.empty() : this(progressableAttributeHistory: const {});
+  JumperStats.empty() : this(progressableAttributeHistory: {});
 
   Map<TrainingProgressCategory, JumperAttributeHistory> progressableAttributeHistory;
 

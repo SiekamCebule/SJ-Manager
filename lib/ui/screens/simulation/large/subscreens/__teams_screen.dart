@@ -155,7 +155,7 @@ class _ListView extends StatelessWidget {
             final team = teams.elementAt(index);
             final flagsRepo = context.read<CountryFlagsRepo>();
             final jumperImagesRepo =
-                context.read<DbItemImageGeneratingSetup<JumperDbRecord>>();
+                context.read<DbItemImageGeneratingSetup<SimulationJumper>>();
             final dbHelper = context.read<SimulationDatabaseHelper>();
             await showDialog(
               context: context,

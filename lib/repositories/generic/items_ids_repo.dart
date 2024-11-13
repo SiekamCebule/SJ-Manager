@@ -1,3 +1,6 @@
+import 'dart:collection';
+
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:sj_manager/json/db_items_json.dart';
 
@@ -15,61 +18,44 @@ class ItemsIdsRepo<ID extends Object> {
   }
 
   final Map<ID, _ItemWithCount> _items = {};
-  final Map<dynamic, ID> _reverseItems = {};
-  final List<ID> _orderedIds = [];
+  final Map<ID, ID> _reverseItems = {};
+  final LinkedHashMap<ID, bool> _orderedIds = LinkedHashMap();
 
   T get<T>(ID id) {
-    final item = maybeGet(id);
+    final item = maybeGet<T>(id);
     if (item == null) {
       throw StateError(
           'Ids repo does not contain any object of type $T with that id ($id)');
-    }
-    if (item is T == false) {
-      throw StateError('The item ($item) doesn\'t have the requested type of $T');
     }
     return item;
   }
 
   T? maybeGet<T>(ID id) {
-    return _items[id]?.item;
+    return _items[id]?.item as T?;
   }
 
-  ID idOf(dynamic item) {
+  ID id(dynamic item) {
     final id = maybeIdOf(item);
     if (id == null) {
-      return 'gg' as ID;
-      //throw StateError('Ids repo does not contain the item ($item)');
+      throw StateError('Ids repo does not contain the item ($item)');
     }
     return id;
   }
 
   ID? maybeIdOf(dynamic item) {
-    return _reverseItems[item];
+    return _items.entries.firstWhereOrNull((entry) => entry.value.item == item)?.key;
   }
 
   int countOfItemsWithId(ID id) {
     return _items[id]?.count ?? 0;
   }
 
-  void update({
-    required ID id,
-    required dynamic newItem,
-  }) {
+  void update({required ID id, required dynamic newItem}) {
     if (!containsId(id)) {
       throw StateError(
           'Cannot update the item because the id ($id) does not exist in the repository.');
     }
-
-    final oldItem = _items[id]!.item;
-    _reverseItems.remove(oldItem);
-
-    final existingId = _reverseItems[newItem];
-    if (existingId != null && existingId != id) {
-      _items.remove(existingId);
-    }
-
     _items[id] = _ItemWithCount(newItem, _items[id]!.count);
-    _reverseItems[newItem] = id;
   }
 
   bool removeById({required ID id}) {
@@ -77,22 +63,21 @@ class ItemsIdsRepo<ID extends Object> {
     if (entry == null) {
       return false;
     }
-
     if (entry.count > 1) {
       entry.count--;
     } else {
-      _reverseItems.remove(entry.item);
       _items.remove(id);
+      _reverseItems.remove(id);
     }
     _orderedIds.remove(id);
     return true;
   }
 
   ID removeByItem({required dynamic item}) {
-    final id = _reverseItems[item];
+    final id = maybeIdOf(item);
     if (id == null) {
       throw StateError(
-          'Cannot remove an item $item, because it doesn\'t even exist in the repo');
+          'Cannot remove an item $item, because it does not even exist in the repo');
     }
     removeById(id: id);
     return id;
@@ -100,13 +85,13 @@ class ItemsIdsRepo<ID extends Object> {
 
   void register(dynamic item, {required ID id}) {
     if (containsItem(item)) {
-      final id = _reverseItems[item]!;
-      _items[id]!.count++;
-      _orderedIds.add(id);
+      final existingId = maybeIdOf(item)!;
+      _items[existingId]!.count++;
+      _orderedIds[existingId] = true;
     } else {
       _items[id] = _ItemWithCount(item, 1);
-      _reverseItems[item] = id;
-      _orderedIds.add(id);
+      _reverseItems[id] = id;
+      _orderedIds[id] = true;
     }
   }
 
@@ -117,15 +102,18 @@ class ItemsIdsRepo<ID extends Object> {
   }) {
     for (var item in items) {
       final id = generateId(item);
+      if (skipDuplicates && containsItem(item)) {
+        continue;
+      }
       register(item, id: id);
     }
   }
 
-  void registerFromLoadedItemsMap<T>(
-    LoadedItemsMap<T> loadedItemsMap,
-  ) {
+  void registerFromLoadedItemsMap<T>(LoadedItemsMap<T> loadedItemsMap) {
     loadedItemsMap.items.forEach((id, itemAndCount) {
-      register(itemAndCount.$1, id: id);
+      for (int i = 0; i < itemAndCount.$2; i++) {
+        register(itemAndCount.$1, id: id);
+      }
     });
   }
 
@@ -134,11 +122,11 @@ class ItemsIdsRepo<ID extends Object> {
   }
 
   bool containsItem(dynamic item) {
-    return _reverseItems.containsKey(item);
+    return maybeIdOf(item) != null;
   }
 
   List<dynamic> getOrderedItems() {
-    return _orderedIds.map((id) => _items[id]!.item).toList();
+    return _orderedIds.keys.map((id) => _items[id]!.item).toList();
   }
 
   void clear() {

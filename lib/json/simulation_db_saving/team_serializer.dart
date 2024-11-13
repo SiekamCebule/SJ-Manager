@@ -54,7 +54,7 @@ class TeamSerializer implements SimulationDbPartSerializer<Team> {
   }
 
   Json _serializeCompetitionTeam(CompetitionTeam team) {
-    final jumpersJson = team.jumpers.map((jumper) => idsRepo.idOf(jumper)).toList();
+    final jumpersJson = team.jumpers.map((jumper) => idsRepo.id(jumper)).toList();
     return {
       'type': 'competition_team',
       'parentTeam': serialize(team),

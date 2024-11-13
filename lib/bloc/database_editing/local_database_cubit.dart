@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sj_manager/models/database/team/country_team/country_team.dart';
 import 'package:sj_manager/models/game_variants/game_variant.dart';
 import 'package:sj_manager/models/game_variants/game_variants_io_utils.dart';
 import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
@@ -14,11 +15,13 @@ class LocalDatabaseState {
     required this.maleJumpersRepo,
     required this.femaleJumpersRepo,
     required this.countriesRepo,
+    required this.countryTeamsRepo,
   });
 
   final EditableItemsRepo<MaleJumperDbRecord> maleJumpersRepo;
   final EditableItemsRepo<FemaleJumperDbRecord> femaleJumpersRepo;
   final CountriesRepo countriesRepo;
+  final ItemsRepo<CountryTeam> countryTeamsRepo;
 }
 
 class LocalDatabaseCubit extends Cubit<LocalDatabaseState?> {
@@ -38,6 +41,7 @@ class LocalDatabaseCubit extends Cubit<LocalDatabaseState?> {
             initial: gameVariant.jumpers.whereType<MaleJumperDbRecord>().toList()),
         femaleJumpersRepo: EditableItemsRepo<FemaleJumperDbRecord>(
             initial: gameVariant.jumpers.whereType<FemaleJumperDbRecord>().toList()),
+        countryTeamsRepo: ItemsRepo(initial: gameVariant.countryTeams),
       ),
     );
   }

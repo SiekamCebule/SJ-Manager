@@ -34,9 +34,9 @@ class DefaultClassificationRulesSerializer
         classificationScoreCreatorSerializer.serialize(rules.classificationScoreCreator);
     final pointsMapJson = rules.pointsMap;
     final competitionIdsJson =
-        rules.competitions.map((competition) => idsRepo.idOf(competition)).toList();
+        rules.competitions.map((competition) => idsRepo.id(competition)).toList();
     final pointsModifiersJson = rules.pointsModifiers
-        .map((competition, modifier) => MapEntry(idsRepo.idOf(competition), modifier));
+        .map((competition, modifier) => MapEntry(idsRepo.id(competition), modifier));
 
     return {
       'type': rules is DefaultIndividualClassificationRules ? 'individual' : 'team',

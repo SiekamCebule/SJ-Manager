@@ -22,6 +22,6 @@ class DefaultMatchingByTextAlgorithm extends MatchingByTextAlgorithm {
 
   @override
   bool matches() {
-    return text.containsAllLetters(from: target);
+    return target.toLowerCase().containsAllLetters(from: text.toLowerCase());
   }
 }

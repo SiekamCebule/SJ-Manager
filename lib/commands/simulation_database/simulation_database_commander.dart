@@ -1,6 +1,7 @@
 import 'package:sj_manager/algorithms/start_form/default_start_form_algorithm.dart';
 import 'package:sj_manager/algorithms/training_engine/jumper_training_result.dart';
 import 'package:sj_manager/models/simulation/database/actions/simulation_action_type.dart';
+import 'package:sj_manager/models/simulation/database/helper/simulation_database_helper.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/models/simulation/jumper/stats/jumper_stats.dart';
@@ -9,10 +10,13 @@ import 'package:sj_manager/models/simulation/flow/training/jumper_training_confi
 import 'package:sj_manager/models/database/team/subteam.dart';
 
 class SimulationDatabaseCommander {
-  const SimulationDatabaseCommander({
+  SimulationDatabaseCommander({
     required this.database,
-  });
+  }) {
+    dbHelper = SimulationDatabaseHelper(database: database);
+  }
 
+  late SimulationDatabaseHelper dbHelper;
   final SimulationDatabase database;
 
   /*SimulationDatabase setIdsRepo({
@@ -58,11 +62,12 @@ class SimulationDatabaseCommander {
   void setSubteam({
     required Subteam subteam,
     required Iterable<SimulationJumper> jumpers,
-    required Object subteamNewId,
+    required String subteamNewId,
   }) {
     database.idsRepo.removeById(id: subteamNewId);
     database.idsRepo.register(subteam, id: subteamNewId);
-    database.subteamJumpers[subteam] = jumpers;
+    final jumperIds = jumpers.map(dbHelper.id);
+    database.subteamJumpers[subteam] = jumperIds.toList();
     database.notify();
   }
 
@@ -79,7 +84,7 @@ class SimulationDatabaseCommander {
     jumper.jumpsConsistency = result.jumpsConsistency;
     jumper.fatigue = result.fatigue;
 
-    final attributeHistory = database.jumperStats[jumper]!.progressableAttributeHistory;
+    final attributeHistory = dbHelper.jumperStats(jumper)!.progressableAttributeHistory;
 
     attributeHistory[TrainingProgressCategory.takeoff]!
         .register(result.takeoffQuality, date: date);
@@ -97,7 +102,7 @@ class SimulationDatabaseCommander {
     required SimulationJumper jumper,
     required JumperStats stats,
   }) {
-    database.jumperStats[jumper] = stats;
+    database.jumperStats[dbHelper.id(jumper)] = stats;
     database.notify();
   }
 
@@ -105,7 +110,7 @@ class SimulationDatabaseCommander {
     required SimulationJumper jumper,
     required TrainingReport? report,
   }) {
-    database.jumperReports[jumper]!.monthlyTrainingReport = report;
+    database.jumperReports[dbHelper.id(jumper)]!.monthlyTrainingReport = report;
     database.notify();
   }
 
@@ -113,7 +118,7 @@ class SimulationDatabaseCommander {
     required SimulationJumper jumper,
     required TrainingReport? report,
   }) {
-    database.jumperReports[jumper]!.weeklyTrainingReport = report;
+    database.jumperReports[dbHelper.id(jumper)]!.weeklyTrainingReport = report;
     database.notify();
   }
 }
