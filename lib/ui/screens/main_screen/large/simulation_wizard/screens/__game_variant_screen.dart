@@ -38,7 +38,7 @@ class __GameVariantScreenState extends State<_GameVariantScreen> {
                   key: ValueKey(index),
                   leading: const Icon(Symbols.circle),
                   title: Text(variant.name.translate(context)),
-                  subtitle: Text(variant.description.translate(context)),
+                  subtitle: Text(variant.shortDescription.translate(context)),
                   selected: _selected == variant,
                   onTap: () {
                     setState(() {
@@ -63,12 +63,16 @@ class __GameVariantScreenState extends State<_GameVariantScreen> {
               shape: const Border(),
               color: Theme.of(context).colorScheme.surfaceContainerLowest,
               margin: EdgeInsets.zero,
-              child: const Padding(
-                padding: EdgeInsets.only(left: 13, top: 13),
-                child: Text(
-                  'Różne warianty gry oferują różne wrażenia - każdy wariant ma inne kalendarze, inne skocznie i zasady rozgrywki. Dzięki temu możesz m.in. symulować legendarne sezony z uwzględnieniem realnych kalendarzy. Chcesz zagrać realistyczną karierę w czasie teraźniejszym, a może karierę opartą na fikcyjnym uniwersum przyszłości?\nWciąż trwają prace nad dodawaniem kolejnych wariantów.',
-                ),
-              ),
+              child: _selected != null
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 13, top: 13),
+                      child: Text(
+                        _selected!.longDescription.translate(context),
+                      ),
+                    )
+                  : const Center(
+                      child: Text('Wybierz wariant gry, żeby zobaczyć jego opis'),
+                    ),
             ),
           ),
         ),

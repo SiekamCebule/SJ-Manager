@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/models/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
+import 'package:sj_manager/utils/colors.dart';
 
 class ChooseSimulationDialog extends StatelessWidget {
   const ChooseSimulationDialog({
@@ -19,6 +20,9 @@ class ChooseSimulationDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     const double bodyWidth = 400;
     const double bodyHeight = 300;
+    final brightness = Theme.of(context).brightness;
+    final tileColor =
+        Theme.of(context).colorScheme.surfaceContainer.blendWithBg(brightness, -0.01);
 
     final content = SizedBox(
       width: bodyWidth,
@@ -28,8 +32,12 @@ class ChooseSimulationDialog extends StatelessWidget {
         itemBuilder: (context, index) {
           final simulation = simulations[index];
           return ListTile(
+            tileColor: tileColor,
+            splashColor: tileColor.blendWithBg(brightness, -0.015),
+            hoverColor: tileColor.blendWithBg(brightness, -0.015),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             key: ValueKey(index),
-            leading: const SizedBox(), // TODO: Country flag
+            leading: const SizedBox(),
             title: Text(simulation.name),
             subtitle: SizedBox(
               width: 120,

@@ -9,38 +9,38 @@ enum SubteamType {
 }
 
 const subteamTypeNames = {
-  SubteamType.a: MultilingualString(valuesByLanguage: {
+  SubteamType.a: MultilingualString({
     'pl': 'Kadra A',
     'en': 'Subteam A',
   }),
-  SubteamType.b: MultilingualString(valuesByLanguage: {
+  SubteamType.b: MultilingualString({
     'pl': 'Kadra B',
     'en': 'Subteam B',
   }),
-  SubteamType.c: MultilingualString(valuesByLanguage: {
+  SubteamType.c: MultilingualString({
     'pl': 'Kadra C',
     'en': 'Subteam C',
   }),
-  SubteamType.d: MultilingualString(valuesByLanguage: {
+  SubteamType.d: MultilingualString({
     'pl': 'Kadra D',
     'en': 'Subteam D',
   }),
 };
 
 const subteamTypeDescriptionsWhenChoosing = {
-  SubteamType.a: MultilingualString(valuesByLanguage: {
+  SubteamType.a: MultilingualString({
     'pl': 'Kadra w której znajdują się najlepsi w kraju',
     'en': 'A subteam featuring the best athletes in the country',
   }),
-  SubteamType.b: MultilingualString(valuesByLanguage: {
+  SubteamType.b: MultilingualString({
     'pl': 'Zaplecze kadry A, w której wciąż znajdziemy wiele talentów',
     'en': 'The backup to Subteam A, still packed with talent',
   }),
-  SubteamType.c: MultilingualString(valuesByLanguage: {
+  SubteamType.c: MultilingualString({
     'pl': 'Są tu sportowcy z potencjałem, którzy tylko czekają na odpowiedniego trenera',
     'en': 'Jumpers here are waiting for the coach, who can unlock their potential',
   }),
-  SubteamType.d: MultilingualString(valuesByLanguage: {
+  SubteamType.d: MultilingualString({
     'pl':
         'Nie ma tu zachwycającego poziomu, ale ci ludzie wciąż potrafią skakać na nartach!',
     'en':

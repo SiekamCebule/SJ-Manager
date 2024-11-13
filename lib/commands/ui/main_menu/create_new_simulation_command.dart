@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quiver/iterables.dart';
+import 'package:sj_manager/commands/ui/simulation/continue_simulation_command.dart';
 import 'package:sj_manager/commands/ui/simulation/jumper_reports/set_up_jumper_level_reports_command.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/models/game_variants/game_variants_io_utils.dart';
@@ -12,6 +14,7 @@ import 'package:sj_manager/models/simulation/user_simulation/user_simulations_re
 import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
 import 'package:sj_manager/utils/file_system.dart';
 import 'package:path/path.dart' as path;
+import 'package:sj_manager/utils/id_generator.dart';
 
 class CreateNewSimulationCommand {
   CreateNewSimulationCommand({
@@ -30,6 +33,7 @@ class CreateNewSimulationCommand {
     await _createSimulationDatabase();
     await _copyImagesFromVariant();
     await _setUpJumperLevelReports();
+    await _maybeSimulateTime();
     await _addUserSimulationRecord();
     await _updateUserSimulationsRegistry();
     await _saveToFile();
@@ -118,6 +122,26 @@ class CreateNewSimulationCommand {
       database: _database,
       levelRequirements: simulationOptions.gameVariant.last!.jumperLevelRequirements,
     ).execute();
+  }
+
+  Future<void> _maybeSimulateTime() async {
+    final earliestDate = simulationOptions.gameVariant.last!.startDates.first;
+    final latestDate = simulationOptions.gameVariant.last!.startDates.last;
+    final startDate = simulationOptions.startDate.last!;
+
+    if (startDate.date.isAfter(earliestDate.date)) {
+      final difference = startDate.date.difference(earliestDate.date);
+      final daysToSimulate = difference.inDays;
+      for (var day in range(0, daysToSimulate - 1, 1)) {
+        ContinueSimulationCommand(
+          database: _database,
+          chooseSubteamId: (_) => context.read<IdGenerator>().generate(),
+          afterSettingUpSubteams: null,
+          afterSettingUpTrainings: null,
+        ).execute();
+        print('day: ${day + 1} (${_database.currentDate})');
+      }
+    }
   }
 
   Future<void> _showSimulationScreen() async {

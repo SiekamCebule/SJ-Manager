@@ -13,7 +13,8 @@ class GameVariant {
   const GameVariant({
     required this.id,
     required this.name,
-    required this.description,
+    required this.shortDescription,
+    required this.longDescription,
     required this.jumpers,
     required this.hills,
     required this.countries,
@@ -26,7 +27,8 @@ class GameVariant {
 
   final String id;
   final MultilingualString name;
-  final MultilingualString description;
+  final MultilingualString shortDescription;
+  final MultilingualString longDescription;
   final List<JumperDbRecord> jumpers;
   final List<Hill> hills;
   final List<Country> countries;
@@ -39,7 +41,8 @@ class GameVariant {
   GameVariant copyWith({
     String? id,
     MultilingualString? name,
-    MultilingualString? description,
+    MultilingualString? shortDescription,
+    MultilingualString? longDescription,
     List<JumperDbRecord>? jumpers,
     List<Hill>? hills,
     List<Country>? countries,
@@ -53,7 +56,8 @@ class GameVariant {
     return GameVariant(
       id: id ?? this.id,
       name: name ?? this.name,
-      description: description ?? this.description,
+      shortDescription: shortDescription ?? this.shortDescription,
+      longDescription: longDescription ?? this.longDescription,
       jumpers: jumpers ?? List<JumperDbRecord>.from(this.jumpers),
       hills: hills ?? List<Hill>.from(this.hills),
       countries: countries ?? List<Country>.from(this.countries),

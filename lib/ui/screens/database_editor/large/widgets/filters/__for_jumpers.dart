@@ -26,13 +26,6 @@ class _ForJumpersState<T extends JumperDbRecord> extends State<_ForJumpers<T>> {
   @override
   void initState() {
     _searchingController = TextEditingController();
-    scheduleMicrotask(() {
-      final filtersRepo = context.read<DbFiltersRepo>();
-      /*filtersRepo.changesStream.listen((_) {
-        _searchingController.text = '';
-        _countriesDropdownKey.currentState!.setManually(null);
-      });*/
-    });
     super.initState();
   }
 

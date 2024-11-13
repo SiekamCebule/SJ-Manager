@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:sj_manager/commands/simulation_database/simulation_database_commander.dart';
 import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/algorithms/training_engine/jumper_training_engine.dart';
@@ -6,12 +5,10 @@ import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
 
 class SimulateJumperTrainingCommand {
   SimulateJumperTrainingCommand({
-    required this.context,
     required this.database,
     required this.jumper,
   });
 
-  final BuildContext context;
   final SimulationDatabase database;
   final SimulationJumper jumper;
 

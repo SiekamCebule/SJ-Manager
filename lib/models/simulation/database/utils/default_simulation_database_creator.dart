@@ -112,14 +112,15 @@ class DefaultSimulationDatabaseCreator {
             type: options.subteamType.last!,
           )
         : null;
+    final earliestDate = options.gameVariant.last!.startDates.first;
     return SimulationDatabase(
       managerData: SimulationManagerData(
         mode: mode,
         userSubteam: userSubteam,
         personalCoachTeam: personalCoachTeam,
       ),
-      startDate: options.startDate.last!.date,
-      currentDate: options.startDate.last!.date,
+      startDate: earliestDate.date,
+      currentDate: earliestDate.date,
       jumpers: _jumpers,
       hills: _hills,
       countryTeams: _countryTeams,

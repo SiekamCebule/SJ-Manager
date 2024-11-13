@@ -30,6 +30,7 @@ import 'package:sj_manager/ui/database_item_editors/fields/my_checkbox_list_tile
 import 'package:sj_manager/ui/dialogs/simple_help_dialog.dart';
 import 'package:sj_manager/ui/dialogs/simulation_wizard/simulation_name_dialog.dart';
 import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
+import 'package:sj_manager/ui/reusable_widgets/help_icon_button.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/country_screen/country_title.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/country_screen/preview_stat_texts.dart';
 import 'package:sj_manager/ui/screens/main_screen/large/simulation_wizard/widgets/country_screen/stars.dart';
@@ -72,7 +73,7 @@ class _SimulationWizardDialogState extends State<SimulationWizardDialog>
     _navCubit = SimulationWizardNavigationCubit(
       onFinish: () async {
         final simulationId = context.read<IdGenerator>().generate();
-        if (simulationId is String == false) {
+        if (simulationId == false) {
           throw StateError('ID generator should generate strings');
         }
         final simulationName = await showSjmDialog(
@@ -81,7 +82,7 @@ class _SimulationWizardDialogState extends State<SimulationWizardDialog>
           child: const SimulationNameDialog(),
         ) as String;
 
-        _optionsRepo.simulationId.set(simulationId as String);
+        _optionsRepo.simulationId.set(simulationId);
         _optionsRepo.simulationName.set(simulationName);
 
         if (!mounted) return;
