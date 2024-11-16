@@ -5,14 +5,14 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:osje_sim/osje_sim.dart' as _i7;
-import 'package:sj_manager/models/simulation/competition/competition.dart' as _i5;
-import 'package:sj_manager/models/simulation/competition/rules/utils/wind_averager/wind_averager.dart'
+import 'package:sj_manager/data/models/simulation/competition/competition.dart' as _i5;
+import 'package:sj_manager/data/models/simulation/competition/rules/utils/wind_averager/wind_averager.dart'
     as _i8;
-import 'package:sj_manager/models/simulation/event_series/event_series.dart' as _i2;
-import 'package:sj_manager/models/simulation/standings/score/details/score_details.dart'
+import 'package:sj_manager/data/models/simulation/event_series/event_series.dart' as _i2;
+import 'package:sj_manager/data/models/simulation/standings/score/details/score_details.dart'
     as _i4;
-import 'package:sj_manager/models/simulation/standings/standings.dart' as _i3;
-import 'package:sj_manager/models/database/hill/hill.dart' as _i6;
+import 'package:sj_manager/data/models/simulation/standings/standings.dart' as _i3;
+import 'package:sj_manager/data/models/database/hill/hill.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

@@ -5,18 +5,18 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i10;
-import 'package:sj_manager/models/simulation/competition/competition.dart' as _i5;
-import 'package:sj_manager/models/simulation/competition/rules/utils/ko_group_creator.dart/concrete/default.dart'
+import 'package:sj_manager/data/models/simulation/competition/competition.dart' as _i5;
+import 'package:sj_manager/data/models/simulation/competition/rules/utils/ko_group_creator.dart/concrete/default.dart'
     as _i8;
-import 'package:sj_manager/models/simulation/competition/rules/utils/ko_group_creator.dart/ko_groups_creator.dart'
+import 'package:sj_manager/data/models/simulation/competition/rules/utils/ko_group_creator.dart/ko_groups_creator.dart'
     as _i7;
-import 'package:sj_manager/models/simulation/competition/rules/utils/ko_round_advancement_determinator/concrete/n_best.dart'
+import 'package:sj_manager/data/models/simulation/competition/rules/utils/ko_round_advancement_determinator/concrete/n_best.dart'
     as _i9;
-import 'package:sj_manager/models/simulation/event_series/event_series.dart' as _i2;
-import 'package:sj_manager/models/simulation/standings/score/details/score_details.dart'
+import 'package:sj_manager/data/models/simulation/event_series/event_series.dart' as _i2;
+import 'package:sj_manager/data/models/simulation/standings/score/details/score_details.dart'
     as _i4;
-import 'package:sj_manager/models/simulation/standings/standings.dart' as _i3;
-import 'package:sj_manager/models/database/hill/hill.dart' as _i6;
+import 'package:sj_manager/data/models/simulation/standings/standings.dart' as _i3;
+import 'package:sj_manager/data/models/database/hill/hill.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

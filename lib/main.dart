@@ -1,44 +1,45 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:fluro/fluro.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sj_manager/models/game_variants/game_variant.dart';
-import 'package:sj_manager/models/simulation/database/simulation_database_and_models/simulation_season.dart';
-import 'package:sj_manager/models/simulation/jumper/simulation_jumper.dart';
-import 'package:sj_manager/models/simulation/user_simulation/user_simulation.dart';
-import 'package:sj_manager/models/database/country/country.dart';
-import 'package:sj_manager/models/database/db_items_file_system_paths.dart';
-import 'package:sj_manager/models/database/hill/hill.dart';
-import 'package:sj_manager/models/database/items_repos_registry.dart';
-import 'package:sj_manager/models/database/team/country_team/country_team.dart';
-import 'package:sj_manager/models/database/team/subteam.dart';
-import 'package:sj_manager/repositories/database_editing/db_editing_defaults_repo.dart';
-import 'package:sj_manager/repositories/generic/db_items_json_configuration.dart';
-import 'package:sj_manager/json/countries.dart';
-import 'package:sj_manager/json/json_types.dart';
-import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
-import 'package:sj_manager/repositories/countries/countries_repo.dart';
-import 'package:sj_manager/repositories/generic/editable_items_repo.dart';
-import 'package:sj_manager/repositories/generic/items_repo.dart';
-import 'package:sj_manager/repositories/settings/local_user_settings_repo.dart';
-import 'package:sj_manager/repositories/settings/user_settings_repo.dart';
+import 'package:sj_manager/data/models/game_variants/game_variant.dart';
+import 'package:sj_manager/data/models/simulation/database/simulation_database_and_models/simulation_season.dart';
+import 'package:sj_manager/data/models/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/data/models/simulation/user_simulation/user_simulation_model.dart';
+import 'package:sj_manager/data/models/database/country/country.dart';
+import 'package:sj_manager/data/models/database/db_items_file_system_paths.dart';
+import 'package:sj_manager/data/models/database/hill/hill.dart';
+import 'package:sj_manager/data/models/database/items_repos_registry.dart';
+import 'package:sj_manager/data/models/database/team/country_team/country_team.dart';
+import 'package:sj_manager/data/models/database/team/subteam.dart';
+import 'package:sj_manager/domain/repository_interfaces/database_editing/db_editing_defaults_repo.dart';
+import 'package:sj_manager/domain/repository_interfaces/generic/db_items_json_configuration.dart';
+import 'package:sj_manager/utilities/json/countries.dart';
+import 'package:sj_manager/utilities/json/json_types.dart';
+import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/domain/repository_interfaces/countries/countries_repo.dart';
+import 'package:sj_manager/domain/repository_interfaces/generic/editable_items_repo.dart';
+import 'package:sj_manager/domain/repository_interfaces/generic/items_repo.dart';
+import 'package:sj_manager/domain/repository_interfaces/settings/local_user_settings_repo.dart';
+import 'package:sj_manager/domain/repository_interfaces/settings/user_settings_repo.dart';
 import 'package:sj_manager/setup/game_variants_loader.dart';
 import 'package:sj_manager/setup/simulations_loader.dart';
-import 'package:sj_manager/ui/app.dart';
-import 'package:sj_manager/ui/app_initializer.dart';
-import 'package:sj_manager/ui/dialogs/sjm_error_dialog.dart';
-import 'package:sj_manager/ui/providers/locale_cubit.dart';
-import 'package:sj_manager/ui/reusable_widgets/countries/country_flag.dart';
-import 'package:sj_manager/ui/screens/main_screen/main_screen.dart';
-import 'package:sj_manager/ui/theme/theme_cubit.dart';
-import 'package:sj_manager/utils/file_system.dart';
-import 'package:sj_manager/utils/id_generator.dart';
+import 'package:sj_manager/presentation/ui/app.dart';
+import 'package:sj_manager/presentation/ui/app_initializer.dart';
+import 'package:sj_manager/presentation/ui/providers/locale_cubit.dart';
+import 'package:sj_manager/presentation/ui/reusable_widgets/countries/country_flag.dart';
+import 'package:sj_manager/presentation/ui/screens/main_screen/main_screen.dart';
+import 'package:sj_manager/presentation/ui/theme/theme_cubit.dart';
+import 'package:sj_manager/utilities/utils/file_system.dart';
+import 'package:sj_manager/utilities/utils/id_generator.dart';
 import 'package:path/path.dart' as path;
-import 'package:sj_manager/utils/platform.dart';
-import 'package:sj_manager/utils/show_dialog.dart';
+import 'package:sj_manager/utilities/utils/logging/errors_logger.dart';
+import 'package:sj_manager/utilities/utils/platform.dart';
 import 'package:window_manager/window_manager.dart';
 
 final mainNavigatorKey = GlobalKey<NavigatorState>();
@@ -49,6 +50,8 @@ void main() async {
   final sharedPrefs = await SharedPreferences.getInstance();
   final pathsCache = PlarformSpecificPathsCache();
   await pathsCache.setup();
+  final logger = LoggerService();
+  await logger.init(pathsCache);
 
   final app = MultiRepositoryProvider(
     providers: [
@@ -101,7 +104,7 @@ void main() async {
               create: (context) => ItemsRepo<GameVariant>(),
             ),
             Provider(
-              create: (context) => EditableItemsRepo<UserSimulation>(),
+              create: (context) => EditableItemsRepo<UserSimulationModel>(),
             ),
           ],
           child: MultiBlocProvider(
@@ -137,46 +140,31 @@ void main() async {
       ),
     ),
   );
-  FlutterError.onError = (FlutterErrorDetails details) async {
-    if (details.exception is AssertionError ||
-        details.exception.toString().contains('A RenderFlex overflowed')) {
-      FlutterError.dumpErrorToConsole(details);
-      return;
-    }
 
-    FlutterError.dumpErrorToConsole(details);
-    await showSjmDialog(
-      barrierDismissible: false,
-      context: mainNavigatorKey.currentContext!,
-      child: SjmErrorDialog(
-        error: details.exception,
-        stackTrace: details.stack,
-      ),
-    );
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    logger.logError(details.exception, details.stack);
   };
 
-  runZonedGuarded<Future<void>>(() async {
-    runApp(app);
-  }, (error, stackTrace) async {
-    if (error is AssertionError || error.toString().contains('A RenderFlex overflowed')) {
-      return;
-    }
-
-    await showSjmDialog(
-      barrierDismissible: false,
-      context: mainNavigatorKey.currentContext!,
-      child: SjmErrorDialog(
-        error: error,
-        stackTrace: stackTrace,
-      ),
-    );
-  });
-
-  WidgetsFlutterBinding.ensureInitialized();
-  await windowManager.ensureInitialized();
-  if (platformIsDesktop) {
-    await WindowManager.instance.setMinimumSize(const Size(1350, 850));
-  }
+  await runZonedGuarded<Future<void>>(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      if (platformIsDesktop) {
+        await windowManager.ensureInitialized();
+        await WindowManager.instance.setMinimumSize(const Size(1350, 850));
+      }
+      runApp(app);
+    },
+    (error, stackTrace) {
+      logger.logError(error, stackTrace);
+      throw error;
+      FlutterError.reportError(FlutterErrorDetails(
+        exception: error,
+        stack: stackTrace,
+        silent: false,
+      ));
+    },
+  );
 }
 
 List constructSimulationDbIoProvidersList() {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/models/simulation/competition/rules/entities_limit.dart';
+import 'package:sj_manager/data/models/simulation/competition/rules/entities_limit.dart';
 
 String translatedEntitiesLimitType(BuildContext context, EntitiesLimit? limit) {
   if (limit == null) {

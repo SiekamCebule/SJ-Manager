@@ -8,10 +8,10 @@ import 'dart:ui' as _i7;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:rxdart/rxdart.dart' as _i2;
 import 'package:shared_preferences/shared_preferences.dart' as _i3;
-import 'package:sj_manager/repositories/generic/items_repo.dart' as _i4;
-import 'package:sj_manager/repositories/settings/local_user_settings_repo.dart'
+import 'package:sj_manager/domain/repository_interfaces/generic/items_repo.dart' as _i4;
+import 'package:sj_manager/domain/repository_interfaces/settings/local_user_settings_repo.dart'
     as _i5;
-import 'package:sj_manager/ui/theme/app_schemes.dart' as _i6;
+import 'package:sj_manager/presentation/ui/theme/app_schemes.dart' as _i6;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -26,8 +26,7 @@ import 'package:sj_manager/ui/theme/app_schemes.dart' as _i6;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeValueStream_0<T1> extends _i1.SmartFake
-    implements _i2.ValueStream<T1> {
+class _FakeValueStream_0<T1> extends _i1.SmartFake implements _i2.ValueStream<T1> {
   _FakeValueStream_0(
     Object parent,
     Invocation parentInvocation,
@@ -47,8 +46,7 @@ class _FakeType_1 extends _i1.SmartFake implements Type {
         );
 }
 
-class _FakeSharedPreferences_2 extends _i1.SmartFake
-    implements _i3.SharedPreferences {
+class _FakeSharedPreferences_2 extends _i1.SmartFake implements _i3.SharedPreferences {
   _FakeSharedPreferences_2(
     Object parent,
     Invocation parentInvocation,
@@ -124,8 +122,7 @@ class MockItemsRepo<T> extends _i1.Mock implements _i4.ItemsRepo<T> {
 /// A class which mocks [LocalUserSettingsRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockLocalUserSettingsRepo extends _i1.Mock
-    implements _i5.LocalUserSettingsRepo {
+class MockLocalUserSettingsRepo extends _i1.Mock implements _i5.LocalUserSettingsRepo {
   MockLocalUserSettingsRepo() {
     _i1.throwOnMissingStub(this);
   }

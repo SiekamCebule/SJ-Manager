@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sj_manager/repositories/database_editing/selected_indexes_repository.dart';
+import 'package:sj_manager/domain/repository_interfaces/database_editing/selected_indexes_repository.dart';
 
 void main() {
   late SelectedIndexesRepo repo;

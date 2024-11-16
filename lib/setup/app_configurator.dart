@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/exceptions/loading_database_failed_exception.dart';
+import 'package:sj_manager/data/models/exceptions/loading_database_failed_exception.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/setup/db_items_list_loader.dart';
-import 'package:sj_manager/ui/navigation/routes.dart';
-import 'package:sj_manager/utils/file_system.dart';
+import 'package:sj_manager/presentation/ui/navigation/routes.dart';
+import 'package:sj_manager/utilities/utils/file_system.dart';
 import 'package:path/path.dart' as path;
 
 class AppConfigurator {
