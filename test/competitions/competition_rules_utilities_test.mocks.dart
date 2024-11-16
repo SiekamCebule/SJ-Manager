@@ -6,22 +6,22 @@
 import 'package:flutter/material.dart' as _i16;
 import 'package:mockito/mockito.dart' as _i2;
 import 'package:mockito/src/dummies.dart' as _i15;
-import 'package:sj_manager/models/simulation/competition/competition.dart' as _i6;
-import 'package:sj_manager/models/simulation/competition/rules/utils/competition_score_creator/competition_score_creator.dart'
+import 'package:sj_manager/data/models/simulation/competition/competition.dart' as _i6;
+import 'package:sj_manager/data/models/simulation/competition/rules/utils/competition_score_creator/competition_score_creator.dart'
     as _i13;
-import 'package:sj_manager/models/simulation/event_series/event_series.dart' as _i4;
-import 'package:sj_manager/models/simulation/standings/score/details/jump_score_details.dart'
+import 'package:sj_manager/data/models/simulation/event_series/event_series.dart' as _i4;
+import 'package:sj_manager/data/models/simulation/standings/score/details/jump_score_details.dart'
     as _i14;
-import 'package:sj_manager/models/simulation/standings/score/details/score_details.dart'
+import 'package:sj_manager/data/models/simulation/standings/score/details/score_details.dart'
     as _i1;
-import 'package:sj_manager/models/simulation/standings/score/score.dart' as _i3;
-import 'package:sj_manager/models/simulation/standings/standings.dart' as _i5;
-import 'package:sj_manager/models/database/country/country.dart' as _i12;
-import 'package:sj_manager/models/database/hill/hill.dart' as _i7;
-import 'package:sj_manager/models/database/jumper/jumper_db_record.dart' as _i8;
-import 'package:sj_manager/models/database/team/competition_team.dart' as _i10;
-import 'package:sj_manager/models/database/team/team.dart' as _i9;
-import 'package:sj_manager/utils/multilingual_string.dart' as _i11;
+import 'package:sj_manager/data/models/simulation/standings/score/score.dart' as _i3;
+import 'package:sj_manager/data/models/simulation/standings/standings.dart' as _i5;
+import 'package:sj_manager/data/models/database/country/country.dart' as _i12;
+import 'package:sj_manager/data/models/database/hill/hill.dart' as _i7;
+import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart' as _i8;
+import 'package:sj_manager/data/models/database/team/competition_team.dart' as _i10;
+import 'package:sj_manager/data/models/database/team/team.dart' as _i9;
+import 'package:sj_manager/utilities/utils/multilingual_string.dart' as _i11;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

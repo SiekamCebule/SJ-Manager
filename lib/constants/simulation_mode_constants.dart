@@ -1,1 +1,0 @@
-const sjmManagerChargesLimit = 15;

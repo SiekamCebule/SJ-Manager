@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
-import 'package:sj_manager/models/simulation/event_series/event_series_calendar_preset.dart';
-import 'package:sj_manager/models/simulation/event_series/event_series_setup.dart';
-import 'package:sj_manager/models/database/country/country.dart';
-import 'package:sj_manager/models/database/hill/hill.dart';
-import 'package:sj_manager/models/database/jumper/jumper_db_record.dart';
-import 'package:sj_manager/models/database/team/team.dart';
+import 'package:sj_manager/data/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
+import 'package:sj_manager/data/models/simulation/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/data/models/simulation/event_series/event_series_setup.dart';
+import 'package:sj_manager/data/models/database/country/country.dart';
+import 'package:sj_manager/data/models/database/hill/hill.dart';
+import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/data/models/database/team/team.dart';
 import 'package:sj_manager/setup/db_items_list_loader.dart';
 import 'package:sj_manager/setup/loading_from_file/db_items_list_loader_from_file_high_level_wrapper.dart';
 

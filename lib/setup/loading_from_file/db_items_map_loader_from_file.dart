@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:sj_manager/json/db_items_json.dart';
-import 'package:sj_manager/json/json_types.dart';
+import 'package:sj_manager/utilities/json/db_items_json.dart';
+import 'package:sj_manager/utilities/json/json_types.dart';
 import 'package:sj_manager/setup/db_items_list_loader.dart';
 
 class DbItemsMapLoaderFromFile<T extends Object> extends DbItemsListLoader {
