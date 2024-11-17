@@ -11,9 +11,9 @@ import 'package:sj_manager/data/models/running/competition_flow_controller.dart'
 import 'package:sj_manager/data/models/running/competition_start_list_repository.dart';
 import 'package:sj_manager/data/models/running/competition_status.dart';
 import 'package:sj_manager/data/models/running/default_competition_flow_controllers.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/utils/judges_creator/concrete/default.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/utils/judges_creator/judges_creator.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/judges_creator/concrete/default.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/judges_creator/judges_creator.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
 
 import 'competition_bloc_test.mocks.dart';
 

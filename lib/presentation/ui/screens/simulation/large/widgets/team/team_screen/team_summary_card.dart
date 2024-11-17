@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:sj_manager/data/models/simulation/flow/reports/team_reports.dart';
-import 'package:sj_manager/data/models/simulation/flow/simple_rating.dart';
+import 'package:sj_manager/domain/entities/simulation/flow/reports/team_reports.dart';
+import 'package:sj_manager/domain/entities/simulation/flow/simple_rating.dart';
 import 'package:sj_manager/presentation/ui/screens/simulation/utils/jumper_ratings_translations.dart';
 import 'package:sj_manager/presentation/ui/screens/simulation/utils/team_ratings_translations.dart';
 

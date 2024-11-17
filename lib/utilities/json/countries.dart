@@ -1,6 +1,6 @@
 import 'package:sj_manager/utilities/json/json_object_loader.dart';
 import 'package:sj_manager/utilities/json/json_object_saver.dart';
-import 'package:sj_manager/data/models/database/country/country.dart';
+import 'package:sj_manager/core/country/country.dart';
 import 'package:sj_manager/domain/repository_interfaces/countries/countries_repo.dart';
 
 abstract interface class JsonCountryLoader<I> implements JsonObjectLoader<I, Country> {}

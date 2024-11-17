@@ -3,8 +3,8 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/data/models/simulation/flow/simulation_mode.dart';
-import 'package:sj_manager/data/models/simulation/user_simulation/user_simulation_model.dart';
+import 'package:sj_manager/domain/entities/simulation/flow/simulation_mode.dart';
+import 'package:sj_manager/data/models/user_simulation/simulation_model.dart';
 import 'package:sj_manager/presentation/ui/dialogs/main_menu/delete_simulation_are_you_sure_dialog.dart';
 import 'package:sj_manager/utilities/utils/colors.dart';
 import 'package:sj_manager/utilities/utils/show_dialog.dart';
@@ -17,9 +17,9 @@ class ChooseSimulationDialog extends StatelessWidget {
     required this.onDelete,
   });
 
-  final List<UserSimulationModel> simulations;
-  final Function(UserSimulationModel simulation) onChoose;
-  final Function(UserSimulationModel simulation) onDelete;
+  final List<SimulationModel> simulations;
+  final Function(SimulationModel simulation) onChoose;
+  final Function(SimulationModel simulation) onDelete;
 
   @override
   Widget build(BuildContext context) {

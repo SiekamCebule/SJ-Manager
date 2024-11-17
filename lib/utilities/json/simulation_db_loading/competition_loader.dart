@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:sj_manager/utilities/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/data/models/simulation/competition/competition.dart';
-import 'package:sj_manager/data/models/simulation/competition/competition_labels.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/competition_rules/default_competition_rules_provider.dart';
-import 'package:sj_manager/data/models/simulation/standings/standings.dart';
-import 'package:sj_manager/data/models/database/hill/hill.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/competition.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/competition_labels.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_rules/default_competition_rules_provider.dart';
+import 'package:sj_manager/domain/entities/simulation/standings/standings.dart';
+import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 
 class CompetitionParser implements SimulationDbPartParser<Competition> {

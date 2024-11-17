@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/utils/judges_creator/judges_creator.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/judges_creator/judges_creator.dart';
 
 class CompetitionJudgingCubit extends Cubit<CompetitionJudgingState> {
   CompetitionJudgingCubit({

@@ -8,21 +8,21 @@ import 'package:sj_manager/presentation/bloc/database_editing/database_items_cub
 import 'package:sj_manager/presentation/bloc/database_editing/state/database_items_state.dart';
 import 'package:sj_manager/utilities/filters/filter.dart';
 import 'package:sj_manager/utilities/filters/jumpers/jumper_matching_algorithms.dart';
-import 'package:sj_manager/data/models/simulation/event_series/event_series_setup.dart';
-import 'package:sj_manager/data/models/database/country/country.dart';
-import 'package:sj_manager/data/models/database/team/country_team/country_team_facts.dart';
-import 'package:sj_manager/data/models/database/hill/hill.dart';
-import 'package:sj_manager/data/models/database/hill/hill_profile_type.dart';
-import 'package:sj_manager/data/models/database/hill/jumps_variability.dart';
-import 'package:sj_manager/data/models/database/hill/landing_ease.dart';
-import 'package:sj_manager/data/models/database/hill/typical_wind_direction.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_skills_db_record.dart';
-import 'package:sj_manager/data/models/database/items_repos_registry.dart';
-import 'package:sj_manager/data/models/database/psyche/personalities.dart';
-import 'package:sj_manager/data/models/database/sex.dart';
-import 'package:sj_manager/data/models/database/team/country_team/country_team.dart';
-import 'package:sj_manager/data/models/database/team/team.dart';
+import 'package:sj_manager/domain/entities/simulation/event_series/event_series_setup.dart';
+import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/core/team/country_team/country_team_facts_model.dart';
+import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
+import 'package:sj_manager/domain/entities/game_variant/hill/hill_profile_type.dart';
+import 'package:sj_manager/domain/entities/game_variant/hill/jumps_variability.dart';
+import 'package:sj_manager/domain/entities/game_variant/hill/landing_ease.dart';
+import 'package:sj_manager/domain/entities/game_variant/hill/typical_wind_direction.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_skills_db_record.dart';
+import 'package:sj_manager/data/repositories/items_repos_registry.dart';
+import 'package:sj_manager/core/psyche/personalities.dart';
+import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
+import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/domain/entities/simulation/team/team.dart';
 import 'package:sj_manager/domain/repository_interfaces/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/editable_items_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/database_editing/selected_indexes_repository.dart';
@@ -67,7 +67,7 @@ void main() {
       country: slovenia,
       dateOfBirth: DateTime.now(),
       personality: Personalities.balanced,
-      skills: JumperSkillsDbRecord.empty.copyWith(
+      skills: JumperSkills.empty.copyWith(
         takeoffQuality: 14,
         flightQuality: 14,
       ),
@@ -78,7 +78,7 @@ void main() {
       country: switzerland,
       dateOfBirth: DateTime.now(),
       personality: Personalities.balanced,
-      skills: JumperSkillsDbRecord.empty,
+      skills: JumperSkills.empty,
     ),
     MaleJumperDbRecord(
       name: 'Caroll',
@@ -86,7 +86,7 @@ void main() {
       country: switzerland,
       dateOfBirth: DateTime.now(),
       personality: Personalities.balanced,
-      skills: JumperSkillsDbRecord.empty,
+      skills: JumperSkills.empty,
     ),
   ];
   final femaleJumpers = [
@@ -147,31 +147,31 @@ void main() {
       when(teamsRepo.itemsType).thenReturn(Team);
       when(teamsRepo.last).thenReturn([
         CountryTeam(
-          facts: const CountryTeamFacts(
+          facts: const CountryTeamFactsModel(
               stars: 5, record: null, subteams: {}, limitInSubteam: {}),
           sex: Sex.male,
           country: germany,
         ),
         CountryTeam(
-          facts: const CountryTeamFacts(
+          facts: const CountryTeamFactsModel(
               stars: 3, record: null, subteams: {}, limitInSubteam: {}),
           sex: Sex.female,
           country: switzerland,
         ),
         CountryTeam(
-          facts: const CountryTeamFacts(
+          facts: const CountryTeamFactsModel(
               stars: 4, record: null, subteams: {}, limitInSubteam: {}),
           sex: Sex.male,
           country: switzerland,
         ),
         CountryTeam(
-          facts: const CountryTeamFacts(
+          facts: const CountryTeamFactsModel(
               stars: 5, record: null, subteams: {}, limitInSubteam: {}),
           sex: Sex.female,
           country: slovenia,
         ),
         CountryTeam(
-          facts: const CountryTeamFacts(
+          facts: const CountryTeamFactsModel(
               stars: 5, record: null, subteams: {}, limitInSubteam: {}),
           sex: Sex.male,
           country: slovenia,

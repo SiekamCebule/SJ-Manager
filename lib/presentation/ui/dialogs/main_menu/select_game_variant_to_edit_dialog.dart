@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:sj_manager/data/models/game_variants/game_variant.dart';
+import 'package:sj_manager/data/models/game_variant/game_variant.dart';
 
 class SelectGameVariantToEditDialog extends StatefulWidget {
   const SelectGameVariantToEditDialog({

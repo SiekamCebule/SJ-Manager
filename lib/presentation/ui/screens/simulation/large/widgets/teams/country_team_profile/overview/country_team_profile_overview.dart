@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sj_manager/utilities/algorithms/jumpers_ranking/country_team_ranking_creator.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/data/models/simulation/database/actions/simulation_action_type.dart';
-import 'package:sj_manager/data/models/database/sex.dart';
-import 'package:sj_manager/data/models/database/team/country_team/country_team.dart';
-import 'package:sj_manager/data/models/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/domain/entities/simulation/database/actions/simulation_action_type.dart';
+import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
+import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/card_with_title.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/jumpers_ranking/team_jumpers_ranking_list.dart';
 

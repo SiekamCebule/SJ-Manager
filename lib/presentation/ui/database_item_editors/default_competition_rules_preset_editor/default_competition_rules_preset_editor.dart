@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/competition_rules/default_competition_rules.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_rules/default_competition_rules.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
 import 'package:sj_manager/presentation/ui/database_item_editors/default_competition_rules_preset_editor/default_competition_rules_editor.dart';
 import 'package:sj_manager/presentation/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/presentation/ui/responsiveness/ui_constants.dart';

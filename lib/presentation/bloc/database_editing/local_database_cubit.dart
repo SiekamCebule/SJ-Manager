@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/data/models/database/team/country_team/country_team.dart';
-import 'package:sj_manager/data/models/game_variants/game_variant.dart';
-import 'package:sj_manager/data/models/game_variants/game_variants_io_utils.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/data/models/game_variant/game_variant.dart';
+import 'package:sj_manager/data/models/game_variant/game_variants_io_utils.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/domain/repository_interfaces/countries/countries_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/editable_items_repo.dart';

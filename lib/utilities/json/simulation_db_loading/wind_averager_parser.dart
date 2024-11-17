@@ -1,8 +1,8 @@
 import 'package:sj_manager/utilities/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/utils/wind_averager/concrete/default_linear.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/utils/wind_averager/concrete/default_weighted.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/utils/wind_averager/wind_averager.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/wind_averager/concrete/default_linear.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/wind_averager/concrete/default_weighted.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 
 class WindAveragerParser implements SimulationDbPartParser<WindAverager> {

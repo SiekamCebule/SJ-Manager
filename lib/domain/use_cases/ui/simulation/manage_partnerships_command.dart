@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/domain/use_cases/simulation_database_use_cases.dart';
-import 'package:sj_manager/data/models/simulation/database/helper/simulation_database_helper.dart';
-import 'package:sj_manager/data/models/simulation/database/simulation_database_and_models/simulation_database.dart';
-import 'package:sj_manager/data/models/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/domain/entities/simulation/database/helper/simulation_database_helper.dart';
+import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/domain/repository_interfaces/countries/country_flags/country_flags_repo.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
 import 'package:sj_manager/presentation/ui/screens/simulation/large/dialogs/manage_partnerships/manage_partnerships_dialog.dart';

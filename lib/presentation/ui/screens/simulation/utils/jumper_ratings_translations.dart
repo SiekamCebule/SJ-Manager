@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/data/models/simulation/jumper/reports/jumper_level_description.dart';
-import 'package:sj_manager/data/models/simulation/flow/simple_rating.dart';
-import 'package:sj_manager/data/models/database/team/country_team/subteam_type.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/reports/jumper_level_description.dart';
+import 'package:sj_manager/domain/entities/simulation/flow/simple_rating.dart';
+import 'package:sj_manager/domain/entities/simulation/team/subteam_type.dart';
 
 String getJumperMoraleDescription({
   required BuildContext context,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:sj_manager/data/models/simulation/jumper/reports/jumper_reports.dart';
-import 'package:sj_manager/data/models/simulation/flow/simple_rating.dart';
-import 'package:sj_manager/data/models/simulation/flow/training/jumper_training_config.dart';
-import 'package:sj_manager/data/models/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/reports/jumper_reports.dart';
+import 'package:sj_manager/domain/entities/simulation/flow/simple_rating.dart';
+import 'package:sj_manager/domain/entities/simulation/flow/training/jumper_training_config.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/card_with_title.dart';
 import 'package:sj_manager/presentation/ui/screens/simulation/large/widgets/team/jumper_training/jumper_training_configurator/widgets/jumper_attribute_training_slider.dart';
 import 'package:sj_manager/presentation/ui/screens/simulation/large/widgets/team/jumper_training/training_progress_report_display.dart';

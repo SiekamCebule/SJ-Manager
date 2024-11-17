@@ -1,9 +1,9 @@
 import 'package:sj_manager/utilities/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/data/models/simulation/standings/score/details/jump_score_details.dart';
-import 'package:sj_manager/data/models/simulation/standings/score/details/score_details.dart';
-import 'package:sj_manager/data/models/simulation/standings/score/score.dart';
-import 'package:sj_manager/data/models/simulation/standings/score/typedefs.dart';
+import 'package:sj_manager/domain/entities/simulation/standings/score/details/jump_score_details.dart';
+import 'package:sj_manager/domain/entities/simulation/standings/score/details/score_details.dart';
+import 'package:sj_manager/domain/entities/simulation/standings/score/score.dart';
+import 'package:sj_manager/domain/entities/simulation/standings/score/typedefs.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 
 class ScoreSerializer implements SimulationDbPartSerializer<Score> {

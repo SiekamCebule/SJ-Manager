@@ -1,7 +1,7 @@
 part of '../../../main_screen.dart';
 
-UserSimulationModel? computeLastPlayedSave({
-  required List<UserSimulationModel> simulations,
+SimulationModel? computeLastPlayedSave({
+  required List<SimulationModel> simulations,
 }) {
   if (simulations.isEmpty) return null;
   return simulations.reduce((first, second) {
@@ -19,7 +19,7 @@ class MainMenuContinueButton extends StatefulWidget {
 class _MainMenuContinueButtonState extends State<MainMenuContinueButton> {
   @override
   Widget build(BuildContext context) {
-    final simulationsRepo = context.watch<EditableItemsRepo<UserSimulationModel>>();
+    final simulationsRepo = context.watch<EditableItemsRepo<SimulationModel>>();
     final greyedOutTextStyle = Theme.of(context).textTheme.bodyMedium!.copyWith(
           color: Theme.of(context).colorScheme.onSurfaceVariant,
         );
@@ -27,7 +27,7 @@ class _MainMenuContinueButtonState extends State<MainMenuContinueButton> {
     return StreamBuilder(
       stream: simulationsRepo.items,
       builder: (context, snapshot) {
-        final UserSimulationModel? lastPlayed =
+        final SimulationModel? lastPlayed =
             computeLastPlayedSave(simulations: simulationsRepo.last);
         final enabled = lastPlayed != null;
         final emptyBody = MainMenuCard(
@@ -132,7 +132,7 @@ class _MainMenuContinueButtonState extends State<MainMenuContinueButton> {
     );
   }
 
-  Widget _constructFirstInfoWidget({required UserSimulationModel lastPlayed}) {
+  Widget _constructFirstInfoWidget({required SimulationModel lastPlayed}) {
     late Widget iconWidget;
     late Widget labelWidget;
     final labelTextStyle = Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -144,7 +144,7 @@ class _MainMenuContinueButtonState extends State<MainMenuContinueButton> {
         iconWidget = ClipRRect(
           borderRadius: BorderRadius.circular(5),
           child: Image.file(
-            File(lastPlayed.subteamCountryFlagPath!),
+            File(lastPlayed.subteamCountryFlagName!),
             height: 30,
             fit: BoxFit.fitHeight,
             errorBuilder: (context, error, stackTrace) => const Placeholder(),

@@ -3,8 +3,8 @@ import 'package:sj_manager/presentation/bloc/competitions/states/competition_sta
 
 import 'package:sj_manager/data/models/running/competition_flow_controller.dart';
 import 'package:sj_manager/data/models/running/competition_status.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
-import 'package:sj_manager/data/models/database/team/team.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/domain/entities/simulation/team/team.dart';
 
 class CompetitionStatusCubit<E> extends Cubit<CompetitionStatusState> {
   CompetitionStatusCubit({

@@ -1,4 +1,4 @@
-part of '../../../data/models/database/jumper/jumper_db_record.dart';
+part of '../../../features/game_variants/domain/entities/jumper/jumper_db_record.dart';
 
 JumperDbRecord _jumperFromJson(Json json, {required JsonCountryLoader countryLoader}) {
   final country = countryLoader.load(json['country']);
@@ -11,7 +11,7 @@ JumperDbRecord _jumperFromJson(Json json, {required JsonCountryLoader countryLoa
           country: country,
           dateOfBirth: DateTime.parse(json['dateOfBirth']),
           personality: personality,
-          skills: JumperSkillsDbRecord.fromJson(json['skills'] as Map<String, dynamic>),
+          skills: JumperSkills.fromJson(json['skills'] as Map<String, dynamic>),
         )
       : FemaleJumperDbRecord(
           name: json['name'] as String,
@@ -19,7 +19,7 @@ JumperDbRecord _jumperFromJson(Json json, {required JsonCountryLoader countryLoa
           country: country,
           dateOfBirth: DateTime.parse(json['dateOfBirth']),
           personality: personality,
-          skills: JumperSkillsDbRecord.fromJson(json['skills'] as Map<String, dynamic>),
+          skills: JumperSkills.fromJson(json['skills'] as Map<String, dynamic>),
         );
 }
 

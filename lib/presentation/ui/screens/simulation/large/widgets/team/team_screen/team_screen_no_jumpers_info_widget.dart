@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/data/models/simulation/flow/simulation_mode.dart';
+import 'package:sj_manager/domain/entities/simulation/flow/simulation_mode.dart';
 import 'package:gap/gap.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/link_text_button.dart';
 

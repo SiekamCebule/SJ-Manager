@@ -1,6 +1,6 @@
 import 'package:sj_manager/utilities/algorithms/reports/training_progress_report/training_report_creator.dart';
-import 'package:sj_manager/data/models/simulation/jumper/reports/jumper_reports.dart';
-import 'package:sj_manager/data/models/simulation/flow/simple_rating.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/reports/jumper_reports.dart';
+import 'package:sj_manager/domain/entities/simulation/flow/simple_rating.dart';
 
 class MonthlyJumperTrainingProgressReportCreator {
   MonthlyJumperTrainingProgressReportCreator({

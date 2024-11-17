@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/competition_rules/default_competition_rules.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_rules/default_competition_rules.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
 
 class CompetitionRulesPresetInfoListTile extends StatelessWidget {
   const CompetitionRulesPresetInfoListTile({

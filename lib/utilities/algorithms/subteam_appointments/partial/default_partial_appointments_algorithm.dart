@@ -1,6 +1,6 @@
+import 'package:sj_manager/domain/entities/simulation/psyche/level_of_consciousness.dart';
 import 'package:sj_manager/utilities/algorithms/subteam_appointments/partial/partial_appointments_algorithm.dart';
-import 'package:sj_manager/data/models/database/psyche/level_of_consciousness.dart';
-import 'package:sj_manager/data/models/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/utilities/utils/random/random.dart';
 
 class DefaultPartialAppointmentsAlgorithm implements PartialAppointmentsAlgorithm {

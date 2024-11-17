@@ -2,16 +2,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:osje_sim/osje_sim.dart';
-import 'package:sj_manager/data/models/simulation/competition/competition.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/competition_rules/default_competition_rules.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/utils/jump_score_creator/concrete/default_classic.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
-import 'package:sj_manager/data/models/simulation/standings/score/details/jump_score_details.dart';
-import 'package:sj_manager/data/models/simulation/standings/score/score.dart';
-import 'package:sj_manager/data/models/database/country/country.dart';
-import 'package:sj_manager/data/models/database/hill/hill.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/competition.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_rules/default_competition_rules.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/jump_score_creator/concrete/default_classic.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
+import 'package:sj_manager/domain/entities/simulation/standings/score/details/jump_score_details.dart';
+import 'package:sj_manager/domain/entities/simulation/standings/score/score.dart';
+import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
 
 import 'jump_score_creator_test.mocks.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:sj_manager/data/models/simulation/jumper/reports/jumper_reports.dart';
-import 'package:sj_manager/data/models/simulation/flow/simulation_mode.dart';
-import 'package:sj_manager/data/models/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/reports/jumper_reports.dart';
+import 'package:sj_manager/domain/entities/simulation/flow/simulation_mode.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/help_icon_button.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/sjm_dialog_ok_pop_button.dart';
 

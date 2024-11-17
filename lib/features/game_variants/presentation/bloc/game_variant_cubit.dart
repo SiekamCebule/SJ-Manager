@@ -1,0 +1,103 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/game_variant.dart';
+import 'package:sj_manager/features/game_variants/domain/usecases/choose_game_variant_use_case.dart';
+import 'package:sj_manager/features/game_variants/domain/usecases/construct_game_variants_use_case.dart';
+import 'package:sj_manager/features/game_variants/domain/usecases/get_all_game_variants_use_case.dart';
+import 'package:sj_manager/features/game_variants/domain/usecases/save_game_variant_use_case.dart';
+
+class GameVariantCubit extends Cubit<GameVariantState> {
+  GameVariantCubit({
+    required this.constructGameVariantsUseCase,
+    required this.getAllGameVariantsUseCase,
+    required this.chooseGameVariantUseCase,
+    required this.saveGameVariantUseCase,
+  }) : super(GameVariantInitial());
+
+  final ConstructGameVariantsUseCase constructGameVariantsUseCase;
+  final GetAllGameVariantsUseCase getAllGameVariantsUseCase;
+  final ChooseGameVariantUseCase chooseGameVariantUseCase;
+  final SaveGameVariantUseCase saveGameVariantUseCase;
+
+  var _variants = <GameVariant>[];
+
+  Future<void> initialize() async {
+    emit(GameVariantInitializing());
+    await constructGameVariantsUseCase();
+    _variants = await getAllGameVariantsUseCase();
+    emit(GameVariantInitialized(variants: _variants));
+  }
+
+  Future<void> chooseGameVariant(GameVariant variant) async {
+    final chosen = await chooseGameVariantUseCase(variant);
+    if (chosen) {
+      emit(GameVariantChosen(variant: variant));
+    } else {
+      emit(const GameVariantError());
+    }
+  }
+
+  Future<void> endEditingVariant() async {
+    if (state is GameVariantChosen) {
+      final currentVariant = (state as GameVariantChosen).variant;
+      emit(GameVariantEndingEditing());
+      await saveGameVariantUseCase(currentVariant);
+      emit(GameVariantInitialized(variants: _variants));
+    } else {
+      throw StateError('Ended editing the variant when no variant had been chosen');
+    }
+  }
+}
+
+abstract class GameVariantState extends Equatable {
+  const GameVariantState();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GameVariantInitial extends GameVariantState {}
+
+class GameVariantInitializing extends GameVariantState {}
+
+class GameVariantEndingEditing extends GameVariantState {}
+
+class GameVariantInitialized extends GameVariantState {
+  const GameVariantInitialized({
+    required this.variants,
+  });
+
+  final List<GameVariant> variants;
+
+  @override
+  List<Object?> get props => [variants];
+}
+
+class GameVariantChosing extends GameVariantState {
+  const GameVariantChosing({
+    required this.variant,
+  });
+
+  final GameVariant variant;
+
+  @override
+  List<Object?> get props => [variant];
+}
+
+class GameVariantChosen extends GameVariantState {
+  const GameVariantChosen({
+    required this.variant,
+  });
+
+  final GameVariant variant;
+
+  @override
+  List<Object?> get props => [variant];
+}
+
+class GameVariantError extends GameVariantState {
+  const GameVariantError();
+
+  @override
+  List<Object?> get props => [];
+}

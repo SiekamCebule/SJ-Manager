@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:sj_manager/utilities/json/db_items_json.dart';
-import 'package:sj_manager/data/models/simulation/database/utils/default_simulation_db_loader_from_file.dart';
-import 'package:sj_manager/data/models/simulation/user_simulation/user_simulation_model.dart';
-import 'package:sj_manager/data/models/database/db_items_file_system_paths.dart';
+import 'package:sj_manager/domain/entities/simulation/database/utils/default_simulation_db_loader_from_file.dart';
+import 'package:sj_manager/data/models/user_simulation/simulation_model.dart';
+import 'package:sj_manager/data/repositories/db_items_file_system_paths.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/editable_items_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 import 'package:sj_manager/setup/db_items_list_loader.dart';
@@ -27,7 +27,7 @@ class SimulationsLoader implements DbItemsListLoader {
   final IdGenerator idGenerator;
   final DbItemsFilePathsRegistry pathsRegistry;
   final PlarformSpecificPathsCache pathsCache;
-  final EditableItemsRepo<UserSimulationModel> simulationsRepo;
+  final EditableItemsRepo<SimulationModel> simulationsRepo;
 
   @override
   Future<void> load() async {
@@ -41,7 +41,7 @@ class SimulationsLoader implements DbItemsListLoader {
 
       final userSimulations = await loadItemsListFromJsonFile(
         file: userDataFile(pathsCache, path.join('simulations', 'simulations.json')),
-        fromJson: UserSimulationModel.fromJson,
+        fromJson: SimulationModel.fromJson,
       );
 
       final simulationFolders =

@@ -2,14 +2,14 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/domain/use_cases/ui/simulation/simulation_screen_navigation_cubit.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
-import 'package:sj_manager/data/models/game_variants/game_variant.dart';
-import 'package:sj_manager/data/models/game_variants/game_variants_io_utils.dart';
-import 'package:sj_manager/data/models/simulation/database/helper/simulation_database_helper.dart';
-import 'package:sj_manager/data/models/simulation/database/simulation_database_and_models/simulation_database.dart';
-import 'package:sj_manager/data/models/simulation/jumper/simulation_jumper.dart';
-import 'package:sj_manager/data/models/simulation/user_simulation/user_simulation_model.dart';
-import 'package:sj_manager/data/models/database/hill/hill.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/data/models/game_variant/game_variant.dart';
+import 'package:sj_manager/data/models/game_variant/game_variants_io_utils.dart';
+import 'package:sj_manager/domain/entities/simulation/database/helper/simulation_database_helper.dart';
+import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/data/models/user_simulation/simulation_model.dart';
+import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
 import 'package:sj_manager/domain/repository_interfaces/countries/country_flags/country_flags_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/countries/country_flags/local_storage_country_flags_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/editable_items_repo.dart';
@@ -137,7 +137,7 @@ void configureRoutes(FluroRouter router) {
   );
   define('/simulation/:simulationId', (context, params) {
     final simulationId = params['simulationId']![0];
-    final simulationsRepo = context!.read<EditableItemsRepo<UserSimulationModel>>();
+    final simulationsRepo = context!.read<EditableItemsRepo<SimulationModel>>();
     final simulation = simulationsRepo.last.singleWhere(
       (simulation) => simulation.id == simulationId,
     );
@@ -196,7 +196,7 @@ void configureRoutes(FluroRouter router) {
             return PopScope(
               onPopInvokedWithResult: (didPop, result) {
                 final database = context.read<SimulationDatabase>();
-                context.read<EditableItemsRepo<UserSimulationModel>>().replace(
+                context.read<EditableItemsRepo<SimulationModel>>().replace(
                       oldIndex: simulationIndexInRepo,
                       newItem: simulation.copyWith(database: database),
                     );

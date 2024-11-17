@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:sj_manager/utilities/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/data/models/simulation/classification/classification.dart';
-import 'package:sj_manager/data/models/simulation/competition/calendar_records/calendar_main_competition_record.dart';
-import 'package:sj_manager/data/models/simulation/competition/high_level_calendar.dart';
+import 'package:sj_manager/domain/entities/simulation/classification/classification.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/calendar_records/calendar_main_competition_record.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/high_level_calendar.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 import 'package:sj_manager/utilities/utils/id_generator.dart';
 

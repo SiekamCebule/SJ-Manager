@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sj_manager/data/models/simulation/standings/score/details/competition_score_details.dart';
-import 'package:sj_manager/data/models/simulation/standings/score/typedefs.dart';
-import 'package:sj_manager/data/models/simulation/standings/standings.dart';
+import 'package:sj_manager/domain/entities/simulation/standings/score/details/competition_score_details.dart';
+import 'package:sj_manager/domain/entities/simulation/standings/score/typedefs.dart';
+import 'package:sj_manager/domain/entities/simulation/standings/standings.dart';
 
 class CompetitionResultsCubit<E> extends Cubit<CompetitionResultsState<E>> {
   CompetitionResultsCubit({

@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:sj_manager/utilities/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/data/models/simulation/classification/classification.dart';
-import 'package:sj_manager/data/models/simulation/classification/default_classification_rules.dart';
-import 'package:sj_manager/data/models/simulation/standings/standings.dart';
+import 'package:sj_manager/domain/entities/simulation/classification/classification.dart';
+import 'package:sj_manager/domain/entities/simulation/classification/default_classification_rules.dart';
+import 'package:sj_manager/domain/entities/simulation/standings/standings.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 
 class ClassificationSerializer implements SimulationDbPartSerializer<Classification> {

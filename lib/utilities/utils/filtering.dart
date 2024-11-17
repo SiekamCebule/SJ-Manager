@@ -1,6 +1,6 @@
-import 'package:sj_manager/data/models/database/country/country.dart';
-import 'package:sj_manager/data/models/database/sex.dart';
-import 'package:sj_manager/data/models/database/team/country_team/country_team.dart';
+import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
+import 'package:sj_manager/core/team/country_team/country_team.dart';
 
 List<CountryTeam> countryTeamsBySex(List<CountryTeam> teams, Sex sex) {
   return teams.where((team) => team.sex == sex).toList();

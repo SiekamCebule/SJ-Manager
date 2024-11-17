@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:sj_manager/utilities/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/data/models/simulation/event_series/event_series.dart';
-import 'package:sj_manager/data/models/simulation/database/simulation_database_and_models/simulation_season.dart';
+import 'package:sj_manager/domain/entities/simulation/event_series/event_series.dart';
+import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_season.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 import 'package:sj_manager/utilities/utils/database_io.dart';
 

@@ -1,7 +1,7 @@
 import 'package:sj_manager/data/models/running/competition_start_list_repository.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/competition_rules/default_competition_rules.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
-import 'package:sj_manager/data/models/database/team/team.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_rules/default_competition_rules.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/domain/entities/simulation/team/team.dart';
 
 abstract class CompetitionFlowController<E> {
   CompetitionFlowController({

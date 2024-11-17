@@ -1,27 +1,24 @@
 import 'dart:async';
-import 'dart:ui';
-
 import 'package:fluro/fluro.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sj_manager/data/models/game_variants/game_variant.dart';
-import 'package:sj_manager/data/models/simulation/database/simulation_database_and_models/simulation_season.dart';
-import 'package:sj_manager/data/models/simulation/jumper/simulation_jumper.dart';
-import 'package:sj_manager/data/models/simulation/user_simulation/user_simulation_model.dart';
-import 'package:sj_manager/data/models/database/country/country.dart';
-import 'package:sj_manager/data/models/database/db_items_file_system_paths.dart';
-import 'package:sj_manager/data/models/database/hill/hill.dart';
-import 'package:sj_manager/data/models/database/items_repos_registry.dart';
-import 'package:sj_manager/data/models/database/team/country_team/country_team.dart';
-import 'package:sj_manager/data/models/database/team/subteam.dart';
+import 'package:sj_manager/data/models/game_variant/game_variant.dart';
+import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_season.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/data/models/user_simulation/simulation_model.dart';
+import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/data/repositories/db_items_file_system_paths.dart';
+import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
+import 'package:sj_manager/data/repositories/items_repos_registry.dart';
+import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/domain/entities/simulation/team/subteam.dart';
 import 'package:sj_manager/domain/repository_interfaces/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/utilities/json/countries.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/domain/repository_interfaces/countries/countries_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/editable_items_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_repo.dart';
@@ -104,7 +101,7 @@ void main() async {
               create: (context) => ItemsRepo<GameVariant>(),
             ),
             Provider(
-              create: (context) => EditableItemsRepo<UserSimulationModel>(),
+              create: (context) => EditableItemsRepo<SimulationModel>(),
             ),
           ],
           child: MultiBlocProvider(

@@ -75,7 +75,7 @@ class _TopPanel extends StatelessWidget {
             iconData: mainButtonIconData,
             onPressed: homeIsSelected
                 ? () async {
-                    await ContinueSimulationCommand(
+                    await ContinueSimulationUseCase(
                       database: database,
                       chooseSubteamId: (subteam) =>
                           context.read<IdGenerator>().generate(),

@@ -2,9 +2,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:sj_manager/data/models/simulation/competition/calendar_records/calendar_main_competition_record.dart';
-import 'package:sj_manager/data/models/simulation/competition/high_level_calendar.dart';
-import 'package:sj_manager/data/models/simulation/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/calendar_records/calendar_main_competition_record.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/high_level_calendar.dart';
+import 'package:sj_manager/domain/entities/simulation/event_series/event_series_calendar_preset.dart';
 
 class SimpleCalendarEditingCubit extends Cubit<SimpleCalendarEditingState> {
   SimpleCalendarEditingCubit({

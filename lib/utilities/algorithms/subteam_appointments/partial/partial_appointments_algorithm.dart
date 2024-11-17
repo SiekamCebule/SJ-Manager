@@ -1,4 +1,4 @@
-import 'package:sj_manager/data/models/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
 
 abstract interface class PartialAppointmentsAlgorithm {
   const PartialAppointmentsAlgorithm();
