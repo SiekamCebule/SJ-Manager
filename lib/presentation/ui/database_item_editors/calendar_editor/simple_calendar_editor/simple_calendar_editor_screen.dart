@@ -8,8 +8,8 @@ import 'package:sj_manager/presentation/bloc/calendar_editing/simple_calendar_ed
 import 'package:sj_manager/presentation/bloc/database_editing/change_status_cubit.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/main.dart';
-import 'package:sj_manager/data/models/simulation/competition/calendar_records/calendar_main_competition_record.dart';
-import 'package:sj_manager/data/models/simulation/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/calendar_records/calendar_main_competition_record.dart';
+import 'package:sj_manager/domain/entities/simulation/event_series/event_series_calendar_preset.dart';
 import 'package:sj_manager/domain/repository_interfaces/database_editing/default_items_repository.dart';
 import 'package:sj_manager/domain/repository_interfaces/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/presentation/ui/database_item_editors/calendar_editor/simple_calendar_editor/competition_main_record_editor.dart';

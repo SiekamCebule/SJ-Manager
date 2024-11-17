@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:sj_manager/data/models/database/team/country_team/subteam_type.dart';
-import 'package:sj_manager/data/models/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/domain/entities/simulation/team/subteam_type.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/sjm_dialog_ok_pop_button.dart';
 import 'package:sj_manager/presentation/ui/screens/simulation/large/widgets/team/jumper/jumper_simple_list_tile.dart';

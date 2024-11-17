@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/data/models/database/country/country.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_skills_db_record.dart';
-import 'package:sj_manager/data/models/database/psyche/personalities.dart';
-import 'package:sj_manager/data/models/database/psyche/translations.dart';
-import 'package:sj_manager/data/models/database/sex.dart';
+import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_skills_db_record.dart';
+import 'package:sj_manager/core/psyche/personalities.dart';
+import 'package:sj_manager/utilities/psyche_translations.dart';
+import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
 import 'package:sj_manager/domain/repository_interfaces/countries/countries_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/presentation/ui/database_item_editors/fields/my_date_form_field.dart';
@@ -312,7 +312,7 @@ class JumperEditorState extends State<JumperEditor> {
 
     final dateOfBirth = _dateFormat.parse(_dateOfBirthController.text);
 
-    final skills = JumperSkillsDbRecord(
+    final skills = JumperSkills(
       takeoffQuality: double.parse(_takeoffQualityController.text),
       flightQuality: double.parse(_flightQualityController.text),
       landingQuality: double.parse(_landingQualityController.text),

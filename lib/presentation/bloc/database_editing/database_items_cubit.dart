@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/presentation/bloc/database_editing/state/database_items_state.dart';
 import 'package:sj_manager/utilities/filters/filter.dart';
-import 'package:sj_manager/data/models/database/items_repos_registry.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/data/repositories/items_repos_registry.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/domain/repository_interfaces/database_editing/db_filters_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/database_editing/selected_indexes_repository.dart';
 

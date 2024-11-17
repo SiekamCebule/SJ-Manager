@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sj_manager/presentation/bloc/calendar_editing/simple_calendar_editing_cubit.dart';
 import 'package:sj_manager/presentation/bloc/database_editing/change_status_cubit.dart';
-import 'package:sj_manager/data/models/simulation/competition/calendar_records/calendar_main_competition_record.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/calendar_records/calendar_main_competition_record.dart';
 import 'package:sj_manager/domain/repository_interfaces/database_editing/selected_indexes_repository.dart';
 import 'package:sj_manager/presentation/ui/database_item_editors/calendar_editor/simple_calendar_editor/simple_calendar_editor_competition_record_tile.dart';
 import 'package:provider/provider.dart';

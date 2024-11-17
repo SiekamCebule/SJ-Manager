@@ -1,10 +1,10 @@
 import 'package:sj_manager/utilities/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/data/models/simulation/classification/default_classification_rules.dart';
-import 'package:sj_manager/data/models/simulation/competition/competition.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
-import 'package:sj_manager/data/models/database/team/team.dart';
+import 'package:sj_manager/domain/entities/simulation/classification/default_classification_rules.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/competition.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/domain/entities/simulation/team/team.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 
 class DefaultClassificationRulesParser

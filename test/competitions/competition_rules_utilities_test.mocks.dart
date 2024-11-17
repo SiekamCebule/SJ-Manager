@@ -6,21 +6,27 @@
 import 'package:flutter/material.dart' as _i16;
 import 'package:mockito/mockito.dart' as _i2;
 import 'package:mockito/src/dummies.dart' as _i15;
-import 'package:sj_manager/data/models/simulation/competition/competition.dart' as _i6;
-import 'package:sj_manager/data/models/simulation/competition/rules/utils/competition_score_creator/competition_score_creator.dart'
+import 'package:sj_manager/core/country/country.dart' as _i12;
+import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart' as _i7;
+import 'package:sj_manager/domain/entities/simulation/competition/competition.dart'
+    as _i6;
+import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/competition_score_creator/competition_score_creator.dart'
     as _i13;
-import 'package:sj_manager/data/models/simulation/event_series/event_series.dart' as _i4;
-import 'package:sj_manager/data/models/simulation/standings/score/details/jump_score_details.dart'
+import 'package:sj_manager/domain/entities/simulation/event_series/event_series.dart'
+    as _i4;
+import 'package:sj_manager/domain/entities/simulation/standings/score/details/jump_score_details.dart'
     as _i14;
-import 'package:sj_manager/data/models/simulation/standings/score/details/score_details.dart'
+import 'package:sj_manager/domain/entities/simulation/standings/score/details/score_details.dart'
     as _i1;
-import 'package:sj_manager/data/models/simulation/standings/score/score.dart' as _i3;
-import 'package:sj_manager/data/models/simulation/standings/standings.dart' as _i5;
-import 'package:sj_manager/data/models/database/country/country.dart' as _i12;
-import 'package:sj_manager/data/models/database/hill/hill.dart' as _i7;
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart' as _i8;
-import 'package:sj_manager/data/models/database/team/competition_team.dart' as _i10;
-import 'package:sj_manager/data/models/database/team/team.dart' as _i9;
+import 'package:sj_manager/domain/entities/simulation/standings/score/score.dart'
+    as _i3;
+import 'package:sj_manager/domain/entities/simulation/standings/standings.dart'
+    as _i5;
+import 'package:sj_manager/domain/entities/simulation/team/competition_team.dart'
+    as _i10;
+import 'package:sj_manager/domain/entities/simulation/team/team.dart' as _i9;
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart'
+    as _i8;
 import 'package:sj_manager/utilities/utils/multilingual_string.dart' as _i11;
 
 // ignore_for_file: type=lint
@@ -78,8 +84,9 @@ class _FakeHill_3 extends _i2.SmartFake implements _i7.Hill {
         );
 }
 
-class _FakeJumper_4 extends _i2.SmartFake implements _i8.JumperDbRecord {
-  _FakeJumper_4(
+class _FakeJumperDbRecord_4 extends _i2.SmartFake
+    implements _i8.JumperDbRecord {
+  _FakeJumperDbRecord_4(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -99,7 +106,8 @@ class _FakeCompetitionTeam_5<T extends _i9.Team> extends _i2.SmartFake
         );
 }
 
-class _FakeMultilingualString_6 extends _i2.SmartFake implements _i11.MultilingualString {
+class _FakeMultilingualString_6 extends _i2.SmartFake
+    implements _i11.MultilingualString {
   _FakeMultilingualString_6(
     Object parent,
     Invocation parentInvocation,
@@ -156,8 +164,8 @@ class MockIndividualCompetitionScoreCreatingContext extends _i2.Mock
               this,
               Invocation.getter(#competition),
             ),
-          ) as _i6
-              .Competition<_i8.JumperDbRecord, _i5.Standings<dynamic, _i1.ScoreDetails>>);
+          ) as _i6.Competition<_i8.JumperDbRecord,
+              _i5.Standings<dynamic, _i1.ScoreDetails>>);
 
   @override
   int get currentRound => (super.noSuchMethod(
@@ -177,7 +185,7 @@ class MockIndividualCompetitionScoreCreatingContext extends _i2.Mock
   @override
   _i8.JumperDbRecord get entity => (super.noSuchMethod(
         Invocation.getter(#entity),
-        returnValue: _FakeJumper_4(
+        returnValue: _FakeJumperDbRecord_4(
           this,
           Invocation.getter(#entity),
         ),
@@ -213,8 +221,8 @@ class MockTeamCompetitionScoreCreatingContext extends _i2.Mock
       ) as _i4.EventSeries);
 
   @override
-  _i6.Competition<
-          _i10.CompetitionTeam<_i9.Team>, _i5.Standings<dynamic, _i1.ScoreDetails>>
+  _i6.Competition<_i10.CompetitionTeam<_i9.Team>,
+          _i5.Standings<dynamic, _i1.ScoreDetails>>
       get competition => (super.noSuchMethod(
             Invocation.getter(#competition),
             returnValue: _FakeCompetition_2<_i10.CompetitionTeam<_i9.Team>,

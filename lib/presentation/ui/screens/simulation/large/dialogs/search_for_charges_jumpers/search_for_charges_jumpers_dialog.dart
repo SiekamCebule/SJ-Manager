@@ -6,9 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/utilities/filters/filter.dart';
 import 'package:sj_manager/utilities/filters/jumpers/jumper_matching_algorithms.dart';
-import 'package:sj_manager/data/models/simulation/database/helper/simulation_database_helper.dart';
-import 'package:sj_manager/data/models/simulation/database/simulation_database_and_models/simulation_database.dart';
-import 'package:sj_manager/data/models/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/domain/entities/simulation/database/helper/simulation_database_helper.dart';
+import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/presentation/ui/database_item_editors/fields/my_search_bar.dart';
 import 'package:sj_manager/presentation/ui/screens/simulation/large/widgets/team/jumper/jumper_simple_list_tile.dart';
 

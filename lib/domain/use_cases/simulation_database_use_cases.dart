@@ -1,13 +1,13 @@
 import 'package:sj_manager/utilities/algorithms/start_form/default_start_form_algorithm.dart';
 import 'package:sj_manager/utilities/algorithms/training_engine/jumper_training_result.dart';
-import 'package:sj_manager/data/models/simulation/database/actions/simulation_action_type.dart';
-import 'package:sj_manager/data/models/simulation/database/helper/simulation_database_helper.dart';
-import 'package:sj_manager/data/models/simulation/database/simulation_database_and_models/simulation_database.dart';
-import 'package:sj_manager/data/models/simulation/jumper/simulation_jumper.dart';
-import 'package:sj_manager/data/models/simulation/jumper/stats/jumper_stats.dart';
-import 'package:sj_manager/data/models/simulation/jumper/reports/jumper_reports.dart';
-import 'package:sj_manager/data/models/simulation/flow/training/jumper_training_config.dart';
-import 'package:sj_manager/data/models/database/team/subteam.dart';
+import 'package:sj_manager/domain/entities/simulation/database/actions/simulation_action_type.dart';
+import 'package:sj_manager/domain/entities/simulation/database/helper/simulation_database_helper.dart';
+import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_database.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/stats/jumper_stats.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/reports/jumper_reports.dart';
+import 'package:sj_manager/domain/entities/simulation/flow/training/jumper_training_config.dart';
+import 'package:sj_manager/domain/entities/simulation/team/subteam.dart';
 
 class SimulationDatabaseUseCases {
   SimulationDatabaseUseCases({

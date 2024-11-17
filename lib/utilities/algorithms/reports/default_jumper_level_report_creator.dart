@@ -1,6 +1,6 @@
-import 'package:sj_manager/data/models/simulation/jumper/reports/jumper_level_description.dart';
-import 'package:sj_manager/data/models/simulation/jumper/reports/jumper_reports.dart';
-import 'package:sj_manager/data/models/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/reports/jumper_level_description.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/reports/jumper_reports.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
 
 class DefaultJumperLevelReportCreator {
   DefaultJumperLevelReportCreator({

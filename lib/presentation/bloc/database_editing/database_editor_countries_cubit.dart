@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/presentation/bloc/database_editing/state/database_editor_countries_state.dart';
-import 'package:sj_manager/data/models/database/country/country.dart';
-import 'package:sj_manager/data/models/database/sex.dart';
-import 'package:sj_manager/data/models/database/team/country_team/country_team.dart';
+import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
+import 'package:sj_manager/core/team/country_team/country_team.dart';
 import 'package:sj_manager/domain/repository_interfaces/countries/countries_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_repo.dart';
 

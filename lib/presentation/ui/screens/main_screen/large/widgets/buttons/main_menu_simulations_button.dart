@@ -5,7 +5,7 @@ class MainMenuSimulationsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final simulationsRepo = context.watch<EditableItemsRepo<UserSimulationModel>>();
+    final simulationsRepo = context.watch<EditableItemsRepo<SimulationModel>>();
     return StreamBuilder(
       stream: simulationsRepo.items,
       builder: (context, snapshot) {
@@ -20,7 +20,7 @@ class MainMenuSimulationsButton extends StatelessWidget {
                     context: context,
                     child: ChooseSimulationDialog(
                       simulations:
-                          context.read<EditableItemsRepo<UserSimulationModel>>().last,
+                          context.read<EditableItemsRepo<SimulationModel>>().last,
                       onChoose: (simulation) {
                         router.pop(context);
                         router.navigateTo(context, '/simulation/${simulation.id}');
@@ -28,7 +28,7 @@ class MainMenuSimulationsButton extends StatelessWidget {
                       onDelete: (simulation) {
                         router.pop(context);
                         context
-                            .read<EditableItemsRepo<UserSimulationModel>>()
+                            .read<EditableItemsRepo<SimulationModel>>()
                             .remove(simulation);
                       },
                     ),

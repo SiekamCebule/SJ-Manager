@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:sj_manager/data/models/simulation/flow/training/jumper_training_config.dart';
+import 'package:sj_manager/domain/entities/simulation/flow/training/jumper_training_config.dart';
 
 class JumperAttributeTrainingSlider extends StatefulWidget {
   const JumperAttributeTrainingSlider({

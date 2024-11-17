@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/data/models/simulation/database/simulation_wizard_options_repo.dart';
+import 'package:sj_manager/domain/entities/simulation/database/simulation_wizard_options_repo.dart';
 import 'package:sj_manager/presentation/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/presentation/ui/screens/main_screen/large/simulation_wizard/simulation_wizard_dialog.dart';
 

@@ -4,8 +4,8 @@ import 'package:sj_manager/utilities/json/simulation_db_loading/score_loader.dar
 import 'package:sj_manager/utilities/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/utilities/json/simulation_db_loading/standings_positions_creator_loader.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/data/models/simulation/standings/score/score.dart';
-import 'package:sj_manager/data/models/simulation/standings/standings.dart';
+import 'package:sj_manager/domain/entities/simulation/standings/score/score.dart';
+import 'package:sj_manager/domain/entities/simulation/standings/standings.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 import 'package:sj_manager/utilities/utils/database_io.dart';
 import 'package:sj_manager/utilities/utils/id_generator.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/data/models/simulation/user_simulation/user_simulation_model.dart';
+import 'package:sj_manager/data/models/user_simulation/simulation_model.dart';
 
 class DeleteSimulationAreYouSureDialog extends StatelessWidget {
   const DeleteSimulationAreYouSureDialog({
@@ -8,7 +8,7 @@ class DeleteSimulationAreYouSureDialog extends StatelessWidget {
     required this.simulation,
   });
 
-  final UserSimulationModel simulation;
+  final SimulationModel simulation;
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,6 @@
-import 'package:sj_manager/data/models/database/country/country.dart';
-import 'package:sj_manager/data/models/database/hill/hill.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
+import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
 
 extension CountriesWithoutNone on Iterable<Country> {
   Iterable<Country> get withoutNoneCountry {

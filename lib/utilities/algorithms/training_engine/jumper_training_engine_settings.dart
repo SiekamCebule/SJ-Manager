@@ -1,5 +1,5 @@
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/data/models/database/psyche/level_of_consciousness.dart';
+import 'package:sj_manager/domain/entities/simulation/psyche/level_of_consciousness.dart';
 
 class JumperTrainingEngineSettings {
   const JumperTrainingEngineSettings({

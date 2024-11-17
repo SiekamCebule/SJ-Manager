@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:sj_manager/data/models/simulation/flow/training/jumper_training_config.dart';
+import 'package:sj_manager/domain/entities/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/utilities/algorithms/training_engine/jumper_training_engine_settings.dart';
 import 'package:sj_manager/utilities/algorithms/training_engine/jumper_training_result.dart';
-import 'package:sj_manager/data/models/simulation/jumper/simulation_jumper.dart';
+import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/utilities/utils/random/random.dart';
 import 'package:sj_manager/utilities/utils/training.dart';
 

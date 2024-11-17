@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/data/models/simulation/event_series/event_series_setup.dart';
+import 'package:sj_manager/domain/entities/simulation/event_series/event_series_setup.dart';
 
 String translatedRelativeMoneyPrize(
     BuildContext context, EventSeriesRelativeMoneyPrize prize) {

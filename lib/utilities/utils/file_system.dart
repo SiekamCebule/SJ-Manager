@@ -7,14 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:path/path.dart' as path;
-import 'package:sj_manager/data/models/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
-import 'package:sj_manager/data/models/simulation/event_series/event_series_calendar_preset.dart';
-import 'package:sj_manager/data/models/simulation/event_series/event_series_setup.dart';
-import 'package:sj_manager/data/models/database/country/country.dart';
-import 'package:sj_manager/data/models/database/db_items_file_system_paths.dart';
-import 'package:sj_manager/data/models/database/hill/hill.dart';
-import 'package:sj_manager/data/models/database/jumper/jumper_db_record.dart';
-import 'package:sj_manager/data/models/database/team/team.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_rules/default_competition_rules_preset.dart';
+import 'package:sj_manager/domain/entities/simulation/event_series/event_series_calendar_preset.dart';
+import 'package:sj_manager/domain/entities/simulation/event_series/event_series_setup.dart';
+import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/data/repositories/db_items_file_system_paths.dart';
+import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/domain/entities/simulation/team/team.dart';
 
 class PlarformSpecificPathsCache {
   PlarformSpecificPathsCache();

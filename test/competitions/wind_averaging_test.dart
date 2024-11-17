@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:osje_sim/osje_sim.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/utils/wind_averager/concrete/default_linear.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/utils/wind_averager/concrete/default_weighted.dart';
-import 'package:sj_manager/data/models/simulation/competition/rules/utils/wind_averager/wind_averager.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/wind_averager/concrete/default_linear.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/wind_averager/concrete/default_weighted.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/wind_averager/wind_averager.dart';
 
 import 'wind_averaging_test.mocks.dart';
 

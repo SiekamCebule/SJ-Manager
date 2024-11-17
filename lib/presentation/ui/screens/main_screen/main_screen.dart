@@ -8,9 +8,9 @@ import 'package:sj_manager/domain/use_cases/ui/main_menu/create_new_simulation_c
 import 'package:sj_manager/domain/use_cases/ui/main_menu/show_simulation_wizard_command.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/main.dart';
-import 'package:sj_manager/data/models/game_variants/game_variant.dart';
-import 'package:sj_manager/data/models/simulation/flow/simulation_mode.dart';
-import 'package:sj_manager/data/models/simulation/user_simulation/user_simulation_model.dart';
+import 'package:sj_manager/data/models/game_variant/game_variant.dart';
+import 'package:sj_manager/domain/entities/simulation/flow/simulation_mode.dart';
+import 'package:sj_manager/data/models/user_simulation/simulation_model.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/editable_items_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_repo.dart';
 import 'package:sj_manager/presentation/ui/dialogs/main_menu/choose_simulation_dialog.dart';

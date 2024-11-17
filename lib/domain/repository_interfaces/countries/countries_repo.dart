@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:sj_manager/data/models/database/country/country.dart';
+import 'package:sj_manager/core/country/country.dart';
 
 class CountriesRepo {
   CountriesRepo({

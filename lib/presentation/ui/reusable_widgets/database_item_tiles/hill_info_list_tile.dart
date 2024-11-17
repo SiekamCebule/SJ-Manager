@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/data/models/database/hill/hill.dart';
+import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
 import 'package:sj_manager/presentation/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/utilities/utils/doubles.dart';

@@ -1,10 +1,10 @@
 import 'package:sj_manager/utilities/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
 import 'package:sj_manager/utilities/json/utils/enums.dart';
-import 'package:sj_manager/data/models/database/team/competition_team.dart';
-import 'package:sj_manager/data/models/database/team/country_team/country_team.dart';
-import 'package:sj_manager/data/models/database/team/subteam.dart';
-import 'package:sj_manager/data/models/database/team/team.dart';
+import 'package:sj_manager/domain/entities/simulation/team/competition_team.dart';
+import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/domain/entities/simulation/team/subteam.dart';
+import 'package:sj_manager/domain/entities/simulation/team/team.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 
 class TeamSerializer implements SimulationDbPartSerializer<Team> {

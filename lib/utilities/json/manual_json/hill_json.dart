@@ -1,4 +1,4 @@
-part of '../../../data/models/database/hill/hill.dart';
+part of '../../../domain/entities/game_variant/hill/hill.dart';
 
 Hill _hillFromJson(Map<String, dynamic> json,
         {required JsonCountryLoader countryLoader}) =>

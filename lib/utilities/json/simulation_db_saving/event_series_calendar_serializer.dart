@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:sj_manager/utilities/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/data/models/simulation/classification/classification.dart';
-import 'package:sj_manager/data/models/simulation/competition/competition.dart';
-import 'package:sj_manager/data/models/simulation/event_series/event_series_calendar.dart';
+import 'package:sj_manager/domain/entities/simulation/classification/classification.dart';
+import 'package:sj_manager/domain/entities/simulation/competition/competition.dart';
+import 'package:sj_manager/domain/entities/simulation/event_series/event_series_calendar.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 import 'package:sj_manager/utilities/utils/database_io.dart';
 

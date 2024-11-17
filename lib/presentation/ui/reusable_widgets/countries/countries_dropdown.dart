@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/data/models/database/country/country.dart';
+import 'package:sj_manager/core/country/country.dart';
 import 'package:sj_manager/domain/repository_interfaces/countries/countries_repo.dart';
 import 'package:sj_manager/presentation/ui/database_item_editors/fields/my_dropdown_field.dart';
 import 'package:sj_manager/presentation/ui/responsiveness/ui_constants.dart';
