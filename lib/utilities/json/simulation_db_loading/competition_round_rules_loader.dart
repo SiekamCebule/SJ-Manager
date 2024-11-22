@@ -14,7 +14,7 @@ import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/ju
 import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
 import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/score/typedefs.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/domain/entities/simulation/team/team.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 

@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:sj_manager/core/countries/countries_repository/countries_repository.dart';
+import 'package:sj_manager/core/countries/countries_repository/in_memory_countries_repository.dart';
 import 'package:sj_manager/utilities/json/countries.dart';
 import 'package:sj_manager/utilities/json/db_items_json.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
@@ -34,15 +36,14 @@ import 'package:sj_manager/domain/entities/simulation/database/simulation_databa
 import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/domain/entities/simulation/flow/reports/team_reports.dart';
 import 'package:sj_manager/domain/entities/simulation/flow/simulation_mode.dart';
-import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
 import 'package:sj_manager/data/repositories/db_items_file_system_paths.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
-import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/core/classes/country_team/country_team.dart';
 import 'package:sj_manager/domain/entities/simulation/team/subteam_type.dart';
 import 'package:sj_manager/domain/entities/simulation/team/personal_coach_team.dart';
 import 'package:sj_manager/domain/entities/simulation/team/subteam.dart';
 import 'package:sj_manager/domain/entities/simulation/team/team.dart';
-import 'package:sj_manager/domain/repository_interfaces/countries/countries_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 import 'package:sj_manager/utilities/utils/file_system.dart';
 import 'package:sj_manager/utilities/utils/id_generator.dart';
@@ -56,7 +57,7 @@ class DefaultSimulationDbLoaderFromFile {
   });
 
   late String _simulationId;
-  late CountriesRepo _countriesRepo;
+  late CountriesRepository _countriesRepo;
   late Json _dynamicStateJson;
 
   final ItemsIdsRepo<String> idsRepo;
@@ -72,7 +73,7 @@ class DefaultSimulationDbLoaderFromFile {
     final loadedCountriesMap = await _loadItems(itemsType: 'country');
     _addIdsFromLoadedMap(loadedCountriesMap);
     final loadedCountries = _itemsFromLoadedMap(loadedCountriesMap);
-    _countriesRepo = CountriesRepo(countries: loadedCountries.cast());
+    _countriesRepo = InMemoryCountriesRepository(countries: loadedCountries.cast());
 
     final loadedMaleJumpersMap = await _loadItems(itemsType: 'maleJumper');
     _addIdsFromLoadedMap(loadedMaleJumpersMap);
@@ -267,12 +268,12 @@ class DefaultSimulationDbLoaderFromFile {
 
   SimulationJumper _parseJumper(Json json) {
     return SimulationJumper.fromJson(json,
-        countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo));
+        countryLoader: JsonCountryLoaderByCode(countriesRepository: _countriesRepo));
   }
 
   Hill _parseHill(Json json) {
     return Hill.fromJson(json,
-        countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo));
+        countryLoader: JsonCountryLoaderByCode(countriesRepository: _countriesRepo));
   }
 
   Country _parseCountry(Json json) {
@@ -282,7 +283,7 @@ class DefaultSimulationDbLoaderFromFile {
   Team _parseTeam(Json json) {
     return TeamLoader(
             idsRepo: idsRepo,
-            countryLoader: JsonCountryLoaderByCode(repo: _countriesRepo))
+            countryLoader: JsonCountryLoaderByCode(countriesRepository: _countriesRepo))
         .parse(json);
   }
 

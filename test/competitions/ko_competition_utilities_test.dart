@@ -15,8 +15,8 @@ import 'package:sj_manager/domain/entities/simulation/standings/standings.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/standings_positions_map_creator/standings_positions_with_no_ex_aequo_creator.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/standings_positions_map_creator/standings_positions_with_shuffle_on_equal_positions_creator.dart';
-import 'package:sj_manager/core/country/country.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 
 import 'ko_competition_utilities_test.mocks.dart';
 

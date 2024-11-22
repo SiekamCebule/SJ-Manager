@@ -1,6 +1,6 @@
-import 'package:sj_manager/core/country/country.dart';
-import 'package:sj_manager/features/game_variants/data/models/jumper/jumper_db_record_model.dart';
-import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
+import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/jumper/jumper_db_record_model.dart';
+import 'package:sj_manager/core/classes/country_team/country_team.dart';
 
 class GameVariantModel {
   const GameVariantModel({

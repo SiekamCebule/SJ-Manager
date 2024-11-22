@@ -4,28 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sj_manager/data/models/game_variant/game_variant.dart';
+import 'package:sj_manager/core/countries/countries_repository/countries_repository.dart';
 import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_season.dart';
 import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
-import 'package:sj_manager/data/models/user_simulation/simulation_model.dart';
-import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
 import 'package:sj_manager/data/repositories/db_items_file_system_paths.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
 import 'package:sj_manager/data/repositories/items_repos_registry.dart';
-import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/core/classes/country_team/country_team.dart';
 import 'package:sj_manager/domain/entities/simulation/team/subteam.dart';
 import 'package:sj_manager/domain/repository_interfaces/database_editing/db_editing_defaults_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/db_items_json_configuration.dart';
 import 'package:sj_manager/utilities/json/countries.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/domain/repository_interfaces/countries/countries_repo.dart';
-import 'package:sj_manager/domain/repository_interfaces/generic/editable_items_repo.dart';
-import 'package:sj_manager/domain/repository_interfaces/generic/items_repo.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/domain/repository_interfaces/settings/local_user_settings_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/settings/user_settings_repo.dart';
-import 'package:sj_manager/setup/game_variants_loader.dart';
-import 'package:sj_manager/setup/simulations_loader.dart';
 import 'package:sj_manager/presentation/ui/app.dart';
 import 'package:sj_manager/presentation/ui/app_initializer.dart';
 import 'package:sj_manager/presentation/ui/providers/locale_cubit.dart';
@@ -97,12 +91,6 @@ void main() async {
             Provider.value(
               value: pathsCache,
             ),
-            Provider(
-              create: (context) => ItemsRepo<GameVariant>(),
-            ),
-            Provider(
-              create: (context) => EditableItemsRepo<SimulationModel>(),
-            ),
           ],
           child: MultiBlocProvider(
             providers: [
@@ -119,14 +107,7 @@ void main() async {
                   shouldSetUpUserData: true,
                   shouldLoadDatabase: true,
                   createLoaders: (context) => [
-                    GameVariantsLoader(context: context),
-                    SimulationsLoader(
-                      context: context,
-                      idGenerator: context.read(),
-                      pathsRegistry: context.read(),
-                      pathsCache: context.read(),
-                      simulationsRepo: context.read(),
-                    ),
+                    // TODO
                   ],
                   child: const MainScreen(),
                 );
@@ -155,37 +136,32 @@ void main() async {
     (error, stackTrace) {
       logger.logError(error, stackTrace);
       throw error;
-      FlutterError.reportError(FlutterErrorDetails(
-        exception: error,
-        stack: stackTrace,
-        silent: false,
-      ));
     },
   );
 }
 
 List constructSimulationDbIoProvidersList() {
-  CountriesRepo countriesRepo(BuildContext context) =>
-      context.read<ItemsReposRegistry>().get<Country>() as CountriesRepo;
+  CountriesRepository countriesRepo(BuildContext context) =>
+      context.read<ItemsReposRegistry>().get<Country>() as CountriesRepository;
 
   MaleJumperDbRecord maleJumperFromJson(Json json, BuildContext context) {
     return MaleJumperDbRecord.fromJson(
       json,
-      countryLoader: JsonCountryLoaderByCode(repo: countriesRepo(context)),
+      countryLoader: JsonCountryLoaderByCode(countriesRepository: countriesRepo(context)),
     );
   }
 
   FemaleJumperDbRecord femaleJumperFromJson(Json json, BuildContext context) {
     return FemaleJumperDbRecord.fromJson(
       json,
-      countryLoader: JsonCountryLoaderByCode(repo: countriesRepo(context)),
+      countryLoader: JsonCountryLoaderByCode(countriesRepository: countriesRepo(context)),
     );
   }
 
   Hill hillFromJson(Json json, BuildContext context) {
     return Hill.fromJson(
       json,
-      countryLoader: JsonCountryLoaderByCode(repo: countriesRepo(context)),
+      countryLoader: JsonCountryLoaderByCode(countriesRepository: countriesRepo(context)),
     );
   }
 

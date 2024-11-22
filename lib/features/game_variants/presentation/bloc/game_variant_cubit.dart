@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/features/game_variants/domain/entities/game_variant.dart';
-import 'package:sj_manager/features/game_variants/domain/usecases/choose_game_variant_use_case.dart';
-import 'package:sj_manager/features/game_variants/domain/usecases/construct_game_variants_use_case.dart';
-import 'package:sj_manager/features/game_variants/domain/usecases/get_all_game_variants_use_case.dart';
-import 'package:sj_manager/features/game_variants/domain/usecases/save_game_variant_use_case.dart';
+import 'package:sj_manager/features/game_variants/domain/usecases/game_variant/choose_game_variant_use_case.dart';
+import 'package:sj_manager/features/game_variants/domain/usecases/game_variant/construct_game_variants_use_case.dart';
+import 'package:sj_manager/features/game_variants/domain/usecases/game_variant/get_all_game_variants_use_case.dart';
+import 'package:sj_manager/features/game_variants/domain/usecases/game_variant/save_game_variant_use_case.dart';
 
 class GameVariantCubit extends Cubit<GameVariantState> {
   GameVariantCubit({

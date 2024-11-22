@@ -1,7 +1,7 @@
+import 'package:sj_manager/core/countries/countries_repository/countries_repository.dart';
 import 'package:sj_manager/utilities/json/json_object_loader.dart';
 import 'package:sj_manager/utilities/json/json_object_saver.dart';
-import 'package:sj_manager/core/country/country.dart';
-import 'package:sj_manager/domain/repository_interfaces/countries/countries_repo.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
 
 abstract interface class JsonCountryLoader<I> implements JsonObjectLoader<I, Country> {}
 
@@ -21,14 +21,14 @@ class CountryByCodeNotFoundError {
 }
 
 class JsonCountryLoaderByCode implements JsonCountryLoader<String> {
-  const JsonCountryLoaderByCode({required this.repo});
+  const JsonCountryLoaderByCode({required this.countriesRepository});
 
-  final CountriesRepo repo;
+  final CountriesRepository countriesRepository;
 
   @override
-  Country load(String code) {
+  Future<Country> load(String code) async {
     try {
-      return repo.countries
+      return (await countriesRepository.getAll())
           .singleWhere((country) => country.code.toLowerCase() == code.toLowerCase());
     } on StateError {
       throw CountryByCodeNotFoundError(countryCode: code);
@@ -36,11 +36,24 @@ class JsonCountryLoaderByCode implements JsonCountryLoader<String> {
   }
 }
 
+class JsonCountryLoaderCustom implements JsonCountryLoader<String> {
+  const JsonCountryLoaderCustom({
+    required this.getCountry,
+  });
+
+  final Country Function(String json) getCountry;
+
+  @override
+  Future<Country> load(String object) async {
+    return getCountry(object);
+  }
+}
+
 class JsonCountryLoaderNone implements JsonCountryLoader<void> {
   const JsonCountryLoaderNone();
 
   @override
-  Country load(void object) {
+  Future<Country> load(void object) async {
     return const Country.emptyNone();
   }
 }

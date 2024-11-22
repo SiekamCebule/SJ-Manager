@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
 import 'package:sj_manager/domain/repository_interfaces/countries/country_flags/country_flags_repo.dart';
 import 'package:path/path.dart' as path;
 

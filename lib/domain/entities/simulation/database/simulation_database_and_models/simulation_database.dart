@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:sj_manager/core/countries/countries_repository/countries_repository.dart';
 
 import 'package:sj_manager/domain/entities/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/domain/entities/simulation/database/actions/simulation_actions_repo.dart';
@@ -11,9 +12,8 @@ import 'package:sj_manager/domain/entities/simulation/jumper/reports/jumper_repo
 import 'package:sj_manager/domain/entities/simulation/flow/reports/team_reports.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
 import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
-import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/core/classes/country_team/country_team.dart';
 import 'package:sj_manager/domain/entities/simulation/team/subteam.dart';
-import 'package:sj_manager/domain/repository_interfaces/countries/countries_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 
 class SimulationDatabase with EquatableMixin, ChangeNotifier {
@@ -39,7 +39,7 @@ class SimulationDatabase with EquatableMixin, ChangeNotifier {
   DateTime currentDate;
   List<SimulationJumper> jumpers;
   List<Hill> hills;
-  CountriesRepo countries;
+  CountriesRepository countries;
   List<CountryTeam> countryTeams;
   List<SimulationSeason> seasons;
   ItemsIdsRepo<String> idsRepo;
@@ -67,7 +67,7 @@ class SimulationDatabase with EquatableMixin, ChangeNotifier {
     DateTime? currentDate,
     List<SimulationJumper>? jumpers,
     List<Hill>? hills,
-    CountriesRepo? countries,
+    CountriesRepository? countries,
     List<CountryTeam>? countryTeams,
     Map<Subteam, Iterable<String>>? subteamJumpers,
     List<SimulationSeason>? seasons,

@@ -9,9 +9,9 @@ import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/ju
 import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/score/details/jump_score_details.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/score/score.dart';
-import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 
 import 'jump_score_creator_test.mocks.dart';
 

@@ -14,8 +14,8 @@ import 'package:sj_manager/domain/entities/simulation/standings/score/details/co
 import 'package:sj_manager/domain/entities/simulation/standings/score/score.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/score/typedefs.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/standings.dart';
-import 'package:sj_manager/core/country/country.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 
 import 'classification_rules_utilities_test.mocks.dart';
 

@@ -1,3 +1,5 @@
+import 'package:sj_manager/core/countries/countries_repository/countries_repository.dart';
+import 'package:sj_manager/core/countries/countries_repository/in_memory_countries_repository.dart';
 import 'package:sj_manager/data/models/game_variant/game_variant_start_date.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill_profile_type.dart';
@@ -8,8 +10,7 @@ import 'package:sj_manager/domain/entities/simulation/database/simulation_databa
 import 'package:sj_manager/domain/entities/simulation/event_series/event_series.dart';
 import 'package:sj_manager/domain/entities/simulation/event_series/event_series_calendar.dart';
 import 'package:sj_manager/domain/entities/simulation/jumper/reports/jumper_level_description.dart';
-import 'package:sj_manager/domain/repository_interfaces/countries/countries_repo.dart';
-import 'package:sj_manager/features/game_variants/data/convert/jumpers_converting.dart';
+import 'package:sj_manager/features/database_editor/data/convert/jumpers_converting.dart';
 import 'package:sj_manager/features/game_variants/data/data_sources/hardcoded_game_variant_data_source.dart';
 import 'package:sj_manager/features/game_variants/data/models/game_variant_model.dart';
 import 'package:sj_manager/features/game_variants/domain/entities/game_variant.dart';
@@ -40,17 +41,17 @@ import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/wi
 import 'package:sj_manager/domain/entities/simulation/event_series/event_series_setup.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/standings.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/domain/entities/simulation/team/team.dart';
 
 class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSource {
-  late CountriesRepo _countriesRepo;
+  late CountriesRepository _countriesRepo;
   late List<Hill> _hills;
 
   @override
   Future<GameVariant> fromModel(GameVariantModel model) async {
-    _countriesRepo = CountriesRepo(countries: model.countries);
-    _hills = _constructHills();
+    _countriesRepo = InMemoryCountriesRepository(countries: model.countries);
+    _hills = await _constructHills();
     final jumpers = model.jumpers.map(jumperDbRecordFromModel);
     return GameVariant(
       id: model.id,
@@ -121,12 +122,12 @@ class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSour
     JumperLevelDescription.amateur: 0,
   };
 
-  List<Hill> _constructHills() {
+  Future<List<Hill>> _constructHills() async {
     return [
       Hill(
         name: 'Letalncia',
         locality: 'Planica',
-        country: _countriesRepo.byCode('si'),
+        country: await _countriesRepo.byCode('si'),
         k: 200,
         hs: 240,
         landingEase: LandingEase.fairlyLow,
@@ -139,7 +140,7 @@ class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSour
       Hill(
         name: 'Erzberg Arena',
         locality: 'Eisenerz-Ramsau',
-        country: _countriesRepo.byCode('at'),
+        country: await _countriesRepo.byCode('at'),
         k: 98,
         hs: 109,
         landingEase: LandingEase.average,
@@ -152,7 +153,7 @@ class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSour
       Hill(
         name: 'Malinka',
         locality: 'Wisła',
-        country: _countriesRepo.byCode('pl'),
+        country: await _countriesRepo.byCode('pl'),
         k: 120,
         hs: 134,
         landingEase: LandingEase.high,

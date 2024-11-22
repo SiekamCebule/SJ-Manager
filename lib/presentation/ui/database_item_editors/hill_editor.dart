@@ -5,7 +5,7 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/typical_wind_direction.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/l10n/hill_parameters_translations.dart';
-import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill_profile_type.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/jumps_variability.dart';
@@ -24,7 +24,7 @@ import 'package:sj_manager/presentation/ui/reusable_widgets/database_item_images
 import 'package:sj_manager/presentation/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/menu_entries/predefined_reusable_entries.dart';
-import 'package:sj_manager/presentation/ui/screens/database_editor/large/dialogs/item_image_help_dialog.dart';
+import 'package:sj_manager/features/database_editor/presentation/pages/large/dialogs/item_image_help_dialog.dart';
 import 'package:sj_manager/utilities/utils/context_maybe_read.dart';
 import 'package:sj_manager/utilities/utils/math.dart';
 import 'package:sj_manager/utilities/utils/platform.dart';

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/domain/entities/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
-import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/core/classes/country_team/country_team.dart';
 import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
 import 'package:sj_manager/presentation/ui/screens/simulation/large/widgets/teams/country_team_profile/subteams/country_team_profile_subteams_not_available.dart';

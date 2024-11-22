@@ -1,9 +1,9 @@
 import 'package:sj_manager/data/models/game_variant/game_variant.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/core/jumps/simple_jump_model.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/core/classes/jumps/simple_jump_model.dart';
 import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
-import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/core/classes/country_team/country_team.dart';
 import 'package:sj_manager/utilities/utils/db_items.dart';
 import 'package:sj_manager/utilities/utils/team_preview_creator/team_preview_creator.dart';
 

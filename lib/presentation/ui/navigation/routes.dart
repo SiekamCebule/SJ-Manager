@@ -2,7 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/domain/use_cases/ui/simulation/simulation_screen_navigation_cubit.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/data/models/game_variant/game_variant.dart';
 import 'package:sj_manager/data/models/game_variant/game_variants_io_utils.dart';
 import 'package:sj_manager/domain/entities/simulation/database/helper/simulation_database_helper.dart';

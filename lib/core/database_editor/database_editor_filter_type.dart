@@ -1,0 +1,4 @@
+enum DatabaseEditorFilterType {
+  nameSurname,
+  country,
+}

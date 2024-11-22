@@ -1,10 +1,10 @@
 import 'package:async/async.dart';
-import 'package:sj_manager/data/models/game_variant/game_variant.dart';
 import 'package:sj_manager/data/models/game_variant/game_variant_start_date.dart';
-import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/core/classes/country_team/country_team.dart';
 import 'package:sj_manager/domain/entities/simulation/team/subteam_type.dart';
 import 'package:sj_manager/domain/entities/simulation/flow/simulation_mode.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/value_repo.dart';
+import 'package:sj_manager/features/game_variants/domain/entities/game_variant.dart';
 
 class SimulationWizardOptionsRepo {
   SimulationWizardOptionsRepo() {

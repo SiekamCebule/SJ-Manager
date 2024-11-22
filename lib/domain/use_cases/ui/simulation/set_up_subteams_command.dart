@@ -3,7 +3,7 @@ import 'package:sj_manager/domain/use_cases/simulation_database_use_cases.dart';
 import 'package:sj_manager/domain/entities/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/domain/entities/simulation/flow/simulation_mode.dart';
-import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/core/classes/country_team/country_team.dart';
 import 'package:sj_manager/domain/entities/simulation/team/subteam_type.dart';
 import 'package:sj_manager/domain/entities/simulation/team/subteam.dart';
 import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
