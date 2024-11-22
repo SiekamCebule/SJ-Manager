@@ -1,14 +1,17 @@
 import 'package:equatable/equatable.dart';
+import 'package:sj_manager/core/mixins/country_mixin.dart';
+import 'package:sj_manager/core/mixins/name_and_surname_mixin.dart';
+import 'package:sj_manager/core/mixins/sex_mixin.dart';
 import 'package:sj_manager/domain/entities/simulation/psyche/level_of_consciousness.dart';
 import 'package:sj_manager/utilities/json/countries.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
 import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
 import 'package:sj_manager/domain/entities/simulation/flow/training/jumper_training_config.dart';
 import 'package:sj_manager/domain/entities/simulation/jumper/reports/jumper_reports.dart';
 import 'package:sj_manager/domain/entities/simulation/jumper/stats/jumper_stats.dart';
 
-class SimulationJumper with EquatableMixin {
+class SimulationJumper with EquatableMixin, NameAndSurnameMixin, CountryMixin, SexMixin {
   SimulationJumper({
     required this.dateOfBirth,
     required this.name,
@@ -30,12 +33,16 @@ class SimulationJumper with EquatableMixin {
 
   DateTime dateOfBirth;
 
+  @override
   String name;
 
+  @override
   String surname;
 
+  @override
   Country country;
 
+  @override
   Sex sex;
 
   /// From 1 to 20
@@ -87,6 +94,7 @@ class SimulationJumper with EquatableMixin {
     return age;
   }
 
+  @override
   String nameAndSurname({bool capitalizeSurname = false, bool reverse = false}) {
     var appropriateSurname = surname;
     if (capitalizeSurname) {

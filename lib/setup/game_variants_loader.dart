@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/data/models/game_variant/variants_registry.dart';
-import 'package:sj_manager/data/models/game_variant/game_variant.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_repo.dart';
 import 'package:sj_manager/setup/db_items_list_loader.dart';
 import 'package:provider/provider.dart';

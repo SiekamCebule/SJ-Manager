@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:sj_manager/core/mixins/country_mixin.dart';
 
 import 'package:sj_manager/utilities/json/countries.dart';
 import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill_profile_type.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill_type_by_size.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/jumps_variability.dart';
@@ -13,7 +14,7 @@ import 'package:sj_manager/utilities/utils/doubles.dart';
 
 part '../../../../utilities/json/manual_json/hill_json.dart';
 
-class Hill with EquatableMixin {
+class Hill with EquatableMixin, CountryMixin {
   Hill({
     required this.name,
     required this.locality,
@@ -47,6 +48,8 @@ class Hill with EquatableMixin {
 
   String name;
   String locality;
+
+  @override
   Country country;
 
   double k;

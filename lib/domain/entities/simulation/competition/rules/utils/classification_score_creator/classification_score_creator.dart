@@ -8,7 +8,7 @@ import 'package:sj_manager/domain/entities/simulation/event_series/event_series.
 import 'package:sj_manager/domain/entities/simulation/standings/score/details/classification_score_details.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/score/details/competition_score_details.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/standings.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/domain/entities/simulation/team/team.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/score/typedefs.dart';
 

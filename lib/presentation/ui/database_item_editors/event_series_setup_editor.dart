@@ -14,14 +14,14 @@ import 'package:sj_manager/presentation/ui/database_item_editors/fields/my_text_
 import 'package:sj_manager/presentation/ui/database_item_editors/fields/my_text_form_field.dart';
 import 'package:sj_manager/presentation/ui/dialogs/simple_help_dialog.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/database_item_images/db_item_image.dart';
-import 'package:sj_manager/presentation/ui/screens/database_editor/large/dialogs/event_series_setup_id_help_dialog.dart';
+import 'package:sj_manager/features/database_editor/presentation/pages/large/dialogs/event_series_setup_id_help_dialog.dart';
 import 'package:sj_manager/presentation/ui/providers/locale_cubit.dart';
 import 'package:sj_manager/presentation/ui/responsiveness/ui_constants.dart';
 import 'package:sj_manager/presentation/ui/reusable/text_formatters.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/database_item_images/db_item_image_generating_setup.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/database_item_images/item_image_not_found_placeholder.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/help_icon_button.dart';
-import 'package:sj_manager/presentation/ui/screens/database_editor/large/dialogs/item_image_help_dialog.dart';
+import 'package:sj_manager/features/database_editor/presentation/pages/large/dialogs/item_image_help_dialog.dart';
 import 'package:sj_manager/utilities/utils/context_maybe_read.dart';
 import 'package:sj_manager/utilities/utils/platform.dart';
 

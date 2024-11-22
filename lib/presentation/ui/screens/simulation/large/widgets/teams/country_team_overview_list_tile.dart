@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/core/classes/country_team/country_team.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/countries/country_flag.dart';
 import 'package:sj_manager/utilities/utils/icons.dart';
 

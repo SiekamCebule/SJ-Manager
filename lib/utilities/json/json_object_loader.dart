@@ -1,3 +1,3 @@
 abstract interface class JsonObjectLoader<I, R> {
-  R load(I object);
+  Future<R> load(I object);
 }

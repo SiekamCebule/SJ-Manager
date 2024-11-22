@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/domain/entities/simulation/team/team.dart';
 
 class CompetitionTeam<T extends Team> extends Team with EquatableMixin {

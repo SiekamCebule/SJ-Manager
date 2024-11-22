@@ -28,7 +28,7 @@ import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/wi
 import 'package:sj_manager/domain/entities/simulation/standings/score/typedefs.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/standings_positions_map_creator/standings_positions_creator.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/domain/entities/simulation/team/competition_team.dart';
 import 'package:sj_manager/domain/entities/simulation/team/team.dart';
 import 'package:sj_manager/domain/repository_interfaces/database_editing/db_editing_avaiable_objects_repo.dart';

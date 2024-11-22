@@ -1,4 +1,4 @@
-import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/core/classes/country_team/country_team.dart';
 import 'package:sj_manager/data/models/user_simulation/simulation_model.dart';
 import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_database.dart';
 

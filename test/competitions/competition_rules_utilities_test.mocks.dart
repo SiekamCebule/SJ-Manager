@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart' as _i16;
 import 'package:mockito/mockito.dart' as _i2;
 import 'package:mockito/src/dummies.dart' as _i15;
-import 'package:sj_manager/core/country/country.dart' as _i12;
+import 'package:sj_manager/core/classes/country/country.dart' as _i12;
 import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart' as _i7;
 import 'package:sj_manager/domain/entities/simulation/competition/competition.dart'
     as _i6;
@@ -18,14 +18,11 @@ import 'package:sj_manager/domain/entities/simulation/standings/score/details/ju
     as _i14;
 import 'package:sj_manager/domain/entities/simulation/standings/score/details/score_details.dart'
     as _i1;
-import 'package:sj_manager/domain/entities/simulation/standings/score/score.dart'
-    as _i3;
-import 'package:sj_manager/domain/entities/simulation/standings/standings.dart'
-    as _i5;
-import 'package:sj_manager/domain/entities/simulation/team/competition_team.dart'
-    as _i10;
+import 'package:sj_manager/domain/entities/simulation/standings/score/score.dart' as _i3;
+import 'package:sj_manager/domain/entities/simulation/standings/standings.dart' as _i5;
+import 'package:sj_manager/domain/entities/simulation/team/competition_team.dart' as _i10;
 import 'package:sj_manager/domain/entities/simulation/team/team.dart' as _i9;
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart'
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart'
     as _i8;
 import 'package:sj_manager/utilities/utils/multilingual_string.dart' as _i11;
 
@@ -84,8 +81,7 @@ class _FakeHill_3 extends _i2.SmartFake implements _i7.Hill {
         );
 }
 
-class _FakeJumperDbRecord_4 extends _i2.SmartFake
-    implements _i8.JumperDbRecord {
+class _FakeJumperDbRecord_4 extends _i2.SmartFake implements _i8.JumperDbRecord {
   _FakeJumperDbRecord_4(
     Object parent,
     Invocation parentInvocation,
@@ -106,8 +102,7 @@ class _FakeCompetitionTeam_5<T extends _i9.Team> extends _i2.SmartFake
         );
 }
 
-class _FakeMultilingualString_6 extends _i2.SmartFake
-    implements _i11.MultilingualString {
+class _FakeMultilingualString_6 extends _i2.SmartFake implements _i11.MultilingualString {
   _FakeMultilingualString_6(
     Object parent,
     Invocation parentInvocation,
@@ -164,8 +159,8 @@ class MockIndividualCompetitionScoreCreatingContext extends _i2.Mock
               this,
               Invocation.getter(#competition),
             ),
-          ) as _i6.Competition<_i8.JumperDbRecord,
-              _i5.Standings<dynamic, _i1.ScoreDetails>>);
+          ) as _i6
+              .Competition<_i8.JumperDbRecord, _i5.Standings<dynamic, _i1.ScoreDetails>>);
 
   @override
   int get currentRound => (super.noSuchMethod(
@@ -221,8 +216,8 @@ class MockTeamCompetitionScoreCreatingContext extends _i2.Mock
       ) as _i4.EventSeries);
 
   @override
-  _i6.Competition<_i10.CompetitionTeam<_i9.Team>,
-          _i5.Standings<dynamic, _i1.ScoreDetails>>
+  _i6.Competition<
+          _i10.CompetitionTeam<_i9.Team>, _i5.Standings<dynamic, _i1.ScoreDetails>>
       get competition => (super.noSuchMethod(
             Invocation.getter(#competition),
             returnValue: _FakeCompetition_2<_i10.CompetitionTeam<_i9.Team>,

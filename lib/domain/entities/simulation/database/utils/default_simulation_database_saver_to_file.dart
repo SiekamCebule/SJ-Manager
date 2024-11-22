@@ -29,10 +29,10 @@ import 'package:sj_manager/utilities/json/simulation_db_saving/team_serializer.d
 import 'package:sj_manager/utilities/json/simulation_db_saving/wind_averager_serializer.dart';
 import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_database.dart';
 import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_season.dart';
-import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
 import 'package:sj_manager/data/repositories/db_items_file_system_paths.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
-import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/core/classes/country_team/country_team.dart';
 import 'package:sj_manager/domain/entities/simulation/team/subteam.dart';
 import 'package:sj_manager/domain/entities/simulation/team/team.dart';
 import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
@@ -61,7 +61,7 @@ class DefaultSimulationDatabaseSaverToFile {
     await _serializeItems(items: database.maleJumpers, itemsType: 'maleJumper');
     await _serializeItems(items: database.femaleJumpers, itemsType: 'femaleJumper');
     await _serializeItems(items: database.hills, itemsType: 'hill');
-    await _serializeItems(items: database.countries.countries, itemsType: 'country');
+    await _serializeItems(items: database.countries.getAll(), itemsType: 'country');
     await _serializeItems(items: database.countryTeams, itemsType: 'countryTeam');
     await _serializeItems(items: database.seasons, itemsType: 'simulationSeason');
     await _serializeDynamicState();

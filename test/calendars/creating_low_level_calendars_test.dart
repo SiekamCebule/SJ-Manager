@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
-import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
 import 'package:sj_manager/domain/entities/simulation/competition/calendar_records/calendar_main_competition_record.dart';
 import 'package:sj_manager/domain/entities/simulation/competition/calendar_records/calendar_main_competition_record_setup.dart';
 import 'package:sj_manager/domain/entities/simulation/competition/calendar_records/calendar_main_competition_records_to_calendar.dart';
@@ -9,7 +9,7 @@ import 'package:sj_manager/domain/entities/simulation/competition/competition_la
 import 'package:sj_manager/domain/entities/simulation/competition/high_level_calendar.dart';
 import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/domain/entities/simulation/team/competition_team.dart';
 
 import 'creating_low_level_calendars_test.mocks.dart';

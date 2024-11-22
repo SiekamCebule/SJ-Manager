@@ -1,3 +1,5 @@
+import 'package:sj_manager/core/countries/countries_repository/countries_repository.dart';
+import 'package:sj_manager/core/countries/countries_repository/in_memory_countries_repository.dart';
 import 'package:sj_manager/domain/entities/simulation/database/actions/simulation_actions_repo.dart';
 import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_manager_data.dart';
 import 'package:sj_manager/domain/entities/simulation/jumper/simulation_jumper.dart';
@@ -15,10 +17,9 @@ import 'package:sj_manager/domain/entities/simulation/standings/score/details/ju
 import 'package:sj_manager/domain/entities/simulation/standings/score/score.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
 import 'package:sj_manager/utilities/psyche_utils.dart';
-import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/core/classes/country_team/country_team.dart';
 import 'package:sj_manager/domain/entities/simulation/team/personal_coach_team.dart';
 import 'package:sj_manager/domain/entities/simulation/team/subteam.dart';
-import 'package:sj_manager/domain/repository_interfaces/countries/countries_repo.dart';
 import 'package:sj_manager/domain/repository_interfaces/generic/items_ids_repo.dart';
 import 'package:sj_manager/utilities/utils/id_generator.dart';
 
@@ -33,15 +34,16 @@ class DefaultSimulationDatabaseCreator {
   late List<SimulationJumper> _jumpers;
   late List<Hill> _hills;
   late List<CountryTeam> _countryTeams;
-  late CountriesRepo _countries;
+  late CountriesRepository _countries;
   late List<SimulationSeason> _seasons;
 
-  SimulationDatabase create(SimulationWizardOptionsRepo options) {
+  Future<SimulationDatabase> create(SimulationWizardOptionsRepo options) async {
     final mode = options.mode.last!;
     _idsRepo = ItemsIdsRepo();
     _hills = List.of(options.gameVariant.last!.hills);
     _countryTeams = List.of(options.gameVariant.last!.countryTeams);
-    _countries = CountriesRepo(countries: options.gameVariant.last!.countries);
+    _countries =
+        InMemoryCountriesRepository(countries: options.gameVariant.last!.countries);
     _seasons = List.of([options.gameVariant.last!.season]);
     const attributeHistoryLimit =
         31; // Max number of days in a month. The biggest need is when we create a monthly training report.
@@ -85,7 +87,7 @@ class DefaultSimulationDatabaseCreator {
         );
       },
     ).toList();
-    _setUpIdsRepo();
+    await _setUpIdsRepo();
     final personalCoachTeam = options.mode.last! == SimulationMode.personalCoach
         ? PersonalCoachTeam(jumpers: [])
         : null;
@@ -126,7 +128,7 @@ class DefaultSimulationDatabaseCreator {
     );
   }
 
-  void _setUpIdsRepo() {
+  Future<void> _setUpIdsRepo() async {
     void register(dynamic item) {
       _idsRepo.register(item, id: idGenerator.generate());
     }
@@ -135,7 +137,7 @@ class DefaultSimulationDatabaseCreator {
       ..._jumpers,
       ..._hills,
       ..._countryTeams,
-      ..._countries.countries,
+      ...(await _countries.getAll()),
       ..._seasons,
       for (var season in _seasons) ...[
         for (var eventSeries in season.eventSeries) ...[

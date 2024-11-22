@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
 import 'package:sj_manager/presentation/ui/reusable_widgets/countries/country_flag.dart';
 
 class CountryTitle extends StatelessWidget {

@@ -1,4 +1,4 @@
-part of '../../../features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+part of '../../../features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 
 JumperDbRecord _jumperFromJson(Json json, {required JsonCountryLoader countryLoader}) {
   final country = countryLoader.load(json['country']);

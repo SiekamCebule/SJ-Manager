@@ -2,10 +2,10 @@ import 'package:sj_manager/data/models/game_variant/game_variant_start_date.dart
 import 'package:sj_manager/domain/entities/simulation/database/actions/simulation_action_type.dart';
 import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_season.dart';
 import 'package:sj_manager/domain/entities/simulation/jumper/reports/jumper_level_description.dart';
-import 'package:sj_manager/core/country/country.dart';
+import 'package:sj_manager/core/classes/country/country.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/core/team/country_team/country_team.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/core/classes/country_team/country_team.dart';
 import 'package:sj_manager/domain/entities/simulation/team/subteam.dart';
 import 'package:sj_manager/utilities/utils/multilingual_string.dart';
 

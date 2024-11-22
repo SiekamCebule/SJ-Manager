@@ -6,7 +6,7 @@ import 'package:sj_manager/domain/entities/simulation/competition/rules/competit
 import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_rules/default_competition_rules_provider.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/standings.dart';
 import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/domain/entities/simulation/team/competition_team.dart';
 import 'package:equatable/equatable.dart';
 

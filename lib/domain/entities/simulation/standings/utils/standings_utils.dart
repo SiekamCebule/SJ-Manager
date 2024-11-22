@@ -3,7 +3,7 @@ import 'package:sj_manager/domain/entities/simulation/standings/score/details/co
 import 'package:sj_manager/domain/entities/simulation/standings/score/typedefs.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/standings.dart';
 import 'package:sj_manager/domain/entities/simulation/standings/standings_positions_map_creator/standings_positions_creator.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/domain/entities/simulation/team/competition_team.dart';
 import 'package:sj_manager/domain/entities/simulation/team/team.dart';
 
