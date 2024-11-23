@@ -5,24 +5,24 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:osje_sim/osje_sim.dart' as _i8;
-import 'package:sj_manager/data/models/running/competition_start_list_repository.dart'
+import 'package:sj_manager/to_embrace/competition/running/competition_start_list_repository.dart'
     as _i10;
-import 'package:sj_manager/data/models/running/default_competition_flow_controllers.dart'
+import 'package:sj_manager/to_embrace/competition/running/default_competition_flow_controllers.dart'
     as _i12;
-import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart' as _i7;
-import 'package:sj_manager/domain/entities/simulation/competition/competition.dart'
-    as _i6;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_rules/default_competition_rules.dart'
+import 'package:sj_manager/core/core_classes/hill/hill.dart' as _i7;
+import 'package:sj_manager/to_embrace/competition/competition.dart' as _i6;
+import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules.dart'
     as _i9;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/judges_creator/concrete/default.dart'
+import 'package:sj_manager/to_embrace/competition/rules/utils/judges_creator/concrete/default.dart'
     as _i11;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/judges_creator/judges_creator.dart'
+import 'package:sj_manager/to_embrace/competition/rules/utils/judges_creator/judges_creator.dart'
     as _i2;
-import 'package:sj_manager/domain/entities/simulation/event_series/event_series.dart'
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series.dart'
     as _i3;
-import 'package:sj_manager/domain/entities/simulation/standings/score/details/score_details.dart'
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/score_details.dart'
     as _i5;
-import 'package:sj_manager/domain/entities/simulation/standings/standings.dart' as _i4;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart'
+    as _i4;
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart'
     as _i13;
 

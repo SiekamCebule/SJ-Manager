@@ -5,16 +5,15 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:osje_sim/osje_sim.dart' as _i7;
-import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart' as _i6;
-import 'package:sj_manager/domain/entities/simulation/competition/competition.dart'
-    as _i5;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/wind_averager/wind_averager.dart'
+import 'package:sj_manager/core/core_classes/hill/hill.dart' as _i6;
+import 'package:sj_manager/to_embrace/competition/competition.dart' as _i5;
+import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/wind_averager.dart'
     as _i8;
-import 'package:sj_manager/domain/entities/simulation/event_series/event_series.dart'
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series.dart'
     as _i2;
-import 'package:sj_manager/domain/entities/simulation/standings/score/details/score_details.dart'
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/score_details.dart'
     as _i4;
-import 'package:sj_manager/domain/entities/simulation/standings/standings.dart'
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart'
     as _i3;
 
 // ignore_for_file: type=lint
@@ -61,8 +60,7 @@ class _FakeHill_2 extends _i1.SmartFake implements _i6.Hill {
         );
 }
 
-class _FakeWindMeasurement_3 extends _i1.SmartFake
-    implements _i7.WindMeasurement {
+class _FakeWindMeasurement_3 extends _i1.SmartFake implements _i7.WindMeasurement {
   _FakeWindMeasurement_3(
     Object parent,
     Invocation parentInvocation,
@@ -75,8 +73,7 @@ class _FakeWindMeasurement_3 extends _i1.SmartFake
 /// A class which mocks [WindAveragingContext].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockWindAveragingContext extends _i1.Mock
-    implements _i8.WindAveragingContext {
+class MockWindAveragingContext extends _i1.Mock implements _i8.WindAveragingContext {
   MockWindAveragingContext() {
     _i1.throwOnMissingStub(this);
   }
@@ -91,16 +88,15 @@ class MockWindAveragingContext extends _i1.Mock
       ) as _i2.EventSeries);
 
   @override
-  _i5.Competition<dynamic, _i3.Standings<dynamic, _i4.ScoreDetails>>
-      get competition => (super.noSuchMethod(
-            Invocation.getter(#competition),
-            returnValue: _FakeCompetition_1<dynamic,
-                _i3.Standings<dynamic, _i4.ScoreDetails>>(
-              this,
-              Invocation.getter(#competition),
-            ),
-          ) as _i5
-              .Competition<dynamic, _i3.Standings<dynamic, _i4.ScoreDetails>>);
+  _i5.Competition<dynamic, _i3.Standings<dynamic, _i4.ScoreDetails>> get competition =>
+      (super.noSuchMethod(
+        Invocation.getter(#competition),
+        returnValue:
+            _FakeCompetition_1<dynamic, _i3.Standings<dynamic, _i4.ScoreDetails>>(
+          this,
+          Invocation.getter(#competition),
+        ),
+      ) as _i5.Competition<dynamic, _i3.Standings<dynamic, _i4.ScoreDetails>>);
 
   @override
   int get currentRound => (super.noSuchMethod(

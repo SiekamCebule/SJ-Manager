@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/domain/entities/simulation/flow/simple_rating.dart';
+import 'package:sj_manager/core/career_mode/simple_rating.dart';
 
 String translateTrainingProgress(
   SimpleRating rating, {

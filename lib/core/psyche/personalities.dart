@@ -1,4 +1,4 @@
-import 'package:sj_manager/domain/entities/simulation/psyche/level_of_consciousness.dart';
+import 'package:sj_manager/core/psyche/level_of_consciousness.dart';
 
 enum Personalities {
   compromised, // Wstyd, Skompromitowany

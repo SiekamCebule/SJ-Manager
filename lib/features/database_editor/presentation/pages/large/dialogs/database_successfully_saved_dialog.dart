@@ -13,8 +13,7 @@ class DatabaseSuccessfullySavedDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Zapisano bazę danych'),
-      content: Text(
-          'Kopia aktualnej bazy danych została zapisana w folderze $dirPath'),
+      content: Text('Kopia aktualnej bazy danych została zapisana w folderze $dirPath'),
       actions: [
         TextButton(
           onPressed: () {

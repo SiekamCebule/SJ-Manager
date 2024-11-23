@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/core/countries/countries_repository/countries_repository.dart';
 import 'package:sj_manager/core/database_editor/database_editor_items_type.dart';
+import 'package:sj_manager/core/general_utils/map_extensions.dart';
 import 'package:sj_manager/features/database_editor/domain/use_cases/countries/get_all_database_editor_countries_use_case.dart';
 import 'package:sj_manager/features/database_editor/domain/use_cases/countries/get_filtered_database_editor_countries_use_case.dart';
 
@@ -16,12 +17,14 @@ class DatabaseEditorCountriesCubit extends Cubit<DatabaseEditorCountriesState> {
       getFilteredCountriesUseCase;
 
   Future<void> initialize() async {
+    final filteredCountries = await getFilteredCountriesUseCase.asyncMap(
+      (itemsType, getFilteredCountries) async {
+        return MapEntry(itemsType, await getFilteredCountries());
+      },
+    );
     emit(DatabaseEditorCountriesInitialized(
       countries: await getAllCountriesUseCase(),
-      maleJumperCountries:
-          await getFilteredCountriesUseCase[DatabaseEditorItemsType.maleJumper]!(),
-      femaleJumperCountries:
-          await getFilteredCountriesUseCase[DatabaseEditorItemsType.femaleJumper]!(),
+      filteredCountries: filteredCountries,
     ));
   }
 }
@@ -40,18 +43,17 @@ class DatabaseEditorCountriesUninitialized extends DatabaseEditorCountriesState 
 class DatabaseEditorCountriesInitialized extends DatabaseEditorCountriesState {
   const DatabaseEditorCountriesInitialized({
     required this.countries,
-    required this.maleJumperCountries,
-    required this.femaleJumperCountries,
+    required this.filteredCountries,
   });
 
   final CountriesRepository countries;
-  final CountriesRepository maleJumperCountries;
-  final CountriesRepository femaleJumperCountries;
+  final Map<DatabaseEditorItemsType, CountriesRepository> filteredCountries;
+  CountriesRepository filtered(DatabaseEditorItemsType itemsType) =>
+      filteredCountries[itemsType]!;
 
   @override
   List<Object?> get props => [
         countries,
-        femaleJumperCountries,
-        femaleJumperCountries,
+        filteredCountries,
       ];
 }

@@ -21,7 +21,6 @@ class AppropriateItemEditorState extends State<AppropriateItemEditor> {
   Widget build(BuildContext context) {
     final filtersState = context.watch<DatabaseEditorFiltersCubit>().state;
     final itemsType = context.watch<DatabaseEditorItemsTypeCubit>().state;
-    context.watch<ValueRepo<_SelectedTabIndex>>();
 
     return _DbItemEditorFactory.create(
       key: _key,
@@ -48,7 +47,7 @@ abstract class _DbItemEditorFactory {
     if (type == DatabaseEditorItemsType.maleJumper) {
       final countriesRepo = (context.read<DatabaseEditorCountriesCubit>().state
               as DatabaseEditorCountriesInitialized)
-          .maleJumperCountries;
+          .filtered(DatabaseEditorItemsType.maleJumper);
       return JumperEditor(
         key: key,
         onChange: onChange,
@@ -60,7 +59,7 @@ abstract class _DbItemEditorFactory {
     } else if (type == DatabaseEditorItemsType.femaleJumper) {
       final countriesRepo = (context.read<DatabaseEditorCountriesCubit>().state
               as DatabaseEditorCountriesInitialized)
-          .femaleJumperCountries;
+          .filtered(DatabaseEditorItemsType.femaleJumper);
       return JumperEditor(
         key: key,
         onChange: onChange,

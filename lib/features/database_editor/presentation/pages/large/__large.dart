@@ -20,8 +20,7 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
         String? action = await _showSaveChangesDialog();
         final shouldClose = await _shouldCloseAfterDialog(action);
         if (action == 'yes') {
-          if (!mounted) return true;
-          await context.read<DatabaseEditorItemsCubit>().saveItems();
+          await _endEditing();
         }
         if (!_closed && shouldClose) {
           _closed = shouldClose;
@@ -39,6 +38,41 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
   }
 
   @override
+  Widget build(BuildContext context) {
+    final child = PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, value) async {
+        final changeStatus = context.read<DatabaseEditorChangeStatusCubit>().state;
+        if (didPop || _closed) {
+          return;
+        } else if (changeStatus is DatabaseEditorChangeStatusNotChanged) {
+          _cleanResources();
+          Navigator.pop(context);
+          return;
+        }
+        String? action = await _showSaveChangesDialog();
+        bool shouldClose = await _shouldCloseAfterDialog(action);
+        if (action == 'yes') {
+          await _endEditing();
+        }
+        if (shouldClose) {
+          _cleanResources();
+          _closed = true;
+          if (!context.mounted) return;
+          router.pop(context);
+        }
+      },
+      child: const _MainBody(),
+    );
+    return AnimatedSwitcher(
+      duration: Durations.long2,
+      switchInCurve: Curves.easeInExpo,
+      switchOutCurve: Curves.decelerate,
+      child: child,
+    );
+  }
+
+  @override
   void dispose() {
     if (!_closed) {
       _cleanResources();
@@ -46,6 +80,19 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
     FlutterWindowClose.setWindowShouldCloseHandler(null);
 
     super.dispose();
+  }
+
+  Future<void> _endEditing() async {
+    await _constructEditedGameVariant();
+    if (!mounted) return;
+    final constructedVariant = (context.read<DatabaseEditorEditedGameVariantCubit>().state
+            as DatabaseEditorEditedGameVariantAvailable)
+        .editedVariant;
+    await context.read<GameVariantCubit>().endEditingVariant(constructedVariant);
+  }
+
+  Future<void> _constructEditedGameVariant() async {
+    await context.read<DatabaseEditorEditedGameVariantCubit>().construct();
   }
 
   void _cleanResources() {
@@ -66,41 +113,5 @@ class _LargeState extends State<_Large> with SingleTickerProviderStateMixin {
       'yes' => true,
       _ => false,
     };
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final child = PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, value) async {
-        final changeStatus = context.read<DatabaseEditorChangeStatusCubit>().state;
-        if (didPop || _closed) {
-          return;
-        } else if (changeStatus is DatabaseEditorChangeStatusNotChanged) {
-          _cleanResources();
-          Navigator.pop(context);
-          return;
-        }
-        String? action = await _showSaveChangesDialog();
-        bool shouldClose = await _shouldCloseAfterDialog(action);
-        if (action == 'yes') {
-          if (!context.mounted) return;
-          await context.read<DatabaseEditorItemsCubit>().saveItems();
-        }
-        if (shouldClose) {
-          _cleanResources();
-          _closed = true;
-          if (!context.mounted) return;
-          router.pop(context);
-        }
-      },
-      child: const _MainBody(),
-    );
-    return AnimatedSwitcher(
-      duration: Durations.long2,
-      switchInCurve: Curves.easeInExpo,
-      switchOutCurve: Curves.decelerate,
-      child: child,
-    );
   }
 }

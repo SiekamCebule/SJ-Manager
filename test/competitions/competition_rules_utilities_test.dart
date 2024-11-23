@@ -2,20 +2,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:osje_sim/osje_sim.dart';
-import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
-import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/competition_score_creator/concrete/individual/default_linear.dart';
-import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/competition_score_creator/concrete/team/default_linear.dart';
-import 'package:sj_manager/domain/entities/simulation/standings/score/details/competition_score_details.dart';
-import 'package:sj_manager/domain/entities/simulation/standings/score/details/jump_score_details.dart';
-import 'package:sj_manager/domain/entities/simulation/standings/score/score.dart';
-import 'package:sj_manager/domain/entities/simulation/standings/score/typedefs.dart';
+import 'package:sj_manager/to_embrace/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
+import 'package:sj_manager/to_embrace/competition/rules/utils/competition_score_creator/concrete/individual/default_linear.dart';
+import 'package:sj_manager/to_embrace/competition/rules/utils/competition_score_creator/concrete/team/default_linear.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/competition_score_details.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/jump_score_details.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/typedefs.dart';
 
-import 'package:sj_manager/core/classes/country/country.dart';
-import 'package:sj_manager/core/classes/country_team/country_team_facts_model.dart';
+import 'package:sj_manager/core/core_classes/country/country.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_facts_model.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
-import 'package:sj_manager/domain/entities/simulation/team/competition_team.dart';
-import 'package:sj_manager/core/classes/country_team/country_team.dart';
+import 'package:sj_manager/core/core_classes/sex.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/competition_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
 
 import 'competition_rules_utilities_test.mocks.dart';
 
@@ -85,7 +85,7 @@ void main() {
     final germany = Country.monolingual(code: 'de', language: 'en', name: 'Germany');
     final team = CompetitionTeam(
       parentTeam: CountryTeam(
-        facts: const CountryTeamFacts.empty(),
+        facts: const CountryTeamFactsModel.empty(),
         sex: Sex.male,
         country: germany,
       ),
