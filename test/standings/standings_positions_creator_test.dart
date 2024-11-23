@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sj_manager/domain/entities/simulation/standings/score/details/score_details.dart';
-import 'package:sj_manager/domain/entities/simulation/standings/standings_positions_map_creator/standings_positions_creator.dart';
-import 'package:sj_manager/domain/entities/simulation/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
-import 'package:sj_manager/domain/entities/simulation/standings/standings_positions_map_creator/standings_positions_with_no_ex_aequo_creator.dart';
-import 'package:sj_manager/domain/entities/simulation/standings/score/score.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/score_details.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings_positions_map_creator/standings_positions_creator.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings_positions_map_creator/standings_positions_with_no_ex_aequo_creator.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart';
 
 void main() {
   late StandingsPositionsCreator creator;

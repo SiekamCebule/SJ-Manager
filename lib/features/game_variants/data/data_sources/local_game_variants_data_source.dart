@@ -1,19 +1,19 @@
 import 'dart:io';
 import 'package:path/path.dart' as path;
-import 'package:sj_manager/core/classes/country/country.dart';
+import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/jumper/jumper_db_record_model.dart';
 
 import 'package:sj_manager/features/game_variants/data/models/game_variant_model.dart';
-import 'package:sj_manager/utilities/json/countries.dart';
-import 'package:sj_manager/utilities/json/db_items_json.dart';
-import 'package:sj_manager/utilities/json/simulation_db_loading/team_loader.dart';
-import 'package:sj_manager/utilities/utils/file_system.dart';
+import 'package:sj_manager/core/general_utils/json/countries.dart';
+import 'package:sj_manager/core/general_utils/json/db_items_json.dart';
+import 'package:sj_manager/core/general_utils/json/simulation_db_loading/team_loader.dart';
+import 'package:sj_manager/core/general_utils/file_system.dart';
 
 abstract interface class LocalGameVariantsDataSource {
-  Future<List<GameVariantModel>> loadAllVariants();
-  Future<GameVariantModel> loadVariant({required String gameVariantId});
-  Future<void> saveVariant(GameVariantModel variantModel);
-  Future<void> saveAllVariants(List<GameVariantModel> models);
+  Future<List<GameVariantModel>> loadAllVariantModels();
+  Future<GameVariantModel> loadVariantModel({required String gameVariantId});
+  Future<void> saveVariantModel(GameVariantModel variantModel);
+  Future<void> saveAllVariantModels(List<GameVariantModel> models);
 }
 
 class LocalGameVariantsDataSourceImpl implements LocalGameVariantsDataSource {
@@ -32,20 +32,20 @@ class LocalGameVariantsDataSourceImpl implements LocalGameVariantsDataSource {
   final JsonCountryLoader jumperCountryJsonLoader;
 
   @override
-  Future<List<GameVariantModel>> loadAllVariants() async {
+  Future<List<GameVariantModel>> loadAllVariantModels() async {
     await _ensureVariantsDirectoryExists();
     final availableDirectories = gameVariantsDirectory
         .listSync(recursive: false, followLinks: false)
         .whereType<Directory>();
     final future = Future.wait([
       for (final directory in availableDirectories)
-        loadVariant(gameVariantId: path.basename(directory.path)),
+        loadVariantModel(gameVariantId: path.basename(directory.path)),
     ]);
     return await future;
   }
 
   @override
-  Future<GameVariantModel> loadVariant({
+  Future<GameVariantModel> loadVariantModel({
     required String gameVariantId,
   }) async {
     await _ensureVariantsDirectoryExists();
@@ -79,7 +79,7 @@ class LocalGameVariantsDataSourceImpl implements LocalGameVariantsDataSource {
   }
 
   @override
-  Future<void> saveVariant(GameVariantModel variantModel) async {
+  Future<void> saveVariantModel(GameVariantModel variantModel) async {
     await _ensureVariantsDirectoryExists();
     final variantDirectory = Directory(path.join(
       gameVariantsDirectory.path,
@@ -93,9 +93,9 @@ class LocalGameVariantsDataSourceImpl implements LocalGameVariantsDataSource {
   }
 
   @override
-  Future<void> saveAllVariants(List<GameVariantModel> models) async {
+  Future<void> saveAllVariantModels(List<GameVariantModel> models) async {
     for (var model in models) {
-      saveVariant(model);
+      saveVariantModel(model);
     }
   }
 

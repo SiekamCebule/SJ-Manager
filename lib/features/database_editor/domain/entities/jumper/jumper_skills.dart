@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:sj_manager/utilities/json/json_types.dart';
+import 'package:sj_manager/core/general_utils/json/json_types.dart';
 
 part 'jumper_skills.g.dart';
 

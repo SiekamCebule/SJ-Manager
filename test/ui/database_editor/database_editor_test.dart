@@ -4,52 +4,39 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-import 'package:sj_manager/presentation/bloc/database_editing/database_items_cubit.dart';
-import 'package:sj_manager/presentation/bloc/database_editing/state/database_items_state.dart';
-import 'package:sj_manager/utilities/filters/filter.dart';
-import 'package:sj_manager/utilities/filters/jumpers/jumper_matching_algorithms.dart';
-import 'package:sj_manager/domain/entities/simulation/event_series/event_series_setup.dart';
-import 'package:sj_manager/core/classes/country/country.dart';
-import 'package:sj_manager/core/classes/country_team/country_team_facts_model.dart';
-import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
-import 'package:sj_manager/domain/entities/game_variant/hill/hill_profile_type.dart';
-import 'package:sj_manager/domain/entities/game_variant/hill/jumps_variability.dart';
-import 'package:sj_manager/domain/entities/game_variant/hill/landing_ease.dart';
-import 'package:sj_manager/domain/entities/game_variant/hill/typical_wind_direction.dart';
+import 'package:sj_manager/core/general_utils/filtering/matching_algorithms/jumper_matching_algorithms.dart';
+import 'package:sj_manager/features/app_settings/data/repository/local_app_settings_repository.dart';
+import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_skills.dart';
+import 'package:sj_manager/features/database_editor/presentation/pages/database_editor_page.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series_setup.dart';
+import 'package:sj_manager/core/core_classes/country/country.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_facts_model.dart';
+import 'package:sj_manager/core/core_classes/hill/hill.dart';
+import 'package:sj_manager/core/core_classes/hill/hill_profile_type.dart';
+import 'package:sj_manager/core/core_classes/hill/jumps_variability.dart';
+import 'package:sj_manager/core/core_classes/hill/landing_ease.dart';
+import 'package:sj_manager/core/core_classes/hill/typical_wind_direction.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/features/game_variants/domain/entities/jumper/jumper_skills_db_record.dart';
-import 'package:sj_manager/data/repositories/items_repos_registry.dart';
 import 'package:sj_manager/core/psyche/personalities.dart';
-import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
-import 'package:sj_manager/core/classes/country_team/country_team.dart';
-import 'package:sj_manager/domain/entities/simulation/team/team.dart';
-import 'package:sj_manager/domain/repository_interfaces/database_editing/db_editing_defaults_repo.dart';
-import 'package:sj_manager/domain/repository_interfaces/generic/editable_items_repo.dart';
-import 'package:sj_manager/domain/repository_interfaces/database_editing/selected_indexes_repository.dart';
-import 'package:sj_manager/domain/repository_interfaces/generic/items_repo.dart';
-import 'package:sj_manager/domain/repository_interfaces/settings/local_user_settings_repo.dart';
-import 'package:sj_manager/domain/repository_interfaces/settings/mocked_user_settings_repo.dart';
-import 'package:sj_manager/domain/repository_interfaces/settings/user_settings_repo.dart';
-import 'package:sj_manager/setup/app_configurator.dart';
-import 'package:sj_manager/presentation/ui/app.dart';
-import 'package:sj_manager/presentation/ui/database_item_editors/fields/my_text_field.dart';
-import 'package:sj_manager/presentation/ui/database_item_editors/hill_editor.dart';
-import 'package:sj_manager/presentation/ui/providers/locale_cubit.dart';
-import 'package:sj_manager/presentation/ui/reusable_widgets/animations/animated_visibility.dart';
-import 'package:sj_manager/presentation/ui/reusable_widgets/countries/countries_dropdown.dart';
-import 'package:sj_manager/presentation/ui/reusable_widgets/database_item_tiles/jumper_info_list_tile.dart';
-import 'package:sj_manager/presentation/ui/reusable_widgets/filtering/search_text_field.dart';
-import 'package:sj_manager/presentation/ui/screens/database_editor/database_editor_screen.dart';
+import 'package:sj_manager/core/core_classes/sex.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/to_embrace/ui/app.dart';
+import 'package:sj_manager/to_embrace/ui/database_item_editors/fields/my_text_field.dart';
+import 'package:sj_manager/to_embrace/ui/database_item_editors/hill_editor.dart';
+import 'package:sj_manager/general_ui/reusable_widgets/animations/animated_visibility.dart';
+import 'package:sj_manager/general_ui/reusable_widgets/countries/countries_dropdown.dart';
+import 'package:sj_manager/general_ui/reusable_widgets/database_item_tiles/jumper_info_list_tile.dart';
+import 'package:sj_manager/general_ui/reusable_widgets/filtering/search_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:sj_manager/features/database_editor/presentation/pages/large/widgets/appropriate_db_item_list_tile.dart';
 import 'package:sj_manager/features/database_editor/presentation/pages/large/widgets/database_items_list.dart';
-import 'package:sj_manager/presentation/ui/theme/app_schemes.dart';
-import 'package:sj_manager/presentation/ui/theme/theme_cubit.dart';
-import 'package:sj_manager/utilities/utils/id_generator.dart';
+import 'package:sj_manager/to_embrace/ui/theme/app_schemes.dart';
+import 'package:sj_manager/core/general_utils/id_generator.dart';
 
 import 'database_editor_test.mocks.dart';
 
-@GenerateMocks([ItemsRepo, LocalUserSettingsRepo])
+@GenerateMocks([LocalAppSettingsRepository])
 void main() {
   const MethodChannel flutterWindowCloseChannel = MethodChannel('flutter_window_close');
 
@@ -139,7 +126,7 @@ void main() {
     ),
   ];
 
-  group(DatabaseEditorScreen, () {
+  group(DatabaseEditorPage, () {
     late Widget appWidget;
 
     setUpAll(() {
@@ -181,7 +168,7 @@ void main() {
         providers: [
           MultiProvider(
             providers: [
-              Provider<UserSettingsRepo>(
+              Provider<UserSettingsRepository>(
                 create: (context) => const MockedUserSettingsRepo(
                   appColorScheme: AppColorScheme.blue,
                   appThemeBrightness: Brightness.dark,
@@ -220,13 +207,13 @@ void main() {
                     initial: {
                       EditableItemsRepo<MaleJumperDbRecord>(initial: maleJumpers),
                       EditableItemsRepo<FemaleJumperDbRecord>(initial: femaleJumpers),
-                      //CountriesRepo(countries: countries), // TODO
+                      //CountriesRepository(countries: countries), // TODO
                       teamsRepo,
                     },
                   ),
                 ),
                 RepositoryProvider(create: (context) {
-                  return DbEditingDefaultsRepo.appDefault();
+                  return DbEditingDefaultsRepository.appDefault();
                 }),
                 Provider<IdGenerator>(create: (context) {
                   return const NanoIdGenerator(size: 10);

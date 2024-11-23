@@ -1,13 +1,13 @@
-import 'package:sj_manager/data/models/game_variant/game_variant_start_date.dart';
-import 'package:sj_manager/domain/entities/simulation/database/actions/simulation_action_type.dart';
-import 'package:sj_manager/domain/entities/simulation/database/simulation_database_and_models/simulation_season.dart';
-import 'package:sj_manager/domain/entities/simulation/jumper/reports/jumper_level_description.dart';
-import 'package:sj_manager/core/classes/country/country.dart';
-import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart';
+import 'package:sj_manager/core/core_classes/game_variant_start_date.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/actions/simulation_action_type.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/simulation_season.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/reports/jumper_level_description.dart';
+import 'package:sj_manager/core/core_classes/country/country.dart';
+import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/core/classes/country_team/country_team.dart';
-import 'package:sj_manager/domain/entities/simulation/team/subteam.dart';
-import 'package:sj_manager/utilities/utils/multilingual_string.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/subteam.dart';
+import 'package:sj_manager/core/general_utils/multilingual_string.dart';
 
 class GameVariant {
   const GameVariant({

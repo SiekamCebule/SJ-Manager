@@ -6,53 +6,53 @@
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i23;
 import 'package:rxdart/rxdart.dart' as _i9;
-import 'package:sj_manager/domain/entities/game_variant/hill/hill.dart' as _i2;
-import 'package:sj_manager/domain/entities/simulation/classification/classification.dart'
-    as _i12;
-import 'package:sj_manager/domain/entities/simulation/classification/default_classification_rules.dart'
+import 'package:sj_manager/core/core_classes/hill/hill.dart' as _i2;
+import 'package:sj_manager/to_embrace/classification/classification.dart' as _i12;
+import 'package:sj_manager/to_embrace/classification/default_classification_rules.dart'
     as _i10;
-import 'package:sj_manager/domain/entities/simulation/competition/competition.dart'
-    as _i6;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_round_rules/default_competition_round_rules.dart'
+import 'package:sj_manager/to_embrace/competition/competition.dart' as _i6;
+import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_competition_round_rules.dart'
     as _i30;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart'
+import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart'
     as _i20;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_round_rules/default_team_competition_round_rules.dart'
+import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_team_competition_round_rules.dart'
     as _i21;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart'
+import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart'
     as _i29;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_rules/default_competition_rules.dart'
+import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules.dart'
     as _i22;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/competition_rules/default_competition_rules_provider.dart'
+import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules_provider.dart'
     as _i3;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/entities_limit.dart'
-    as _i24;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/ko/ko_round_rules.dart'
-    as _i26;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/classification_score_creator/classification_score_creator.dart'
+import 'package:sj_manager/to_embrace/competition/rules/entities_limit.dart' as _i24;
+import 'package:sj_manager/to_embrace/competition/rules/ko/ko_round_rules.dart' as _i26;
+import 'package:sj_manager/to_embrace/competition/rules/utils/classification_score_creator/classification_score_creator.dart'
     as _i11;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/competition_score_creator/competition_score_creator.dart'
+import 'package:sj_manager/to_embrace/competition/rules/utils/competition_score_creator/competition_score_creator.dart'
     as _i19;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/judges_creator/judges_creator.dart'
+import 'package:sj_manager/to_embrace/competition/rules/utils/judges_creator/judges_creator.dart'
     as _i16;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/jump_score_creator/jump_score_creator.dart'
+import 'package:sj_manager/to_embrace/competition/rules/utils/jump_score_creator/jump_score_creator.dart'
     as _i17;
-import 'package:sj_manager/domain/entities/simulation/competition/rules/utils/wind_averager/wind_averager.dart'
+import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/wind_averager.dart'
     as _i25;
-import 'package:sj_manager/domain/entities/simulation/event_series/event_series.dart'
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series.dart'
     as _i14;
-import 'package:sj_manager/domain/entities/simulation/standings/score/details/classification_score_details.dart'
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/classification_score_details.dart'
     as _i13;
-import 'package:sj_manager/domain/entities/simulation/standings/score/details/competition_score_details.dart'
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/competition_score_details.dart'
     as _i18;
-import 'package:sj_manager/domain/entities/simulation/standings/score/details/score_details.dart'
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/score_details.dart'
     as _i5;
-import 'package:sj_manager/domain/entities/simulation/standings/score/score.dart' as _i7;
-import 'package:sj_manager/domain/entities/simulation/standings/standings.dart' as _i4;
-import 'package:sj_manager/domain/entities/simulation/standings/standings_positions_map_creator/standings_positions_creator.dart'
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart'
+    as _i7;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart'
+    as _i4;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings_positions_map_creator/standings_positions_creator.dart'
     as _i8;
-import 'package:sj_manager/domain/entities/simulation/team/competition_team.dart' as _i27;
-import 'package:sj_manager/domain/entities/simulation/team/team.dart' as _i28;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/competition_team.dart'
+    as _i27;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart'
+    as _i28;
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart'
     as _i15;
 

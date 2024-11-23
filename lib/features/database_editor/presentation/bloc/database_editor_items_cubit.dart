@@ -9,7 +9,6 @@ import 'package:sj_manager/features/database_editor/domain/use_cases/items/add_d
 import 'package:sj_manager/features/database_editor/domain/use_cases/items/filter_database_editor_items_use_case.dart';
 import 'package:sj_manager/features/database_editor/domain/use_cases/items/move_database_editor_item_use_case.dart';
 import 'package:sj_manager/features/database_editor/domain/use_cases/items/remove_database_editor_item_use_case.dart';
-import 'package:sj_manager/features/database_editor/domain/use_cases/items/save_database_editor_items_use_case.dart';
 import 'package:sj_manager/features/database_editor/domain/use_cases/items/update_database_editor_item_use_case.dart';
 import 'package:sj_manager/features/database_editor/domain/use_cases/items_type/get_database_editor_items_type_use_case.dart';
 
@@ -20,7 +19,6 @@ class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
     required this.updateItemUseCase,
     required this.filterItemsUseCase,
     required this.moveItemUseCase,
-    required this.saveItemsUseCase,
     required this.getItemsTypeUseCase,
     required this.getFiltersStreamUseCase,
   }) : super(const DatabaseEditorItemsInitial());
@@ -32,7 +30,6 @@ class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
   final Map<DatabaseEditorItemsType, UpdateDatabaseEditorItemUseCase> updateItemUseCase;
   final Map<DatabaseEditorItemsType, FilterDatabaseEditorItemsUseCase> filterItemsUseCase;
   final Map<DatabaseEditorItemsType, MoveDatabaseEditorItemUseCase> moveItemUseCase;
-  final Map<DatabaseEditorItemsType, SaveDatabaseEditorItemsUseCase> saveItemsUseCase;
   final GetDatabaseEditorItemsTypeUseCase getItemsTypeUseCase;
   final GetDatabaseEditorFiltersStreamUseCase getFiltersStreamUseCase;
 
@@ -84,12 +81,6 @@ class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
       final type = await getItemsTypeUseCase();
       await moveItemUseCase[type]!(index, targetIndex);
     }
-  }
-
-  Future<void> saveItems() async {
-    saveItemsUseCase.forEach(
-      (itemsType, save) async => await save(),
-    );
   }
 
   @override

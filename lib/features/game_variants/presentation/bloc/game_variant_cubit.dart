@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sj_manager/features/game_variants/domain/entities/game_variant.dart';
-import 'package:sj_manager/features/game_variants/domain/usecases/game_variant/choose_game_variant_use_case.dart';
-import 'package:sj_manager/features/game_variants/domain/usecases/game_variant/construct_game_variants_use_case.dart';
-import 'package:sj_manager/features/game_variants/domain/usecases/game_variant/get_all_game_variants_use_case.dart';
-import 'package:sj_manager/features/game_variants/domain/usecases/game_variant/save_game_variant_use_case.dart';
+import 'package:sj_manager/features/game_variants/domain/usecases/choose_game_variant_use_case.dart';
+import 'package:sj_manager/features/game_variants/domain/usecases/construct_game_variants_use_case.dart';
+import 'package:sj_manager/features/game_variants/domain/usecases/get_all_game_variants_use_case.dart';
+import 'package:sj_manager/features/game_variants/domain/usecases/save_game_variant_use_case.dart';
 
 class GameVariantCubit extends Cubit<GameVariantState> {
   GameVariantCubit({
@@ -25,7 +25,7 @@ class GameVariantCubit extends Cubit<GameVariantState> {
     emit(GameVariantInitializing());
     await constructGameVariantsUseCase();
     _variants = await getAllGameVariantsUseCase();
-    emit(GameVariantInitialized(variants: _variants));
+    emit(GameVariantAbleToChoose(variants: _variants));
   }
 
   Future<void> chooseGameVariant(GameVariant variant) async {
@@ -37,12 +37,12 @@ class GameVariantCubit extends Cubit<GameVariantState> {
     }
   }
 
-  Future<void> endEditingVariant() async {
+  Future<void> endEditingVariant(GameVariant editedVariant) async {
     if (state is GameVariantChosen) {
       final currentVariant = (state as GameVariantChosen).variant;
       emit(GameVariantEndingEditing());
       await saveGameVariantUseCase(currentVariant);
-      emit(GameVariantInitialized(variants: _variants));
+      emit(GameVariantAbleToChoose(variants: _variants));
     } else {
       throw StateError('Ended editing the variant when no variant had been chosen');
     }
@@ -62,8 +62,8 @@ class GameVariantInitializing extends GameVariantState {}
 
 class GameVariantEndingEditing extends GameVariantState {}
 
-class GameVariantInitialized extends GameVariantState {
-  const GameVariantInitialized({
+class GameVariantAbleToChoose extends GameVariantState {
+  const GameVariantAbleToChoose({
     required this.variants,
   });
 

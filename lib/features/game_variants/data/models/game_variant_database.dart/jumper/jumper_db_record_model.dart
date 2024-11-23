@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/core/classes/country/country.dart';
+import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/psyche/personalities.dart';
 import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/jumper/jumper_skills_model.dart';
-import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
-import 'package:sj_manager/utilities/json/countries.dart';
-import 'package:sj_manager/utilities/json/json_types.dart';
+import 'package:sj_manager/core/core_classes/sex.dart';
+import 'package:sj_manager/core/general_utils/json/countries.dart';
+import 'package:sj_manager/core/general_utils/json/json_types.dart';
 
 class JumperDbRecordModel with EquatableMixin {
   const JumperDbRecordModel({

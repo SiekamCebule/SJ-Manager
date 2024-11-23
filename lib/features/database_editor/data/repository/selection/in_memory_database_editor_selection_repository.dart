@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:sj_manager/features/database_editor/domain/repository/database_editor_selection_repository.dart';
-import 'package:sj_manager/utilities/extensions/set_toggle.dart';
+import 'package:sj_manager/core/general_utils/extensions/set_toggle.dart';
 
 class InMemoryDatabaseEditorSelectionRepository
     implements DatabaseEditorSelectionRepository {

@@ -29,6 +29,9 @@ class _ForJumpersState<T extends JumperDbRecord> extends State<_ForJumpers<T>> {
 
   @override
   Widget build(BuildContext context) {
+    final countriesCubit = context.watch<DatabaseEditorCountriesCubit>();
+    final countriesState = countriesCubit.state as DatabaseEditorCountriesInitialized;
+    final countries = countriesState.filtered(widget.type);
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -47,7 +50,7 @@ class _ForJumpersState<T extends JumperDbRecord> extends State<_ForJumpers<T>> {
           key: _countriesDropdownKey,
           width: 220,
           label: Text(translate(context).filterByCountry),
-          countriesRepo: countriesRepo,
+          countries: countries.getAll(),
           firstAsInitial: true,
           menuHeight: 600,
           onSelected: (selected) async {
@@ -63,8 +66,8 @@ class _ForJumpersState<T extends JumperDbRecord> extends State<_ForJumpers<T>> {
     final dbCountries = (context.read<DatabaseEditorCountriesCubit>().state
         as DatabaseEditorCountriesInitialized);
     final countries = T == MaleJumperDbRecord
-        ? dbCountries.maleJumperCountries
-        : dbCountries.femaleJumperCountries;
+        ? dbCountries.filtered(DatabaseEditorItemsType.maleJumper)
+        : dbCountries.filtered(DatabaseEditorItemsType.femaleJumper);
     return countries;
   }
 

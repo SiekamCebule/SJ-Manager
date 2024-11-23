@@ -5,6 +5,4 @@ abstract interface class DatabaseEditorItemsRepository<T> {
   Future<void> update(int index, T item);
   Future<void> move(int index, int targetIndex);
   Future<List<T>> getAll();
-  Future<void> load();
-  Future<void> save();
 }

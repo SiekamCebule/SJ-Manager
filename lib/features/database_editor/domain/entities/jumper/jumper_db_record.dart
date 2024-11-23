@@ -4,14 +4,14 @@ import 'package:sj_manager/core/mixins/country_mixin.dart';
 import 'package:sj_manager/core/mixins/name_and_surname_mixin.dart';
 import 'package:sj_manager/core/mixins/sex_mixin.dart';
 
-import 'package:sj_manager/utilities/json/countries.dart';
-import 'package:sj_manager/utilities/json/json_types.dart';
-import 'package:sj_manager/core/classes/country/country.dart';
+import 'package:sj_manager/core/general_utils/json/countries.dart';
+import 'package:sj_manager/core/general_utils/json/json_types.dart';
+import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_skills.dart';
 import 'package:sj_manager/core/psyche/personalities.dart';
-import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
+import 'package:sj_manager/core/core_classes/sex.dart';
 
-part '../../../../../utilities/json/manual_json/jumper_json.dart';
+part '../../../../../core/general_utils/json/manual_json/jumper_json.dart';
 
 class JumperDbRecord with EquatableMixin, NameAndSurnameMixin, CountryMixin, SexMixin {
   JumperDbRecord({
@@ -75,8 +75,9 @@ class JumperDbRecord with EquatableMixin, NameAndSurnameMixin, CountryMixin, Sex
     return age;
   }
 
-  static JumperDbRecord fromJson(Json json, {required JsonCountryLoader countryLoader}) {
-    return _jumperFromJson(json, countryLoader: countryLoader);
+  static Future<JumperDbRecord> fromJson(Json json,
+      {required JsonCountryLoader countryLoader}) async {
+    return await _jumperFromJson(json, countryLoader: countryLoader);
   }
 
   Json toJson({required JsonCountrySaver countrySaver}) => _jumperToJson(
@@ -126,9 +127,9 @@ class MaleJumperDbRecord extends JumperDbRecord {
     required super.skills,
   }) : super(sex: Sex.male);
 
-  static MaleJumperDbRecord fromJson(Json json,
-      {required JsonCountryLoader countryLoader}) {
-    final jumper = JumperDbRecord.fromJson(json, countryLoader: countryLoader);
+  static Future<MaleJumperDbRecord> fromJson(Json json,
+      {required JsonCountryLoader countryLoader}) async {
+    final jumper = await JumperDbRecord.fromJson(json, countryLoader: countryLoader);
     return MaleJumperDbRecord(
       name: jumper.name,
       surname: jumper.surname,
@@ -181,9 +182,9 @@ class FemaleJumperDbRecord extends JumperDbRecord {
     required super.skills,
   }) : super(sex: Sex.female);
 
-  static FemaleJumperDbRecord fromJson(Json json,
-      {required JsonCountryLoader countryLoader}) {
-    final jumper = JumperDbRecord.fromJson(json, countryLoader: countryLoader);
+  static Future<FemaleJumperDbRecord> fromJson(Json json,
+      {required JsonCountryLoader countryLoader}) async {
+    final jumper = await JumperDbRecord.fromJson(json, countryLoader: countryLoader);
     return FemaleJumperDbRecord(
       name: jumper.name,
       surname: jumper.surname,

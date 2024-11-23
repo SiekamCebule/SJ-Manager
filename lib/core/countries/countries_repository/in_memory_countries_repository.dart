@@ -1,7 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/core/classes/country/country.dart';
+import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/countries/countries_repository/countries_repository.dart';
+import 'package:sj_manager/core/errors/country_not_found_error.dart';
 
 class InMemoryCountriesRepository with EquatableMixin implements CountriesRepository {
   const InMemoryCountriesRepository({
@@ -11,21 +12,21 @@ class InMemoryCountriesRepository with EquatableMixin implements CountriesReposi
   final Iterable<Country> countries;
 
   @override
-  Future<Iterable<Country>> getAll() async => countries;
+  Iterable<Country> getAll() => countries;
 
   @override
-  Future<Country> byCode(String code) async {
+  Country byCode(String code) {
     final toReturn = countries.singleWhereOrNull(
       (country) => country.code.toLowerCase() == code.toLowerCase(),
     );
     if (toReturn == null) {
-      throw CountryNotFoundError(countryCode: code.toLowerCase());
+      throw CountryByCodeNotFoundError(countryCode: code.toLowerCase());
     }
     return toReturn;
   }
 
   @override
-  Future<Country> get none async => byCode('none');
+  Country get none => byCode('none');
 
   @override
   List<Object?> get props => [countries];

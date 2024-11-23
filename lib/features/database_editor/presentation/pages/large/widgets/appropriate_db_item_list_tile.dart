@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/core/database_editor/database_editor_items_type.dart';
-import 'package:sj_manager/presentation/ui/reusable_widgets/database_item_tiles/jumper_info_list_tile.dart';
+import 'package:sj_manager/general_ui/reusable_widgets/database_item_tiles/jumper_info_list_tile.dart';
 
 class AppropriateDbItemListTile extends StatelessWidget {
   const AppropriateDbItemListTile({

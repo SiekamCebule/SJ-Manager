@@ -1,4 +1,4 @@
-import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/sex.dart';
+import 'package:sj_manager/core/core_classes/sex.dart';
 
 mixin SexMixin {
   Sex get sex;
