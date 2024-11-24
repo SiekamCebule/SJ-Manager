@@ -1,0 +1,4 @@
+enum CompetitionTypeByEntity {
+  individual,
+  team,
+}

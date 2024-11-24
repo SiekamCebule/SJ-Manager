@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:sj_manager/to_embrace/competition/competition_type_by_entity.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules_provider.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
