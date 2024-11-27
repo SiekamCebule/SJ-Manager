@@ -1,6 +1,6 @@
 import 'package:sj_manager/core/countries/countries_repository/countries_repository.dart';
 import 'package:sj_manager/core/countries/countries_repository/in_memory_countries_repository.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/actions/simulation_actions_repo.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/manager_data/simulation_manager_data.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/stats/jumper_attribute_history.dart';
@@ -19,7 +19,7 @@ import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/core/psyche/psyche_utils.dart';
 import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/personal_coach_team.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/subteam.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 import 'package:sj_manager/core/general_utils/id_generator.dart';
 
@@ -121,8 +121,13 @@ class DefaultSimulationDatabaseCreator {
       countries: _countries,
       seasons: _seasons,
       idsRepository: _idsRepo,
-      actionDeadlines: options.gameVariant!.actionDeadlines,
-      actionsRepo: SimulationActionsRepo(initial: {}),
+      actions: [
+        for (var actionType in options.gameVariant!.actionDeadlines.keys)
+          SimulationAction(
+            type: actionType,
+            deadline: options.gameVariant!.actionDeadlines[actionType],
+          )
+      ],
       teamReports: teamReports,
     );
   }

@@ -9,9 +9,9 @@ import 'package:sj_manager/features/database_editor/domain/use_cases/items_type/
 
 class DatabaseEditorItemsTypeCubit extends Cubit<DatabaseEditorItemsTypeState> {
   DatabaseEditorItemsTypeCubit({
-    required this.getStreamUseCase,
-    required this.setItemsTypeUseCase,
-    required this.setItemsTypeByIndexUseCase,
+    required this.getStream,
+    required this.setItemsType,
+    required this.setItemsTypeByIndex,
   }) : super(initial);
 
   static const initial = DatabaseEditorItemsTypeState(
@@ -20,22 +20,22 @@ class DatabaseEditorItemsTypeCubit extends Cubit<DatabaseEditorItemsTypeState> {
 
   late StreamSubscription<DatabaseEditorItemsType> _subscription;
 
-  final GetDatabaseEditorItemsTypeStreamUseCase getStreamUseCase;
-  final SetDatabaseEditorItemsTypeUseCase setItemsTypeUseCase;
-  final SetDatabaseEditorItemsTypeByIndexUseCase setItemsTypeByIndexUseCase;
+  final GetDatabaseEditorItemsTypeStreamUseCase getStream;
+  final SetDatabaseEditorItemsTypeUseCase setItemsType;
+  final SetDatabaseEditorItemsTypeByIndexUseCase setItemsTypeByIndex;
 
   Future<void> initialize() async {
-    _subscription = (await getStreamUseCase()).listen((type) {
+    _subscription = (await getStream()).listen((type) {
       emit(DatabaseEditorItemsTypeState(type: type));
     });
   }
 
   Future<void> set(DatabaseEditorItemsType type) async {
-    await setItemsTypeUseCase(type);
+    await setItemsType(type);
   }
 
   Future<void> setByIndex(int index) async {
-    await setItemsTypeByIndexUseCase(index);
+    await setItemsTypeByIndex(index);
   }
 
   @override

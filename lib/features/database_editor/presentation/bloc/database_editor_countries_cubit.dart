@@ -8,22 +8,22 @@ import 'package:sj_manager/features/database_editor/domain/use_cases/countries/g
 
 class DatabaseEditorCountriesCubit extends Cubit<DatabaseEditorCountriesState> {
   DatabaseEditorCountriesCubit({
-    required this.getAllCountriesUseCase,
-    required this.getFilteredCountriesUseCase,
+    required this.getAllCountries,
+    required this.getFilteredCountries,
   }) : super(const DatabaseEditorCountriesUninitialized());
 
-  final GetAllDatabaseEditorCountriesUseCase getAllCountriesUseCase;
+  final GetAllDatabaseEditorCountriesUseCase getAllCountries;
   final Map<DatabaseEditorItemsType, GetFilteredDatabaseEditorCountriesUseCase>
-      getFilteredCountriesUseCase;
+      getFilteredCountries;
 
   Future<void> initialize() async {
-    final filteredCountries = await getFilteredCountriesUseCase.asyncMap(
+    final filteredCountries = await getFilteredCountries.asyncMap(
       (itemsType, getFilteredCountries) async {
         return MapEntry(itemsType, await getFilteredCountries());
       },
     );
     emit(DatabaseEditorCountriesInitialized(
-      countries: await getAllCountriesUseCase(),
+      countries: await getAllCountries(),
       filteredCountries: filteredCountries,
     ));
   }

@@ -1,13 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
 import 'package:sj_manager/core/mixins/country_mixin.dart';
 import 'package:sj_manager/core/mixins/name_and_surname_mixin.dart';
 import 'package:sj_manager/core/mixins/sex_mixin.dart';
 import 'package:sj_manager/core/psyche/level_of_consciousness.dart';
-import 'package:sj_manager/core/general_utils/json/countries.dart';
-import 'package:sj_manager/core/general_utils/json/json_types.dart';
 import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/core_classes/sex.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/training/jumper_training_config.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_config.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/reports/jumper_reports.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/stats/jumper_stats.dart';
 
@@ -17,6 +16,7 @@ class SimulationJumper with EquatableMixin, NameAndSurnameMixin, CountryMixin, S
     required this.name,
     required this.surname,
     required this.country,
+    required this.countryTeam,
     required this.sex,
     required this.takeoffQuality,
     required this.flightQuality,
@@ -41,6 +41,8 @@ class SimulationJumper with EquatableMixin, NameAndSurnameMixin, CountryMixin, S
 
   @override
   Country country;
+
+  CountryTeam countryTeam;
 
   @override
   Sex sex;
@@ -103,7 +105,7 @@ class SimulationJumper with EquatableMixin, NameAndSurnameMixin, CountryMixin, S
     return reverse ? '$appropriateSurname $name ' : '$name $appropriateSurname';
   }
 
-  Json toJson({required JsonCountrySaver countrySaver}) {
+  /*Json toJson({required JsonCountrySaver countrySaver}) {
     return {
       'dateOfBirth': dateOfBirth.toString(),
       'name': name,
@@ -149,13 +151,14 @@ class SimulationJumper with EquatableMixin, NameAndSurnameMixin, CountryMixin, S
       stats: JumperStats.fromJson(json['stats']),
       reports: JumperReports.fromJson(json['reports']),
     );
-  }
+  }*/
 
   SimulationJumper copyWith({
     DateTime? dateOfBirth,
     String? name,
     String? surname,
     Country? country,
+    CountryTeam? countryTeam,
     Sex? sex,
     double? takeoffQuality,
     double? flightQuality,
@@ -174,6 +177,7 @@ class SimulationJumper with EquatableMixin, NameAndSurnameMixin, CountryMixin, S
       name: name ?? this.name,
       surname: surname ?? this.surname,
       country: country ?? this.country,
+      countryTeam: countryTeam ?? this.countryTeam,
       sex: sex ?? this.sex,
       takeoffQuality: takeoffQuality ?? this.takeoffQuality,
       flightQuality: flightQuality ?? this.flightQuality,
@@ -195,6 +199,7 @@ class SimulationJumper with EquatableMixin, NameAndSurnameMixin, CountryMixin, S
         name,
         surname,
         country,
+        countryTeam,
         sex,
         takeoffQuality,
         flightQuality,
@@ -214,6 +219,7 @@ class SimulationMaleJumper extends SimulationJumper {
     required super.name,
     required super.surname,
     required super.country,
+    required super.countryTeam,
     required super.takeoffQuality,
     required super.flightQuality,
     required super.landingQuality,
@@ -229,11 +235,11 @@ class SimulationMaleJumper extends SimulationJumper {
           sex: Sex.male,
         );
 
-  factory SimulationMaleJumper.fromJson(Json json,
+  /*factory SimulationMaleJumper.fromJson(Json json,
       {required JsonCountryLoader countryLoader}) {
     return SimulationJumper.fromJson(json, countryLoader: countryLoader)
         as SimulationMaleJumper;
-  }
+  }*/
 
   @override
   SimulationFemaleJumper copyWith({
@@ -241,6 +247,7 @@ class SimulationMaleJumper extends SimulationJumper {
     String? name,
     String? surname,
     Country? country,
+    CountryTeam? countryTeam,
     Sex? sex,
     double? takeoffQuality,
     double? flightQuality,
@@ -259,6 +266,7 @@ class SimulationMaleJumper extends SimulationJumper {
       name: name,
       surname: surname,
       country: country,
+      countryTeam: countryTeam,
       sex: Sex.female,
       takeoffQuality: takeoffQuality,
       flightQuality: flightQuality,
@@ -281,6 +289,7 @@ class SimulationFemaleJumper extends SimulationJumper {
     required super.name,
     required super.surname,
     required super.country,
+    required super.countryTeam,
     required super.takeoffQuality,
     required super.flightQuality,
     required super.landingQuality,
@@ -296,11 +305,11 @@ class SimulationFemaleJumper extends SimulationJumper {
           sex: Sex.female,
         );
 
-  factory SimulationFemaleJumper.fromJson(Json json,
+  /*factory SimulationFemaleJumper.fromJson(Json json,
       {required JsonCountryLoader countryLoader}) {
     return SimulationJumper.fromJson(json, countryLoader: countryLoader)
         as SimulationFemaleJumper;
-  }
+  }*/
 
   @override
   SimulationFemaleJumper copyWith({
@@ -308,6 +317,7 @@ class SimulationFemaleJumper extends SimulationJumper {
     String? name,
     String? surname,
     Country? country,
+    CountryTeam? countryTeam,
     Sex? sex,
     double? takeoffQuality,
     double? flightQuality,
@@ -326,6 +336,7 @@ class SimulationFemaleJumper extends SimulationJumper {
       name: name,
       surname: surname,
       country: country,
+      countryTeam: countryTeam,
       sex: Sex.female,
       takeoffQuality: takeoffQuality,
       flightQuality: flightQuality,

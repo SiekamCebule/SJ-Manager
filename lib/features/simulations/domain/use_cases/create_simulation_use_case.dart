@@ -6,8 +6,8 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';
 import 'package:sj_manager/features/simulations/presentation/simulation_wizard/simulation_wizard_options_repo.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/utils/default_simulation_database_creator.dart';
-import 'package:sj_manager/to_embrace/domain/use_cases/ui/simulation/continue_simulation_use_case.dart';
-import 'package:sj_manager/to_embrace/domain/use_cases/ui/simulation/jumper_reports/set_up_jumper_level_reports_use_case.dart';
+import 'package:sj_manager/to_embrace/domain/continue/continue_simulation_use_case.dart';
+import 'package:sj_manager/to_embrace/domain/continue/subcases/reports/set_up_jumper_level_reports_use_case.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/sjm_simulation.dart';
 import 'package:sj_manager/features/simulations/domain/repository/simulation_databases_repository.dart';
 import 'package:sj_manager/features/simulations/domain/repository/simulations_repository.dart';

@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_database.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/reports/team_reports.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/subteam_type.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam_type.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/reports/jumper_reports.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';

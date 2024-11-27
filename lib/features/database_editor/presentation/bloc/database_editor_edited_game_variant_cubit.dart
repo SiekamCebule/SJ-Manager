@@ -6,13 +6,13 @@ import 'package:sj_manager/features/game_variants/domain/entities/game_variant.d
 class DatabaseEditorEditedGameVariantCubit
     extends Cubit<DatabaseEditorEditedGameVariantState> {
   DatabaseEditorEditedGameVariantCubit({
-    required this.constructEditedVariantUseCase,
+    required this.constructEditedVariant,
   }) : super(const DatabaseEditorEditedGameVariantNotAvailable());
 
-  final ConstructEditedGameVariantUseCase constructEditedVariantUseCase;
+  final ConstructEditedGameVariantUseCase constructEditedVariant;
 
   Future<void> construct() async {
-    final gameVariant = await constructEditedVariantUseCase();
+    final gameVariant = await constructEditedVariant();
     emit(DatabaseEditorEditedGameVariantAvailable(editedVariant: gameVariant));
   }
 }

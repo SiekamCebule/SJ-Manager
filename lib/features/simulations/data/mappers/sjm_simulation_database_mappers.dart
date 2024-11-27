@@ -16,8 +16,7 @@ extension SimulationDatabaseToModel on SimulationDatabase {
       subteamJumpers: subteamJumpers,
       seasons: seasons,
       idsRepository: idsRepository,
-      actionDeadlines: actionDeadlines,
-      actionsRepo: actionsRepo,
+      actions: actions,
       teamReports: teamReports,
     );
   }
@@ -35,8 +34,7 @@ SimulationDatabase simulationDatabaseFromModel(SimulationDatabaseModel model) {
     subteamJumpers: model.subteamJumpers,
     seasons: model.seasons,
     idsRepository: model.idsRepository,
-    actionDeadlines: model.actionDeadlines,
-    actionsRepo: model.actionsRepo,
+    actions: model.actions,
     teamReports: model.teamReports,
   );
 }

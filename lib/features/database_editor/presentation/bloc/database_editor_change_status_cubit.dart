@@ -7,12 +7,12 @@ import 'package:sj_manager/features/database_editor/domain/use_cases/change_stat
 
 class DatabaseEditorChangeStatusCubit extends Cubit<DatabaseEditorChangeStatusState> {
   DatabaseEditorChangeStatusCubit({
-    required this.getStreamUseCase,
-    required this.markAsChangedUseCase,
+    required this.getStream,
+    required this.markAsChanged,
   }) : super(const DatabaseEditorChangeStatusNotChanged());
 
   Future<void> initialize() async {
-    _subscription = (await getStreamUseCase()).listen((changeStatus) {
+    _subscription = (await getStream()).listen((changeStatus) {
       if (changeStatus == true) {
         emit(const DatabaseEditorChangeStatusChanged());
       } else {
@@ -23,11 +23,11 @@ class DatabaseEditorChangeStatusCubit extends Cubit<DatabaseEditorChangeStatusSt
 
   late StreamSubscription _subscription;
 
-  final GetDatabaseEditorChangeStatusStreamUseCase getStreamUseCase;
-  final MarkDatabaseEditorAsChangedUseCase markAsChangedUseCase;
+  final GetDatabaseEditorChangeStatusStreamUseCase getStream;
+  final MarkDatabaseEditorAsChangedUseCase markAsChanged;
 
   Future<void> markAsChanged() async {
-    await markAsChangedUseCase();
+    await markAsChanged();
   }
 
   @override

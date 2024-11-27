@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
 import 'package:sj_manager/core/core_classes/jumps/simple_jump_model.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/subteam_type.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam_type.dart';
 
 part 'country_team_facts.g.dart';
 

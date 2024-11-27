@@ -15,10 +15,22 @@ String pluralForm({
   };
 }
 
-String sjmFutureDateDescription(
-    {required BuildContext context,
-    required DateTime currentDate,
-    required DateTime targetDate}) {
+String sjmDeadlineDateDescription({
+  required BuildContext context,
+  required DateTime currentDate,
+  required DateTime? targetDate,
+}) {
+  return targetDate == null
+      ? translate(context).noDeadline
+      : sjmFutureDateDescription(
+          context: context, currentDate: currentDate, targetDate: targetDate);
+}
+
+String sjmFutureDateDescription({
+  required BuildContext context,
+  required DateTime currentDate,
+  required DateTime targetDate,
+}) {
   final Duration difference = targetDate.difference(currentDate);
   final int hoursDifference = difference.inHours;
 

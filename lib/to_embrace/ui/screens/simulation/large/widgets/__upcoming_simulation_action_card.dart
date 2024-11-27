@@ -4,11 +4,13 @@ class _UpcomingSimulationActionCard extends StatelessWidget {
   const _UpcomingSimulationActionCard({
     required this.onTap,
     required this.actionType,
+    required this.deadline,
     required this.important,
   });
 
   final VoidCallback onTap;
   final SimulationActionType actionType;
+  final DateTime? deadline;
   final bool important;
 
   @override
@@ -19,10 +21,10 @@ class _UpcomingSimulationActionCard extends StatelessWidget {
       SimulationActionType.settingUpTraining => translator.settingUpTraining,
       SimulationActionType.settingUpSubteams => translator.settingUpSubteams,
     };
-    final dateText = sjmFutureDateDescription(
+    final dateText = sjmDeadlineDateDescription(
       context: context,
       currentDate: database.currentDate,
-      targetDate: database.actionDeadlines[actionType]!,
+      targetDate: deadline,
     );
     final textColor = important
         ? Theme.of(context).colorScheme.onErrorContainer

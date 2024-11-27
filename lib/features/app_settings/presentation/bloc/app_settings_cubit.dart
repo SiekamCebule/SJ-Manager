@@ -9,35 +9,35 @@ import 'package:sj_manager/to_embrace/ui/theme/app_schemes.dart';
 
 class AppSettingsCubit extends Cubit<AppSettingsState> {
   AppSettingsCubit({
-    required this.setColorSchemeUseCase,
-    required this.setLanguageCodeUseCase,
-    required this.getColorSchemeUseCase,
-    required this.getLanguageCodeUseCase,
+    required this.setColorScheme,
+    required this.setLanguageCode,
+    required this.getColorScheme,
+    required this.getLanguageCode,
   }) : super(const AppSettingsInitial());
 
-  final SetAppColorSchemeUseCase setColorSchemeUseCase;
-  final SetAppLanguageCodeUseCase setLanguageCodeUseCase;
-  final GetAppColorSchemeUseCase getColorSchemeUseCase;
-  final GetAppLanguageCodeUseCase getLanguageCodeUseCase;
+  final SetAppColorSchemeUseCase setColorScheme;
+  final SetAppLanguageCodeUseCase setLanguageCode;
+  final GetAppColorSchemeUseCase getColorScheme;
+  final GetAppLanguageCodeUseCase getLanguageCode;
 
   Future<void> initialize() async {
     emit(AppSettingsInitialized(
-      colorScheme: await getColorSchemeUseCase(),
-      languageCode: await getLanguageCodeUseCase(),
+      colorScheme: await getColorScheme(),
+      languageCode: await getLanguageCode(),
     ));
   }
 
   Future<void> setLanguageCode(String languageCode) async {
-    await setLanguageCodeUseCase(languageCode);
+    await setLanguageCode(languageCode);
     emit((state as AppSettingsInitialized).copyWith(
-      languageCode: await getLanguageCodeUseCase(),
+      languageCode: await getLanguageCode(),
     ));
   }
 
   Future<void> setColorScheme(AppColorScheme colorScheme) async {
-    await setColorSchemeUseCase(colorScheme);
+    await setColorScheme(colorScheme);
     emit((state as AppSettingsInitialized).copyWith(
-      colorScheme: await getColorSchemeUseCase(),
+      colorScheme: await getColorScheme(),
     ));
   }
 }

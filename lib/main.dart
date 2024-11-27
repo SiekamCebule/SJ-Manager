@@ -17,7 +17,7 @@ import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/general_utils/db_items_file_system_paths.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/subteam.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/to_embrace/ui/app.dart';
 import 'package:sj_manager/to_embrace/ui/app_initializer.dart';
@@ -50,13 +50,13 @@ void main() async {
     providers: [
       BlocProvider(
         create: (context) => AppSettingsCubit(
-          setColorSchemeUseCase:
+          setColorScheme:
               SetAppColorSchemeUseCase(settingsRepository: settingsRepository),
-          setLanguageCodeUseCase:
+          setLanguageCode:
               SetAppLanguageCodeUseCase(settingsRepository: settingsRepository),
-          getColorSchemeUseCase:
+          getColorScheme:
               GetAppColorSchemeUseCase(settingsRepository: settingsRepository),
-          getLanguageCodeUseCase:
+          getLanguageCode:
               GetAppLanguageCodeUseCase(settingsRepository: settingsRepository),
         ),
       ),

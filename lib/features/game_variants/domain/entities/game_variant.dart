@@ -1,12 +1,12 @@
 import 'package:sj_manager/core/core_classes/game_variant_start_date.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/actions/simulation_action_type.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action_type.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/simulation_season.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/reports/jumper_level_description.dart';
 import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/subteam.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/core/general_utils/multilingual_string.dart';
 
 class GameVariant {

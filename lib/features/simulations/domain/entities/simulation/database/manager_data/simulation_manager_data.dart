@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/personal_coach_team.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/subteam.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 
 class SimulationManagerData with EquatableMixin {
   SimulationManagerData({

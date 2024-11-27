@@ -1,6 +1,6 @@
 import 'package:sj_manager/core/general_utils/multilingual_string.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/subteam_type.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam_type.dart';
 
 class SjmSimulation {
   const SjmSimulation({

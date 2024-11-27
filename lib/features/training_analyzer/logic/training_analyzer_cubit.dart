@@ -5,17 +5,18 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart' as path;
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_category.dart';
 
 import 'package:sj_manager/features/training_analyzer/logic/training_test_runner.dart';
 import 'package:sj_manager/core/general_utils/json/countries.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/training/jumper_training_config.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_config.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/core/training_analyzer/training_analyzer_actions.dart';
 import 'package:sj_manager/core/training_analyzer/training_analyzer_chart_data_category.dart';
 import 'package:sj_manager/core/training_analyzer/training_analyzer_result.dart';
 import 'package:sj_manager/core/training_analyzer/training_segment.dart';
-import 'package:sj_manager/core/career_mode/career_mode_utils/training/training_engine/jumper_training_engine_settings.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/training_engine/jumper_training_engine_settings.dart';
 import 'package:sj_manager/core/general_utils/file_system.dart';
 import 'package:sj_manager/core/training_analyzer/training_analyzer_utils.dart';
 
@@ -90,19 +91,19 @@ class TrainingAnalyzerCubit extends Cubit<TrainingAnalyzerNotSimulated> {
     }
     if (additionalActions.contains(TrainingAnalyzerActions.saveAttributeStats)) {
       _writeAttributeStats(
-        result.dayResults.map((result) => result.trainingResult.takeoffQuality).toList(),
+        result.dayResults.map((result) => result.trainingResult.takeoffDelta).toList(),
         getAnalyzerFileOrCreate('takeoff_stats.txt'),
       );
       _writeAttributeStats(
-        result.dayResults.map((result) => result.trainingResult.flightQuality).toList(),
+        result.dayResults.map((result) => result.trainingResult.flightDelta).toList(),
         getAnalyzerFileOrCreate('flight_stats.txt'),
       );
       _writeAttributeStats(
-        result.dayResults.map((result) => result.trainingResult.landingQuality).toList(),
+        result.dayResults.map((result) => result.trainingResult.landingDelta).toList(),
         getAnalyzerFileOrCreate('landing_stats.txt'),
       );
       _writeAttributeStats(
-        result.dayResults.map((result) => result.trainingResult.form).toList(),
+        result.dayResults.map((result) => result.trainingResult.formDelta).toList(),
         getAnalyzerFileOrCreate('form_stats.txt'),
       );
     }

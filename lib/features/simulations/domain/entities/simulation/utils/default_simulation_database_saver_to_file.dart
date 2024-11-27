@@ -33,7 +33,7 @@ import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/general_utils/db_items_file_system_paths.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/subteam.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';

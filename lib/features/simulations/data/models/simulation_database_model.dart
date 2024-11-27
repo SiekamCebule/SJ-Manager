@@ -1,16 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:sj_manager/core/countries/countries_repository/countries_repository.dart';
-
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/actions/simulation_action_type.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/actions/simulation_actions_repo.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/manager_data/simulation_manager_data.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/simulation_season.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/reports/team_reports.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
-import 'package:sj_manager/core/core_classes/sex.dart';
 import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/subteam.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
 class SimulationDatabaseModel with EquatableMixin {
@@ -25,8 +22,7 @@ class SimulationDatabaseModel with EquatableMixin {
     required this.subteamJumpers,
     required this.seasons,
     required this.idsRepository,
-    required this.actionDeadlines,
-    required this.actionsRepo,
+    required this.actions,
     required this.teamReports,
   });
 
@@ -41,20 +37,10 @@ class SimulationDatabaseModel with EquatableMixin {
   final List<SimulationSeason> seasons;
   final IdsRepository<String> idsRepository;
 
-  final Map<SimulationActionType, DateTime> actionDeadlines;
-  final SimulationActionsRepo actionsRepo;
+  final List<SimulationAction> actions;
 
   final Map<String, TeamReports> teamReports;
   final Map<Subteam, Iterable<String>> subteamJumpers;
-
-  Iterable<SimulationJumper> get maleJumpers =>
-      jumpers.where((jumper) => jumper.sex == Sex.male);
-  Iterable<SimulationJumper> get femaleJumpers =>
-      jumpers.where((jumper) => jumper.sex == Sex.female);
-  Iterable<CountryTeam> get maleJumperTeams =>
-      countryTeams.where((team) => team.sex == Sex.male).cast();
-  Iterable<CountryTeam> get femaleJumperTeams =>
-      countryTeams.where((team) => team.sex == Sex.female).cast();
 
   SimulationDatabaseModel copyWith({
     SimulationManagerData? managerData,
@@ -67,8 +53,7 @@ class SimulationDatabaseModel with EquatableMixin {
     Map<Subteam, Iterable<String>>? subteamJumpers,
     List<SimulationSeason>? seasons,
     IdsRepository<String>? idsRepository,
-    Map<SimulationActionType, DateTime>? actionDeadlines,
-    SimulationActionsRepo? actionsRepo,
+    List<SimulationAction>? actions,
     Map<String, TeamReports>? teamReports,
   }) {
     return SimulationDatabaseModel(
@@ -82,8 +67,7 @@ class SimulationDatabaseModel with EquatableMixin {
       subteamJumpers: subteamJumpers ?? this.subteamJumpers,
       seasons: seasons ?? this.seasons,
       idsRepository: idsRepository ?? this.idsRepository,
-      actionDeadlines: actionDeadlines ?? this.actionDeadlines,
-      actionsRepo: actionsRepo ?? this.actionsRepo,
+      actions: actions ?? this.actions,
       teamReports: teamReports ?? this.teamReports,
     );
   }
@@ -100,8 +84,7 @@ class SimulationDatabaseModel with EquatableMixin {
         subteamJumpers,
         seasons,
         idsRepository,
-        actionDeadlines,
-        actionsRepo,
+        actions,
         teamReports
       ];
 }

@@ -134,42 +134,42 @@ List<BlocProvider> defaultDbEditorBlocProviders(BuildContext context) {
   return [
     BlocProvider(
       create: (context) => DatabaseEditorChangeStatusCubit(
-        getStreamUseCase: GetDatabaseEditorChangeStatusStreamUseCase(
+        getStream: GetDatabaseEditorChangeStatusStreamUseCase(
           changeStatusRepository: changeStatusRepository,
         ),
-        markAsChangedUseCase: MarkDatabaseEditorAsChangedUseCase(
+        markAsChanged: MarkDatabaseEditorAsChangedUseCase(
           changeStatusRepository: changeStatusRepository,
         ),
       )..initialize(),
     ),
     BlocProvider(
       create: (context) => DatabaseEditorFiltersCubit(
-        getFilterUseCase: GetDatabaseEditorFilterUseCase(
+        getFilter: GetDatabaseEditorFilterUseCase(
           filtersRepository: filtersRepository,
           itemsTypeRepository: itemsTypeRepository,
         ),
-        getValidFiltersUseCase: GetValidDatabaseEditorFiltersUseCase(
+        getValidFilters: GetValidDatabaseEditorFiltersUseCase(
           filtersRepository: filtersRepository,
           itemsTypeRepository: itemsTypeRepository,
         ),
-        setFilterUseCase: SetDatabaseEditorFilterUseCase(
+        setFilter: SetDatabaseEditorFilterUseCase(
           filtersRepository: filtersRepository,
           itemsTypeRepository: itemsTypeRepository,
         ),
-        getAllFiltersUseCase: GetAllDatabaseEditorFiltersUseCase(
+        getAllFilters: GetAllDatabaseEditorFiltersUseCase(
           filtersRepository: filtersRepository,
         ),
-        getItemsTypeUseCase: GetDatabaseEditorItemsTypeUseCase(
+        getItemsType: GetDatabaseEditorItemsTypeUseCase(
           itemsTypeRepository: itemsTypeRepository,
         ),
-        clearFiltersUseCase: ClearDatabaseEditorFiltersUseCase(
+        clearFilters: ClearDatabaseEditorFiltersUseCase(
           filtersRepository: filtersRepository,
         ),
       ),
     ),
     BlocProvider(
       create: (context) => DatabaseEditorItemsCubit(
-        addItemUseCase: {
+        addItem: {
           DatabaseEditorItemsType.maleJumper: AddDatabaseEditorItemUseCase(
             defaultItemsRepository: defaultItemsRepository,
             itemsRepository: maleJumpersRepository,
@@ -185,7 +185,7 @@ List<BlocProvider> defaultDbEditorBlocProviders(BuildContext context) {
             changeStatusRepository: changeStatusRepository,
           ),
         },
-        removeItemUseCase: {
+        removeItem: {
           DatabaseEditorItemsType.maleJumper: RemoveDatabaseEditorItemUseCase(
             itemsRepository: maleJumpersRepository,
             selectionRepository: selectionRepository,
@@ -195,7 +195,7 @@ List<BlocProvider> defaultDbEditorBlocProviders(BuildContext context) {
             selectionRepository: selectionRepository,
           ),
         },
-        updateItemUseCase: {
+        updateItem: {
           DatabaseEditorItemsType.maleJumper: UpdateDatabaseEditorItemUseCase(
             itemsRepository: maleJumpersRepository,
             selectionRepository: selectionRepository,
@@ -205,7 +205,7 @@ List<BlocProvider> defaultDbEditorBlocProviders(BuildContext context) {
             selectionRepository: selectionRepository,
           ),
         },
-        filterItemsUseCase: {
+        filterItems: {
           DatabaseEditorItemsType.maleJumper: FilterDatabaseEditorItemsUseCase(
             itemsRepository: maleJumpersRepository,
             selectionRepository: selectionRepository,
@@ -219,7 +219,7 @@ List<BlocProvider> defaultDbEditorBlocProviders(BuildContext context) {
             itemsTypeRepository: itemsTypeRepository,
           ),
         },
-        moveItemUseCase: {
+        moveItem: {
           DatabaseEditorItemsType.maleJumper: MoveDatabaseEditorItemUseCase(
             itemsRepository: maleJumpersRepository,
             selectionRepository: selectionRepository,
@@ -231,20 +231,20 @@ List<BlocProvider> defaultDbEditorBlocProviders(BuildContext context) {
             filtersRepository: filtersRepository,
           ),
         },
-        getItemsTypeUseCase: GetDatabaseEditorItemsTypeUseCase(
+        getItemsType: GetDatabaseEditorItemsTypeUseCase(
           itemsTypeRepository: itemsTypeRepository,
         ),
-        getFiltersStreamUseCase: GetDatabaseEditorFiltersStreamUseCase(
+        getFiltersStream: GetDatabaseEditorFiltersStreamUseCase(
           filtersRepository: filtersRepository,
         ),
       )..initialize(),
     ),
     BlocProvider(
       create: (context) => DatabaseEditorCountriesCubit(
-        getAllCountriesUseCase: GetAllDatabaseEditorCountriesUseCase(
+        getAllCountries: GetAllDatabaseEditorCountriesUseCase(
           countriesRepository: countriesRepository,
         ),
-        getFilteredCountriesUseCase: {
+        getFilteredCountries: {
           DatabaseEditorItemsType.maleJumper: GetFilteredDatabaseEditorCountriesUseCase(
             countriesRepository: countriesRepository,
             itemsTypeRepository: itemsTypeRepository,
@@ -255,35 +255,35 @@ List<BlocProvider> defaultDbEditorBlocProviders(BuildContext context) {
     ),
     BlocProvider(
       create: (context) => DatabaseEditorItemsTypeCubit(
-        getStreamUseCase: GetDatabaseEditorItemsTypeStreamUseCase(
+        getStream: GetDatabaseEditorItemsTypeStreamUseCase(
           itemsTypeRepository: itemsTypeRepository,
         ),
-        setItemsTypeUseCase: SetDatabaseEditorItemsTypeUseCase(
+        setItemsType: SetDatabaseEditorItemsTypeUseCase(
           itemsTypeRepository: itemsTypeRepository,
         ),
-        setItemsTypeByIndexUseCase: SetDatabaseEditorItemsTypeByIndexUseCase(
+        setItemsTypeByIndex: SetDatabaseEditorItemsTypeByIndexUseCase(
           itemsTypeRepository: itemsTypeRepository,
         ),
       ),
     ),
     BlocProvider(
       create: (context) => DatabaseEditorSelectionCubit(
-        getStreamUseCase: GetDatabaseEditorSelectionStreamUseCase(
+        getStream: GetDatabaseEditorSelectionStreamUseCase(
           selectionRepository: selectionRepository,
         ),
-        getSelectionUseCase: GetDbEditorSelectionUseCase(
+        getSelection: GetDbEditorSelectionUseCase(
           selectionRepository: selectionRepository,
         ),
-        selectOnlyUseCase: DbEditorSelectionSelectOnlyUseCase(
+        selectOnly: DbEditorSelectionSelectOnlyUseCase(
           selectionRepository: selectionRepository,
         ),
-        toggleUseCase: DbEditorSelectionToggleUseCase(
+        toggle: DbEditorSelectionToggleUseCase(
           selectionRepository: selectionRepository,
         ),
-        selectRangeUseCase: DbEditorSelectionSelectRangeUseCase(
+        selectRange: DbEditorSelectionSelectRangeUseCase(
           selectionRepository: selectionRepository,
         ),
-        clearUseCase: DbEditorSelectionClearUseCase(
+        clear: DbEditorSelectionClearUseCase(
           selectionRepository: selectionRepository,
         ),
       ),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:sj_manager/core/career_mode/career_mode_utils/jumpers_ranking/country_team_ranking_creator.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/actions/presentation/bloc/simulation_actions_cubit.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/jumpers/presentation/bloc/country_team_profile_cubit.dart';
 import 'package:sj_manager/l10n/helpers.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/actions/simulation_action_type.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action_type.dart';
 import 'package:sj_manager/core/core_classes/sex.dart';
 import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_database.dart';
 import 'package:sj_manager/general_ui/reusable_widgets/card_with_title.dart';
 import 'package:sj_manager/general_ui/reusable_widgets/jumpers_ranking/team_jumpers_ranking_list.dart';
 
@@ -20,17 +20,16 @@ class CountryTeamProfileOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabase>();
-    final unorderedJumpers = database.jumpers.where((jumper) =>
-        jumper.country == countryTeam.country && jumper.sex == countryTeam.sex);
+    final actionsState =
+        context.watch<SimulationActionsCubit>().state as SimulationActionsDefault;
+    final teamProfileState =
+        context.watch<CountryTeamProfileCubit>().state as CountryTeamProfileDefault;
 
-    final ranking =
-        CountryTeamRankingCreator(jumpers: unorderedJumpers.toList()).create();
     late Widget rankingWidget;
-    if (database.actionsRepo.isCompleted(SimulationActionType.settingUpTraining)) {
-      rankingWidget = ranking.isNotEmpty
+    if (actionsState.isCompleted[SimulationActionType.settingUpTraining]!) {
+      rankingWidget = teamProfileState.ranking.isNotEmpty
           ? TeamJumpersRankingList(
-              jumpers: ranking,
+              jumpers: teamProfileState.ranking,
             )
           : Center(
               child: Text(

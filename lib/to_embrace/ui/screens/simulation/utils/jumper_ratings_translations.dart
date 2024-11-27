@@ -3,7 +3,7 @@ import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/reports/jumper_level_description.dart';
 import 'package:sj_manager/core/career_mode/simple_rating.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/subteam_type.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam_type.dart';
 
 String getJumperMoraleDescription({
   required BuildContext context,

@@ -14,29 +14,29 @@ import 'package:sj_manager/features/database_editor/domain/use_cases/items_type/
 
 class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
   DatabaseEditorItemsCubit({
-    required this.addItemUseCase,
-    required this.removeItemUseCase,
-    required this.updateItemUseCase,
-    required this.filterItemsUseCase,
-    required this.moveItemUseCase,
-    required this.getItemsTypeUseCase,
-    required this.getFiltersStreamUseCase,
+    required this.addItem,
+    required this.removeItem,
+    required this.updateItem,
+    required this.filterItems,
+    required this.moveItem,
+    required this.getItemsType,
+    required this.getFiltersStream,
   }) : super(const DatabaseEditorItemsInitial());
 
   late StreamSubscription<DatabaseEditorFilters> _filtersSubscription;
 
-  final Map<DatabaseEditorItemsType, AddDatabaseEditorItemUseCase> addItemUseCase;
-  final Map<DatabaseEditorItemsType, RemoveDatabaseEditorItemUseCase> removeItemUseCase;
-  final Map<DatabaseEditorItemsType, UpdateDatabaseEditorItemUseCase> updateItemUseCase;
-  final Map<DatabaseEditorItemsType, FilterDatabaseEditorItemsUseCase> filterItemsUseCase;
-  final Map<DatabaseEditorItemsType, MoveDatabaseEditorItemUseCase> moveItemUseCase;
-  final GetDatabaseEditorItemsTypeUseCase getItemsTypeUseCase;
-  final GetDatabaseEditorFiltersStreamUseCase getFiltersStreamUseCase;
+  final Map<DatabaseEditorItemsType, AddDatabaseEditorItemUseCase> addItem;
+  final Map<DatabaseEditorItemsType, RemoveDatabaseEditorItemUseCase> removeItem;
+  final Map<DatabaseEditorItemsType, UpdateDatabaseEditorItemUseCase> updateItem;
+  final Map<DatabaseEditorItemsType, FilterDatabaseEditorItemsUseCase> filterItems;
+  final Map<DatabaseEditorItemsType, MoveDatabaseEditorItemUseCase> moveItem;
+  final GetDatabaseEditorItemsTypeUseCase getItemsType;
+  final GetDatabaseEditorFiltersStreamUseCase getFiltersStream;
 
   Future<void> initialize() async {
-    _filtersSubscription = (await getFiltersStreamUseCase()).listen((filters) async {
-      final type = await getItemsTypeUseCase();
-      final items = await filterItemsUseCase[type]!();
+    _filtersSubscription = (await getFiltersStream()).listen((filters) async {
+      final type = await getItemsType();
+      final items = await filterItems[type]!();
       emit(DatabaseEditorItemsInitialized(
         items: items,
       ));
@@ -45,8 +45,8 @@ class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
 
   Future<void> addItem() async {
     if (state is DatabaseEditorItemsInitialized) {
-      final type = await getItemsTypeUseCase();
-      await addItemUseCase[type]!();
+      final type = await getItemsType();
+      await addItem[type]!();
     } else {
       throw StateError(
         'Items can be added only when cubit\'s state is DatabaseEditorInitializedState',
@@ -56,8 +56,8 @@ class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
 
   Future<void> removeItem() async {
     if (state is DatabaseEditorItemsInitialized) {
-      final type = await getItemsTypeUseCase();
-      await removeItemUseCase[type]!();
+      final type = await getItemsType();
+      await removeItem[type]!();
     } else {
       throw StateError(
         'Items can be removed only when cubit\'s state is DatabaseEditorInitializedState',
@@ -67,8 +67,8 @@ class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
 
   Future<void> updateItem(dynamic item) async {
     if (state is DatabaseEditorItemsInitialized) {
-      final type = await getItemsTypeUseCase();
-      await updateItemUseCase[type]!(item);
+      final type = await getItemsType();
+      await updateItem[type]!(item);
     } else {
       throw StateError(
         'Items can be updated only when cubit\'s state is DatabaseEditorInitializedState',
@@ -78,8 +78,8 @@ class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
 
   Future<void> moveItem(int index, int targetIndex) async {
     if (state is DatabaseEditorItemsInitialized) {
-      final type = await getItemsTypeUseCase();
-      await moveItemUseCase[type]!(index, targetIndex);
+      final type = await getItemsType();
+      await moveItem[type]!(index, targetIndex);
     }
   }
 

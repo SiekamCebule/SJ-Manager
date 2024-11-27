@@ -7,12 +7,12 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 
 class SimulationCubit extends Cubit<SimulationState> {
   SimulationCubit({
-    required this.getDatabaseUseCase,
-    required this.preserveSimulationUseCase,
+    required this.getDatabase,
+    required this.preserveSimulation,
   }) : super(const SimulationNotChosen());
 
-  final GetSimulationDatabaseUseCase getDatabaseUseCase;
-  final PreserveSimulationUseCase preserveSimulationUseCase;
+  final GetSimulationDatabaseUseCase getDatabase;
+  final PreserveSimulationUseCase preserveSimulation;
 
   Future<void> choose(SjmSimulation simulation) async {
     if (state is SimulationChosen) {
@@ -21,7 +21,7 @@ class SimulationCubit extends Cubit<SimulationState> {
     emit(
       SimulationChosen(
         simulation: simulation,
-        database: await getDatabaseUseCase(simulation.id),
+        database: await getDatabase(simulation.id),
       ),
     );
   }
@@ -31,7 +31,7 @@ class SimulationCubit extends Cubit<SimulationState> {
     if (state is! SimulationChosen) {
       throw StateError('Cannot preserve a simulation when it hasn\'t been chosen');
     }
-    await preserveSimulationUseCase(state.simulation);
+    await preserveSimulation(state.simulation);
     emit(const SimulationNotChosen());
   }
 }

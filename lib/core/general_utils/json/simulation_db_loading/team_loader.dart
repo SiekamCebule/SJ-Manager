@@ -8,8 +8,8 @@ import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumpe
 import 'package:sj_manager/core/core_classes/jumps/simple_jump_model.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/competition_team.dart';
 import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/subteam_type.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/subteam.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam_type.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 

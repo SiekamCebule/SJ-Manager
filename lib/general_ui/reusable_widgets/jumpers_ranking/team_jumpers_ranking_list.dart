@@ -8,7 +8,7 @@ class TeamJumpersRankingList extends StatelessWidget {
     required this.jumpers,
   });
 
-  final List<SimulationJumper> jumpers;
+  final Iterable<SimulationJumper> jumpers;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class TeamJumpersRankingList extends StatelessWidget {
       children: [
         for (var i = 0; i < jumpers.length; i++)
           JumperInRankingTile(
-            jumper: jumpers[i],
+            jumper: jumpers.elementAt(i),
             position: i + 1,
           ),
       ],

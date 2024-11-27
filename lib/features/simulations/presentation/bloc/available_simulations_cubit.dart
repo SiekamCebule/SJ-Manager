@@ -12,34 +12,34 @@ import 'package:sj_manager/features/simulations/presentation/simulation_wizard/s
 
 class AvailableSimulationsCubit extends Cubit<AvailableSimulationsState> {
   AvailableSimulationsCubit({
-    required this.getSimulationsStreamUseCase,
-    required this.getAllSimulationsUseCase,
-    required this.getAllSimulationDatabasesUseCase,
-    required this.createSimulationUseCase,
-    required this.deleteSimulationUseCase,
+    required this.getSimulationsStream,
+    required this.getAllSimulations,
+    required this.getAllSimulationDatabases,
+    required this.createSimulation,
+    required this.deleteSimulation,
   }) : super(const AvailableSimulationsInitial());
 
   late StreamSubscription _simulationsSubscriptions;
 
-  final GetSimulationsStreamUseCase getSimulationsStreamUseCase;
-  final GetAllSimulationsUseCase getAllSimulationsUseCase;
-  final GetAllSimulationDatabasesUseCase getAllSimulationDatabasesUseCase;
-  final CreateSimulationUseCase createSimulationUseCase;
-  final DeleteSimulationUseCase deleteSimulationUseCase;
+  final GetSimulationsStreamUseCase getSimulationsStream;
+  final GetAllSimulationsUseCase getAllSimulations;
+  final GetAllSimulationDatabasesUseCase getAllSimulationDatabases;
+  final CreateSimulationUseCase createSimulation;
+  final DeleteSimulationUseCase deleteSimulation;
 
   Future<void> initialize() async {
-    final stream = await getSimulationsStreamUseCase();
+    final stream = await getSimulationsStream();
     _simulationsSubscriptions = stream.listen((simulations) {
       emit(AvailableSimulationsInitialized(simulations: simulations));
     });
   }
 
   Future<void> add(SimulationWizardOptions options) async {
-    await createSimulationUseCase(options);
+    await createSimulation(options);
   }
 
   Future<void> delete(SjmSimulation simulation) async {
-    await deleteSimulationUseCase(simulation);
+    await deleteSimulation(simulation);
   }
 
   @override

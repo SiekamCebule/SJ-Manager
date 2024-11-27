@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:sj_manager/core/training_analyzer/training_segment.dart';
-import 'package:sj_manager/core/career_mode/career_mode_utils/training/training_engine/jumper_training_result.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_result.dart';
 
 class TrainingAnalyzerResult with EquatableMixin {
   const TrainingAnalyzerResult({
@@ -38,12 +38,12 @@ class TrainingAnalyzerDaySimulationResult with EquatableMixin {
   }) {
     return [
       day.toString(),
-      trainingResult.takeoffQuality.toStringAsFixed(2),
-      trainingResult.flightQuality.toStringAsFixed(2),
-      trainingResult.landingQuality.toStringAsFixed(2),
-      trainingResult.form.toStringAsFixed(2),
-      trainingResult.jumpsConsistency.toStringAsFixed(2),
-      trainingResult.fatigue.toStringAsFixed(2)
+      trainingResult.takeoffDelta.toStringAsFixed(2),
+      trainingResult.flightDelta.toStringAsFixed(2),
+      trainingResult.landingDelta.toStringAsFixed(2),
+      trainingResult.formDelta.toStringAsFixed(2),
+      trainingResult.consistencyDelta.toStringAsFixed(2),
+      trainingResult.fatigueDelta.toStringAsFixed(2)
     ].join(delimiter);
   }
 

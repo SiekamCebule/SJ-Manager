@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:sj_manager/core/career_mode/simple_rating.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/reports/jumper_reports.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/subteam_type.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam_type.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/general_ui/reusable_widgets/link_text_button.dart';
 import 'package:sj_manager/to_embrace/ui/screens/simulation/large/widgets/simulation_jumper_image.dart';

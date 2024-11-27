@@ -9,47 +9,44 @@ class _TopPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabase>();
-    const availableActions = SimulationActionType.values;
-    final incompletedActions =
-        availableActions.where(database.actionsRepo.isNotCompleted);
-    final sortedIncompletedActions = incompletedActions.sorted(
-      (first, second) {
-        return database.actionDeadlines[second]!
-            .compareTo(database.actionDeadlines[first]!);
-      },
-    );
-    final navigationCubit = context.watch<SimulationScreenNavigationCubit>();
+    final actionsState =
+        context.watch<SimulationActionsCubit>().state as SimulationActionsDefault;
+    final currentDateState =
+        context.watch<SimulationCurrentDateCubit>() as SimulationCurrentDateDefault;
+    final navigationState = context.watch<SimulationScreenNavigationCubit>().state;
     final homeIsSelected =
-        navigationCubit.state.screen == SimulationScreenNavigationTarget.home;
+        navigationState.screen == SimulationScreenNavigationTarget.home;
     final mainButtonText = homeIsSelected ? 'Kontynuuj' : 'Dom';
     final mainButtonIconData = homeIsSelected ? Symbols.forward : Symbols.home;
 
     void returnToHome() {
       navigatorKey.currentState!.pushReplacementNamed('/simulation/home');
-      navigationCubit.change(screen: SimulationScreenNavigationTarget.home);
+      context
+          .read<SimulationScreenNavigationCubit>()
+          .change(screen: SimulationScreenNavigationTarget.home);
     }
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Spacer(),
-        for (var incompletedActionType in sortedIncompletedActions) ...[
+        for (var action in actionsState.sortedIncompletedActions) ...[
           _UpcomingSimulationActionCard(
-            important: database.actionDeadlines[incompletedActionType]!
-                    .difference(database.currentDate) <
+            important: actionsState.deadline[action.type]!
+                    .difference(currentDateState.currentDate) <
                 const Duration(hours: 48),
-            actionType: incompletedActionType,
+            actionType: action.type,
+            deadline: action.deadline,
             onTap: () async {
               late Widget dialogWidget;
-              dialogWidget = switch (incompletedActionType) {
+              dialogWidget = switch (action.type) {
                 SimulationActionType.settingUpTraining => TrainingsSettingUpHelpDialog(
                     trainingsStartDate:
-                        database.actionDeadlines[SimulationActionType.settingUpTraining]!,
+                        actionsState.deadline[SimulationActionType.settingUpTraining]!,
                   ),
                 SimulationActionType.settingUpSubteams => SubteamsSettingUpHelpDialog(
                     subteamsSetuppingDate:
-                        database.actionDeadlines[SimulationActionType.settingUpSubteams]!,
+                        actionsState.deadline[SimulationActionType.settingUpSubteams]!,
                   ),
               };
               await showSjmDialog(
@@ -61,7 +58,7 @@ class _TopPanel extends StatelessWidget {
           ),
           const Gap(10),
         ],
-        if (sortedIncompletedActions.isNotEmpty) const Gap(70),
+        if (actionsState.sortedIncompletedActions.isNotEmpty) const Gap(70),
         const SizedBox(
           width: 165,
           child: _CurrentDateCard(),
@@ -80,7 +77,7 @@ class _TopPanel extends StatelessWidget {
                       chooseSubteamId: (subteam) =>
                           context.read<IdGenerator>().generate(),
                       afterSettingUpTrainings: () async {
-                        await SetUpTrainingsCommand(
+                        await SetUpTrainingsSubcase(
                           database: database,
                           onFinish: () async {
                             final dbHelper = context.read<SimulationDatabaseHelper>();
@@ -128,7 +125,7 @@ class _TopPanel extends StatelessWidget {
                       afterSettingUpSubteams: () async {
                         final dbHelper = context.read<SimulationDatabaseHelper>();
                         final charges = dbHelper.managerJumpers;
-                        await SetUpSubteamsCommand(
+                        await SetUpSubteamsUseCase(
                           database: database,
                           chooseSubteamId: (subteam) =>
                               context.read<IdGenerator>().generate(),

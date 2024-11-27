@@ -11,48 +11,48 @@ import 'package:sj_manager/features/database_editor/domain/use_cases/selection/g
 
 class DatabaseEditorSelectionCubit extends Cubit<DatabaseEditorSelectionState> {
   DatabaseEditorSelectionCubit({
-    required this.getStreamUseCase,
-    required this.getSelectionUseCase,
-    required this.selectOnlyUseCase,
-    required this.toggleUseCase,
-    required this.selectRangeUseCase,
-    required this.clearUseCase,
+    required this.getStream,
+    required this.getSelection,
+    required this.selectOnly,
+    required this.toggle,
+    required this.selectRange,
+    required this.clear,
   }) : super(initial);
 
   static const initial = DatabaseEditorSelectionState(selection: {});
 
   late StreamSubscription _selectionSubscription;
 
-  final GetDatabaseEditorSelectionStreamUseCase getStreamUseCase;
-  final GetDbEditorSelectionUseCase getSelectionUseCase;
-  final DbEditorSelectionSelectOnlyUseCase selectOnlyUseCase;
-  final DbEditorSelectionToggleUseCase toggleUseCase;
-  final DbEditorSelectionSelectRangeUseCase selectRangeUseCase;
-  final DbEditorSelectionClearUseCase clearUseCase;
+  final GetDatabaseEditorSelectionStreamUseCase getStream;
+  final GetDbEditorSelectionUseCase getSelection;
+  final DbEditorSelectionSelectOnlyUseCase selectOnly;
+  final DbEditorSelectionToggleUseCase toggle;
+  final DbEditorSelectionSelectRangeUseCase selectRange;
+  final DbEditorSelectionClearUseCase clear;
 
   Future<void> initialize() async {
-    _selectionSubscription = (await getStreamUseCase()).listen((selection) {
+    _selectionSubscription = (await getStream()).listen((selection) {
       emit(DatabaseEditorSelectionState(selection: selection));
     });
   }
 
   /// Click
   Future<void> selectOnly(int index) async {
-    await selectOnlyUseCase(index);
+    await selectOnly(index);
   }
 
   /// Ctrl + click
   Future<void> toggle(int index) async {
-    await toggleUseCase(index);
+    await toggle(index);
   }
 
   /// Shift + click
   Future<void> selectRange(int start, int end) async {
-    await selectRangeUseCase(start, end);
+    await selectRange(start, end);
   }
 
   Future<void> clear() async {
-    await clearUseCase();
+    await clear();
   }
 
   @override

@@ -5,7 +5,7 @@ import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/core/core_classes/hill/hill_profile_type.dart';
 import 'package:sj_manager/core/core_classes/hill/jumps_variability.dart';
 import 'package:sj_manager/core/core_classes/hill/landing_ease.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/actions/simulation_action_type.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action_type.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/simulation_season.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series_calendar.dart';

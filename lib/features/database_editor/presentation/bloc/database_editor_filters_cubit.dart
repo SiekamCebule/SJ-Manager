@@ -13,12 +13,12 @@ import 'package:sj_manager/features/database_editor/domain/use_cases/items_type/
 
 class DatabaseEditorFiltersCubit extends Cubit<DatabaseEditorFiltersState> {
   DatabaseEditorFiltersCubit({
-    required this.getFilterUseCase,
-    required this.getValidFiltersUseCase,
-    required this.setFilterUseCase,
-    required this.getAllFiltersUseCase,
-    required this.getItemsTypeUseCase,
-    required this.clearFiltersUseCase,
+    required this.getFilter,
+    required this.getValidFilters,
+    required this.setFilter,
+    required this.getAllFilters,
+    required this.getItemsType,
+    required this.clearFilters,
   }) : super(initial);
 
   static const initial = DatabaseEditorFiltersState(
@@ -26,28 +26,28 @@ class DatabaseEditorFiltersCubit extends Cubit<DatabaseEditorFiltersState> {
     filters: DatabaseEditorFilters.empty(),
   );
 
-  final GetDatabaseEditorFilterUseCase getFilterUseCase;
-  final GetAllDatabaseEditorFiltersUseCase getAllFiltersUseCase;
-  final GetValidDatabaseEditorFiltersUseCase getValidFiltersUseCase;
-  final SetDatabaseEditorFilterUseCase setFilterUseCase;
-  final GetDatabaseEditorItemsTypeUseCase getItemsTypeUseCase;
-  final ClearDatabaseEditorFiltersUseCase clearFiltersUseCase;
+  final GetDatabaseEditorFilterUseCase getFilter;
+  final GetAllDatabaseEditorFiltersUseCase getAllFilters;
+  final GetValidDatabaseEditorFiltersUseCase getValidFilters;
+  final SetDatabaseEditorFilterUseCase setFilter;
+  final GetDatabaseEditorItemsTypeUseCase getItemsType;
+  final ClearDatabaseEditorFiltersUseCase clearFilters;
 
   Future<void> clearFilters() async {
-    await clearFiltersUseCase();
+    await clearFilters();
     emit(DatabaseEditorFiltersState(
       validFilterExists: false,
-      filters: await getAllFiltersUseCase(),
+      filters: await getAllFilters(),
     ));
   }
 
   Future<void> setFilter(DatabaseEditorItemsType itemType,
       DatabaseEditorFilterType filterType, Filter filter) async {
-    await setFilterUseCase(filterType, filter);
-    final validFilters = await getValidFiltersUseCase();
+    await setFilter(filterType, filter);
+    final validFilters = await getValidFilters();
     emit(DatabaseEditorFiltersState(
       validFilterExists: validFilters.isNotEmpty,
-      filters: await getAllFiltersUseCase(),
+      filters: await getAllFilters(),
     ));
   }
 }

@@ -22,8 +22,6 @@ class _TeamScreenState extends State<_TeamScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabase>();
-    final dbHelper = context.read<SimulationDatabaseHelper>();
     final trainingsAreSetUp =
         database.actionsRepo.isCompleted(SimulationActionType.settingUpTraining);
     final jumpers = dbHelper.managerJumpers;

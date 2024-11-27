@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/jumper_stats/domain/entities/jumper_attribute.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/stats/jumper_attribute_history.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/reports/jumper_reports.dart';
 
 class JumperStats with EquatableMixin {
   JumperStats({
@@ -9,7 +9,7 @@ class JumperStats with EquatableMixin {
 
   JumperStats.empty() : this(progressableAttributeHistory: {});
 
-  Map<TrainingProgressCategory, JumperAttributeHistory> progressableAttributeHistory;
+  Map<JumperAttributeType, JumperAttributeHistory> progressableAttributeHistory;
 
   Map<String, dynamic> toJson() {
     return {
@@ -23,8 +23,7 @@ class JumperStats with EquatableMixin {
       progressableAttributeHistory:
           (json['progressableAttributeHistory'] as Map<String, dynamic>).map(
         (categoryName, historyJson) => MapEntry(
-          TrainingProgressCategory.values
-              .singleWhere((value) => value.name == categoryName),
+          JumperAttributeType.values.singleWhere((value) => value.name == categoryName),
           JumperAttributeHistory.fromJson(historyJson),
         ),
       ),
@@ -32,7 +31,7 @@ class JumperStats with EquatableMixin {
   }
 
   JumperStats copyWith({
-    Map<TrainingProgressCategory, JumperAttributeHistory>? progressableAttributeHistory,
+    Map<JumperAttributeType, JumperAttributeHistory>? progressableAttributeHistory,
   }) {
     return JumperStats(
       progressableAttributeHistory:

@@ -1,8 +1,8 @@
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/core/training_analyzer/training_analyzer_result.dart';
 import 'package:sj_manager/core/training_analyzer/training_segment.dart';
-import 'package:sj_manager/core/career_mode/career_mode_utils/training/training_engine/jumper_training_engine.dart';
-import 'package:sj_manager/core/career_mode/career_mode_utils/training/training_engine/jumper_training_engine_settings.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/training_engine/jumper_training_engine.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/training_engine/jumper_training_engine_settings.dart';
 
 class TrainingTestRunner {
   const TrainingTestRunner({
@@ -45,12 +45,12 @@ class TrainingTestRunner {
         trainingResult: trainingResult,
       );
       currentJumper = currentJumper.copyWith(
-        form: trainingResult.form,
-        jumpsConsistency: trainingResult.jumpsConsistency,
-        fatigue: trainingResult.fatigue,
-        takeoffQuality: trainingResult.takeoffQuality,
-        flightQuality: trainingResult.flightQuality,
-        landingQuality: trainingResult.landingQuality,
+        form: trainingResult.formDelta,
+        jumpsConsistency: trainingResult.consistencyDelta,
+        fatigue: trainingResult.fatigueDelta,
+        takeoffQuality: trainingResult.takeoffDelta,
+        flightQuality: trainingResult.flightDelta,
+        landingQuality: trainingResult.landingDelta,
       );
       dayResults.add(lastResult);
     }

@@ -8,28 +8,28 @@ import 'package:sj_manager/features/game_variants/domain/usecases/save_game_vari
 
 class GameVariantCubit extends Cubit<GameVariantState> {
   GameVariantCubit({
-    required this.constructGameVariantsUseCase,
-    required this.getAllGameVariantsUseCase,
-    required this.chooseGameVariantUseCase,
-    required this.saveGameVariantUseCase,
+    required this.constructGameVariants,
+    required this.getAllGameVariants,
+    required this.chooseGameVariant,
+    required this.saveGameVariant,
   }) : super(GameVariantInitial());
 
-  final ConstructGameVariantsUseCase constructGameVariantsUseCase;
-  final GetAllGameVariantsUseCase getAllGameVariantsUseCase;
-  final ChooseGameVariantUseCase chooseGameVariantUseCase;
-  final SaveGameVariantUseCase saveGameVariantUseCase;
+  final ConstructGameVariantsUseCase constructGameVariants;
+  final GetAllGameVariantsUseCase getAllGameVariants;
+  final ChooseGameVariantUseCase chooseGameVariant;
+  final SaveGameVariantUseCase saveGameVariant;
 
   var _variants = <GameVariant>[];
 
   Future<void> initialize() async {
     emit(GameVariantInitializing());
-    await constructGameVariantsUseCase();
-    _variants = await getAllGameVariantsUseCase();
+    await constructGameVariants();
+    _variants = await getAllGameVariants();
     emit(GameVariantAbleToChoose(variants: _variants));
   }
 
   Future<void> chooseGameVariant(GameVariant variant) async {
-    final chosen = await chooseGameVariantUseCase(variant);
+    final chosen = await chooseGameVariant(variant);
     if (chosen) {
       emit(GameVariantChosen(variant: variant));
     } else {
@@ -41,7 +41,7 @@ class GameVariantCubit extends Cubit<GameVariantState> {
     if (state is GameVariantChosen) {
       final currentVariant = (state as GameVariantChosen).variant;
       emit(GameVariantEndingEditing());
-      await saveGameVariantUseCase(currentVariant);
+      await saveGameVariant(currentVariant);
       emit(GameVariantAbleToChoose(variants: _variants));
     } else {
       throw StateError('Ended editing the variant when no variant had been chosen');

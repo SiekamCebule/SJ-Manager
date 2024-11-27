@@ -1,4 +1,4 @@
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/actions/simulation_action_type.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action_type.dart';
 
 enum SimulationMode {
   classicCoach,

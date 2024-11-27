@@ -1,4 +1,4 @@
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/training/jumper_training_config.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_config.dart';
 
 class TrainingSegment {
   const TrainingSegment({

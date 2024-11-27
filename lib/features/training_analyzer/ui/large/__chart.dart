@@ -50,7 +50,7 @@ class _Chart extends StatelessWidget {
             name: 'Wybicie',
             dataSource: result.dayResults,
             xValueMapper: (result, _) => result.day,
-            yValueMapper: (result, _) => result.trainingResult.takeoffQuality,
+            yValueMapper: (result, _) => result.trainingResult.takeoffDelta,
           ),
         if (categories.contains(TrainingAnalyzerDataCategory.flightQuality))
           LineSeries<TrainingAnalyzerDaySimulationResult, int>(
@@ -58,7 +58,7 @@ class _Chart extends StatelessWidget {
             name: 'Lot',
             dataSource: result.dayResults,
             xValueMapper: (result, _) => result.day,
-            yValueMapper: (result, _) => result.trainingResult.flightQuality,
+            yValueMapper: (result, _) => result.trainingResult.flightDelta,
           ),
         if (categories.contains(TrainingAnalyzerDataCategory.landingQuality))
           LineSeries<TrainingAnalyzerDaySimulationResult, int>(
@@ -66,7 +66,7 @@ class _Chart extends StatelessWidget {
             name: 'Lądowanie',
             dataSource: result.dayResults,
             xValueMapper: (result, _) => result.day,
-            yValueMapper: (result, _) => result.trainingResult.landingQuality,
+            yValueMapper: (result, _) => result.trainingResult.landingDelta,
           ),
         if (categories.contains(TrainingAnalyzerDataCategory.form))
           LineSeries<TrainingAnalyzerDaySimulationResult, int>(
@@ -74,7 +74,7 @@ class _Chart extends StatelessWidget {
             name: 'Forma',
             dataSource: result.dayResults,
             xValueMapper: (result, _) => result.day,
-            yValueMapper: (result, _) => result.trainingResult.form,
+            yValueMapper: (result, _) => result.trainingResult.formDelta,
           ),
         if (categories.contains(TrainingAnalyzerDataCategory.jumpsConsistency))
           LineSeries<TrainingAnalyzerDaySimulationResult, int>(
@@ -82,7 +82,7 @@ class _Chart extends StatelessWidget {
             name: 'Równość',
             dataSource: result.dayResults,
             xValueMapper: (result, _) => result.day,
-            yValueMapper: (result, _) => result.trainingResult.jumpsConsistency,
+            yValueMapper: (result, _) => result.trainingResult.consistencyDelta,
           ),
         if (categories.contains(TrainingAnalyzerDataCategory.fatigue))
           LineSeries<TrainingAnalyzerDaySimulationResult, int>(
@@ -90,7 +90,7 @@ class _Chart extends StatelessWidget {
             name: 'Zmęczenie',
             dataSource: result.dayResults,
             xValueMapper: (result, _) => result.day,
-            yValueMapper: (result, _) => result.trainingResult.fatigue,
+            yValueMapper: (result, _) => result.trainingResult.fatigueDelta,
           ),
       ],
     );

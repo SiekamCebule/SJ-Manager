@@ -22,7 +22,7 @@ import 'package:sj_manager/core/core_classes/sex.dart';
 import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';
 import 'package:sj_manager/features/simulations/presentation/simulation_wizard/simulation_wizard_options_repo.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/subteam_type.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam_type.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
 import 'package:sj_manager/core/country_flags/country_flags_repository.dart';
 import 'package:sj_manager/core/country_flags/local_storage_country_flags_repo.dart';
