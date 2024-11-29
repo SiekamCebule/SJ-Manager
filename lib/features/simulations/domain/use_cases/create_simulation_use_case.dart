@@ -6,8 +6,8 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';
 import 'package:sj_manager/features/simulations/presentation/simulation_wizard/simulation_wizard_options_repo.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/utils/default_simulation_database_creator.dart';
-import 'package:sj_manager/to_embrace/domain/continue/continue_simulation_use_case.dart';
-import 'package:sj_manager/to_embrace/domain/continue/subcases/reports/set_up_jumper_level_reports_use_case.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/simulation_flow/domain/usecases/continue_simulation_use_case.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/jumper_reports/domain/usecases/level/set_up_jumper_level_reports_use_case.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/sjm_simulation.dart';
 import 'package:sj_manager/features/simulations/domain/repository/simulation_databases_repository.dart';
 import 'package:sj_manager/features/simulations/domain/repository/simulations_repository.dart';
@@ -20,12 +20,14 @@ class CreateSimulationUseCase {
     required this.pathsCache,
     required this.simulationsRepository,
     required this.databasesRepository,
+    required this.continueSimulation,
   });
 
   final IdGenerator idGenerator;
   final PlarformSpecificPathsCache pathsCache;
   final SimulationsRepository simulationsRepository;
   final SimulationDatabasesRepository databasesRepository;
+  final ContinueSimulationUseCase continueSimulation;
 
   late SimulationDatabase _database;
   late SimulationWizardOptions _options;
@@ -49,7 +51,7 @@ class CreateSimulationUseCase {
       simulationId: options.simulationId!,
     );
     _setUpJumperLevelReports();
-    _maybeSimulateTime();
+    await _maybeSimulateTime();
     await simulationsRepository.add(
       simulation,
       saveTime: DateTime.now(),
@@ -95,19 +97,14 @@ class CreateSimulationUseCase {
     ).execute();
   }
 
-  void _maybeSimulateTime() {
+  Future<void> _maybeSimulateTime() async {
     final earliestDate = _options.gameVariant!.startDates.first;
     final startDate = _options.startDate!;
     if (startDate.date.isAfter(earliestDate.date)) {
       final difference = startDate.date.difference(earliestDate.date);
       final daysToSimulate = difference.inDays;
       for (var day in range(0, daysToSimulate - 1, 1)) {
-        ContinueSimulationUseCase(
-          database: _database,
-          chooseSubteamId: (_) => idGenerator.generate(),
-          afterSettingUpSubteams: null,
-          afterSettingUpTrainings: null,
-        ).execute();
+        await continueSimulation();
         print('day: ${day + 1} (${_database.currentDate})');
       }
     }

@@ -67,6 +67,7 @@ class TeamSerializer implements SimulationDbPartSerializer<Team> {
       'type': 'subteam',
       'parentTeam': serialize(team),
       'subteamType': team.type.name,
+      'jumperIds': team.jumpers.map((jumper) => idsRepository.id(jumper))
     };
   }
 }

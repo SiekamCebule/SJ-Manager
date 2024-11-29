@@ -6,6 +6,7 @@ import 'package:sj_manager/core/mixins/sex_mixin.dart';
 import 'package:sj_manager/core/psyche/level_of_consciousness.dart';
 import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/core_classes/sex.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_config.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/reports/jumper_reports.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/stats/jumper_stats.dart';
@@ -17,6 +18,7 @@ class SimulationJumper with EquatableMixin, NameAndSurnameMixin, CountryMixin, S
     required this.surname,
     required this.country,
     required this.countryTeam,
+    required this.subteam,
     required this.sex,
     required this.takeoffQuality,
     required this.flightQuality,
@@ -43,6 +45,8 @@ class SimulationJumper with EquatableMixin, NameAndSurnameMixin, CountryMixin, S
   Country country;
 
   CountryTeam countryTeam;
+
+  Subteam? subteam;
 
   @override
   Sex sex;
@@ -159,6 +163,7 @@ class SimulationJumper with EquatableMixin, NameAndSurnameMixin, CountryMixin, S
     String? surname,
     Country? country,
     CountryTeam? countryTeam,
+    Subteam? subteam,
     Sex? sex,
     double? takeoffQuality,
     double? flightQuality,
@@ -178,6 +183,7 @@ class SimulationJumper with EquatableMixin, NameAndSurnameMixin, CountryMixin, S
       surname: surname ?? this.surname,
       country: country ?? this.country,
       countryTeam: countryTeam ?? this.countryTeam,
+      subteam: subteam ?? this.subteam,
       sex: sex ?? this.sex,
       takeoffQuality: takeoffQuality ?? this.takeoffQuality,
       flightQuality: flightQuality ?? this.flightQuality,
@@ -199,6 +205,7 @@ class SimulationJumper with EquatableMixin, NameAndSurnameMixin, CountryMixin, S
         name,
         surname,
         country,
+        subteam,
         countryTeam,
         sex,
         takeoffQuality,
@@ -220,6 +227,7 @@ class SimulationMaleJumper extends SimulationJumper {
     required super.surname,
     required super.country,
     required super.countryTeam,
+    required super.subteam,
     required super.takeoffQuality,
     required super.flightQuality,
     required super.landingQuality,
@@ -248,6 +256,7 @@ class SimulationMaleJumper extends SimulationJumper {
     String? surname,
     Country? country,
     CountryTeam? countryTeam,
+    Subteam? subteam,
     Sex? sex,
     double? takeoffQuality,
     double? flightQuality,
@@ -290,6 +299,7 @@ class SimulationFemaleJumper extends SimulationJumper {
     required super.surname,
     required super.country,
     required super.countryTeam,
+    required super.subteam,
     required super.takeoffQuality,
     required super.flightQuality,
     required super.landingQuality,
@@ -318,6 +328,7 @@ class SimulationFemaleJumper extends SimulationJumper {
     String? surname,
     Country? country,
     CountryTeam? countryTeam,
+    Subteam? subteam,
     Sex? sex,
     double? takeoffQuality,
     double? flightQuality,

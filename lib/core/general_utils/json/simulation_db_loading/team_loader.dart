@@ -4,8 +4,8 @@ import 'package:sj_manager/core/general_utils/json/json_types.dart';
 import 'package:sj_manager/core/general_utils/json/utils/enums.dart';
 
 import 'package:sj_manager/core/core_classes/country_team/country_team_facts_model.dart';
-import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/core/core_classes/jumps/simple_jump_model.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/competition_team.dart';
 import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam_type.dart';
@@ -42,7 +42,7 @@ class TeamLoader implements SimulationDbPartParser<Team> {
     final parentTeam = await parse(parentTeamJson);
     final jumperIds = json['jumperIds'] as List;
     final jumpers = jumperIds.map((id) {
-      return idsRepository.get(id) as JumperDbRecord;
+      return idsRepository.get(id) as SimulationJumper;
     }).toList();
 
     return CompetitionTeam(
@@ -55,10 +55,15 @@ class TeamLoader implements SimulationDbPartParser<Team> {
     final parentTeamJson = json['parentTeam'] as Json;
     final parentTeam = await parse(parentTeamJson);
     final typeName = json['subteamType'] as String;
+    final jumperIds = json['jumperIds'] as List;
+    final jumpers = jumperIds.map((id) {
+      return idsRepository.get(id) as SimulationJumper;
+    }).toList();
 
     return Subteam(
       parentTeam: parentTeam,
       type: SubteamType.values.singleWhere((subteamType) => subteamType.name == typeName),
+      jumpers: jumpers,
     );
   }
 }

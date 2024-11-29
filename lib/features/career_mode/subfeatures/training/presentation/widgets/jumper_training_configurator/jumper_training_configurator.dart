@@ -9,7 +9,7 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/general_ui/reusable_widgets/card_with_title.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/training/presentation/widgets/jumper_training_configurator/widgets/jumper_attribute_training_slider.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/jumper_reports/presentation/widgets/training_progress_report_display.dart';
-import 'package:sj_manager/to_embrace/ui/screens/simulation/utils/training_translations.dart';
+import 'package:sj_manager/l10n/training_translations.dart';
 import 'package:sj_manager/core/career_mode/career_mode_utils/training_utils.dart';
 
 part 'widgets/__configuration_component.dart';

@@ -10,13 +10,13 @@ class GameVariantCubit extends Cubit<GameVariantState> {
   GameVariantCubit({
     required this.constructGameVariants,
     required this.getAllGameVariants,
-    required this.chooseGameVariant,
+    required this.chooseGameVariantUseCase,
     required this.saveGameVariant,
   }) : super(GameVariantInitial());
 
   final ConstructGameVariantsUseCase constructGameVariants;
   final GetAllGameVariantsUseCase getAllGameVariants;
-  final ChooseGameVariantUseCase chooseGameVariant;
+  final ChooseGameVariantUseCase chooseGameVariantUseCase;
   final SaveGameVariantUseCase saveGameVariant;
 
   var _variants = <GameVariant>[];
@@ -29,7 +29,7 @@ class GameVariantCubit extends Cubit<GameVariantState> {
   }
 
   Future<void> chooseGameVariant(GameVariant variant) async {
-    final chosen = await chooseGameVariant(variant);
+    final chosen = await chooseGameVariantUseCase(variant);
     if (chosen) {
       emit(GameVariantChosen(variant: variant));
     } else {

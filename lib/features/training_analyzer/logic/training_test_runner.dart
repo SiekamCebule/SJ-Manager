@@ -1,8 +1,8 @@
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/core/training_analyzer/training_analyzer_result.dart';
 import 'package:sj_manager/core/training_analyzer/training_segment.dart';
-import 'package:sj_manager/features/career_mode/subfeatures/training/training_engine/jumper_training_engine.dart';
-import 'package:sj_manager/features/career_mode/subfeatures/training/training_engine/jumper_training_engine_settings.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/training_engine/jumper_training_engine.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/training_engine/jumper_training_engine_settings.dart';
 
 class TrainingTestRunner {
   const TrainingTestRunner({

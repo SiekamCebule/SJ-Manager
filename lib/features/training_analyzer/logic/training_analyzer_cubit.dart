@@ -16,7 +16,7 @@ import 'package:sj_manager/core/training_analyzer/training_analyzer_actions.dart
 import 'package:sj_manager/core/training_analyzer/training_analyzer_chart_data_category.dart';
 import 'package:sj_manager/core/training_analyzer/training_analyzer_result.dart';
 import 'package:sj_manager/core/training_analyzer/training_segment.dart';
-import 'package:sj_manager/features/career_mode/subfeatures/training/training_engine/jumper_training_engine_settings.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/training_engine/jumper_training_engine_settings.dart';
 import 'package:sj_manager/core/general_utils/file_system.dart';
 import 'package:sj_manager/core/training_analyzer/training_analyzer_utils.dart';
 

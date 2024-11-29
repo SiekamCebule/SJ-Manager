@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/jumpers/presentation/bloc/simulation_jumpers_cubit.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/training/presentation/bloc/jumper_training_cubit.dart';
-import 'package:sj_manager/to_embrace/ui/screens/simulation/large/widgets/team/jumper/jumper_simple_list_tile.dart';
+import 'package:sj_manager/features/career_mode/ui/reusable/jumper/jumper_simple_list_tile.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/training/presentation/widgets/jumper_training_configurator/jumper_training_configurator.dart';
 
 class JumperTrainingManagerRow extends StatefulWidget {

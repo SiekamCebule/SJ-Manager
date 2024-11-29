@@ -20,7 +20,7 @@ class _RemoveFab extends StatelessWidget {
           .tertiaryContainer
           .blendWithBg(Theme.of(context).brightness, 0.2),
       onPressed: () async {
-        await items.addItem();
+        await items.add();
         await changeStatus.markAsChanged();
       },
       tooltip: translate(context).remove,

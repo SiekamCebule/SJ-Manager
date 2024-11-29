@@ -15,10 +15,10 @@ class DatabaseEditorFiltersCubit extends Cubit<DatabaseEditorFiltersState> {
   DatabaseEditorFiltersCubit({
     required this.getFilter,
     required this.getValidFilters,
-    required this.setFilter,
+    required this.setFilterUseCase,
     required this.getAllFilters,
     required this.getItemsType,
-    required this.clearFilters,
+    required this.clearFiltersUseCase,
   }) : super(initial);
 
   static const initial = DatabaseEditorFiltersState(
@@ -29,12 +29,12 @@ class DatabaseEditorFiltersCubit extends Cubit<DatabaseEditorFiltersState> {
   final GetDatabaseEditorFilterUseCase getFilter;
   final GetAllDatabaseEditorFiltersUseCase getAllFilters;
   final GetValidDatabaseEditorFiltersUseCase getValidFilters;
-  final SetDatabaseEditorFilterUseCase setFilter;
+  final SetDatabaseEditorFilterUseCase setFilterUseCase;
   final GetDatabaseEditorItemsTypeUseCase getItemsType;
-  final ClearDatabaseEditorFiltersUseCase clearFilters;
+  final ClearDatabaseEditorFiltersUseCase clearFiltersUseCase;
 
   Future<void> clearFilters() async {
-    await clearFilters();
+    await clearFiltersUseCase();
     emit(DatabaseEditorFiltersState(
       validFilterExists: false,
       filters: await getAllFilters(),
@@ -43,7 +43,7 @@ class DatabaseEditorFiltersCubit extends Cubit<DatabaseEditorFiltersState> {
 
   Future<void> setFilter(DatabaseEditorItemsType itemType,
       DatabaseEditorFilterType filterType, Filter filter) async {
-    await setFilter(filterType, filter);
+    await setFilterUseCase(filterType, filter);
     final validFilters = await getValidFilters();
     emit(DatabaseEditorFiltersState(
       validFilterExists: validFilters.isNotEmpty,

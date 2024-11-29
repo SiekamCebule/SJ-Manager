@@ -50,9 +50,9 @@ void main() async {
     providers: [
       BlocProvider(
         create: (context) => AppSettingsCubit(
-          setColorScheme:
+          setColorSchemeUseCase:
               SetAppColorSchemeUseCase(settingsRepository: settingsRepository),
-          setLanguageCode:
+          setLanguageCodeUseCase:
               SetAppLanguageCodeUseCase(settingsRepository: settingsRepository),
           getColorScheme:
               GetAppColorSchemeUseCase(settingsRepository: settingsRepository),

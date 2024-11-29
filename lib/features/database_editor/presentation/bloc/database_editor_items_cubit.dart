@@ -14,8 +14,8 @@ import 'package:sj_manager/features/database_editor/domain/use_cases/items_type/
 
 class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
   DatabaseEditorItemsCubit({
-    required this.addItem,
-    required this.removeItem,
+    required this.addItemUseCase,
+    required this.removeItemUseCase,
     required this.updateItem,
     required this.filterItems,
     required this.moveItem,
@@ -25,8 +25,8 @@ class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
 
   late StreamSubscription<DatabaseEditorFilters> _filtersSubscription;
 
-  final Map<DatabaseEditorItemsType, AddDatabaseEditorItemUseCase> addItem;
-  final Map<DatabaseEditorItemsType, RemoveDatabaseEditorItemUseCase> removeItem;
+  final Map<DatabaseEditorItemsType, AddDatabaseEditorItemUseCase> addItemUseCase;
+  final Map<DatabaseEditorItemsType, RemoveDatabaseEditorItemUseCase> removeItemUseCase;
   final Map<DatabaseEditorItemsType, UpdateDatabaseEditorItemUseCase> updateItem;
   final Map<DatabaseEditorItemsType, FilterDatabaseEditorItemsUseCase> filterItems;
   final Map<DatabaseEditorItemsType, MoveDatabaseEditorItemUseCase> moveItem;
@@ -43,10 +43,10 @@ class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
     });
   }
 
-  Future<void> addItem() async {
+  Future<void> add() async {
     if (state is DatabaseEditorItemsInitialized) {
       final type = await getItemsType();
-      await addItem[type]!();
+      await addItemUseCase[type]!();
     } else {
       throw StateError(
         'Items can be added only when cubit\'s state is DatabaseEditorInitializedState',
@@ -54,10 +54,10 @@ class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
     }
   }
 
-  Future<void> removeItem() async {
+  Future<void> remove() async {
     if (state is DatabaseEditorItemsInitialized) {
       final type = await getItemsType();
-      await removeItem[type]!();
+      await removeItemUseCase[type]!();
     } else {
       throw StateError(
         'Items can be removed only when cubit\'s state is DatabaseEditorInitializedState',
@@ -65,7 +65,7 @@ class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
     }
   }
 
-  Future<void> updateItem(dynamic item) async {
+  Future<void> update(dynamic item) async {
     if (state is DatabaseEditorItemsInitialized) {
       final type = await getItemsType();
       await updateItem[type]!(item);
@@ -76,7 +76,7 @@ class DatabaseEditorItemsCubit extends Cubit<DatabaseEditorItemsState> {
     }
   }
 
-  Future<void> moveItem(int index, int targetIndex) async {
+  Future<void> move(int index, int targetIndex) async {
     if (state is DatabaseEditorItemsInitialized) {
       final type = await getItemsType();
       await moveItem[type]!(index, targetIndex);

@@ -29,4 +29,10 @@ class SimDbSimulationActionsRepository implements SimulationActionsRepository {
   Future<Iterable<SimulationAction>> getAll() async {
     return await dataSource.getAll();
   }
+
+  @override
+  Future<SimulationAction> actionByType(SimulationActionType actionType) async {
+    final actions = await getAll();
+    return actions.singleWhere((action) => action.type == actionType);
+  }
 }

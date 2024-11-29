@@ -2,5 +2,5 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 
 abstract interface class SimulationManagerDataRepository {
   Future<SimulationManagerData> get();
-  Future<SimulationManagerData> set();
+  Future<void> set(SimulationManagerData managerData);
 }

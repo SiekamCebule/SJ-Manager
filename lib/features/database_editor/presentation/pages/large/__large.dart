@@ -1,7 +1,5 @@
 part of '../database_editor_page.dart';
 
-extension type _SelectedTabIndex(int index) {}
-
 class _Large extends StatefulWidget {
   const _Large();
 

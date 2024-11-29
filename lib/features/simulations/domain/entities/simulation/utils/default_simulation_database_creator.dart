@@ -1,6 +1,7 @@
 import 'package:sj_manager/core/countries/countries_repository/countries_repository.dart';
 import 'package:sj_manager/core/countries/countries_repository/in_memory_countries_repository.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/jumper_stats/domain/entities/jumper_attribute.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/manager_data/simulation_manager_data.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/stats/jumper_attribute_history.dart';
@@ -47,6 +48,7 @@ class DefaultSimulationDatabaseCreator {
     const attributeHistoryLimit =
         31; // Max number of days in a month. The biggest need is when we create a monthly training report.
     final jumperRecords = List.of(options.gameVariant!.jumpers);
+
     _jumpers = jumperRecords.map(
       (dbRecord) {
         return SimulationJumper(
@@ -72,15 +74,15 @@ class DefaultSimulationDatabaseCreator {
             jumpsRating: null,
           ),
           stats: JumperStats(progressableAttributeHistory: {
-            TrainingProgressCategory.takeoff:
+            JumperAttributeType.takeoffQuality:
                 JumperAttributeHistory.empty(limit: attributeHistoryLimit),
-            TrainingProgressCategory.flight:
+            JumperAttributeType.flightQuality:
                 JumperAttributeHistory.empty(limit: attributeHistoryLimit),
-            TrainingProgressCategory.landing:
+            JumperAttributeType.landingQuality:
                 JumperAttributeHistory.empty(limit: attributeHistoryLimit),
-            TrainingProgressCategory.consistency:
+            JumperAttributeType.consistency:
                 JumperAttributeHistory.empty(limit: attributeHistoryLimit),
-            TrainingProgressCategory.form:
+            JumperAttributeType.form:
                 JumperAttributeHistory.empty(limit: attributeHistoryLimit),
           }),
         );
@@ -103,6 +105,7 @@ class DefaultSimulationDatabaseCreator {
         ? Subteam(
             parentTeam: options.team!,
             type: options.subteamType!,
+            jumpers: [],
           )
         : null;
     final earliestDate = options.gameVariant!.startDates.first;
@@ -126,6 +129,7 @@ class DefaultSimulationDatabaseCreator {
           SimulationAction(
             type: actionType,
             deadline: options.gameVariant!.actionDeadlines[actionType],
+            isCompleted: false,
           )
       ],
       teamReports: teamReports,

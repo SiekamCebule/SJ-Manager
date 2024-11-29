@@ -152,7 +152,7 @@ List<BlocProvider> defaultDbEditorBlocProviders(BuildContext context) {
           filtersRepository: filtersRepository,
           itemsTypeRepository: itemsTypeRepository,
         ),
-        setFilter: SetDatabaseEditorFilterUseCase(
+        setFilterUseCase: SetDatabaseEditorFilterUseCase(
           filtersRepository: filtersRepository,
           itemsTypeRepository: itemsTypeRepository,
         ),
@@ -162,14 +162,14 @@ List<BlocProvider> defaultDbEditorBlocProviders(BuildContext context) {
         getItemsType: GetDatabaseEditorItemsTypeUseCase(
           itemsTypeRepository: itemsTypeRepository,
         ),
-        clearFilters: ClearDatabaseEditorFiltersUseCase(
+        clearFiltersUseCase: ClearDatabaseEditorFiltersUseCase(
           filtersRepository: filtersRepository,
         ),
       ),
     ),
     BlocProvider(
       create: (context) => DatabaseEditorItemsCubit(
-        addItem: {
+        addItemUseCase: {
           DatabaseEditorItemsType.maleJumper: AddDatabaseEditorItemUseCase(
             defaultItemsRepository: defaultItemsRepository,
             itemsRepository: maleJumpersRepository,
@@ -185,7 +185,7 @@ List<BlocProvider> defaultDbEditorBlocProviders(BuildContext context) {
             changeStatusRepository: changeStatusRepository,
           ),
         },
-        removeItem: {
+        removeItemUseCase: {
           DatabaseEditorItemsType.maleJumper: RemoveDatabaseEditorItemUseCase(
             itemsRepository: maleJumpersRepository,
             selectionRepository: selectionRepository,
@@ -271,19 +271,19 @@ List<BlocProvider> defaultDbEditorBlocProviders(BuildContext context) {
         getStream: GetDatabaseEditorSelectionStreamUseCase(
           selectionRepository: selectionRepository,
         ),
-        getSelection: GetDbEditorSelectionUseCase(
+        getSelectionUseCase: GetDbEditorSelectionUseCase(
           selectionRepository: selectionRepository,
         ),
-        selectOnly: DbEditorSelectionSelectOnlyUseCase(
+        selectOnlyUseCase: DbEditorSelectionSelectOnlyUseCase(
           selectionRepository: selectionRepository,
         ),
-        toggle: DbEditorSelectionToggleUseCase(
+        toggleUseCase: DbEditorSelectionToggleUseCase(
           selectionRepository: selectionRepository,
         ),
-        selectRange: DbEditorSelectionSelectRangeUseCase(
+        selectRangeUseCase: DbEditorSelectionSelectRangeUseCase(
           selectionRepository: selectionRepository,
         ),
-        clear: DbEditorSelectionClearUseCase(
+        clearUseCase: DbEditorSelectionClearUseCase(
           selectionRepository: selectionRepository,
         ),
       ),

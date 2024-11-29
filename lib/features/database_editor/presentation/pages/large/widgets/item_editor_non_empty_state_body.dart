@@ -23,7 +23,7 @@ class _ItemEditorNonEmptyStateBodyState extends State<ItemEditorNonEmptyStateBod
       itemType: itemsType,
       onChange: (changedItem) async {
         if (selection.length == 1 && changedItem != null) {
-          context.read<DatabaseEditorItemsCubit>().updateItem(changedItem);
+          context.read<DatabaseEditorItemsCubit>().update(changedItem);
           //dbIsChangedCubit.markAsChanged(); // TODO
         }
       },

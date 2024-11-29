@@ -26,7 +26,7 @@ class DatabaseEditorChangeStatusCubit extends Cubit<DatabaseEditorChangeStatusSt
   final GetDatabaseEditorChangeStatusStreamUseCase getStream;
   final MarkDatabaseEditorAsChangedUseCase markAsChanged;
 
-  Future<void> markAsChanged() async {
+  Future<void> markDatabaseAsChanged() async {
     await markAsChanged();
   }
 

@@ -9,14 +9,14 @@ import 'package:sj_manager/to_embrace/ui/theme/app_schemes.dart';
 
 class AppSettingsCubit extends Cubit<AppSettingsState> {
   AppSettingsCubit({
-    required this.setColorScheme,
-    required this.setLanguageCode,
+    required this.setColorSchemeUseCase,
+    required this.setLanguageCodeUseCase,
     required this.getColorScheme,
     required this.getLanguageCode,
   }) : super(const AppSettingsInitial());
 
-  final SetAppColorSchemeUseCase setColorScheme;
-  final SetAppLanguageCodeUseCase setLanguageCode;
+  final SetAppColorSchemeUseCase setColorSchemeUseCase;
+  final SetAppLanguageCodeUseCase setLanguageCodeUseCase;
   final GetAppColorSchemeUseCase getColorScheme;
   final GetAppLanguageCodeUseCase getLanguageCode;
 
@@ -28,14 +28,14 @@ class AppSettingsCubit extends Cubit<AppSettingsState> {
   }
 
   Future<void> setLanguageCode(String languageCode) async {
-    await setLanguageCode(languageCode);
+    await setLanguageCodeUseCase(languageCode);
     emit((state as AppSettingsInitialized).copyWith(
       languageCode: await getLanguageCode(),
     ));
   }
 
   Future<void> setColorScheme(AppColorScheme colorScheme) async {
-    await setColorScheme(colorScheme);
+    await setColorSchemeUseCase(colorScheme);
     emit((state as AppSettingsInitialized).copyWith(
       colorScheme: await getColorScheme(),
     ));

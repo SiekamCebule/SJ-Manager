@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
 
 class CompetitionTeam<T extends Team> extends Team with EquatableMixin {
@@ -9,9 +9,9 @@ class CompetitionTeam<T extends Team> extends Team with EquatableMixin {
   });
 
   final T parentTeam;
-  final List<JumperDbRecord> jumpers;
+  final List<SimulationJumper> jumpers;
 
-  CompetitionTeam<T> copyWith({T? parentTeam, List<JumperDbRecord>? jumpers}) {
+  CompetitionTeam<T> copyWith({T? parentTeam, List<SimulationJumper>? jumpers}) {
     return CompetitionTeam(
       parentTeam: parentTeam ?? this.parentTeam,
       jumpers: jumpers ?? this.jumpers,

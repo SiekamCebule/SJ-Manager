@@ -7,7 +7,7 @@ import 'package:sj_manager/features/game_variants/presentation/bloc/game_variant
 import 'package:sj_manager/features/simulations/domain/entities/simulation/sjm_simulation.dart';
 import 'package:sj_manager/features/simulations/presentation/bloc/available_simulations_cubit.dart';
 import 'package:sj_manager/features/simulations/presentation/bloc/simulation_cubit.dart';
-import 'package:sj_manager/to_embrace/domain/use_cases/ui/main_menu/show_simulation_wizard_command.dart';
+import 'package:sj_manager/main_menu/ui/dialogs/show_simulation_wizard_command.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/main.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';

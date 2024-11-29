@@ -265,5 +265,6 @@
     "noFemaleJumpers": "Brak zawodniczek",
     "noMaleJumpersInTeam": "Brak zawodników w drużynie",
     "noFemaleJumpersInTeam": "Brak zawodniczek w drużynie",
-    "rankingWillShowUpAfterTrainingsStart": "Ranking pojawi się po rozpoczęciu treningów"
+    "rankingWillShowUpAfterTrainingsStart": "Ranking pojawi się po rozpoczęciu treningów",
+    "noDeadline": "Bezterminowo"
 }

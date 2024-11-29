@@ -17,7 +17,7 @@ class _AddFab extends StatelessWidget {
       heroTag: 'addFab',
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       onPressed: () async {
-        await items.addItem();
+        await items.add();
         await changeStatus.markAsChanged();
       },
       tooltip: translate(context).add,

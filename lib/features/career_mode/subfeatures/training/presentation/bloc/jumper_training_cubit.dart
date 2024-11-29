@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_category.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_config.dart';
-import 'package:sj_manager/features/career_mode/subfeatures/training/domain/usecases/get_jumper_training_balance_for_all_categories_use_case.dart';
-import 'package:sj_manager/features/career_mode/subfeatures/training/domain/usecases/get_jumper_training_balance_use_case.dart';
-import 'package:sj_manager/features/career_mode/subfeatures/training/domain/usecases/set_jumper_training_balance_use_case.dart';
-import 'package:sj_manager/features/career_mode/subfeatures/training/domain/usecases/set_jumper_training_config_use_case.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/usecases/training_config/get_jumper_training_balance_for_all_categories_use_case.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/usecases/training_config/get_jumper_training_balance_use_case.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/usecases/training_config/set_jumper_training_balance_use_case.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/usecases/training_config/set_jumper_training_config_use_case.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 
 class JumperTrainingCubit extends Cubit<JumperTrainingState> {

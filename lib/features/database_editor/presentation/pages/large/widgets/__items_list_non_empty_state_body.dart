@@ -16,7 +16,7 @@ class _ItemsListNonEmptyStateBody extends StatelessWidget {
     return DatabaseItemsList(
       reorderable: !filtersState.validFilterExists,
       onReorder: (oldIndex, newIndex) async {
-        itemsCubit.moveItem(oldIndex, newIndex);
+        itemsCubit.move(oldIndex, newIndex);
       },
       length: itemsState.items.length,
       itemBuilder: (context, index) {
