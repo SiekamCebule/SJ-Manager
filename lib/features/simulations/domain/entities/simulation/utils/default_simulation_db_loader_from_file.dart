@@ -26,24 +26,21 @@ import 'package:sj_manager/core/general_utils/json/simulation_db_loading/simulat
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/standings_loader.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/standings_positions_creator_loader.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/team_competition_group_rules_loader.dart';
-import 'package:sj_manager/core/general_utils/json/simulation_db_loading/team_loader.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/wind_averager_parser.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action.dart';
 import 'package:sj_manager/features/simulations/data/models/simulation_database_model.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action_type.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/actions/simulation_actions_repo.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/manager_data/simulation_manager_data.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/simulation_season.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/reports/team_reports.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';
 import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/general_utils/db_items_file_system_paths.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
-import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam_type.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/personal_coach_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/personal_coach_team.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 import 'package:sj_manager/core/general_utils/file_system.dart';
 
@@ -101,23 +98,6 @@ class DefaultSimulationDbLoaderFromFile {
 
     _dynamicStateJson = await _loadDynamicStateJson();
 
-    final actionDeadlinesJson = _dynamicStateJson['actionDeadlines'] as Map;
-    final actionDeadlines = actionDeadlinesJson.map((actionTypeName, dateTimeJson) {
-      return MapEntry(
-        SimulationActionType.values.singleWhere((value) => value.name == actionTypeName),
-        DateTime.parse(dateTimeJson),
-      );
-    });
-
-    final simulationActionCompletionStatusesJson =
-        _dynamicStateJson['simulationActionCompletionStatuses'] as List;
-
-    final simulationActionCompletionStatuses =
-        simulationActionCompletionStatusesJson.map((actionTypeName) {
-      return SimulationActionType.values
-          .singleWhere((value) => value.name == actionTypeName);
-    }).toSet();
-
     final managerDataJson = _dynamicStateJson['managerData'] as Json;
 
     final personalCoachTeamJson = managerDataJson['personalCoachTeam'];
@@ -142,26 +122,19 @@ class DefaultSimulationDbLoaderFromFile {
       personalCoachTeam: personalCoachTeam,
     );
 
-    final teamReportsJson = _dynamicStateJson['teamReports'] as Map;
-    final teamReports = teamReportsJson.map((id, reportsJson) {
-      return MapEntry(
-        id,
-        TeamReports.fromJson(reportsJson),
-      );
-    });
-
-    final subteamJumpersJson = _dynamicStateJson['subteamJumpers'] as Json;
-    final subteamJumpers = subteamJumpersJson.map((subteamKey, jumperIds) {
-      final splitSubteamKey = subteamKey.split('###');
-      return MapEntry(
-        Subteam(
-          type:
-              SubteamType.values.singleWhere((value) => value.name == splitSubteamKey[0]),
-          parentTeam: idsRepository.get(splitSubteamKey[1]),
-        ),
-        (jumperIds as List).toList().cast<String>(),
-      );
-    });
+    final actionsJson = _dynamicStateJson['actions'] as List;
+    final actions = actionsJson.map(
+      (actionJson) {
+        return SimulationAction(
+          type: SimulationActionType.values
+              .singleWhere((type) => type.name == actionJson['type']),
+          deadline: actionJson['deadline'] != null
+              ? DateTime.parse(actionJson['deadline'])
+              : null,
+          isCompleted: actionJson['isCompleted'],
+        );
+      },
+    );
 
     return SimulationDatabaseModel(
       managerData: managerData,
@@ -173,10 +146,7 @@ class DefaultSimulationDbLoaderFromFile {
       startDate: DateTime.parse(_dynamicStateJson['startDate']!),
       currentDate: DateTime.parse(_dynamicStateJson['currentDate']!),
       idsRepository: idsRepository,
-      actionDeadlines: actionDeadlines,
-      actionsRepo: SimulationActionsRepo(initial: simulationActionCompletionStatuses),
-      teamReports: teamReports.cast(),
-      subteamJumpers: subteamJumpers.cast(),
+      actions: actions.toList(),
     );
   }
 
@@ -223,8 +193,8 @@ class DefaultSimulationDbLoaderFromFile {
       return pathsRegistry.get<Hill>();
     } else if (type == Country) {
       return pathsRegistry.get<Country>();
-    } else if (type == CountryTeam) {
-      return pathsRegistry.get<CountryTeam>();
+    } else if (type == CountryTeamDbRecord) {
+      return pathsRegistry.get<CountryTeamDbRecord>();
     } else if (type == Subteam) {
       return pathsRegistry.get<Subteam>();
     } else if (type == SimulationSeason) {
@@ -239,7 +209,7 @@ class DefaultSimulationDbLoaderFromFile {
     'femaleJumper': SimulationFemaleJumper,
     'hill': Hill,
     'country': Country,
-    'countryTeam': CountryTeam,
+    'countryTeam': CountryTeamDbRecord,
     'subteam': Subteam,
     'simulationSeason': SimulationSeason,
   };
@@ -256,7 +226,7 @@ class DefaultSimulationDbLoaderFromFile {
       return _parseHill;
     } else if (type == Country) {
       return _parseCountry;
-    } else if (type == CountryTeam || type == Subteam) {
+    } else if (type == CountryTeamDbRecord || type == Subteam) {
       return _parseTeam;
     } else if (type == SimulationSeason) {
       return _parseSeason;
@@ -279,8 +249,8 @@ class DefaultSimulationDbLoaderFromFile {
     return Country.fromJson(json);
   }
 
-  Future<Team> _parseTeam(Json json) async {
-    return await TeamLoader(
+  Future<SimulationTeam> _parseTeam(Json json) async {
+    return await SimulationTeamLoader(
             idsRepository: idsRepository,
             countryLoader: JsonCountryLoaderByCode(countriesRepository: _countriesRepo))
         .parse(json);

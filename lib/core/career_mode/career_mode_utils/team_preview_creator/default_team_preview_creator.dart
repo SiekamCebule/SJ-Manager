@@ -3,11 +3,11 @@ import 'package:sj_manager/core/general_utils/country_mixin_utils.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/core/core_classes/jumps/simple_jump_model.dart';
 import 'package:sj_manager/core/core_classes/sex.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 import 'package:sj_manager/features/game_variants/domain/entities/game_variant.dart';
-import 'package:sj_manager/core/career_mode/career_mode_utils/team_preview_creator/team_preview_creator.dart';
+import 'package:sj_manager/core/career_mode/career_mode_utils/team_preview_creator/country_team_preview_creator.dart';
 
-class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
+class DefaultCountryTeamPreviewCreator extends CountryTeamPreviewCreator {
   const DefaultCountryTeamPreviewCreator({
     required this.gameVariant,
     required this.currentDate,
@@ -17,7 +17,7 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
   final DateTime currentDate;
 
   @override
-  Hill? largestHill(CountryTeam team) {
+  Hill? largestHill(CountryTeamDbRecord team) {
     final fromCountry = gameVariant.hills.fromCountryByCode(team.country.code);
     if (fromCountry.isEmpty) return null;
     return fromCountry.reduce((previous, current) {
@@ -26,17 +26,17 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
   }
 
   @override
-  int? stars(CountryTeam team) {
+  int? stars(CountryTeamDbRecord team) {
     return team.facts.stars;
   }
 
   @override
-  SimpleJumpModel? record(CountryTeam team) {
+  SimpleJumpModel? record(CountryTeamDbRecord team) {
     return team.facts.record;
   }
 
   @override
-  JumperDbRecord? bestJumper(CountryTeam team) {
+  JumperDbRecord? bestJumper(CountryTeamDbRecord team) {
     final jumpers = _jumpersBySex(team.sex);
     final jumpersFromCountry = jumpers.fromCountryByCode(team.country.code);
     if (jumpersFromCountry.isEmpty) return null;
@@ -47,7 +47,7 @@ class DefaultCountryTeamPreviewCreator extends TeamPreviewCreator<CountryTeam> {
   }
 
   @override
-  JumperDbRecord? risingStar(CountryTeam team) {
+  JumperDbRecord? risingStar(CountryTeamDbRecord team) {
     final jumpers = _jumpersBySex(team.sex);
     final jumpersFromCountry = jumpers.fromCountryByCode(team.country.code);
     if (jumpersFromCountry.isEmpty) return null;

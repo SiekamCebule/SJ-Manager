@@ -1,12 +1,12 @@
 import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/core_classes/sex.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 
-List<CountryTeam> countryTeamsBySex(List<CountryTeam> teams, Sex sex) {
+List<CountryTeamDbRecord> countryTeamsBySex(List<CountryTeamDbRecord> teams, Sex sex) {
   return teams.where((team) => team.sex == sex).toList();
 }
 
-List<Country> countriesHavingTeam(List<CountryTeam> teams) {
+List<Country> countriesHavingTeam(List<CountryTeamDbRecord> teams) {
   final countries = <Country>{};
   for (var team in teams) {
     countries.add(team.country);
@@ -14,7 +14,8 @@ List<Country> countriesHavingTeam(List<CountryTeam> teams) {
   return countries.toList();
 }
 
-List<CountryTeam> teamsByStars(List<CountryTeam> teams, {bool ascending = false}) {
+List<CountryTeamDbRecord> teamsByStars(List<CountryTeamDbRecord> teams,
+    {bool ascending = false}) {
   var copiedTeams = List.of(teams);
   final descending = !ascending;
 

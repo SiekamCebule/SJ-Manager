@@ -1,6 +1,6 @@
 import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/jumper/jumper_db_record_model.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 
 class GameVariantModel {
   const GameVariantModel({
@@ -13,19 +13,19 @@ class GameVariantModel {
   final String id;
   final List<JumperDbRecordModel> jumpers;
   final List<Country> countries;
-  final List<CountryTeam> countryTeams;
+  final List<CountryTeamDbRecord> countryTeams;
 
   GameVariantModel copyWith({
     String? id,
     List<JumperDbRecordModel>? jumpers,
     List<Country>? countries,
-    List<CountryTeam>? countryTeams,
+    List<CountryTeamDbRecord>? countryTeams,
   }) {
     return GameVariantModel(
       id: id ?? this.id,
       jumpers: jumpers ?? List<JumperDbRecordModel>.from(this.jumpers),
       countries: countries ?? List<Country>.from(this.countries),
-      countryTeams: countryTeams ?? List<CountryTeam>.from(this.countryTeams),
+      countryTeams: countryTeams ?? List<CountryTeamDbRecord>.from(this.countryTeams),
     );
   }
 }

@@ -13,7 +13,7 @@ extension SjmSimulationToModel on SjmSimulation {
       saveTime: saveTime,
       mode: mode,
       currentDate: currentDate,
-      chargesCount: chargesCount,
+      traineesCount: traineesCount,
       subteamCountryName: subteamCountryName,
       subteamType: subteamType,
     );
@@ -27,7 +27,7 @@ SjmSimulation sjmSimulationFromModel(SjmSimulationModel model) {
     saveTime: model.saveTime,
     mode: model.mode,
     currentDate: model.currentDate,
-    chargesCount: model.chargesCount,
+    traineesCount: model.traineesCount,
     subteamCountryName: model.subteamCountryName,
     subteamType: model.subteamType,
   );

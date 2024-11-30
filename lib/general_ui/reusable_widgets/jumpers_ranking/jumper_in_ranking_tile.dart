@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
-import 'package:sj_manager/features/career_mode/ui/reusable/jumper/simulation_jumper_image.dart';
+import 'package:sj_manager/features/career_mode/presentation/widgets/jumper/simulation_jumper_image.dart';
 
 class JumperInRankingTile extends StatelessWidget {
   const JumperInRankingTile({

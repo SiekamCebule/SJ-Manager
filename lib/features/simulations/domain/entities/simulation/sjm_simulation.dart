@@ -9,7 +9,7 @@ class SjmSimulation {
     required this.saveTime,
     required this.mode,
     required this.currentDate,
-    required this.chargesCount,
+    required this.traineesCount,
     required this.subteamCountryName,
     required this.subteamType,
   });
@@ -19,7 +19,7 @@ class SjmSimulation {
   final DateTime saveTime;
   final SimulationMode mode;
   final DateTime currentDate;
-  final int? chargesCount;
+  final int? traineesCount;
   final MultilingualString? subteamCountryName;
   final SubteamType? subteamType;
 
@@ -29,7 +29,7 @@ class SjmSimulation {
     DateTime? saveTime,
     SimulationMode? mode,
     DateTime? currentDate,
-    int? chargesCount,
+    int? traineesCount,
     MultilingualString? subteamCountryName,
     SubteamType? subteamType,
   }) {
@@ -39,7 +39,7 @@ class SjmSimulation {
       saveTime: saveTime ?? this.saveTime,
       mode: mode ?? this.mode,
       currentDate: currentDate ?? this.currentDate,
-      chargesCount: chargesCount ?? this.chargesCount,
+      traineesCount: traineesCount ?? this.traineesCount,
       subteamCountryName: subteamCountryName ?? this.subteamCountryName,
       subteamType: subteamType ?? this.subteamType,
     );

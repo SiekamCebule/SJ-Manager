@@ -16,7 +16,7 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/general_utils/db_items_file_system_paths.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/to_embrace/ui/app.dart';
@@ -71,7 +71,7 @@ void main() async {
             SimulationFemaleJumper: 'jumpers_female.json',
             Hill: 'hills.json',
             Country: path.join('countries', 'countries.json'),
-            CountryTeam: path.join('teams', 'country_teams.json'),
+            CountryTeamDbRecord: path.join('teams', 'country_teams.json'),
             Subteam: path.join('teams', 'subteams.json'),
             SimulationSeason: 'seasons.json',
           }),

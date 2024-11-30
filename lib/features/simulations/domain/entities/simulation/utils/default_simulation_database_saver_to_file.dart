@@ -32,9 +32,9 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/general_utils/db_items_file_system_paths.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 import 'package:sj_manager/core/general_utils/file_system.dart';
@@ -58,10 +58,14 @@ class DefaultSimulationDatabaseSaverToFile {
     required SimulationDatabaseModel database,
   }) async {
     _database = database;
-    await _serializeItems(items: database.maleJumpers, itemsType: 'maleJumper');
-    await _serializeItems(items: database.femaleJumpers, itemsType: 'femaleJumper');
+    await _serializeItems(
+        items: database.jumpers.whereType<SimulationMaleJumper>(),
+        itemsType: 'maleJumper');
+    await _serializeItems(
+        items: database.jumpers.whereType<SimulationFemaleJumper>(),
+        itemsType: 'femaleJumper');
     await _serializeItems(items: database.hills, itemsType: 'hill');
-    await _serializeItems(items: await database.countries.getAll(), itemsType: 'country');
+    await _serializeItems(items: database.countries.getAll(), itemsType: 'country');
     await _serializeItems(items: database.countryTeams, itemsType: 'countryTeam');
     await _serializeItems(items: database.seasons, itemsType: 'simulationSeason');
     await _serializeDynamicState();
@@ -74,12 +78,6 @@ class DefaultSimulationDatabaseSaverToFile {
       fileName: 'dynamic_state.json',
     );
     await file.create(recursive: true);
-    final subteamJumpersJson = _database.subteamJumpers.map((subteam, jumperIds) {
-      return MapEntry(
-        '${subteam.type.name}###${idsRepository.id(subteam.parentTeam)}',
-        jumperIds.toList(),
-      );
-    });
     final json = {
       'managerData': {
         'simulationMode': _database.managerData.mode.name,
@@ -132,8 +130,8 @@ class DefaultSimulationDatabaseSaverToFile {
       return pathsRegistry.get<Hill>();
     } else if (type == Country) {
       return pathsRegistry.get<Country>();
-    } else if (type == CountryTeam) {
-      return pathsRegistry.get<CountryTeam>();
+    } else if (type == CountryTeamDbRecord) {
+      return pathsRegistry.get<CountryTeamDbRecord>();
     } else if (type == Subteam) {
       return pathsRegistry.get<Subteam>();
     } else if (type == SimulationSeason) {
@@ -148,7 +146,7 @@ class DefaultSimulationDatabaseSaverToFile {
     'femaleJumper': SimulationFemaleJumper,
     'hill': Hill,
     'country': Country,
-    'countryTeam': CountryTeam,
+    'countryTeam': CountryTeamDbRecord,
     'subteam': Subteam,
     'simulationSeason': SimulationSeason,
   };
@@ -164,7 +162,7 @@ class DefaultSimulationDatabaseSaverToFile {
       return (item) => _serializeHill(item);
     } else if (type == Country) {
       return (item) => _serializeCountry(item);
-    } else if (type == CountryTeam || type == Subteam) {
+    } else if (type == CountryTeamDbRecord || type == Subteam) {
       return (item) => _serializeTeam(item);
     } else if (type == SimulationSeason) {
       return (item) async => await _serializeSeason(item);
@@ -185,7 +183,7 @@ class DefaultSimulationDatabaseSaverToFile {
     return item.toJson();
   }
 
-  Json _serializeTeam(Team item) {
+  Json _serializeTeam(SimulationTeam item) {
     return TeamSerializer(idsRepository: idsRepository).serialize(item);
   }
 

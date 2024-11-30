@@ -7,9 +7,9 @@ class _CountryTeamsGrid extends StatelessWidget {
     required this.onTap,
   });
 
-  final List<CountryTeam> teams;
-  final CountryTeam? selected;
-  final void Function(CountryTeam) onTap;
+  final List<CountryTeamDbRecord> teams;
+  final CountryTeamDbRecord? selected;
+  final void Function(CountryTeamDbRecord) onTap;
 
   @override
   Widget build(BuildContext context) {

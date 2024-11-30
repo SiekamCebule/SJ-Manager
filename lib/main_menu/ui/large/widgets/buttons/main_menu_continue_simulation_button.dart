@@ -155,12 +155,12 @@ class _MainMenuContinueSimulationButtonState
           style: labelTextStyle,
         );
       case SimulationMode.personalCoach:
-        final chargesCount = lastPlayed.chargesCount!;
+        final traineesCount = lastPlayed.traineesCount!;
         iconWidget = const Icon(Symbols.group,
             size: UiMainMenuConstants.continueButtonSimulationInfoIconSize);
-        final text = chargesCount != 0
-            ? '$chargesCount ${translate(context).charges(chargesCount).toLowerCase()}'
-            : translate(context).charges(chargesCount);
+        final text = traineesCount != 0
+            ? '$traineesCount ${translate(context).trainees(traineesCount).toLowerCase()}'
+            : translate(context).trainees(traineesCount);
         labelWidget = Text(
           text,
           style: labelTextStyle,

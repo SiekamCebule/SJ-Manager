@@ -3,15 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:ui' as _i7;
+import 'dart:async' as _i4;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:rxdart/rxdart.dart' as _i2;
-import 'package:shared_preferences/shared_preferences.dart' as _i3;
-import 'package:sj_manager/domain/repository_interfaces/generic/items_repo.dart' as _i4;
-import 'package:sj_manager/features/settings/settings/local_user_settings_repository.dart'
-    as _i5;
-import 'package:sj_manager/to_embrace/ui/theme/app_schemes.dart' as _i6;
+import 'package:mockito/src/dummies.dart' as _i6;
+import 'package:sj_manager/features/app_settings/data/data_sources/shared_prefs_app_settings_data_source.dart'
+    as _i2;
+import 'package:sj_manager/features/app_settings/data/repository/local_app_settings_repository.dart'
+    as _i3;
+import 'package:sj_manager/to_embrace/ui/theme/app_schemes.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -26,8 +26,9 @@ import 'package:sj_manager/to_embrace/ui/theme/app_schemes.dart' as _i6;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeValueStream_0<T1> extends _i1.SmartFake implements _i2.ValueStream<T1> {
-  _FakeValueStream_0(
+class _FakeSharedPrefsAppSettingsDataSource_0 extends _i1.SmartFake
+    implements _i2.SharedPrefsAppSettingsDataSource {
+  _FakeSharedPrefsAppSettingsDataSource_0(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -36,149 +37,59 @@ class _FakeValueStream_0<T1> extends _i1.SmartFake implements _i2.ValueStream<T1
         );
 }
 
-class _FakeType_1 extends _i1.SmartFake implements Type {
-  _FakeType_1(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeSharedPreferences_2 extends _i1.SmartFake implements _i3.SharedPreferences {
-  _FakeSharedPreferences_2(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-/// A class which mocks [ItemsRepo].
+/// A class which mocks [LocalAppSettingsRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockItemsRepo<T> extends _i1.Mock implements _i4.ItemsRepo<T> {
-  MockItemsRepo() {
+class MockLocalAppSettingsRepository extends _i1.Mock
+    implements _i3.LocalAppSettingsRepository {
+  MockLocalAppSettingsRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.ValueStream<List<T>> get items => (super.noSuchMethod(
-        Invocation.getter(#items),
-        returnValue: _FakeValueStream_0<List<T>>(
+  _i2.SharedPrefsAppSettingsDataSource get settingsDataSource =>
+      (super.noSuchMethod(
+        Invocation.getter(#settingsDataSource),
+        returnValue: _FakeSharedPrefsAppSettingsDataSource_0(
           this,
-          Invocation.getter(#items),
+          Invocation.getter(#settingsDataSource),
         ),
-      ) as _i2.ValueStream<List<T>>);
+      ) as _i2.SharedPrefsAppSettingsDataSource);
 
   @override
-  Type get itemsType => (super.noSuchMethod(
-        Invocation.getter(#itemsType),
-        returnValue: _FakeType_1(
+  _i4.Future<_i5.AppColorScheme> get colorScheme => (super.noSuchMethod(
+        Invocation.getter(#colorScheme),
+        returnValue:
+            _i4.Future<_i5.AppColorScheme>.value(_i5.AppColorScheme.blue),
+      ) as _i4.Future<_i5.AppColorScheme>);
+
+  @override
+  _i4.Future<String> get languageCode => (super.noSuchMethod(
+        Invocation.getter(#languageCode),
+        returnValue: _i4.Future<String>.value(_i6.dummyValue<String>(
           this,
-          Invocation.getter(#itemsType),
-        ),
-      ) as Type);
+          Invocation.getter(#languageCode),
+        )),
+      ) as _i4.Future<String>);
 
   @override
-  List<T> get last => (super.noSuchMethod(
-        Invocation.getter(#last),
-        returnValue: <T>[],
-      ) as List<T>);
-
-  @override
-  int get lastLength => (super.noSuchMethod(
-        Invocation.getter(#lastLength),
-        returnValue: 0,
-      ) as int);
-
-  @override
-  List<Object?> get props => (super.noSuchMethod(
-        Invocation.getter(#props),
-        returnValue: <Object?>[],
-      ) as List<Object?>);
-
-  @override
-  void set(List<T>? value) => super.noSuchMethod(
+  _i4.Future<void> setColorScheme(_i5.AppColorScheme? colorScheme) =>
+      (super.noSuchMethod(
         Invocation.method(
-          #set,
-          [value],
+          #setColorScheme,
+          [colorScheme],
         ),
-        returnValueForMissingStub: null,
-      );
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  void dispose() => super.noSuchMethod(
-        Invocation.method(
-          #dispose,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
-}
-
-/// A class which mocks [LocalUserSettingsRepo].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockLocalUserSettingsRepo extends _i1.Mock
-    implements _i5.LocalUserSettingsRepository {
-  MockLocalUserSettingsRepo() {
-    _i1.throwOnMissingStub(this);
-  }
-
-  @override
-  _i3.SharedPreferences get prefs => (super.noSuchMethod(
-        Invocation.getter(#prefs),
-        returnValue: _FakeSharedPreferences_2(
-          this,
-          Invocation.getter(#prefs),
-        ),
-      ) as _i3.SharedPreferences);
-
-  @override
-  _i2.ValueStream<void> get stream => (super.noSuchMethod(
-        Invocation.getter(#stream),
-        returnValue: _FakeValueStream_0<void>(
-          this,
-          Invocation.getter(#stream),
-        ),
-      ) as _i2.ValueStream<void>);
-
-  @override
-  void setAppColorScheme(_i6.AppColorScheme? scheme) => super.noSuchMethod(
-        Invocation.method(
-          #setAppColorScheme,
-          [scheme],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void setAppThemeBrightness(_i7.Brightness? brightness) => super.noSuchMethod(
-        Invocation.method(
-          #setAppThemeBrightness,
-          [brightness],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void setDatabaseEditorTutorialShown(bool? shown) => super.noSuchMethod(
-        Invocation.method(
-          #setDatabaseEditorTutorialShown,
-          [shown],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  void setLanguageCode(String? code) => super.noSuchMethod(
+  _i4.Future<void> setLanguageCode(String? languageCode) => (super.noSuchMethod(
         Invocation.method(
           #setLanguageCode,
-          [code],
+          [languageCode],
         ),
-        returnValueForMissingStub: null,
-      );
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 }

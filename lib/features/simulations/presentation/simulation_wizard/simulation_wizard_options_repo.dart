@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:sj_manager/core/core_classes/game_variant_start_date.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam_type.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';
 import 'package:sj_manager/features/game_variants/domain/entities/game_variant.dart';
@@ -11,7 +11,7 @@ class SimulationWizardOptions with ChangeNotifier {
   SimulationMode? _mode;
   GameVariantStartDate? _startDate;
   GameVariant? _gameVariant;
-  CountryTeam? _team;
+  CountryTeamDbRecord? _team;
   SubteamType? _subteamType;
   bool? _archiveEndedSeasonResults;
   bool? _showJumperSkills;
@@ -43,8 +43,8 @@ class SimulationWizardOptions with ChangeNotifier {
     }
   }
 
-  CountryTeam? get team => _team;
-  set team(CountryTeam? value) {
+  CountryTeamDbRecord? get team => _team;
+  set team(CountryTeamDbRecord? value) {
     if (_team != value) {
       _team = value;
       notifyListeners();

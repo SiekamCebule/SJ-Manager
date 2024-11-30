@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:sj_manager/core/core_classes/country/country.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 import 'package:sj_manager/features/game_variants/data/models/game_variant_database.dart/jumper/jumper_db_record_model.dart';
 
 import 'package:sj_manager/features/game_variants/data/models/game_variant_model.dart';
 import 'package:sj_manager/core/general_utils/json/countries.dart';
 import 'package:sj_manager/core/general_utils/json/db_items_json.dart';
-import 'package:sj_manager/core/general_utils/json/simulation_db_loading/team_loader.dart';
 import 'package:sj_manager/core/general_utils/file_system.dart';
 
 abstract interface class LocalGameVariantsDataSource {
@@ -66,7 +66,7 @@ class LocalGameVariantsDataSourceImpl implements LocalGameVariantsDataSource {
     );
     final countryTeams = await loadItemsListFromJsonFile(
       file: fileInDirectory(variantDirectory, countryTeamsFileName),
-      fromJson: (json) => loadCountryTeamFromJson(json,
+      fromJson: (json) => CountryTeamDbRecord.fromJson(json,
           countryLoader: JsonCountryLoaderCustom(getCountry: countryByCode)),
     );
 

@@ -4,7 +4,7 @@ import 'package:sj_manager/to_embrace/classification/default_classification_rule
 import 'package:sj_manager/to_embrace/competition/competition.dart';
 import 'package:sj_manager/to_embrace/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
 class DefaultClassificationRulesParser
@@ -66,8 +66,8 @@ class DefaultClassificationRulesParser
     }
 
     DefaultTeamClassificationRules createTeam() {
-      if (classificationScoreCreator is ClassificationScoreCreator<Team,
-          DefaultClassificationScoreCreatingContext<Team>>) {
+      if (classificationScoreCreator is ClassificationScoreCreator<SimulationTeam,
+          DefaultClassificationScoreCreatingContext<SimulationTeam>>) {
         return DefaultTeamClassificationRules(
           classificationScoreCreator: classificationScoreCreator,
           scoringType: scoringType,

@@ -5,7 +5,7 @@ class _TeamScreen extends StatefulWidget {
     required this.onChange,
   });
 
-  final void Function(CountryTeam? country) onChange;
+  final void Function(CountryTeamDbRecord? country) onChange;
 
   @override
   State<_TeamScreen> createState() => _TeamScreenState();
@@ -13,12 +13,12 @@ class _TeamScreen extends StatefulWidget {
 
 class _TeamScreenState extends State<_TeamScreen> {
   // Zrobić dispose() na bazie danych - tutaj lub z poziomu zapisanych opcji wizarda
-  late TeamPreviewCreator _teamPreviewCreator;
+  late CountryTeamPreviewCreator _teamPreviewCreator;
 
   var _selectedSex = Sex.male;
-  CountryTeam? _selectedTeam;
-  late List<CountryTeam> _maleTeams;
-  late List<CountryTeam> _femaleTeams;
+  CountryTeamDbRecord? _selectedTeam;
+  late List<CountryTeamDbRecord> _maleTeams;
+  late List<CountryTeamDbRecord> _femaleTeams;
   late final StreamSubscription _dbChangesSubscription;
 
   @override
@@ -29,7 +29,7 @@ class _TeamScreenState extends State<_TeamScreen> {
     _teamPreviewCreator = DefaultCountryTeamPreviewCreator(
       gameVariant: variant,
       currentDate: date.date,
-    );
+    ).call();
     context.read<SimulationWizardOptions>().addListener(() {
       _setUpMaleAndFemaleTeams();
     });
@@ -42,11 +42,11 @@ class _TeamScreenState extends State<_TeamScreen> {
     final variant = context.read<SimulationWizardOptions>().gameVariant!;
     setState(() {
       _maleTeams = variant.countryTeams
-          .cast<CountryTeam>()
+          .cast<CountryTeamDbRecord>()
           .where((team) => team.sex == Sex.male)
           .toList();
       _femaleTeams = variant.countryTeams
-          .cast<CountryTeam>()
+          .cast<CountryTeamDbRecord>()
           .where((team) => team.sex == Sex.female)
           .toList();
     });

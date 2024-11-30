@@ -5,11 +5,11 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings_positions_map_creator/standings_positions_creator.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/competition_team.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 
 Standings<JumperDbRecord, CompetitionJumperScoreDetails>
     createIndividualStandingsForTeamCompetition({
-  required Standings<Team, CompetitionTeamScoreDetails> teamStandings,
+  required Standings<SimulationTeam, CompetitionTeamScoreDetails> teamStandings,
   required StandingsPositionsCreator<CompetitionJumperScore> positionsCreator,
 }) {
   final individualStandings = Standings<JumperDbRecord, CompetitionJumperScoreDetails>(
@@ -74,7 +74,7 @@ E? teamOfJumperInStandings<E extends CompetitionTeam>(
   return null;
 }
 
-CompetitionTeam<T> findCompetitionTeam<T extends Team>({
+CompetitionTeam<T> findCompetitionTeam<T extends SimulationTeam>({
   required T parentTeam,
   required Competition<CompetitionTeam, dynamic> competition,
 }) {

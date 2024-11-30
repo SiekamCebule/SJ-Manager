@@ -6,7 +6,6 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/stats/jumper_attribute_history.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/stats/jumper_stats.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/reports/team_reports.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_database.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/simulation_season.dart';
@@ -18,8 +17,8 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/core/psyche/psyche_utils.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/personal_coach_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/personal_coach_team.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 import 'package:sj_manager/core/general_utils/id_generator.dart';
@@ -34,7 +33,7 @@ class DefaultSimulationDatabaseCreator {
   late IdsRepository<String> _idsRepo;
   late List<SimulationJumper> _jumpers;
   late List<Hill> _hills;
-  late List<CountryTeam> _countryTeams;
+  late List<CountryTeamDbRecord> _countryTeams;
   late CountriesRepository _countries;
   late List<SimulationSeason> _seasons;
 
@@ -42,7 +41,8 @@ class DefaultSimulationDatabaseCreator {
     final mode = options.mode!;
     _idsRepo = IdsRepository();
     _hills = List.of(options.gameVariant!.hills);
-    _countryTeams = List.of(options.gameVariant!.countryTeams);
+    _countryTeams = options.gameVariant!.countryTeams
+        .map((countryTeamDbRecord) => countryTeamDbRecord.toSimulationCountryTeam());
     _countries = InMemoryCountriesRepository(countries: options.gameVariant!.countries);
     _seasons = List.of([options.gameVariant!.season]);
     const attributeHistoryLimit =
@@ -56,6 +56,9 @@ class DefaultSimulationDatabaseCreator {
           name: dbRecord.name,
           surname: dbRecord.surname,
           country: dbRecord.country,
+          countryTeam: _countryTeams
+              .singleWhere((countryTeam) => countryTeam.country == dbRecord.country),
+              subteam: ,
           sex: dbRecord.sex,
           takeoffQuality: dbRecord.skills.takeoffQuality,
           flightQuality: dbRecord.skills.flightQuality,
@@ -90,17 +93,9 @@ class DefaultSimulationDatabaseCreator {
     ).toList();
     await _setUpIdsRepo();
     final personalCoachTeam = options.mode! == SimulationMode.personalCoach
-        ? PersonalCoachTeam(jumpers: [])
+        ? PersonalCoachTeam(jumpers: [], reports: null)
         : null;
     _idsRepo.register(personalCoachTeam, id: idGenerator.generate());
-    const defaultTeamReports = TeamReports(
-      generalMoraleRating: null,
-      generalJumpsRating: null,
-      generalTrainingRating: null,
-    );
-    final teamReports = {
-      if (personalCoachTeam != null) _idsRepo.id(personalCoachTeam): defaultTeamReports,
-    };
     final userSubteam = mode == SimulationMode.classicCoach
         ? Subteam(
             parentTeam: options.team!,
@@ -120,7 +115,6 @@ class DefaultSimulationDatabaseCreator {
       jumpers: _jumpers,
       hills: _hills,
       countryTeams: _countryTeams,
-      subteamJumpers: {},
       countries: _countries,
       seasons: _seasons,
       idsRepository: _idsRepo,
@@ -132,7 +126,6 @@ class DefaultSimulationDatabaseCreator {
             isCompleted: false,
           )
       ],
-      teamReports: teamReports,
     );
   }
 

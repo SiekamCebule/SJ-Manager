@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
 import 'package:sj_manager/core/mixins/country_mixin.dart';
 import 'package:sj_manager/core/mixins/name_and_surname_mixin.dart';
 import 'package:sj_manager/core/mixins/sex_mixin.dart';
@@ -10,6 +9,7 @@ import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/enti
 import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_config.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/reports/jumper_reports.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/stats/jumper_stats.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/country_team.dart';
 
 class SimulationJumper with EquatableMixin, NameAndSurnameMixin, CountryMixin, SexMixin {
   SimulationJumper({

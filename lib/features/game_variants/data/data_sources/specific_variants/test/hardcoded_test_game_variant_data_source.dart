@@ -42,7 +42,7 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 
 class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSource {
   late CountriesRepository _countriesRepo;
@@ -330,7 +330,7 @@ class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSour
             competition.labels.contains(DefaultCompetitionType.competition));
         final ncModifiers = {
           for (var ncCompetition in ncCompetitions)
-            if (ncCompetition is Competition<Team, Standings> &&
+            if (ncCompetition is Competition<SimulationTeam, Standings> &&
                 ncCompetition.rules.competitionRules.rounds
                         .cast<DefaultTeamCompetitionRoundRules>()
                         .first

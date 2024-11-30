@@ -15,7 +15,7 @@ import 'package:sj_manager/core/core_classes/country_team/country_team_facts_mod
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/core/core_classes/sex.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/competition_team.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 
 import 'competition_rules_utilities_test.mocks.dart';
 
@@ -84,7 +84,7 @@ void main() {
     final context = MockTeamCompetitionScoreCreatingContext();
     final germany = Country.monolingual(code: 'de', language: 'en', name: 'Germany');
     final team = CompetitionTeam(
-      parentTeam: CountryTeam(
+      parentTeam: CountryTeamDbRecord(
         facts: const CountryTeamFactsModel.empty(),
         sex: Sex.male,
         country: germany,

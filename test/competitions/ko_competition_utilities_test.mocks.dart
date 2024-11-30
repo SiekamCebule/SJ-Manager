@@ -6,6 +6,12 @@
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i10;
 import 'package:sj_manager/core/core_classes/hill/hill.dart' as _i6;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series.dart'
+    as _i2;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/score_details.dart'
+    as _i4;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart'
+    as _i3;
 import 'package:sj_manager/to_embrace/competition/competition.dart' as _i5;
 import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.dart/concrete/default.dart'
     as _i8;
@@ -13,12 +19,6 @@ import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.d
     as _i7;
 import 'package:sj_manager/to_embrace/competition/rules/utils/ko_round_advancement_determinator/concrete/n_best.dart'
     as _i9;
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series.dart'
-    as _i2;
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/score_details.dart'
-    as _i4;
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart'
-    as _i3;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -83,14 +83,15 @@ class MockKoGroupsCreatingContext<T> extends _i1.Mock
       ) as _i2.EventSeries);
 
   @override
-  _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>> get competition =>
-      (super.noSuchMethod(
-        Invocation.getter(#competition),
-        returnValue: _FakeCompetition_1<T, _i3.Standings<dynamic, _i4.ScoreDetails>>(
-          this,
-          Invocation.getter(#competition),
-        ),
-      ) as _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>>);
+  _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>>
+      get competition => (super.noSuchMethod(
+            Invocation.getter(#competition),
+            returnValue:
+                _FakeCompetition_1<T, _i3.Standings<dynamic, _i4.ScoreDetails>>(
+              this,
+              Invocation.getter(#competition),
+            ),
+          ) as _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>>);
 
   @override
   int get currentRound => (super.noSuchMethod(
@@ -145,14 +146,15 @@ class MockClassicKoGroupsCreatingContext<T> extends _i1.Mock
       ) as _i2.EventSeries);
 
   @override
-  _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>> get competition =>
-      (super.noSuchMethod(
-        Invocation.getter(#competition),
-        returnValue: _FakeCompetition_1<T, _i3.Standings<dynamic, _i4.ScoreDetails>>(
-          this,
-          Invocation.getter(#competition),
-        ),
-      ) as _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>>);
+  _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>>
+      get competition => (super.noSuchMethod(
+            Invocation.getter(#competition),
+            returnValue:
+                _FakeCompetition_1<T, _i3.Standings<dynamic, _i4.ScoreDetails>>(
+              this,
+              Invocation.getter(#competition),
+            ),
+          ) as _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>>);
 
   @override
   int get currentRound => (super.noSuchMethod(
@@ -214,14 +216,15 @@ class MockRandomKoGroupsCreatingContext<T> extends _i1.Mock
       ) as _i2.EventSeries);
 
   @override
-  _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>> get competition =>
-      (super.noSuchMethod(
-        Invocation.getter(#competition),
-        returnValue: _FakeCompetition_1<T, _i3.Standings<dynamic, _i4.ScoreDetails>>(
-          this,
-          Invocation.getter(#competition),
-        ),
-      ) as _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>>);
+  _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>>
+      get competition => (super.noSuchMethod(
+            Invocation.getter(#competition),
+            returnValue:
+                _FakeCompetition_1<T, _i3.Standings<dynamic, _i4.ScoreDetails>>(
+              this,
+              Invocation.getter(#competition),
+            ),
+          ) as _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>>);
 
   @override
   int get currentRound => (super.noSuchMethod(
@@ -283,14 +286,15 @@ class MockKoGroupsPotsCreatingContext<T> extends _i1.Mock
       ) as _i2.EventSeries);
 
   @override
-  _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>> get competition =>
-      (super.noSuchMethod(
-        Invocation.getter(#competition),
-        returnValue: _FakeCompetition_1<T, _i3.Standings<dynamic, _i4.ScoreDetails>>(
-          this,
-          Invocation.getter(#competition),
-        ),
-      ) as _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>>);
+  _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>>
+      get competition => (super.noSuchMethod(
+            Invocation.getter(#competition),
+            returnValue:
+                _FakeCompetition_1<T, _i3.Standings<dynamic, _i4.ScoreDetails>>(
+              this,
+              Invocation.getter(#competition),
+            ),
+          ) as _i5.Competition<T, _i3.Standings<dynamic, _i4.ScoreDetails>>);
 
   @override
   int get currentRound => (super.noSuchMethod(

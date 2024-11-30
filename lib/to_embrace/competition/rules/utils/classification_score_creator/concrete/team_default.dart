@@ -7,10 +7,10 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/utils/standings_utils.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/competition_team.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 
 class DefaultTeamClassificationScoreCreator extends DefaultClassificationScoreCreator<
-    Team, DefaultTeamClassificationScoreCreatingContext> {
+    SimulationTeam, DefaultTeamClassificationScoreCreatingContext> {
   @override
   void setUpCompetitionScores() {
     final classificationRules =
@@ -22,7 +22,7 @@ class DefaultTeamClassificationScoreCreator extends DefaultClassificationScoreCr
             competitionScores.add(jumperScore);
           }
         }
-      } else if (competition is Competition<Team, Standings>) {
+      } else if (competition is Competition<SimulationTeam, Standings>) {
         final score =
             competition.standings!.scoreOf(context.entity) as CompetitionTeamScore?;
         if (score != null) {

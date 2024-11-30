@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 
-class CompetitionTeam<T extends Team> extends Team with EquatableMixin {
+class CompetitionTeam<T extends SimulationTeam> with EquatableMixin {
   const CompetitionTeam({
     required this.parentTeam,
     required this.jumpers,

@@ -2,12 +2,12 @@ import 'package:sj_manager/core/general_utils/json/simulation_db_saving/simulati
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
 import 'package:sj_manager/core/general_utils/json/utils/enums.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/competition_team.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
-class TeamSerializer implements SimulationDbPartSerializer<Team> {
+class TeamSerializer implements SimulationDbPartSerializer<SimulationTeam> {
   const TeamSerializer({
     required this.idsRepository,
   });
@@ -15,8 +15,8 @@ class TeamSerializer implements SimulationDbPartSerializer<Team> {
   final IdsRepository idsRepository;
 
   @override
-  Json serialize(Team team) {
-    if (team is CountryTeam) {
+  Json serialize(SimulationTeam team) {
+    if (team is CountryTeamDbRecord) {
       return _serializeCountryTeam(team);
     } else if (team is CompetitionTeam) {
       return _serializeCompetitionTeam(team);
@@ -27,7 +27,7 @@ class TeamSerializer implements SimulationDbPartSerializer<Team> {
     }
   }
 
-  Json _serializeCountryTeam(CountryTeam team) {
+  Json _serializeCountryTeam(CountryTeamDbRecord team) {
     final subteamsJson =
         team.facts.subteams.map((subteamType) => subteamType.name).toList();
     return {

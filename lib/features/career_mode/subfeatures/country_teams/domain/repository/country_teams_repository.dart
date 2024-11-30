@@ -1,4 +1,4 @@
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/country_team.dart';
 
 abstract interface class CountryTeamsRepository {
   Future<Iterable<CountryTeam>> getAll();

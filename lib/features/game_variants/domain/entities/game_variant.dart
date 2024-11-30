@@ -5,7 +5,7 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/core/general_utils/multilingual_string.dart';
 
@@ -32,7 +32,7 @@ class GameVariant {
   final List<JumperDbRecord> jumpers;
   final List<Hill> hills;
   final List<Country> countries;
-  final List<CountryTeam> countryTeams;
+  final List<CountryTeamDbRecord> countryTeams;
   final SimulationSeason season;
   final List<GameVariantStartDate> startDates;
   final Map<SimulationActionType, DateTime> actionDeadlines;
@@ -46,7 +46,7 @@ class GameVariant {
     List<JumperDbRecord>? jumpers,
     List<Hill>? hills,
     List<Country>? countries,
-    List<CountryTeam>? countryTeams,
+    List<CountryTeamDbRecord>? countryTeams,
     List<Subteam>? subteams,
     SimulationSeason? season,
     List<GameVariantStartDate>? startDates,
@@ -61,7 +61,7 @@ class GameVariant {
       jumpers: jumpers ?? List<JumperDbRecord>.from(this.jumpers),
       hills: hills ?? List<Hill>.from(this.hills),
       countries: countries ?? List<Country>.from(this.countries),
-      countryTeams: countryTeams ?? List<CountryTeam>.from(this.countryTeams),
+      countryTeams: countryTeams ?? List<CountryTeamDbRecord>.from(this.countryTeams),
       season: season ?? this.season,
       startDates: startDates ?? List<GameVariantStartDate>.from(this.startDates),
       actionDeadlines: actionDeadlines ??

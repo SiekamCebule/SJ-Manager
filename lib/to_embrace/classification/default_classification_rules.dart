@@ -5,7 +5,7 @@ import 'package:sj_manager/to_embrace/competition/rules/utils/classification_sco
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/classification_score_details.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 
 abstract class ClassificationRules<E> {
   const ClassificationRules({
@@ -64,7 +64,7 @@ class DefaultIndividualClassificationRules
       ];
 }
 
-class DefaultTeamClassificationRules extends DefaultClassificationRules<Team> {
+class DefaultTeamClassificationRules extends DefaultClassificationRules<SimulationTeam> {
   const DefaultTeamClassificationRules({
     required super.classificationScoreCreator,
     required super.scoringType,

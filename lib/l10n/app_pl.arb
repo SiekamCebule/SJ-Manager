@@ -175,7 +175,7 @@
     "classicCoach": "Klasyczny trener",
     "personalCoach": "Trener personalny",
     "observer": "Obserwator",
-    "charges": "{howMany, plural, =0 {Brak podopiecznych} =1 {Podopieczny} few {Podopiecznych} many {Podopiecznych} other {Podopiecznego}}",
+    "trainees": "{howMany, plural, =0 {Brak podopiecznych} =1 {Podopieczny} few {Podopiecznych} many {Podopiecznych} other {Podopiecznego}}",
     "jumperMoraleExcellent": "Wyśmienite morale",
     "jumperMoraleVeryGood": "Bardzo dobre morale",
     "jumperMoraleGood": "Dobre morale",

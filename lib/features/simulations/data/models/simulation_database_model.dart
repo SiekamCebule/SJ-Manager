@@ -4,9 +4,9 @@ import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entit
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/manager_data/simulation_manager_data.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/simulation_season.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/reports/team_reports.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/team_reports.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
@@ -19,11 +19,9 @@ class SimulationDatabaseModel with EquatableMixin {
     required this.hills,
     required this.countries,
     required this.countryTeams,
-    required this.subteamJumpers,
     required this.seasons,
     required this.idsRepository,
     required this.actions,
-    required this.teamReports,
   });
 
   final SimulationManagerData managerData;
@@ -33,14 +31,10 @@ class SimulationDatabaseModel with EquatableMixin {
   final List<SimulationJumper> jumpers;
   final List<Hill> hills;
   final CountriesRepository countries;
-  final List<CountryTeam> countryTeams;
+  final List<CountryTeamDbRecord> countryTeams;
   final List<SimulationSeason> seasons;
   final IdsRepository<String> idsRepository;
-
   final List<SimulationAction> actions;
-
-  final Map<String, TeamReports> teamReports;
-  final Map<Subteam, Iterable<String>> subteamJumpers;
 
   SimulationDatabaseModel copyWith({
     SimulationManagerData? managerData,
@@ -49,7 +43,7 @@ class SimulationDatabaseModel with EquatableMixin {
     List<SimulationJumper>? jumpers,
     List<Hill>? hills,
     CountriesRepository? countries,
-    List<CountryTeam>? countryTeams,
+    List<CountryTeamDbRecord>? countryTeams,
     Map<Subteam, Iterable<String>>? subteamJumpers,
     List<SimulationSeason>? seasons,
     IdsRepository<String>? idsRepository,
@@ -64,11 +58,9 @@ class SimulationDatabaseModel with EquatableMixin {
       hills: hills ?? this.hills,
       countries: countries ?? this.countries,
       countryTeams: countryTeams ?? this.countryTeams,
-      subteamJumpers: subteamJumpers ?? this.subteamJumpers,
       seasons: seasons ?? this.seasons,
       idsRepository: idsRepository ?? this.idsRepository,
       actions: actions ?? this.actions,
-      teamReports: teamReports ?? this.teamReports,
     );
   }
 
@@ -81,10 +73,8 @@ class SimulationDatabaseModel with EquatableMixin {
         hills,
         countries,
         countryTeams,
-        subteamJumpers,
         seasons,
         idsRepository,
         actions,
-        teamReports
       ];
 }

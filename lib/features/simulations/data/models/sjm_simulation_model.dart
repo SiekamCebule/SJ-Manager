@@ -10,7 +10,7 @@ class SjmSimulationModel {
     required this.saveTime,
     required this.mode,
     required this.currentDate,
-    required this.chargesCount,
+    required this.traineesCount,
     required this.subteamCountryName,
     required this.subteamType,
   });
@@ -20,7 +20,7 @@ class SjmSimulationModel {
   final DateTime saveTime;
   final SimulationMode mode;
   final DateTime currentDate;
-  final int? chargesCount;
+  final int? traineesCount;
   final MultilingualString? subteamCountryName;
   final SubteamType? subteamType;
 
@@ -31,7 +31,7 @@ class SjmSimulationModel {
       'saveTime': saveTime.toIso8601String(),
       'mode': mode,
       'currentDate': currentDate.toString(),
-      'chargesCount': chargesCount,
+      'traineesCount': traineesCount,
       'subteamCountryName': subteamCountryName?.toJson(),
       'subteamType': subteamType?.name,
     };
@@ -44,7 +44,7 @@ class SjmSimulationModel {
         saveTime: DateTime.parse(json['saveTime'] as String),
         mode: SimulationMode.values.firstWhere((mode) => mode.name == json['mode']),
         currentDate: DateTime.parse(json['currentDate']),
-        chargesCount: json['chargesCount'],
+        traineesCount: json['traineesCount'],
         subteamCountryName: MultilingualString.fromJson(json['subteamCountryName']),
         subteamType: SubteamType.values
             .singleWhere((subteamType) => subteamType.name == json['subteamType']));
@@ -56,7 +56,7 @@ class SjmSimulationModel {
     DateTime? saveTime,
     SimulationMode? mode,
     DateTime? currentDate,
-    int? chargesCount,
+    int? traineesCount,
     MultilingualString? subteamCountryName,
     SubteamType? subteamType,
   }) {
@@ -66,7 +66,7 @@ class SjmSimulationModel {
       saveTime: saveTime ?? this.saveTime,
       mode: mode ?? this.mode,
       currentDate: currentDate ?? this.currentDate,
-      chargesCount: chargesCount ?? this.chargesCount,
+      traineesCount: traineesCount ?? this.traineesCount,
       subteamCountryName: subteamCountryName ?? this.subteamCountryName,
       subteamType: subteamType ?? this.subteamType,
     );

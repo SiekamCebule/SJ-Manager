@@ -1,8 +1,8 @@
 import 'package:sj_manager/features/career_mode/subfeatures/manager_data/domain/repository/simulation_manager_data_repository.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/repository/subteams_repository.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/team_reports/domain/repository/team_reports_repository.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/reports/team_reports.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/team_reports.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 
 class GetTeamReportsMapUseCase {
   GetTeamReportsMapUseCase({
@@ -15,7 +15,7 @@ class GetTeamReportsMapUseCase {
   final SubteamsRepository subteamsRepository;
   final SimulationManagerDataRepository managerDataRepository;
 
-  Future<Map<Team, TeamReports>> call() async {
+  Future<Map<SimulationTeam, TeamReports>> call() async {
     final subteams = await subteamsRepository.getAll();
     final managerData = await managerDataRepository.get();
     final personalCoachTeam = managerData.personalCoachTeam;

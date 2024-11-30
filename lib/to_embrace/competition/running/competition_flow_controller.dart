@@ -1,7 +1,7 @@
 import 'package:sj_manager/to_embrace/competition/running/competition_start_list_repository.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 
 abstract class CompetitionFlowController<E> {
   CompetitionFlowController({
@@ -27,7 +27,8 @@ abstract class IndividualCompetitionFlowController
   });
 }
 
-abstract class TeamCompetitionFlowController extends CompetitionFlowController<Team> {
+abstract class TeamCompetitionFlowController
+    extends CompetitionFlowController<SimulationTeam> {
   TeamCompetitionFlowController({
     required super.rules,
     required super.startlist,

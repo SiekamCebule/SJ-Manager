@@ -10,7 +10,6 @@ import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumpe
 import 'package:sj_manager/features/database_editor/presentation/pages/database_editor_page.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series_setup.dart';
 import 'package:sj_manager/core/core_classes/country/country.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team_facts_model.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/core/core_classes/hill/hill_profile_type.dart';
 import 'package:sj_manager/core/core_classes/hill/jumps_variability.dart';
@@ -19,8 +18,8 @@ import 'package:sj_manager/core/core_classes/hill/typical_wind_direction.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/core/psyche/personalities.dart';
 import 'package:sj_manager/core/core_classes/sex.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 import 'package:sj_manager/to_embrace/ui/app.dart';
 import 'package:sj_manager/to_embrace/ui/database_item_editors/fields/my_text_field.dart';
 import 'package:sj_manager/to_embrace/ui/database_item_editors/hill_editor.dart';
@@ -130,35 +129,35 @@ void main() {
     late Widget appWidget;
 
     setUpAll(() {
-      final teamsRepo = MockItemsRepo<Team>();
-      when(teamsRepo.itemsType).thenReturn(Team);
+      final teamsRepo = MockItemsRepo<SimulationTeam>();
+      when(teamsRepo.itemsType).thenReturn(SimulationTeam);
       when(teamsRepo.last).thenReturn([
-        CountryTeam(
-          facts: const CountryTeamFactsModel(
+        CountryTeamDbRecord(
+          facts: const CountryTeamFactsDbRecord(
               stars: 5, record: null, subteams: {}, limitInSubteam: {}),
           sex: Sex.male,
           country: germany,
         ),
-        CountryTeam(
-          facts: const CountryTeamFactsModel(
+        CountryTeamDbRecord(
+          facts: const CountryTeamFactsDbRecord(
               stars: 3, record: null, subteams: {}, limitInSubteam: {}),
           sex: Sex.female,
           country: switzerland,
         ),
-        CountryTeam(
-          facts: const CountryTeamFactsModel(
+        CountryTeamDbRecord(
+          facts: const CountryTeamFactsDbRecord(
               stars: 4, record: null, subteams: {}, limitInSubteam: {}),
           sex: Sex.male,
           country: switzerland,
         ),
-        CountryTeam(
-          facts: const CountryTeamFactsModel(
+        CountryTeamDbRecord(
+          facts: const CountryTeamFactsDbRecord(
               stars: 5, record: null, subteams: {}, limitInSubteam: {}),
           sex: Sex.female,
           country: slovenia,
         ),
-        CountryTeam(
-          facts: const CountryTeamFactsModel(
+        CountryTeamDbRecord(
+          facts: const CountryTeamFactsDbRecord(
               stars: 5, record: null, subteams: {}, limitInSubteam: {}),
           sex: Sex.male,
           country: slovenia,

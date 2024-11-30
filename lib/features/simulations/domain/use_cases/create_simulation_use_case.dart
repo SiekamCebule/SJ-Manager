@@ -42,7 +42,7 @@ class CreateSimulationUseCase {
       saveTime: DateTime.now(),
       mode: options.mode!,
       currentDate: options.startDate!.date,
-      chargesCount: options.mode! == SimulationMode.personalCoach ? 0 : null,
+      traineesCount: options.mode! == SimulationMode.personalCoach ? 0 : null,
       subteamCountryName: options.team?.country.multilingualName,
       subteamType: options.subteamType,
     );

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:sj_manager/features/game_variants/domain/entities/game_variant.dart';
 import 'package:sj_manager/features/game_variants/presentation/bloc/game_variant_cubit.dart';
 import 'package:sj_manager/core/simulation_wizard/simulation_wizard_screen_type.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/country_team.dart';
 import 'package:sj_manager/features/simulations/presentation/bloc/simulation_wizard/simulation_wizard_navigation_cubit.dart';
 import 'package:sj_manager/features/simulations/presentation/bloc/simulation_wizard/simulation_wizard_navigation_state.dart';
 import 'package:sj_manager/l10n/helpers.dart';
@@ -19,11 +21,10 @@ import 'package:sj_manager/core/core_classes/game_variant_start_date.dart';
 import 'package:sj_manager/core/general_utils/game_variants_io_utils.dart';
 import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/core_classes/sex.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
+import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';
 import 'package:sj_manager/features/simulations/presentation/simulation_wizard/simulation_wizard_options_repo.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam_type.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
 import 'package:sj_manager/core/country_flags/country_flags_repository.dart';
 import 'package:sj_manager/core/country_flags/local_storage_country_flags_repo.dart';
 import 'package:sj_manager/to_embrace/ui/database_item_editors/fields/my_checkbox_list_tile_field.dart';
@@ -40,7 +41,7 @@ import 'package:sj_manager/features/simulations/presentation/simulation_wizard/w
 import 'package:sj_manager/core/general_utils/id_generator.dart';
 import 'package:sj_manager/core/general_utils/dialogs.dart';
 import 'package:sj_manager/core/career_mode/career_mode_utils/team_preview_creator/default_team_preview_creator.dart';
-import 'package:sj_manager/core/career_mode/career_mode_utils/team_preview_creator/team_preview_creator.dart';
+import 'package:sj_manager/core/career_mode/career_mode_utils/team_preview_creator/country_team_preview_creator.dart';
 import 'package:path/path.dart' as path;
 
 part '__mode_screen.dart';

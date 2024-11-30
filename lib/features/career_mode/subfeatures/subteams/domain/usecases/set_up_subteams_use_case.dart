@@ -6,10 +6,10 @@ import 'package:sj_manager/features/career_mode/subfeatures/manager_data/domain/
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/repository/subteams_repository.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action_type.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam_type.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/country_team.dart';
 
 class SetUpSubteamsUseCase {
   SetUpSubteamsUseCase({
@@ -58,20 +58,18 @@ class SetUpSubteamsUseCase {
     );
     final subteamJumpers = <SubteamType, Iterable<SimulationJumper>>{};
 
-    for (final subteamType in SubteamType.values) {
-      if (countryTeam.facts.subteams.contains(subteamType)) {
-        if (availableJumpers.isEmpty) {
-          return subteamJumpers;
-        }
-        final limit = countryTeam.facts.limitInSubteam[subteamType]!;
-        const algorithm = DefaultPartialAppointmentsAlgorithm();
-        final chosenJumpers = algorithm.chooseBestJumpers(
-          source: availableJumpers,
-          limit: limit,
-        );
-        subteamJumpers[subteamType] = chosenJumpers;
-        availableJumpers = availableJumpers.toSet().difference(chosenJumpers.toSet());
+    for (final subteam in countryTeam.subteams) {
+      if (availableJumpers.isEmpty) {
+        return subteamJumpers;
       }
+      final limit = countryTeam.limitInSubteam[subteam.type]!;
+      const algorithm = DefaultPartialAppointmentsAlgorithm();
+      final chosenJumpers = algorithm.chooseBestJumpers(
+        source: availableJumpers,
+        limit: limit,
+      );
+      subteamJumpers[subteam.type] = chosenJumpers;
+      availableJumpers = availableJumpers.toSet().difference(chosenJumpers.toSet());
     }
 
     return subteamJumpers;

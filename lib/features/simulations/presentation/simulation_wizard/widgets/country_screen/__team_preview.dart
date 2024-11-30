@@ -5,11 +5,11 @@ class _TeamPreview extends StatelessWidget {
     required this.team,
   });
 
-  final Team team;
+  final CountryTeamDbRecord team;
 
   @override
   Widget build(BuildContext context) {
-    final previewCreator = context.read<TeamPreviewCreator>();
+    final previewCreator = context.read<CountryTeamPreviewCreator>();
 
     final record = previewCreator.record(team);
 
@@ -32,7 +32,7 @@ class _TeamPreview extends StatelessWidget {
       child: Column(
         children: [
           const Gap(15),
-          if (team is CountryTeam) CountryTitle(country: (team as CountryTeam).country),
+          CountryTitle(country: team.country),
           const Gap(15),
           PreviewStatTexts(
             description: 'Poziom: ',

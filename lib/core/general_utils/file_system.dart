@@ -14,7 +14,7 @@ import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/core/general_utils/db_items_file_system_paths.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/team.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 
 class PlarformSpecificPathsCache {
   PlarformSpecificPathsCache();
@@ -125,7 +125,7 @@ bool directoryIsValidForDatabase(BuildContext context, Directory directory) {
     fileInDirectory(directory, dbRegistry.get<EventSeriesSetup>()).path,
     fileInDirectory(directory, dbRegistry.get<EventSeriesCalendarPreset>()).path,
     fileInDirectory(directory, dbRegistry.get<DefaultCompetitionRulesPreset>()).path,
-    fileInDirectory(directory, dbRegistry.get<Team>()).path,
+    fileInDirectory(directory, dbRegistry.get<SimulationTeam>()).path,
     fileInDirectory(directory, dbRegistry.get<Country>()).path,
   };
 
