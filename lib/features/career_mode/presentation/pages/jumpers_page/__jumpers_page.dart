@@ -152,9 +152,10 @@ class _JumpersListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabase>();
-    final helper = SimulationDatabaseHelper(database: database);
-    final jumpers = database.jumpers.where((jumper) => jumper.sex == selectedSex.toSex());
+    final managerState = context.watch<ManagerCubit>().state as ManagerDefault;
+    final jumpersState = context.watch<JumpersCubit>().state as JumpersDefault;
+    final jumpers =
+        jumpersState.jumpers.where((jumper) => jumper.sex == selectedSex.toSex());
     final filter = NameSurnameFilter<SimulationJumper>(text: searchText);
     final filteredJumpers = filter(jumpers);
 
@@ -168,7 +169,11 @@ class _JumpersListView extends StatelessWidget {
       itemCount: filteredJumpers.length,
       itemBuilder: (context, index) {
         final jumper = filteredJumpers.elementAt(index);
-        final jumperIsTrainee = helper.managerJumpers.contains(jumper);
+        bool jumperIsTrainee = false;
+        if (managerState.team != null) {
+          final myTeamState = context.read<MyTeamCubit>().state as MyTeamDefault;
+          jumperIsTrainee = myTeamState.trainees.contains(jumper);
+        }
         return JumperSimpleListTile(
           jumper: jumper,
           subtitle: JumperSimpleListTileSubtitle.levelDescription,

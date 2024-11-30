@@ -4,9 +4,9 @@ import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entit
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/manager_data/simulation_manager_data.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/simulation_season.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/country_team.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/team_reports.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
@@ -28,26 +28,26 @@ class SimulationDatabaseModel with EquatableMixin {
 
   final DateTime startDate;
   final DateTime currentDate;
-  final List<SimulationJumper> jumpers;
-  final List<Hill> hills;
+  final Iterable<SimulationJumper> jumpers;
+  final Iterable<Hill> hills;
   final CountriesRepository countries;
-  final List<CountryTeamDbRecord> countryTeams;
-  final List<SimulationSeason> seasons;
+  final Iterable<CountryTeam> countryTeams;
+  final Iterable<SimulationSeason> seasons;
   final IdsRepository<String> idsRepository;
-  final List<SimulationAction> actions;
+  final Iterable<SimulationAction> actions;
 
   SimulationDatabaseModel copyWith({
     SimulationManagerData? managerData,
     DateTime? startDate,
     DateTime? currentDate,
-    List<SimulationJumper>? jumpers,
-    List<Hill>? hills,
+    Iterable<SimulationJumper>? jumpers,
+    Iterable<Hill>? hills,
     CountriesRepository? countries,
-    List<CountryTeamDbRecord>? countryTeams,
+    Iterable<CountryTeam>? countryTeams,
     Map<Subteam, Iterable<String>>? subteamJumpers,
-    List<SimulationSeason>? seasons,
+    Iterable<SimulationSeason>? seasons,
     IdsRepository<String>? idsRepository,
-    List<SimulationAction>? actions,
+    Iterable<SimulationAction>? actions,
     Map<String, TeamReports>? teamReports,
   }) {
     return SimulationDatabaseModel(

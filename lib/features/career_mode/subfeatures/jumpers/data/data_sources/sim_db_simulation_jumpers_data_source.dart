@@ -21,11 +21,11 @@ class SimDbSimulationJumpersDataSourceImpl implements SimDbSimulationJumpersData
 
   @override
   void add(SimulationJumper jumper) {
-    database.jumpers.add(jumper);
+    database.jumpers = database.jumpers.toList()..add(jumper);
   }
 
   @override
   void remove(SimulationJumper jumper) {
-    database.jumpers.remove(jumper);
+    database.jumpers = database.jumpers.toList()..remove(jumper);
   }
 }

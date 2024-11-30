@@ -35,14 +35,14 @@ class IdsRepository<ID extends Object> {
   }
 
   ID id(dynamic item) {
-    final id = maybeIdOf(item);
+    final id = maybeId(item);
     if (id == null) {
       throw StateError('Ids repo does not contain the item ($item)');
     }
     return id;
   }
 
-  ID? maybeIdOf(dynamic item) {
+  ID? maybeId(dynamic item) {
     return _items.entries.firstWhereOrNull((entry) => entry.value.item == item)?.key;
   }
 
@@ -74,7 +74,7 @@ class IdsRepository<ID extends Object> {
   }
 
   ID removeByItem({required dynamic item}) {
-    final id = maybeIdOf(item);
+    final id = maybeId(item);
     if (id == null) {
       throw StateError(
           'Cannot remove an item $item, because it does not even exist in the repo');
@@ -85,7 +85,7 @@ class IdsRepository<ID extends Object> {
 
   void register(dynamic item, {required ID id}) {
     if (containsItem(item)) {
-      final existingId = maybeIdOf(item)!;
+      final existingId = maybeId(item)!;
       _items[existingId]!.count++;
       _orderedIds[existingId] = true;
     } else {
@@ -122,7 +122,7 @@ class IdsRepository<ID extends Object> {
   }
 
   bool containsItem(dynamic item) {
-    return maybeIdOf(item) != null;
+    return maybeId(item) != null;
   }
 
   List<dynamic> getOrderedItems() {

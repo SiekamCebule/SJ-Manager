@@ -10,6 +10,7 @@ import 'package:sj_manager/features/career_mode/presentation/bloc/manager_cubit.
 import 'package:sj_manager/features/career_mode/presentation/bloc/my_team_cubit.dart';
 import 'package:sj_manager/features/career_mode/presentation/bloc/simulation_config_cubit.dart';
 import 'package:sj_manager/features/career_mode/presentation/bloc/teams_cubit.dart';
+import 'package:sj_manager/features/career_mode/presentation/bloc/to_consider/jumpers_cubit.dart';
 import 'package:sj_manager/features/career_mode/presentation/dialogs/manage_partnerships/show_manage_partnerships_dialog.dart';
 import 'package:sj_manager/features/career_mode/presentation/bloc/simulation_cubit.dart';
 import 'package:sj_manager/features/career_mode/presentation/dialogs/search_for_charges_jumpers/show_search_for_charges_dialog.dart';
@@ -17,8 +18,6 @@ import 'package:sj_manager/main.dart';
 import 'package:sj_manager/features/career_mode/presentation/bloc/ui/simulation_screen_navigation_cubit.dart';
 import 'package:sj_manager/l10n/helpers.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action_type.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_database_helper.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_database.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';
 import 'package:sj_manager/core/core_classes/sex.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';

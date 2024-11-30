@@ -6,7 +6,7 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 
 void main() {
   group(Standings, () {
-    late Standings<String, SimplePointsScoreDetails> repo;
+    late Standings<String, SimplePointsScoreDetails> standings;
 
     test('Adding, editing and removing; updating standings', () {
       const stoch = Score<String, SimplePointsScoreDetails>(
@@ -35,25 +35,25 @@ void main() {
         details: SimplePointsScoreDetails(),
       );
 
-      repo = Standings(
+      standings = Standings(
         positionsCreator: StandingsPositionsWithExAequosCreator(),
         initialScores: const [stoch, kubacki, zyla],
       );
 
-      repo.addScore(newScore: geiger);
-      repo.addScore(newScore: eisenbichler);
-      expect(repo.leaders.single, eisenbichler);
-      expect(repo.last.values.last, [stoch, zyla]); // Scores at last position
-      expect(repo.length, 5);
-      repo.remove(score: eisenbichler);
-      expect(repo.leaders.single, kubacki);
-      expect(repo.length, 4);
-      expect(repo.containsEntity('Markus Eisenbichler'), false);
-      repo.addScore(newScore: stoch.copyWith(points: 441.4), overwrite: true);
-      expect(repo.leaders.single.entity, 'Kamil Stoch');
-      expect(repo.length, 4);
+      standings.addScore(newScore: geiger);
+      standings.addScore(newScore: eisenbichler);
+      expect(standings.leaders.single, eisenbichler);
+      expect(standings.scores.last, [stoch, zyla]); // Scores at last position
+      expect(standings.length, 5);
+      standings.remove(score: eisenbichler);
+      expect(standings.leaders.single, kubacki);
+      expect(standings.length, 4);
+      expect(standings.containsEntity('Markus Eisenbichler'), false);
+      standings.addScore(newScore: stoch.copyWith(points: 441.4), overwrite: true);
+      expect(standings.leaders.single.entity, 'Kamil Stoch');
+      expect(standings.length, 4);
 
-      repo.dispose();
+      standings.dispose();
     });
 
     group('Repo view utilities', () {
@@ -104,7 +104,7 @@ void main() {
       );
 
       setUpAll(() {
-        repo = Standings(
+        standings = Standings(
           positionsCreator: StandingsPositionsWithExAequosCreator(),
           initialScores: const [
             kot,
@@ -121,53 +121,53 @@ void main() {
       });
 
       test('leaders', () {
-        expect(repo.leaders, [kobayashi, danielHuber]);
-        expect(() => repo.leaders.single, throwsA(isA<StateError>()));
+        expect(standings.leaders, [kobayashi, danielHuber]);
+        expect(() => standings.leaders.single, throwsA(isA<StateError>()));
       });
 
       test('scores by position', () {
-        expect(repo.leaders, repo.atPosition(1));
-        expect(repo.atPosition(4), [stefanHuber]);
-        expect(() => repo.atPosition(0), throwsA(isA<StateError>()));
-        expect(() => repo.atPosition(18), throwsA(isA<StateError>()));
+        expect(standings.leaders, standings.atPosition(1));
+        expect(standings.atPosition(4), [stefanHuber]);
+        expect(() => standings.atPosition(0), throwsA(isA<StateError>()));
+        expect(() => standings.atPosition(18), throwsA(isA<StateError>()));
       });
 
       test('position by entity', () {
-        expect(repo.positionOf('Ulrich Wohlgenannt'), 8);
-        expect(repo.positionOf('Stefan Huber'), 4);
-        expect(repo.positionOf('Karol Wojtyła'), isNull);
+        expect(standings.positionOf('Ulrich Wohlgenannt'), 8);
+        expect(standings.positionOf('Stefan Huber'), 4);
+        expect(standings.positionOf('Karol Wojtyła'), isNull);
       });
 
       test('score by entity', () {
         expect(
-            repo.scoreOf('Domen Prevc'),
+            standings.scoreOf('Domen Prevc'),
             const Score<String, SimplePointsScoreDetails>(
               entity: 'Domen Prevc',
               points: 114.9,
               details: SimplePointsScoreDetails(),
             ));
         expect(
-            repo.scoreOf('Daniel Huber'),
+            standings.scoreOf('Daniel Huber'),
             const Score<String, SimplePointsScoreDetails>(
               entity: 'Daniel Huber',
               points: 137.8,
               details: SimplePointsScoreDetails(),
             ));
-        expect(repo.scoreOf('Peter Prevc'), isNull);
+        expect(standings.scoreOf('Peter Prevc'), isNull);
       });
 
       test('length', () {
-        expect(repo.length, 9);
+        expect(standings.length, 9);
       });
 
       test('whether contains an entity', () {
-        expect(repo.containsEntity('Stefan Hula'), true);
-        expect(repo.containsEntity('Stefan Huber'), true);
-        expect(repo.containsEntity('Junshiro Kobayashi'), false);
+        expect(standings.containsEntity('Stefan Hula'), true);
+        expect(standings.containsEntity('Stefan Huber'), true);
+        expect(standings.containsEntity('Junshiro Kobayashi'), false);
       });
 
       tearDownAll(() {
-        repo.dispose();
+        standings.dispose();
       });
     });
   });

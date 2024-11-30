@@ -16,12 +16,11 @@ class _NavigationRail extends StatefulWidget {
 class _NavigationRailState extends State<_NavigationRail> {
   @override
   Widget build(BuildContext context) {
+    final managerState = context.watch<ManagerCubit>().state as ManagerDefault;
     final regularRailDestinationLabelStyle = Theme.of(context).textTheme.bodySmall!;
     final exitButtonStyle = Theme.of(context).textTheme.bodySmall!.copyWith(
           color: Theme.of(context).colorScheme.onErrorContainer,
         );
-    final database = context.watch<SimulationDatabase>();
-    final simulationMode = database.managerData.mode;
 
     return NavigationRail(
       extended: true,
@@ -107,7 +106,7 @@ class _NavigationRailState extends State<_NavigationRail> {
       minExtendedWidth: 160,
       onDestinationSelected: (selecetedIndex) {
         final navigationTarget =
-            navigationTargetsBySimulationMode[simulationMode]![selecetedIndex];
+            navigationTargetsBySimulationMode[managerState.mode]![selecetedIndex];
         switch (navigationTarget) {
           case SimulationScreenNavigationTarget.home:
             widget.navigatorKey.currentState!.pushReplacementNamed('/simulation/home');

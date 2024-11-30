@@ -4,18 +4,18 @@ import 'package:sj_manager/features/career_mode/subfeatures/training/domain/enti
 import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_config.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/training/domain/training_engine/jumper_training_engine_settings.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_result.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/training_engine/training_engine_entity.dart';
 import 'package:sj_manager/core/general_utils/random/random.dart';
 import 'package:sj_manager/core/career_mode/career_mode_utils/training_utils.dart';
 
 class JumperTrainingEngine {
   JumperTrainingEngine({
     this.settings = sjmDefaultTrainingEngineSettings,
-    required this.jumper,
+    required this.entity,
   });
 
   final JumperTrainingEngineSettings settings;
-  final SimulationJumper jumper;
+  final TrainingEngineEntity entity;
 
   late JumperTrainingConfig _trainingConfig;
   late double _developmentPotentialFactor;
@@ -30,19 +30,19 @@ class JumperTrainingEngine {
   }
 
   void _setUp() {
-    if (jumper.trainingConfig == null) {
+    if (entity.trainingConfig == null) {
       throw ArgumentError(
-        'Jumper\'s (${jumper.nameAndSurname()}) training config is null so cannot simulate the training',
+        'Entity\'s training config is null so cannot simulate the training',
       );
     }
-    _trainingConfig = jumper.trainingConfig!;
+    _trainingConfig = entity.trainingConfig!;
   }
 
   void _calculateDevelopmentPotentialFactor() {
-    final fromMorale = jumper.morale < settings.moraleFactorThreshold
-        ? jumper.morale * settings.moraleFactorMultiplier
+    final fromMorale = entity.morale < settings.moraleFactorThreshold
+        ? entity.morale * settings.moraleFactorMultiplier
         : 0;
-    final fromFatigue = -jumper.fatigue * settings.fatigueFactorMultiplier;
+    final fromFatigue = -entity.fatigue * settings.fatigueFactorMultiplier;
 
     _developmentPotentialFactor = settings.developmentPotentialFactorBase +
         ((fromMorale + fromFatigue) / settings.developmentPotentialDivider);
@@ -50,12 +50,12 @@ class JumperTrainingEngine {
 
   void _createResultObject() {
     _result = JumperTrainingResult(
-      takeoffDelta: jumper.takeoffQuality + _computeTakeoffDelta(),
-      flightDelta: jumper.flightQuality + _computeFlightDelta(),
-      landingDelta: jumper.landingQuality + _computeLandingDelta(),
-      formDelta: jumper.form + _computeFormDelta(),
-      consistencyDelta: jumper.jumpsConsistency + _computeConsistencyDelta(),
-      fatigueDelta: jumper.fatigue + _computeFatigueDelta(),
+      takeoffDelta: entity.takeoffQuality + _computeTakeoffDelta(),
+      flightDelta: entity.flightQuality + _computeFlightDelta(),
+      landingDelta: entity.landingQuality + _computeLandingDelta(),
+      formDelta: entity.form + _computeFormDelta(),
+      consistencyDelta: entity.jumpsConsistency + _computeConsistencyDelta(),
+      fatigueDelta: entity.fatigue + _computeFatigueDelta(),
     );
   }
 
@@ -70,9 +70,9 @@ class JumperTrainingEngine {
       settings.takeoffRandomCauchyDampingFactor,
     );
 
-    final distanceFromCenter = (jumper.takeoffQuality - 10).abs();
+    final distanceFromCenter = (entity.takeoffQuality - 10).abs();
     var delta = random / settings.takeoffBalanceEffectDivider;
-    final directionalMultiplier = (jumper.takeoffQuality - 10) *
+    final directionalMultiplier = (entity.takeoffQuality - 10) *
         delta.sign /
         settings.takeoffDirectionalMultiplierDivider;
     final exponentiationBase = 1 +
@@ -95,9 +95,9 @@ class JumperTrainingEngine {
       settings.flightRandomCauchyDampingFactor,
     );
 
-    final distanceFromCenter = (jumper.flightQuality - 10).abs();
+    final distanceFromCenter = (entity.flightQuality - 10).abs();
     var delta = random / settings.flightBalanceEffectDivider;
-    final directionalMultiplier = (jumper.flightQuality - 10) *
+    final directionalMultiplier = (entity.flightQuality - 10) *
         delta.sign /
         settings.flightDirectionalMultiplierDivider;
     final exponentiationBase = 1 +
@@ -120,9 +120,9 @@ class JumperTrainingEngine {
       settings.landingRandomCauchyDampingFactor,
     );
 
-    final distanceFromCenter = (jumper.landingQuality - 10).abs();
+    final distanceFromCenter = (entity.landingQuality - 10).abs();
     var delta = random / settings.landingBalanceEffectDivider;
-    final directionalMultiplier = (jumper.landingQuality - 10) *
+    final directionalMultiplier = (entity.landingQuality - 10) *
         delta.sign /
         settings.landingDirectionalMultiplierDivider;
     final exponentiationBase = 1 +
@@ -146,10 +146,10 @@ class JumperTrainingEngine {
     );
 
     // Tłumienie delty
-    final distanceFromCenter = (jumper.form - 10).abs();
+    final distanceFromCenter = (entity.form - 10).abs();
     var delta = random / settings.formBalanceDivider;
     final directionalMultiplier =
-        (jumper.form - 10) * delta.sign / settings.formDirectionalMultiplierDivider;
+        (entity.form - 10) * delta.sign / settings.formDirectionalMultiplierDivider;
     final exponentiationBase = 1 +
         (distanceFromCenter / settings.formDeltaDampingBaseDivider) *
             (1 + directionalMultiplier);
@@ -170,9 +170,9 @@ class JumperTrainingEngine {
       settings.consistencyRandomCauchyDampingFactor,
     );
     // Tłumienie delty
-    final distanceFromCenter = (jumper.jumpsConsistency - 10).abs();
+    final distanceFromCenter = (entity.jumpsConsistency - 10).abs();
     var delta = random / settings.consistencyBalanceDivider;
-    final directionalMultiplier = (jumper.jumpsConsistency - 10) *
+    final directionalMultiplier = (entity.jumpsConsistency - 10) *
         delta.sign /
         settings.consistencyDirectionalMultiplierDivider;
     final exponentiationBase = 1 +

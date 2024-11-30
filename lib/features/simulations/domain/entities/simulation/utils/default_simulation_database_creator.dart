@@ -1,6 +1,7 @@
 import 'package:sj_manager/core/countries/countries_repository/countries_repository.dart';
 import 'package:sj_manager/core/countries/countries_repository/in_memory_countries_repository.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/country_teams/data/mappers/country_team_mappers.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/jumper_stats/domain/entities/jumper_attribute.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/manager_data/simulation_manager_data.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
@@ -9,6 +10,7 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_mode.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_database.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/simulation_season.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/country_team.dart';
 import 'package:sj_manager/features/simulations/presentation/simulation_wizard/simulation_wizard_options_repo.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/reports/jumper_reports.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/classification_score_details.dart';
@@ -17,9 +19,7 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/core/psyche/psyche_utils.dart';
-import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/personal_coach_team.dart';
-import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 import 'package:sj_manager/core/general_utils/id_generator.dart';
 
@@ -31,18 +31,18 @@ class DefaultSimulationDatabaseCreator {
   final IdGenerator idGenerator;
 
   late IdsRepository<String> _idsRepo;
-  late List<SimulationJumper> _jumpers;
-  late List<Hill> _hills;
-  late List<CountryTeamDbRecord> _countryTeams;
+  late Iterable<SimulationJumper> _jumpers;
+  late Iterable<Hill> _hills;
+  late Iterable<CountryTeam> _countryTeams;
   late CountriesRepository _countries;
-  late List<SimulationSeason> _seasons;
+  late Iterable<SimulationSeason> _seasons;
 
   Future<SimulationDatabase> create(SimulationWizardOptions options) async {
     final mode = options.mode!;
     _idsRepo = IdsRepository();
     _hills = List.of(options.gameVariant!.hills);
-    _countryTeams = options.gameVariant!.countryTeams
-        .map((countryTeamDbRecord) => countryTeamDbRecord.toSimulationCountryTeam());
+    _countryTeams =
+        options.gameVariant!.countryTeams.map(createCountryTeamEntityFromDbRecord);
     _countries = InMemoryCountriesRepository(countries: options.gameVariant!.countries);
     _seasons = List.of([options.gameVariant!.season]);
     const attributeHistoryLimit =
@@ -51,14 +51,15 @@ class DefaultSimulationDatabaseCreator {
 
     _jumpers = jumperRecords.map(
       (dbRecord) {
+        final jumperCountryTeam = _countryTeams
+            .singleWhere((countryTeam) => countryTeam.country == dbRecord.country);
         return SimulationJumper(
           dateOfBirth: dbRecord.dateOfBirth,
           name: dbRecord.name,
           surname: dbRecord.surname,
           country: dbRecord.country,
-          countryTeam: _countryTeams
-              .singleWhere((countryTeam) => countryTeam.country == dbRecord.country),
-              subteam: ,
+          countryTeam: jumperCountryTeam,
+          subteam: null,
           sex: dbRecord.sex,
           takeoffQuality: dbRecord.skills.takeoffQuality,
           flightQuality: dbRecord.skills.flightQuality,
@@ -97,11 +98,9 @@ class DefaultSimulationDatabaseCreator {
         : null;
     _idsRepo.register(personalCoachTeam, id: idGenerator.generate());
     final userSubteam = mode == SimulationMode.classicCoach
-        ? Subteam(
-            parentTeam: options.team!,
-            type: options.subteamType!,
-            jumpers: [],
-          )
+        ? _countryTeams
+            .singleWhere((team) => team.country == options.countryTeam!.country)
+            .getSubtem(options.subteamType!)
         : null;
     final earliestDate = options.gameVariant!.startDates.first;
     return SimulationDatabase(
@@ -138,7 +137,7 @@ class DefaultSimulationDatabaseCreator {
       ..._jumpers,
       ..._hills,
       ..._countryTeams,
-      ...(await _countries.getAll()),
+      ..._countries.getAll(),
       ..._seasons,
       for (var season in _seasons) ...[
         for (var eventSeries in season.eventSeries) ...[

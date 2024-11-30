@@ -21,6 +21,8 @@ import 'package:sj_manager/core/general_utils/json/simulation_db_saving/ko_group
 import 'package:sj_manager/core/general_utils/json/simulation_db_saving/ko_round_advancement_determinator_serializer.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_saving/ko_round_rules_serializer.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_saving/score_serializer.dart';
+import 'package:sj_manager/core/general_utils/json/simulation_db_saving/simulation_action_serializer.dart';
+import 'package:sj_manager/core/general_utils/json/simulation_db_saving/simulation_jumper_serializer.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_saving/simulation_season_serializer.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_saving/standings_positions_creator_serializer.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_saving/standings_serializer.dart';
@@ -80,25 +82,17 @@ class DefaultSimulationDatabaseSaverToFile {
     await file.create(recursive: true);
     final json = {
       'managerData': {
-        'simulationMode': _database.managerData.mode.name,
-        'userSubteamId': idsRepository.maybeIdOf(_database.managerData.userSubteam),
-        'personalCoachTeam': _database.managerData.personalCoachTeam
-            ?.toJson(serializeJumper: (jumper) => idsRepository.id(jumper)),
+        'mode': _database.managerData.mode.name,
+        'userSubteamId': idsRepository.maybeId(_database.managerData.userSubteam),
+        'personalCoachTeam': _database.managerData.personalCoachTeam?.jumpers
+            .map((jumper) => idsRepository.id(jumper)),
         'personalCoachTeamId':
-            idsRepository.maybeIdOf(_database.managerData.personalCoachTeam),
+            idsRepository.maybeId(_database.managerData.personalCoachTeam),
       },
       'startDate': _database.startDate.toString(),
       'currentDate': _database.currentDate.toString(),
-      'actionDeadlines': _database.actionDeadlines.map(
-        (actionType, dateTime) => MapEntry(actionType.name, dateTime.toString()),
-      ),
-      'simulationActionCompletionStatuses': _database.actionsRepo.completedActions
-          .map((actionType) => actionType.name)
-          .toList(),
-      'teamReports': _database.teamReports.map((id, reports) {
-        return MapEntry(id, reports.toJson());
-      }),
-      'subteamJumpers': subteamJumpersJson,
+      'actions': _database.actions
+          .map((action) => const SimulationActionSerializer().serialize(action)),
     };
     await file.writeAsString(jsonEncode(json));
   }
@@ -171,8 +165,8 @@ class DefaultSimulationDatabaseSaverToFile {
     }
   }
 
-  Json _serializeJumper(SimulationJumper item) {
-    return item.toJson(countrySaver: const JsonCountryCodeSaver());
+  FutureOr<Json> _serializeJumper(SimulationJumper item) async {
+    return await SimulationJumperSerializer(idsRepository: idsRepository).serialize(item);
   }
 
   Json _serializeHill(Hill item) {

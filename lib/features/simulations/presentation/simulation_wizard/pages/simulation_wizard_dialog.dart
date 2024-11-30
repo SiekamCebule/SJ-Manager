@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 import 'package:sj_manager/features/game_variants/domain/entities/game_variant.dart';
 import 'package:sj_manager/features/game_variants/presentation/bloc/game_variant_cubit.dart';
 import 'package:sj_manager/core/simulation_wizard/simulation_wizard_screen_type.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/country_team.dart';
 import 'package:sj_manager/features/simulations/presentation/bloc/simulation_wizard/simulation_wizard_navigation_cubit.dart';
 import 'package:sj_manager/features/simulations/presentation/bloc/simulation_wizard/simulation_wizard_navigation_state.dart';
 import 'package:sj_manager/l10n/helpers.dart';

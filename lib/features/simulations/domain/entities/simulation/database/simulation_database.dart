@@ -24,16 +24,15 @@ class SimulationDatabase with EquatableMixin, ChangeNotifier {
   });
 
   SimulationManagerData managerData;
-
   DateTime startDate;
   DateTime currentDate;
-  List<SimulationJumper> jumpers;
-  List<Hill> hills;
+  Iterable<SimulationJumper> jumpers;
+  Iterable<Hill> hills;
   CountriesRepository countries;
-  List<CountryTeam> countryTeams;
-  List<SimulationSeason> seasons;
+  Iterable<CountryTeam> countryTeams;
+  Iterable<SimulationSeason> seasons;
   IdsRepository<String> idsRepository;
-  List<SimulationAction> actions;
+  Iterable<SimulationAction> actions;
 
   void notify() => notifyListeners();
 

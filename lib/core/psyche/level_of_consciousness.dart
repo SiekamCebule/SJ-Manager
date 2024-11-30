@@ -1,3 +1,5 @@
+import 'package:sj_manager/core/general_utils/json/json_types.dart';
+
 enum LevelOfConsciousnessLabels {
   shame, // Wstyd
   guilt, // Wina
@@ -57,6 +59,16 @@ class LevelOfConsciousness {
       logarithmicValue > other.logarithmicValue;
   bool isEqualTo(LevelOfConsciousness other) =>
       logarithmicValue == other.logarithmicValue;
+
+  Json toJson() {
+    return {
+      'logValue': logarithmicValue,
+    };
+  }
+
+  static LevelOfConsciousness fromJson(Json json) {
+    return LevelOfConsciousness(json['logValue']);
+  }
 
   @override
   String toString() {

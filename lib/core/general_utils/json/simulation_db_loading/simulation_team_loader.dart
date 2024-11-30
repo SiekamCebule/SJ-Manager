@@ -8,8 +8,10 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/country_team.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam_type.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/personal_coach_team.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/team_reports.dart';
 
 class SimulationTeamLoader implements SimulationDbPartParser<SimulationTeam> {
   const SimulationTeamLoader({
@@ -26,6 +28,7 @@ class SimulationTeamLoader implements SimulationDbPartParser<SimulationTeam> {
     return switch (type) {
       'country_team' => await _parseCountryTeam(json),
       'subteam' => await _parseSubteam(json),
+      'personal_coach_team' => await _parsePersonalCoachTeam(json),
       _ => throw ArgumentError('(Team parsing): An invalid team\'s type ($type)'),
     };
   }
@@ -58,6 +61,18 @@ class SimulationTeamLoader implements SimulationDbPartParser<SimulationTeam> {
       type: SubteamType.values.singleWhere((subteamType) => subteamType.name == typeName),
       jumpers: jumpers,
       limit: json['limit'],
+    );
+  }
+
+  Future<PersonalCoachTeam> _parsePersonalCoachTeam(Json json) async {
+    final jumperIds = json['jumpers'] as List;
+    final jumpers = jumperIds.map((id) {
+      return idsRepository.get(id) as SimulationJumper;
+    }).toList();
+
+    return PersonalCoachTeam(
+      jumpers: jumpers,
+      reports: TeamReports.fromJson(json['reports']),
     );
   }
 }

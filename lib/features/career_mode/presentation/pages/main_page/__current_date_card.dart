@@ -5,7 +5,7 @@ class _CurrentDateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabase>();
+    final simulationState = context.watch<SimulationCubit>().state as SimulationDefault;
     final textStyle = Theme.of(context).textTheme.bodyMedium!;
 
     return DecoratedBox(
@@ -21,11 +21,11 @@ class _CurrentDateCard extends StatelessWidget {
           children: [
             const Spacer(),
             Text(
-              DateFormat('EEE, d MMMM').format(database.currentDate),
+              DateFormat('EEE, d MMMM').format(simulationState.currentDate),
               style: textStyle.copyWith(fontWeight: FontWeight.w500),
             ),
             Text(
-              DateFormat('yyyy').format(database.currentDate),
+              DateFormat('yyyy').format(simulationState.currentDate),
               style: textStyle,
             ),
             const Spacer(),

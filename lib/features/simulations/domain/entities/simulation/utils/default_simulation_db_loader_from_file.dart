@@ -22,7 +22,9 @@ import 'package:sj_manager/core/general_utils/json/simulation_db_loading/ko_grou
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/ko_round_advancement_determinator_loader.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/ko_round_rules_loader.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/score_loader.dart';
+import 'package:sj_manager/core/general_utils/json/simulation_db_loading/simulation_jumper_loader.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/simulation_season_loader.dart';
+import 'package:sj_manager/core/general_utils/json/simulation_db_loading/simulation_team_loader.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/standings_loader.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/standings_positions_creator_loader.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/team_competition_group_rules_loader.dart';
@@ -101,12 +103,8 @@ class DefaultSimulationDbLoaderFromFile {
     final managerDataJson = _dynamicStateJson['managerData'] as Json;
 
     final personalCoachTeamJson = managerDataJson['personalCoachTeam'];
-    final personalCoachTeam = personalCoachTeamJson != null
-        ? PersonalCoachTeam.fromJson(
-            personalCoachTeamJson,
-            parseJumper: (id) => idsRepository.get(id),
-          )
-        : null;
+    final personalCoachTeam =
+        personalCoachTeamJson != null ? _parseTeam(personalCoachTeamJson) : null;
     final personalCoachTeamId = managerDataJson['personalCoachTeamId'];
     if (personalCoachTeamId != null) {
       idsRepository.register(personalCoachTeam, id: personalCoachTeamId);
@@ -117,9 +115,9 @@ class DefaultSimulationDbLoaderFromFile {
 
     final managerData = SimulationManagerData(
       mode: SimulationMode.values
-          .singleWhere((mode) => mode.name == managerDataJson['simulationMode']),
+          .singleWhere((mode) => mode.name == managerDataJson['mode']),
       userSubteam: userSubteam,
-      personalCoachTeam: personalCoachTeam,
+      personalCoachTeam: personalCoachTeam as PersonalCoachTeam?,
     );
 
     final actionsJson = _dynamicStateJson['actions'] as List;
@@ -236,8 +234,10 @@ class DefaultSimulationDbLoaderFromFile {
   }
 
   Future<SimulationJumper> _parseJumper(Json json) async {
-    return await SimulationJumper.fromJson(json,
-        countryLoader: JsonCountryLoaderByCode(countriesRepository: _countriesRepo));
+    return await SimulationJumperLoader(
+            idsRepository: idsRepository,
+            countryLoader: JsonCountryLoaderByCode(countriesRepository: _countriesRepo))
+        .parse(json);
   }
 
   Future<Hill> _parseHill(Json json) async {

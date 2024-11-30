@@ -15,7 +15,6 @@ import 'package:sj_manager/to_embrace/competition/rules/utils/jump_score_creator
 import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/typedefs.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
 class CompetitionRoundRulesParser
@@ -94,7 +93,7 @@ class CompetitionRoundRulesParser
     );
   }
 
-  FutureOr<DefaultCompetitionRoundRules<SimulationTeam>> _loadTeam(Json json) async {
+  FutureOr<DefaultCompetitionRoundRules> _loadTeam(Json json) async {
     final entitiesLimitJson = json['limit'];
     EntitiesLimit? entitiesLimit;
     if (entitiesLimitJson != null) {

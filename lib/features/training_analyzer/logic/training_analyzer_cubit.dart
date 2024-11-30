@@ -6,12 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart' as path;
 import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_category.dart';
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/training_engine/training_engine_entity.dart';
 
 import 'package:sj_manager/features/training_analyzer/logic/training_test_runner.dart';
-import 'package:sj_manager/core/general_utils/json/countries.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_config.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/core/training_analyzer/training_analyzer_actions.dart';
 import 'package:sj_manager/core/training_analyzer/training_analyzer_chart_data_category.dart';
 import 'package:sj_manager/core/training_analyzer/training_analyzer_result.dart';
@@ -46,8 +45,7 @@ class TrainingAnalyzerCubit extends Cubit<TrainingAnalyzerNotSimulated> {
 
     final engineSettings =
         JumperTrainingEngineSettings.fromJson(configJson['engineSettings']);
-    final jumper = await SimulationJumper.fromJson(configJson['jumper'],
-        countryLoader: const JsonCountryLoaderNone());
+    final entity = TrainingEngineEntity.fromJson(configJson['entity']);
 
     final segmentsJson = (configJson['trainingSegments'] as List).cast<Json>();
     final trainingSegments = segmentsJson.map((segmentJson) => TrainingSegment(
@@ -68,7 +66,7 @@ class TrainingAnalyzerCubit extends Cubit<TrainingAnalyzerNotSimulated> {
       segments: trainingSegments.toList(),
       engineSettings: engineSettings,
       daysToSimulate: configJson['daysToSimulate'],
-      jumper: jumper,
+      entity: entity,
     );
 
     final result = runner.run();

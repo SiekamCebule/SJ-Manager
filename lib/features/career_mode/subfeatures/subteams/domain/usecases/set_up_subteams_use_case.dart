@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:sj_manager/core/career_mode/career_mode_utils/subteam_appointments/partial/default_partial_appointments_algorithm.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/repository/simulation_actions_repository.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/country_teams/domain/repository/country_teams_repository.dart';
@@ -37,10 +38,13 @@ class SetUpSubteamsUseCase {
         final subteams =
             await _chooseSubteams(countryTeam: countryTeam, simulationJumpers: jumpers);
         subteams.forEach((subteamType, jumpers) async {
+          final existingSubteam = (await subteamsRepository.getByCountry(countryTeam))
+              .singleWhereOrNull((subteam) => subteam.type == subteamType);
           final subteam = Subteam(
             parentTeam: countryTeam,
             type: subteamType,
             jumpers: jumpers,
+            limit: existingSubteam?.limit ?? 6, // TODO
           );
           await subteamsRepository.setSubteam(subteam: subteam);
         });
@@ -62,11 +66,10 @@ class SetUpSubteamsUseCase {
       if (availableJumpers.isEmpty) {
         return subteamJumpers;
       }
-      final limit = countryTeam.limitInSubteam[subteam.type]!;
       const algorithm = DefaultPartialAppointmentsAlgorithm();
       final chosenJumpers = algorithm.chooseBestJumpers(
         source: availableJumpers,
-        limit: limit,
+        limit: subteam.limit,
       );
       subteamJumpers[subteam.type] = chosenJumpers;
       availableJumpers = availableJumpers.toSet().difference(chosenJumpers.toSet());

@@ -15,7 +15,7 @@ class _UpcomingSimulationActionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final database = context.watch<SimulationDatabase>();
+    final simulationState = context.watch<SimulationCubit>().state as SimulationDefault;
     final translator = translate(context);
     final actionText = switch (actionType) {
       SimulationActionType.settingUpTraining => translator.settingUpTraining,
@@ -23,7 +23,7 @@ class _UpcomingSimulationActionCard extends StatelessWidget {
     };
     final dateText = sjmDeadlineDateDescription(
       context: context,
-      currentDate: database.currentDate,
+      currentDate: simulationState.currentDate,
       targetDate: deadline,
     );
     final textColor = important

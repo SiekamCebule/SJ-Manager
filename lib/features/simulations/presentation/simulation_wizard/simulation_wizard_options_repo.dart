@@ -43,8 +43,8 @@ class SimulationWizardOptions with ChangeNotifier {
     }
   }
 
-  CountryTeamDbRecord? get team => _team;
-  set team(CountryTeamDbRecord? value) {
+  CountryTeamDbRecord? get countryTeam => _team;
+  set countryTeam(CountryTeamDbRecord? value) {
     if (_team != value) {
       _team = value;
       notifyListeners();

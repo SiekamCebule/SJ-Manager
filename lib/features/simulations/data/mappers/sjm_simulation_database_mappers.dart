@@ -13,11 +13,9 @@ extension SimulationDatabaseToModel on SimulationDatabase {
       hills: hills,
       countries: countries,
       countryTeams: countryTeams,
-      subteamJumpers: subteamJumpers,
       seasons: seasons,
       idsRepository: idsRepository,
       actions: actions,
-      teamReports: teamReports,
     );
   }
 }
@@ -31,10 +29,8 @@ SimulationDatabase simulationDatabaseFromModel(SimulationDatabaseModel model) {
     hills: model.hills,
     countries: model.countries,
     countryTeams: model.countryTeams,
-    subteamJumpers: model.subteamJumpers,
     seasons: model.seasons,
     idsRepository: model.idsRepository,
     actions: model.actions,
-    teamReports: model.teamReports,
   );
 }

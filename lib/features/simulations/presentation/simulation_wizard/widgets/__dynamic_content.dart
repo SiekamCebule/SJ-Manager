@@ -49,7 +49,7 @@ class _DynamicContentState extends State<_DynamicContent> {
               value: _countryFlagsRepo,
               child: _TeamScreen(
                 onChange: (team) {
-                  options.team = team;
+                  options.countryTeam = team;
                   if (team != null) {
                     navCubit.unblockGoingForward();
                   } else {
@@ -59,7 +59,7 @@ class _DynamicContentState extends State<_DynamicContent> {
               ),
             ),
           SimulationWizardScreenType.subteam => _SubteamScreen(
-              subteamTypes: options.team!.facts.subteams,
+              subteamTypes: options.countryTeam!.facts.subteams,
               onChange: (subteamType) {
                 options.subteamType = subteamType;
                 if (subteamType != null) {

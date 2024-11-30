@@ -43,7 +43,7 @@ class CreateSimulationUseCase {
       mode: options.mode!,
       currentDate: options.startDate!.date,
       traineesCount: options.mode! == SimulationMode.personalCoach ? 0 : null,
-      subteamCountryName: options.team?.country.multilingualName,
+      subteamCountryName: options.countryTeam?.country.multilingualName,
       subteamType: options.subteamType,
     );
     await _copyImagesFromVariant(
