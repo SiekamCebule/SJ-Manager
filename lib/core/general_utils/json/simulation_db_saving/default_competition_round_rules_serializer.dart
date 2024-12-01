@@ -7,9 +7,9 @@ import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/entities_limit.dart';
 import 'package:sj_manager/to_embrace/competition/rules/ko/ko_round_rules.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/competition_score_creator.dart';
 import 'package:sj_manager/to_embrace/competition/rules/utils/judges_creator/judges_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/jump_score_creator/jump_score_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/jump_score_creator.dart';
 import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 

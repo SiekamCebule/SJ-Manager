@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:sj_manager/core/general_utils/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
 import 'package:sj_manager/to_embrace/classification/classification.dart';
-import 'package:sj_manager/to_embrace/classification/default_classification_rules.dart';
+import 'package:sj_manager/to_embrace/classification/simple_classification_rules.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
@@ -16,12 +16,12 @@ class ClassificationSerializer implements SimulationDbPartSerializer<Classificat
 
   final IdsRepository idsRepository;
   final SimulationDbPartSerializer<Standings> standingsSerializer;
-  final SimulationDbPartSerializer<DefaultClassificationRules>
+  final SimulationDbPartSerializer<SimpleClassificationRules>
       defaultClassificationRulesSerializer;
 
   @override
   FutureOr<Json> serialize(Classification classification) {
-    if (classification is DefaultClassification) {
+    if (classification is SimpleClassification) {
       return _serializeDefault(classification);
     } else {
       throw UnsupportedError(
@@ -30,7 +30,7 @@ class ClassificationSerializer implements SimulationDbPartSerializer<Classificat
     }
   }
 
-  FutureOr<Json> _serializeDefault(DefaultClassification classification) async {
+  FutureOr<Json> _serializeDefault(SimpleClassification classification) async {
     return {
       'type': 'default',
       'name': classification.name,

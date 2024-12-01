@@ -2,13 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sj_manager/to_embrace/classification/classification.dart';
-import 'package:sj_manager/to_embrace/classification/default_classification_rules.dart';
+import 'package:sj_manager/to_embrace/classification/simple_classification_rules.dart';
 import 'package:sj_manager/to_embrace/competition/competition.dart';
 import 'package:sj_manager/to_embrace/competition/competition_labels.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/classification_score_creator/concrete/individual_default.dart';
+import 'package:sj_manager/features/competitions/domain/utils/classification_score_creator/concrete/individual_default.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/classification_score_details.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/competition_score_details.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart';
@@ -22,8 +21,8 @@ import 'classification_rules_utilities_test.mocks.dart';
 @GenerateMocks([
   Competition,
   Standings,
-  DefaultClassification,
-  DefaultIndividualClassificationRules,
+  SimpleClassification,
+  SimpleIndividualClassificationRules,
   DefaultIndividualClassificationScoreCreatingContext,
   Score,
   DefaultIndividualCompetitionRoundRules,
@@ -67,7 +66,7 @@ void main() {
         });
 
         when(classificationRules.scoringType)
-            .thenReturn(DefaultClassificationScoringType.pointsFromMap);
+            .thenReturn(SimpleClassificationScoringType.pointsFromMap);
         when(classification.rules).thenReturn(classificationRules);
         when(context.entity).thenReturn(jumper);
         when(context.classification).thenReturn(classification);

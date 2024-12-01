@@ -10,7 +10,7 @@ import 'package:sj_manager/to_embrace/competition/high_level_calendar.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/competition_team.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/subjects/competition_team.dart';
 
 import 'creating_low_level_calendars_test.mocks.dart';
 

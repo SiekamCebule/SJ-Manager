@@ -19,6 +19,7 @@ class CountryTeam extends SimulationTeam with EquatableMixin {
   Iterable<Subteam> subteams;
   // TODO RECORD, STATS
 
+  @override
   Iterable<SimulationJumper> get jumpers {
     return subteams.expand((subteams) => subteams.jumpers);
   }

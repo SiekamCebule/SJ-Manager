@@ -4,7 +4,7 @@ import 'package:sj_manager/core/general_utils/json/simulation_db_loading/simulat
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/competition_team.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/subjects/competition_team.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
 class CompetitionTeamLoader implements SimulationDbPartParser<CompetitionTeam> {

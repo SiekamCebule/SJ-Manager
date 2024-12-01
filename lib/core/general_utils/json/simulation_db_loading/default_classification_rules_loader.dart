@@ -1,6 +1,6 @@
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
-import 'package:sj_manager/to_embrace/classification/default_classification_rules.dart';
+import 'package:sj_manager/to_embrace/classification/simple_classification_rules.dart';
 import 'package:sj_manager/to_embrace/competition/competition.dart';
 import 'package:sj_manager/to_embrace/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
@@ -8,7 +8,7 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
 class DefaultClassificationRulesParser
-    implements SimulationDbPartParser<DefaultClassificationRules> {
+    implements SimulationDbPartParser<SimpleClassificationRules> {
   const DefaultClassificationRulesParser({
     required this.idsRepository,
     required this.classificationScoreCreatorParser,
@@ -19,7 +19,7 @@ class DefaultClassificationRulesParser
       classificationScoreCreatorParser;
 
   @override
-  DefaultClassificationRules parse(Json json) {
+  SimpleClassificationRules parse(Json json) {
     final type = json['type'] as String;
     return switch (type) {
       'individual' || 'team' => _loadAccordingly(json: json, typeString: type),
@@ -29,7 +29,7 @@ class DefaultClassificationRulesParser
     };
   }
 
-  DefaultClassificationRules _loadAccordingly(
+  SimpleClassificationRules _loadAccordingly(
       {required Json json, required String typeString}) {
     final classificationScoreCreator =
         classificationScoreCreatorParser.parse(json['classificationScoreCreator']);
@@ -45,10 +45,10 @@ class DefaultClassificationRulesParser
       },
     );
 
-    DefaultIndividualClassificationRules createIndividual() {
+    SimpleIndividualClassificationRules createIndividual() {
       if (classificationScoreCreator is ClassificationScoreCreator<JumperDbRecord,
           DefaultClassificationScoreCreatingContext<JumperDbRecord>>) {
-        return DefaultIndividualClassificationRules(
+        return SimpleIndividualClassificationRules(
           classificationScoreCreator: classificationScoreCreator,
           scoringType: scoringType,
           pointsMap: json['pointsMap'],
@@ -65,10 +65,10 @@ class DefaultClassificationRulesParser
       }
     }
 
-    DefaultTeamClassificationRules createTeam() {
+    SimpleTeamClassificationRules createTeam() {
       if (classificationScoreCreator is ClassificationScoreCreator<SimulationTeam,
           DefaultClassificationScoreCreatingContext<SimulationTeam>>) {
-        return DefaultTeamClassificationRules(
+        return SimpleTeamClassificationRules(
           classificationScoreCreator: classificationScoreCreator,
           scoringType: scoringType,
           pointsMap: json['pointsMap'],
@@ -93,10 +93,10 @@ class DefaultClassificationRulesParser
     };
   }
 
-  DefaultClassificationScoringType _loadScoringType(dynamic value) {
+  SimpleClassificationScoringType _loadScoringType(dynamic value) {
     return switch (value) {
-      'pointsFromCompetitions' => DefaultClassificationScoringType.pointsFromCompetitions,
-      'pointsFromMap' => DefaultClassificationScoringType.pointsFromMap,
+      'pointsFromCompetitions' => SimpleClassificationScoringType.pointsFromCompetitions,
+      'pointsFromMap' => SimpleClassificationScoringType.pointsFromMap,
       _ => throw UnsupportedError(
           'An unsupported type of DefaultClassificationScoringType. Supported are only \'pointsFromCompetitions\' \'pointsFromMap\' ($value)')
     };

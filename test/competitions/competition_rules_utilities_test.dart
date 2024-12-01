@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:osje_sim/osje_sim.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/competition_score_creator/concrete/individual/default_linear.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/competition_score_creator/concrete/team/default_linear.dart';
+import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/competition_score_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/concrete/individual/default_linear.dart';
+import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/concrete/team/default_linear.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/competition_score_details.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/jump_score_details.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart';
@@ -13,7 +13,7 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/core/core_classes/sex.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/specific_teams/competition_team.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/subjects/competition_team.dart';
 import 'package:sj_manager/core/core_classes/country_team/country_team_db_record.dart';
 
 import 'competition_rules_utilities_test.mocks.dart';

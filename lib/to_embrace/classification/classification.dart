@@ -1,10 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/to_embrace/classification/default_classification_rules.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/score_details.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/standings.dart';
+import 'package:sj_manager/to_embrace/classification/simple_classification_rules.dart';
 
-abstract class Classification<E, S extends Standings<E, ScoreDetails>,
-    R extends ClassificationRules<E>> with EquatableMixin {
+abstract class Classification<T, R extends ClassificationRules<T>> with EquatableMixin {
   const Classification({
     required this.name,
     required this.standings,
@@ -12,15 +10,8 @@ abstract class Classification<E, S extends Standings<E, ScoreDetails>,
   });
 
   final String name;
-  final S? standings;
+  final Standings? standings;
   final R rules;
-
-  void updateStandings() {
-    if (standings == null) {
-      throw StateError('Standings are null, so cannot update them');
-    }
-    standings!.update();
-  }
 
   @override
   List<Object?> get props => [
@@ -30,11 +21,12 @@ abstract class Classification<E, S extends Standings<E, ScoreDetails>,
       ];
 }
 
-class DefaultClassification<E, S extends Standings<E, ScoreDetails>>
-    extends Classification<E, S, DefaultClassificationRules<E>> {
-  const DefaultClassification({
+class SimpleClassification<T> extends Classification<T, SimpleClassificationRules<T>> {
+  const SimpleClassification({
     required super.name,
     required super.standings,
     required super.rules,
   });
 }
+
+// TODO: Custom classification

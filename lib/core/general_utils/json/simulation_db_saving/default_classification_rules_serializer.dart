@@ -1,11 +1,11 @@
 import 'package:sj_manager/core/general_utils/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
-import 'package:sj_manager/to_embrace/classification/default_classification_rules.dart';
+import 'package:sj_manager/to_embrace/classification/simple_classification_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
 class DefaultClassificationRulesSerializer
-    implements SimulationDbPartSerializer<DefaultClassificationRules> {
+    implements SimulationDbPartSerializer<SimpleClassificationRules> {
   const DefaultClassificationRulesSerializer({
     required this.idsRepository,
     required this.classificationScoreCreatorSerializer,
@@ -16,9 +16,9 @@ class DefaultClassificationRulesSerializer
       classificationScoreCreatorSerializer;
 
   @override
-  Json serialize(DefaultClassificationRules rules) {
-    if (rules is DefaultIndividualClassificationRules ||
-        rules is DefaultTeamClassificationRules) {
+  Json serialize(SimpleClassificationRules rules) {
+    if (rules is SimpleIndividualClassificationRules ||
+        rules is SimpleTeamClassificationRules) {
       return _serializeAccordingly(rules: rules);
     } else {
       throw UnsupportedError(
@@ -28,7 +28,7 @@ class DefaultClassificationRulesSerializer
   }
 
   Json _serializeAccordingly({
-    required DefaultClassificationRules rules,
+    required SimpleClassificationRules rules,
   }) {
     final classificationScoreCreatorJson =
         classificationScoreCreatorSerializer.serialize(rules.classificationScoreCreator);
@@ -39,25 +39,25 @@ class DefaultClassificationRulesSerializer
         (competition, modifier) => MapEntry(idsRepository.id(competition), modifier));
 
     return {
-      'type': rules is DefaultIndividualClassificationRules ? 'individual' : 'team',
+      'type': rules is SimpleIndividualClassificationRules ? 'individual' : 'team',
       'classificationScoreCreator': classificationScoreCreatorJson,
       'scoringType': _serializeType(rules.scoringType),
       'pointsMapJson': pointsMapJson,
       'competitionIds': competitionIdsJson,
       'pointsModifiers': pointsModifiersJson,
-      if (rules is DefaultIndividualClassificationRules)
+      if (rules is SimpleIndividualClassificationRules)
         'includeIndividualPlaceFromTeamCompetitions':
             rules.includeApperancesInTeamCompetitions,
-      if (rules is DefaultTeamClassificationRules)
+      if (rules is SimpleTeamClassificationRules)
         'includeJumperPointsFromIndividualCompetitions':
             rules.includeJumperPointsFromIndividualCompetitions
     };
   }
 
-  dynamic _serializeType(DefaultClassificationScoringType type) {
+  dynamic _serializeType(SimpleClassificationScoringType type) {
     return switch (type) {
-      DefaultClassificationScoringType.pointsFromCompetitions => 'pointsFromCompetitions',
-      DefaultClassificationScoringType.pointsFromMap => 'pointsFromMap',
+      SimpleClassificationScoringType.pointsFromCompetitions => 'pointsFromCompetitions',
+      SimpleClassificationScoringType.pointsFromMap => 'pointsFromMap',
     };
   }
 }

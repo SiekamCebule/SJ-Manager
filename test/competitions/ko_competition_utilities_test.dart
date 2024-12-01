@@ -12,9 +12,9 @@ import 'package:sj_manager/to_embrace/competition/rules/utils/ko_round_advanceme
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/score_details.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings_positions_map_creator/standings_positions_with_no_ex_aequo_creator.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings_positions_map_creator/standings_positions_with_shuffle_on_equal_positions_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/standings_position_creators/standings_positions_with_ex_aequos_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/standings_position_creators/standings_positions_with_no_ex_aequo_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/standings_position_creators/standings_positions_with_shuffle_on_equal_positions_creator.dart';
 import 'package:sj_manager/core/core_classes/country/country.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 

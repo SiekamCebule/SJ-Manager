@@ -7,6 +7,7 @@ class PersonalCoachTeam extends SimulationTeam {
     required super.reports,
   });
 
+  @override
   List<SimulationJumper> jumpers;
 
   @override

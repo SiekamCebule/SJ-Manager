@@ -1,8 +1,8 @@
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/competition_score_creator/competition_score_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/competition_score_creator/concrete/individual/default_linear.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/competition_score_creator/concrete/team/default_linear.dart';
+import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/competition_score_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/concrete/individual/default_linear.dart';
+import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/concrete/team/default_linear.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
 class CompetitionScoreCreatorLoader

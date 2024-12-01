@@ -17,7 +17,7 @@ import 'package:sj_manager/features/game_variants/domain/entities/game_variant.d
 import 'package:sj_manager/core/general_utils/multilingual_string.dart';
 import 'package:sj_manager/features/game_variants/data/data_sources/specific_variants/test/test_variant_constants.dart';
 import 'package:sj_manager/to_embrace/classification/classification.dart';
-import 'package:sj_manager/to_embrace/classification/default_classification_rules.dart';
+import 'package:sj_manager/to_embrace/classification/simple_classification_rules.dart';
 import 'package:sj_manager/to_embrace/competition/calendar_records/calendar_main_competition_record.dart';
 import 'package:sj_manager/to_embrace/competition/calendar_records/calendar_main_competition_record_setup.dart';
 import 'package:sj_manager/to_embrace/competition/calendar_records/calendar_main_competition_records_to_calendar.dart';
@@ -29,18 +29,18 @@ import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/
 import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/entities_limit.dart';
 import 'package:sj_manager/to_embrace/competition/rules/ko/ko_round_rules.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/classification_score_creator/concrete/individual_default.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/classification_score_creator/concrete/team_default.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/competition_score_creator/concrete/individual/default_linear.dart';
+import 'package:sj_manager/features/competitions/domain/utils/classification_score_creator/concrete/individual_default.dart';
+import 'package:sj_manager/features/competitions/domain/utils/classification_score_creator/concrete/team_default.dart';
+import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/concrete/individual/default_linear.dart';
 import 'package:collection/collection.dart';
 import 'package:sj_manager/to_embrace/competition/rules/utils/judges_creator/concrete/default.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/jump_score_creator/concrete/default_classic.dart';
+import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/concrete/default_classic.dart';
 import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.dart/concrete/default_classic.dart';
 import 'package:sj_manager/to_embrace/competition/rules/utils/ko_round_advancement_determinator/concrete/n_best.dart';
 import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/concrete/default_weighted.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series_setup.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings_positions_map_creator/standings_positions_with_ex_aequos_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/standings_position_creators/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 
@@ -349,39 +349,39 @@ class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSour
               competition.hill == _hillByLocalityAndHs('Wisła', 134),
         );
         return [
-          DefaultClassification(
+          SimpleClassification(
             name: 'World Cup',
             standings:
                 Standings(positionsCreator: StandingsPositionsWithExAequosCreator()),
-            rules: DefaultIndividualClassificationRules(
+            rules: SimpleIndividualClassificationRules(
               classificationScoreCreator: DefaultIndividualClassificationScoreCreator(),
-              scoringType: DefaultClassificationScoringType.pointsFromMap,
+              scoringType: SimpleClassificationScoringType.pointsFromMap,
               pointsMap: worldCupPointsMap,
               competitions: wcCompetitions.toList(),
               pointsModifiers: {},
               includeApperancesInTeamCompetitions: false,
             ),
           ),
-          DefaultClassification(
+          SimpleClassification(
             name: 'Nations Cup',
             standings:
                 Standings(positionsCreator: StandingsPositionsWithExAequosCreator()),
-            rules: DefaultTeamClassificationRules(
+            rules: SimpleTeamClassificationRules(
               classificationScoreCreator: DefaultTeamClassificationScoreCreator(),
-              scoringType: DefaultClassificationScoringType.pointsFromMap,
+              scoringType: SimpleClassificationScoringType.pointsFromMap,
               pointsMap: nationsCupPointsMap,
               competitions: ncCompetitions.toList(),
               pointsModifiers: ncModifiers,
               includeJumperPointsFromIndividualCompetitions: true,
             ),
           ),
-          DefaultClassification(
+          SimpleClassification(
             name: 'Wisła Six',
             standings:
                 Standings(positionsCreator: StandingsPositionsWithExAequosCreator()),
-            rules: DefaultIndividualClassificationRules(
+            rules: SimpleIndividualClassificationRules(
               classificationScoreCreator: DefaultIndividualClassificationScoreCreator(),
-              scoringType: DefaultClassificationScoringType.pointsFromCompetitions,
+              scoringType: SimpleClassificationScoringType.pointsFromCompetitions,
               pointsMap: null,
               competitions: wislaSixCompetitions.toList(),
               pointsModifiers: {},
