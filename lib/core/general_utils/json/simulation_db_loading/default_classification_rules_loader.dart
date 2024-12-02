@@ -1,9 +1,9 @@
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
+import 'package:sj_manager/features/competitions/domain/utils/classification_score_creator/classification_score_creator.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/to_embrace/classification/simple_classification_rules.dart';
 import 'package:sj_manager/to_embrace/competition/competition.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
-import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
@@ -46,10 +46,9 @@ class DefaultClassificationRulesParser
     );
 
     SimpleIndividualClassificationRules createIndividual() {
-      if (classificationScoreCreator is ClassificationScoreCreator<JumperDbRecord,
-          DefaultClassificationScoreCreatingContext<JumperDbRecord>>) {
+      if (classificationScoreCreator is ClassificationScoreCreator<SimulationJumper>) {
         return SimpleIndividualClassificationRules(
-          classificationScoreCreator: classificationScoreCreator,
+          scoreCreator: classificationScoreCreator,
           scoringType: scoringType,
           pointsMap: json['pointsMap'],
           competitions: competitions.toList(),
@@ -66,10 +65,9 @@ class DefaultClassificationRulesParser
     }
 
     SimpleTeamClassificationRules createTeam() {
-      if (classificationScoreCreator is ClassificationScoreCreator<SimulationTeam,
-          DefaultClassificationScoreCreatingContext<SimulationTeam>>) {
+      if (classificationScoreCreator is ClassificationScoreCreator<SimulationTeam>) {
         return SimpleTeamClassificationRules(
-          classificationScoreCreator: classificationScoreCreator,
+          scoreCreator: classificationScoreCreator,
           scoringType: scoringType,
           pointsMap: json['pointsMap'],
           competitions: competitions.toList(),

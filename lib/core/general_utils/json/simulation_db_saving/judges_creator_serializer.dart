@@ -1,7 +1,7 @@
 import 'package:sj_manager/core/general_utils/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/judges_creator/concrete/default.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/judges_creator/judges_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/judges_creator/judges_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/judges_creator/specific/default_judges_creator.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
 class JudgesCreatorSerializer implements SimulationDbPartSerializer<JudgesCreator> {

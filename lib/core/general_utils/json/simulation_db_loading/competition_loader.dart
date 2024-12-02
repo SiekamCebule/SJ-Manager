@@ -5,7 +5,7 @@ import 'package:sj_manager/core/general_utils/json/json_types.dart';
 import 'package:sj_manager/to_embrace/competition/competition.dart';
 import 'package:sj_manager/to_embrace/competition/competition_labels.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules_provider.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/standings.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 

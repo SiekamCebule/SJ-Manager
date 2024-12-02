@@ -1,46 +1,42 @@
 import 'dart:math';
-
-import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_competition_round_rules.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/competition_scores.dart';
 import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/jump_score_creator.dart';
-import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/util_functions.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/jump_score_details.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart';
+import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_competition_round_rules.dart';
+import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/context/jump_score_creating_context.dart';
+import 'package:sj_manager/core/general_utils/hill_points_utils.dart';
 import 'package:sj_manager/core/general_utils/math.dart';
 
-class DefaultClassicJumpScoreCreator<E> extends JumpScoreCreator<E> {
+class DefaultClassicJumpScoreCreator
+    implements JumpScoreCreator<JumpScoreCreatingContext> {
   late JumpScoreCreatingContext _context;
 
   @override
-  Score<E, CompetitionJumpScoreDetails> compute(JumpScoreCreatingContext<E> context) {
+  CompetitionJumpScore create(JumpScoreCreatingContext context) {
     _context = context;
 
-    final details = CompetitionJumpScoreDetails(
-      jumpRecord: _context.jumpRecord,
-      distancePoints: _calculateDistancePoints(),
-      judgesPoints: _calculateJudgesPoints(),
-      gatePoints: _calculateGatePoints(),
-      windPoints: _calculateWindPoints(),
-    );
+    final distancePoints = _calculateDistancePoints();
+    final judgesPoints = _calculateJudgesPoints();
+    final gatePoints = _calculateGatePoints();
+    final windPoints = _calculateWindPoints();
 
-    final componentsSum = [
-      details.distancePoints ?? 0,
-      details.judgesPoints ?? 0,
-      details.gatePoints ?? 0,
-      details.windPoints ?? 0,
-    ].fold(0.0, (sum, value) => sum + value);
-    final withOneDecimalPlace = componentsSum.toPrecision(1);
-    final atLeastZero = max(0, withOneDecimalPlace).toDouble();
+    final points = [
+      distancePoints ?? 0,
+      judgesPoints ?? 0,
+      gatePoints ?? 0,
+      windPoints ?? 0,
+    ].reduce((value, element) => value + element).toPrecision(1);
 
-    return Score(
-      entity: _context.entity,
-      details: details,
-      points: atLeastZero,
+    return CompetitionJumpScore(
+      subject: context.subject,
+      jump: context.jump,
+      competition: context.competition,
+      points: points.clamp(0, double.infinity),
     );
   }
 
-  double _calculateDistancePoints() {
+  double? _calculateDistancePoints() {
     final pointsForK = defaultHillPointsForK(_context.hill);
-    final behindK = (_context.jumpRecord.distance - _context.hill.k);
+    final behindK = (_context.jump.distance - _context.hill.k);
     final pointsForMeter = defaultHillPointsForMeter(_context.hill);
     return pointsForK + (behindK * pointsForMeter);
   }

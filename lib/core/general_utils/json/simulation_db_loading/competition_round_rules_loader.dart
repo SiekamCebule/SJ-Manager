@@ -3,6 +3,10 @@ import 'dart:async';
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/standings_positions_creator_loader.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/subjects/competition_team.dart';
+import 'package:sj_manager/features/competitions/domain/utils/judges_creator/judges_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/jump_score_creator.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_competition_round_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
@@ -10,11 +14,7 @@ import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/
 import 'package:sj_manager/to_embrace/competition/rules/entities_limit.dart';
 import 'package:sj_manager/to_embrace/competition/rules/ko/ko_round_rules.dart';
 import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/competition_score_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/judges_creator/judges_creator.dart';
-import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/jump_score_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/wind_averager.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/typedefs.dart';
-import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/competitions/domain/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
 class CompetitionRoundRulesParser
@@ -53,7 +53,7 @@ class CompetitionRoundRulesParser
     };
   }
 
-  FutureOr<DefaultCompetitionRoundRules<JumperDbRecord>> _loadIndividual(
+  FutureOr<DefaultCompetitionRoundRules<SimulationJumper>> _loadIndividual(
       Json json) async {
     final entitiesLimitJson = json['limit'];
     EntitiesLimit? entitiesLimit;
@@ -62,9 +62,7 @@ class CompetitionRoundRulesParser
     }
     final competitionScoreCreator =
         competitionScoreCreatorParser.parse(json['competitionScoreCreator']);
-    if (competitionScoreCreator
-            is CompetitionScoreCreator<CompetitionScore<JumperDbRecord>> ==
-        false) {
+    if (competitionScoreCreator is CompetitionScoreCreator<SimulationJumper> == false) {
       throw ArgumentError(
         '(Parsing) The loaded competition score creator type is not a valid one for individual competition rules (${competitionScoreCreator.runtimeType})',
       );
@@ -87,7 +85,7 @@ class CompetitionRoundRulesParser
       judgesCreator: await judgesCreatorParser.parse(json['judgesCreator']),
       significantJudgesCount: json['significantJudgesCount'],
       competitionScoreCreator:
-          competitionScoreCreator as CompetitionScoreCreator<CompetitionJumperScore>,
+          competitionScoreCreator as CompetitionScoreCreator<SimulationJumper>,
       jumpScoreCreator: await jumpScoreCreatorParser.parse(json['jumpScoreCreator']),
       koRules: koRulesJson != null ? await koRoundRulesParser.parse(koRulesJson) : null,
     );
@@ -109,8 +107,7 @@ class CompetitionRoundRulesParser
 
     final competitionScoreCreator =
         competitionScoreCreatorParser.parse(json['competitionScoreCreator']);
-    if (competitionScoreCreator is CompetitionScoreCreator<CompetitionTeamScore> ==
-        false) {
+    if (competitionScoreCreator is CompetitionScoreCreator<CompetitionTeam> == false) {
       throw ArgumentError(
         '(Parsing) The loaded competition score creator type is not a valid one for team competition rules (${competitionScoreCreator.runtimeType})',
       );
@@ -133,7 +130,7 @@ class CompetitionRoundRulesParser
       judgesCreator: await judgesCreatorParser.parse(json['judgesCreator']),
       significantJudgesCount: json['significantJudgesCount'],
       competitionScoreCreator:
-          competitionScoreCreator as CompetitionScoreCreator<CompetitionTeamScore>,
+          competitionScoreCreator as CompetitionScoreCreator<CompetitionTeam>,
       jumpScoreCreator: await jumpScoreCreatorParser.parse(json['jumpScoreCreator']),
       groups: groups,
       koRules: koRulesJson != null ? await koRoundRulesParser.parse(koRulesJson) : null,

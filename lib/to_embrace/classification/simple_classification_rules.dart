@@ -1,8 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:sj_manager/features/competitions/domain/utils/classification_score_creator/classification_score_creator.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/to_embrace/competition/competition.dart';
-import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 
 abstract class ClassificationRules<E> {
   const ClassificationRules({
@@ -37,7 +36,7 @@ abstract class SimpleClassificationRules<E> extends ClassificationRules<E>
 }
 
 class SimpleIndividualClassificationRules
-    extends SimpleClassificationRules<JumperDbRecord> {
+    extends SimpleClassificationRules<SimulationJumper> {
   const SimpleIndividualClassificationRules({
     required super.scoreCreator,
     required super.scoringType,
@@ -56,7 +55,7 @@ class SimpleIndividualClassificationRules
       ];
 }
 
-class SimpleTeamClassificationRules extends SimpleClassificationRules<SimulationTeam> {
+class SimpleTeamClassificationRules extends SimpleClassificationRules<dynamic> {
   const SimpleTeamClassificationRules({
     required super.scoreCreator,
     required super.scoringType,

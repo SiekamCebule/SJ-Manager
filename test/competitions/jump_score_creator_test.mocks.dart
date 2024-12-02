@@ -4,44 +4,57 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i16;
+import 'package:mockito/src/dummies.dart' as _i21;
 import 'package:osje_sim/osje_sim.dart' as _i7;
+import 'package:sj_manager/core/core_classes/country/country.dart' as _i14;
 import 'package:sj_manager/core/core_classes/hill/hill.dart' as _i6;
-import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart'
-    as _i17;
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series.dart'
-    as _i2;
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/competition_score_details.dart'
-    as _i12;
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/score_details.dart'
-    as _i4;
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart'
-    as _i8;
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart'
-    as _i3;
-import 'package:sj_manager/features/competitions/domain/utils/standings_position_creators/standings_positions_creator.dart'
-    as _i9;
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart'
-    as _i22;
+import 'package:sj_manager/core/core_classes/sex.dart' as _i29;
+import 'package:sj_manager/core/psyche/level_of_consciousness.dart' as _i16;
+import 'package:sj_manager/features/career_mode/subfeatures/subteams/domain/entities/subteam.dart'
+    as _i28;
+import 'package:sj_manager/features/career_mode/subfeatures/training/domain/entities/jumper_training_config.dart'
+    as _i30;
 import 'package:sj_manager/features/competitions/domain/entities/scoring/score/subjects/competition_team.dart'
-    as _i21;
+    as _i25;
+import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/competition_score_creator.dart'
+    as _i11;
+import 'package:sj_manager/features/competitions/domain/utils/judges_creator/judges_creator.dart'
+    as _i9;
+import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/context/jump_score_creating_context.dart'
+    as _i20;
+import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/jump_score_creator.dart'
+    as _i10;
+import 'package:sj_manager/features/competitions/domain/utils/standings_position_creators/standings_positions_creator.dart'
+    as _i8;
+import 'package:sj_manager/features/competitions/domain/utils/wind_averager/wind_averager.dart'
+    as _i23;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series.dart'
+    as _i4;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/simulation_season.dart'
+    as _i3;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/reports/jumper_reports.dart'
+    as _i17;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart'
+    as _i19;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/stats/jumper_stats.dart'
+    as _i18;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/simulation_database.dart'
+    as _i2;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/country_team.dart'
+    as _i15;
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart'
+    as _i26;
 import 'package:sj_manager/to_embrace/competition/competition.dart' as _i5;
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart'
-    as _i14;
+    as _i12;
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_team_competition_round_rules.dart'
-    as _i15;
-import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart'
-    as _i23;
-import 'package:sj_manager/to_embrace/competition/rules/entities_limit.dart' as _i18;
-import 'package:sj_manager/to_embrace/competition/rules/ko/ko_round_rules.dart' as _i20;
-import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/competition_score_creator.dart'
     as _i13;
-import 'package:sj_manager/to_embrace/competition/rules/utils/judges_creator/judges_creator.dart'
-    as _i10;
-import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/jump_score_creator.dart'
-    as _i11;
-import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/wind_averager.dart'
-    as _i19;
+import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart'
+    as _i27;
+import 'package:sj_manager/to_embrace/competition/rules/entities_limit.dart'
+    as _i22;
+import 'package:sj_manager/to_embrace/competition/rules/ko/ko_round_rules.dart'
+    as _i24;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -56,8 +69,9 @@ import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/wind
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeEventSeries_0 extends _i1.SmartFake implements _i2.EventSeries {
-  _FakeEventSeries_0(
+class _FakeSimulationDatabase_0 extends _i1.SmartFake
+    implements _i2.SimulationDatabase {
+  _FakeSimulationDatabase_0(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -66,9 +80,9 @@ class _FakeEventSeries_0 extends _i1.SmartFake implements _i2.EventSeries {
         );
 }
 
-class _FakeCompetition_1<E1, S extends _i3.Standings<dynamic, _i4.ScoreDetails>>
-    extends _i1.SmartFake implements _i5.Competition<E1, S> {
-  _FakeCompetition_1(
+class _FakeSimulationSeason_1 extends _i1.SmartFake
+    implements _i3.SimulationSeason {
+  _FakeSimulationSeason_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -77,8 +91,8 @@ class _FakeCompetition_1<E1, S extends _i3.Standings<dynamic, _i4.ScoreDetails>>
         );
 }
 
-class _FakeHill_2 extends _i1.SmartFake implements _i6.Hill {
-  _FakeHill_2(
+class _FakeEventSeries_2 extends _i1.SmartFake implements _i4.EventSeries {
+  _FakeEventSeries_2(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -87,8 +101,9 @@ class _FakeHill_2 extends _i1.SmartFake implements _i6.Hill {
         );
 }
 
-class _FakeWindMeasurement_3 extends _i1.SmartFake implements _i7.WindMeasurement {
-  _FakeWindMeasurement_3(
+class _FakeCompetition_3<E> extends _i1.SmartFake
+    implements _i5.Competition<E> {
+  _FakeCompetition_3(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -97,9 +112,30 @@ class _FakeWindMeasurement_3 extends _i1.SmartFake implements _i7.WindMeasuremen
         );
 }
 
-class _FakeJumpSimulationRecord_4 extends _i1.SmartFake
+class _FakeHill_4 extends _i1.SmartFake implements _i6.Hill {
+  _FakeHill_4(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeWindMeasurement_5 extends _i1.SmartFake
+    implements _i7.WindMeasurement {
+  _FakeWindMeasurement_5(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeJumpSimulationRecord_6 extends _i1.SmartFake
     implements _i7.JumpSimulationRecord {
-  _FakeJumpSimulationRecord_4(
+  _FakeJumpSimulationRecord_6(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -108,9 +144,9 @@ class _FakeJumpSimulationRecord_4 extends _i1.SmartFake
         );
 }
 
-class _FakeStandingsPositionsCreator_5<S extends _i8.Score<dynamic, _i4.ScoreDetails>>
-    extends _i1.SmartFake implements _i9.StandingsPositionsCreator<S> {
-  _FakeStandingsPositionsCreator_5(
+class _FakeStandingsPositionsCreator_7 extends _i1.SmartFake
+    implements _i8.StandingsPositionsCreator {
+  _FakeStandingsPositionsCreator_7(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -119,8 +155,8 @@ class _FakeStandingsPositionsCreator_5<S extends _i8.Score<dynamic, _i4.ScoreDet
         );
 }
 
-class _FakeJudgesCreator_6 extends _i1.SmartFake implements _i10.JudgesCreator {
-  _FakeJudgesCreator_6(
+class _FakeJudgesCreator_8 extends _i1.SmartFake implements _i9.JudgesCreator {
+  _FakeJudgesCreator_8(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -129,9 +165,9 @@ class _FakeJudgesCreator_6 extends _i1.SmartFake implements _i10.JudgesCreator {
         );
 }
 
-class _FakeJumpScoreCreator_7<E> extends _i1.SmartFake
-    implements _i11.JumpScoreCreator<E> {
-  _FakeJumpScoreCreator_7(
+class _FakeJumpScoreCreator_9<C> extends _i1.SmartFake
+    implements _i10.JumpScoreCreator<C> {
+  _FakeJumpScoreCreator_9(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -140,10 +176,9 @@ class _FakeJumpScoreCreator_7<E> extends _i1.SmartFake
         );
 }
 
-class _FakeCompetitionScoreCreator_8<
-        S extends _i8.Score<dynamic, _i12.CompetitionScoreDetails<dynamic>>>
-    extends _i1.SmartFake implements _i13.CompetitionScoreCreator<S> {
-  _FakeCompetitionScoreCreator_8(
+class _FakeCompetitionScoreCreator_10<T> extends _i1.SmartFake
+    implements _i11.CompetitionScoreCreator<T> {
+  _FakeCompetitionScoreCreator_10(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -152,9 +187,9 @@ class _FakeCompetitionScoreCreator_8<
         );
 }
 
-class _FakeDefaultIndividualCompetitionRoundRules_9 extends _i1.SmartFake
-    implements _i14.DefaultIndividualCompetitionRoundRules {
-  _FakeDefaultIndividualCompetitionRoundRules_9(
+class _FakeDefaultIndividualCompetitionRoundRules_11 extends _i1.SmartFake
+    implements _i12.DefaultIndividualCompetitionRoundRules {
+  _FakeDefaultIndividualCompetitionRoundRules_11(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -163,9 +198,82 @@ class _FakeDefaultIndividualCompetitionRoundRules_9 extends _i1.SmartFake
         );
 }
 
-class _FakeDefaultTeamCompetitionRoundRules_10 extends _i1.SmartFake
-    implements _i15.DefaultTeamCompetitionRoundRules {
-  _FakeDefaultTeamCompetitionRoundRules_10(
+class _FakeDefaultTeamCompetitionRoundRules_12 extends _i1.SmartFake
+    implements _i13.DefaultTeamCompetitionRoundRules {
+  _FakeDefaultTeamCompetitionRoundRules_12(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeDateTime_13 extends _i1.SmartFake implements DateTime {
+  _FakeDateTime_13(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeCountry_14 extends _i1.SmartFake implements _i14.Country {
+  _FakeCountry_14(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeCountryTeam_15 extends _i1.SmartFake implements _i15.CountryTeam {
+  _FakeCountryTeam_15(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeLevelOfConsciousness_16 extends _i1.SmartFake
+    implements _i16.LevelOfConsciousness {
+  _FakeLevelOfConsciousness_16(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeJumperReports_17 extends _i1.SmartFake
+    implements _i17.JumperReports {
+  _FakeJumperReports_17(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeJumperStats_18 extends _i1.SmartFake implements _i18.JumperStats {
+  _FakeJumperStats_18(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeSimulationJumper_19 extends _i1.SmartFake
+    implements _i19.SimulationJumper {
+  _FakeSimulationJumper_19(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -177,31 +285,56 @@ class _FakeDefaultTeamCompetitionRoundRules_10 extends _i1.SmartFake
 /// A class which mocks [JumpScoreCreatingContext].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockJumpScoreCreatingContext<E> extends _i1.Mock
-    implements _i11.JumpScoreCreatingContext<E> {
+class MockJumpScoreCreatingContext<T> extends _i1.Mock
+    implements _i20.JumpScoreCreatingContext<T> {
   MockJumpScoreCreatingContext() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i2.EventSeries get eventSeries => (super.noSuchMethod(
+  T get subject => (super.noSuchMethod(
+        Invocation.getter(#subject),
+        returnValue: _i21.dummyValue<T>(
+          this,
+          Invocation.getter(#subject),
+        ),
+      ) as T);
+
+  @override
+  _i2.SimulationDatabase get simulationDatabase => (super.noSuchMethod(
+        Invocation.getter(#simulationDatabase),
+        returnValue: _FakeSimulationDatabase_0(
+          this,
+          Invocation.getter(#simulationDatabase),
+        ),
+      ) as _i2.SimulationDatabase);
+
+  @override
+  _i3.SimulationSeason get season => (super.noSuchMethod(
+        Invocation.getter(#season),
+        returnValue: _FakeSimulationSeason_1(
+          this,
+          Invocation.getter(#season),
+        ),
+      ) as _i3.SimulationSeason);
+
+  @override
+  _i4.EventSeries get eventSeries => (super.noSuchMethod(
         Invocation.getter(#eventSeries),
-        returnValue: _FakeEventSeries_0(
+        returnValue: _FakeEventSeries_2(
           this,
           Invocation.getter(#eventSeries),
         ),
-      ) as _i2.EventSeries);
+      ) as _i4.EventSeries);
 
   @override
-  _i5.Competition<dynamic, _i3.Standings<dynamic, _i4.ScoreDetails>> get competition =>
-      (super.noSuchMethod(
+  _i5.Competition<dynamic> get competition => (super.noSuchMethod(
         Invocation.getter(#competition),
-        returnValue:
-            _FakeCompetition_1<dynamic, _i3.Standings<dynamic, _i4.ScoreDetails>>(
+        returnValue: _FakeCompetition_3<dynamic>(
           this,
           Invocation.getter(#competition),
         ),
-      ) as _i5.Competition<dynamic, _i3.Standings<dynamic, _i4.ScoreDetails>>);
+      ) as _i5.Competition<dynamic>);
 
   @override
   int get currentRound => (super.noSuchMethod(
@@ -212,7 +345,7 @@ class MockJumpScoreCreatingContext<E> extends _i1.Mock
   @override
   _i6.Hill get hill => (super.noSuchMethod(
         Invocation.getter(#hill),
-        returnValue: _FakeHill_2(
+        returnValue: _FakeHill_4(
           this,
           Invocation.getter(#hill),
         ),
@@ -233,7 +366,7 @@ class MockJumpScoreCreatingContext<E> extends _i1.Mock
   @override
   _i7.WindMeasurement get windDuringJump => (super.noSuchMethod(
         Invocation.getter(#windDuringJump),
-        returnValue: _FakeWindMeasurement_3(
+        returnValue: _FakeWindMeasurement_5(
           this,
           Invocation.getter(#windDuringJump),
         ),
@@ -246,11 +379,11 @@ class MockJumpScoreCreatingContext<E> extends _i1.Mock
       ) as double);
 
   @override
-  _i7.JumpSimulationRecord get jumpRecord => (super.noSuchMethod(
-        Invocation.getter(#jumpRecord),
-        returnValue: _FakeJumpSimulationRecord_4(
+  _i7.JumpSimulationRecord get jump => (super.noSuchMethod(
+        Invocation.getter(#jump),
+        returnValue: _FakeJumpSimulationRecord_6(
           this,
-          Invocation.getter(#jumpRecord),
+          Invocation.getter(#jump),
         ),
       ) as _i7.JumpSimulationRecord);
 
@@ -259,22 +392,13 @@ class MockJumpScoreCreatingContext<E> extends _i1.Mock
         Invocation.getter(#judges),
         returnValue: <double>[],
       ) as List<double>);
-
-  @override
-  E get entity => (super.noSuchMethod(
-        Invocation.getter(#entity),
-        returnValue: _i16.dummyValue<E>(
-          this,
-          Invocation.getter(#entity),
-        ),
-      ) as E);
 }
 
 /// A class which mocks [DefaultIndividualCompetitionRoundRules].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
-    implements _i14.DefaultIndividualCompetitionRoundRules {
+    implements _i12.DefaultIndividualCompetitionRoundRules {
   MockDefaultIndividualCompetitionRoundRules() {
     _i1.throwOnMissingStub(this);
   }
@@ -328,15 +452,13 @@ class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
       ) as bool);
 
   @override
-  _i9.StandingsPositionsCreator<_i8.Score<dynamic, _i4.ScoreDetails>>
-      get positionsCreator => (super.noSuchMethod(
-            Invocation.getter(#positionsCreator),
-            returnValue:
-                _FakeStandingsPositionsCreator_5<_i8.Score<dynamic, _i4.ScoreDetails>>(
-              this,
-              Invocation.getter(#positionsCreator),
-            ),
-          ) as _i9.StandingsPositionsCreator<_i8.Score<dynamic, _i4.ScoreDetails>>);
+  _i8.StandingsPositionsCreator get positionsCreator => (super.noSuchMethod(
+        Invocation.getter(#positionsCreator),
+        returnValue: _FakeStandingsPositionsCreator_7(
+          this,
+          Invocation.getter(#positionsCreator),
+        ),
+      ) as _i8.StandingsPositionsCreator);
 
   @override
   bool get ruleOf95HsFallEnabled => (super.noSuchMethod(
@@ -351,13 +473,13 @@ class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
       ) as int);
 
   @override
-  _i10.JudgesCreator get judgesCreator => (super.noSuchMethod(
+  _i9.JudgesCreator get judgesCreator => (super.noSuchMethod(
         Invocation.getter(#judgesCreator),
-        returnValue: _FakeJudgesCreator_6(
+        returnValue: _FakeJudgesCreator_8(
           this,
           Invocation.getter(#judgesCreator),
         ),
-      ) as _i10.JudgesCreator);
+      ) as _i9.JudgesCreator);
 
   @override
   int get significantJudgesCount => (super.noSuchMethod(
@@ -366,26 +488,23 @@ class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
       ) as int);
 
   @override
-  _i11.JumpScoreCreator<dynamic> get jumpScoreCreator => (super.noSuchMethod(
+  _i10.JumpScoreCreator<dynamic> get jumpScoreCreator => (super.noSuchMethod(
         Invocation.getter(#jumpScoreCreator),
-        returnValue: _FakeJumpScoreCreator_7<dynamic>(
+        returnValue: _FakeJumpScoreCreator_9<dynamic>(
           this,
           Invocation.getter(#jumpScoreCreator),
         ),
-      ) as _i11.JumpScoreCreator<dynamic>);
+      ) as _i10.JumpScoreCreator<dynamic>);
 
   @override
-  _i13.CompetitionScoreCreator<
-          _i8.Score<_i17.JumperDbRecord, _i12.CompetitionScoreDetails<dynamic>>>
+  _i11.CompetitionScoreCreator<_i19.SimulationJumper>
       get competitionScoreCreator => (super.noSuchMethod(
             Invocation.getter(#competitionScoreCreator),
-            returnValue: _FakeCompetitionScoreCreator_8<
-                _i8.Score<_i17.JumperDbRecord, _i12.CompetitionScoreDetails<dynamic>>>(
+            returnValue: _FakeCompetitionScoreCreator_10<_i19.SimulationJumper>(
               this,
               Invocation.getter(#competitionScoreCreator),
             ),
-          ) as _i13.CompetitionScoreCreator<
-              _i8.Score<_i17.JumperDbRecord, _i12.CompetitionScoreDetails<dynamic>>>);
+          ) as _i11.CompetitionScoreCreator<_i19.SimulationJumper>);
 
   @override
   bool get judgesEnabled => (super.noSuchMethod(
@@ -394,26 +513,25 @@ class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
       ) as bool);
 
   @override
-  _i14.DefaultIndividualCompetitionRoundRules copyWith({
-    _i18.EntitiesLimit? limit,
+  _i12.DefaultIndividualCompetitionRoundRules copyWith({
+    _i22.EntitiesLimit? limit,
     bool? bibsAreReassigned,
     bool? startlistIsSorted,
     bool? gateCanChange,
     bool? gateCompensationsEnabled,
     bool? windCompensationsEnabled,
-    _i19.WindAverager? windAverager,
+    _i23.WindAverager? windAverager,
     bool? inrunLightsEnabled,
     bool? dsqEnabled,
-    _i9.StandingsPositionsCreator<_i8.Score<dynamic, _i4.ScoreDetails>>? positionsCreator,
+    _i8.StandingsPositionsCreator? positionsCreator,
     bool? ruleOf95HsFallEnabled,
     int? judgesCount,
-    _i10.JudgesCreator? judgesCreator,
+    _i9.JudgesCreator? judgesCreator,
     int? significantJudgesCount,
-    _i11.JumpScoreCreator<dynamic>? jumpScoreCreator,
-    _i13.CompetitionScoreCreator<
-            _i8.Score<_i17.JumperDbRecord, _i12.CompetitionScoreDetails<dynamic>>>?
+    _i10.JumpScoreCreator<dynamic>? jumpScoreCreator,
+    _i11.CompetitionScoreCreator<_i19.SimulationJumper>?
         competitionScoreCreator,
-    _i20.KoRoundRules<dynamic>? koRules,
+    _i24.KoRoundRules<dynamic>? koRules,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -439,7 +557,7 @@ class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
             #koRules: koRules,
           },
         ),
-        returnValue: _FakeDefaultIndividualCompetitionRoundRules_9(
+        returnValue: _FakeDefaultIndividualCompetitionRoundRules_11(
           this,
           Invocation.method(
             #copyWith,
@@ -465,15 +583,14 @@ class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
             },
           ),
         ),
-      ) as _i14.DefaultIndividualCompetitionRoundRules);
+      ) as _i12.DefaultIndividualCompetitionRoundRules);
 
   @override
-  _i15.DefaultTeamCompetitionRoundRules toTeam({
-    required _i13.CompetitionScoreCreator<
-            _i8.Score<_i21.CompetitionTeam<_i22.SimulationTeam>,
-                _i12.CompetitionTeamScoreDetails>>?
+  _i13.DefaultTeamCompetitionRoundRules toTeam({
+    required _i11
+        .CompetitionScoreCreator<_i25.CompetitionTeam<_i26.SimulationTeam>>?
         competitionScoreCreator,
-    required List<_i23.TeamCompetitionGroupRules>? groups,
+    required List<_i27.TeamCompetitionGroupRules>? groups,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -484,7 +601,7 @@ class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
             #groups: groups,
           },
         ),
-        returnValue: _FakeDefaultTeamCompetitionRoundRules_10(
+        returnValue: _FakeDefaultTeamCompetitionRoundRules_12(
           this,
           Invocation.method(
             #toTeam,
@@ -495,5 +612,425 @@ class MockDefaultIndividualCompetitionRoundRules extends _i1.Mock
             },
           ),
         ),
-      ) as _i15.DefaultTeamCompetitionRoundRules);
+      ) as _i13.DefaultTeamCompetitionRoundRules);
+}
+
+/// A class which mocks [SimulationJumper].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSimulationJumper extends _i1.Mock implements _i19.SimulationJumper {
+  MockSimulationJumper() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  DateTime get dateOfBirth => (super.noSuchMethod(
+        Invocation.getter(#dateOfBirth),
+        returnValue: _FakeDateTime_13(
+          this,
+          Invocation.getter(#dateOfBirth),
+        ),
+      ) as DateTime);
+
+  @override
+  set dateOfBirth(DateTime? _dateOfBirth) => super.noSuchMethod(
+        Invocation.setter(
+          #dateOfBirth,
+          _dateOfBirth,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  String get name => (super.noSuchMethod(
+        Invocation.getter(#name),
+        returnValue: _i21.dummyValue<String>(
+          this,
+          Invocation.getter(#name),
+        ),
+      ) as String);
+
+  @override
+  set name(String? _name) => super.noSuchMethod(
+        Invocation.setter(
+          #name,
+          _name,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  String get surname => (super.noSuchMethod(
+        Invocation.getter(#surname),
+        returnValue: _i21.dummyValue<String>(
+          this,
+          Invocation.getter(#surname),
+        ),
+      ) as String);
+
+  @override
+  set surname(String? _surname) => super.noSuchMethod(
+        Invocation.setter(
+          #surname,
+          _surname,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i14.Country get country => (super.noSuchMethod(
+        Invocation.getter(#country),
+        returnValue: _FakeCountry_14(
+          this,
+          Invocation.getter(#country),
+        ),
+      ) as _i14.Country);
+
+  @override
+  set country(_i14.Country? _country) => super.noSuchMethod(
+        Invocation.setter(
+          #country,
+          _country,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i15.CountryTeam get countryTeam => (super.noSuchMethod(
+        Invocation.getter(#countryTeam),
+        returnValue: _FakeCountryTeam_15(
+          this,
+          Invocation.getter(#countryTeam),
+        ),
+      ) as _i15.CountryTeam);
+
+  @override
+  set countryTeam(_i15.CountryTeam? _countryTeam) => super.noSuchMethod(
+        Invocation.setter(
+          #countryTeam,
+          _countryTeam,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  set subteam(_i28.Subteam? _subteam) => super.noSuchMethod(
+        Invocation.setter(
+          #subteam,
+          _subteam,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i29.Sex get sex => (super.noSuchMethod(
+        Invocation.getter(#sex),
+        returnValue: _i29.Sex.male,
+      ) as _i29.Sex);
+
+  @override
+  set sex(_i29.Sex? _sex) => super.noSuchMethod(
+        Invocation.setter(
+          #sex,
+          _sex,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  double get takeoffQuality => (super.noSuchMethod(
+        Invocation.getter(#takeoffQuality),
+        returnValue: 0.0,
+      ) as double);
+
+  @override
+  set takeoffQuality(double? _takeoffQuality) => super.noSuchMethod(
+        Invocation.setter(
+          #takeoffQuality,
+          _takeoffQuality,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  double get flightQuality => (super.noSuchMethod(
+        Invocation.getter(#flightQuality),
+        returnValue: 0.0,
+      ) as double);
+
+  @override
+  set flightQuality(double? _flightQuality) => super.noSuchMethod(
+        Invocation.setter(
+          #flightQuality,
+          _flightQuality,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  double get landingQuality => (super.noSuchMethod(
+        Invocation.getter(#landingQuality),
+        returnValue: 0.0,
+      ) as double);
+
+  @override
+  set landingQuality(double? _landingQuality) => super.noSuchMethod(
+        Invocation.setter(
+          #landingQuality,
+          _landingQuality,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  set trainingConfig(_i30.JumperTrainingConfig? _trainingConfig) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #trainingConfig,
+          _trainingConfig,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  double get form => (super.noSuchMethod(
+        Invocation.getter(#form),
+        returnValue: 0.0,
+      ) as double);
+
+  @override
+  set form(double? _form) => super.noSuchMethod(
+        Invocation.setter(
+          #form,
+          _form,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  double get jumpsConsistency => (super.noSuchMethod(
+        Invocation.getter(#jumpsConsistency),
+        returnValue: 0.0,
+      ) as double);
+
+  @override
+  set jumpsConsistency(double? _jumpsConsistency) => super.noSuchMethod(
+        Invocation.setter(
+          #jumpsConsistency,
+          _jumpsConsistency,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  double get morale => (super.noSuchMethod(
+        Invocation.getter(#morale),
+        returnValue: 0.0,
+      ) as double);
+
+  @override
+  set morale(double? _morale) => super.noSuchMethod(
+        Invocation.setter(
+          #morale,
+          _morale,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  double get fatigue => (super.noSuchMethod(
+        Invocation.getter(#fatigue),
+        returnValue: 0.0,
+      ) as double);
+
+  @override
+  set fatigue(double? _fatigue) => super.noSuchMethod(
+        Invocation.setter(
+          #fatigue,
+          _fatigue,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i16.LevelOfConsciousness get levelOfConsciousness => (super.noSuchMethod(
+        Invocation.getter(#levelOfConsciousness),
+        returnValue: _FakeLevelOfConsciousness_16(
+          this,
+          Invocation.getter(#levelOfConsciousness),
+        ),
+      ) as _i16.LevelOfConsciousness);
+
+  @override
+  set levelOfConsciousness(_i16.LevelOfConsciousness? _levelOfConsciousness) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #levelOfConsciousness,
+          _levelOfConsciousness,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i17.JumperReports get reports => (super.noSuchMethod(
+        Invocation.getter(#reports),
+        returnValue: _FakeJumperReports_17(
+          this,
+          Invocation.getter(#reports),
+        ),
+      ) as _i17.JumperReports);
+
+  @override
+  set reports(_i17.JumperReports? _reports) => super.noSuchMethod(
+        Invocation.setter(
+          #reports,
+          _reports,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i18.JumperStats get stats => (super.noSuchMethod(
+        Invocation.getter(#stats),
+        returnValue: _FakeJumperStats_18(
+          this,
+          Invocation.getter(#stats),
+        ),
+      ) as _i18.JumperStats);
+
+  @override
+  set stats(_i18.JumperStats? _stats) => super.noSuchMethod(
+        Invocation.setter(
+          #stats,
+          _stats,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  List<Object?> get props => (super.noSuchMethod(
+        Invocation.getter(#props),
+        returnValue: <Object?>[],
+      ) as List<Object?>);
+
+  @override
+  int age({required DateTime? date}) => (super.noSuchMethod(
+        Invocation.method(
+          #age,
+          [],
+          {#date: date},
+        ),
+        returnValue: 0,
+      ) as int);
+
+  @override
+  int calculateAge(DateTime? birthDate) => (super.noSuchMethod(
+        Invocation.method(
+          #calculateAge,
+          [birthDate],
+        ),
+        returnValue: 0,
+      ) as int);
+
+  @override
+  String nameAndSurname({
+    bool? capitalizeSurname = false,
+    bool? reverse = false,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #nameAndSurname,
+          [],
+          {
+            #capitalizeSurname: capitalizeSurname,
+            #reverse: reverse,
+          },
+        ),
+        returnValue: _i21.dummyValue<String>(
+          this,
+          Invocation.method(
+            #nameAndSurname,
+            [],
+            {
+              #capitalizeSurname: capitalizeSurname,
+              #reverse: reverse,
+            },
+          ),
+        ),
+      ) as String);
+
+  @override
+  _i19.SimulationJumper copyWith({
+    DateTime? dateOfBirth,
+    String? name,
+    String? surname,
+    _i14.Country? country,
+    _i15.CountryTeam? countryTeam,
+    _i28.Subteam? subteam,
+    _i29.Sex? sex,
+    double? takeoffQuality,
+    double? flightQuality,
+    double? landingQuality,
+    _i30.JumperTrainingConfig? trainingConfig,
+    double? form,
+    double? jumpsConsistency,
+    double? morale,
+    double? fatigue,
+    _i16.LevelOfConsciousness? levelOfConsciousness,
+    _i17.JumperReports? reports,
+    _i18.JumperStats? stats,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #copyWith,
+          [],
+          {
+            #dateOfBirth: dateOfBirth,
+            #name: name,
+            #surname: surname,
+            #country: country,
+            #countryTeam: countryTeam,
+            #subteam: subteam,
+            #sex: sex,
+            #takeoffQuality: takeoffQuality,
+            #flightQuality: flightQuality,
+            #landingQuality: landingQuality,
+            #trainingConfig: trainingConfig,
+            #form: form,
+            #jumpsConsistency: jumpsConsistency,
+            #morale: morale,
+            #fatigue: fatigue,
+            #levelOfConsciousness: levelOfConsciousness,
+            #reports: reports,
+            #stats: stats,
+          },
+        ),
+        returnValue: _FakeSimulationJumper_19(
+          this,
+          Invocation.method(
+            #copyWith,
+            [],
+            {
+              #dateOfBirth: dateOfBirth,
+              #name: name,
+              #surname: surname,
+              #country: country,
+              #countryTeam: countryTeam,
+              #subteam: subteam,
+              #sex: sex,
+              #takeoffQuality: takeoffQuality,
+              #flightQuality: flightQuality,
+              #landingQuality: landingQuality,
+              #trainingConfig: trainingConfig,
+              #form: form,
+              #jumpsConsistency: jumpsConsistency,
+              #morale: morale,
+              #fatigue: fatigue,
+              #levelOfConsciousness: levelOfConsciousness,
+              #reports: reports,
+              #stats: stats,
+            },
+          ),
+        ),
+      ) as _i19.SimulationJumper);
 }

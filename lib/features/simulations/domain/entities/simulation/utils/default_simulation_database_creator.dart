@@ -3,6 +3,8 @@ import 'package:sj_manager/core/countries/countries_repository/in_memory_countri
 import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/country_teams/data/mappers/country_team_mappers.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/jumper_stats/domain/entities/jumper_attribute.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/competition_scores.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/score.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/manager_data/simulation_manager_data.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/stats/jumper_attribute_history.dart';
@@ -13,10 +15,6 @@ import 'package:sj_manager/features/simulations/domain/entities/simulation/datab
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/country_team.dart';
 import 'package:sj_manager/features/simulations/presentation/simulation_wizard/simulation_wizard_options_repo.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/reports/jumper_reports.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/classification_score_details.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/competition_score_details.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/jump_score_details.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
 import 'package:sj_manager/core/psyche/psyche_utils.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/personal_coach_team.dart';
@@ -147,23 +145,21 @@ class DefaultSimulationDatabaseCreator {
             competition.rules,
             for (var score in competition.standings?.scores ?? <Score>[]) ...[
               score,
-              score.entity,
-              score.details,
-              if (score.details is CompetitionJumperScoreDetails) ...[
-                ...(score.details as CompetitionJumperScoreDetails).jumpScores,
-                ...(score.details as CompetitionJumperScoreDetails)
-                    .jumpScores
-                    .map((score) => score.details.jumpRecord),
+              score.subject,
+              if (score is CompetitionJumperScore) ...[
+                ...score.jumps,
+                ...score.jumps.map((score) => score.jump),
               ],
-              if (score.details is CompetitionTeamScoreDetails) ...[
-                ...(score.details as CompetitionTeamScoreDetails).jumperScores,
-                ...(score.details as CompetitionTeamScoreDetails).jumpScores,
-                ...(score.details as CompetitionTeamScoreDetails)
-                    .jumpScores
-                    .map((score) => score.details.jumpRecord),
+              if (score is CompetitionTeamScore) ...[
+                ...score.subscores,
+                ...score.subscores
+                    .whereType<CompetitionJumperScore>()
+                    .map(
+                      (jumperScore) => jumperScore.jumps,
+                    )
+                    .expand((jumps) => jumps),
               ],
-              if (score.details is JumpScoreDetails)
-                ...(score.details as CompetitionJumperScoreDetails).jumpScores,
+              if (score is CompetitionJumpScore) score.jump,
             ],
           ],
           for (var classification in eventSeries.calendar.classifications) ...[
@@ -171,14 +167,7 @@ class DefaultSimulationDatabaseCreator {
             classification.rules,
             for (var score in classification.standings?.scores ?? <Score>[]) ...[
               score,
-              score.entity,
-              score.details,
-              if (score.details is ClassificationScoreDetails) ...[
-                ...(score.details as ClassificationScoreDetails).competitionScores,
-                ...(score.details as ClassificationScoreDetails)
-                    .competitionScores
-                    .map((score) => score.details.jumpScores),
-              ],
+              score.subject,
             ],
           ],
         ],

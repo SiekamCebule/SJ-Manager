@@ -11,6 +11,16 @@ class SimpleScore<T> extends Score<T> {
 
   @override
   List<Object?> get props => [subject, points];
+
+  SimpleScore<T> copyWith({
+    T? subject,
+    double? points,
+  }) {
+    return SimpleScore<T>(
+      subject: subject ?? this.subject,
+      points: points ?? this.points,
+    );
+  }
 }
 
 class ZeroScore<T> extends SimpleScore<T> {

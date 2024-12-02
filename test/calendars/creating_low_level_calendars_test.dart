@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:sj_manager/core/core_classes/country/country.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/to_embrace/competition/calendar_records/calendar_main_competition_record.dart';
 import 'package:sj_manager/to_embrace/competition/calendar_records/calendar_main_competition_record_setup.dart';
 import 'package:sj_manager/to_embrace/competition/calendar_records/calendar_main_competition_records_to_calendar.dart';
@@ -9,7 +10,6 @@ import 'package:sj_manager/to_embrace/competition/competition_labels.dart';
 import 'package:sj_manager/to_embrace/competition/high_level_calendar.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/core/core_classes/hill/hill.dart';
-import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/features/competitions/domain/entities/scoring/score/subjects/competition_team.dart';
 
 import 'creating_low_level_calendars_test.mocks.dart';
@@ -23,7 +23,7 @@ void main() {
         .copyWith(locality: 'Sapporo', hs: 137);
     final vikersund = Hill.empty(country: const Country.emptyNone())
         .copyWith(locality: 'Vikersund', hs: 240);
-    final ind = MockDefaultCompetitionRules<JumperDbRecord>();
+    final ind = MockDefaultCompetitionRules<SimulationJumper>();
     final team = MockDefaultCompetitionRules<CompetitionTeam>();
 
     const week = Duration(days: 7);

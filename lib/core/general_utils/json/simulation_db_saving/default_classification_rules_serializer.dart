@@ -1,7 +1,7 @@
 import 'package:sj_manager/core/general_utils/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
+import 'package:sj_manager/features/competitions/domain/utils/classification_score_creator/classification_score_creator.dart';
 import 'package:sj_manager/to_embrace/classification/simple_classification_rules.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/classification_score_creator/classification_score_creator.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
 class DefaultClassificationRulesSerializer
@@ -31,7 +31,7 @@ class DefaultClassificationRulesSerializer
     required SimpleClassificationRules rules,
   }) {
     final classificationScoreCreatorJson =
-        classificationScoreCreatorSerializer.serialize(rules.classificationScoreCreator);
+        classificationScoreCreatorSerializer.serialize(rules.scoreCreator);
     final pointsMapJson = rules.pointsMap;
     final competitionIdsJson =
         rules.competitions.map((competition) => idsRepository.id(competition)).toList();

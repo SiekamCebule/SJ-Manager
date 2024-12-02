@@ -1,22 +1,21 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/test_scores.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_group_creator.dart/context/ko_groups_creator_context.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_round_advancement_determinator/context/ko_round_advancemenent_determinating_context.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/to_embrace/competition/rules/entities_limit.dart';
 import 'package:sj_manager/to_embrace/competition/rules/ko/ko_group.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.dart/concrete/default.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.dart/concrete/default_classic.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.dart/concrete/default_random.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.dart/concrete/default_with_pots.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.dart/ko_groups_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_round_advancement_determinator/concrete/n_best.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/score_details.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_group_creator.dart/concrete/default.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_group_creator.dart/concrete/default_classic.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_group_creator.dart/concrete/default_random.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_group_creator.dart/concrete/default_with_pots.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_round_advancement_determinator/concrete/n_best.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/standings.dart';
 import 'package:sj_manager/features/competitions/domain/utils/standings_position_creators/standings_positions_with_ex_aequos_creator.dart';
 import 'package:sj_manager/features/competitions/domain/utils/standings_position_creators/standings_positions_with_no_ex_aequo_creator.dart';
 import 'package:sj_manager/features/competitions/domain/utils/standings_position_creators/standings_positions_with_shuffle_on_equal_positions_creator.dart';
-import 'package:sj_manager/core/core_classes/country/country.dart';
-import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 
 import 'ko_competition_utilities_test.mocks.dart';
 
@@ -25,47 +24,47 @@ import 'ko_competition_utilities_test.mocks.dart';
   ClassicKoGroupsCreatingContext,
   RandomKoGroupsCreatingContext,
   KoGroupsPotsCreatingContext,
-  KoRoundNBestAdvancementDeterminingContext
+  KoRoundNBestAdvancementDeterminingContext,
+  SimulationJumper,
 ])
 void main() {
-  const country = Country.emptyNone();
+  SimulationJumper createJumper(String name, String surname) {
+    final jumper = MockSimulationJumper();
+    when(jumper.name).thenReturn(name);
+    when(jumper.surname).thenReturn(surname);
+    return jumper;
+  }
+
   group('KoGroupsCreator', () {
     group('DefaultClassicKoGroupsCreator', () {
       test(
           'Creates groups for 8 jumpers in good order (groups\'s order and the order wihin group). Checks if passing uneven number causes an error',
           () {
-        final context = MockClassicKoGroupsCreatingContext<JumperDbRecord>();
+        final context = MockClassicKoGroupsCreatingContext<SimulationJumper>();
         final jumpers = [
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Dawid', surname: 'Kubacki'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Piotr', surname: 'Żyła'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'David', surname: 'Siegel'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Tymoteusz', surname: 'Amilkiewicz'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Yevhen', surname: 'Marusiak'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Evgeniy', surname: 'Klimov'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Robert', surname: 'Johansson'),
+          createJumper('Dawid', 'Kubacki'),
+          createJumper('Piotr', 'Żyła'),
+          createJumper('David', 'Siegel'),
+          createJumper('Tymoteusz', 'Amilkiewicz'),
+          createJumper('Yevhen', 'Marusiak'),
+          createJumper('Evgeniy', 'Klimov'),
+          createJumper('Robert', 'Johansson'),
         ];
-        final creator = DefaultClassicKoGroupsCreator<JumperDbRecord>();
+        final creator = DefaultClassicKoGroupsCreator<SimulationJumper>();
         when(context.entities).thenReturn(jumpers);
         when(context.entitiesCount).thenReturn(jumpers.length);
         expect(
           () {
-            creator.compute(context);
+            creator.create(context);
           },
           throwsA(isA<ArgumentError>()),
         );
         jumpers.add(
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Halvor Egner', surname: 'Granerud'),
+          createJumper('Halvor Egner', 'Granerud'),
         );
         when(context.entities).thenReturn(jumpers);
         when(context.entitiesCount).thenReturn(jumpers.length);
-        final groups = creator.compute(context);
+        final groups = creator.create(context);
         expect(groups, [
           KoGroup(entities: [jumpers[4], jumpers[3]]),
           KoGroup(entities: [jumpers[5], jumpers[2]]),
@@ -77,19 +76,19 @@ void main() {
 
     group('DefaultRandomKoGroupsCreator', () {
       test('Even groups', () {
-        final context = MockRandomKoGroupsCreatingContext<JumperDbRecord>();
+        final context = MockRandomKoGroupsCreatingContext<SimulationJumper>();
         final jumpers = [
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
+          createJumper('Jumper 1', ''),
+          createJumper('Jumper 2', ''),
+          createJumper('Jumper 3', ''),
+          createJumper('Jumper 4', ''),
+          createJumper('Jumper 5', ''),
+          createJumper('Jumper 6', ''),
+          createJumper('Jumper 7', ''),
+          createJumper('Jumper 8', ''),
+          createJumper('Jumper 9', ''),
         ];
-        final creator = DefaultRandomKoGroupsCreator<JumperDbRecord>();
+        final creator = DefaultRandomKoGroupsCreator<SimulationJumper>();
 
         when(context.entities).thenReturn(jumpers);
         when(context.entitiesCount).thenReturn(jumpers.length);
@@ -97,7 +96,7 @@ void main() {
         when(context.remainingEntitiesAction)
             .thenReturn(KoGroupsCreatorRemainingEntitiesAction.throwError);
 
-        final groups = creator.compute(context);
+        final groups = creator.create(context);
 
         expect(groups.length, 3);
         expect(groups.every((group) => group.entities.length == 3), isTrue);
@@ -106,20 +105,20 @@ void main() {
       });
 
       test('Uneven groups, remainingEntitiesAction - placeInSmallestGroup', () {
-        final context = MockRandomKoGroupsCreatingContext<JumperDbRecord>();
+        final context = MockRandomKoGroupsCreatingContext<SimulationJumper>();
         final jumpers = [
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 10'),
+          createJumper('Jumper 1', ''),
+          createJumper('Jumper 2', ''),
+          createJumper('Jumper 3', ''),
+          createJumper('Jumper 4', ''),
+          createJumper('Jumper 5', ''),
+          createJumper('Jumper 6', ''),
+          createJumper('Jumper 7', ''),
+          createJumper('Jumper 8', ''),
+          createJumper('Jumper 9', ''),
+          createJumper('Jumper 10', ''),
         ];
-        final creator = DefaultRandomKoGroupsCreator<JumperDbRecord>();
+        final creator = DefaultRandomKoGroupsCreator<SimulationJumper>();
 
         when(context.entities).thenReturn(jumpers);
         when(context.entitiesCount).thenReturn(jumpers.length);
@@ -127,7 +126,7 @@ void main() {
         when(context.remainingEntitiesAction)
             .thenReturn(KoGroupsCreatorRemainingEntitiesAction.placeInSmallestGroup);
 
-        final groups = creator.compute(context);
+        final groups = creator.create(context);
 
         expect(groups.length, 2);
         expect(groups.where((group) => group.entities.length == 5).length, 2);
@@ -136,21 +135,21 @@ void main() {
       });
 
       test('Uneven groups, remainingEntitiesAction - placeRandomly', () {
-        final context = MockRandomKoGroupsCreatingContext<JumperDbRecord>();
+        final context = MockRandomKoGroupsCreatingContext<SimulationJumper>();
         final jumpers = [
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 10'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 11'),
+          createJumper('Jumper 1', ''),
+          createJumper('Jumper 2', ''),
+          createJumper('Jumper 3', ''),
+          createJumper('Jumper 4', ''),
+          createJumper('Jumper 5', ''),
+          createJumper('Jumper 6', ''),
+          createJumper('Jumper 7', ''),
+          createJumper('Jumper 8', ''),
+          createJumper('Jumper 9', ''),
+          createJumper('Jumper 10', ''),
+          createJumper('Jumper 11', ''),
         ];
-        final creator = DefaultRandomKoGroupsCreator<JumperDbRecord>();
+        final creator = DefaultRandomKoGroupsCreator<SimulationJumper>();
 
         when(context.entities).thenReturn(jumpers);
         when(context.entitiesCount).thenReturn(jumpers.length);
@@ -158,7 +157,7 @@ void main() {
         when(context.remainingEntitiesAction)
             .thenReturn(KoGroupsCreatorRemainingEntitiesAction.placeRandomly);
 
-        final groups = creator.compute(context);
+        final groups = creator.create(context);
 
         expect(groups.length, 2);
         expect(groups.where((group) => group.entities.length == 5).length, 1);
@@ -168,19 +167,19 @@ void main() {
       });
 
       test('Uneven groups, remainingEntitiesAction - placeAtBegin', () {
-        final context = MockRandomKoGroupsCreatingContext<JumperDbRecord>();
+        final context = MockRandomKoGroupsCreatingContext<SimulationJumper>();
         final jumpers = [
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
-          JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
+          createJumper('Jumper 1', ''),
+          createJumper('Jumper 2', ''),
+          createJumper('Jumper 3', ''),
+          createJumper('Jumper 4', ''),
+          createJumper('Jumper 5', ''),
+          createJumper('Jumper 6', ''),
+          createJumper('Jumper 7', ''),
+          createJumper('Jumper 8', ''),
+          createJumper('Jumper 9', ''),
         ];
-        final creator = DefaultRandomKoGroupsCreator<JumperDbRecord>();
+        final creator = DefaultRandomKoGroupsCreator<SimulationJumper>();
 
         when(context.entities).thenReturn(jumpers);
         when(context.entitiesCount).thenReturn(jumpers.length);
@@ -188,7 +187,7 @@ void main() {
         when(context.remainingEntitiesAction)
             .thenReturn(KoGroupsCreatorRemainingEntitiesAction.placeAtBegin);
 
-        final groups = creator.compute(context);
+        final groups = creator.create(context);
         expect(groups.length, 2);
         expect(groups.first.entities.length, 5);
         expect(groups[1].entities.length, 4);
@@ -202,24 +201,24 @@ void main() {
         final context = MockKoGroupsPotsCreatingContext();
         final pots = [
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
+            createJumper('Jumper 1', ''),
+            createJumper('Jumper 2', ''),
+            createJumper('Jumper 3', ''),
           ],
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
+            createJumper('Jumper 4', ''),
+            createJumper('Jumper 5', ''),
+            createJumper('Jumper 6', ''),
           ],
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
+            createJumper('Jumper 7', ''),
+            createJumper('Jumper 8', ''),
+            createJumper('Jumper 9', ''),
           ],
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 10'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 11'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 12'),
+            createJumper('Jumper 10', ''),
+            createJumper('Jumper 11', ''),
+            createJumper('Jumper 12', ''),
           ],
         ];
         final creator = DefaultPotsKoGroupsCreator();
@@ -231,36 +230,35 @@ void main() {
         when(context.remainingEntitiesAction)
             .thenReturn(KoGroupsCreatorRemainingEntitiesAction.throwError);
 
-        final groups = creator.compute(context);
+        final groups = creator.create(context);
         expect(groups.length, 3);
         expect(groups.every((group) => group.entities.length == 4), isTrue);
         expect(groups.map((group) => group.entities.first), containsAll(pots[0]));
       });
       test('Uneven groups, remainingEntitiesAction - placeRandomly', () {
         final context = MockKoGroupsPotsCreatingContext();
-        final additionalJumper =
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3.5');
+        final additionalJumper = createJumper('Jumper 3.5', '');
         final pots = [
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
+            createJumper('Jumper 1', ''),
+            createJumper('Jumper 2', ''),
+            createJumper('Jumper 3', ''),
             additionalJumper,
           ],
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
+            createJumper('Jumper 4', ''),
+            createJumper('Jumper 5', ''),
+            createJumper('Jumper 6', ''),
           ],
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
+            createJumper('Jumper 7', ''),
+            createJumper('Jumper 8', ''),
+            createJumper('Jumper 9', ''),
           ],
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 10'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 11'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 12'),
+            createJumper('Jumper 10', ''),
+            createJumper('Jumper 11', ''),
+            createJumper('Jumper 12', ''),
           ],
         ];
         final creator = DefaultPotsKoGroupsCreator();
@@ -271,7 +269,7 @@ void main() {
         when(context.remainingEntitiesAction)
             .thenReturn(KoGroupsCreatorRemainingEntitiesAction.placeRandomly);
 
-        final groups = creator.compute(context);
+        final groups = creator.create(context);
         expect(groups.length, 3);
         expect(groups.where((group) => group.entities.length == 4).length, 2);
         expect(groups.where((group) => group.entities.length == 5).length, 1);
@@ -288,27 +286,27 @@ void main() {
         final context = MockKoGroupsPotsCreatingContext();
         final pots = [
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
+            createJumper('Jumper 1', ''),
+            createJumper('Jumper 2', ''),
+            createJumper('Jumper 3', ''),
+            createJumper('Jumper 4', ''),
+            createJumper('Jumper 5', ''),
+            createJumper('Jumper 6', ''),
           ],
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
+            createJumper('Jumper 7', ''),
+            createJumper('Jumper 8', ''),
+            createJumper('Jumper 9', ''),
           ],
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 10'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 11'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 12'),
+            createJumper('Jumper 10', ''),
+            createJumper('Jumper 11', ''),
+            createJumper('Jumper 12', ''),
           ],
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 13'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 14'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 15'),
+            createJumper('Jumper 13', ''),
+            createJumper('Jumper 14', ''),
+            createJumper('Jumper 15', ''),
           ],
         ];
         final creator = DefaultPotsKoGroupsCreator();
@@ -319,7 +317,7 @@ void main() {
         when(context.remainingEntitiesAction)
             .thenReturn(KoGroupsCreatorRemainingEntitiesAction.placeRandomly);
 
-        final groups = creator.compute(context);
+        final groups = creator.create(context);
         expect(groups.length, 3);
         expect(groups.expand((group) => group.entities).length, 15);
       });
@@ -328,27 +326,27 @@ void main() {
         final context = MockKoGroupsPotsCreatingContext();
         final pots = [
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 1'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 2'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 3'),
+            createJumper('Jumper 1', ''),
+            createJumper('Jumper 2', ''),
+            createJumper('Jumper 3', ''),
           ],
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 4'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 5'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 6'),
+            createJumper('Jumper 4', ''),
+            createJumper('Jumper 5', ''),
+            createJumper('Jumper 6', ''),
           ],
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 7'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 8'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 9'),
+            createJumper('Jumper 7', ''),
+            createJumper('Jumper 8', ''),
+            createJumper('Jumper 9', ''),
           ],
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 10'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 11'),
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 12'),
+            createJumper('Jumper 10', ''),
+            createJumper('Jumper 11', ''),
+            createJumper('Jumper 12', ''),
           ],
           [
-            JumperDbRecord.empty(country: country).copyWith(name: 'Jumper 13'),
+            createJumper('Jumper 13', ''),
           ],
         ];
         final creator = DefaultPotsKoGroupsCreator();
@@ -359,7 +357,7 @@ void main() {
         when(context.remainingEntitiesAction)
             .thenReturn(KoGroupsCreatorRemainingEntitiesAction.placeRandomly);
 
-        final groups = creator.compute(context);
+        final groups = creator.create(context);
         expect(groups.length, 3);
         expect(groups.where((group) => group.entities.length == 4).length, 2);
         expect(groups.where((group) => group.entities.length == 5).length, 1);
@@ -370,35 +368,27 @@ void main() {
   group('KoRoundAdvancementDeterminator', () {
     group('NBestKoRoundAdvancementDeterminator', () {
       test('Typical without ex aequo conflicts', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<SimulationJumper>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<SimulationJumper>();
         final jumpers = [
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Kamil', surname: 'Stoch'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Martin', surname: 'Hamann'),
+          createJumper('Kamil', 'Stoch'),
+          createJumper('Giovanni', 'Bresadola'),
+          createJumper('Martin', 'Hamann'),
         ];
-        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
+        final standings = Standings(
           positionsCreator: StandingsPositionsWithExAequosCreator(),
-          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[0],
+          initialScores: <SimpleScore>[
+            SimpleScore(
+              subject: jumpers[0],
               points: 127.7,
-              details: const SimplePointsScoreDetails(),
             ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[1],
+            SimpleScore(
+              subject: jumpers[1],
               points: 134.5,
-              details: const SimplePointsScoreDetails(),
             ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[2],
+            SimpleScore(
+              subject: jumpers[2],
               points: 105.4,
-              details: const SimplePointsScoreDetails(),
             ),
           ],
         );
@@ -408,41 +398,24 @@ void main() {
         when(context.koStandings).thenReturn(
           standings,
         );
-        final advanced = determinator.compute(context);
+        final advanced = determinator.determineAdvancement(context);
         expect(advanced, [jumpers[1]]);
       });
 
       test('Ex aequo on first place, but limit is exact(1)', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<SimulationJumper>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<SimulationJumper>();
         final jumpers = [
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Kamil', surname: 'Stoch'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Martin', surname: 'Hamann'),
+          createJumper('Kamil', 'Stoch'),
+          createJumper('Giovanni', 'Bresadola'),
+          createJumper('Martin', 'Hamann'),
         ];
-        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
+        final standings = Standings(
           positionsCreator: StandingsPositionsWithExAequosCreator(),
-          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[0],
-              points: 127.7,
-              details: const SimplePointsScoreDetails(),
-            ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[1],
-              points: 127.7,
-              details: const SimplePointsScoreDetails(),
-            ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[2],
-              points: 105.4,
-              details: const SimplePointsScoreDetails(),
-            ),
+          initialScores: [
+            SimpleScore(subject: jumpers[0], points: 127.7),
+            SimpleScore(subject: jumpers[1], points: 127.7),
+            SimpleScore(subject: jumpers[2], points: 105.4),
           ],
         );
         provideDummy(standings);
@@ -451,40 +424,32 @@ void main() {
         when(context.koStandings).thenReturn(
           standings,
         );
-        final advanced = determinator.compute(context);
+        final advanced = determinator.determineAdvancement(context);
         expect(advanced.length, 1);
       });
 
       test('No ex aequos, but same points count', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<SimulationJumper>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<SimulationJumper>();
         final jumpers = [
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Kamil', surname: 'Stoch'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Martin', surname: 'Hamann'),
+          createJumper('Kamil', 'Stoch'),
+          createJumper('Giovanni', 'Bresadola'),
+          createJumper('Martin', 'Hamann'),
         ];
-        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
+        final standings = Standings(
           positionsCreator: StandingsPositionsWithNoExAequoCreator(),
-          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[0],
+          initialScores: [
+            SimpleScore(
+              subject: jumpers[0],
               points: 127.7,
-              details: const SimplePointsScoreDetails(),
             ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[1],
+            SimpleScore(
+              subject: jumpers[1],
               points: 127.7,
-              details: const SimplePointsScoreDetails(),
             ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[2],
+            SimpleScore(
+              subject: jumpers[2],
               points: 105.4,
-              details: const SimplePointsScoreDetails(),
             ),
           ],
         );
@@ -494,40 +459,32 @@ void main() {
         when(context.koStandings).thenReturn(
           standings,
         );
-        final advanced = determinator.compute(context);
+        final advanced = determinator.determineAdvancement(context);
         expect(advanced, [jumpers[0]]);
       });
 
       test('Shuffle on same points count', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<SimulationJumper>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<SimulationJumper>();
         final jumpers = [
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Kamil', surname: 'Stoch'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Martin', surname: 'Hamann'),
+          createJumper('Kamil', 'Stoch'),
+          createJumper('Giovanni', 'Bresadola'),
+          createJumper('Martin', 'Hamann'),
         ];
-        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
+        final standings = Standings(
           positionsCreator: StandingsPositionsWithShuffleOnEqualPositionsCreator(),
-          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[0],
+          initialScores: [
+            SimpleScore(
+              subject: jumpers[0],
               points: 127.7,
-              details: const SimplePointsScoreDetails(),
             ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[1],
+            SimpleScore(
+              subject: jumpers[1],
               points: 127.7,
-              details: const SimplePointsScoreDetails(),
             ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[2],
+            SimpleScore(
+              subject: jumpers[2],
               points: 105.4,
-              details: const SimplePointsScoreDetails(),
             ),
           ],
         );
@@ -537,40 +494,32 @@ void main() {
         when(context.koStandings).thenReturn(
           standings,
         );
-        final advanced = determinator.compute(context);
+        final advanced = determinator.determineAdvancement(context);
         expect(advanced.length, 1);
       });
 
       test('Soft limit + ex aequo', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<SimulationJumper>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<SimulationJumper>();
         final jumpers = [
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Kamil', surname: 'Stoch'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Martin', surname: 'Hamann'),
+          createJumper('Kamil', 'Stoch'),
+          createJumper('Giovanni', 'Bresadola'),
+          createJumper('Martin', 'Hamann'),
         ];
-        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
+        final standings = Standings(
           positionsCreator: StandingsPositionsWithExAequosCreator(),
-          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[0],
+          initialScores: [
+            SimpleScore(
+              subject: jumpers[0],
               points: 127.7,
-              details: const SimplePointsScoreDetails(),
             ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[1],
+            SimpleScore(
+              subject: jumpers[1],
               points: 127.7,
-              details: const SimplePointsScoreDetails(),
             ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[2],
+            SimpleScore(
+              subject: jumpers[2],
               points: 105.4,
-              details: const SimplePointsScoreDetails(),
             ),
           ],
         );
@@ -580,40 +529,32 @@ void main() {
         when(context.koStandings).thenReturn(
           standings,
         );
-        final advanced = determinator.compute(context);
+        final advanced = determinator.determineAdvancement(context);
         expect(advanced.toSet(), {jumpers[0], jumpers[1]});
       });
 
       test('Soft limit (count: 2) + ex aequo on first place', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<SimulationJumper>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<SimulationJumper>();
         final jumpers = [
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Kamil', surname: 'Stoch'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Martin', surname: 'Hamann'),
+          createJumper('Kamil', 'Stoch'),
+          createJumper('Giovanni', 'Bresadola'),
+          createJumper('Martin', 'Hamann'),
         ];
-        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
+        final standings = Standings(
           positionsCreator: StandingsPositionsWithExAequosCreator(),
-          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[0],
+          initialScores: [
+            SimpleScore(
+              subject: jumpers[0],
               points: 127.7,
-              details: const SimplePointsScoreDetails(),
             ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[1],
+            SimpleScore(
+              subject: jumpers[1],
               points: 127.7,
-              details: const SimplePointsScoreDetails(),
             ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[2],
+            SimpleScore(
+              subject: jumpers[2],
               points: 105.4,
-              details: const SimplePointsScoreDetails(),
             ),
           ],
         );
@@ -623,40 +564,32 @@ void main() {
         when(context.koStandings).thenReturn(
           standings,
         );
-        final advanced = determinator.compute(context);
+        final advanced = determinator.determineAdvancement(context);
         expect(advanced.toSet(), {jumpers[0], jumpers[1]});
       });
 
       test('No limit', () {
-        const determinator = NBestKoRoundAdvancementDeterminator<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
-        final context = MockKoRoundNBestAdvancementDeterminingContext<JumperDbRecord,
-            Standings<JumperDbRecord, SimplePointsScoreDetails>>();
+        const determinator = NBestKoRoundAdvancementDeterminator<SimulationJumper>();
+        final context = MockKoRoundNBestAdvancementDeterminingContext<SimulationJumper>();
         final jumpers = [
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Kamil', surname: 'Stoch'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Giovanni', surname: 'Bresadola'),
-          JumperDbRecord.empty(country: country)
-              .copyWith(name: 'Martin', surname: 'Hamann'),
+          createJumper('Kamil', 'Stoch'),
+          createJumper('Giovanni', 'Bresadola'),
+          createJumper('Martin', 'Hamann'),
         ];
-        final standings = Standings<JumperDbRecord, SimplePointsScoreDetails>(
+        final standings = Standings(
           positionsCreator: StandingsPositionsWithShuffleOnEqualPositionsCreator(),
-          initialScores: <Score<JumperDbRecord, SimplePointsScoreDetails>>[
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[0],
+          initialScores: [
+            SimpleScore(
+              subject: jumpers[0],
               points: 127.7,
-              details: const SimplePointsScoreDetails(),
             ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[1],
+            SimpleScore(
+              subject: jumpers[1],
               points: 127.7,
-              details: const SimplePointsScoreDetails(),
             ),
-            Score<JumperDbRecord, SimplePointsScoreDetails>(
-              entity: jumpers[2],
+            SimpleScore(
+              subject: jumpers[2],
               points: 105.4,
-              details: const SimplePointsScoreDetails(),
             ),
           ],
         );
@@ -666,7 +599,7 @@ void main() {
         when(context.koStandings).thenReturn(
           standings,
         );
-        final advanced = determinator.compute(context);
+        final advanced = determinator.determineAdvancement(context);
         expect(advanced, jumpers);
       });
     });

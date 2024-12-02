@@ -4,7 +4,7 @@ import 'package:sj_manager/core/general_utils/json/simulation_db_saving/simulati
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
 import 'package:sj_manager/to_embrace/classification/classification.dart';
 import 'package:sj_manager/to_embrace/classification/simple_classification_rules.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/standings.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
 class ClassificationSerializer implements SimulationDbPartSerializer<Classification> {

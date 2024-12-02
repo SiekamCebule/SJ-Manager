@@ -1,8 +1,8 @@
 import 'package:sj_manager/core/general_utils/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_competition_round_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules.dart';
-import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 import 'package:sj_manager/features/competitions/domain/entities/scoring/score/subjects/competition_team.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
@@ -18,7 +18,7 @@ class DefaultCompetitionRulesSerializer
 
   @override
   Json serialize(DefaultCompetitionRules rules) {
-    if (rules is DefaultCompetitionRules<JumperDbRecord>) {
+    if (rules is DefaultCompetitionRules<SimulationJumper>) {
       return {
         'type': 'individual',
         'rounds': _serializeRounds(rules.rounds),

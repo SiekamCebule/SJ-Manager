@@ -1,17 +1,18 @@
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/subjects/competition_team.dart';
+import 'package:sj_manager/features/competitions/domain/utils/judges_creator/judges_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/jump_score_creator.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_competition_round_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_team_competition_round_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/entities_limit.dart';
 import 'package:sj_manager/to_embrace/competition/rules/ko/ko_round_rules.dart';
 import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/competition_score_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/judges_creator/judges_creator.dart';
-import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/jump_score_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/wind_averager.dart';
+import 'package:sj_manager/features/competitions/domain/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/features/competitions/domain/utils/standings_position_creators/standings_positions_creator.dart';
-import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
 
 class DefaultIndividualCompetitionRoundRules
-    extends DefaultCompetitionRoundRules<JumperDbRecord> {
+    extends DefaultCompetitionRoundRules<SimulationJumper> {
   const DefaultIndividualCompetitionRoundRules({
     required super.limit,
     required super.bibsAreReassigned,
@@ -48,8 +49,7 @@ class DefaultIndividualCompetitionRoundRules
     JudgesCreator? judgesCreator,
     int? significantJudgesCount,
     JumpScoreCreator? jumpScoreCreator,
-    CompetitionScoreCreator<Score<JumperDbRecord, CompetitionScoreDetails>>?
-        competitionScoreCreator,
+    CompetitionScoreCreator<SimulationJumper>? competitionScoreCreator,
     KoRoundRules? koRules,
   }) {
     return DefaultIndividualCompetitionRoundRules(
@@ -74,7 +74,7 @@ class DefaultIndividualCompetitionRoundRules
   }
 
   DefaultTeamCompetitionRoundRules toTeam({
-    required CompetitionScoreCreator<CompetitionTeamScore> competitionScoreCreator,
+    required CompetitionScoreCreator<CompetitionTeam> competitionScoreCreator,
     required List<TeamCompetitionGroupRules> groups,
   }) {
     return DefaultTeamCompetitionRoundRules(

@@ -1,12 +1,10 @@
 import 'package:sj_manager/core/general_utils/json/simulation_db_loading/simulation_db_part_loader.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/classification_score_details.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/competition_score_details.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/jump_score_details.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/score_details.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/typedefs.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/classification_scores.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/competition_scores.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/score.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/test_scores.dart';
 
 class ScoreParser implements SimulationDbPartParser<Score> {
   const ScoreParser({
@@ -24,91 +22,84 @@ class ScoreParser implements SimulationDbPartParser<Score> {
     final type = json['type'] as String;
     return switch (type) {
       'competition_jump_score' => _loadCompetitionJumpScore(json),
-      'jump_score' => _loadSimpleJumpScore(json),
-      'jumper_competition_score' => _loadCompetitionJumperScore(json),
-      'team_competition_score' => _loadCompetitionTeamScore(json),
-      'simple_points_score' => _loadSimplePointsScore(json),
-      'classification_score' => _loadClassificationScore(json),
+      'competition_jumper_score' => _loadCompetitionJumperScore(json),
+      'competition_team_score' => _loadCompetitionTeamScore(json),
+      'simple_score' => _loadSimpleScore(json),
+      'classification_jumper_score' => _loadClassificationJumperScore(json),
+      'classification_team_score' => _loadClassificationTeamScore(json),
       _ => throw UnsupportedError('Unsupported score type: $type'),
     };
   }
 
   CompetitionJumpScore _loadCompetitionJumpScore(Json json) {
-    final entity = idsRepository.get(json['entityId']);
-    final jumpRecord = idsRepository.get(json['jumpRecordId']);
     return CompetitionJumpScore(
-      entity: entity,
-      details: CompetitionJumpScoreDetails(
-        jumpRecord: jumpRecord,
-        distancePoints: json['distancePoints'],
-        judgesPoints: json['judgesPoints'],
-        gatePoints: json['gatePoints'],
-        windPoints: json['windPoints'],
-      ),
+      subject: idsRepository.get(json['subjectId']),
+      jump: idsRepository.get(json['jumpId']),
+      distancePoints: json['distancePoints'],
+      judgePoints: json['judgesPoints'],
+      gatePoints: json['gatePoints'],
+      windPoints: json['windPoints'],
       points: json['points'],
+      competition: idsRepository.get(json['competitionId']),
     );
   }
 
-  Score<dynamic, SimpleJumpScoreDetails> _loadSimpleJumpScore(Json json) {
-    final entity = idsRepository.get(json['entityId']);
-    final jumpRecord = idsRepository.get(json['jumpRecordId']);
-    return Score<dynamic, SimpleJumpScoreDetails>(
-      entity: entity,
-      details: SimpleJumpScoreDetails(jumpRecord: jumpRecord),
+  SimpleScore _loadSimpleScore(Json json) {
+    return SimpleScore(
+      subject: idsRepository.get(json['subjectId']),
       points: json['points'],
     );
   }
 
   CompetitionJumperScore _loadCompetitionJumperScore(Json json) {
-    final entity = idsRepository.get(json['entityId']);
     final jumpScoresJson = json['jumpScores'] as List<Json>;
     final jumpScores = jumpScoresJson.map((json) {
       return _loadAppropriate(json);
     }).toList();
     return CompetitionJumperScore(
-      entity: entity,
+      subject: idsRepository.get(json['subjectId']),
       points: json['points'],
-      details: CompetitionJumperScoreDetails(
-        jumpScores: jumpScores.cast(),
-      ),
+      jumps: jumpScores.cast(),
+      competition: idsRepository.get(json['competitionId']),
     );
   }
 
   CompetitionTeamScore _loadCompetitionTeamScore(Json json) {
-    final entity = idsRepository.get(json['entityId']);
     final jumperScoresJson = json['entityScores'] as List<Json>;
     final jumperScores = jumperScoresJson.map((json) {
       return _loadCompetitionJumperScore(json);
     }).toList();
     return CompetitionTeamScore(
-      entity: entity,
+      subject: idsRepository.get(json['subjectId']),
       points: json['points'],
-      details: CompetitionTeamScoreDetails(
-        jumperScores: jumperScores,
-      ),
+      subscores: jumperScores,
+      competition: idsRepository.get(json['competitionId']),
     );
   }
 
-  Score<dynamic, SimplePointsScoreDetails> _loadSimplePointsScore(Json json) {
-    final entity = idsRepository.get(json['entityId']);
-    return Score<dynamic, SimplePointsScoreDetails>(
-      entity: entity,
-      points: json['points'],
-      details: const SimplePointsScoreDetails(),
-    );
-  }
-
-  ClassificationScore _loadClassificationScore(Json json) {
+  ClassificationJumperScore _loadClassificationJumperScore(Json json) {
     final competitionScoresJson = json['competitionScores'] as List<Json>;
     final competitionScores = competitionScoresJson.map((json) {
       return _loadAppropriate(json);
     }).toList();
-    return ClassificationScore(
-      entity: idsRepository.get(json['entityId']),
+    return ClassificationJumperScore(
+      subject: idsRepository.get(json['subjectId']),
       points: json['points'],
-      details: ClassificationScoreDetails(
-        competitionScores: competitionScores.cast<CompetitionScore>(),
-      ),
+      competitionScores: competitionScores.cast(),
+      classification: idsRepository.get('classificationId'),
+    );
+  }
+
+  ClassificationTeamScore _loadClassificationTeamScore(Json json) {
+    final competitionScoresJson = json['competitionScores'] as List<Json>;
+    final competitionScores = competitionScoresJson.map((json) {
+      return _loadAppropriate(json);
+    }).toList();
+    return ClassificationTeamScore(
+      subject: idsRepository.get(json['subjectId']),
+      points: json['points'],
+      competitionScores: competitionScores.cast(),
+      classification: idsRepository.get('classificationId'),
     );
   }
 }

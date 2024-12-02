@@ -1,20 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/classification_scores.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/competition_scores.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/score.dart';
+import 'package:sj_manager/features/competitions/domain/utils/classification_score_creator/context/simple_classification_score_creating_context.dart';
+import 'package:sj_manager/features/competitions/domain/utils/classification_score_creator/simple/simple_classification_jumper_score_creator.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/to_embrace/classification/classification.dart';
 import 'package:sj_manager/to_embrace/classification/simple_classification_rules.dart';
 import 'package:sj_manager/to_embrace/competition/competition.dart';
 import 'package:sj_manager/to_embrace/competition/competition_labels.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules.dart';
-import 'package:sj_manager/features/competitions/domain/utils/classification_score_creator/concrete/individual_default.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/classification_score_details.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/competition_score_details.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/score.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/typedefs.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart';
-import 'package:sj_manager/core/core_classes/country/country.dart';
-import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/standings.dart';
 
 import 'classification_rules_utilities_test.mocks.dart';
 
@@ -23,38 +22,37 @@ import 'classification_rules_utilities_test.mocks.dart';
   Standings,
   SimpleClassification,
   SimpleIndividualClassificationRules,
-  DefaultIndividualClassificationScoreCreatingContext,
+  SimpleClassificationJumperScoreCreatingContext,
   Score,
+  SimulationJumper,
+  CompetitionJumperScore,
   DefaultIndividualCompetitionRoundRules,
   DefaultCompetitionRules,
 ])
 void main() {
   group('ClassificationScoreCreator', () {
     group('DefaultClassificationScoreCreator', () {
-      test('DefaultIndividualClassificationScoreCreator', () {
-        final creator = DefaultIndividualClassificationScoreCreator();
-        final context = MockDefaultIndividualClassificationScoreCreatingContext();
-        const country = Country.emptyNone();
-        final jumper = JumperDbRecord.empty(country: country)
-            .copyWith(name: 'Jakub', surname: 'Wolny');
-        final classification = MockDefaultClassification<JumperDbRecord,
-            Standings<JumperDbRecord, ClassificationScoreDetails>>();
+      test('SimpleClassificationJumperScoreCreator', () {
+        final creator = SimpleClassificationJumperScoreCreator();
+        final context = MockSimpleClassificationJumperScoreCreatingContext();
+        final jumper = MockSimulationJumper();
+        final classification = MockSimpleClassification<SimulationJumper>();
         final scores = [
-          MockScore<JumperDbRecord, CompetitionJumperScoreDetails>(),
-          MockScore<JumperDbRecord, CompetitionJumperScoreDetails>(),
-          MockScore<JumperDbRecord, CompetitionJumperScoreDetails>(),
-          MockScore<JumperDbRecord, CompetitionJumperScoreDetails>(),
-        ].cast<Score<JumperDbRecord, CompetitionJumperScoreDetails>>();
+          MockCompetitionJumperScore(),
+          MockCompetitionJumperScore(),
+          MockCompetitionJumperScore(),
+          MockCompetitionJumperScore(),
+        ].cast<CompetitionJumperScore>();
 
-        List<Competition<JumperDbRecord, IndividualCompetitionStandings>> competitions = [
+        List<Competition<SimulationJumper>> competitions = [
           setupCompetition(jumper, scores[0], 2),
           setupCompetition(jumper, scores[1], 7),
           setupCompetition(jumper, scores[2], 5),
           setupCompetition(jumper, scores[3], 2),
         ];
 
-        final classificationRules = MockDefaultIndividualClassificationRules();
-        when(classificationRules.classificationScoreCreator).thenReturn(creator);
+        final classificationRules = MockSimpleIndividualClassificationRules();
+        when(classificationRules.scoreCreator).thenReturn(creator);
         when(classificationRules.competitions).thenReturn(competitions);
         when(classificationRules.pointsMap).thenReturn({
           1: 100,
@@ -68,19 +66,18 @@ void main() {
         when(classificationRules.scoringType)
             .thenReturn(SimpleClassificationScoringType.pointsFromMap);
         when(classification.rules).thenReturn(classificationRules);
-        when(context.entity).thenReturn(jumper);
+        when(context.subject).thenReturn(jumper);
         when(context.classification).thenReturn(classification);
 
-        final score = creator.compute(context);
+        final score = creator.create(context);
 
         expect(
           score,
-          ClassificationScore<JumperDbRecord>(
-            entity: jumper,
+          ClassificationJumperScore(
+            subject: jumper,
             points: 105.0,
-            details: ClassificationScoreDetails(
-              competitionScores: scores,
-            ),
+            competitionScores: scores,
+            classification: classification,
           ),
         );
       });
@@ -88,13 +85,13 @@ void main() {
   });
 }
 
-MockCompetition<JumperDbRecord, IndividualCompetitionStandings> setupCompetition(
-  JumperDbRecord jumper,
-  Score<JumperDbRecord, CompetitionJumperScoreDetails> score,
+MockCompetition<SimulationJumper> setupCompetition(
+  SimulationJumper jumper,
+  Score<SimulationJumper> score,
   int position,
 ) {
-  final competition = MockCompetition<JumperDbRecord, IndividualCompetitionStandings>();
-  final standings = MockStandings<JumperDbRecord, CompetitionJumperScoreDetails>();
+  final competition = MockCompetition<SimulationJumper>();
+  final standings = MockStandings();
   when(standings.scoreOf(jumper)).thenReturn(score);
   when(standings.positionOf(jumper)).thenReturn(position);
   when(competition.standings).thenReturn(standings);

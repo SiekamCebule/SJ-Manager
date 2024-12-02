@@ -1,8 +1,8 @@
 import 'package:sj_manager/core/general_utils/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/concrete/default_linear.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/concrete/default_weighted.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/wind_averager.dart';
+import 'package:sj_manager/features/competitions/domain/utils/wind_averager/concrete/default_linear.dart';
+import 'package:sj_manager/features/competitions/domain/utils/wind_averager/concrete/default_weighted.dart';
+import 'package:sj_manager/features/competitions/domain/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
 class WindAveragerSerializer implements SimulationDbPartSerializer<WindAverager> {

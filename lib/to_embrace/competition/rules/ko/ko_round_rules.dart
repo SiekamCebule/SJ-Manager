@@ -1,10 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.dart/ko_groups_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_round_advancement_determinator/ko_round_advancement_determinator.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/details/score_details.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_group_creator.dart/ko_groups_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_round_advancement_determinator/ko_round_advancement_determinator.dart';
 
-class KoRoundRules<E> with EquatableMixin {
+class KoRoundRules<T> with EquatableMixin {
   const KoRoundRules({
     required this.advancementDeterminator,
     required this.advancementCount,
@@ -12,11 +10,9 @@ class KoRoundRules<E> with EquatableMixin {
     required this.groupSize,
   });
 
-  final KoRoundAdvancementDeterminator<E,
-          KoRoundAdvancementDeterminingContext<E, Standings<E, ScoreDetails>>>
-      advancementDeterminator;
+  final KoRoundAdvancementDeterminator<T> advancementDeterminator;
   final int advancementCount;
-  final KoGroupsCreator<E, KoGroupsCreatingContext<E>> koGroupsCreator;
+  final KoGroupsCreator<T> koGroupsCreator;
   final int groupSize;
 
   @override

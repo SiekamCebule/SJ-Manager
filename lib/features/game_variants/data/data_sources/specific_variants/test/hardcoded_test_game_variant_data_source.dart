@@ -6,6 +6,9 @@ import 'package:sj_manager/core/core_classes/hill/hill_profile_type.dart';
 import 'package:sj_manager/core/core_classes/hill/jumps_variability.dart';
 import 'package:sj_manager/core/core_classes/hill/landing_ease.dart';
 import 'package:sj_manager/features/career_mode/subfeatures/actions/domain/entities/simulation_action_type.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/score/subjects/competition_team.dart';
+import 'package:sj_manager/features/competitions/domain/utils/classification_score_creator/simple/simple_classification_jumper_score_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/classification_score_creator/simple/simple_classification_team_score_creator.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/simulation_season.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series_calendar.dart';
@@ -16,6 +19,7 @@ import 'package:sj_manager/features/game_variants/data/models/game_variant_model
 import 'package:sj_manager/features/game_variants/domain/entities/game_variant.dart';
 import 'package:sj_manager/core/general_utils/multilingual_string.dart';
 import 'package:sj_manager/features/game_variants/data/data_sources/specific_variants/test/test_variant_constants.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/to_embrace/classification/classification.dart';
 import 'package:sj_manager/to_embrace/classification/simple_classification_rules.dart';
 import 'package:sj_manager/to_embrace/competition/calendar_records/calendar_main_competition_record.dart';
@@ -29,20 +33,16 @@ import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/
 import 'package:sj_manager/to_embrace/competition/rules/competition_rules/default_competition_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/entities_limit.dart';
 import 'package:sj_manager/to_embrace/competition/rules/ko/ko_round_rules.dart';
-import 'package:sj_manager/features/competitions/domain/utils/classification_score_creator/concrete/individual_default.dart';
-import 'package:sj_manager/features/competitions/domain/utils/classification_score_creator/concrete/team_default.dart';
-import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/concrete/individual/default_linear.dart';
+import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/specific/individual/default_linear_individual_competition_score_creator.dart';
 import 'package:collection/collection.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/judges_creator/concrete/default.dart';
+import 'package:sj_manager/features/competitions/domain/utils/judges_creator/specific/default_judges_creator.dart';
 import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/concrete/default_classic.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.dart/concrete/default_classic.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_round_advancement_determinator/concrete/n_best.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/concrete/default_weighted.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_group_creator.dart/concrete/default_classic.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_round_advancement_determinator/concrete/n_best.dart';
+import 'package:sj_manager/features/competitions/domain/utils/wind_averager/concrete/default_weighted.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/event_series/event_series_setup.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/standings.dart';
+import 'package:sj_manager/features/competitions/domain/entities/scoring/standings.dart';
 import 'package:sj_manager/features/competitions/domain/utils/standings_position_creators/standings_positions_with_ex_aequos_creator.dart';
-import 'package:sj_manager/features/database_editor/domain/entities/jumper/jumper_db_record.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/team/simulation_team/simulation_team.dart';
 
 class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSource {
   late CountriesRepository _countriesRepo;
@@ -127,7 +127,7 @@ class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSour
       Hill(
         name: 'Letalncia',
         locality: 'Planica',
-        country: await _countriesRepo.byCode('si'),
+        country: _countriesRepo.byCode('si'),
         k: 200,
         hs: 240,
         landingEase: LandingEase.fairlyLow,
@@ -140,7 +140,7 @@ class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSour
       Hill(
         name: 'Erzberg Arena',
         locality: 'Eisenerz-Ramsau',
-        country: await _countriesRepo.byCode('at'),
+        country: _countriesRepo.byCode('at'),
         k: 98,
         hs: 109,
         landingEase: LandingEase.average,
@@ -153,7 +153,7 @@ class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSour
       Hill(
         name: 'Malinka',
         locality: 'Wisła',
-        country: await _countriesRepo.byCode('pl'),
+        country: _countriesRepo.byCode('pl'),
         k: 120,
         hs: 134,
         landingEase: LandingEase.high,
@@ -325,12 +325,12 @@ class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSour
             competition.labels.contains(
               DefaultCompetitionType.competition,
             ) &&
-            competition is Competition<JumperDbRecord, Standings>);
+            competition is Competition<SimulationJumper>);
         final ncCompetitions = competitions.where((competition) =>
             competition.labels.contains(DefaultCompetitionType.competition));
         final ncModifiers = {
           for (var ncCompetition in ncCompetitions)
-            if (ncCompetition is Competition<SimulationTeam, Standings> &&
+            if (ncCompetition is Competition<CompetitionTeam> &&
                 ncCompetition.rules.competitionRules.rounds
                         .cast<DefaultTeamCompetitionRoundRules>()
                         .first
@@ -354,7 +354,7 @@ class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSour
             standings:
                 Standings(positionsCreator: StandingsPositionsWithExAequosCreator()),
             rules: SimpleIndividualClassificationRules(
-              classificationScoreCreator: DefaultIndividualClassificationScoreCreator(),
+              scoreCreator: SimpleClassificationJumperScoreCreator(),
               scoringType: SimpleClassificationScoringType.pointsFromMap,
               pointsMap: worldCupPointsMap,
               competitions: wcCompetitions.toList(),
@@ -367,7 +367,7 @@ class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSour
             standings:
                 Standings(positionsCreator: StandingsPositionsWithExAequosCreator()),
             rules: SimpleTeamClassificationRules(
-              classificationScoreCreator: DefaultTeamClassificationScoreCreator(),
+              scoreCreator: SimpleClassificationTeamScoreCreator(),
               scoringType: SimpleClassificationScoringType.pointsFromMap,
               pointsMap: nationsCupPointsMap,
               competitions: ncCompetitions.toList(),
@@ -380,7 +380,7 @@ class HardcodedTestGameVariantDataSource implements HardcodedGameVariantDataSour
             standings:
                 Standings(positionsCreator: StandingsPositionsWithExAequosCreator()),
             rules: SimpleIndividualClassificationRules(
-              classificationScoreCreator: DefaultIndividualClassificationScoreCreator(),
+              scoreCreator: SimpleClassificationJumperScoreCreator(),
               scoringType: SimpleClassificationScoringType.pointsFromCompetitions,
               pointsMap: null,
               competitions: wislaSixCompetitions.toList(),

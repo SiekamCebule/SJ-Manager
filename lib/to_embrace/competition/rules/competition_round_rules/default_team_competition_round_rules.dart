@@ -1,13 +1,13 @@
+import 'package:sj_manager/features/competitions/domain/utils/judges_creator/judges_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/jump_score_creator.dart';
+import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_competition_round_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/default_individual_competition_round_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/competition_round_rules/group_rules/team_competition_group_rules.dart';
 import 'package:sj_manager/to_embrace/competition/rules/entities_limit.dart';
 import 'package:sj_manager/to_embrace/competition/rules/ko/ko_round_rules.dart';
 import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/competition_score_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/judges_creator/judges_creator.dart';
-import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/jump_score_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/wind_averager.dart';
-import 'package:sj_manager/features/simulations/domain/entities/simulation/database/calendar/standings/score/typedefs.dart';
+import 'package:sj_manager/features/competitions/domain/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/features/competitions/domain/utils/standings_position_creators/standings_positions_creator.dart';
 import 'package:sj_manager/features/competitions/domain/entities/scoring/score/subjects/competition_team.dart';
 
@@ -35,7 +35,7 @@ class DefaultTeamCompetitionRoundRules
   });
 
   DefaultIndividualCompetitionRoundRules toIndividual({
-    required CompetitionScoreCreator<CompetitionJumperScore> competitionScoreCreator,
+    required CompetitionScoreCreator<SimulationJumper> competitionScoreCreator,
   }) {
     return DefaultIndividualCompetitionRoundRules(
       limit: limit,
@@ -78,7 +78,7 @@ class DefaultTeamCompetitionRoundRules
     JudgesCreator? judgesCreator,
     int? significantJudgesCount,
     JumpScoreCreator? jumpScoreCreator,
-    CompetitionScoreCreator<CompetitionTeamScore>? competitionScoreCreator,
+    CompetitionScoreCreator<CompetitionTeam>? competitionScoreCreator,
     KoRoundRules? koRules,
     List<TeamCompetitionGroupRules>? groups,
   }) {

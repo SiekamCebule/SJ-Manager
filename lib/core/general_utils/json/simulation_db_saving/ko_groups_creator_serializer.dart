@@ -1,9 +1,9 @@
 import 'package:sj_manager/core/general_utils/json/simulation_db_saving/simulation_db_part_serializer.dart';
 import 'package:sj_manager/core/general_utils/json/json_types.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.dart/concrete/default_classic.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.dart/concrete/default_random.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.dart/concrete/default_with_pots.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/ko_group_creator.dart/ko_groups_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_group_creator.dart/concrete/default_classic.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_group_creator.dart/concrete/default_random.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_group_creator.dart/concrete/default_with_pots.dart';
+import 'package:sj_manager/features/competitions/domain/utils/ko_group_creator.dart/ko_groups_creator.dart';
 import 'package:sj_manager/core/general_utils/ids_repository.dart';
 
 class KoGroupsCreatorSerializer implements SimulationDbPartSerializer<KoGroupsCreator> {

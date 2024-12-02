@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:sj_manager/features/competitions/domain/utils/judges_creator/judges_creator.dart';
+import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/jump_score_creator.dart';
 import 'package:sj_manager/to_embrace/competition/rules/entities_limit.dart';
 import 'package:sj_manager/to_embrace/competition/rules/ko/ko_round_rules.dart';
 import 'package:sj_manager/features/competitions/domain/utils/competition_score_creator/competition_score_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/judges_creator/judges_creator.dart';
-import 'package:sj_manager/features/competitions/domain/utils/jump_score_creator/jump_score_creator.dart';
-import 'package:sj_manager/to_embrace/competition/rules/utils/wind_averager/wind_averager.dart';
+import 'package:sj_manager/features/competitions/domain/utils/wind_averager/wind_averager.dart';
 import 'package:sj_manager/features/competitions/domain/utils/standings_position_creators/standings_positions_creator.dart';
 
 abstract class DefaultCompetitionRoundRules<T> with EquatableMixin {
@@ -43,8 +43,7 @@ abstract class DefaultCompetitionRoundRules<T> with EquatableMixin {
   final JudgesCreator judgesCreator;
   final int significantJudgesCount;
   final JumpScoreCreator jumpScoreCreator;
-  final CompetitionScoreCreator<Score<T, CompetitionScoreDetails>>
-      competitionScoreCreator;
+  final CompetitionScoreCreator<T> competitionScoreCreator;
   final KoRoundRules? koRules;
 
   bool get judgesEnabled => judgesCount > 0;

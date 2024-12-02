@@ -27,7 +27,7 @@ class CompetitionTeamLoader implements SimulationDbPartParser<CompetitionTeam> {
 
     return CompetitionTeam(
       parentTeam: parentTeam,
-      jumpers: jumpers,
+      subjects: jumpers,
     );
   }
 }

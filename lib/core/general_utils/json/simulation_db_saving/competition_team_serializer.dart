@@ -17,7 +17,7 @@ class CompetitionTeamSerializer implements SimulationDbPartSerializer<Competitio
   Json serialize(CompetitionTeam team) {
     return {
       'parentTeam': teamSerializer.serialize(team.parentTeam),
-      'jumpers': team.jumpers.map(idsRepository.id).toList(),
+      'subjects': team.subjects.map(idsRepository.id).toList(),
     };
   }
 }

@@ -16,7 +16,7 @@ class JsonCountryLoaderByCode implements JsonCountryLoader<String> {
   @override
   Future<Country> load(String code) async {
     try {
-      return (await countriesRepository.getAll())
+      return (countriesRepository.getAll())
           .singleWhere((country) => country.code.toLowerCase() == code.toLowerCase());
     } on StateError {
       throw CountryByCodeNotFoundError(countryCode: code);

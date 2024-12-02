@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:osje_sim/osje_sim.dart';
 import 'package:sj_manager/features/competitions/domain/entities/scoring/score/score.dart';
 import 'package:sj_manager/features/simulations/domain/entities/simulation/database/jumper/simulation_jumper.dart';
 import 'package:sj_manager/features/competitions/domain/entities/scoring/score/subjects/competition_team.dart';
@@ -18,12 +19,14 @@ class CompetitionJumpScore extends CompetitionScore<SimulationJumper> {
     required super.subject,
     required super.competition,
     required this.points,
+    required this.jump,
     this.distancePoints,
     this.judgePoints,
     this.windPoints,
     this.gatePoints,
   });
 
+  final JumpSimulationRecord jump;
   final double? distancePoints;
   final double? judgePoints;
   final double? windPoints;
